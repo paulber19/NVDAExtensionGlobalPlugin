@@ -262,7 +262,7 @@ class MyInputManager (inputCore.InputManager):
 				return 
 			raise NoInputGestureAction
 		log.debug ("MyInputGesture: gesture = %s"%gesture)
-		if  isinstance(gesture, KeyboardInputGesture) or isinstance(gesture, BrailleInputGesture) or isinstance(gesture, BrailleDisplayGesture): 
+		if  isinstance(gesture, KeyboardInputGesture): 
 			self.speakGesture(gesture)
 		elif config.conf["keyboard"]["speakCommandKeys"] and gesture.shouldReportAsCommand:
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, gesture.displayName)

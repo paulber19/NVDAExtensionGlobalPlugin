@@ -1,6 +1,6 @@
 Module complémentaire Extension des commandes  de base de NVDA - Historique
 Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poiraud
-Dernière modification: 25/09/2018
+Dernière modification: 14/12/2018
 
 %!Target: html
 %!Encoding: UTF-8
@@ -16,6 +16,23 @@ Dernière modification: 25/09/2018
 %!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
 %!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
 %!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
+
+
++ v7.4.1 (21/12/2018) +
+Correction du problème de l'annonce en anglais des commandes issues d'un clavier braille.
++ v7.4 (16/12/2018) +
+1- Nouvelles fonctionnalités:
+- ajout , pour les navigateurs "Firefox" et Google Chrome", du type "cliquable" pour le mode  navigation et le dialogue "Liste des éléments",
+- ajout , pour les navigateurs "Firefox" Internet Explorer, Microsoft Edge et Google Chrome", du type "paragraphe" pour le mode  navigation et le dialogue "Liste des éléments",
+- ajout du script pour faire un simple  et double clic gauche à la position courante de l'objet navigateur.
+- ajout du script pour faire un simple  et double clic droit à la position courante de l'objet navigateur.
+
+
+2- divers:
+- possibilité de lancer le script sélectionné dans le dialogue présentant les scripts de l'interpréteur,
+- possibilité, pour les traducteurs, de configurer les commandes d'édition du type "control+c, control+a" pour chaque langue et pour certaines applications le nécessitant,
+- utilisation de CentreOnScreen" à la place de "Centre".
+
 
 + v7.3 (25/09/2018) +
 Finalisation de la mise  en  compatibilité avec NVDA 2018.3   et avec wxPython 4.
