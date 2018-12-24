@@ -1,0 +1,1190 @@
+Complemento Extensión de las órdenes básicas de NVDA - manual del usuario
+Autor: paulber19 (paulber19@laposte.net)  con la participación de Daniel Poiraud
+Ultima modificacion: 14/12/2018
+
+%!Target: html
+%!Encoding: UTF-8
+%!Options: --toc
+%!style:..\style.css
+% Remove the Table of Contents heading from the toc.
+%!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
+
+% h1 in html should really be the document title only.
+% Therefore, change h1 through h5 in the output to h2 through h6.
+%!PostProc(html): ^<H5>(.*)</H5>$ <H6>\1</H6>
+%!PostProc(html): ^<H4>(.*)</H4>$ <H5>\1</H5>
+%!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
+%!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
+%!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
+% script command keys  definition
+%!PostProc (html): KEY_NEXT_ROW_REPORT NVDA+alt+Flecha Abajo
+%!PostProc (html): KEY_PREVIOUS_ROW_REPORT NVDA+alt+Flecha Arriba
+%!PostProc (html): KEY_NEXT_COLUMN_REPORT NVDA+alt+Flecha Derecha
+%!PostProc (html): KEY_PREVIOUS_COLUMN_REPORT NVDA+alt+Flecha Izquierda
+%!PostProc (html): KEY_MOVE_FIRST_CELL_ROW control+alt+mayúscula+Flecha Izquierda
+%!PostProc (html): KEY_MOVE_LAST_CELL_ROW control+alt+mayúscula+Flecha Derecha
+%!PostProc (html): KEY_MOVE_FIRST_CELL_COLUMN control+alt+mayúscula+Flecha Arriba
+%!PostProc (html): KEY_MOVE_LAST_CELL_COLUMN control+alt+mayúscula+Flecha Abajo
+%!PostProc (html): KEY_CURRENT_ROW_REPORT NVDA+alt+j
+%!PostProc (html): KEY_CURRENT_COLUMN_REPORT NVDA+alt+l
+%!PostProc (html): KEY1_CELL_POSITION_REPORT NVDA+alt+5 Teclado numérico
+%!PostProc (html): KEY2_CELL_POSITION_REPORT NVDA+alt+;
+%!PostProc (html): KEY1_DOCUMENT_ADDRESS NVDA+a
+%!PostProc (html): KEY2_DOCUMENT_ADDRESS NVDA+mayúscula+a
+
+% main script command keys definition
+%!PostProc (html): KEY_SHELL NVDA+j
+%!PostProc (html): KEY_DATE_TIME NVDA + F12
+
+% default fonctionnality  script command keys definition
+%!PostProc (html): MAIN_KEY_ICONS_List NVDA + F11
+%!PostProc (html): MAIN_KEY_COMPLEX_SYMBOL NVDA + Mayúscula + f4
+%!PostProc (html): MAIN_KEY_REPORT_NAME_VERSION NVDA + mayúscula + f1
+%!PostProc (html): MAIN_KEY_CONFIGURATION_PROFILE NVDA+ control +F1
+%!PostProc (html): MAIN_KEY_SAY_CURRENT_FOLDER NVDA+o
+%!PostProc (html): MAIN_KEY_LOG_VIEW NVDA+mayúscula+j
+%!PostProc (html): MAIN_KEY_PREVIOUS_RECORD NVDA+control+f8
+%!PostProc (html): MAIN_KEY_CURRENT_RECORD NVDA+control+f9
+%!PostProc (html): MAIN_KEY_NEXT_RECORD NVDA+control+f10
+%!PostProc (html): MAIN_KEY_MINUTE_TIMER NVDA+mayúscula+f12
+%!PostProc (html): MAIN_KEY_RESTART_NVDA NVDA+control+f4
+%!PostProc (html): MAIN_KEY_OBJECTS_LIST NVDA+b
+%!PostProc (html): MAIN_KEY_VOICEPROFILE_SELECTOR nvda+mayúscula+control+ número del selector
+%!PostProc (html): MAIN_KEY_NEXT_VOICEPROFILE nvda+mayúscula+control+Flecha Derecha
+%!PostProc (html): MAIN_KEY_PREVIOUS_VOICEPROFILE nvda+mayúscula+control+Flecha Izquierda
+%!PostProc (html): MAIN_KEY_MANAGE_SELECTOR nvda+mayúscula+control+m
+%!PostProc (html): MAIN_KEY_VOLUME_ON nvda+mayúscula+escape"
+%!PostProc (html): MAIN_KEY_TOGGLE_MUTE nvda+mayúscula+pausa
+%!PostProc (html): MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR nvda+,
+%!PostProc (html): MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR nvda+,
+%!PostProc (html): MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR nvda+mayúscula+,
+
+% script shell command keys definitions
+%!PostProc (html): KEY_APPLICATION_INFORMATIONS a
+%!PostProc (html): KEY_OBJECTS_LIST b
+%!PostProc (html): KEY_CONVERT_TO_HTML c
+%!PostProc (html): KEY_REPORT_FORMATTING f
+%!PostProc (html): KEY_COMPLEX_SYMBOL f4
+%!PostProc (html): KEY_LAST_USED_COMPLEX_SYMBOL control+f4
+%!PostProc (html): KEY_DISPLAY_SPEECH_HISTORY f9
+%!PostProc (html): KEY_WINDOWS_LIST F10
+%!PostProc (html): KEY_ICONS_List F11
+%!PostProc (html): KEY_MINUTE_TIMER f12
+%!PostProc (html): KEY_MODULE_GUIDE g
+%!PostProc (html): KEY_HELP_SHELL h
+%!PostProc (html): KEY_LOG_VIEW j
+%!PostProc (html): KEY_SAY_CURRENT_FOLDER o
+%!PostProc (html): KEY_VOICE_PROFIL_SWITCHING p
+%!PostProc (html): KEY_SHUTDOWN r
+%!PostProc (html): KEY_TOGGLE_MUTE s
+%!PostProc (html): KEY_USER_INPUT_GESTURE u
+
+%!PostProc (html): KEY_MANAGE_VOICE_PROFIL v
+
+Descargar: ["v7.3" https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-7.3.nvda-addon]
+
+
+Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
+
+
+= Índice =[toc]
+%%toc
+
+
+
++ Introducción +
+++ Generalidades ++
+Este complemento añade a las órdenes globales de NVDA:
+- las siguientes características:
+ - [Mostrar la lista de iconos  en la bandeja del sistema y las ventanas de las aplicaciones lanzadas #hdr1],
+ - [Ayuda para la composición de símbolos complejos #hdr3] como por ejemplo un "e" en la "o", un punto de interrogación invertida...,
+ - [Informar o mostrar información sobre la aplicación enfocada, como su versión o el perfil de configuración activa #hdr4],
+ - [Extensión de la funcionalidad del modo exploración #hdr5] para los navegadores Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge y Google Chrome:
+  - Nuevas órdenes para el modo de navegación: párrafo, división, ancla), punto de referencia principal),
+  - Nuevos tipos de elementos presentado como una lista en el cuadro de diálogo "Lista de Elementos" abierto por NVDA+f7: (lista, casilla de verificación, párrafo, división, marco, ...) y anuncio  del número de elementos correspondientes al tipo seleccionado,
+  - Anunciar la dirección URL del documento,
+  - Opción para navegar en bucle para la búsqueda de un elemento siguiente o anterior,
+  - Nuevas características para las tablas:
+   - Anunciar la posición de la celda actual,
+   - Ir a la columna / línea siguiente o anterior con la lectura de las celdas que la componen,
+   - Ir a la primera / última celda de la fila / columna,
+   - Anunciar las celdas de la columna / fila actual.
+      - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7],
+ - [Anuncio de la carpeta preseleccionada de cuadros de diálogo de estilo Abrir, Guardar, Guardar como #hdr8],
+ - [Abrir el registro antiguo o actual de NVDA y copiar la ruta de este último al portapapeles #hdr9],
+ - [Historial de los anuncios del habla #hdr10], anunciando o mostrando los últimos registros del historial de los anuncios del habla,
+ - [Renombrar teclas del teclado #hdr12],
+ - [Anuncio selectivo de teclas de órdenes #hdr13],
+ - [Temporizador de minutos simple #hdr14],
+ - [Reiniciar NVDA con el nivel de registro en modo "depuración" con un simple gesto de entrada #hdr15],
+ - [Mostrar la lista de 	elementos visibles que componen el objeto en primer plano #hdr16],
+ - [Cambio rápido de perfil de voz #hdr17],
+ - [Remanencia de las teclas (NVDA y modificadoras) #hdr18],
+ - [Apagar, reiniciar o hibernar el ordenador #hdr19],
+ - [Administrar los gestos de entrada configurados por el usuario #hdr20],
+ - [Control del sonido #hdr21] (solo Windows 10):
+  - Silencia o restablece el sonido  del flujo audio para la aplicación que tiene el foco,
+  - Establecer  manualmente el sonido principal y el flujo audio de NVDA,
+ - [Herramientas de desarrollo #hdr22]:
+  - Funcionalida para convertir los archivos de documentación de los complementos instalados,
+ - [Funcionalida para hacer clic en la posición actual   del navegador de objetos  #hdr23].
+- Nuevas opciones:
+ - [Eliminar el anuncio de la descripción de objetos en las cintas de Windows #hdr100],
+ - [Anuncio de la palabra enfocada después de eliminar la palabra #hdr101],
+ - [Maximizar automáticamente las ventanas #hdr102],
+ - [Anunciar sistemáticamente la puntuación al moverse por palabra #hdr103],
+ - [Anunciar la hora del reloj de Windows con los segundos #hdr104].
+- Nuevas opciones avanzadas:
+ - [Advertir con un sonido la escritura de un error en el registro de NVDA #hdr300],
+ - [Restablecimiento automático del volumen principal y de NVDA al cargar el complemento #hdr301],
+ - [Títulos de los cuadros de diálogos del complemento con el nombre del complemento #hdr302],
+ - [Configuración del retardo de espera de repetición para el mismo gesto de entrada #hdr303].
+- Otras mejoras:
+ - [Anuncio de la hora independiente del nivel de puntuación #hdr200],
+ - [Copia la fecha y hora al portapapeles #hdr201],
+ - [Menú para explorar tu carpeta de configuración o la carpeta en archivos de programa de NVDA #hdr202],
+ - [Presentación de la información de formato del texto en un cuadro de diálogo, en lugar de un documento HTML #hdr203],
+ - [Anuncio del texto de los cuadros de diálogo de estilo de confirmación aunque el anuncio de la descripción del objeto está deshabilitado #hdr204].
+
+
+++ Menú de configuración del complemento ++
+En el menú "Preferencias" de NVDA, se añade el submenú "Complemento Extensión de las órdenes básicas de NVDA" que propone, según el caso, tres submenús:
+- Sistemáticamente el submenú Opciones que abre un cuadro de diálogo similar al menú "Opciones" de NVDA y que presenta tres categorías de opciones:
+ - "Instalación de las funcionalidades": permite ver el estado de instalación de cada funcionalidad proporcionada por el complemento y, posiblemente, modificarlo.
+ - "Opciones" para configurar las opciones proporcionadas por el complemento,
+ - Opciones avanzadas:   opciones para usuarios experimentados.
+
+
+- El submenú "Renombrar teclas del teclado" (si la funcionalidad está instalada): te permite modificar, según sea necesario, los nombres de las teclas del teclado que NVDA proporciona de forma predeterminada,
+- El submenú "Anuncio selectivo de teclas de órdenes" (si la funcionalidad está instalada): anuncia de forma selectiva el nombre de las teclas del teclado según sea necesario.
+
+
+En ciertos casos de modificación de la configuración del complemento, NVDA deberá reiniciarse para que se tengan en cuenta los cambios.
+
+Esta configuración se guarda de dos maneras dependiendo de la funcionalidad o las opciones en cuestión:
+- En el archivo "NVDAExtensionGlobalPluginAddon.ini" colocado en la carpeta de usuario "userConfig" de NVDA para la configuración  utilizada cualquiera que sea el perfil de configuración,
+- En el archivo NVDA.ini o el archivo de perfil de configuración del perfil disparado al momento del cambio para la configuración que se utilizará solo cuando ese perfil sea disparado.
+
+
+Cuando se desinstala el complemento, su archivo de configuración se elimina y la configuración del complemento se elimina de todos los perfiles de configuración.
+
+En el caso de una actualización, la instalación del complemento ofrece la posibilidad de conservar (en la medida de lo posible) o no la configuración anterior.
+
+++ Compatibilidad ++
+Este complemento no es compatible con versiones de NVDA inferiores a la 2018.2.
+
+
+++ Historial ++
+El historial de las versiones del complemento está en el archivo ["change.html" change.html]
+
++ Funcionalidades +
+++ Instalación de una funcionalidad ++
+El complemento permite instalar o no instalar tal o cual funcionalidad.
+El estado de instalación de cada funcionalidad del complemento es presentado por  el diálogo "Complemento Extensión de las órdenes básicas de NVDA - Instalación de las funcionalidades"
+Este estado puede ser:
+- No instalar: la funcionalidad no está instalada.
+- Instalar: la funcionalidad está instalada. Sus scripts se pueden usar usando las órdenes del intérprete y los gestos  de entrada proporcionado por defecto.
+- Instalar sin gesto de entrada: la funcionalidad está instalada. Sus scripts se pueden usar usando las órdenes del intérprete pero ningún gesto de entrada no se les asigna.
+
+
+Por defecto, el complemento no instala todas las funcionalidades.
+
+++ Activación de los scripts ++
+En general, cada script se puede activar de dos maneras:
+- Ya sea con un gesto de entrada clásica,
+- Ya sea usando el intérprete de órdenes del complemento.
+
+
+En el cuadro de diálogo "Gestos de Entrada" de NVDA, los scripts proporcionados por el complemento se colocan en su propia categoría.
+La gran mayoría de los scripts son divididos en las categorías: "Extensión de las órdenes básicas de NVDA", "Cambiar el perfil de voz", "Configuración", "Herramientas" y "Voz".
+
+Para los scripts que se pueden iniciar mediante una órden del intérprete, esto se indica después de la descripción del script.
+
+Dependiendo de la opción  de la instalación de una funcionalidad ("Instalar, " o "Instalar sin gesto de entrada"), los gestos de entrada proporcionados por defecto se atribuyen o no a los scripts de esta funcionalidad.
+
+De forma predeterminada, la gran mayoría de los scripts que pueden ser lanzados mediante el intérprete de órdenes no se asignan a ningún gesto de órden.
+
++++ Intérprete de órdenes +++
+Éste se lanza con la ayuda del gesto de órden "KEY_SHELL". Un pitido es audible.
+
+Entonces es posible activar los scripts de  las funcionalidades con la ayuda   de órdenes.
+
+Hoy en día, estas órdenes no son modificables.
+
+La órden "KEY_HELP_SHELL" del intérprete lista todas las órdenes de las funcionalidades instaladas  y la órden "KEY_MODULE_GUIDE" abre el manual de utilización del complemento.
+
+El intérprete de órdenes se detiene ya sea:
+- Pulsando la tecla "Escape",
+- O bien automáticamente si una órden es pulsada. Si esta órden no corresponde con ninguna funcionalidad, se reproduce un pitido.
+
+
+++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas ++[hdr1]
+Esta funcionalidad está, por defecto, instalada con gestos de entrada.
+
+Esta añade los siguientes scripts:
+- Mostrar la lista de iconos en la bandeja del sistema,
+- Mostrar la lista de ventanas de las aplicaciones lanzadas,
+- Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas.
+
+
+Estos scripts están almacenados en la sección "Extensión de las órdenes básicas de NVDA" del diálogo "Gestos de Entrada".
+
+
++++ Mostrar la lista de iconos en la bandeja del sistema +++
+Este script creado originalmente por Yannick Maillot y Daniel Poiraud era instalado mediante el complemento independiente "ListeIconesZoneNotification_v1.2.nvda-addon" por lo tanto lo debemos desinstalar.
+
+Su descripción es: "Mostrar la lista de iconos en la bandeja del sistema"
+
+El  se lanza mediante la órden "KEY_ICONS_List" del intérprete de órden. Es la contraparte del script de Jaws "Insert + f11".
+
+No se le asigna ningún gesto de entrada por defecto.
+
+Muestra un cuadro de diálogo que contiene:
+- La lista de iconos presentes en la bandeja del sistema,
+- El botón "Clic izquierdo" para activar un clic izquierdo del ratón,
+- El botón "Clic derecho" para activar un clic derecho del ratón,
+- El botón "Doble clic izquierdo" para activar un doble clic izquierdo del ratón,
+- El botón "Cancelar" para cerrar el cuadro de diálogo y terminar el script.
+
+
+La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Shift+Tab" y en la lista con las flechas de dirección arriba y abajo.
+
+Pulsando la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
+
+En la lista de iconos, pulsando la tecla "Intro" activa la pulsación sobre el botón "Clic izquierdo".
+
+
++++ Mostrar la lista de ventanas de las aplicaciones lanzadas +++
+La descripción de este script es: "Muestra la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla":
+
+Es la contraparte del script de Jaws "Insert + f10".
+
+El  se lanza mediante la órden "KEY_WINDOWS_LIST" del intérprete de órden.
+
+No se le asigna ningún gesto de entrada por defecto.
+
+Muestra un cuadro de diálogo que contiene:
+- La lista de todas las aplicaciones lanzadas,
+- El botón "Destruir" para cerrar la ventana seleccionada,
+- El botón "Cambiar a" para poner al primer plano la ventana seleccionada,
+- El botón "Cancelar" para cerrar el cuadro de diálogo y terminar el script.
+
+
+La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Shift+Tab" y en la lista con las flechas de dirección arriba y abajo.
+Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
+
+En la lista, las aplicaciones son indicadas como Maximizado o Minimizado.
+
+Al pulsar el botón "Destruir" se cerrará la ventana de la aplicación seleccionada y el retorno del foco en la lista actualizada de las ventanas de las aplicaciones.
+
+Pulsando el botón "Cambiar a" o la tecla "Intro" cuando estás en la lista de las aplicaciones, cierra el cuadro de diálogo y nos trae al primer plano la ventana de la aplicación seleccionada dándole el foco.
+
++++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas +++
+La descripción de este script es: - "Mostrar la lista de iconos en la bandeja del sistema. Pulsando dos veces: Muestra la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla".
+
+Por defecto, el gesto de entrada "MAIN_KEY_ICONS_List" se le asigna.
+
+No se le asigna ninguna órden  al intérprete.
+
+Una simple pulsación del gesto de entrada "MAIN_KEY_ICONS_List" lanza  el script "Mostrar la lista de iconos en la bandeja del sistema" (ver arriba).
+
+Una doble pulsación lanza el script "Mostrar la lista de ventanas de las aplicaciones lanzadas" (ver arriba).
+
+
+++ Ayuda para la composición de símbolos complejos ++[hdr3]
+Esta funcionalidad está, por defecto, instalada sin un gesto de entrada.
+
+Esta añade los siguientes dos scripts:
+  - Un script cuya descripción es: "Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático",
+  - Un script cuya descripción es: "Mostrar la lista de los últimos símbolos complejos compuestos".
+
+  
+  Estos scripts están almacenados en la sección "Extensión de las órdenes básicas de NVDA" del diálogo "Gestos de Entrada".
+  
+  
+  +++ Script Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático +++
+Este script se lanza:
+- Ya sea mediante la órden "KEY_COMPLEX_SYMBOL" del intérprete  de órden,
+- Ya sea mediante el gesto de entrada "MAIN_KEY_COMPLEX_SYMBOL "  asignado por defecto.
+
+
+Muestra el cuadro de diálogo "Ayuda para la composición de símbolos complejos" que consta de: 
+- La lista permitiéndote de elegir una de las categorías de símbolos,  
+- La lista presentándote los símbolos de la categoría seleccionada,  
+- El botón "Pegar" para insertar el símbolo seleccionado en el documento actual,  
+- El botón "Copiar al portapapeles" para copiar el símbolo seleccionado al portapapeles,  
+- El botón "Gestionar tus símbolos" para añadir / eliminar tus propias categorías  o símbolos , 
+- El botón "Cerrar" para cerrar el cuadro de diálogo.  
+
+
+Para moverte en el cuadro de diálogo  debes hacer "Tab" o "Shift+Tab".
+
+Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
+
+Cuando estás en la lista de categorías, pulsando la tecla "Intro" nos trae el foco sobre la lista de los símbolos de la categoría seleccionada.
+
+Estos símbolos se enumeran en el orden del archivo "symbolCategories.dic" (ver más abajo).
+
+
+Sin embargo, si uno está en la lista de símbolos y si un símbolo es seleccionado, pulsando la tecla "Intro" causa la pulsación sobre el botón "Pegar".
+
+Situado sobre un símbolo, pulsando la tecla "Espacio" causa la vocalización del código del símbolo bajo la forma: código en decimal seguido del código en hexadecimal deletreadó. Esto te puede servir si deseas componer manualmente el símbolo con la órden Windows "Alt + 0" seguido por el código decimal compuesto en el teclado numérico.
+
+Pulsando uno de los tres botones cierra el cuadro de diálogo.
+
+El botón "Gestionar tus símbolos" presenta el diálogo que ofrece la posibilidad de completar las categorías básicas del complemento con tus propios símbolos.
+Este cuadro de diálogo muestra:
+- La lista de todas las categorías,
+- La lista de símbolos específicos del usuario para la categoría seleccionada,
+- El botón "Añadir un símbolo" para añadir un símbolo en la categoría seleccionada,
+- El botón "Eliminar el símbolo" para eliminar el símbolo seleccionado,
+- El botón "Añadir una categoría",
+- El botón "Eliminar la categoría" para eliminar la categoría (las categorías básicas no pueden ser eliminadas)
+- El botón "Guardar" para guardar todos los cambios realizados y cerrar el diálogo,
+- El botón "Cancelar" para cerrar el diálogo sin modificaciones.
+
+Las categorías y los símbolos añadidos son almacenados en el archivo de configuración del complemento (NVDAExtensionGlobalPluginAddon.ini que se encuentra en la carpeta de configuración de usuario de NVDA) en la sección "Categories&Symbols" y en la subsección correspondiente al idioma de NVDA bajo los cuales se hicieron los cambios. 
+
+Cada categoría es una sección definida como sigue:
+- Nombre de la categoría,
+- Lista de símbolos (el símbolo = su descripción)
+
+Las categorías básicas del complemento con sus símbolos se definen en un archivo "symbolCategories.dic" propio a cada idioma específico y se encuentra en la carpeta "xxx" en la carpeta "locale" del complemento (xxx siendo el identificador de la lengua, por ejemplo "fr" por el francés) o en este caso "es" por el español.
+Puedes personalizar el complemento y constituir tus propias categorías básicas.
+Para ello, simplemente debe crear en la carpeta userConfig, un archivo "symbolCategories-xxx.dic", guardado en codificación "utf-8", (xx es el código de la lengua). En este archivo, el nombre de las categorías se definirá entre corchetes y cada símbolo como sigue:
+- El símbolo (un solo carácter),  
+- Una tabulación (carácter "Tab")  
+- La descripción del símbolo (una cadena de caracteres).  
+
+
+Las líneas en blanco o comentario (empezando por "#") son aceptados.
+Estos archivos se guardan durante una actualización del complemento, incluso si el usuario solicita no conservar su propia configuración.
+Durante la instalación del complemento se añade, para cada idioma, la pronunciación de algunos símbolos encontrados en las categorías básicas y que NVDA no tiene. El archivo "symboles-xx.dic" de la carpeta userConfig ya se crea o ya se modifica para añadir las nuevas pronunciaciones.
+
+
+
++++ Script Mostrar la lista de los últimos símbolos complejos compuestos +++
+El complemento  almacena los últimos 20 símbolos compuestos para el perfil de configuración actual.
+
+Este script permite visualizarlos y recomponer un símbolo comúnmente usado. Esto evita ir a buscarlo en su categoría con el script anterior.
+
+Este script se lanza mediante la órden "KEY_LAST_USED_COMPLEX_SYMBOL" del intérprete de órden. No se le asigna ningún gesto de entrada por defecto.
+
+Presenta el mismo tipo de cuadro de diálogo que el script anterior sin el botón para gestionar tus propios símbolos.
+
+El número máximo de últimos símbolos se puede configurar con la opción "Número máximo de últimos símbolos compuestos registrados" de la categoría "Opciones avanzadas" en el menú "Opciones" del complemento.
+
+
+++ Información de la aplicación bajo el foco ++[hdr4]
+Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
+
+Instala, según su estado de instalación, los siguientes scripts:
+- Anuncia el nombre del archivo de la aplicación, el nombre del complemento cargado y el nombre y el estado del perfil de configuración,
+- Anuncia el nombre y número de versión de la aplicación,
+
+
+Y en cualquier caso los scripts:
+- Anuncia el nombre y el número de versión del complemento activado para la aplicación,
+- Mostrar información acerca de la aplicación.
+
+
+Estos scripts están almacenados en la sección "Herramientas" del cuadro de diálogo "Gestos de Entrada".
+
+
++++ Anuncia el nombre del archivo de la aplicación, el nombre del complemento cargado y el nombre y estado del perfil de configuración +++
+La descripción de este script es: "Anuncia el nombre del archivo de la aplicación actual y el nombre del complemento cargado. Pulsando dos veces, anuncia el nombre y el estado del perfil de configuración".
+
+De forma predeterminada, el gesto de entrada "MAIN_KEY_CONFIGURATION_PROFILE" se le asigna.
+
+Una simple pulsación del gesto de entrada activa el script básico de NVDA que anuncia el nombre del archivo de la aplicación y, si existe, el nombre del complemento cargado.
+
+Una doble pulsación anuncia el nombre del perfil de configuración y su estado.
+
++++ Anuncio del número de versión de la aplicación enfocada +++
+La descripción de este script es: "Anuncia el nombre y el número de versión de la aplicación enfocada".
+
+De forma predeterminada, el gesto de entrada "MAIN_KEY_REPORT_NAME_VERSION" se le asigna.
+
+ El gesto de entrada activa el anuncio del nombre y el número de versión de la aplicación colocada bajo el foco.
+
+
++++ Mostrar información de la aplicación enfocada +++
+La descripción de este script es: "Mostrar información acerca de la aplicación enfocada".
+
+Este se lanza mediante  la órden "KEY_APPLICATION_INFORMATIONS" del intérprete.
+
+Por defecto, no se le asigna ningún gesto de entrada.
+
+Muestra el cuadro de diálogo "Extensión de las órdenes básicas de NVDA - Información" que presenta la siguiente información:
+- Nombre del archivo de la aplicación bajo el foco y su número de versión,
+- El nombre del perfil de configuración activado.
+- El nombre del complemento cargado si hay uno,
+- El nombre y el número de versión del complemento asociado (si lo hay y activado),
+
+
++++ Muestra el nombre y número de versión del complemento +++
+La descripción de este script es: "Anuncia el nombre y el número de versión del complemento activado para la aplicación enfocada".
+
+Por defecto, no se le asignan gestos de entrada, ni ningún intérprete de órdenes.
+
+++ Extensión de la funcionalidad del modo exploración ++[hdr5]
+Esta funcionalidad se instala de forma predeterminada.
+
+Esto concierne los navegadores Mozilla Firefox , Microsoft Internet Explorer, Google Chrome, Microsoft  Edge(parcialmente) y  trae:
+
++++ Nuevas órdenes de navegación +++
+Este complemento añade las siguientes órdenes para el modo de navegación:
+- "p" para ir al párrafo siguiente,
+- "Mayúscula+p" para ir al párrafo anterior,
+- "y" para ir a la división siguiente,
+- "Mayúscula + y" para ir a la división anterior,
+- "z" para ir a la ancla siguiente,
+- "Mayúscula+z" para ir a la ancla anterior,
+- ";"  para ir al punto de referencia principal siguiente,
+- "Mayúscula + ;" para ir al punto de referencia principal anterior,
+- ":" para ir al elemento clicable siguiente,
+- "Mayúscula+:" para ir al elemento clicable anterior.
+
+
+A excepción de los primeros cuatro, estas órdenes no se implementan en el navegador Microsoft Edge.
+
++++ Nuevos tipos de elementos para el script "NVDA + f7" +++
+Básicamente, el script integrado en NVDA y activado por la órden "NVDA + f7", muestra el cuadro de diálogo "Lista de elementos" con la lista de algunos elementos presentes en una página web.
+Este complemento aumenta el número de tipos de elementos que se pueden seleccionar.
+La lista de estos tipos se convierte en:
+- Enlace,
+- Encabezado,
+- Punto de referencia,
+- Párrafo (no en Microsoft Edge),
+- Marco (no en Microsoft Edge),
+- División (no en Microsoft Edge),
+- Botón,
+- Botón de opción,
+- Casilla de verificación,
+- Cuadro combinado,
+- Tabla,
+- Cita (no en Microsoft Edge),
+- Campo de edición,
+- Lista,
+- Elemento de lista,
+- Ancla (no en Microsoft Edge),
+- Gráfico,
+- Objeto integrado (no en Microsoft Edge),
+- Campo de formulario,
+- Separador,
+- Clicable (no en Internet Explorer ni en Microsoft Edge).
+
+
+Estos tipos se presentan en forma de lista en lugar de botón de opción (en la versión básica).
+Se puede acceder a un tipo escribiendo la primera letra de su etiqueta.
+Es posible volver a esta lista mediante el atajo "alt+t". 
+En cada cambio de tipo, el número de elementos encontrados es anunciado o, si no se encuentra ningún elemento, la indicación de voz "Ningún elemento" es anunciado.
+
+Se escucha un pitido repetitivo mientras se buscan elementos.
+
+
+El estado "marcado" o "no marcado" es indicado para las casillas de verificación.
+
+El tipo "Campo de edición" da la lista de los campos de edición del documento y cada elemento se presenta verbalmente de la siguiente manera:
+- Anuncia la etiqueta del campo si hay una o "Sin etiqueta" en el caso contrario,
+- Anuncia el "Campo de edición",
+- Anuncia el contenido del campo de edición.
+
+
+Asimismo, cada campo de formulario se presenta vocalmente según su tipo.
+
++++ scripts para las tablas +++
+Para los navegadores Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefox, GoogleChrome, es posible cuando el cursor está en una celda de tabla de:
+- Anunciar la posición de la celda actual (gesto de entrada KEY1_CELL_POSITION_REPORT en la disposición de escritorio, KEY2_CELL_POSITION_REPORT en la disposición de portátil),
+- Anunciar las celdas en la fila actual (gesto de entrada "KEY_CURRENT_ROW_REPORT"),
+- Anunciar las celdas en la columna actual (gesto de entrada "KEY_CURRENT_COLUMN_REPORT"),
+- Mover el cursor a la celda de la siguiente fila, misma columna y leer las celdas de esta fila (gesto de entrada "KEY_NEXT_ROW_REPORT"),
+- Mover el cursor a la celda de la fila anterior, misma columna y leer las celdas de esta fila (gesto de entrada "KEY_PREVIOUS_ROW_REPORT"),
+- Mover el cursor a la celda de la siguiente columna, misma fila y leer las celdas de esta columna (gesto de entrada "KEY_NEXT_COLUMN_REPORT"),
+- Mover el cursor a la celda de la columna anterior, misma fila y leer las celdas de esta columna (gesto de entrada "KEY_PREVIOUS_COLUMN_REPORT").
+- Ir a la primera celda de la fila (gesto de entrada KEY_MOVE_FIRST_CELL_ROW),
+- Ir a la última celda de la fila (gesto de entrada KEY_MOVE_LAST_CELL_ROW)
+- Ir a la primera celda de la columna (gesto de entrada KEY_MOVE_FIRST_CELL_COLUMN),
+- Ir a la última celda de la columna (gesto de entrada KEY_MOVE_LAST_CELL_COLUMN).
+
+
+Todos estos scripts están almacenados en la categoría "Tabla" en el árbol del cuadro de diálogo "Gestos de Entrada".
+
+El complemento también mueve en esta categoría los scripts básicos de NVDA que se  almacenaron en la categoría "Miscelánea". Estos son:
+- Moverse a la columna anterior: "NVDA+control+ Flecha Izquierda",
+- Moverse a la columna siguiente: "NVDA+control+ Flecha Derecha",
+- Moverse a la fila anterior: "NVDA+control+ Flecha Arriba",
+- Moverse a la fila siguiente: "NVDA+control+ Flecha Abajo",
+
+
++++ Anuncio de la dirección del documento +++
+El gesto de entrada "KEY1_DOCUMENT_ADDRESS",  (en la disposición de escritorio) o "KEY2_DOCUMENT_ADDRESS"  (en la disposición de portátil) tecleado en los navegadores Mozilla FireFox, Microsoft Internet Explorer, Microsoft  Edge o Gooble Chrome, anuncia la dirección (URL) del documento. Con una doble pulsación, esta dirección se copia al portapapeles.
+
++++ Navegación en bucle +++
+En modo exploración, la búsqueda del elemento siguiente o anterior se detiene al final o al principio del documento.
+
+El complemento añade, como opción, la capacidad de examinar cíclicamente el documento, es decir:
+- La búsqueda del siguiente elemento continúa yendo al principio del documento si el final del documento se encuentra,
+- La búsqueda del elemento anterior continúa volviendo al final del documento si el principio del documento se encuentra.
+
+
+El pasaje por el principio o el final del documento se indica mediante un sonido y un mensaje de voz.
+
+La opción "Navegar en bucle" del menú "Opciones" y submenú  "Opciones" permite  habilitar o deshabilitar esta operación.
+
+Por defecto, esta opción no está marcada. El funcionamiento básico de NVDA se conserva.
+
+Esta opción solo se presenta si la funcionalidad "Extensión de la funcionalidad del modo exploración" está instalado.
+
+
+++ Anuncio de la funcionalidad asociada a las órdenes de edición de estilo  "Copiar", "Pegar" ++[hdr7]
+Esta funcionalidad se instala de forma predeterminada.
+
+Las funciones activadas mediante las órdenes de teclado "control+v", "control+c", "control+x",  "control+z" no siendo vocalizado por NVDA, el complemento se encarga.
+
+No se realiza ningún control sobre el resultado de la función.
+Pero para las órdenes de teclado "control+c", "control+x", la ausencia de selección de texto se indica en los árboles y las listas.
+
+Si el complemento fakeClipboardAnnouncement está instalado (que realiza la misma función), debe ser desinstalado. 
+
+++ Anuncio de la carpeta seleccionada en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como" ++[hdr8]
+Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
+
+Añade, en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como", "Buscar en", el script que permite conocer el nombre de la carpeta que es seleccionada para definir la ubicación donde el archivo será buscado o guardado.
+
+La descripción de este script es: "Anuncia la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar".
+
+Este script se almacena en la sección "Extensión de las órdenes básicas de NVDA" del cuadro de diálogo "Gestos de Entrada".
+
+Él se lanza:
+- Ya sea con la órden "KEY_SAY_CURRENT_FOLDER" del intérprete 
+- Ya sea con el gesto de entrada "MAIN_KEY_SAY_CURRENT_FOLDER" asignado a él por defecto.
+
+
+Tenga cuidado, este script solo funciona en cuadros de diálogo compatibles con el estándar de Windows.
+
+El gesto de entrada activa el anuncio del nombre de la carpeta seleccionada en el cuadro de diálogo y, si es posible, la ruta de esta carpeta.
+
+++ Registros de NVDA ++[hdr9]
+Esta funcionalidad está, por defecto, instalada sin gesto de entrada.
+
+Esta añade los scripts:
+- Gestión de los registros de NVDA,
+- Apertura de los registros de NVDA.
+
+
+Estos scripts están almacenados en la sección "Herramientas" del cuadro de diálogo "Gestos de Entrada".
+
++++ Gestión de los registros de NVDA +++
+La descripción de este script es: "Mostrar el diálogo para administrar los registros de NVDA".
+
+El se lanza mediante la órden "KEY_LOG_VIEW" del intérprete. No se le asigna ningún gesto de   entrada por defecto.
+
+Este script muestra el cuadro de diálogo  "Gestión de los registros de NVDA" que presenta:
+
+- Un botón para abrir el registro actual de NVDA,
+- Un botón para abrir el antiguo registro de NVDA,
+- Un botón para copiar al portapapeles la ruta del registro actual de NVDA,
+- El botón "Cerrar" para cerrar el cuadro de diálogo.
+
+
+El registro se abre en el programa asociado con la extensión .log. Si aún no existe la asociación de un programa con esta extensión, tendrá que definirlo (elija el bloc de notas, por ejemplo).
+
++++ Apertura de los registros de NVDA +++
+La descripción de este script es: "Abrir el registro actual de NVDA. Pulsando dos veces: abre el antiguo registro. Pulsando tres veces: copia la ruta del registro actual al portapapeles".
+
+El se lanza mediante el gesto de entrada "MAIN_KEY_LOG_VIEW" asignado a él por defecto.
+
+Una simple pulsación activa la apertura del registro actual de NVDA.
+
+Una doble pulsación,  la apertura del antiguo registro.
+
+Una triple pulsación, la copia de la ruta del registro actual al portapapeles. 
+
+El registro se abre en el programa asociado con la extensión .log. Si aún no existe la asociación de un programa con esta extensión, tendrá que definirlo (elija el bloc de notas, por ejemplo).
+
+++ Historial de los anuncios del habla ++[hdr10]
+Esta funcionalidad está, por defecto, instalada sin gesto de entrada.
+
+Para escuchar anuncios del habla mal comprendidos o mal entendidos, el complemento registra un historial limitado de anuncios enviados al sintetizador.
+El número de registros está limitado a 200.
+
+Para volver a escuchar estos registros, los siguientes scripts, que se encuentran en la sección "Voz" del cuadro de diálogo "Gestos de Entrada", son proporcionados por esta funcionalidad:
++++ Anuncia el registro anterior +++
+Este script se lanza mediante el gesto de entrada, "MAIN_KEY_PREVIOUS_RECORD" asignado por defecto.
+
+El gesto de entrada activa el anuncio del registro anterior en relación con el último registro anunciado.
+
++++ Anuncia el siguiente registro +++
+Este script se lanza mediante el gesto de entrada, "MAIN_KEY_NEXT_RECORD" asignado por defecto.
+
+El gesto de entrada activa el anuncio del siguiente registro en relación con el último registro anunciado.
+
++++ Re-anunciar el último registro anunciado +++
+La descripción de este script es: "Anuncia el registro actual del historial de los anuncios del habla. Pulsando dos veces: para cópiarlo al portapapeles. Pulsando tres veces: para mostrar el historial de los anuncios del habla".
+
+Este script se lanza mediante el gesto de entrada, "MAIN_KEY_CURRENT_RECORD" asignado por defecto.
+
+Una simple pulsación activa El anuncio del último registro anunciado.
+
+Una doble pulsación, copia este registro al portapapeles.
+
+Una triple pulsación, muestra el historial de los anuncios del habla.
+
++++ Mostrar el historial del habla +++
+La descripción de este script es: "Mostrar los registros del historial de los anuncios del habla".
+
+Este script se lanza mediante la órden "KEY_DISPLAY_SPEECH_HISTORY" del intérprete. No se le asigna ningún gesto de entrada por defecto.
+
+Presenta el cuadro de diálogo "Historial de los anuncios del habla" que enumera estos registros en orden descendente según su antigüedad. Se utiliza un botón para copiar el registro seleccionado al portapapeles.
+
+Por defecto, los registros están numerados. Esta numeración se puede desactivar mediante la opción "Numerar los registros del historial de los anuncios del habla" en el submenú "Opciones".
+
+
+++ Renombrar teclas del teclado ++[hdr12]
+Esta funcionalidad está instalada por defecto.
+
+Te permite renombrar algunas teclas del teclado como "bloqueo mayúsculas"  o  "bloqueo numérico".
+
+Esta instala un submenú "Renombrar teclas del teclado" en el submenú "Complemento Extensión de las órdenes básicas de NVDA".
+
+Es posible asignar un gesto de entrada a este submenú. Pero por defecto, ningún gesto no  está asignado a él.
+
+Al activar este submenú se muestra el cuadro de diálogo "Renombrar teclas del teclado" que presenta en una lista, las teclas del teclado con su etiqueta definida en NVDA. 
+
+El botón "Modificar" te permite cambiar la etiqueta de la tecla seleccionada en la lista y introducir una etiqueta de reemplazo mediante un cuadro de diálogo de entrada estándar.
+
+Cuando se define una etiqueta de reemplazo para la tecla seleccionada, el cuadro de edición de sólo lectura al que se puede acceder mediante "Tab", muestra esta etiqueta de reemplazo. Esta etiqueta se anuncia cuando el foco llega a la tecla.
+
+El botón "Eliminar" te permite eliminar esta etiqueta de reemplazo.
+También es posible eliminar esta etiqueta introduciendo una cadena vacía o llena de blanco en el cuadro de entrada.
+
+El botón "Eliminar todo" te permite eliminar todas las etiquetas de reemplazo para volver a las etiquetas básicas previsto por NVDA.
+
+El botón "Aceptar" te permite aplicar    los reemplazos y guardar las teclas del teclado y sus etiquetas de reemplazo en el archivo de configuración del complemento en la sección "RedefinedKeyLabels" y la subsección correspondiente al idioma  de NVDA ("fr" por ejemplo para el Francés). En nuestro caso será "es" para el Español. Por lo tanto, es posible renombrar las teclas para tenerlo en diferentes idiomas.
+
+Esta funcionalidad está instalada por defecto.
+Es posible no instalarlo desmarcando la casilla de verificación "Renombrar teclas del teclado" en el submenú "Funcionalidades instaladas" en el submenú "Opciones del  Complemento Extensión de las órdenes básicas de NVDA".
+
+++ Anuncio selectivo de teclas de órdenes ++[hdr13]
+Esta funcionalidad está instalada por defecto.
+
+NVDA permite anunciarte verbalmente las teclas de órdenes mediante la opción "Verbalizar teclas de órdenes" ubicado en el submenú "Teclado" del menú "Preferencias" o  mediante la orden de teclado "NVDA+4".
+
+Esta funcionalidad trae la posibilidad de:
+- No anunciar algunas teclas de  órdenes cuando la opción "Verbalizar teclas de órdenes" está marcada,
+- Para anunciar algunas teclas de  órdenes cuando la opción "Verbalizar teclas de órdenes" no está marcada.
+
+
+Esta instala un submenú "Anuncio selectivo de teclas de órdenes"  en el submenú ""Complemento Extensión de las órdenes básicas de NVDA".
+
+Se le puede asignar un gesto de entrada. Pero ningún gesto es proporcionado por defecto.
+
+La activación de este submenú muestra el cuadro de diálogo "Anuncio selectivo de teclas de órdenes" que presenta:
+- Una casilla de verificación para elegir en qué modo las teclas de órdenes seleccionadas serán utilizadas,
+- La lista de posibles teclas de órdenes,
+- La lista de combinaciones posibles con las teclas adicionales "NVDA", "Alt", "Control", "Mayúscula".
+
+
+Una pulsación sobre la barra espaciadora se marcará o se desmarcará la tecla o la combinación seleccionada.
+
+Si la casilla "Verbalizar teclas de órdenes" del cuadro de diálogo no está marcada, el hecho de marcar una tecla todavía se anunciará esta tecla. La lista de combinaciones es accesible y todas las combinaciones de la lista están marcadas. 
+
+Para evitar que la tecla de órden tecleada con la combinación sea anunciada, simplemente desmarca esta combinación.
+
+Por otro lado, si la casilla de verificación "Verbalizar teclas de órdenes" está marcada, el hecho de marcar una tecla de órden permitirá no anunciar esta tecla. La lista de combinaciones es accesible y todas las combinaciones de la lista están marcadas de forma predeterminada. Esto significa que la tecla tecleada con cualquier combinación no será anunciada. Al desmarcar una combinación permite anunciar la tecla con esta combinación.
+
+El botón "Aceptar" guarda las elecciones realizadas, mientras que el botón "Cancelar" las olvida.
+
+En las listas, las teclas "F1" y "F2" te permite desplazarte respectivamente al siguiente elemento marcado  o al elemento anterior marcado.
+
+++ Temporizador de minutos ++[hdr14]
+Esta funcionalidad está instalada por defecto.
+
+Permite iniciar un temporizador de minutos para una duración programable.
+Al final del temporizador de minutos, aparece un cuadro de diálogo que muestra un anuncio programable y la emisión de un tono de campanadas.
+
+Esta instala un script que se  lanza:
+- Ya sea mediante la órden "KEY_MINUTE_TIMER" del intérprete,
+- Ya sea mediante el gesto de entrada "MAIN_KEY_MINUTE_TIMER " asignado por defecto.
+
+
+Si el temporizador de minutos se detiene, el script   muestra el cuadro de diálogo "Ejecutar el temporizador de minutos" que presenta:
+- El campo de edición de la duración del temporizador de minutos (en minutos),
+- El campo de edición del anuncio que se muestra cuando finalice el temporizador de minutos,
+- La lista para elegir la duración en el que debe notificarse antes de que finalice el temporizador de minutos,
+- El botón "Opciones del tono de campanadas" para establecer el número de tono de campanadas y el tiempo entre los  tonos de campanadas.
+
+
+La duración, el anuncio y la duración en el que debe notificarse antes de que finalice el temporizador de minutos se registran cada vez que se inicia el temporizador de minutos y se muestran de forma predeterminada al siguiente inicio del temporizador de minutos.
+
+Si el temporizador de minutos se está ejecutando, el script muestra el cuadro de diálogo "Temporizador de minutos actual" para conocer la duración restante del temporizador de minutos y posiblemente detener el temporizador de minutos.
+
+ La duración se actualiza cada 5 segundos y se anuncia cuando el foco está en el campo de edición (de sólo lectura) que lo muestra.
+
+Este cuadro de diálogo se cierra automáticamente cuando finalice el temporizador de minutos.
+
+++ Reinicio de NVDA ++[hdr15]
+Esta funcionalidad no está instalada por defecto.
+
+Esta instala un script  que permite reiniciar NVDA con el nivel de registro en depuración sin cambiar la configuración de NVDA.
+
+La descripción de este script es: "Reinicia NVDA. Pulsando dos veces: reinicia con el nivel de registro en depuración".
+
+El gesto de entrada "MAIN_KEY_RESTART_NVDA" se le asigna de forma predeterminada.
+
+Una simple pulsación de este gesto activa el reinicio de NVDA con el nivel de registro configurado en las Preferencias General.
+
+Una doble pulsación de este gesto de entrada reinicia NVDA con el nivel de registro en depuración sin cambiar el nivel de registro configurado en las Preferencias General de NVDA.
+
+
+++ Mostrar los elementos visibles del objeto en primer plano ++[hdr16]
+Por defecto, esta funcionalidad se instala con  gesto de entrada. 
+
+Esta instala dos scripts almacenados en la sección "Foco del sistema" del diálogo "Gestos de Entrada":
++++ Mostrar los elementos visibles del objeto bajo el foco +++
+La descripción de este script es: "Mostrar los elementos visibles que componen el objeto en primer plano".
+
+Este se lanza mediante la órden "KEY_OBJECTS_LIST" del intérprete.
+No se le asigna ningún gesto de entrada.
+
+El script comienza a buscar estos elementos. Esto puede llevar mucho tiempo. Se emite un pitido cada dos segundos durante esta búsqueda.
+
+Para limitar este tiempo de búsqueda, se establecen límites para ciertos tipos de elementos:
+- El número máximo de filas en una tabla se establece en 40, 
+- El número de elementos de un árbol se establece en 40,
+- El número máximo de elementos en una lista se establece en 40,
+- Los elementos que componen un documento no se tienen en cuenta, ni los de una tabla, un árbol y una lista cuyo número de elementos supera los 500.
+
+
+Una vez la búsqueda completada, los elementos se muestran en el cuadro de diálogo "Mostrar los elementos visibles que componen el objeto en primer plano", según su tipo.
+
+Este cuadro de diálogo presenta:
+- La casilla de verificación para elegir si los elementos sin etiqueta, ni descripción  deben tenerse en cuenta o no (de forma predeterminada, los elementos sin etiqueta no se tienen en cuenta),
+- La lista de tipos de elementos disponibles,
+- La lista de elementos para el tipo seleccionado,
+- El botón para hacer clic izquierdo del ratón sobre el elemento seleccionado,
+- El botón para hacer clic derecho del ratón sobre el elemento seleccionado,
+- El botón para llevar el Navegador de objetos de NVDA y el puntero del ratón sobre el elemento seleccionado,
+- El botón para salir del diálogo.
+
+
++++  Anunciar o mostrar los elementos visibles del objeto bajo el foco +++
+La descripción de este script es: "Verbaliza el objeto actual en primer plano. Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto en primer plano".
+
+Este se lanza mediante el gesto de entrada "MAIN_KEY_OBJECTS_LIST" asignado a el por defecto.
+
+Una simple pulsación lanza el script básico de NVDA que anuncia todos los objetos del objeto en primer plano.
+
+Una doble pulsación lanza el script anterior "Mostrar los elementos visibles del objeto en primer plano".
+
+
+++ Cambio rápido de perfil de voz ++[hdr17]
+Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
+
+Permite cambiar rápidamente el perfil de voz brindando la posibilidad de memorizar, para el perfil de configuración actual, hasta 8 perfiles de voz y seleccionar rápidamente uno de estos perfiles de voz.
+
+Un perfil de voz se define por:
+- El sintetizador de voz utilizado y sus opciones de voz en la configuración (como "voz", "volumen", "velocidad", ...),
+- Las opciones de voz en la configuración de NVDA (como "Nivel de Puntuación y símbolos", "Decir" Mayus" antes de Mayúsculas", ...). 
+
+
+Esta instala los siguientes scripts almacenados bajo la sección "Cambiar el perfil de voz" del cuadro de diálogo "Gestos de Entrada":
+
++++ Administrar los selectores del perfil de voz +++
+La descripción de este script es:"Mostrar el diálogo para administrar los selectores de perfil de voz".
+
+El se lanza:
+- Ya sea mediante la órden "KEY_MANAGE_VOICE_PROFIL" del intérprete,
+- Ya sea mediante el gesto de entrada "MAIN_KEY_MANAGE_SELECTOR" asignado a el por defecto.
+
+
+Este script muestra el cuadro de diálogo "Administrar los selectores del perfil de voz del perfil de configuración Nombre del perfil" (donde  NombreDelPerfil es el nombre del perfil de configuración activado).
+
+Este cuadro de diálogo le permite administrar la asociación de perfil de selector de voz y presenta:
+- La lista de los selectores, 
+- El botón "Activar el perfil de voz",
+- El botón "Asociar el perfil de voz",
+- El botón "Modificar el perfil de voz",
+- El botón "Liberar el selector",
+- El botón "Liberar todos los selectores",
+- El botón "Información del perfil de voz",
+- El botón "Cerrar".
+
+
+Cuando el selector se indica como "libre", el botón "Asociar el perfil de voz" permite asociar el perfil de voz actual con este selector. Este botón abre un cuadro de diálogo que permite asignar  un nombre a este perfil de voz. Un nombre por defecto es propuesto. El botón  "Predeterminado" permite retornar a esta propuesta.
+
+Cuando un selector ya está asociado con un perfil de voz entonces es posible:
+- Activar este perfil de voz con el botón "Activar el perfil de voz": el perfil se convierte en el perfil de voz actual y el cuadro se cierra.
+- Modificar  el nombre del perfil de voz con el botón "Modificar el perfil de voz",
+- Romper la asociación entre el selector y el perfil  de voz con el botón "Liberar el selector". 
+- Romper todas las asociaciones con el botón "Liberar todos los selectores".
+
+
+Para cambiar rápidamente  de perfil de voz,  el modo "Cambiar el perfil de voz" está configurado.
+
+Para habilitar o deshabilitar este modo, la órden "KEY_VOICE_PROFIL_SWITCHING" del intérprete debe ser tecleado.
+
+Este modo habilitado, las flechas derecha o izquierda permite desplazarte al primer selector siguiente o anterior asociado con un perfil de voz y, por lo tanto, definir el perfil de voz asociado con este selector como un perfil de voz actual.
+
++++ Elegir el selector de perfil de voz anterior +++
+La descripción de este script es: "Ir al primer selector anterior asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual".
+
+Este se lanza mediante el gesto de entrada "MAIN_KEY_PREVIOUS_VOICEPROFILE" que se le asigna por defecto.
+
+El script busca el primer selector de perfil de voz que precede al selector actual y se asocia con un perfil de voz. Luego establece este perfil vocal como un perfil de voz actual.
+
+
++++ Elegir el selector de perfil de voz siguiente +++
+La descripción de este script es: "Ir al primer selector siguiente asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual".
+
+Este se lanza mediante el gesto de entrada "MAIN_KEY_NEXT_VOICEPROFILE" que se le asigna por defecto.
+
+El script busca el primer selector de perfil de voz que sigue al selector actual y está asociado con un perfil de voz. Luego establece este perfil de voz como un perfil de voz actual.
++++ Elegir el selector de perfil de voz por   su número +++
+8 scripts están instalados.
+La descripción de estos scripts es:  "Establezca el selector x como el selector actual y, si es posible, defina su perfil de voz asociado como un perfil de voz actual" (donde x es el número del selector).
+
+Cada script se lanza mediante el gesto de entrada "MAIN_KEY_VOICEPROFILE_SELECTOR" asignado de forma predeterminada.
+
+El script selecciona el selector x y si está asociado a un perfil de voz, establece este perfil de voz como un perfil de voz actual.
+
+++ Remanencia de las teclas NVDA y modificadoras ++[hdr18]
+Esta funcionalidad no está instalada por defecto.
+
+Permite hacer persistentes las teclas NVDA ("Insert" del teclado numérico normal o extendido, la tecla "BloqMayus") y las teclas modificadoras ("mayúscula", "control", "alt izquierda" "Control alt derecha", "Windows"). 
+
+El objetivo es usar solo un dedo, por ejemplo, para componer un gesto de entrada que requiera mantener pulsadas todas las teclas.
+
+Para activar o desactivar el modo de remanencia, simplemente componga una de las siguientes secuencias de teclas:
+- "mayúscula derecha", "Control derecha", "mayúscula derecha",
+- "mayúscula izquierda", "control izquierda", "mayúscula izquierda".
+
+
+La activación o desactivación de este modo es indicado vocalmente.
+Cuando el modo "Remanencia " esté activado,  al pulsar una de las teclas NVDA o la modificadora desencadena un retardo y la tecla se almacena.
+Este retardo de tiempo es configurable mediante la opción "Duración de la remanencia de las  teclas" desde el submenú "Opciones avanzadas" del complemento. Puede ser entre 1 y 5 segundos.
+
+El inicio y el final de esta remanencia se indican mediante un pitido que se puede desactivar mediante las siguientes casillas de verificación del submenú "Opciones avanzadas" del complemento:
+- Emitir un pitido al inicio de la remanencia de una tecla ,
+- Emitir un pitido al final de la remanencia de una tecla .
+
+
+Están marcadas de forma predeterminada.
+
+Durante este retardo de tiempo, cualquier nueva pulsación en una de estas teclas reinicia el retardo de tiempo y esta nueva tecla también se almacena, pero no se emite ningún pitido.
+Al pulsar cualquier otra tecla en el teclado, se ejecuta el gesto de entrada compuesto en la combinación de todas las teclas almacenadas con la última tecla.
+Cada vez que se pulsa esta tecla nuevamente durante el retardo de tiempo, el gesto de entrada se ejecutará nuevamente.
+
+Si esta tecla se pulsa fuera del retardo de tiempo, se ejecuta sola y las teclas almacenadas se olvidan.
+
+Atención:
+Es necesario esperar hasta el final de la remanencia para tratar cualquier nueva tecla individualmente. Por ejemplo: "alt" para mostrar un menú y después desplegar los elementos del menú.
+
+Sin embargo, es posible detener la remanencia antes de que finalice el retardo, volviendo a teclear la última tecla remanente.
+
+++ Apagar el ordenador ++[hdr19]
+Esta funcionalidad no se puede desinstalar.
+
+Este instala un script cuya descripción es: "Mostrar el diálogo para apagar, reiniciar o hibernar el ordenador".
+
+El se lanza mediante la órden "KEY_SHUTDOWN" del intérprete.
+Este script muestra un diálogo compuesto por los siguientes elementos:
+- Un botón para apagar el ordenador,
+- Un botón para reiniciar el ordenador,
+- Un botón para hibernar el ordenador,
+- Una casilla de verificación para, si está marcada (estado predeterminado), solicitar el cierre sin previo aviso de todas las aplicaciones iniciadas cuando se pulsa uno de los dos primeros botones,
+- Un campo de edición para establecer la duración antes de apagar o reiniciar el ordenador.
+
+
+Esta funcionalidad también instala los scripts correspondientes a las funciones de los tres botones.
+
+Todos los scripts están almacenados en la sección "Extensión de las órdenes básicas de NVDA" del diálogo "Gestos de Entrada", pero no se les asigna ningún gesto.
+
+
+++ Gestión de los gestos de entrada del usuario ++[hdr20]
+Esta funcionalidad no se puede desinstalar.
+
+Básicamente, NVDA te permite añadir o eliminar gestos de entrada mediante el diálogo "Gestos de entrada". Pero no hay forma de saber qué gestos     han sido añadidos o eliminados por el usuario.
+Es esta necesidad la que quiere responder a esta funcionalidad.
+
+Para ello, este añade el script cuya descripción es: "Mostrar el diálogo para administrar los gestos de entrada configurados por el usuario".
+
+El se lanza mediante la órden "KEY_USER_INPUT_GESTURE" del intérprete. No se le asigna ningún gesto de entrada por defecto.
+
+Este script  muestra el cuadro de diálogo  de estilo "Gestos de entrada" de NVDA al seleccionar solo los gestos de entrada eliminados o modificados por el usuario. 
+
+El dialogo presenta:
+- El árbol clásico que presenta los gestos de entrada por categoría y cada script por su descripción,
+- Un botón ""Eliminar" (activo cuando se selecciona un gesto) para cancelar la adición o eliminación del gesto seleccionado,
+- Un botón para cancelar  todas las adiciones o eliminaciones de los gestos de entrada.
+
+
+Los gestos de entrada eliminados de una categoría se presentan bajo la descripción: "Gestos de Entrada eliminados".
+
+Dado que no es posible conocer la categoría y la descripción de un gesto de entrada eliminado o un gesto de entrada añadido asociado con un script de un complemento que no está cargado o no está instalado en el momento de la visualización del diálogo, este gesto se presenta así:
+- La categoria es nombrada: "nombre del complemento python"."nombre de la class python" (por ejemplo: appModules.notepad++.editWindow.EditWindow),
+- La descripción de los gestos de entrada añadidos es nombrada: "nombre del script python"(por ejemplo: goToPreviousBookmark  ).
+
+
+como por el diálogo "Gestos de Entrada"clásico, solo pulsando el botón "Aceptar" se tomarán en cuenta todas las eliminaciones de gestos.
+
+La cancelación de todos los cambios con el botón "Eliminar todo" está sujeta a confirmación. Una vez aceptados, todos los cambios se cancelan y el diálogo se cierra.
+
+
+++ Control del sonido ++[hdr21]
+De forma predeterminada, esta funcionalidad se instala sin gesto de entrada.
+
+Solo puede funcionar bajo el sistema operativo Windows 10.
+
+Este instala dos scripts almacenados en la sección "Estado del sistema" del diálogo "Gestos de Entrada": 
+
++++ Establecer manualmente el sonido  principal y el flujo audio de NVDA +++
+Este script se lanza mediante el gesto de entrada "MAIN_KEY_VOLUME_ON" asignado de forma predeterminada.
+
+Establece el sonido para el volumen principal y para el flujo audio de NVDA y fuerza los niveles de cada uno a los valores configurados en las Opciones avanzadas sin considerar el nivel mínimo.
+
++++ Silencia o restablece el sonido del flujo audio para la aplicación que tiene el foco +++
+Este script se lanza:
+- Ya sea mediante la órden "KEY_TOGGLE_MUTE" del intérprete de órden,
+- Ya sea mediante el gesto de entrada "MAIN_KEY_TOGGLE_MUTE" asignado de forma predeterminada.
+
+
+Esta órden silencia el sonido del flujo audio de la aplicación que tiene el foco Si se establece o restablece el sonido si se silencia.
+
+
+++ Herramientas de desarrollo ++[hdr22]
+Esta funcionalidad no está instalada por defecto.
+
+Este instala un script almacenado en la sección "Herramientas" del diálogo "Gestos de Entrada":
++++ Conversión de archivos de documentación +++
+Este script se lanza mediante la órden "KEY_CONVERT_TO_HTML" del intérprete. No se le asigna ningún gesto de entrada.
+
+Muestra el diálogo "Convertir a HTML" que te permite seleccionar uno de los complementos instalados y comenzar la conversión a HTML de los archivos de documentación para un idioma en particular o todos los idiomas de este complemento.
+
+
+++  Scripts para hacer clic en la posición actual del navegador de objetos ++[hdr23]
+Estos scripts permiten hacer, con el botón derecho o izquierdo del ratón, un simple o un doble clic en la posición actual del navegador de objetos.
+
+Estos encadenan dos tipos de scripts de NVDA:
+- El script "Desplaza el puntero del ratón al navegador de objetos actual: atajo "NVDA+Dividir teclado numérico" (ordenador de escritorio) o "NVDA+mayúscula+m" (ordenador Portátil),
+- y los scripts para hacer    un Clic con el botón del ratón:
+ - Simple clic izquierdo: "Dividir teclado numérico" (ordenador de escritorio) o "NVDA+ù"   (ordenador Portátil y idioma NVDA en francés) o "NVDA+[" (ordenador Portátil   y otro idioma).
+ - Simple clic derecho: "Multiplicar teclado numérico" (ordenador de escritorio) o "NVDA+*"   (ordenador Portátil y idioma NVDA en francés) o "NVDA+]" (ordenador Portátil y otro idioma).
+
+
+Los gestos de entradade estos scripts son:
+- "MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR": hacer un simple clic izquierdo a la posición del  navegador de objetos. Una segunda pulsación  hace un doble clic.
+- "MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR": hacer un simple clic derecho a la posición del  navegador de objetos. Una segunda pulsación hace un doble clic.
+
+
+Estos gestos de entrada pueden ser modificados y están en la categoría "Ratón" del cuadro de diálogo "Gestos de Entrada".
+
+
++ Opciones +
+++ Eliminación de los anuncios de la descripción de los objetos en las cintas de Windows ++[hdr100]
+
+En las cintas de Windows, NVDA es demasiado parlanchín sin necesidad.
+Por defecto, el complemento impide que se anuncie la descripción que parece inútil.
+
+Pero esto se puede desactivar mediante la opción "No anunciar la descripción de los objetos en las cintas de Windows" que está en el submenú "Opciones" del menú "Opciones del Complemento Extensión de las órdenes básicas de NVDA".
+Será necesario reiniciar NVDA para tener en cuenta la opción.
+
+
+++ Anunciar la palabra enfocada después de una eliminación de palabras ++[hdr101]
+En algunas aplicaciones como WordPad , microsoft Word, es posible eliminar la siguiente palabra con la órden "control+suprimir", pero NVDA no pronuncia la palabra después de la posición del cursor después de la eliminación.
+
+Por defecto, el complemento le permite a NVDA pronunciar esta palabra.
+
+Esto se puede evitar desmarcando la opción "Anunciar la palabra enfocada después de una eliminación de palabras" que está en el submenú "Opciones" del menú "Opciones del Complemento Extensión de las órdenes básicas de NVDA".
+
+
+++ Maximizar automáticamente las ventanas ++[hdr102]
+Esta opción   permite maximizar automáticamente las ventanas que están en primer plano.
+
+Por defecto, está habilitado.
+
+Puedes desactivarlo desmarcando la opción "Maximizar automáticamente las ventanas" en el submenú "Opciones" del menú "Opciones del Complemento Extensión de las órdenes básicas de NVDA".
+
+
+++ Anunciar signos de puntuación y símbolos al moverse por palabra ++[hdr103]
+NVDA permite, en los documentos, de moverse  palabra por palabra con las órdenes de teclado "control+Flecha derecha" y "control+Flecha izquierda". 
+
+Los símbolos y las puntuaciones se verbalizarán entonces según el nivel de puntuación y símbolos configurados para el perfil de configuración actual.
+
+Esta opción te permite configurar el nivel de símbolos y puntuación que sólo se utilizará al moverse por palabra.
+
+Esta opción se registra para el perfil de configuración actual.
+
+Esto se configura en el submenú "Opciones" del menú "Opciones del Complemento Extensión de las órdenes básicas de NVDA".
+
+Sólo está presente si la funcionalidad "Anuncio de la funcionalidad asociada a las órdenes de edición de estilo "Copiar", "Pegar" está instalada.
+
+Este se presenta en forma de una lista que te permite elegir:
+- Ya sea el nivel de símbolos y puntuación del nivel de configuración actual (seleccionado de forma predeterminada),
+- Ya sea uno de los niveles de símbolos y puntuación de NVDA (ninguna, alguna, la mayoría, toda).
+
+
++ Opciones avanzadas +
+++ Advertir con un sonido la escritura de un error en el registro de NVDA ++[hdr300]
+Los usuarios experimentados pueden haber notado que al usar una versión de desarrollo de NVDA (version snapshot master o next), todo error  escrito en el registro de NVDA es advertido con un sonido. Pero con las versiones  finales o releases candidates, esta advertencia no se repoduce.
+
+Esta opción ofrece la opción entre:
+- Emitir la señal acústica para todas las versiones de NVDA,
+- Nunca emitir la señal para ninguna versión de NVDA,
+- Emitir la señal hasta el próximo reinicio de NVDA,
+- Emitir la señal solo para versiones de desarrollo de NVDA.
+
+
+Para hacer  esta elección, simplemente selecciona la opción en el cuadro combinado llamado  "Reproducir un sonido al escribir un error en el registro" desde el submenú "Opciones avanzadas del menú ""Opciones del Complemento Extensión de las órdenes básicas de NVDA".
+
+Por defecto, la opción "Solo para versiones de desarrollo de NVDA" está seleccionada.
+
+++ Restablecimiento automático del volumen principal y de NVDA al cargar el complemento ++[hdr301]
+Esta opción permite restablecer, al cargar el complemento, el volumen principal y el de NVDA y para establecer el nivel de cada volumen a un valor definido por configuración en el caso de que esté por debajo del nivel mínimo definido por configuración.
+
+Para ello, el diálogo "Opciones avanzadas" presenta los siguientes campos de configuración:
+- La casilla de verificación "Ajustar automáticamente el sonido principal y de NVDA al cargar el complemento" que permite habilitar o deshabilitar esta opción,
+- El nivel mínimo del volumen principal debajo de que nivel será restablecido,
+- El nivel del volumen principal a restablecer,
+- El nivel mínimo del volumen de NVDA debajo de que nivel será restablecido,
+- El nivel predeterminado  del volumen de NVDA a restablecer.
+
+
+Una imposibilidad técnica  imposibilita para que se pueda establecer el nivel del volumen de NVDA por encima del 50%.
+Al instalar el complemento, los niveles del volumen principal y de NVDA se tienen en cuenta para definir los niveles a restablecer.
+
+
+
+++ Títulos de los cuadros de diálogos del complemento con el nombre del complemento ++[hdr302]
+Esta opción permite titular o no los diálogos del complemento con el nombre del complemento.
+Por defecto, esta opción está marcada y el título de los cuadros de diálogo se presenta en la forma: "Complemento Extensión de las órdenes básicas de NVDA - NVDA - título del diálogo".
+
+
+
+++ Configuración del retardo de espera de repetición para el mismo gesto de entrada ++[hdr303]
+Algunos de los scripts del complemento realizan diferentes acciones dependiendo de la cantidad de veces que se compone el gesto de entrada asociado con el script.
+La repetición del gesto de entrada debe realizarse dentro de poco tiempo (250 ms de forma predeterminada).
+Para un script que realiza tres acciones diferentes, el mecanismo es:
+- En la primera pulsación, se inicia el temporizador, 
+- Si no hay una segunda pulsación antes de la expiración del temporizador, se realiza la primera acción. De lo contrario se reinicia el temporizador,
+- Si no hay una tercera pulsación antes de la expiración del temporizador, se realiza la segunda acción. De lo contrario, el temporizador se detiene y se realiza la tercera acción.
+
+
+Dependiendo de la destreza del usuario o de la configuración del hardware, esta duración puede ser demasiado larga o demasiado corta.
+La opción titulada "Duración  de repetición del mismo gesto de entrada" del menú "Opciones avanzadas", permite ajustar esta Duración según sea necesario.
+
+
++ Otras mejoras +
+
+++ Anuncio de la hora independiente del nivel de puntuación ++[hdr200]
+
+El gesto de entrada básico "NVDA + f12" pulsándola una vez anuncia la hora y pulsándola dos veces anuncia la fecha.
+Pero la hora no se anuncia de la misma manera, según el nivel de puntuación seleccionado en la configuración de voz.
+
+El complemento corrige este pequeño defecto.
+++ Copia la fecha y hora al portapapeles ++[hdr201]
+El gesto de entrada básico "NVDA + f12" pulsándola una vez anuncia la hora y pulsándola dos veces anuncia la fecha.
+
+El complemento añade la copia de la fecha y la hora pulsándola tres  veces con este gesto.
+
+
+
+++ Exploración de la carpeta de configuración del usuario o las  carpeta en archivos de programa de NVDA ++[hdr202]
+El módulo agrega en el menú "Herramientas" de NVDA un submenú "Explorar NVDA" que ofrece dos submenús:
+- "Mi carpeta de configuración" : para abrir en el Explorador de Windows tu carpeta de usuario "userConfig",
+- "La carpeta del programa NVDA" : para abrir en el explorador la carpeta del programa NVDA.
+
+
+Es posible asociar con cada uno de ellos, un gesto de entrada mediante el diálogo "Gesto de Entrada" de NVDA.
+
+Esto corresponde a los dos scripts almacenados en la sección "Extensión de las órdenes básicas de NVDA" del diálogo "Gesto de Entrada" y cuya descripción es:
+- "Abrir en el explorador mi carpeta de configuración",
+- "Abrir en el explorador la carpeta del programa NVDA".
+
+
+Por defecto, ningún gesto de entrada está asociado con ellos.
+
+++ Presentación de la información de formato del texto en un cuadro de diálogo ++[hdr203]
+De forma básica, una doble pulsación del gesto de entrada "NVDA+f" presenta la información de formato en forma de un documento HTML.
+
+Este script apunta a completarlos y mostrarlos en un cuadro de diálogo.
+
+Éste se lanza con la ayuda del gesto de órden "KEY_REPORT_FORMATTING" del intérprete. 
+No se le asigna ningún gesto de entrada por defecto.
+
+La descripción del script es: "Mostrar información de formato para la posición actual del cursor de revisión dentro de un documento en el cuadro de diálogo".
+
+Este está almacenado en la sección "Extensión de las órdenes básicas de NVDA" del diálogo "Gesto de Entrada".
+
+++ Anuncio del texto de los cuadros de diálogo de estilo de confirmación ++[hdr204]
+NVDA considera para ciertos cuadros de diálogo como los de confirmación, que el texto que contienen es una descripción.
+
+Entonces, si la opción "Anunciar descripciones de objeto" del submenú "Presentación de Objetos" no está marcado, NVDA no anuncia el texto. 
+
+El complemento pone en su lugar la opción "No tomar en cuenta la opción de Anunciar la descripción del objeto al mostrar los cuadros de diálogo de estilo de confirmación" en el submenú "Opciones avanzadas"  para forzar, si está marcado, el anuncio del texto de estos  cuadros de diálogo en todos los casos. Esta opción está marcada por defecto.
+
+
++ Resumen de las órdenes proporcionados por el complemento +
+++ Gestos de entrada instalados sistemáticamente ++
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| KEY_CURRENT_ROW_REPORT | KEY_CURRENT_ROW_REPORT | Ninguno | Anunciar las celdas en la fila actual de la tabla |
+| KEY_CURRENT_COLUMN_REPORT | KEY_CURRENT_COLUMN_REPORT | Ninguno | Anunciar las celdas en la columna actual de la tabla |
+| KEY_NEXT_ROW_REPORT | KEY_NEXT_ROW_REPORT | Ninguno | Ir a la siguiente fila de la tabla y anunciar las celdas de la misma |
+| KEY_PREVIOUS_ROW_REPORT | KEY_PREVIOUS_ROW_REPORT | Ninguno | Ir a la fila anterior de la tabla y anunciar las celdas de la misma |
+| KEY_NEXT_COLUMN_REPORT | KEY_NEXT_COLUMN_REPORT | Ninguno | Ir a la siguiente columna de la tabla y anunciar las celdas de la misma |
+| KEY_PREVIOUS_COLUMN_REPORT | KEY_PREVIOUS_COLUMN_REPORT | Ninguno | Ir a la columna anterior de la tabla y anunciar las celdas de la misma |
+| KEY1_CELL_POSITION_REPORT | KEY2_CELL_POSITION_REPORT | Ninguno | Anunciar la posición de la celda actual de la tabla |
+| KEY_MOVE_FIRST_CELL_ROW | KEY_MOVE_FIRST_CELL_ROW | Ninguno | Ir a la primera celda de la fila de la tabla |
+| KEY_MOVE_LAST_CELL_ROW | KEY_MOVE_LAST_CELL_ROW | Ninguno | Ir a la última celda de la fila de la tabla |
+| KEY_MOVE_FIRST_CELL_COLUMN | KEY_MOVE_FIRST_CELL_COLUMN | Ninguno | Ir a la primera celda de la columna de la tabla |
+| KEY_MOVE_LAST_CELL_COLUMN | KEY_MOVE_LAST_CELL_COLUMN | Ninguno | Ir a la última celda de la columna de la tabla |
+| KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | Ninguno | Anuncia la dirección (URL) del documento. Pulsando dos veces: para copiarla al portapapeles |
+| KEY_SHELL | KEY_SHELL | Ninguno | Ejecutar la órden del intérprete del complemento |
+| KEY_DATE_TIME | KEY_DATE_TIME | Ninguno | Anuncia la hora actual. Pulsando dos veces, anuncia la fecha actual. Pulsando tres veces: copia la fecha y hora al portapapeles |
+
+++ Gestos de entrada instalados a la demanda ++
+
+|| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| Lista de iconos en la bandeja del sistema | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Ninguno | Mostrar la lista de iconos en la bandeja del sistema. Pulsando dos veces, Muestra la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla |
+| Ayuda para la composición de símbolos complejos | MAIN_KEY_COMPLEX_SYMBOL  | MAIN_KEY_COMPLEX_SYMBOL | Ninguno | Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático |
+| Anuncia el nombre y el número de versión de la aplicación enfocada | MAIN_KEY_REPORT_NAME_VERSION  | MAIN_KEY_REPORT_NAME_VERSION | Ninguno | Anuncia el nombre y el número de versión de la aplicación enfocada |
+| Anuncia el nombre del archivo de la aplicación, el nombre del complemento cargado y el nombre y estado del perfil de configuración | MAIN_KEY_CONFIGURATION_PROFILE  | MAIN_KEY_CONFIGURATION_PROFILE | Ninguno | Anuncia el nombre del archivo de la aplicación actual y el nombre del complemento cargado. Pulsando dos veces, anuncia el nombre y el estado del perfil de configuración |
+| Anuncia la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Ninguno |Anuncia la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar |
+| Gestión de los registros de NVDA | MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | Ninguno | Abrir el registro actual de NVDA. Pulsando dos veces: abre el antiguo registro. Pulsando tres veces: copia la ruta del registro actual al portapapeles |
+| Anuncia el registro anterior del historial de los anuncios del habla | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Ninguno | Anuncia el registro anterior del historial de los anuncios del habla |
+| Anuncia el siguiente registro del historial de los anuncios del habla | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Ninguno | Anuncia el siguiente registro del historial de los anuncios del habla |
+| Anuncia el registro actual del historial de los anuncios del habla | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Ninguno | Anuncia el registro actual del historial de los anuncios del habla. Pulsando dos veces: para cópiarlo al portapapeles. Pulsando tres veces: para mostrar el historial de los anuncios del habla |
+| Reinicio de NVDA | MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | Ninguno | Reinicia NVDA. Pulsando dos veces: reinicia con el nivel de registro en depuración |
+| Temporizador de minutos | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Ninguno | Mostrar el diálogo que permite, si se detuvo el temporizador de minutos, ya sea para iniciarlo o si no para consultar la duración restante o para detenerlo |
+| Mostrar los elementos visibles del objeto en primer plano | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Ninguno | Verbaliza el objeto actual en primer plano. Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto en primer plano |
+| Administrar los selectores del perfil de voz | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Ninguno | Establezca el selector 1 a 8 como el selector actual y, si es posible, defina su perfil de voz asociado como un perfil de voz actual |
+| Ir al primer selector siguiente | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Ninguno | Ir al primer selector siguiente asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
+| Ir al primer selector anterior | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Ninguno | Ir al primer selector anterior asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
+| Asociación del perfil de voz | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Ninguno | Asociar el perfil de voz actual con el selector actual. Pulsando dos veces: liberar el selector de su perfil de voz asociado. Pulsando tres veces: liberar todos los selectores de su perfil  de voz asociado |
+| Ajustar automáticamente el sonido | MAIN_KEY_VOLUME_ON | MAIN_KEY_VOLUME_ON | Ninguno | Ajustar automáticamente el sonido principal y de NVDA |
+
+++ Órdenes del intérprete ++
+
+| Órdenes | Descripción |
+| KEY_APPLICATION_INFORMATIONS | Mostrar información acerca de la aplicación enfocada |
+| KEY_OBJECTS_LIST | Mostrar los elementos visibles que componen el objeto en primer plano |
+| KEY_CONVERT_TO_HTML | Mostrar el diálogo para convertir a HTML los archivos de documentación de uno de los complementos instalados |
+| KEY_REPORT_FORMATTING | Mostrar información de formato para la posición actual del cursor de revisión dentro de un documento en el cuadro de diálogo |
+| KEY_COMPLEX_SYMBOL | Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático |
+| KEY_LAST_USED_COMPLEX_SYMBOL | Mostrar la lista de los últimos símbolos complejos compuestos |
+| KEY_DISPLAY_SPEECH_HISTORY |  Mostrar los registros del historial de los anuncios del habla |
+| KEY_WINDOWS_LIST | Muestra la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla |
+| KEY_ICONS_List | Mostrar la lista de iconos en la bandeja del sistema |
+| KEY_MINUTE_TIMER | Mostrar el diálogo que permite, si se detuvo el temporizador de minutos, ya sea para iniciarlo o si no para consultar la duración restante o para detenerlo |
+| KEY_MODULE_GUIDE | Mostrar la guía del usuario del complemento |
+| KEY_HELP_SHELL | Mostrar la lista de órdenes del intérprete del complemento |
+| KEY_LOG_VIEW | Mostrar el diálogo para administrar los registros de NVDA |
+| KEY_SAY_CURRENT_FOLDER | Anuncia la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar |
+| KEY_VOICE_PROFIL_SWITCHING | Alternar el modo de cambio de perfil de voz |
+| KEY_SHUTDOWN | Mostrar el diálogo para apagar, reiniciar o hibernar el ordenador |
+| KEY_TOGGLE_MUTE | Silencia o restablece el volumen para la aplicación actual |
+| KEY_USER_INPUT_GESTURE  | Mostrar el diálogo para administrar los gestos de entrada configurados por el usuario |
+| KEY_MANAGE_VOICE_PROFIL | Mostrar el diálogo para administrar los selectores de perfil de voz |
+
+

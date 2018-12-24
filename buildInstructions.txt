@@ -1,0 +1,23 @@
+Add-on build instructions
+
+Last updated: September16, 2018 (paulber19)
+
+Thank you for your interest in helping out with this addon development, specificlaly building the add-on for testing purposes.
+
+There are two ways of building the add-on: manual or automated. Manual bundling is useful if you'd like to build the add-on bundle but do not wish to install extra software and wish to work with source code directly, whereas automated build is useful for publishing the add-on to websites and includes interface translations and documentation.
+
+Manual bundling: From the source code directory, open "addon" folder and create a text file named "manifest.ini". Alternatively, copy manifest.ini.tpl into "addon" folderand rename it to "manifest.ini". Then fill out the manifest file (be sure to quote strings). Once the manifest file is ready, zip the entire contents of the "addon" folder as a zip file, naming this whatever you want with the extensoin of .nvda-addon.
+
+Automated bundling: To use this method, install Python 2.7 (www.python.org),and SCons (www.scons.org).
+Install Python (if you haven't), then install SCons. 
+Then run SCons from the command prompt shell (Windows Command Prompt (cmd.exe), Cygwin, etc.) (for windows user, you also use "makeaddon.bat" batche command).
+If everything is working, after some progress messages, add-on installer  (with nvda-addon extension) will be created.
+
+To customize automated bundling variables, modify buildVars.py.
+The build variables dictionary allows you to control the same variables as manifest method above (name, description, version and so on).
+
+To generate the  add-on  pot file, type "scons pot"(for Windows user, you can use "makepotfile.bat" batche command). 
+Lastly, to clean the build, type "scons --clean" (for Windows user, you can also use "clean.bat" batche command).
+
+
+Enjoy the add-on.

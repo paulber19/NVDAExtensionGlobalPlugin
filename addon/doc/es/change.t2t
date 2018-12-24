@@ -1,0 +1,377 @@
+Complemento Extensión de las órdenes básicas de NVDA - Historial
+Autor: paulber19 (paulber19@laposte.net)  con la participación de Daniel Poiraud
+Ultima modificacion: 14/12/2018
+
+%!Target: html
+%!Encoding: UTF-8
+%!style:..\style.css
+%!Options: --toc
+% Remove the Table of Contents heading from the toc.
+%!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
+
+% h1 in html should really be the document title only.
+% Therefore, change h1 through h5 in the output to h2 through h6.
+%!PostProc(html): ^<H5>(.*)</H5>$ <H6>\1</H6>
+%!PostProc(html): ^<H4>(.*)</H4>$ <H5>\1</H5>
+%!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
+%!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
+%!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
+Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
++ v7.4 (16/12/2018) +
+1- Nueva características:
+- Añadido, para los navegadores "Firefox" y Google Chrome", de tipo  "Clicable" para  el modo de navegación y el cuadro de diálogo "Lista de elementos",
+- Añadido, para los navegadores "Firefox" Internet Explorer, Microsoft Edge y Google Chrome", de tipo "Párrafo " para  el modo de navegación y el cuadro de diálogo "Lista de elementos",
+- Añadido  el script para hacer  un simple  y un double clic izquierdo en la posición actual del navegador de objetos.
+- Añadido  el script para hacer  un simple  y un double clic derecho en la posición actual del navegador de objetos.
+
+
+2- Varios:
+- Posibilidad, para lanzar el script seleccionado en el diálogo que presenta los scripts del intérprete,
+- Posibilidad, para los traductores, de configurar las órdenes de edición de tipo "control+c, control+a" para cada idioma y para ciertas aplicaciones que lo requieran,
+- Utilización de CentreOnScreen" en lugar de "Centre".
+
+
++ v7.3 (25/09/2018) +
+Finalización de la puesta en compatibilidad con NVDA 2018.3 y con wxPython 4.
+- Nueva características:
+ - Almacenados los últimos símbolos y cuadros de diálogo para mostrarlos y recomponerlos,
+ - El nuevo cuadro de diálogo Herramientas de desarrollo que permite la posibilidad de convertir los archivos de documentación de los complementos,
+ - Añadido el tipo de elemento "Punto de referencia principal" para el modo de navegación (navegador Firefox, Internet Explorer, Google Chrome y Microsoft Edge),
+ - Añadida la opción avanzada para configurar el retardo de espera de repetición del mismo gesto de entrada,
+ - Desactivación bajo la opción de parámetro "Anunciar Descripciones de Objeto" mientras se muestran los cuadros de diálogo de estilo de confirmación (mostrados por gui.messageBox) para que NVDA anuncie el mensaje contenido en estos cuadros,
+ - Añadida la opción para la navegación en bucle en el documento en la búsqueda de un elemento anterior o siguiente,
+ - Añadido un pitido repetitivo al buscar elementos en el cuadro de diálogo "Lista de elementos" (NVDA+f7),
+ - Colocación del botón "Hibernar" en primer lugar en el cuadro de diálogo "Apagar el ordenador",
+ - El menú de configuración del complemento cambió para parecerse al menú de configuración de NVDA,
+
+
+- Corección de Errores:
+ - Corrección de las etiquetas de lista de opciones de los diálogos de configuración del complemento.
+ - Corrección de la no interrupción del pitido al buscar elementos de la ventana en primer plano en la interrupción de escape,
+  - Problema de pie de página cuando la conversión incorrecta de un documento t2t (modificación del archivo txt2tags.py y supresión del pie de página).
+
+
+
+- Varios:
+ - Reorganización  del código fuente con la ubicación de todos los módulos utilizados en la misma carpeta ("( "utilities"). Este archivo no requiere ninguna traducción,
+ - Colocación de los archivos wav en la carpeta sounds.
+
+
++ v7.2 (20 de Junio de 2018) +
+- Puesta en compatibilidad con las versiones de desarrollo de NVDA que se preparan para la transición a wxPython 4 (NVDA 2018.3),
+- Se corrigió un error al destruir la última ventana en la lista de ventanas.
+- Se añadió una opción para deshabilitar la numeración de los registros del historial de los anuncios del habla,
+- Se añadió una opción para titular o no los diálogos con el nombre del complemento,
+- Desactivación del parámetro "Anunciar Descripciones de Objeto" mientras se muestran los cuadros de diálogo del complemento, de estilo gui.messageBox, para escuchar el mensaje contenido en estos cuadros.
+
+
++ v7.1.2 (6 de Junio de 2018) +
+Corrección que no tenía en cuenta la configuración del complemento para la funcionalidad "Remanencia de teclas".
+
++ v7.1.1 (5 de Junio de 2018) +
+Se ha solucionado el problema de no poder leer el resultado del reconocimiento óptico.
+
++ v7.1 (1 de Junio de 2018) +
+Puesta en compatibilidad con NVDA 2018.2
+
+
++ v7.0 (8 de Marzo de 2018) +
+Esta versión del complemento no es compatible con versiones anteriores a la versión 2018.1 de NVDA
+
+++ Nuevas características ++
+- Soporte del navegador Google Chrome mediante la funcionalidad "Extensión de la funcionalidad del modo exploración",
+- Puesta en marcha del intérprete de órdenes que permiten lanzar los scripts con una simple tecla,
+- Instalación mediante la configuración de las funcionalidades con o sin gestos de entrada,
+- Nueva característica "Remanencia de teclas"  para componer los gestos de entrada usando las teclas NVDA, Control, Alt, Mayuscula o Windows, con un solo dedo,
+- Anuncio o visualización del nombre y número de versión del complemento activado  para la aplicación colocado bajo el foco,
+- Apagar, reiniciar o hibernar el ordenador,
+- Administrar los gestos de entrada configurados por el usuario.
+- Control del sonido del ordenador (Windows 10)  para:
+ - Silenciar o restablecer el sonido  del flujo audio para la aplicación que tiene el foco,
+ - Establecer, mediante el script y en el lanzamiento del complemento, el sonido del flujo audio principal y el de NVDA.
+
+
+++ Cambios ++
+- La mayoría de las funcionalidades ahora están instaladas por defecto sin ningún gesto de entrada. Sin embargo, es posible instalar estos gestos de entrada cambiando el estado de instalación de la funcionalidad o asignando manualmente estos gestos de entrada,
+- El gesto de entrada "nvda+f12" puede anunciar la hora del reloj de Windows con los segundos (opción configurable),
+- El gesto de entrada "NVDA+f12" puede copiar la fecha y la hora al portapapeles (pulsación triple),
+- El gesto de entrada "NVDA+alt+k" ("Anunciar las celdas en la columna actual ") se ha reemplazado por "NVDA+alt+l" (conflicto con otro complemento),
+- El gesto de entrada "NVDA+mayúscula+4" ("Ayuda para la composición de símbolos complejos") se ha reemplazado por "NVDA+majuscule+ f4" (conflicto con otro complemento),
+- La documentación ha sido reorganizada: el capítulo "Historial" se mueve al capítulo "Generalidades" y el historial del complemento se coloca en un archivo separado (change.html).
+
+
+++ Corección de Errores ++
+- Corrección de las descripciones erróneas de los gestos de entrada de los scripts que reemplazan a los scripts básicos,
+- En la corrupción del archivo de configuración, restableciendo la configuración a los valores predeterminados.
+
+
++v6.5 (28 de Agosto de 2017)+
+- Compatibilidad con NVDA 2017.3,
+- La órden "w" modificado en "y",
+-  Corrección de un fallo en la funcionalidad "Anuncio selectivo de teclas de órdenes",
+- Corrección de la documentación de algunos scripts.
+
+
++v6.4 (9 de Julio de 2017)+
+- Añadidos atajos de teclado para cambiar  el perfil de voz en un ordenador portátil,
+- Corrección de la pérdida de los nombres de la tecla modificada durante una actualización,
+- Corrección del error al moverse en una página html.
+
+
++ v6.3 (2 de Junio de 2017) +
+- Cambio rápido de perfil de voz.
+
+
++ v6.2.1 (7 de Abril de 2017) +
+Corrección del problema encontrado en Excel con "control+c" o "control+v"
+
+
++ v6.2 (13 de Marzo de 2017) +
+Compatibilidad con nvda 2017.1
+
+Nuevas características:
+- Posibilidad de advertencia antes de que expire el temporizador,
+- Se ha añadido las órdenes al moverse en una tabla para Microsoft Edge,
+- Reiniciar NVDA con el registro habilitado en modo depuración,
+- Advertir, con un sonido, la escritura de un error en el registro.
+
+
+
+Corrección de fallo:
+
+
+- Doble anuncio del elemento enfocado (diálogo Anuncio selectivo de teclas de órdenes),
+- No hay niguna acción del botón "Gestionar tus símbolos" del cuadro de diálogo "Ayuda para la composición de símbolos complejos",
+- Imposibilidad de crear una nueva categoría del cuadro de diálogo   "Administrador de símbolos del usuario",
+- No tenía en cuenta inmediatamente las traducciones durante una actualización (doble reinicio de NVDA necesario),
+- "control+c" en el Explorador de Windows se salta al primer archivo que comienza con "c",
+- Se anuncia mal el número de elementos seleccionados (Windows Explorer W10).
+
+
++ v6.1 (10 de Enero de 2017) +
+- Configuración del nivel de símbolos y puntuación al moverse por palabra,
+- Nuevo cambio de la órden de teclado para el temporizador,
+- Corrección de la no copia de la dirección del documento al portapapeles ("NVDA+a")
+
+
++ v6.0.3 (5 de Enero de 2017) (sin distribuir) +
+- Nuevo cambio de atajo para el temporizador,
+- Corrección de la documentación.
+
+
++ v6.0.1 (26 de Diciembre de 2016) +
+Corrección de fallo en el anuncio de puntuación palabra por palabra.
+
++ v6.0 (23 de Diciembre de 2016) +
+- Posibilidad de copiar la ruta del registro actual al portapapeles,
+- Posibilidad de mostrar el historial de los anuncios del habla y aumentar el número de registros a 200,
+- Añadido parcial de la funcionalidad "Extensión del modo exploración" para el navegador Microsoft Edge,
+- script para reiniciar NVDA,
+- script para mostrar los elementos visibles que componen el objeto en primer plano,
+- Cambio de órden de teclado para lanzar el temporizador,
+- Anuncia la puntuación al moverse por palabra,
+- Rediseño de todos los diálogos para explotar los servicios de guiHelper,
+- Compatibilidad con NVDA 2016.4.
+
+
++ v5.0.2 (30 de Septiembre de 2016) +
+- Corrección del problema de bloqueo W10 al maximizar las ventanas,
+- Indicación en la documentación, cómo seleccionar con el ratón, los elementos en las listas en los cuadros de diálogo "Anuncio selectivo de las teclas de órdenes".
+
+
++ v5.0.1 (13 de Septiembre de 2016) +
+Corrección de fallos:
+- problema de la superposición de listas en el cuadro de diálogo "Anuncio selectivo de las teclas de órdenes",
+- Menú "Renombrar las teclas del teclado" inoperativo,
+- Las órdenes "nvda+Mayuscula+4" inoperativo.
+
+
++ v5.0 (23 de Agosto de 2016) +
+- Funcionalidad de renombrar las teclas del teclado,
+- Funcionalidad de gestión de símbolos complejos del usuario,
+- Funcionalidad del anuncio selectivo de las teclas de órdenes,
+- Funcionalidad del temporizador,
+- Se han añadido los scripts  para las tablas para moverse a la primera / última celda de la fila / columna,
+- Opción de maximización automática de las ventanas,,
+- Se ha añadido un submenú para explorar tu carpeta de configuración o la carpeta en archivos de programa de NVDA,
+- Se ha añadido la categoría "Alfabeto Griego",
+- Lista de símbolos complejos siguiendo el orden del archivo "symbolCategories.dic",
+- Reanudación del manual.
+
+
++ v4.3 (6 de Junio de 2016) +
+- corrección de una mala traducción de los anuncios "copiar al portapapeles" y "ninguna selección",
+- Presentación en un cuadro de diálogo del formato de texto (órden de teclado nvda+f).
+
+
++ v4.2 (18 de Abril de 2016) +
+- Scripts para reescuchar los anteriores anuncios del habla,
+- Scripts para anunciar las celdas de las columnas / filas de una tabla,
+- Script para anunciar la dirección del documento (Firefox y Internet Explorer),
+- Modificación del script de NVDA "nvda+f12" para anunciar la hora sin depender del nivel de puntuación.
+
+
++ v4.1.3 (14 de Marzo de 2016) +
+- Utilizando las traducciones de NVDA para el cuadro de diálogo "NVDA+f7",
+- Anuncio de las órdenes sin control de selección para todas las aplicaciones.
+- Reanudación de la descripción de algunos scripts,
+- Eliminación de los archivos changes.* y la inclusión del historial en el manual del usuario.
+
+
++ v4.1.2 (6 de Marzo de 2016) +
+- Corrección de fallo: Regresión del script "control+delete"
+
+
++ v4.1.1 (5 de Marzo de 2016) +
+- Corrección de fallo: No hay anuncio de la selección en Libre office Writer
+
+
++ v4.1 (25 de Febrero de 2016) +
+- Puesta en conformidad con NVDA 2016.1
+- Complemento en la denominación en los nombres de los elementos en el cuadro de diálogo NVDA+f7.
+- Se tiene en cuenta   la selección para anunciar las órdenes de edición
+- Eliminación de la descripción en las cintas de Windows
+- Maximizada la altura de la ventana de símbolos complejos.
+
+
++ v4.0.2 (16 de Diciembre de 2015) (sin distribuir) +
+- Cambio de la letra al mover de ancla en ancla (conflicto con anotación)
+- Corrección de la documentación de las órdenes de teclado (eliminación del punto final)
+- Corrección de la parada de la bucle en enlaces en el árbol(diálogo NVDA+f7)
+
+
++ v4.0.1 (27 de Noviembre de 2015) +
+- Corrección de fallo: Defecto de la selección del elemento en el árbol (diálogo NVDA+f7),
+- Se ha corregido el posicionamiento sin foco en la lista de tipos de elementos.
+
+
++ v4.0 (23 de Noviembre de 2015) +
+- Añadido Activación / desactivación de la instalación de las funcionalidades del complemento,
+- Mostrar la etiqueta de los campos de edición en el árbol de elementos (diálogo NVDA+f7),
+- Anuncio del número de elementos que se encuentran en la lista de opciones del tipo de elemento (diálogo NVDA + f7),
+- Añadido el script para mostrar el registro antiguo o actual de NVDA.
+- Se ha eliminado el anuncio de la funcionalidad para "control+y" (problema con MS sWord).
+- Modificación para tener en cuenta las nuevas posibilidades de NVDA 2015.3, en particular:
+- Se ha eliminado el script "nvda+h"
+- Se ha eliminado el script para cambiar el anuncio del número de línea
+
+
++ v3.6.1 (11 de Marzo de 2015) +
+- Corrección de la visualización de la ventana abierta por "nvda+f7(modificación Daniel Poiraud)
+
+
++ v3.6 (28 de Febrero de 2015) +
+- Nuevo script "nvda+alt+l" para activar o desactivar el anuncio del número de línea,
+- Anuncio de la siguiente palabra despues de la palabra eliminada mediante la órden "control+suprimir",
+- Cambio de tamaño de las ventanas "Lista de  las ventanas de las aplicaciones lanzadas" y "Lista de iconos en la bandeja del sistema".
+
+
++ v3.5 (20 de Febrero de 2015) +
+- Integración del complemento fakeClipboardAnnouncement
+- Integración del complemento DitDossierOuvrirEnregistrer (Daniel Poiraud)
+- Compatibilidad con nvda 2015.1
+- Traducción en Español por Rémy Ruiz
+
+
++ v3.4 (28 de Noviembre de 2014) +
+- Modificación del acceso directo "nvda+control+v" ya se utiliza en "nvda+shift+f1"
+- Limpieza del código
+
+
++ v3.3 (9 de Octubre de 2014) +
+- Se ha añadido el script para anunciar el nombre y la versión de la aplicación bajo el cursor,
+- Puesta en conformidad con la versión NVDA 2014.3:
+- Acceso a la ayuda del complemento mediante  el administrador de Complementos,
+- NVDA+h ahora muestra el diálogo de los gestos de entrada  de NVDA.
+
+
++ v3.2 (22 de Junio de 2014) +
+- En la lista de los elementos (nvda+f7) incapacidad para elegir un enlace por su primera letra.
+
+
++ v3.1 (27 de Mayo de 2014) +
+- Reemplazo de los botones de opción  por una lista en el cuadro de diálogo "lista de elementos" ("nvda+f7")
+- "nvda+h" en lugar de "nvda+1" en la documentación
+- Eliminación del duplicado de las órdenes de teclado "nvda+control+f1" en los gestos de entrada.
+
+
++ v3.0 (29 de Noviembre de 2013) +
+- Utilización  de las categorías de script aportados por NVDA 2013.3
+- Compatibilidad con la versión 2014.1 de NVDA,
+- Se ha añadido el script para anunciar el perfil de configuración actual
+- Eliminación del script para mostrar la lista de las ventanas (nvda+shift+f11)
+- Se ha añadido el script para mostrar la lista de iconos en la bandeja del sistema y de la lista de las ventanas (nvda+f11)
+- Uniformización visual de los cuadros de  diálogo,
+- Añadido nueva órden de  navegación para el modo exploración (párrafo, división, ancla)
+- Añadido nuevo tipo de elementos para la órden "nvda+F7".
+- Composición de los símbolos: el carácter "espacio indivisible Ahora está correctamente copiado al portapapeles.
+
+
++ v2.4.3 (11 de Abril de 2013) +
+- Gestión de las órdenes de teclado   que se definen en los overlay class. (Perky duck addon)
+- Problema del botón "órdenes globales / retorno a las órdenes  del complemento)
+
+
++ v2.4.2 (1 de Abril de 2013) +
+- Errores con Firefox y thunderbird
+- Error con gesture que contiene "más" 
+
+
++ v2.4.1 (26 de Marzo de 2013) +
+- Visualización de las órdenes de teclado del modo exploración mediante el script  "NVDA+h"
+- Se han añadido las nuevas órdenes para moverse en modo exploración: párrafo, división, ancla.
+
+
++ v2.3.8 (25 de Marzo de 2013) +
+- Corrección archivo symbolCategories.dic fr y es.
+- Corrección problema ligado con los nombres de carpeta acentuadas y su utilización con os.path.join
+- En onDestroyButton (activeWindowReport)
+
+
++ v2.3.7 (23 de Marzo de 2013) +
+- Traducción en Español
+- Corrección de ortografía y texto
+- Corrección en los archivos symbolCategories.dic y symboles-xx.dic
+
+
++ v2.3.6 (4 de Febrero de 2013) +
+- Varios errores.
+
+
++ v2.3.4 (11 de Enero de 2013) +
+- Ventana sin título
+- Lista de los símbolos truncado
+- Errores de ortografía, etc
+
+
++ v2.3.3 (8 de Enero de 2013) +
+- Error  de la lista  de categorías.
+
++ v2.3.2 (8 de Enero de 2013) ++
+- Nuevo script de ayuda para la composición de símbolos complejos (NVDA+shift+4) 
+
+
++ v2.2.1 (27 de Octubre de 2012) +
+
+- Cambio de tamaño de la ventana en 1200X700,
+- Puesto en mayúscula de la primera letra  del nombre de las teclas,
+- Renombrado des los botones "global" y "aplicación" en "órdenes globales" y "retorno a las órdenes  del complemento",
+- Modificación de la ayuda para indicar más bien la utilización posible de las teclas "t" y "s".
+
+
++ v2.2.0 (6 de Octubre de 2012) +
+- Reagrupación en un solo script (NVDA+h) de los dos script anteriores.
+- Integración del global plugin "listDesFenetres-v100225".  
+
+
++ v2.0.0 (3 de Octubre de 2012) +
+- Traducción de las teclas,
+- Navegación simplificada entre grupos de comandos mediante la tecla "t", y entre las categorías de teclado mediante la tecla "s".
+- Añadido un botón de ayuda 
+- Se tiene en cuenta de los archivos gestures.ini
+
+
++ v1.0.0 (5 de Julio de 2012) +
+Creación del global plugin:
+- Script (NVDA+h) para mostrar las órdenes de teclado propio al complemento activo
+- Script (NVDA+shift+h) para mostrar las órdenes de teclado globales.
