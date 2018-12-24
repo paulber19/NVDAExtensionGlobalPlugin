@@ -45,7 +45,7 @@ class NVDALogsManagementDialog (wx.Dialog):
 		openOldLogButton =  bHelper.addButton(self, label=_("Open &old log"))
 		# Translators: This is a label of a button appearing on NVDA Logs Management Dialog .
 		copyCurrentLogPathButton =  bHelper.addButton(self, label=_("Copy log &path to clipboard"))
-
+		sHelper.addItem(bHelper) 
 		bHelper = sHelper.addDialogDismissButtons(gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
 		closeButton= bHelper.addButton(self, id = wx.ID_CLOSE)
 		mainSizer.Add(sHelper.sizer, border=gui.guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)

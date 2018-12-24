@@ -99,7 +99,8 @@ def makeAddonWindowTitle(dialogTitle):
 		return dialogTitle
 	curAddon = addonHandler.getCodeAddon()
 	addonSummary = curAddon.manifest['summary']
-	return  _("{addonSummary}'s add-on - {dialogTitle}").format(addonSummary = addonSummary, dialogTitle = dialogTitle)
+	return "%s - %s"%(addonSummary, dialogTitle)
+
 
 
 def getPositionXY (obj):

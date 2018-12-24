@@ -63,7 +63,7 @@ addon_info = {
 - script to restart NVDA.
 This Module has been developed with the participation of Daniel Poiraud. It is not compatible with versions of NVDA below the 2018.2.""" ),
 	# version
-	"addon_version" : "7.4.1",
+	"addon_version" : "7.4.2",
 	# Author(s)
 	"addon_author" : u"PaulBer19",
 	# URL for the add-on documentation support

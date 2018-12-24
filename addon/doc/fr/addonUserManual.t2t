@@ -83,7 +83,7 @@ Dernière modification: 14/12/2018
 
 %!PostProc (html): KEY_MANAGE_VOICE_PROFIL v
 
-Téléchargement: ["v7.3" https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-7.3.nvda-addon]
+Téléchargement: ["v7.4.2" https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-7.4.2.nvda-addon]
 
 = Sommaire =[toc]
 %%toc
@@ -187,21 +187,22 @@ Cet état peut être:
 Par défaut, le module n'installe pas  toutes les fonctionnalités.
 
 ++ Activation des scripts ++
-En général, chaque  script peut être  activé de deux manières:
+En général, chaque  script peut être  activé de deux manières différentes:
 - soit à l'aide d'un geste de commande classique,
-- soit en utilisant l'interpréteur de commandes du module.
+- soit en utilisant [l'interpréteur de commandes #hdr01] du module.
 
 
 Dans la boite de dialogue "Gestes de commande " de NVDA, les scripts apportés par le module sont placées dans leur propre catégorie.
-La grande majorité  des scripts se répartit  dans les catégories: "Extension des commandes de base de NVDA", "Commutation de profil vocal", "Configuration", "Outils" et  Parole.
 
-Pour les scripts pouvant être lancés par une commande  de l'interpréteur, celle-ci est indiquée à la suite de la description du script.
+Dans leur grande majorité,  les scripts se répartissent  dans les catégories suivantes: "Extension des commandes de base de NVDA", "Commutation de profil vocal", "Configuration", "Outils" et  Parole.
+
+Pour les scripts pouvant être lancés par une commande  de [l'interpréteur #hdr01], celle-ci est indiquée à la suite de la description du script.
 
 Suivant le choix d'installation d'une fonctionnalité ("Installer, " ou "Installer sans geste de commande"), les gestes de commande prévus par défaut sont attribués ou non aux scripts de cette fonctionnalité.
 
-Par défaut, la grande majorité des scripts pouvant être lancé par l'interpréteur de commandes  ne sont affectés à aucun geste de commande.
+Par défaut et dans leur grande majorité, les scripts pouvant être lancé par [l'interpréteur de commandes #hdr01] ne sont affectés à aucun geste de commande.
 
-+++ Interpréteur de commandes +++
++++ Interpréteur de commandes +++[hdr01]
 Celui-ci se lance à l'aide du geste de commande "KEY_SHELL". Un bip sonore est alors audible.
 
 Il est alors possible d'activer  les scripts des  fonctionnalités à l'aide   de commandes.

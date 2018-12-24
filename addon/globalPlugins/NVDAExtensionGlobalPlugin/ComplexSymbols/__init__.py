@@ -595,6 +595,7 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		pasteButton.SetDefault()
 		# Translators: This is a label of a button appearing on last Used Symbols dialog.
 		cleanButton =  bHelper.addButton(self,label=_("&Delete all"))
+		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
 		closeButton= bHelper.addButton(self, id = wx.ID_CLOSE, label = NVDAString("&Close"))
 		mainSizer.Add(sHelper.sizer, border=guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)

@@ -52,12 +52,11 @@ class ComputerShutdownDialog(wx.Dialog):
 		bHelper= gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: This is a label of a button appearing on Computer shutdown dialog.
 		hibernateButton =  bHelper.addButton(self,  label=_("&Hibernate"))
-		sHelper.addItem(bHelper)
 		# Translators: This is a label of a button appearing on Computer shutdowndialog.
 		shutdownButton =  bHelper.addButton(self, label=_("&Shutdown"))
 		# Translators: This is a label of a button appearing on Computer shutdown  dialog.		
 		rebootButton =  bHelper.addButton(self, label=_("&Reboot"))
-		sHelper1 = gui.guiHelper.BoxSizerHelper(self, orientation=wx.HORIZONTAL)
+		sHelper1 = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# Translators: This is the label for a checkbox in the Computer shutdowndialog.
 		labelText = _("F&orce running programs to close without warning")
 		self.forceOptionBox=sHelper1.addItem (wx.CheckBox(self, label= labelText))
@@ -70,6 +69,8 @@ class ComputerShutdownDialog(wx.Dialog):
 			min=int(0),
 			max=int(600),
 			initial=_addonConfigManager.getdelayBeforeShutdownOrRestart())
+		sHelper.addItem(sHelper1)
+		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
 		closeButton= bHelper.addButton(self, id = wx.ID_CLOSE)
 		mainSizer.Add(sHelper.sizer, border=gui.guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)

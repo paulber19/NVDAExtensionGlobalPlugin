@@ -265,6 +265,7 @@ class SelectorsManagementDialog (wx.Dialog):
 		self.freeAllButton =  bHelper.addButton(self, label=_("&Free all selectors"))
 		# Translators: This is a label of a button appearing on Selectors Management dialog.
 		self.informationButton =  bHelper.addButton(self, label=_("Voice profile's &informations"))
+		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
 		closeButton= bHelper.addButton(self, id = wx.ID_CLOSE)
 		mainSizer.Add(sHelper.sizer, border=gui.guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)
