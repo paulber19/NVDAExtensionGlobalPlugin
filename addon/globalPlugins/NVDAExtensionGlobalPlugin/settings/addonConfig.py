@@ -175,7 +175,7 @@ class AddonConfiguration19(BaseAddonConfiguration):
 		{ringCount} = integer(default = 3)
 		{delayBetweenRings} = integer(default = 1500)
 		{lastDuration} = integer(default = 30)
-		{lastAnnounce} = string(default = {ItIsTime})
+		{lastAnnounce} = string(default = "{ItIsTime}")
 		{lastDelayBeforeEndDuration} = integer(default = 5)
 		""".format(section = SCT_MinuteTimer,ringCount = ID_RingCount, delayBetweenRings= ID_DelayBetweenRings, lastDuration = ID_LastDuration, lastAnnounce = ID_LastAnnounce, lastDelayBeforeEndDuration = ID_LastDelayBeforeEndDuration, ItIsTime =  _ItIsTime
 		)
@@ -227,7 +227,7 @@ class AddonConfiguration20(BaseAddonConfiguration):
 		{ringCount} = integer(default = 3)
 		{delayBetweenRings} = integer(default = 1500)
 		{lastDuration} = integer(default = 30)
-		{lastAnnounce} = string(default = {ItIsTime})
+		{lastAnnounce} = string(default = "{ItIsTime}")
 		{lastDelayBeforeEndDuration} = integer(default = 5)
 		""".format(section = SCT_MinuteTimer,ringCount = ID_RingCount, delayBetweenRings= ID_DelayBetweenRings, lastDuration = ID_LastDuration, lastAnnounce = ID_LastAnnounce, lastDelayBeforeEndDuration = ID_LastDelayBeforeEndDuration,
 			ItIsTime = ("It's time"))
@@ -290,7 +290,7 @@ class AddonConfiguration21(BaseAddonConfiguration):
 		{ringCount} = integer(default = 3)
 		{delayBetweenRings} = integer(default = 1500)
 		{lastDuration} = integer(default = 30)
-		{lastAnnounce} = string(default = {ItIsTime})
+		{lastAnnounce} = string(default = "{ItIsTime}")
 		{lastDelayBeforeEndDuration} = integer(default = 5)
 		""".format(section = SCT_MinuteTimer,ringCount = ID_RingCount, delayBetweenRings= ID_DelayBetweenRings, lastDuration = ID_LastDuration, lastAnnounce = ID_LastAnnounce, lastDelayBeforeEndDuration = ID_LastDelayBeforeEndDuration, ItIsTime =  _ItIsTime 
 		)
@@ -353,7 +353,7 @@ class AddonConfiguration22(BaseAddonConfiguration):
 		{ringCount} = integer(default = 3)
 		{delayBetweenRings} = integer(default = 1500)
 		{lastDuration} = integer(default = 30)
-		{lastAnnounce} = string(default = {ItIsTime})
+		{lastAnnounce} = string(default = "{ItIsTime}")
 		{lastDelayBeforeEndDuration} = integer(default = 5)
 		""".format(section = SCT_MinuteTimer,ringCount = ID_RingCount, delayBetweenRings= ID_DelayBetweenRings, lastDuration = ID_LastDuration, lastAnnounce = ID_LastAnnounce, lastDelayBeforeEndDuration = ID_LastDelayBeforeEndDuration, ItIsTime = _ItIsTime 
 		)
@@ -421,7 +421,7 @@ class AddonConfiguration23(BaseAddonConfiguration):
 		{ringCount} = integer(default = 3)
 		{delayBetweenRings} = integer(default = 1500)
 		{lastDuration} = integer(default = 30)
-		{lastAnnounce} = string(default = {ItIsTime})
+		{lastAnnounce} = string(default = "{ItIsTime}")
 		{lastDelayBeforeEndDuration} = integer(default = 5)
 		""".format(section = SCT_MinuteTimer,ringCount = ID_RingCount, delayBetweenRings= ID_DelayBetweenRings, lastDuration = ID_LastDuration, lastAnnounce = ID_LastAnnounce, lastDelayBeforeEndDuration = ID_LastDelayBeforeEndDuration, ItIsTime = _ItIsTime 
 		)

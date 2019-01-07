@@ -1,0 +1,17 @@
+1- création des dossiers "xx" de localisation pour la langue dans les dossier doc et locale.
+2- Traduction du  code source:
+Le fichier de catalogue "nvda.pot" se trouve dans le dossier "locale/en".
+Placer les fichiers .po et .mo  dans le dossier "LC_MESSAGES" (à créer) .
+
+4 Traduire le fichier "manifest.ini" et le placer dans le dossier "locale/xx".
+4- Traduction des fichiers "keyboard.ini" et "symbolCategories.dic" (codage en utf-8).
+à placer dans le dossier "locale/xx".
+Adapter ces fichiers en fonction de la langue.
+
+5- Traduire le fichier "symbols-en.dic" du dossier "newSymbols" et nommer le fichier traduit "symbols-xxdic".
+Y ajouter les symboles éventuellement ajoutés dans le fichier "locale/xx/symbolCategories.dic" et non pris en charge vocalement par NVDA.
+
+6- Traduction de la documentation du module:
+- traduire les fichiers "addonUserManual.t2t" et "change.t2t". Placer les fichiers traduit dans le dossier "doc/xx".
+- convertir en html ces fichiers en utilisant le script de conversion du module (taper "NVDA+j" suivi de "c").
+

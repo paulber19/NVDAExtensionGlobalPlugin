@@ -1,6 +1,6 @@
 Module complémentaire Extension des commandes  de base de NVDA - Historique
 Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poiraud
-Dernière modification: 14/12/2018
+
 
 %!Target: html
 %!Encoding: UTF-8
@@ -16,6 +16,18 @@ Dernière modification: 14/12/2018
 %!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
 %!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
 %!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
+
+
+
+
++ v7.4.3 (07/01/2019) +
+-correction du fichier keyboard.ini espagnol  qui provoquait le plantage de NVDA en langue espagnole.
+- traduction en langue arabe  de l'interface du module
+
+
++ v7.4.2 (22/12/2018) +
+- Correction de la documentation
+- correction du mauvais placement des boutons dans le dialogue "Derniers symboles composés".
 
 
 + v7.4.1 (21/12/2018) +

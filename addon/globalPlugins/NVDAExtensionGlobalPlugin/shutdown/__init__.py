@@ -52,6 +52,7 @@ class ComputerShutdownDialog(wx.Dialog):
 		bHelper= gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: This is a label of a button appearing on Computer shutdown dialog.
 		hibernateButton =  bHelper.addButton(self,  label=_("&Hibernate"))
+		sHelper.addItem(bHelper)
 		# Translators: This is a label of a button appearing on Computer shutdowndialog.
 		shutdownButton =  bHelper.addButton(self, label=_("&Shutdown"))
 		# Translators: This is a label of a button appearing on Computer shutdown  dialog.		
