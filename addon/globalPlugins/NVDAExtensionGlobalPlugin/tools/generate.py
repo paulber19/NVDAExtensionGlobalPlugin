@@ -35,15 +35,15 @@ def generateTranslatedManifest(addon, addonInfos, language, template):
 	_ = getTranslationsInstance(addon, language ).ugettext
 	vars = {}
 	translatedVars = {}
-	noTranslation = False
+	allTranslated = True
 	for var in getVariablesBetweenBrass(template):
 		vars[var] = addonInfos[var]
 		translatedVars[var] = _(addonInfos[var])
 		if translatedVars[var] == vars[var]:
-			noTranslation = False
+			allTranslated= False
 	result = template.format(**translatedVars)
 	dest= os.path.join(addon.path, "locale", language, "manifest.ini")
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(result)
-	return noTranslation
+	return allTranslated
 

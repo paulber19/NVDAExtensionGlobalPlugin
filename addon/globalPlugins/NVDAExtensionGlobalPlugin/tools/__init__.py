@@ -272,16 +272,15 @@ def _makeLocaleManifestIni(addon, lang):
 		gui.messageBox(_("Error:%s file is not found")%addonHandler.MANIFEST_FILENAME ,  dialogTitle,wx.OK)
 		return
 	count = 0
-	noMoFile = []
 	noTranslation = []
 	for lang in langs:
 		moFile =  os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
 		if  not os.path.exists(moFile):
-			noMoFile.append(lang)
+			continue
 		if not generateTranslatedManifest(addon, manifest, lang, manifest_template ):
 			noTranslation.append(lang)
 		count = count+1
-	if len(noMoFile) or len(noTranslation):
+	if len(noTranslation):
 		# Translators: title of dialog
 		dialogTitle = _("Creation  of locale manifest.ini file")
 		# Translators: message to user.
@@ -377,12 +376,12 @@ def _prepareAddon(addon):
 		if  os.path.exists(localeDir):
 			langs = os.listdir(localeDir)
 			count = 0
-			noMoFile = []
+
 			noTranslation = []
 			for lang in langs:
 				moFile =  os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
 				if  not os.path.exists(moFile):
-					noMoFile.append(lang)
+					continue
 				if not generateTranslatedManifest(addon, manifest, lang, manifest_template ):
 					noTranslation.append(lang)
 				count +=1
@@ -390,7 +389,7 @@ def _prepareAddon(addon):
 			if count:
 				# Translators: message to user to report number of created files.
 				msg =  _("%s locale manifest.ini files created or updated")%count
-				if len(noMoFile) or len(noTranslation):
+				if len(noTranslation):
 					# Translators: message to user to report missing translated strings.
 					msg = msg + _("But for some languages, translated string are missing")
 				speech.speakMessage(msg)
@@ -707,12 +706,11 @@ class ToolsForAddonDialog(wx.Dialog):
 	def run(cls):
 		if isOpened(cls):
 			return
-
-		gui.mainFrame.prePopup()		
 		addonsList = cls.getAddonsList()
 		if len(addonsList) == 0:
 			speech.speakMessage (_("No add-on installed"))
 			return
+		gui.mainFrame.prePopup()
 		d =   cls(gui.mainFrame, addonsList)
 		d.CentreOnScreen()
 		d.Show()
