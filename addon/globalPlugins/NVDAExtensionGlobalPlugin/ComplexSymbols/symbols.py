@@ -66,7 +66,7 @@ class SymbolsManager(object):
 					log.error("Symbol and description incorrect: %s" % line)
 	
 	
-		if len(symbolCategories.keys())== 0:
+		if len(symbolCategories)== 0:
 			return False
 
 		self.basicSymbolCategoriesDic = symbolCategories.copy()
@@ -142,13 +142,13 @@ class SymbolsManager(object):
 		if not userComplexSymbols :
 			userComplexSymbols = self.addonConfigManager.getUserComplexSymbols()
 			
-		if categoryName not in userComplexSymbols.keys():
+		if categoryName not in userComplexSymbols:
 			return ([], [])
 		
 		userSymbols = userComplexSymbols[categoryName]
 		symbolList= []
 		descriptionList = []
-		for symbol in userSymbols.keys():
+		for symbol in userSymbols:
 			symbolList.append(symbol)                                                                                                                                                                                                                                                                                                            
 			descriptionList.append(userSymbols[symbol])
 		
@@ -159,11 +159,11 @@ class SymbolsManager(object):
 	def getSymbolAndDescriptionList(self, categoryName):
 		userSymbolCategoriesDic = self.addonConfigManager.getUserComplexSymbols()
 		userSymbolsDic  = {}
-		if categoryName in userSymbolCategoriesDic .keys():
+		if categoryName in userSymbolCategoriesDic:
 			userSymbolsDic = userSymbolCategoriesDic [categoryName].copy()
 		basicSymbolsDic = {}
 		orderedSymbols  = []
-		if categoryName in self.basicSymbolCategoriesDic .keys():
+		if categoryName in self.basicSymbolCategoriesDic:
 			basicSymbolsDic = self.basicSymbolCategoriesDic [categoryName].copy()
 			orderedSymbols = self.orderedSymbols[categoryName][:]
 		#merge two dictionnaries
@@ -172,7 +172,7 @@ class SymbolsManager(object):
 		for symbol in orderedSymbols:
 			symbolList.append(symbol)                                                                                                                                                                                                                                                                                                            
 			descriptionList.append(basicSymbolsDic [symbol])
-		for symbol in userSymbolsDic.keys():
+		for symbol in userSymbolsDic:
 			symbolList.append(symbol)                                                                                                                                                                                                                                                                                                            
 			descriptionList.append(userSymbolsDic [symbol])
 		return (symbolList, descriptionList)
@@ -184,7 +184,7 @@ class SymbolsManager(object):
 	def getCategoryNames(self):
 		userSymbolCategoriesDic = self.addonConfigManager.getUserComplexSymbols()
 		symbolCategoryNames = self.basicOrderedSymbolCategoryNames[:]
-		for categoryName in userSymbolCategoriesDic .keys():
+		for categoryName in userSymbolCategoriesDic:
 			if categoryName not in symbolCategoryNames :
 				symbolCategoryNames .append(categoryName)
 	

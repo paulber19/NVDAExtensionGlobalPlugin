@@ -5,11 +5,13 @@
 * Télécharger [version stable][1]
 * Télécharger [version de développement][2]
 
-Ce Module a été développé  avec la participation de Daniel Poiraud. 
 
-Il n'est pas compatible avec les versions de NVDA inférieures à la  2018.2.
+Cette extension a été développé  avec la participation de Daniel Poiraud. 
 
-Il  ajoute à NVDA:
+Elle n'est pas compatible avec les versions de NVDA inférieures à la  2018.3.2.
+
+
+Elle  ajoute à NVDA:
 ## Les fonctionnalités ##
 
 Certaines fonctionnalités peuvent être activées ou désactivées individuellement.
@@ -20,20 +22,19 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * Extension des fonctionnalités du tampon virtuel pour les navigateurs Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge et Google Chrome:
 
 	* commandes pour le mode navigation (paragraphe, division, ancre, région principale),
-	* nouveaux types d'éléments pour la boite de dialogue ouverte par "NVDA+F7": titre, repère, cadre, bouton, …, avec annonce du nombre d'éléments trouvés,
-	* commandes pour les tableaux:annoncer les cellules d'une ligne /colonne, aller à la première/dernière cellule de la ligne/colonne courante, se déplacer à la colonne/ligne précédente ou suivante avec  annonce possible  des cellules de la ligne/colonne,
+	* nouveaux types d'éléments pour la boite de dialogue ouverte par "NVDA+F7" (bouton radio, paragraphe, cadre, case à cocher, etc) avec annonce du nombre d'éléments trouvés,
+	* commandes pour les tableaux:
+		* annoncer les cellules d'une ligne /colonne, aller à la première/dernière cellule de la ligne/colonne courante, se déplacer à la colonne/ligne précédente ou suivante avec  annonce possible  des cellules de la ligne/colonne,
 	* annonce de l'adresse URL du document,
 	* navigation en boucle,
 
 
-* Annonce de la fonction associée aux  commandes d'édition du style Copier, Coller, etc ,
-*  Annonce  du nom du dossier présélectionné dans les boites de dialogue du style "Ouvrir», Enregistrer", "Enregistrer sous", etc,
+* Annonce de la fonction associée aux  commandes d'édition du style Copier, Coller, …,
+*  Annonce  du nom du dossier présélectionné dans les boites de dialogue du style "Ouvrir", "Enregistrer", "Enregistrer sous",…,
 * affichage d'informations sur l'application sous le focus:
-
-
 	* le  nom et numéro de version de l'application,
 	* le profil de configuration courant,
-	* le module complémentaire actif associé à l'application,
+* l'extension	 active associée à l'application,
 
 
 * outils pour les journaux de NVDA: 
@@ -42,7 +43,6 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 
 
 * historique des annonces vocales,
-* présentation du formatage du texte dans une boite de dialogue (désactivé par défaut (commande clavier NVDA+f),
 * renommage des touches clavier,
 * annonce sélective des touches de commandes,
 * simple minuterie,
@@ -50,13 +50,13 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * commutation rapide de profil vocal,
 * rémanence des touches de modification,
 * arrêter, redémarrer ou mettre en veille prolongé l'ordinateur,
-* contrôle du volume principal et de NVDA:
-
+* controle du volume principal et de NVDA:
 	* coupure ou remise du son pour l'application focalisée,
-	* établissement du volume principal ou de NVDA au démarrage du module,
+	* établissement du volume principal ou de NVDA au démarrage de l'extension,
 
 
-* Outils pour le développement de module complémentaire.
+* Outils pour le développement d'extensions,
+* Compléments concernant la date et l'heure: copie de la date et de l'heure dans le presse-papier, annonce de l'heure avec les secondes.
 
 
 ## Les options ##
@@ -70,16 +70,17 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 ## Les options avancées ##
 
 * signaler, par un son, l'inscription d'une erreur dans le journal  aussi pour les versions finales  et release candidate de NVDA,
-* Titrer les dialogues avec le nom du module,
+* Titrer les dialogues avec le nom de l'extension,
 * Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boites de dialogue du style confirmation.
 
 
 ## Divers autres éléments  ##
 
+* présentation de la mise en forme du texte dans une boite de dialogue,
 * sous-menus pour explorer les dossiers programme ou de configuration,
 * script pour redémarrer rapidement NVDA.
 
 
-[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-7.4.3.nvda-addon
+[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.0.nvda-addon
 
 [2]:

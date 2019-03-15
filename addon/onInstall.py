@@ -62,7 +62,7 @@ def getNewSymbols(symbolsFile):
 		temp=line.split("\t")
 		if len(temp) > 1:
 			identifier=temp.pop(0)
-			if not (computedSymbols.has_key(identifier) or userSymbols.has_key(identifier)):
+			if not (identifier in computedSymbols or identifier in userSymbols):
 				symbolsList.append(sLine)
 	
 	src.close()

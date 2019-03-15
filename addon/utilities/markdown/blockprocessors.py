@@ -121,7 +121,8 @@ class ListIndentProcessor(BlockProcessor):
         return block.startswith(' '*markdown.TAB_LENGTH) and \
                 not self.parser.state.isstate('detabbed') and  \
                 (parent.tag in self.ITEM_TYPES or \
-                    (len(parent) and parent[-1] and \
+                # modified by paulber19 because FutureWarning
+                    (len(parent) and (parent[-1] is not None) and \
                         (parent[-1].tag in self.LIST_TYPES)
                     )
                 )
@@ -172,7 +173,8 @@ class ListIndentProcessor(BlockProcessor):
         # Step through children of tree to find matching indent level.
         while indent_level > level:
             child = self.lastChild(parent)
-            if child and (child.tag in self.LIST_TYPES or child.tag in self.ITEM_TYPES):
+            # modified by paulber19 because future warning
+            if (child is not None)and (child.tag in self.LIST_TYPES or child.tag in self.ITEM_TYPES):
                 if child.tag in self.LIST_TYPES:
                     level += 1
                 parent = child
@@ -269,7 +271,7 @@ class OListProcessor(BlockProcessor):
         # Check fr multiple items in one block.
         items = self.get_items(blocks.pop(0))
         sibling = self.lastChild(parent)
-        if sibling and sibling.tag in ['ol', 'ul']:
+        if (sibling is not None)  and sibling.tag in ['ol', 'ul']:
             # Previous block was a list item, so set that as parent
             lst = sibling
             # make sure previous item is in a p.

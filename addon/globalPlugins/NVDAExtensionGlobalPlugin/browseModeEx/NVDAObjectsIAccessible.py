@@ -6,7 +6,9 @@
 
 import controlTypes
 import NVDAObjects
-from virtualBuffersEx import MSHTMLEx, Gecko_ia2Pre14Ex, Gecko_ia2_Ex, ChromeVBufEx
+from .virtualBuffersEx import MSHTMLEx, Gecko_ia2Pre14Ex, Gecko_ia2_Ex, ChromeVBufEx
+from . import virtualBuffersEx
+
 
 class NVDAObjectMSHTMLEx(NVDAObjects.IAccessible.MSHTML.MSHTML):
 	def _get_treeInterceptorClass(self):
@@ -36,4 +38,3 @@ class ChromiumDocument(NVDAObjects.IAccessible.chromium.Document):
 			return ChromeVBufEx
 		return super(ChromiumDocument, self).treeInterceptorClass
 
-		

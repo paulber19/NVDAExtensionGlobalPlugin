@@ -14,6 +14,7 @@ import nvwave
 import config
 import speech
 import sayAllHandler
+from .py3Compatibility import reLoad
 class RepeatTask(threading.Thread): 
 	_delay = None
 	_armed= False
@@ -71,20 +72,20 @@ class RepeatbeepOnAudioDevices(RepeatTask):
 		self._delay = float(60*settings._addonConfigManager.getRepeatBeepOnAudioDevicesDelay())
 		super(RepeatbeepOnAudioDevices, self).__init__()
 	def task(self):
-		import mytones
-		from . import setAudioOutputDevice
+		from . import mytones
+		from .__init__ import setAudioOutputDevice
 		devices = nvwave.getOutputDeviceNames()
 		if len(devices) == 0:
 			return
 		try:
 			for dev in devices[1:]:
 				setAudioOutputDevice(dev)
-				reload(mytones)
+				reLoad(mytones)
 				mytones.beep (200, 40)
 		except:
 			pass
 		setAudioOutputDevice = None
-		reload(mytones)
+		reLoad(mytones)
 
 
 		

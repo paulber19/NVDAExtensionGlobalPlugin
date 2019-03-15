@@ -21,6 +21,6 @@ class ExtendedNetUIHWND (NVDAObjects.NVDAObject):
 		config.conf["presentation"]["reportObjectDescriptions"] = oldPresentationReportObjectDescriptions
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
-	if obj.windowClassName == u"NetUIHWND":
+	if obj.windowClassName == "NetUIHWND":
 		clsList.insert(0, ExtendedNetUIHWND )
 

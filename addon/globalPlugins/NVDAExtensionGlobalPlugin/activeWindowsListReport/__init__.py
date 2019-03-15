@@ -212,7 +212,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		# windows list update
 		self.windowsListInit()
 		self.windowsListBox.Clear()
-		time.sleep(01)
+		time.sleep(0.1)
 		self.windowsListBox.AppendItems(self.windowNamesList)
 		# check if window is really destroyed
 		newWindowsCount = self.windowsListBox.GetCount()

@@ -19,12 +19,16 @@ import NVDAObjects
 import queueHandler
 import itertools
 import sayAllHandler
+import core
 from ..utils import PutWindowOnForeground, getPositionXY, mouseClick, makeAddonWindowTitle
 from ..utils.NVDAStrings import NVDAString
-import core
+from ..utils.py3Compatibility import rangeGen, _unicode
+
 
 def generateObjectSubtreeGetObject(obj,indexGen, th):
-	index=indexGen.next()
+	#index=indexGen.next()
+	index=next(indexGen)
+
 	yield obj,index
 	rowCount = 0
 	treeCount = 0
@@ -33,7 +37,7 @@ def generateObjectSubtreeGetObject(obj,indexGen, th):
 		childCount = len(obj.children)
 	except:
 		childCount = 0
-	for i in xrange(childCount):
+	for i in rangeGen(childCount):
 		try:
 			child = obj.getChild(i)
 		except:
@@ -101,7 +105,7 @@ def getObjectsHelper_generator(oParent):
 
 	while True:
 		try:
-			o,lastSentIndex=getObjectGen.next()
+			o,lastSentIndex=next(getObjectGen)
 			# Consider only objects that are visible on screen and with known role
 			if o.role != controlTypes.ROLE_UNKNOWN and controlTypes.STATE_INVISIBLE not in o.states:
 				objectList.append(o)
@@ -196,21 +200,21 @@ class ElementListDialog(wx.Dialog):
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
-		# Translators: This is the label for only tagged objectcheckbox in the Installed features dialog.
-		taggedObjectsLabelText = _("Ignore untaggeditems")
-		self.taggedObjectsCheckBox=sHelper.addItem(wx.CheckBox(self,wx.ID_ANY,label = taggedObjectsLabelText))
+		# Translators: This is the label for a checkBox  in the ElementListDialog dialog.
+		labelText = _("Ignore untaggeditems")
+		self.taggedObjectsCheckBox=sHelper.addItem(wx.CheckBox(self,wx.ID_ANY,label = labelText))
 		self.taggedObjectsCheckBox.SetValue(True)
-		#the object type list boxes
+		# Translators: This is the label for a listBox  in the ElementListDialog dialog.
 		typeLabelText = _("&Type: ")
 		self.objectTypesListBox= sHelper.addLabeledControl(typeLabelText , wx.ListBox,id = wx.ID_ANY, choices = tuple(et[1] for et in self.elementTypes))
 		self.objectTypesListBox.Select(0) 
-		# the object list box
-		objectListLabelText = _("Elements:")
-		self.objectListBox = sHelper.addLabeledControl(objectListLabelText,  wx.ListBox, id = wx.ID_ANY, size = (600, 300))
+		# Translators: This is the label for a listBox  in the ElementListDialog dialog.
+		labelText = _("Elements:")
+		self.objectListBox = sHelper.addLabeledControl(labelText,  wx.ListBox, id = wx.ID_ANY, style = wx.LB_SINGLE |wx.LB_ALWAYS_SB|wx.WANTS_CHARS, size = (600, 300))
 		elementType = self.elementTypes[0][0]
 		self.elementsForType = self.getElementsForType(elementType)
 		if len(self.elementsForType): 
-			self.objectListBox.SetItems([unicode(obj[0]) for obj in self.elementsForType])
+			self.objectListBox.SetItems([_unicode(obj[0]) for obj in self.elementsForType])
 		# the buttons
 		bHelper= gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: The label for a button in elements list dialog .
@@ -232,21 +236,76 @@ class ElementListDialog(wx.Dialog):
 		self.objectTypesListBox.Bind(wx.EVT_LISTBOX,self.onElementTypeChange) 
 		self.objectTypesListBox.Bind(wx.EVT_SET_FOCUS,self.onObjectTypeListBoxFocus) 
 		self.objectListBox.Bind(wx.EVT_SET_FOCUS,self.onObjectListBoxFocus) 
+		self.objectListBox.Bind(wx.EVT_KEY_DOWN, self.onKeydown)
 		self.leftClickButton.Bind(wx.EVT_BUTTON, self.onLeftClickButton) 
 		self.rightClickButton.Bind(wx.EVT_BUTTON, self.onRightMouseButton)
 		self.navigatorObjectButton.Bind(wx.EVT_BUTTON, self.onNavigatorObjectButton)
 		closeButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
 		self.SetEscapeId(wx.ID_CLOSE)
-		self.objectTypesListBox.SetFocus()
+		self.objectTypesListBox.SetSelection(0)
+		self.objectListBox.SetFocus()
+		wx.CallAfter(self.updateObjectsListBox)
+
 	def Destroy(self):
 		ElementListDialog._instance = None
 		super(ElementListDialog, self).Destroy()	
+	def updateObjectsListBox(self):
+		index = self.objectTypesListBox.GetSelection()
+		elementType=self.elementTypes[index][1]
+		queueHandler.queueFunction(queueHandler.eventQueue,speech.speakMessage, _(elementType))
+		queueHandler.queueFunction(queueHandler.eventQueue,self.onElementTypeChange, None)
+		wx.CallLater(1000, self._onObjectListBoxFocus)
+	
+	def onKeydown(self, evt):
+		keyCode= evt.GetKeyCode()
+		if keyCode == 13:
+			if self.leftClickButton.Enable:
+				self.onLeftClickButton(None)
+			return
+		if keyCode in [314, 316]: # leftArrow or rightArrow
+			# change type of objects.
+			index = self.objectTypesListBox.GetSelection()
+			if keyCode == 314:
+				newIndex = index-1 if index-1>=0 else self.objectTypesListBox.Count -1
+			else:
+				newIndex = index+ 1 if index< self.objectTypesListBox.Count-1 else 0
+			elementType=self.elementTypes[newIndex][1]
+			self.objectTypesListBox.SetSelection(newIndex)
+			self.objectTypeHasChanged = True
+			self.updateObjectsListBox()
+			return
+		
+		l = [ord(x[1][0]) for x in self.elementTypes]
+		if keyCode in l:
+			curIndex = self.objectTypesListBox.GetSelection()
+			index = curIndex
+			index = curIndex+1 if curIndex < len(l)-1 else 0
+			while index != curIndex:
+				if l[index] == keyCode:
+					self.objectTypesListBox.SetSelection(index)
+					self.objectTypeHasChanged = True
+					self.updateObjectsListBox()
+					return
+				index = index+1 if index < len(l)-1 else 0
+		if keyCode == wx.WXK_TAB:
+			shiftDown = evt.ShiftDown()
+			if shiftDown:
+				wx.Window.Navigate(self.objectListBox ,wx.NavigationKeyEvent.IsBackward)
+			else:
+				wx.Window.Navigate(self.objectListBox ,wx.NavigationKeyEvent.IsForward)
+			return
+
+
+		
+		evt.Skip()
 	
 	def onObjectTypeListBoxFocus(self, evt):
 		self.sayNumberOfElements()
+		self.objectTypeHasChanged = False
+	
 	def onCheckTaggedObjectsCheckBox(self, evt):
 		self.onElementTypeChange(evt)
-		
+	
 	def getLabel(self, obj, withRole = False):
 		taggedObjectsFilter = self.taggedObjectsCheckBox.GetValue()
 		try:
@@ -301,11 +360,12 @@ class ElementListDialog(wx.Dialog):
 		return l
 	
 	def sayNumberOfElements(self):
+
 		def callback (count):
 			self._timer = None
 			# Check if the listbox is still alive.
 			try:
-				if not self.objectTypesListBox.HasFocus(): return
+				if not self.objectTypesListBox.HasFocus()and not self.objectListBox.HasFocus(): return
 			except RuntimeError:
 				return
 			if count:
@@ -317,10 +377,15 @@ class ElementListDialog(wx.Dialog):
 		if self._timer is not None:
 			self._timer.Stop()
 		self._timer = core.callLater(200,callback, self.objectListBox.Count) 
+	
+
+
+
 		
 	def updateButtons(self, enable = True):
 		if enable:
 			self.leftClickButton.Enable()
+			self.leftClickButton.SetDefault()
 			self.rightClickButton.Enable()
 			self.navigatorObjectButton.Enable()
 		else:
@@ -329,14 +394,17 @@ class ElementListDialog(wx.Dialog):
 			self.navigatorObjectButton.Disable()
 
 
-		
 	def onObjectListBoxFocus(self, evt):
+		self._onObjectListBoxFocus()
+		
+	def _onObjectListBoxFocus(self):
 		if self.objectListBox.GetCount() == 0:
 			self.updateButtons(False)
 		else:
 			if self.objectTypeHasChanged:
 				self.objectListBox.Select(0) 
 			self.updateButtons(True)
+			self.objectTypeHasChanged = False
 	
 	def onElementTypeChange(self, evt):
 		index = self.objectTypesListBox.GetSelection()
@@ -400,7 +468,6 @@ class ElementListDialog(wx.Dialog):
 	
 	@classmethod
 	def run(cls, oParent, objects): 
-
 		gui.mainFrame.prePopup()
 		d = cls(None, oParent, objects)
 		d.CentreOnScreen()

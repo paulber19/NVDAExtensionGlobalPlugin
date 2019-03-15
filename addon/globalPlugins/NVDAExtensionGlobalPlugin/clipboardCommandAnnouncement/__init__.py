@@ -10,15 +10,12 @@ import api
 import textInfos
 import speech
 import time
-from ..utils.NVDAStrings import NVDAString
 import controlTypes
-from ..settings import *
 from editableText import EditableText
 import braille
 import config
 from characterProcessing import SYMLVL_SOME, SYMLVL_ALL
 import eventHandler
-from ..__init__ import GB_taskTimer
 import NVDAObjects.IAccessible.sysListView32
 from scriptHandler import isScriptWaiting, willSayAllResume
 import wx
@@ -30,6 +27,9 @@ from NVDAObjects.UIA import UIA
 import queueHandler
 import core
 import contentRecog.recogUi
+from ..utils.NVDAStrings import NVDAString
+from ..settings import *
+from ..utils.py3Compatibility import baseString
 
 def getWExplorerStatusBarText(foreground):
 	clientObject = UIAHandler.handler.clientObject
@@ -58,7 +58,7 @@ def getStatusBarText():
 	text = obj.name or ""
 	if text:
 		text += " "
-	return text + " ".join(chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, basestring) and not chunk.isspace())
+	return text + " ".join(chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, baseString) and not chunk.isspace())
 	
 # Translators: message to the user on cut command activation.
 _msgCut = _("Cut")
@@ -101,7 +101,7 @@ class EditableTextEx(EditableText):
 	def initOverlayClass(self):
 		if isInstall(ID_ClipboardCommandAnnouncement  ):
 			d = getEditionKeyCommands(self)
-			for command in self._commandToScript.keys():
+			for command in self._commandToScript:
 				key = d[command]
 				if key != "":
 					self.bindGesture("kb:%s"%key, self._commandToScript[command])
@@ -204,7 +204,8 @@ _clipboardCommands ={
 	"copy": (_msgCopy, True),
 	"paste": (_msgPaste, False)
 	}
-
+# task timer
+_GB_taskTimer = None
 class ClipboardCommandAnnouncement(object):
 
 	_changeSelectionGestureToMessage = {
@@ -226,7 +227,7 @@ class ClipboardCommandAnnouncement(object):
 					d[selectAllKey] = _msgSelectAll,
 				for key in d:
 					self.bindGesture("kb:%s"%key, "reportChangeSelection")
-			for item in _clipboardCommands.keys():
+			for item in _clipboardCommands:
 				key = editionKeyCommands[item]
 				if key != "":
 					self.bindGesture("kb:%s"%key, "clipboardCommandAnnouncement")
@@ -269,7 +270,7 @@ class ClipboardCommandAnnouncement(object):
 			if controlTypes.STATE_SELECTED in o.states:
 				count += 1
 			try:
-				o = o.next
+				o = o._get_next()
 			except:
 				o = None
 
@@ -289,7 +290,7 @@ class ClipboardCommandAnnouncement(object):
 		while o:
 			if controlTypes.STATE_SELECTED in o.states:
 				return True
-			o = o.next
+			o = o._get_next()
 		o= obj.previous
 		while o:
 			if controlTypes.STATE_SELECTED in o.states:
@@ -314,29 +315,30 @@ class ClipboardCommandAnnouncement(object):
 		return text
 	
 	def script_reportChangeSelection(self,gesture):
-		global GB_taskTimer
+		global _GB_taskTimer
 		def callback():
-			global GB_taskTimer
-			GB_taskTimer = None
+			global _GB_taskTimer
+			_GB_taskTimer = None
+
 			text = self.getSelectionInfo()
 			if text != "":
 				queueHandler.queueFunction(queueHandler.eventQueue, speech.speakText, text, symbolLevel=SYMLVL_SOME)
 
-		if GB_taskTimer:
-			GB_taskTimer.Stop()
-			GB_taskTimer = None
+		if _GB_taskTimer:
+			_GB_taskTimer.Stop()
+			_GB_taskTimer = None
 		gesture.send()
 		try:
 			msg = self.__changeSelectionGestures ["+".join(gesture.modifierNames)+"+"+gesture.mainKeyName]
 		except:
 			msg = None
 		if msg: speech.speakMessage(msg)
-		GB_taskTimer = core.callLater(800, callback)
+		_GB_taskTimer = core.callLater(800, callback)
 	
 	def script_clipboardCommandAnnouncement(self,gesture):
 		editionKeyCommands = getEditionKeyCommands(self)
 		d = {}
-		for item in _clipboardCommands.keys():
+		for item in _clipboardCommands:
 			d[editionKeyCommands[item]] = _clipboardCommands[item]
 		(msg, checkSelection) = d["+".join(gesture.modifierNames)+"+"+gesture.mainKeyName]
 		if self.checkSelection and checkSelection:

@@ -1,0 +1,19 @@
+NVDA global commands extension add-on - user's  manual
+Author: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poiraud
+
+
+% add-on version
+%!PostProc (html): ADDON_VERSION 8.0
+
+%!Target: html
+%!Encoding: UTF-8
+%!style:..\style_t2t.css
+%!Options: --toc
+% Remove the Table of Contents heading from the toc.
+%!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
+
+Download: [version ADDON_VERSION https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExensionGlobalPlugin-ADDON_VERSION.nvda-addon]
+
+
+Sorry, but this manual is not available in English today. 
+The original manual is written in french ([french manual ../fr/addonUserManual.html]) and is not translated to this day.

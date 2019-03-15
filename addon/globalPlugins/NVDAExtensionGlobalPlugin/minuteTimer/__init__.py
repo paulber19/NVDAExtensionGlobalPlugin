@@ -18,12 +18,16 @@ import wx
 import nvwave
 from keyboardHandler import KeyboardInputGesture
 from gui import SettingsDialog
+import threading
+import core
+import queueHandler
 from ..settings import _addonConfigManager
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isInteger, speakLater, isOpened, makeAddonWindowTitle
-import threading
-import core
+from ..utils.py3Compatibility import rangeGen
+
 _curMinuteTimer = None
+
 def minuteTimer():
 	if _curMinuteTimer is None:
 		MinuteTimerLaunchDialog.run()
@@ -121,7 +125,7 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 		announceLabel=_("Enter the &annonce to be spoken at the end of duration:")
 		self.announceEdit = sHelper.addLabeledControl( announceLabel, wx.TextCtrl)
 		self.announceEdit.Value = lastAnnounce
-		self.delayBeforeEndDurationList = [str(x) for x in xrange(11)]
+		self.delayBeforeEndDurationList = [str(x) for x in rangeGen(11)]
 		# Translators: This is a label for a setting in MinuteTimer  dialog.
 		delayBeforeEndDurationLabel = _("Delayto be alerted before ending (in minutes):")
 		self.delayBeforeEndDurationLB = sHelper.addLabeledControl(delayBeforeEndDurationLabel, wx.Choice,  choices = self.delayBeforeEndDurationList)
@@ -159,10 +163,7 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 				d.ShowModal() 
 		except:
 			pass
-
-
-
-			
+	
 	def validate(self):
 		global _curMinuteTimer
 		duration = self.minuteTimerDurationEdit.GetValue()
@@ -172,7 +173,6 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 			speakLater(100, text)
 			wx.CallLater(300, self.minuteTimerDurationEdit.SetFocus)
 			return False
-		
 		announce = self.announceEdit.GetValue()
 		duration = int(duration)
 		delayBeforeEndDuration = int(self.delayBeforeEndDurationLB.GetSelection())
@@ -188,7 +188,9 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 		_addonConfigManager.saveLastMinuteTimerDatas((duration, announce, delayBeforeEndDuration))
 		# Translators: message to the user when minute timer  starts.
 		text = _("Minute timer started for %s minutes") %duration
-		speakLater(10, text)
+		speakLater(100, text)
+
+
 		return True
 	
 	def onOk (self, evt):
@@ -315,6 +317,8 @@ class CurrentMinuteTimerDialog(wx.Dialog):
 		if _curMinuteTimer is not None:
 			_curMinuteTimer.stop()
 			_curMinuteTimer = None
+			# Translators: message to user minute timer stopped.
+			speakLater(100, _("Minute timer is stopped"))
 		self.Close()
 		
 	def monitorRemainingTime(self):

@@ -13,6 +13,8 @@ import buildVars
 import txt2tagsEx
 def t2t2html(source, dest):
 	txt2tagsEx.exec_command_line([source,])
+	
+
 
 def md2html(source, dest):
 	import markdown
@@ -39,7 +41,7 @@ def md2html(source, dest):
 			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
 			"<head>\n" +
 			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
-			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../style_md.css\" media=\"screen\"/>\n" +
+			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" media=\"screen\"/>\n" +
 			"<title>%s</title>\n" % title +
 			"</head>\n<body>\n"
 		)

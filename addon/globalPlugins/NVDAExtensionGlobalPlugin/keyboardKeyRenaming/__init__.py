@@ -6,20 +6,24 @@
 
 import addonHandler
 addonHandler.initTranslation()
-from ..utils.NVDAStrings import NVDAString
-from ..utils import speakLater, makeAddonWindowTitle
+
 import os
 import api
 import speech
 import wx
 from gui import guiHelper, SettingsDialog
 from keyLabels import localizedKeyLabels 
-from ..settings import _addonConfigManager 
 import core
-
+import queueHandler
+from ..settings import _addonConfigManager 
+from ..utils.NVDAStrings import NVDAString
+from ..utils import speakLater, makeAddonWindowTitle
+from ..utils.py3Compatibility import iterate_items
 class KeyboardKeyRenamingDialog(SettingsDialog):
 	# Translators: This is the label for the ModifyKeyLabels dialog.
 	title = _("Keyboard Key renaming")
+	taskTimer = None
+	
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(KeyboardKeyRenamingDialog, self).__init__(parent)
@@ -28,8 +32,8 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 		#init
 		self.modifiedKeyLabels = _addonConfigManager .getRedefinedKeyLabels()
 		self.basicLocalizedKeyLabels = _addonConfigManager.getBasicLocalizedKeyLabels()
-		self.localizedLabel2KeyName = dict((name, code) for code, name in self.basicLocalizedKeyLabels .iteritems())
-		self.localizedLabels = self.localizedLabel2KeyName .keys()
+		self.localizedLabel2KeyName = dict((name, code) for code, name in iterate_items(self.basicLocalizedKeyLabels ))
+		self.localizedLabels = [x for x in self.localizedLabel2KeyName ]
 		self.localizedLabels.sort()
 		# gui
 		sHelper = guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
@@ -47,7 +51,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 			self.modifiedLabelBox_id = wx.NewId()
 		self.modifiedLabelBox = sHelper.addLabeledControl(modifiedLabelText, wx.TextCtrl, id = self.modifiedLabelBox_id)
 		keyName = self.localizedLabel2KeyName[self.localizedLabels[0]]
-		if keyName in self.modifiedKeyLabels.keys():
+		if keyName in self.modifiedKeyLabels:
 			self.modifiedLabelBox.SetValue(self.modifiedKeyLabels[keyName])
 		else:
 			self.modifiedLabelBox.Disable()
@@ -74,8 +78,14 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 	
 	def postInit(self):
 		self.keyLabelsList.SetFocus()
-		
+	def stopTaskTimer(self):
+		if self.taskTimer is not None:
+			self.taskTimer.Stop()
+			self.taskTimer = None
+	
 	def onSelect(self, evt):
+		self.stopTaskTimer()
+		speech.cancelSpeech()
 		label = self.keyLabelsList.GetStringSelection()
 		keyName = self.localizedLabel2KeyName[label]
 		self.reportLabelRedifinition(label)
@@ -92,13 +102,17 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 		core.callLater(100, self.reportLabelRedifinition, label)
 	
 	def reportLabelRedifinition(self, label):
+		def callback(text):
+			self.taskTimer = None
+			queueHandler.queueFunction( queueHandler.eventQueue, speech.speakMessage,text)
 		keyName = self.localizedLabel2KeyName[label]
-		if keyName in self.modifiedKeyLabels.keys():
+		if keyName in self.modifiedKeyLabels:
 			self.modifiedLabelBox.SetValue(self.modifiedKeyLabels[keyName])
 			self.modifiedLabelBox.Enable()
 			# Translators: message to the user when key label is  redefined.
 			text = _("Redefined in %s")%self.modifiedKeyLabels[keyName]
-			speakLater(300, text)
+			self.taskTimer = wx.CallLater(500, callback, text)
+
 			self.removeButton.Enable()
 			self.removeAllButton.Enable()
 		
@@ -114,7 +128,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 	def onModifyLabel (self, evt):
 		localizedLabel = self.keyLabelsList.GetStringSelection()
 		keyName = self.localizedLabel2KeyName[localizedLabel]
-		if keyName in self.modifiedKeyLabels.keys():
+		if keyName in self.modifiedKeyLabels:
 			label = self.modifiedKeyLabels[keyName]
 		else:
 			label = ""
@@ -128,7 +142,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 				if d.ShowModal() == wx.ID_OK:
 					newLabel = (d.Value).strip()
 					if newLabel == "":
-						if keyName in self.modifiedKeyLabels.keys():
+						if keyName in self.modifiedKeyLabels:
 							# Translators: message to the user when redefined key label is  is removed.
 							text = _("New name is removed")
 							speakLater(300, text)
@@ -149,7 +163,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 	def onRemoveLabel(self, evt):
 		localizedLabel = self.keyLabelsList.GetStringSelection()
 		keyName = self.localizedLabel2KeyName[localizedLabel]
-		if keyName in self.modifiedKeyLabels.keys():
+		if keyName in self.modifiedKeyLabels:
 			# Translators: message to the user when redefined key label is removed.
 			text = _("New name is removed")
 			speakLater(300, text)

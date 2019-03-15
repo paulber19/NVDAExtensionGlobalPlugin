@@ -8,7 +8,7 @@
 
 This Module has been developed with the participation of Daniel Poiraud.
 
-It is not compatible with versions of NVDA below to 2018.2.
+It is not compatible with versions of NVDA below to 2018.3.2.
 
 It adds to NVDA:
 ## The features ##
@@ -17,22 +17,18 @@ some features can be enabled or disabled individually.
 
 * Display of the list of icons in the notification area ,
 * Display of the windows list of running applications,
-* Assistance in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2
-  and possibility to add its own categories and symbols,
-* Extension of the functionality of the virtual buffer
-  for browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, and Google Chrome:
+* Assistance in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2  and possibility to add its own categories and symbols,
+* Extension of the functionality of the virtual buffer  for browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, and Google Chrome:
 
 	* new commands for navigation mode (paragraph, division, anchor, main area),
-	* new types of elements for the dialog box opened by "NVDA+F7"
-  (title,reference, frame, button,etc.) with the announcement of the number of items found,
+	* new types of elements for the dialog box opened by "NVDA+F7" (radio button, paragraph, frame, checkBox, etc) with the announcement of the number of items found,
 	* commands for the tables:
-  announce the cells of a row /column , go to first/last cell in the row/current column, move the column/row preceding or following with announcement possible of the cells in that row/column,
-	* announcement of the URL of the document,
-	* navigation loop,
+		* announce the cells of a row /column , go to first/last cell in the row/current column, move the column/row preceding or following with announcement possible of the cells in that row/column,
+		* announcement of the URL of the document,
+		* navigation loop,
 
 
-* Announcement of the function associated with editing commands
-  style Copy, Paste, etc.,
+* Announcement of the function associated with editing commands  style Copy, Paste, etc.,
 * Announcement of the name of the folder pre-selected in the dialog boxes like "Open","Save", "Save as",etc.,
 * display of information on the focused application:
 
@@ -47,7 +43,6 @@ some features can be enabled or disabled individually.
 
 
 * history of voice speechs,
-* presentation formatting of the text in a dialog box (disabled by default (the key command NVDA+f),
 * renaming keyboard keys,
 * selective announcement of  command keyboard keys ,
 * simple countdown timer,
@@ -62,6 +57,7 @@ some features can be enabled or disabled individually.
 
 
 * Tools for development of add-on.
+* supplements regarding the date and time: copy date and time  to clipboard, report time with seconds
 
 
 ## The options ##
@@ -81,10 +77,11 @@ some features can be enabled or disabled individually.
 
 ## Various other elements ##
 
+* presentation formatting of the text in a dialog box,
 * sub-menus to explore the program folders or configuration,
 * script to quickly restart NVDA.
 
 
-[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-7.4.3.nvda-addon
+[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.0.nvda-addon
 
 [2]:

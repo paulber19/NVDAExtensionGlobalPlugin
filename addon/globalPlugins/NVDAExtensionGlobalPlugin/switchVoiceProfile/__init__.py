@@ -16,59 +16,163 @@ import scriptHandler
 import wx
 import gui
 import queueHandler
+import eventHandler
 import NVDAObjects
-from ..utils.informationDialog import InformationDialog, makeAddonWindowTitle
-from ..utils.NVDAStrings import NVDAString
-
-from ..__init__  import GB_taskTimer
 import synthDriverHandler
+import core
 import characterProcessing
 import api
+from ..utils.informationDialog import InformationDialog, makeAddonWindowTitle
+from ..utils.NVDAStrings import NVDAString
+from ..utils.py3Compatibility import iterate_items, rangeGen, _unicode
 from ..settings import _addonConfigManager
-import core
 
 #constants
-_VOICE_PROFILE_SWITCHING  = "VoiceProfileSwitching"
-_LAST_SELECTOR = "LastSelector"
+
+# keys and sections of "voiceProfileSwitching" section
+SCT_VoiceProfileSwitching  = "voiceProfileSwitching"
+KEY_UseNormalConfigurationSelectors = "useNormalConfigurationSelectors"
+KEY_LastSelector =  "lastSelector"
+# keys and sections of selector configuration
+KEY_Activate = "activate"
+KEY_VoiceProfileName = "voiceProfileName"
+KEY_DefaultVoiceProfileName = "defaultVoiceProfileName"
+KEY_SynthName = "synthName"
+SCT_SynthDisplayInfos = "synthDisplayInfos"
+
+# NVDA sections and keys  confSpec definition
+SCT_Speech = "speech"
+SCT_Many = "__many__"
+KEY_OutputDevice = "outputDevice"
+
 _MAX_SELECTORS= 8
 
-class SwitchVoiceProfile(object):
+# for compatibility with NVDA version below 2018.4
+def deepCopy(agregSection):
+	try:
+		return agregSection.dict()
+	except AttributeError:
+		"""Return a deepcopy of self as a dictionary.
+		Adapted from L{configobj.Section.dict}.
+		"""
+		newdict = {}
+		for key, value in agregSection.iteritems():
+			if isinstance(value, config.AggregatedSection):
+				value = deepCopy(value)
+			elif isinstance(value, list):
+				# create a copy rather than a reference
+				value = list(value)
+			elif isinstance(value, tuple):
+				# create a copy rather than a reference
+				value = tuple(value)
+			newdict[key] = value
+		return newdict
 
-	NVDASpeechSettings = ["autoLanguageSwitching", "autoDialectSwitching", "symbolLevel", "trustVoiceLanguage"]
+
+class SwitchVoiceProfilesManager(object):
+	NVDASpeechSettings = ["autoLanguageSwitching", "autoDialectSwitching", "symbolLevel", "trustVoiceLanguage", "includeCLDR" ]
 	NVDASpeechManySettings = ["capPitchChange", "sayCapForCapitals", "beepForCapitals", "useSpellingFunctionality"]
 
 
 	def __init__ (self):
-		_addonConfigManager.updateVoiceProfileSwitchingConfig()
+		curAddon = addonHandler.getCodeAddon()
+		self.addonName = curAddon.manifest["name"]
+		self.curSynth = speech.getSynth()
 		self._initialize()
+	def saveConf(self, force = False):
+		# We save the configuration, in case the user would not have checked the "Save configuration on exit" checkbox in General settings.
+		if force or config.conf['general']['saveConfigurationOnExit']:
+			config.conf.save ()
 	
 	def _initialize(self):
-		self.switchVoiceProfileSection = _addonConfigManager.getVoiceProfileSwitching()
-		self.curSynth = speech.getSynth()
-		self.curConfigSpeech = config.conf["speech"].copy()
+		self.deletePreviousVoiceProfileSelectorsConfiguration()
+		if not config.conf.get(self.addonName ):
+			config.conf[self.addonName] = {}
+			config.conf[self.addonName][SCT_VoiceProfileSwitching] = {}
+			self.saveConf()
+		elif not config.conf[self.addonName].get(SCT_VoiceProfileSwitching ):
+			config.conf[self.addonName][SCT_VoiceProfileSwitching] = {}
+			self.saveConf()
 	
-	def isSet(self, selector):
-		return _addonConfigManager.isVoiceProfileSelectorSet(selector)
-		
+	def deletePreviousVoiceProfileSelectorsConfiguration(self):
+		# this module version is not compatible with previous voice profile selectors configuration
+		# so we must delete all previous associations
+		if self.deleteAllProfiles("SwitchingVoiceProfile"):
+			gui.messageBox(
+				# Translators: the label of a message box dialog.
+				_("""The current configuration of the "Voice profile switching"feature is not compatible with this module's version, all the selectors have been released and the voice profiles deleted. Sorry for the inconvenience."""),
+				# Translators: the title of a message box dialog.
+				makeAddonWindowTitle(_("warning")),
+				wx.OK|wx.ICON_WARNING)
+	
+	def deleteAllProfiles(self, voiceProfileSwitchingSection = SCT_VoiceProfileSwitching ):
+		curAddon = addonHandler.getCodeAddon()
+		addonName = curAddon.manifest["name"]
+		conf = config.conf
+		save = False
+		if (addonName in conf.profiles[0]
+			and  voiceProfileSwitchingSection  in conf.profiles[0][addonName]):
+			del conf.profiles[0][addonName][voiceProfileSwitchingSection ]
+			save = True
+		profileNames = []
+		profileNames.extend(config.conf.listProfiles())
+		for name in profileNames:
+			profile = config.conf._getProfile(name)
+			if (profile.get(addonName)
+				and voiceProfileSwitchingSection  in profile[addonName]):
+				del profile[addonName][voiceProfileSwitchingSection ]
+				config.conf._dirtyProfiles.add(name)
+				save = True
+		if save:
+			self.saveConf(force = True)
+			return True
+		return False
+	def getConfig(self):
+		return deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
+
+	
+
+
+	
+	def isSet(self, selector, inUpdate = False):
+		if inUpdate:
+			updateConf = self.getUpdatedConfig()
+			if (updateConf.get(selector)
+				and updateConf[selector] != {}):
+				if (updateConf.get(KEY_VoiceProfileName)
+					or self.getConfig()[selector].get(KEY_VoiceProfileName)):
+					return True
+		else:
+			conf = self.getConfig()
+			if (conf.get(selector)
+				and conf[selector] != {}
+				and conf[selector].get(KEY_VoiceProfileName)):
+				return True
+		return False
 	
 	def getLastSelector(self):
-		return _addonConfigManager.getLastVoiceProfileSelector()
-
+		conf = self.getConfig()
+		if conf.get(KEY_LastSelector):
+			return conf[KEY_LastSelector]
+		return "1"
 	
 	def setLastSelector(self, selector):
-		_addonConfigManager.setLastVoiceProfileSelector(selector)
+		conf = config.conf[self.addonName][SCT_VoiceProfileSwitching]
+		conf[KEY_LastSelector] =selector
+		self.saveConf()
 	
-	def switchToVoiceProfile(self, selector):
-		voiceProfileSwitchingSect = _addonConfigManager.getVoiceProfileSwitching()
-		#newProfile = voiceProfileSwitchingSect[selector].copy()
-		newProfile = _addonConfigManager.getVoiceProfile(selector)
-		voiceProfileName = newProfile["voiceProfileName"]
+	def switchToVoiceProfile(self, selector, silent = False):
+		def finish(msg):
+			queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
+			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, msg)
+		voiceProfileSwitchingSect = self.getConfig()
+		newProfile = self.getVoiceProfile(selector)
 		synthName = None
 		for s, val in speech.getSynthList():
-			if s == newProfile["synthName"]:
+			if s == newProfile[KEY_SynthName]:
 				synthName = s
 				break
-
+		voiceProfileName = newProfile[KEY_VoiceProfileName]
 		if synthName is None:
 			if gui.messageBox(
 				# Translators: the label of a message box dialog.
@@ -78,33 +182,31 @@ class SwitchVoiceProfile(object):
 				wx.YES|wx.NO|wx.ICON_WARNING)==wx.YES:
 				core.callLater(200, self.freeSelector, selector)
 				return
-		
-		speechSynthConf = config.conf['speech'][synthName]
-		for s,val in newProfile["config"].iteritems():
-			config.conf['speech'][synthName][s] = val
-		for s in self.NVDASpeechSettings:
-			config.conf["speech"][s] = newProfile[s]
-		config.conf["speech"]["__many__"] = newProfile["__many__"].copy()
+		d = deepCopy(config.conf[SCT_Speech] )
+		d.update(newProfile[SCT_Speech].copy())
+		config.conf[SCT_Speech] = d.copy()
 		speech.setSynth(synthName)
-		msg = _("Selector {selector}: {name}").format(selector = selector, name = voiceProfileName)
-		ui.message(msg)
+		speech.getSynth().saveSettings()
 		self.setLastSelector(selector)
-	def nextOrPreviousVoiceProfile(self, action = "next"):
-		def nextSelector(currentSelector, action):
-			if action == "next":
+		if silent: return
+		msg = _("Selector {selector}: {name}").format(selector = selector, name = voiceProfileName)
+		wx.CallLater(50, finish, msg)
+	
+	def nextVoiceProfile(self, forward = True):
+		def moveSelector(currentSelector, forward):
+			if forward:
 				selector = currentSelector+ 1 if currentSelector <_MAX_SELECTORS else 1
 			else:
 				selector = currentSelector- 1 if currentSelector >1 else _MAX_SELECTORS
 			return selector
-		
 		lastSelector  = self.getLastSelector()
 		iSelector = int(lastSelector)
 		i= _MAX_SELECTORS-1
 		while i:
 			i=i-1
-			iSelector = nextSelector(iSelector, action)
+			iSelector = moveSelector(iSelector, forward)
 			sSelector = str(iSelector)
-			if not self.isSet(sSelector):
+			if not self.isSet(sSelector,not self.getUseNormalConfigurationSelectorsFlag() ):
 				continue
 			self.switchToVoiceProfile(sSelector)
 			self.setLastSelector(sSelector)
@@ -112,8 +214,8 @@ class SwitchVoiceProfile(object):
 		if self.isSet(lastSelector):
 			#Translators: this is a message to inform the user that there is no other voice profile.
 			ui.message(_("no other selector set to voice profile"))
-			newProfile = _addonConfigManager.getVoiceProfile(lastSelector) #.copy()
-			voiceProfileName = newProfile["voiceProfileName"]
+			newProfile = self.getVoiceProfile(lastSelector) #.copy()
+			voiceProfileName = newProfile[KEY_VoiceProfileName]
 			msg = _("Selector {selector}: {name}").format(selector= lastSelector, name = voiceProfileName)
 			ui.message(msg)
 		else:
@@ -121,71 +223,108 @@ class SwitchVoiceProfile(object):
 			ui.message(_("no selector set to voice profile"))
 
 	
-	def setVoiceProfileSelector(self, iSelector):
-		selector = str(iSelector)
+	def setVoiceProfile(self, selector, silent = False):
 		self.setLastSelector(selector)
-		#config.conf[_VOICE_PROFILE_SWITCHING ]._cache.clear()
-		if self.isSet(selector):
-			wx.CallAfter(self.switchToVoiceProfile, selector)
+		if not self.isSet(selector):
+			#Translators: this is  a message to inform the user  that the selector is not set.
+			ui.message(_("Selector %s is free") %selector)
 			return
-		
-		#Translators: this is  a message to inform the user  that the selector is not set.
-		ui.message(_("Selector %s is free") %selector)
+		wx.CallAfter(self.switchToVoiceProfile, selector, silent)
 	
-	def associateProfileToSelector(self, selector, voiceProfileName, defaultVoiceProfileName):
-		c = {}
-		c["voiceProfileName"] = voiceProfileName
-		c["defaultVoiceProfileName"] = defaultVoiceProfileName
-		synth = speech.getSynth()
-		c["synthName"] = synth.name
-		c["outputDevice"] = config.conf["speech"]["outputDevice"]
-		c["config"] = config.conf['speech'][synth.name].copy()
+	def getSynthDisplayInfos(self, synth, synthConf):
+		conf= synthConf
 		infos = {}
 		for setting in synth.supportedSettings:
 			name = setting.name
 			if isinstance(setting,synthDriverHandler.NumericSynthSetting):
-				infos[name] = c["config"][name]
+				infos[name] = conf[name]
 			elif isinstance(setting, synthDriverHandler.BooleanSynthSetting):
-				infos[name] = c["config"][name]
+				infos[name] = conf[name]
 			else:
 				if hasattr(synth,"available%ss"%setting.name.capitalize()):
-					l=getattr(synth,"available%ss"%name.capitalize()).values()
-					cur = c["config"][name]
+					l=list(getattr(synth,"available%ss"%name.capitalize()).values())
+					cur = conf[name]
 					i=[x.ID for x in l].index(cur)
 					v = l[i].name
 					infos[name] = v
 
-		c["synthDisplayInfos"] = infos.copy()
-		c["__many__"] = config.conf["speech"]["__many__"].copy()
-		for s in self.NVDASpeechSettings:
-			c[s] = config.conf["speech"][s]
-		_addonConfigManager.setVoiceProfile(selector, c)
-		"""
-		if _VOICE_PROFILE_SWITCHING  not in config.conf:
-			config.conf[_VOICE_PROFILE_SWITCHING ] = {}
-		if not self.isSet(selector):
-			config.conf[_VOICE_PROFILE_SWITCHING ][selector] = {}
-		config.conf[_VOICE_PROFILE_SWITCHING ][selector]= c.copy()
-		"""
+		return infos.copy()
+	
+	def associateProfileToSelector(self, selector, voiceProfileName, defaultVoiceProfileName):
+		if not config.conf.get(self.addonName ):
+			config.conf[self.addonName] = {}
+		if not config.conf[self.addonName].get(SCT_VoiceProfileSwitching ):
+			config.conf[self.addonName][SCT_VoiceProfileSwitching] = {}
+		config.conf[self.addonName][SCT_VoiceProfileSwitching][selector] = {}
+		conf = config.conf[self.addonName][SCT_VoiceProfileSwitching][selector]
+		conf[KEY_Activate] = True
+		conf[KEY_VoiceProfileName] = voiceProfileName
+		conf[KEY_DefaultVoiceProfileName] = defaultVoiceProfileName
+		#synth = speech.getSynth()
+		synth = self.curSynth
+		conf[KEY_SynthName] = synth.name
+		# save only current synth config
+		d = deepCopy(config.conf[SCT_Speech])
+		for key in config.conf[SCT_Speech].copy():
+			val = config.conf[SCT_Speech][key]
+			if type(val ) == config.AggregatedSection and key not in[SCT_Many,synth.name] :
+				del d[key]
+		conf[SCT_Speech] = d
+		conf[SCT_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name])
+		conf._cache.clear()
+		self.saveConf()
+		self.setLastSelector(selector)
 		#Translators: this is a message  to the user to report the association between selector and voice profile.
 		msg = _("{name} voice profile set to selector {selector}").format(name = voiceProfileName, selector = selector)
-		core.callLater(200, ui.message, msg)
-		self.setLastSelector(selector)
-		self._initialize()
+		#core.callLater(200, ui.message, msg)
+		speech.speakMessage(msg)
+
+	
+	def freeSelector(self, selector):
+		if self.isSet(selector):
+			config.conf[self.addonName][SCT_VoiceProfileSwitching][selector] = {}
+			config.conf[self.addonName][SCT_VoiceProfileSwitching]._cache.clear()
+		self.saveConf()
+		#Translators: this is  a message to inform the user that  the selector is not associated.
+		ui.message(_("Selector %s is free") %selector)
+
 
 	def freeAllSelectors(self):
-		_addonConfigManager.freeAllVoiceProfileSelectors()
+		for index in range(1, 8):
+			selector = str(index)
+			if self.isSet(selector):
+				config.conf[self.addonName][SCT_VoiceProfileSwitching][selector] = {}
+		config.conf[self.addonName][SCT_VoiceProfileSwitching]._cache.clear()
+		self.saveConf()
 		#Translators: this a message to inform that all slots are not associated.
 		msg = _("all selectors are freed from their vocal profile")
 		ui.message( msg)
-		self._initialize()
 	
-	def freeSelector(self, selector):
-		_addonConfigManager.freeVoiceProfileSelector(selector)
-		#Translators: this is  a message to inform the user that  the selector is not associated.
-		ui.message(_("Selector %s is free") %selector)
-		self._initialize()
-
+	def getVoiceProfile(self, selector):
+		if not self.isSet(selector):
+			return {}
+		return  deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching][selector])
+	
+	def getUpdatedConfig(self):
+		conf = config.conf
+		if (conf.get(self.addonName )
+			and conf[self.addonName].get(SCT_VoiceProfileSwitching )):
+			return conf[self.addonName][SCT_VoiceProfileSwitching]._getUpdateSection()
+	
+	def getUseNormalConfigurationSelectorsFlag (self):
+		conf = deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
+		if KEY_UseNormalConfigurationSelectors in conf:
+			return conf[KEY_UseNormalConfigurationSelectors] in [True, _unicode(True)]
+		# by default
+		return True
+	def setUseNormalConfigurationSelectorsFlag(self, val):
+		config.conf[self.addonName][SCT_VoiceProfileSwitching][KEY_UseNormalConfigurationSelectors] = val
+		config.conf[self.addonName][SCT_VoiceProfileSwitching]._cache.clear()
+		self.saveConf()
+	
+	def getVoiceProfileName(self, selector):
+		conf = deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
+		return conf[selector][KEY_VoiceProfileName]
 class SelectorsManagementDialog (wx.Dialog):
 	shouldSuspendConfigProfileTriggers = True
 	_instance = None
@@ -202,32 +341,54 @@ class SelectorsManagementDialog (wx.Dialog):
 		if SelectorsManagementDialog ._instance is not None:
 			return
 		SelectorsManagementDialog ._instance = self
-		self.switchVoiceProfile = SwitchVoiceProfile()
-		self.selector = self.switchVoiceProfile.getLastSelector()
+		self.switchManager = SwitchVoiceProfilesManager()
+		self.normalConfigurationProfile = False
 		profileName = config.conf.profiles[-1].name
 		if profileName is  None:
-			profileName = NVDAString("(normal configuration)")
+			self.normalConfigurationProfile = True
+			self.configurationProfileName = NVDAString("normal configuration")
+		else:
+			self.configurationProfileName  = profileName
+
 		# Translators: This is the title  of  the Selectors Management dialog.
-		dialogTitle = _("Voice profile selectors's Management  of configuration profile %s")
-		title = SelectorsManagementDialog .title = makeAddonWindowTitle(dialogTitle%profileName)
+		dialogTitle = _("Voice profile selectors's Management  of profile %s")
+		title = SelectorsManagementDialog .title = makeAddonWindowTitle(dialogTitle%self.configurationProfileName)
 		super(SelectorsManagementDialog , self).__init__(parent, -1, title)
-		self.curSynth = self.switchVoiceProfile.curSynth
-		self.selectorList = []
+		self.curSynth = self.switchManager.curSynth
+		self.doGui()
+		
+	def getSelectorsListLabel(self):
+		# Translators: part of label of selectors list.
+		text=_("&Selectors")
+		if (not self.normalConfigurationProfile
+			and self.switchManager.getUseNormalConfigurationSelectorsFlag()):
+			# current configuration profile Nam  + normal configuration profile name
+			return"%s (%s, %s):"%(text, self.configurationProfileName, NVDAString("normal configuration"))
+		else:
+			# only current configuration profile name
+			return "%s (%s):"%(text,self.configurationProfileName)
+	
+	def getSelectorsList(self):
+		selectorsList = []
+		updatedConf= self.switchManager.getUpdatedConfig()
+		conf = self.switchManager.getConfig ()
 		for index in range(0,8):
 			selector = str(index+1)
-			if self.switchVoiceProfile.isSet(selector):
-				newProfile = self.switchVoiceProfile.switchVoiceProfileSection [selector]
-				voiceProfileName = newProfile["voiceProfileName"]
+			if self.switchManager.isSet(selector, not self.switchManager.getUseNormalConfigurationSelectorsFlag()):
+				voiceProfileName = conf[selector][KEY_VoiceProfileName]
+				if not self.normalConfigurationProfile and(selector not in updatedConf
+					or not updatedConf[selector]):
+					voiceProfileName  = "%s %s"%(voiceProfileName , NVDAString("(normal configuration)"))
 			else:
 				voiceProfileName = _("free")
-			self.selectorList.append("%s: %s"%(selector, voiceProfileName))
-		self.doGui()
+			selectorsList.append("%s: %s"%(selector, voiceProfileName))
+		return selectorsList[:]
 	
 	def getCurrentSynthVoiceAndVariant(self):
-		def getcurrentSettingName(setting):
+		def getCurrentSettingName(setting):
 			try:
 				cur=getattr(synth,setting.name)
-				l=getattr(synth,"available%ss"%setting.name.capitalize()).values()
+				l=list(getattr(synth,"available%ss"%setting.name.capitalize()).values())
 				i=[x.ID for x in l].index(cur)
 				return l[i].name
 			except:
@@ -238,19 +399,27 @@ class SelectorsManagementDialog (wx.Dialog):
 		variant = ""
 		for s in synth.supportedSettings:
 			if s.name == "voice":
-				voice = getcurrentSettingName(s)
+				voice = getCurrentSettingName(s)
 			elif s.name == "variant":
-				variant = getcurrentSettingName(s)
+				variant = getCurrentSettingName(s)
 		
 		return (voice, variant)
 	
 	def doGui(self):
-		lastSelector =self.switchVoiceProfile.getLastSelector()
+		lastSelector =self.switchManager.getLastSelector()
 		mainSizer=wx.BoxSizer(wx.VERTICAL)
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
+		# Translators: This is the label for a checkbox in the various settings panel.
+		labelText = _("&Use selectors associated under normal cconfiguration's profile")
+		self.useNormalConfigurationSelectorsCheckBox=sHelper.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
+		self.useNormalConfigurationSelectorsCheckBox.SetValue(self.switchManager.getUseNormalConfigurationSelectorsFlag())
+		if self.normalConfigurationProfile:
+			self.useNormalConfigurationSelectorsCheckBox.Disable()
 		# Translators: This is the label of  list box appearing in the Selectors Management dialog.
-		selectorListLabelText=_("&Selectors:")
-		self.selectorListBox =sHelper.addLabeledControl(selectorListLabelText, wx.ListBox,id = wx.ID_ANY, name= "Selectors" ,choices=self.selectorList) #, style = wx.LB_SINGLE |wx.LB_ALWAYS_SB|wx.WANTS_CHARS)
+		labelText = self.getSelectorsListLabel()
+		self.selectorListLabelText= wx.StaticText(self,wx.ID_ANY, label= labelText)
+		self.selectorListBox = wx.ListBox(self, id = wx.ID_ANY, name= "laSelectors" ,choices=self.getSelectorsList())
+		sHelper.addItem(gui.guiHelper.associateElements(self.selectorListLabelText, self.selectorListBox))
 		self.selectorListBox.SetSelection(int(lastSelector)-1)
 		bHelper= gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: This is a label of a button appearing on Selectors Management dialog.
@@ -272,8 +441,9 @@ class SelectorsManagementDialog (wx.Dialog):
 		mainSizer.Fit(self)
 		self.SetSizer(mainSizer)
 		#events
+		self.useNormalConfigurationSelectorsCheckBox.Bind(wx.EVT_CHECKBOX,self.onCheckUseNormalConfigurationSelectors)
 		self.selectorListBox.Bind(wx.EVT_LISTBOX, self.onSelectorSelection)
-		self.selectorListBox.Bind(wx.EVT_SET_FOCUS, self.focusOnSelectorListBox)
+		self.selectorListBox.Bind(wx.EVT_SET_FOCUS, self.onFocusOnSelectorListBox)
 		self.activateButton.Bind(wx.EVT_BUTTON,self.onActivateButton)
 		self.associateButton.Bind(wx.EVT_BUTTON,self.onAssociateButton)
 		self.modifyButton.Bind(wx.EVT_BUTTON,self.onModifyButton)
@@ -283,94 +453,107 @@ class SelectorsManagementDialog (wx.Dialog):
 		closeButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
 		self.SetEscapeId(wx.ID_CLOSE)
 		self.selectorListBox.SetFocus()
-		self.updateButtons(lastSelector)
-		isSet = False
-		for index in range(1,_MAX_SELECTORS+1):
-			selector = str(index)
-			if self.switchVoiceProfile.isSet(selector):
-				isSet = True
-				break
-		if isSet:
-			self.freeAllButton.Enable()
-		else:
-			self.freeAllButton.Disable()
+		self.updateButtons()
 	
 	def Destroy(self):
 		SelectorsManagementDialog ._instance = None
 		super(SelectorsManagementDialog , self).Destroy()
+	def updateSelectorsList(self):
+		self.selectorListBox.Clear()
+		self.selectorListBox.AppendItems(self.getSelectorsList())
+		self.selectorListBox.SetSelection(int(self.switchManager.getLastSelector())-1)
+		
+	
+	def onCheckUseNormalConfigurationSelectors(self, evt):
+		val = self.useNormalConfigurationSelectorsCheckBox.GetValue()
+		self.switchManager.setUseNormalConfigurationSelectorsFlag(val)
+		labelText = self.getSelectorsListLabel()
+		self.selectorListLabelText.SetLabel(labelText)
+		self.updateSelectorsList()
 	
 	def onInformationButton(self, evt):
 		def boolToText(val):
 			return _("yes") if val else _("no")
+		
 		def punctuationLevelToText(level):
 			return characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS[int(level)]
+		
 		NVDASpeechSettingsInfos = [
 			(_("Automatic language switching (when supported)"), boolToText), 
 			(_("Automatic dialect switching (when supported)"), boolToText),
 			(_("Punctuation/symbol level"), punctuationLevelToText),
 			(_("Trust voice's language when processing characters and symbols"), boolToText),
+			(_("Include Unicode Consortium data (including emoji) when processing characters and symbols"), boolToText),
 			]
 		NVDASpeechManySettingsInfos = [
 			(_("Capital pitch change percentage"), None),
 			(_("Say cap before capitals"), boolToText),
 			(_("Beep for capitals"), boolToText),
-			(_("Use &spelling functionality if supported"), boolToText),
+			(_("Use spelling functionality if supported"), boolToText),
 			]
 		index = self.selectorListBox.GetSelection()
 		selector = str(index+1)
-		if not self.switchVoiceProfile.isSet(selector):
-			return
-		s = self.switchVoiceProfile.switchVoiceProfileSection [selector].copy()
+		selectorConfig = self.switchManager.getConfig()[selector].copy()
 		text = []
 		text.append(_("selector: %s") %selector)
-		text.append(_("Voice profile name: %s") %s["voiceProfileName"])
-		synthName = s["synthName"]
-
+		text.append(_("Voice profile name: %s") %selectorConfig[KEY_VoiceProfileName])
+		updatedConf = self.switchManager.getUpdatedConfig()
+		if selector not in updatedConf:
+			text.append(_("Associated under %s configuration profile")%NVDAString("(normal configuration)"))
+		synthName = selectorConfig[KEY_SynthName]
 		text.append(_("Synthetizer: %s") %synthName)
-		text.append(_("Output device: %s")%s["outputDevice"])
-		if "synthDisplayInfos" not in s :
-			# Translators: message to user .
-			ui.message(_("Voice profile Informations  cannot be displayed. You must  before, re-associate  the selector"))
-			return
+		synthSettings = selectorConfig[SCT_Speech][synthName].copy()
 
+		text.append(_("Output device: %s")%selectorConfig[SCT_Speech][KEY_OutputDevice])
 		synthClass = synthDriverHandler._getSynthDriver(synthName)
 		supportedSettings = synthClass.supportedSettings
+		synthDisplayInfos= selectorConfig[SCT_SynthDisplayInfos]
 		for setting in supportedSettings:
-			val = s["synthDisplayInfos"][setting.name]
+			val = synthDisplayInfos[setting.name]
 			if isinstance(setting, synthDriverHandler.BooleanSynthSetting):
 				val = boolToText(val)
 			text.append("%s: %s" %(setting.displayName, val))
-
-		for setting in SwitchVoiceProfile.NVDASpeechSettings:
-			val = s[setting] 
-			index = SwitchVoiceProfile.NVDASpeechSettings.index(setting)
+		for setting in SwitchVoiceProfilesManager.NVDASpeechSettings:
+			val = selectorConfig[SCT_Speech][setting] 
+			index = SwitchVoiceProfilesManager.NVDASpeechSettings.index(setting)
 			(name, f) = NVDASpeechSettingsInfos[index]
 			if f is not None:
 				val = f(val)
 			text.append("%s: %s"%(name, val))
-		for setting in SwitchVoiceProfile.NVDASpeechManySettings:
-			val = s["config"][setting] 
-			index = SwitchVoiceProfile.NVDASpeechManySettings.index(setting)
+		for setting in SwitchVoiceProfilesManager.NVDASpeechManySettings:
+			val = selectorConfig[SCT_Speech][SCT_Many] [setting]
+			if setting in synthSettings:
+				val = synthSettings[setting]
+			else:
+				val = selectorConfig[SCT_Speech][SCT_Many] [setting]
+			index = SwitchVoiceProfilesManager.NVDASpeechManySettings.index(setting)
 			(name, f) = NVDASpeechManySettingsInfos[index]
 			if f is not None:
 				val = f(val)
-			text.append("%s: %s"%(name, val))			
-		
+			text.append("%s: %s"%(name, val))
+
 		# Translators: this is the title of informationdialog box  to show voice profile informations.
 		dialogTitle = _("Voice profile 's informations")
 		InformationDialog.run (None, dialogTitle, "", "\r\n".join(text))
 	
 	def onActivateButton(self, evt):
+		# no action if focus is on check box
+		if self.useNormalConfigurationSelectorsCheckBox.HasFocus():
+			return
 		index = self.selectorListBox.GetSelection()
-		core.callLater(200, self.switchVoiceProfile.setVoiceProfileSelector,index+1)
+		self.switchManager.setVoiceProfile(str(index+1), silent = True)
 		self.Close()
 		
 	
 	def onAssociateButton(self, evt):
+		# no action  if focus is on the check box
+		if self.useNormalConfigurationSelectorsCheckBox.HasFocus():
+			return
 		index = self.selectorListBox.GetSelection()
 		selector = str(index+1)
-		if self.switchVoiceProfile.isSet(selector):
-			voiceProfileName = self.switchVoiceProfile.switchVoiceProfileSection [selector]["voiceProfileName"]
+		#if self.switchManager.isSet(selector):
+		if self.switchManager.isSet(selector, not self.switchManager.getUseNormalConfigurationSelectorsFlag()):
+			voiceProfileName = self.switchManager.getConfig()[selector][KEY_VoiceProfileName]
 			if gui.messageBox(
 				# Translators: the label of a message box dialog.
 				_("Selector {selector} is already set to {voiceProfileName} voice profile. Do you want to replace this voice profile?") .format(selector= selector, voiceProfileName = voiceProfileName),
@@ -382,28 +565,28 @@ class SelectorsManagementDialog (wx.Dialog):
 			if associateVoiceProfileDialog.ShowModal() != wx.ID_OK:
 				return
 		
-		core.callLater( 200,self.switchVoiceProfile.associateProfileToSelector,  selector, associateVoiceProfileDialog.voiceProfileName, associateVoiceProfileDialog.defaultVoiceProfileName)
+		core.callLater( 200,self.switchManager.associateProfileToSelector,  selector, associateVoiceProfileDialog.voiceProfileName, associateVoiceProfileDialog.defaultVoiceProfileName)
 		self.Close()
 	
 	def onModifyButton(self, evt):
 		index = self.selectorListBox.GetSelection()
 		selector = str(index+1)
-		voiceProfile = self.switchVoiceProfile.switchVoiceProfileSection [selector]
+		voiceProfile = self.switchManager.getConfig()[selector]
 		with ModifyVoiceProfileDialog(self, voiceProfile) as modifyVoiceProfileDialog:
 			if modifyVoiceProfileDialog.ShowModal() != wx.ID_OK:
 				return
 			
 			voiceProfileName = modifyVoiceProfileDialog.voiceProfileName
 			self.selectorListBox.SetString(index, "%s: %s"%(str(index+1), voiceProfileName))
-			voiceProfile["voiceProfileName"]=voiceProfileName 
+			voiceProfile[KEY_VoiceProfileName]=voiceProfileName 
 
 	
 	def onFreeButton(self, evt):
 		index = self.selectorListBox.GetSelection() 
 		selector = str(index+1)
-		if not self.switchVoiceProfile.isSet(selector):
+		if not self.switchManager.isSet(selector):
 			return
-		voiceProfileName = self.switchVoiceProfile.switchVoiceProfileSection [selector]["voiceProfileName"]
+		voiceProfileName = self.switchManager.getConfig()[selector][KEY_VoiceProfileName]
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
 			_("Do you want realy free selector {selector} associated to voice profile {voiceProfileName}").format(selector= selector, voiceProfileName =voiceProfileName),
@@ -412,17 +595,14 @@ class SelectorsManagementDialog (wx.Dialog):
 			wx.YES|wx.NO|wx.ICON_WARNING)==wx.NO:
 			return
 		
-		self.switchVoiceProfile.freeSelector(selector)
-		self.selectorListBox.SetString(index, "%s: %s"%(selector, _("free")))
-		self.updateButtons(str(selector))
+		self.switchManager.freeSelector(selector)
+		#self.selectorListBox.SetString(index, "%s: %s"%(selector, _("free")))
+		self.updateSelectorsList()
+		self.updateButtons()
 		self.selectorListBox.SetFocus()
-
-
-		
 		
 		
 	def onFreeAllButton(self, evt):
-		
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
 			_("Do you want realy free all selectors set to this configuration profile ?"),
@@ -431,22 +611,35 @@ class SelectorsManagementDialog (wx.Dialog):
 			wx.YES|wx.NO|wx.ICON_WARNING)==wx.NO:
 			return
 
-		self.switchVoiceProfile.freeAllSelectors()
-		for index in xrange(self.selectorListBox.Count):
-			selector = str(index+1)
-			self.selectorListBox.SetString(index, "%s: %s"%(selector, _("free")))
-		selector = self.selectorListBox.GetSelection()+1
-		self.updateButtons(str(selector))
+		self.switchManager.freeAllSelectors()
+		self.updateSelectorsList()
+		self.updateButtons()
 		self.selectorListBox.SetFocus()
 
 
-	def updateButtons(self, selector):
-		if self.switchVoiceProfile.isSet(selector):
+	def updateButtons(self):
+		def isSet(selector):
+			label = self.selectorListBox.GetString(int(selector)-1)
+			freeText = _("free")
+			if label[-len(freeText):] == freeText:
+				return False
+			elif self.switchManager.isSet(selector):
+				return True
+			return False
+
+		selector = str(self.selectorListBox.GetSelection()+1)
+		updatedConf = self.switchManager.getUpdatedConfig()
+		if isSet(selector):
 			self.activateButton.Enable()
 			self.activateButton.SetDefault()
-			self.modifyButton.Enable()
-			self.freeButton.Enable()
 			self.informationButton.Enable()
+			if (selector in updatedConf
+				and not updatedConf[selector] == {}):
+				self.modifyButton.Enable()
+				self.freeButton.Enable()
+			else:
+				self.modifyButton.Disable()
+				self.freeButton.Disable()
 		else:
 			self.associateButton.SetDefault()
 			self.activateButton.Disable()
@@ -454,9 +647,11 @@ class SelectorsManagementDialog (wx.Dialog):
 			self.freeButton.Disable()
 			self.informationButton.Disable()
 		enable = False
-		for index in xrange(self.selectorListBox.Count):
+		for index in rangeGen(self.selectorListBox.Count):
 			selector = str(index+1)
-			if self.switchVoiceProfile.isSet(selector):
+			if (isSet(selector)
+				and selector in updatedConf
+				and updatedConf[selector] != {}):
 				enable = True
 				break
 		if enable:
@@ -464,13 +659,12 @@ class SelectorsManagementDialog (wx.Dialog):
 		else:
 			self.freeAllButton.Disable()
 	
-	def focusOnSelectorListBox(self, evt):
-		selector = self.selectorListBox.GetSelection()+1
-		self.updateButtons(str(selector))
+	def onFocusOnSelectorListBox(self, evt):
+		self.updateButtons()
 
 	def onSelectorSelection(self, evt):
-		selector = self.selectorListBox.GetSelection()+1
-		self.updateButtons(str(selector))
+
+		self.updateButtons()
 	
 	@classmethod
 	def run(cls, obj):
@@ -493,7 +687,7 @@ class ModifyVoiceProfileDialog(wx.Dialog):
 	def __init__(self, parent, voiceProfile):
 		super(ModifyVoiceProfileDialog,self).__init__(parent, title=self.title )
 		self.voiceProfile = voiceProfile
-		voiceProfileName = voiceProfile["voiceProfileName"]
+		voiceProfileName = voiceProfile[KEY_VoiceProfileName]
 		mainSizer=wx.BoxSizer(wx.VERTICAL)
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# Translators: This is the label of the edit field appearing in the Modify voice profile dialog.
@@ -515,7 +709,7 @@ class ModifyVoiceProfileDialog(wx.Dialog):
 	
 	def onDefaultButton(self, evt):
 		self.voiceProfileNameEdit .Clear()
-		self.voiceProfileNameEdit .AppendText(self.voiceProfile["defaultVoiceProfileName"])
+		self.voiceProfileNameEdit .AppendText(self.voiceProfile[KEY_DefaultVoiceProfileName])
 		self.voiceProfileNameEdit .SetFocus()
 		evt.Skip()
 	def onOk(self, evt):
@@ -536,7 +730,7 @@ class AssociateVoiceProfileDialog(wx.Dialog):
 		super(AssociateVoiceProfileDialog,self).__init__(parent, title=self.title )
 		self.parent = parent
 		self.selector = selector
-		synthName = self.parent.switchVoiceProfile.curSynth.name
+		synthName = self.parent.switchManager.curSynth.name
 		(voice,variant) = self.getCurrentSynthVoiceAndVariant()
 		self.defaultVoiceProfileName = "%s %s %s"%(synthName , voice , variant)
 		self.voice = voice
@@ -562,23 +756,23 @@ class AssociateVoiceProfileDialog(wx.Dialog):
 		self.CentreOnScreen()
 		
 	def getCurrentSynthVoiceAndVariant(self):
-		def getcurrentSettingName(setting):
+		def getCurrentSettingName(setting):
 			try:
 				cur=getattr(synth,setting.name)
-				l=getattr(synth,"available%ss"%setting.name.capitalize()).values()
+				l=list(getattr(synth,"available%ss"%setting.name.capitalize()).values())
 				i=[x.ID for x in l].index(cur)
 				return l[i].name
 			except:
 				return ""
 		
-		synth = self.parent.switchVoiceProfile.curSynth
+		synth = self.parent.switchManager.curSynth
 		voice = ""
 		variant = ""
 		for s in synth.supportedSettings:
 			if s.name == "voice":
-				voice = getcurrentSettingName(s)
+				voice = getCurrentSettingName(s)
 			elif s.name == "variant":
-				variant = getcurrentSettingName(s)
+				variant = getCurrentSettingName(s)
 		
 		return (voice, variant)
 

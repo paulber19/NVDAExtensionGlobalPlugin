@@ -16,11 +16,13 @@ import virtualBuffers.MSHTML
 import virtualBuffers.gecko_ia2 
 from virtualBuffers import *
 from virtualBuffers import _prepareForFindByAttributes
-from ..utils.NVDAStrings import NVDAString
-from .__init__ import  BrowseModeDocumentTreeInterceptorEx , ElementsListDialogEx, GeckoElementsListDialog
-
 from  NVDAObjects.IAccessible import ia2Web
 from comtypes import COMError
+from ..utils.NVDAStrings import NVDAString
+from . import elementsList
+from .__init__ import  BrowseModeDocumentTreeInterceptorEx 
+from ..utils.py3Compatibility import _unicode
+
 def _iterNodesByAttribsEx(obj, attribs, direction="next", pos=None,nodeType=None):
 	offset=pos._startOffset if pos else -1
 	reqAttrs, regexp = _prepareForFindByAttributes(attribs)
@@ -53,7 +55,6 @@ class VirtualBufferEx (BrowseModeDocumentTreeInterceptorEx , virtualBuffers.Virt
 class MSHTMLEx(VirtualBufferEx, virtualBuffers.MSHTML .MSHTML):
 	def __init__(self,rootNVDAObject):
 		super(MSHTMLEx, self).__init__(rootNVDAObject)
-
 	
 	def _searchableNewAttribsForNodeType(self,nodeType):
 		if nodeType == "paragraph":
@@ -72,9 +73,8 @@ class MSHTMLEx(VirtualBufferEx, virtualBuffers.MSHTML .MSHTML):
 
 		else:
 			attrs = None
-
 		return attrs
-			
+	
 	def _searchableAttribsForNodeType(self,nodeType):
 		attrs = self._searchableNewAttribsForNodeType(nodeType)
 		if attrs is None:
@@ -85,7 +85,7 @@ class MSHTMLEx(VirtualBufferEx, virtualBuffers.MSHTML .MSHTML):
 		return _iterNodesByAttribsEx(self, attribs, direction, pos, nodeType)
 
 	def _get_ElementsListDialog(self):
-		return ElementsListDialogEx
+		return elementsList.ElementsListDialogEx
 
 class Gecko_ia2_Ex(VirtualBufferEx,virtualBuffers.gecko_ia2 .Gecko_ia2):
 	def __init__(self,rootNVDAObject):
@@ -120,7 +120,7 @@ class Gecko_ia2_Ex(VirtualBufferEx,virtualBuffers.gecko_ia2 .Gecko_ia2):
 		return _iterNodesByAttribsEx(self, attribs, direction, pos, nodeType)
 	
 	def _get_ElementsListDialog(self):
-		return GeckoElementsListDialog
+		return elementsList.GeckoElementsListDialog
 
 class Gecko_ia2Pre14Ex(Gecko_ia2_Ex):
 	def _searchableTagValues(self, values):
@@ -167,18 +167,18 @@ class VirtualBufferQuickNavItemEx(virtualBuffers.VirtualBufferQuickNavItem):
 		role = attrs.get("role", "")
 		if (self.itemType =="edit") : #Qor (self.itemType == "formField" and role == controlTypes.ROLE_EDITABLETEXT):
 			name = attrs.get("name", "")
-			return u"{name} {role} {value}".format(name = self.getLabel(name), role = controlTypes.roleLabels[role] ,value = value)
+			return _unicode("{name} {role} {value}").format(name = self.getLabel(name), role = controlTypes.roleLabels[role] ,value = value)
 		if self.itemType ==   "checkBox":
 			states = attrs.get("states", "")
 			state = NVDAString("checked") if controlTypes.STATE_CHECKED in states else NVDAString("not checked")
 			name = attrs.get("name", "")
-			return u"%s %s" %(self.getLabel(name), state)
+			return _unicode("%s %s") %(self.getLabel(name), state)
 		
 		if self.itemType in ["formField"]:
 			if role == controlTypes.ROLE_CHECKBOX:
 				states = attrs.get("states", "")
 				state = NVDAString("checked") if controlTypes.STATE_CHECKED in states else NVDAString("not checked")
 				name = attrs.get("name", "")
-				return u"{name} {role} {state}" .format(name= name, role= controlTypes.roleLabels[role], state = state)
+				return _unicode("{name} {role} {state}") .format(name= name, role= controlTypes.roleLabels[role], state = state)
 			return value
 		return  self.getLabel (value)

@@ -25,7 +25,7 @@ class InformationDialog(wx.Dialog):
 			return InformationDialog._instance
 		return wx.Dialog.__new__(cls)	
 	
-	def __init__(self, parent, dialogTitle,  informationLabel, information):
+	def __init__(self, parent, dialogTitle,  informationLabel, information, insertionPointOnLastLine):
 		if InformationDialog._instance is not None:
 			return
 		InformationDialog._instance = self
@@ -34,6 +34,7 @@ class InformationDialog(wx.Dialog):
 			dialogTitle = _("Informations")
 		title = InformationDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(InformationDialog, self).__init__(parent, wx.ID_ANY,title)
+		self.insertionPointOnLastLine = insertionPointOnLastLine
 		self.informationLabel = informationLabel
 		self.information = information
 		self.doGui()
@@ -46,7 +47,13 @@ class InformationDialog(wx.Dialog):
 		tcLabel =sHelper.addItem(wx.StaticText(self, label=self.informationLabel))
 		self.tc = sHelper.addItem(wx.TextCtrl(self, id = wx.ID_ANY,style=wx.TE_MULTILINE | wx.TE_READONLY|wx.TE_RICH, size = (1000, 600)))
 		self.tc.AppendText(self.information)
-		self.tc.SetInsertionPoint(0)
+		if self.insertionPointOnLastLine:
+			lineCount = self.tc.GetNumberOfLines()
+			length = self.tc.GetLineLength(lineCount-1)
+			lastPosition = self.tc.GetLastPosition()
+			self.tc.SetInsertionPoint(lastPosition - length)
+		else:
+			self.tc.SetInsertionPoint(0)
 		# the buttons
 		bHelper = sHelper.addDialogDismissButtons(guiHelper.ButtonHelper(wx.HORIZONTAL))
 		# Translators: label of copy to clipboard button.
@@ -78,13 +85,13 @@ class InformationDialog(wx.Dialog):
 			speech.speakMessage(text)
 			
 	@classmethod
-	def run(cls, parent, dialogTitle,informationLabel, information):
+	def run(cls, parent, dialogTitle,informationLabel, information, insertionPointOnLastLine = False):
 		if isOpened(InformationDialog):
 			return
 		
 		if parent is None:
 			mainFrame.prePopup()
-		d = InformationDialog(parent or mainFrame, dialogTitle, informationLabel, information)
+		d = InformationDialog(parent or mainFrame, dialogTitle, informationLabel, information, insertionPointOnLastLine)
 		d.CentreOnScreen()
 		d.Show()     
 		if parent is None:

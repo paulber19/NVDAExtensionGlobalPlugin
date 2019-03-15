@@ -43,7 +43,8 @@ class ListeNotification(wx.Dialog):
 		windowsListLabelText=_("&Icons") +":"
 		self.listeIcones = sHelper.addLabeledControl(windowsListLabelText, wx.ListBox, id = wx.ID_ANY, style = wx.LB_SINGLE, size = (700, 280))
 		self.listeIcones.AppendItems(self.getListeIcones())
-		self.listeIcones.Select(0) 
+		if self.listeIcones.Count:
+			self.listeIcones.Select(0) 
 		# the buttons
 		bHelper= guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: this is a button appearing in NVDA - System tray icons 's list dialog.

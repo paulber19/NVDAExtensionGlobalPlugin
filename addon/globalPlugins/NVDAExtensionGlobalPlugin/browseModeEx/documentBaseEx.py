@@ -12,8 +12,8 @@ import wx
 import collections
 import gui
 from scriptHandler import isScriptWaiting, getLastScriptRepeatCount
-from ..__init__ import GB_taskTimer
 from ..utils.NVDAStrings import NVDAString
+
 import queueHandler
 import speech
 import ui
@@ -40,10 +40,10 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		"kb:control+alt+shift+downArrow" : "moveToLastCellOfColumn",
 		}
 	# set category of base NVDA scripts
-	documentBase.DocumentWithTableNavigation.script_nextRow.im_func.category = SCRCAT_TABLE
-	documentBase.DocumentWithTableNavigation.script_previousRow.im_func.category = SCRCAT_TABLE
-	documentBase.DocumentWithTableNavigation.script_nextColumn.im_func.category = SCRCAT_TABLE
-	documentBase.DocumentWithTableNavigation.script_previousColumn.im_func.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_nextRow.__func__.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_previousRow.__func__.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_nextColumn.__func__.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_previousColumn.__func__.category = SCRCAT_TABLE
 	
 	def __init__(self,rootNVDAObject):
 		super(DocumentWithTableNavigationEx,self).__init__(rootNVDAObject)

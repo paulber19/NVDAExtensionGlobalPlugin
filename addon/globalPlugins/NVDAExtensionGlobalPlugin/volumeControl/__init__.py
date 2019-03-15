@@ -1,6 +1,6 @@
 #NVDAExtensionGlobalPlugin/volumeControl/__init__.py
 #A part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2017  paulber19
+#Copyright (C) 2017-2019  paulber19
 #This file is covered by the GNU General Public License.
 #See the file COPYING for more details.
 import addonHandler
@@ -9,16 +9,11 @@ from logHandler import log
 import speech
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
-import os
 import sys
-_curAddon = addonHandler.getCodeAddon()
-pycawPath= os.path.join(_curAddon.path, "utilities")
-sys.path.append(pycawPath)
-import pycaw
+from ..utils.py3Compatibility import getUtilitiesPath
+sys.path.append(getUtilitiesPath())
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 del sys.path[-1]
-#futurePath= os.path.join(_curAddon.path, "utilities", "pycaw", "future")
-#sys.path.append(futurePath)
 
 def toggleProcessVolume(processName):
 	""" Mutes or unmute process volume """

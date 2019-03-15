@@ -5,7 +5,7 @@
 #See the file COPYING for more details.
 
 import NVDAObjects.UIA.edge
-from browseModeUIAEx import UIABrowseModeDocumentEx, EdgeElementsListDialog
+from .browseModeUIAEx import UIABrowseModeDocumentEx, EdgeElementsListDialog
 
 
 class EdgeHTMLTreeInterceptorEx (UIABrowseModeDocumentEx, NVDAObjects.UIA.edge.EdgeHTMLTreeInterceptor):

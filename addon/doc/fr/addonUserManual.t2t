@@ -1,7 +1,11 @@
-Module complémentaire Extension des commandes  de base de NVDA - manuel utilisateur
+ADDON_SUMMARY - manuel utilisateur
 Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poiraud
 
 
+% add-on version
+%!PostProc (html): ADDON_VERSION 8.0
+% add-on summary
+%!PostProc (html): ADDON_SUMMARY Extension des commandes de base de NVDA
 %!Target: html
 %!Encoding: UTF-8
 %!Options: --toc
@@ -57,13 +61,14 @@ Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poira
 %!PostProc (html): MAIN_KEY_TOGGLE_MUTE nvda+majuscule+pause
 %!PostProc (html): MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR nvda+,
 %!PostProc (html): MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR nvda+majuscule+,
-
-
 % script shell command keys definitions
 %!PostProc (html): KEY_APPLICATION_INFORMATIONS a
 %!PostProc (html): KEY_OBJECTS_LIST b
-%!PostProc (html): KEY_CONVERT_TO_HTML c
+%!PostProc (html): KEY_COPY_DATETIME c
 %!PostProc (html): KEY_REPORT_FORMATTING f
+%!PostProc (html): KEY_ADDON_SETTINGS f1
+%!PostProc (html): KEY_RENAMING f2
+%!PostProc (html): KEY_SELECTIVE_ANNOUNCEMENT f3
 %!PostProc (html): KEY_COMPLEX_SYMBOL f4
 %!PostProc (html): KEY_LAST_USED_COMPLEX_SYMBOL control+f4
 %!PostProc (html): KEY_DISPLAY_SPEECH_HISTORY f9
@@ -77,26 +82,27 @@ Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poira
 %!PostProc (html): KEY_VOICE_PROFIL_SWITCHING p
 %!PostProc (html): KEY_SHUTDOWN r
 %!PostProc (html): KEY_TOGGLE_MUTE s
+%!PostProc (html): KEY_VOLUME_ON control+s
+%!PostProc (html): KEY_TOOLSFORADDON t
 %!PostProc (html): KEY_USER_INPUT_GESTURE u
-
 %!PostProc (html): KEY_MANAGE_VOICE_PROFIL v
 
-Téléchargement: ["v7.4.3" https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-7.4.3.nvda-addon]
+
+DTéléchargement: [version ADDON_VERSION https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-ADDON_VERSION.nvda-addon]
 
 = Sommaire =[toc]
 %%toc
 
-
 + Introduction +
 ++ Généralités ++
-Ce module complémentaire ajoute aux commandes globales de NVDA:
+Cette extension ajoute aux commandes globales de NVDA:
 - les fonctionnalités suivantes:
  - [Affichage de la liste Des icônes de la zone de notification ou des fenêtres des applications lancées #hdr1],
  - [Aide à la composition de symboles complexes #hdr3] comme par exemple un "e" dans l'"o", un point d'interrogation renversé...,
  - [Annonce ou affichage d'informations concernant l'application sous le focus, comme sa version ou le profil de configuration actif #hdr4],
  - [Extension des fonctionnalités du tampon virtuel #hdr5] pour les navigateurs Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge et Google Chrome:
   - nouvelles commandes pour le mode de navigation : paragraphe, division, ancre, région principale,
-  - nouveaux types d'éléments présentés sous forme de liste dans la boite de dialogue "Liste des éléments" ouverte par NVDA+f7: (liste, case à cocher, paragraphe, division, cadre,...) et annonce du nombre d'éléments correspondant au type sélectionné,
+  - nouveaux types d'éléments présentés sous forme de liste dans la boite de dialogue "Liste des éléments" ouverte par NVDA+f7: (radio bouton, paragraphe, cadre, case à cocher, ...) et annonce du nombre d'éléments correspondant au type sélectionné,
   - annonce  de l'adresse (URL) du document,
   - option pour  naviguer en boucle à la recherche d'un élément suivant ou précédent,
   - scripts pour les tableaux:
@@ -114,104 +120,126 @@ Ce module complémentaire ajoute aux commandes globales de NVDA:
  - [redémarrage de NVDA en niveau de journalisation "débogage" par simple geste de commande #hdr15],
  - [affichage des éléments visibles composant l'objet en avant-plan #hdr16],
  - [commutation rapide de profil vocal #hdr17],
- - [rémanence des touches NVDA et de modification #hdr18],
+ - [rémanence des touches NVDA et de modification et rémanence spécifique pour le site gmail.com #hdr18],
  - [Arrêt, redémarrage ou mise en veille prolongée de l'ordinateur #hdr19],
  - [gestion des gestes de commande configurés par l'utilisateur #hdr20],
  - [control du son #hdr21] (Windows 10 uniquement):
   - couper ou établir  le son pour le flux audio de l'application sous le focus,
   - établir manuellement le son principal et du flux audio de NVDA ,
- - [Outils de développement #hdr22]:
-  - script pour convertir les fichiers de documentation des modules installés,
- - [scripts pour cliquer à la position courante de l'objet navigateur #hdr23].
+ - [Outils pour le  développement d'extensions #hdr22]:
+  - création du fichier buildVars.py à partir du fichier manifest.ini de l'extension,
+  - mise à jour du fichier manifest.ini à partir des informations du fichier buildVars.py,
+  - création du fichier manifest.ini local pour une ou toutes les langues supportées par l'extension,
+  - création de la documentation HTML de l'extension pour une ou toutes les langues,
+  - préparation de l'extension,
+  - exploration du dossier de l'extension,
+ - [scripts pour cliquer à la position courante de l'objet navigateur #hdr23],
+ - [Compléments concernant la date et l'heure #hdr24]:
+  - copie de la date et l'heure dans le presse-papier,
+  - Annoncer l'heure de l'horloge Windows avec les secondes,
+  - annonce  de l'heure  indépendante du niveau de ponctuation.
+
+
 - Les options:
  - [suppression de l'annonce de la description des objets dans les rubans Windows #hdr100],
  - [Annonce du mot focalisé après suppression de mot #hdr101],
  - [agrandissement automatique des fenêtres #hdr102],
  - [annonce systématique des ponctuations lors de déplacement par mot #hdr103],
- - [Annoncer l'heure de l'horloge Windows avec les secondes #hdr104].
 - les options avancées:
  - [Signalement par un son de l'inscription d'une erreur dans le journal de NVDA #hdr300],
- - [Rétablissement automatique du volume principal et de NVDA au chargement du module #hdr301],
- - [Titrage des boites de dialogue du module avec le nom du module #hdr302],
+ - [Rétablissement automatique du volume principal et de NVDA au chargement de l'extension #hdr301],
+ - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
  - [configuration de la temporisation d'attente de répétition du même geste de commande #hdr303].
 - et les autres améliorations:
- - [annonce  de l'heure  indépendante du niveau de ponctuation #hdr200],
- - [copie de la date et l'heure dans le presse-papier #hdr201],
- - [menu pour explorer son dossier de configuration ou le dossier programme de NVDA#hdr202],
- - [présentation des informations de formatage du texte dans une boite de dialogue  en lieu et place d'un document HTML #hdr203],
+ - [menu pour explorer le dossier de configuration de l'utilisateur ou le dossier programme de NVDA#hdr202],
+ - [présentation des informations de mise en forme du texte dans une boite de dialogue  en lieu et place d'un document HTML #hdr203],
  - [Annonce du texte des boite de dialogue du style confirmation même si l'l'annonce de la description de l'objet est désactivée #hdr204].
 
 
-++ Menu de configuration du module ++
-Dans le menu "Préférences" de NVDA est ajouté le sous-menu "Module complémentaire extension des commandes de base de NVDA" qui propose suivant le cas, trois sous-menus:
-- systématiquement le sous-menu Paramètres qui ouvre un dialogue ressemblant au menu "paramètres" de NVDA  et qui présente trois catégories de paramètres:
- - "Installation des fonctionnalités": permet de voir l'état d'installation de chaque fonctionnalité apportée par le module et éventuellement le modifier.
- - "Options" pour configurer les options apportées par le module,
- - options avancées:   options pour les utilisateurs expérimentés.
+++ Menu de configuration de l'extension ++
+Dans le sous-menu "Préférences" de NVDA est ajouté le sous-menu "ADDON_SUMMARY" qui propose suivant le cas, les choix suivants:
+- systématiquement  "Paramètres" qui ouvre un dialogue ressemblant au dialogue "paramètres" de NVDA  et qui présente  les catégories suivantes:
+ - "Installation des fonctionnalités": permet de voir l'état d'installation de chaque fonctionnalité apportée par l'extension et éventuellement le modifier.
+ - "Divers" pour configurer  les options non classables apportées par l'extension,
+ - "Ordinateur"  pour configurer les options de l'extension liées au système d'exploitation Window,
+ - Rémanence des touches (si la fonctionnalité est installée),
+ - Contrôle du son (si la fonctionnalité est installée),
+ - Avancés:   options pour les utilisateurs expérimentés.
 
 
-- le sous-menu "Renommage des touches clavier " (si la fonctionnalité est installée): permet de modifier suivant son besoin les noms des touches clavier donné par défaut par NVDA,
-- le sous-menu "Annonce sélective des touches clavier" (si la fonctionnalité est installée): permet de faire annoncer sélectivement suivant son besoin le nom des touches clavier.
+- "Renommage des touches clavier " (si la fonctionnalité est installée): permet de modifier suivant son besoin les noms des touches clavier donné par défaut par NVDA,
+- "Annonce sélective des touches clavier" (si la fonctionnalité est installée): permet de faire annoncer sélectivement suivant son besoin le nom des touches clavier.
 
-
-Dans certain cas de modification de la configuration du module, NVDA devra redémarrer pour que les changements soient pris en compte.
 
 Cette configuration est enregistrée de deux manières suivant la fonctionnalité ou l'options concernée:
 - dans le fichier "NVDAExtensionGlobalPluginAddon.ini" placé dans le dossier utilisateur "userConfig" de NVDA pour la configuration utilisée quel que soit le profil de configuration,
 - dans le fichier NVDA.ini ou le fichier du profil de configuration du profil déclenché au moment de la modification pour la configuration qui sera utilisée uniquement lorsque ce profil sera déclenché.
 
 
-Lors de la désinstallation du module, son fichier de configuration est supprimé et la configuration du module est effacée de tous les profils de configuration.
+NVDA offre l'option "Sauvegarder la configuration en quittant" (voir manuel utilisateur de NVDA) qui permet de  sauvegarder automatiquement la configuration de NVDA en quittant ou en redémarrant NVDA. Si cette option n'est pas cochée, la configuration n'est sauvegardée que sur action de l'utilisateur.
 
-Dans le cas d'une mise à jour, l'installation du module offre la possibilité de conserver (dans la mesure du possible) ou non la précédente configuration.
+Cette extension suit ce mode de fonctionnement.
+
+Certaines modifications de paramètres de l'extension nécessite la sauvegarde de la configuration et le redémarrage de NVDA. Dans ce cas, il est proposé à l'utilisateur la sauvegarde et le redémarrage immédiat.
+
+
+Lors de la désinstallation de l'extension, son fichier de configuration est supprimé et la configuration de l'extension est effacée de tous les profils de configuration.
+
+Lors de la désinstallation d'une fonctionnalité, sa configuration, s’il y a,  est complétement supprimée.
+
+Dans le cas d'une mise à jour, l'installation de l'extension offre la possibilité de conserver (dans la mesure du possible) ou non la précédente configuration.
 
 ++ Compatibilité ++
-Ce module n'est pas compatible avec les versions de NVDA antérieures à la version 2018.2.
+Cette extension n'est pas compatible avec les versions de NVDA antérieures à la version 2018.3.2.
+
+La configuration de la fonctionnalité "Commutation de profil vocal"  ayant changée depuis la version 8 de l'extension,  celle-ci est effacée  lors d'une mise à jour à partir d'une version de l'extension plus ancienne. Tous les sélecteurs sont libérés et les profils vocaux associés sont supprimés.
 
 
 ++ Historique ++
-L'historique des versions du module est dans le fichier ["change.html" change.html]
+L'historique des versions de cette  extension est dans le fichier ["change.html" change.html]
 
 +Fonctionnalités +
 ++ Installation d'une fonctionnalité ++
-Le module permet d'installer ou ne pas installer telle ou telle fonctionnalité.
-L'état d'installation de chaque  fonctionnalité du module est présenté par Le dialogue "Module d'extension des commandes de Base de NVDA - Installation des fonctionnalités".
+Cette extension permet d'installer ou ne pas installer telle ou telle fonctionnalité.
+L'état d'installation de chaque  fonctionnalité de l'extension est présenté dans la catégorie  "Installation des fonctionnalités" du dialogue "Paramètres.
+
 Cet état peut être:
 - Ne pas installer: la fonctionnalité n'est pas installée.
-- Installer: la fonctionnalité est installée. Ses scripts sont utilisables à l'aide des commandes de l'interpréteur et des gestes de commande prévus par défaut.
-- Installer sans geste de commande: la fonctionnalité est installée. Ses scripts sont utilisables à l'aide des commandes de l'interpréteur mais aucun geste de commande ne leur est affecté.
+- Installer: la fonctionnalité est installée. Ses scripts sont utilisables à l'aide des commandes de l'interpréteur de commandes (voir chapitre suivant) et des gestes de commande prévus par défaut.
+- Installer sans geste de commande: la fonctionnalité est installée. Ses scripts sont utilisables à l'aide des commandes de l'interpréteur de commandes (voir chapitre suivant), mais aucun geste de commande ne leur est affecté.
 
 
-Par défaut, le module n'installe pas  toutes les fonctionnalités.
+Par défaut, cette extension n'installe pas  toutes les fonctionnalités.
 
 ++ Activation des scripts ++
-En général, chaque  script peut être  activé de deux manières différentes:
+En général, chaque  script peut être  activé de deux manières:
 - soit à l'aide d'un geste de commande classique,
-- soit en utilisant [l'interpréteur de commandes #hdr01] du module.
+- soit en utilisant l'interpréteur de commandes de l'extension (voir chapitre suivant).
 
 
-Dans la boite de dialogue "Gestes de commande " de NVDA, les scripts apportés par le module sont placées dans leur propre catégorie.
+Dans la boite de dialogue "Gestes de commande " de NVDA, les scripts apportés par l'extension sont placées dans leur propre catégorie.
+La grande majorité  des scripts se répartit  dans les catégories: "ADDON_SUMMARY", "Commutation de profil vocal", "Configuration", "Outils" et  Parole.
 
-Dans leur grande majorité,  les scripts se répartissent  dans les catégories suivantes: "Extension des commandes de base de NVDA", "Commutation de profil vocal", "Configuration", "Outils" et  Parole.
-
-Pour les scripts pouvant être lancés par une commande  de [l'interpréteur #hdr01], celle-ci est indiquée à la suite de la description du script.
+Pour les scripts pouvant être lancés par une commande  de l'interpréteur, celle-ci est indiquée à la suite de la description du script.
 
 Suivant le choix d'installation d'une fonctionnalité ("Installer, " ou "Installer sans geste de commande"), les gestes de commande prévus par défaut sont attribués ou non aux scripts de cette fonctionnalité.
 
-Par défaut et dans leur grande majorité, les scripts pouvant être lancé par [l'interpréteur de commandes #hdr01] ne sont affectés à aucun geste de commande.
+Par défaut, la grande majorité des scripts pouvant être lancés par l'interpréteur de commandes  ne sont affectés à aucun geste de commande.
 
-+++ Interpréteur de commandes +++[hdr01]
++++ Interpréteur de commandes +++
 Celui-ci se lance à l'aide du geste de commande "KEY_SHELL". Un bip sonore est alors audible.
 
 Il est alors possible d'activer  les scripts des  fonctionnalités à l'aide   de commandes.
 
 Aujourd'hui, ces commandes ne sont pas modifiables.
 
-La commande "KEY_HELP_SHELL" de l'interpréteur  liste l'ensemble des  commandes des fonctionnalités installées et la commande "KEY_MODULE_GUIDE" ouvre le manuel d'utilisation du module.
+La commande "KEY_HELP_SHELL" de l'interpréteur  liste l'ensemble des  scripts des fonctionnalités installées accessible  par une commande de l'interpréteur. Dans cette liste, il est possible de lancer le scriptsélectionné en appuyant sur la touche "Entrée".
+
+Lla commande "KEY_MODULE_GUIDE" de l'interpréteur ouvre le manuel d'utilisation de l'extension.
 
 L'interpréteur de commandes s'arrête soit:
 - en tapant la touche "Echap",
-- soit automatiquement  si une commande est tapée. Si cette commande ne correspond à aucune fonctionnalité, un bip sonore le signale.
+- soit automatiquement  si une commande est tapée. Si cette commande ne correspond à aucun script, un bip sonore le signale.
 
 
 ++ Affichage de la liste des  icônes de la zone de notification et de la liste des fenêtres  des applications lancées ++[hdr1]
@@ -223,11 +251,11 @@ Elle ajoute les scripts suivants:
 - Affichage de la liste des  icônes de la zone de notification ou des fenêtres  des applications lancées.
 
 
-Ces scripts sont rangés dans la rubrique "Extension des commandes de base de NVDA" du dialogue "Gestes de commande".
+Ces scripts sont rangés dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA.
 
 
 +++ Affichage de la liste des  icônes de la zone de notification +++
-Ce script initialement créé par Yannick Maillot et Daniel Poiraud s'installait à l'aide du module complémentaire indépendant "ListeIconesZoneNotification_v1.2.nvda-addon" qu'il faudra donc désinstaller. 
+Ce script initialement créé par Yannick Maillot et Daniel Poiraud s'installait à l'aide de l'extension indépendant "ListeIconesZoneNotification_v1.2.nvda-addon" qu'il faudra donc désinstaller. 
 
 Sa description est : "Afficher la liste des icônes de la zone de notification"
 
@@ -288,15 +316,16 @@ Un double appui lance le script "Affichage de la liste des fenêtres  des applic
 
 
 ++ Aide à la composition de symboles complexes ++[hdr3]
-Cette fonctionnalité est, par défaut, installée sans geste de commande.
+Cette fonctionnalité est par défaut, installée sans geste de commande.
 
 Elle ajoute les deux scripts suivants:
-  - un script dont la description est : "Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique (",
-  - un script dont la description est: "Afficher la liste des derniers symboles complexes composés ".
+- un script dont la description est : "Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique (",
+- un script dont la description est: "Afficher la liste des derniers symboles complexes composés ".
 
-  
-  Ces scripts sont rangés dans la rubrique "Extension des commandes de base de NVDA" du dialogue "Gestes de commande".
-  +++ Script Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique ( +++
+
+Ces scripts sont rangés dans la rubrique "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA.
+
++++ Script Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique ( +++
 Ce script se lance :
 - soit par la commande KEY_COMPLEX_SYMBOL " de l'interpréteur de commande,
 - soit par le geste de commande "MAIN_KEY_COMPLEX_SYMBOL "  affecté par défaut.
@@ -326,7 +355,7 @@ Positionné sur un symbole, l'appui sur la touche "Espace" provoque la vocalisat
 
 L'appui sur l'un des trois boutons ferme la boite de dialogue.
 
-Le bouton "Gérer ses symboles" présente la boite de dialogue qui  offre la possibilité de  compléter les catégories  de base du module par ses propres symboles.
+Le bouton "Gérer ses symboles" présente la boite de dialogue qui  offre la possibilité de  compléter les catégories  de base de l'extension par ses propres symboles.
 Cette boite de dialogue affiche:
 - la liste de toutes les catégories,
 - la liste des symboles propres  à l'utilisateur pour la catégorie sélectionnée,
@@ -337,14 +366,14 @@ Cette boite de dialogue affiche:
 - le bouton "Enregistrer" pour enregistrer toutes les modifications faites et fermer la boite de dialogue,
 - le bouton "Annuler" pour fermer la boite de dialogue sans modification. 
 
-Les catégories et symboles ajoutées sont mémorisées dans le fichier de configuration du module (NVDAExtensionGlobalPluginAddon.ini  se trouvant dans le dossier utilisateur de configuration de NVDA ) sous la section "Categories&Symbols" et  sous la sous-section correspondant au langage de NVDA sous lequel les modifications ont été faites. 
+Les catégories et symboles ajoutées sont mémorisées dans le fichier de configuration de l'extension (NVDAExtensionGlobalPluginAddon.ini  se trouvant dans le dossier utilisateur de configuration de NVDA ) sous la section "Categories&Symbols" et  sous la sous-section correspondant au langage de NVDA sous lequel les modifications ont été faites. 
 
 Chaque catégorie est une section définie comme suit:
 - nom de la catégorie,
 - liste des symboles (le symbole = sa description)
 
-Les catégories de bases du module avec leurs symboles sont définis dans un fichier "symbolCategories.dic" propre à chaque langage et qui se trouve dans le dossier "xxx" du dossier "locale" du module complémentaire (xxx étant l'identifiant du langage, par exemple "fr" pour le français).
-Il est possible de personnaliser le module complémentaire et de constituer ses propres catégories de base.
+Les catégories de bases de l'extension avec leurs symboles sont définis dans un fichier "symbolCategories.dic" propre à chaque langage et qui se trouve dans le dossier "xxx" du dossier "locale" de l'extension  (xxx étant l'identifiant du langage, par exemple "fr" pour le français).
+Il est possible de personnaliser cette extension et de constituer ses propres catégories de base.
 Pour cela, il suffit de créer  dans le dossier userConfig, un fichier "symbolCategories-xxx.dic", enregistré en encodage "utf-8", (xx est le code de la langue). Dans ce fichier, le nom des catégories sera défini entre crochets et chaque symbole comme suit:
 - le symbole (un seul caractère),  
 - une tabulation (caractère "Tab")  
@@ -352,45 +381,45 @@ Pour cela, il suffit de créer  dans le dossier userConfig, un fichier "symbolCa
 
 
 Les lignes vides ou de commentaire (commençant par "#") sont acceptées.
-Ces fichiers  sont conservés lors d'une mise à jour du module, même si l'utilisateur demande à ne pas conserver ses propres paramètres.
-L'installation du module  ajoute, pour chaque langue, la prononciation de certains  symboles se trouvant dans les catégories de base et que NVDA n'a pas. Le fichier "symboles-xx.dic" du dossier userConfig est soit créé, soit modifié pour y ajouter les nouvelles prononciations.
+Ces fichiers  sont conservés lors d'une mise à jour de l'extension, même si l'utilisateur demande à ne pas conserver ses propres paramètres.
+L'installation de l'"extension  ajoute, pour chaque langue, la prononciation de certains  symboles se trouvant dans les catégories de base et que NVDA n'a pas. Le fichier "symboles-xx.dic" du dossier userConfig est soit créé, soit modifié pour y ajouter les nouvelles prononciations.
 
 
 
 +++ Script Afficher la liste des derniers symboles complexes composés +++
-Le module mémorise les 20 derniers symboles composés pour le profil de configuration courant.
+Cette extension mémorise les 20 derniers symboles composés pour le profil de configuration courant.
 
 Ce script permet de les faire afficher et de recomposer un symbole  couramment utilisé. Cela évite d'aller le rechercher  dans sa catégorie avec le script précédent.
 
-Ce script se lance par la commande "KEY_LAST_USED_COMPLEX_SYMBOL" de l'interpréteur de commande. Aucun geste de commande ne lui est affecté par défaut.
+Ce script se lance par la commande KEY_LAST_USED_COMPLEX_SYMBOL " de l'interpréteur de commande, Aucun geste de commande ne lui est affecté par défaut.
 
 Il présente le même genre de boite  de dialogue que le script précédent sans le bouton pour gérer ses propres symboles.
 
-Le nombre  maximum de derniers symboles est configurable avec l'option "Nombre maximum de derniers symboles composés enregistrés" de la catégorie "Options avancées" du menu "paramètres" du module.
+Le nombre  maximum de derniers symboles est configurable avec l'option "Nombre maximum de derniers symboles composés enregistrés" placé dans la catégorie "Avancés" du dialogue "Paramètres" de l'extension.
 
 
 ++ Informations sur l'application sous le focus ++[hdr4]
 Cette fonctionnalité est installée par défaut sans geste de commande.
 
 Elle installe, suivant son état d'installation,  les scripts suivant:
-- annonce  du nom du fichier de l'application, du nom du module chargé ainsi que  le nom et l'état du profil de configuration,
+- annonce  du nom du fichier de l'application, du nom de l'extension chargé ainsi que  le nom et l'état du profil de configuration,
 - annonce du nom et numéro de version de l'application,
 
 
 Et dans tous les cas, les scripts:
-- annonce du nom et du numéro de version du module complémentaire activé pour l'application,
+- annonce du nom et du numéro de version de l'extension activée pour l'application,
 - affichage des informations  sur l'application.
 
 
-Ces scripts sont rangés dans la rubrique "Outils" du dialogue "Gestes de commande".
+Ces scripts sont rangés dans la rubrique "Outils" du dialogue "Gestes de commande" de NVDA.
 
 
-+++ Annonce  du nom du fichier de l'application, du nom du module chargé et du nom et de l'état du profil de configuration +++
-La description de ce script est: "Annoncer le nom du fichier de l'application en cours ainsi que le nom du module chargé. Deux appuis: annoncer le nom et l'état du profil de configuration".
++++ Annonce  du nom du fichier de l'application, du nom de l'extension activée et du nom et de l'état du profil de configuration +++
+La description de ce script est: "Annoncer le nom du fichier de l'application en cours ainsi que le nom du fichier de l'extension . Deux appuis: annoncer le nom et l'état du profil de configuration".
 
 Par défaut, le geste de commande "MAIN_KEY_CONFIGURATION_PROFILE "  lui est affecté.
 
-Un simple appui du geste de commande déclenche le script de base de NVDA qui annonce le nom du fichier de l'application et s'il y a, le nom du module chargé.
+Un simple appui du geste de commande déclenche le script de base de NVDA qui annonce le nom du fichier de l'application et s'il y a, le nom du fichier de l'extension activée.
 
 Un double appui annonce le nom du profil de configuration  et son état.
 
@@ -409,15 +438,16 @@ Il se lance par la commande "KEY_APPLICATION_INFORMATIONS" de l'interpréteur.
 
 Par défaut, Aucun geste de commande ne lui est affecté.
 
-Il affiche la   boite de dialogue  "Extension des commandes  de base de NVDA - Informations" qui présente les informations suivantes:
+Il affiche la   boite de dialogue  "ADDON_SUMMARY - Informations" qui présente les informations suivantes:
 - nom du fichier de l'application sous le focus et son numéro de version,
 - le nom du profil de configuration déclenché.
-- le nom du module chargé s'il y en a un,
-- le nom et le numéro de version du module complémentaire associé (s'il y en a un et activé),
+- le nom et le numéro de version de l'extension active,
+- le chemin de l'extension active,
+- le nom du module python chargé s'il y en.
 
 
-+++ Affichage du nom et du numéro de version du module complémentaire +++
-La description de ce script est: "Annoncer le nom et le numéro de version du module complémentaire activé pour l'application sous le focus".
++++ Affichage du nom et du numéro de version de l'extension +++
+La description de ce script est: "Annoncer le nom et le numéro de version de l'extension activée pour l'application sous le focus".
 
 Par défaut, Aucun geste de commande ne lui est affecté, ni aucune commande interpréteur.
 
@@ -427,7 +457,7 @@ Cette fonctionnalité est installée par défaut.
 Elle concerne les navigateurs Mozilla Firefox , Microsoft Internet Explorer, Google Chrome, Microsoft  Edge(partiellement) et  apporte:
 
 +++ Nouvelles commandes de navigation +++
-Ce module ajoute les commandes suivantes pour le mode de navigation:
+Cette extension ajoute les commandes suivantes pour le mode de navigation:
 - "p" pour aller au paragraphe suivant,
 - Majuscule+p" pour aller au paragraphe précédent,
 - ";"  pour aller à la région principale suivante,
@@ -440,19 +470,26 @@ Ce module ajoute les commandes suivantes pour le mode de navigation:
 - "majuscule+:" pour aller à l'élément cliquable précédent.
 
 
+
 Sauf les quatre premières, ces commandes ne sont pas implémentées dans le navigateur Microsoft Edge.
+
 +++ Nouveaux types d'élément pour le script "NVDA + f7" +++
 De base, le script intégré à  NVDA et déclenché par le geste de commande "NVDA + f7", permet d'afficher la  boite de dialogue   "Liste d'éléments" présentant la liste de certains éléments présents dans une page Web.
-Ce module complémentaire augmente  le  nombre de types d'éléments pouvant être choisis.
+Cette extension augmente  le  nombre de types d'éléments pouvant être choisis.
 La liste de ces types devient:
+Types de base:
 - Lien,
 - Titre,
-- Région,
+- Champ de Formulaire,
+- Bouton,
+- Région.
+
+
+Types ajoutés par l'extension:
+- Bouton radio,
 - Paragraphe,
 - Cadre (pas dans Microsoft Edge),
 - Division (pas dans Microsoft Edge),
-- Bouton,
-- Bouton radio,
 - Cases à cocher,
 - Liste déroulante,
 - Tableau,
@@ -463,7 +500,6 @@ La liste de ces types devient:
 - Ancre (pas dans Microsoft Edge),
 - Graphique,
 - Objet embarqué (pas dans Microsoft Edge),
-- Champ de Formulaire,
 - Séparateur,
 - cliquable (pas dans Internet Explorer ni Microsoft Edge).
 
@@ -486,7 +522,7 @@ Le type "zone d'édition" donne la liste des zones d'édition du document,  et c
 
 De même chaque champ de formulaire est présenté vocalement en fonction de son type
 
-+++ Scripts pour les tableaux  +++
++++ scripts pour les tableaux  +++
 Pour les navigateurs Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefox, GoogleChrome, il est possible quand le curseur se trouve sur une cellule de tableau de:
 - annoncer la position de la cellule courante (geste de commande KEY1_CELL_POSITION_REPORT sur ordinateur de bureau, KEY2_CELL_POSITION_REPORT sur ordinateur portable),
 - annoncer les cellules de la ligne courante (geste de commande "KEY_CURRENT_ROW_REPORT"),
@@ -501,9 +537,9 @@ Pour les navigateurs Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefo
 - aller à la dernière cellule de la colonne (geste de commande KEY_MOVE_LAST_CELL_COLUMN).
 
 
-Tous ces scripts sont rangés dans la catégorie "Tableau" dans l'arborescence du dialogue "Gestes de commandes".
+Tous ces scripts sont rangés dans la catégorie "Tableau" dans l'arborescence du dialogue "Gestes de commandes" de NVDA.
 
-Le module déplace aussi dans cette catégorie les scripts de base de NVDA qui étaient rangés dans la catégorie "Divers". Ce sont:
+Cette extension déplace aussi dans cette catégorie les scripts de base de NVDA qui étaient rangés dans la catégorie "Divers". Ce sont:
 - aller à la colonne précédente: "NVDA+control+ flèche gauche",
 - aller à la colonne suivante: "NVDA+control+ flèche droite",
 - aller à la ligne: précédente "NVDA+control+ flèche haut",
@@ -516,29 +552,31 @@ Le geste de commande  "KEY1_DOCUMENT_ADDRESS",  (ordinateur de bureau) ou "KEY2_
 +++ Navigation en boucle +++
 En mode navigation, la recherche de l'élément suivant ou précédent s'arrête à la fin ou au début du document.
 
-Le module ajoute, en option, la possibilité de parcourir cycliquement le document, c'est à dire:
+Cette extension ajoute, en option, la possibilité de parcourir cycliquement le document, c'est à dire:
 - la recherche du prochain élément continue en descendant par le début du document si la fin du document est rencontrée,
 - la recherche de l'élément précédent continue en remontant par la fin du document si le début du document est rencontré.
 
 
 Le passage par le début ou la fin du document est signalé par un son et un message vocal.
 
-L'option "Navigation en boucle"  du menu "Paramètres «et sous-menu "Options" permet d'activer ou désactiver ce fonctionnement.
+L'option "Navigation en boucle" de la catégorie   "Divers" du dialogue "Paramètres" de l'extension  permet d'activer ou désactiver ce fonctionnement.
+
+Cette option n'est présentée que si la fonctionnalité "Extension des fonctionnalités  du tampon virtuel" est installée.
 
 Par défaut, cette option n'est pas cochée. Le fonctionnement de base de NVDA est conservé.
 
-Cette option n'est présentée que si la fonctionnalité "Extension des fonctionnalités  du tampon virtuel" est installée.
+
 
 
 ++ Annonce de la  fonction associée aux commandes d'édition   du style "copier", "Coller" ++[hdr7]
 Cette fonctionnalité est installée par défaut.
 
-Les fonctions déclenchées par les raccourcis "control+v", "control+c", "control+x",  "control+z" n'étant pas vocalisées par NVDA, le module s'en charge.
+Les fonctions déclenchées par les raccourcis "control+v", "control+c", "control+x",  "control+z" n'étant pas vocalisées par NVDA, cette extension s'en charge.
 
 Aucun contrôle sur le résultat de la fonction n'est fait.
 Mais pour les raccourcis "control+c", "control+x", l'absence de sélection de texte est signalée dans les arborescences et les listes.
 
-Si Le module  fakeClipboardAnnouncement est installé (qui réalise la même fonction), il faut le désinstaller. 
+Si l'extension  fakeClipboardAnnouncement est installé (qui réalise la même fonction), il faut le désinstaller. 
 
 ++ Annonce du dossier sélectionné dans les boites de dialogue du style "Ouvrir", "Enregistrer", "Enregistrer sous" ++[hdr8]
 Cette fonctionnalité est installée par défaut sans geste de commande.
@@ -547,7 +585,7 @@ Elle ajoute, dans les boites  de dialogue du style "Ouvrir", "Enregistrer", "Enr
 
 La description  de ce script est: "Annoncer le dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer".
 
-Ce script est rangé dans la rubrique "Extension des commandes de base de NVDA" du dialogue "Gestes de commande".
+Ce script est rangé dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA.
 
 Il se lance :
 - soit avec la commande "KEY_SAY_CURRENT_FOLDER" de l'interpréteur 
@@ -559,14 +597,14 @@ Attention, ce script ne fonctionne que dans  des boites de dialogue conforme au 
 Le geste de commande déclenche l'annonce du nom du dossier sélectionné dans la boite de dialogue et si possible le chemin de ce dossier.
 
 ++ Journaux de NVDA ++[hdr9]
-Cette fonctionnalité est, par défaut, installée sans geste de commande.
+Cette fonctionnalité est par défaut, installée sans geste de commande.
 
 Elle ajoute les scripts:
 - gestion des journaux de NVDA,
 - Ouverture   des journaux de NVDA.
 
 
-Les scripts sont rangés dans la rubriques "Outils" du dialogue "Gestes de commandes".
+Les scripts sont rangés dans la catégorie "Outils" du dialogue "Gestes de commandes" de NVDA.
 
 +++ Gestion des journaux de NVDA +++
 La description de ce script est: "Afficher le dialogue pour gérer les journaux de NVDA".
@@ -598,11 +636,10 @@ Le journal s'ouvre dans le programme associé à l'extension .log. Si il n'y a p
 
 ++ Historique des annonces vocales ++[hdr10]
 Cette fonctionnalité est installée par défaut sans geste de commande.
-
-Afin de pouvoir réécouter  des annonces vocales mal comprises ou mal entendues, le module enregistre  un historique  limité   des   annonces envoyées au synthétiseur.
+Afin de pouvoir réécouter  des annonces vocales mal comprises ou mal entendues, cette extension enregistre  un historique  limité   des   annonces envoyées au synthétiseur.
 Le nombre d'enregistrements est limité à 200.
 
-Pour réécouter ces enregistrements, les scripts suivants, rangés dans la rubrique "Parole" du dialogue "Gestes de commande",  sont apportés par cette fonctionnalité:
+Pour réécouter ces enregistrements, les scripts suivants, rangés dans la catégorie "Parole" du dialogue "Gestes de commande" de NVDA,  sont apportés par cette fonctionnalité:
 +++ Annonce du précédent enregistrement +++
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_PREVIOUS_RECORD"  affecté par défaut.
 
@@ -631,50 +668,55 @@ Ce script se lance à l'aide  de la commande "KEY_DISPLAY_SPEECH_HISTORY" de l'i
 
 Il présente la boite de dialogue "Historique des annonces vocales" qui liste ces enregistrements dans l'ordre décroissant de leur ancienneté. Un bouton permet de copier dans le presse-papier l'enregistrement sélectionné.
 
-Par défaut, les enregistrements sont numérotés.  Cette numérotation peut être désactivée par l'option "Numéroter les enregistrements de l'historique vocal  " du sous-menu "Options".
+Par défaut:
+- les enregistrements sont numérotés.  Cette numérotation peut être désactivée par l'option "Numéroter les enregistrements de l'historique vocal  " de la catégorie  "Divers" du dialogue "Paramètres".
+- les enregistrements sont présentés dans l'ordre décroissant. L'option "Afficher les enregistrements de l'historique vocal dans l'ordre croissant" de cette même catégorie permet de les afficher dans l'ordre inverse.
 
 
 ++ Renommage des touches clavier ++[hdr12]
 Cette fonctionnalité est installée par défaut.
 
-Elle permet de renommer certaines touches du clavier comme "Verrouillage majuscule"  ou  "Verrouillage numérique".
+Elle permet de renommer certaines touches du clavier comme "Verrouillage majuscule"  ou  "Verrouillage numérique" à l'aide d'une boite de dialoguequi présente:
+- dans une liste, les touches clavier avec leur libellé défini dans NVDA,
+- Le bouton "Modifier" qui permet de modifier le libellé de la touche sélectionnée dans la liste et d'entrer un libellé de remplacement à l'aide d'une boite de dialogue  de saisie classique.
 
-Elle installe un sous-menu "Renommage des touches clavier" dans le sous-menu "Module complémentaire extension des commandes globales de base de NVDA".
-
-Il est possible d'affecter un geste de commande à ce sous-menu. Mais par défaut, aucun geste ne lui est affecté.
-
-L'activation de ce sous-menu affiche la boite de dialogue "Renommage des touches clavier" qui présente dans une liste, les touches clavier avec leur libellé défini dans NVDA. 
-
-Le bouton "Modifier" permet de modifier le libellé de la touche sélectionnée dans la liste et d'entrer un libellé de remplacement à l'aide d'une boite de dialogue  de saisie classique.
 
 Lorsqu'un libellé de remplacement est défini pour la  touche sélectionnée, la zone d'édition en lecture seule et atteignable par "Tab", affiche ce libellé de remplacement. Ce libellé est annoncé lorsque le focus  arrive sur la touche.
 
 Le bouton "Effacer" permet de supprimer ce libellé de remplacement.
+
 Il est possible aussi de supprimer ce libellé en  entrant une chaine vide ou pleine de blanc dans la boite de saisie.
 
 Le bouton " Supprimer tout" permet de supprimer tous les libellés de remplacement pour revenir aux libellés de base prévu par NVDA.
 
-Le bouton "OK"  permet d'appliquer  les remplacements et d'enregistrer les touches  clavier et leur libellé de remplacement dans le fichier de configuration du module dans la section "RedefinedKeyLabels" et la sous-section  correspondant au langage de NVDA ("fr" par exemple pour le Français). Il est ainsi possible d'avoir des renommages de touches pour différentes langues.
+Le bouton "OK"  permet d'appliquer  les remplacements et d'enregistrer les touches  clavier et leur libellé de remplacement dans le fichier de configuration de l'extension dans la section "RedefinedKeyLabels" et la sous-section  correspondant au langage de NVDA ("fr" par exemple pour le Français). Il est ainsi possible d'avoir des renommages de touches pour différentes langues.
 
-Cette fonctionnalité est installée par défaut.
-Il est possible de ne pas l'installer en décochant la case à cocher "Renommage des touches clavier" du sous-menu 
-"Fonctionnalités installées" du sous-menu "Paramètres du module d'extension des commandes de bases de NVDA".
+
+Pour afficher ce dialogue, trois possibilité:
+- en sélectionnant et activant l'élément "Renommage des touches clavier" du sous-menu "ADDON_SUMMARY",
+- avec La commande "KEY_RENAMING" de l'interpréteur,
+- avec le script "Afficher le dialog Renomage des touches clavier", prévu sans geste de commande. Un geste peut lui être affecté à l'aide du dialogue "geste de commandes " de NVDA.
+
+
+Il est possible de ne pas installer cette fonctionnalité en sélectionnant , dans la catégorie "Fonctionnalités installées" et pour la fonctionnalité "Renommage des touches clavier"  ,  l'état "Ne pas Installer" .
+
 
 ++ Annonce sélective des touches de commandes ++[hdr13]
 Cette fonctionnalité est installée par défaut.
 
-NVDA permet de faire annoncer vocalement les touches de commandes  à l'aide de l'option  "Dire les touches de commandes" située dans le sous-menu "Paramètres du clavier" du menu "Préférences" ou par la commande clavier "NVDA+4".
+NVDA permet de faire annoncer vocalement les touches de commandes  à l'aide de l'option  "Dire les touches de commandes" située dans la catégorie "clavier" du dialogue "Paramètres" de NVDA ou par la commande clavier "NVDA+4".
 
-Cette fonctionnalité apporte la possibilité de :
+Cette fonctionnalité apporte, à l'aide d'une boite de dialogue,  la possibilité de :
 - ne pas annoncer certaines touches  de commandes quand l'option "Dire les touches de commandes" est cochée,
 - d'annoncer  certaines touches de commandes quand l'option "Dire les touches de commandes" n'est pas cochée.
 
+Pour afficher ce dialogue, trois possibilités:
+- en sélectionnant et activant l'élément    "Annonce sélective des touches de commandes"  du sous-menu "ADDON_SUMMARY",
+- à l'aide de La commande "KEY_SELECTIVE_ANNOUNCEMENT" de l'interpréteur,
+-  à l'aide du script "Afficher le dialogue pour configurer les annonces sélectives des touches de commande", prévu sans geste de commande.Un geste de commande peut lui être affecté à l'aide du dialogue "Gestes de commande" de NVDA.
 
-Elle  installe  le sous-menu "Annonce sélective des touches de commandes"  dans le sous-menu "Module complémentaire Extension des commandes globales de NVDA".
 
-Un geste de commande peut lui être affecté. Mais aucun geste n'est prévu par défaut.
-
-L'activation de ce sous-menu affiche la boite de dialogue  "Annonce sélective des touches de commandes" qui présente:
+Le dialogue présente:
 - une case à cocher pour choisir pour quel mode les touches    de commandes sélectionnées seront  utilisées,
 - la liste des touches de commandes possibles,
 - la liste des combinaisons possibles avec les touches complémentaires  "NVDA", "Alt", "Contrôle", "Majuscule".
@@ -692,6 +734,9 @@ Le bouton "OK" enregistre les choix faits tandis que le bouton "Annuler" les oub
 
 Dans les listes, les touches "F1" et"F2" permettent de se déplacer respectivement  à l'élément coché suivant ou à l'élément coché précédent.
 
+
+Il est possible de ne pas installer cette fonctionnalité  en sélectionnant , dans la catégorie "Fonctionnalités installées" et pour la fonctionnalité "Annonce sélective des touches de commande", l'état "Ne pas Installer" .
+
 ++ Minuterie ++[hdr14]
 Cette fonctionnalité est installée par défaut.
 
@@ -699,7 +744,7 @@ Elle permet de lancer une minuterie pour une durée programmable.
 A L'échéance de la minuterie une boite de dialogue  apparait en affichant une annonce  programmable et  l'émission d'une sonnerie.
 
 Elle installe un script qui se lance:
-- soit par La commande "KEY_MINUTE_TIMER"de l'interpréteur,
+- soit par La commande "KEY_MINUTE_TIMER"de l'interpréteur de commandes,
 - soit par le geste de commande "MAIN_KEY_MINUTE_TIMER " affecté par défaut.
 
 
@@ -714,7 +759,7 @@ La durée, l'annonce et le délai pour être averti avant l'échéance de la min
 
 Si la minuterie est en cours, le script affiche alors la boite de dialogue  "Minuterie en cours" permettant de connaitre la durée restante de la minuterie et éventuellement d'arrêter la minuterie.
 
- La durée est réactualisée toute les 5 secondes  et est annoncée quand le focus se trouve dans la zone d'édition (en lecture seule) l'affichant.
+La durée est réactualisée toute les 5 secondes  et est annoncée quand le focus se trouve dans la zone d'édition (en lecture seule) l'affichant.
 
 Cette boite de dialogue se ferme automatiquement à l'échéance de la minuterie.
 
@@ -724,6 +769,8 @@ Cette fonctionnalité n'est pas installée par défaut.
 Elle installe un script qui  permet de redémarrer NVDA en niveau  de journalisation débogage sans modifier la configuration de NVDA.
 
 La description de ce script est: "Redémarrer NVDA. Deux appuis: redémarrer en niveau de journalisation débogage".
+
+Il est rangé dans la catégorie "Divers" du dialogue "Gestes de commandes" de NVDA.
 
 Le geste de commande "MAIN_KEY_RESTART_NVDA "   lui est affecté par défaut.
 
@@ -735,11 +782,13 @@ Un double appui de ce geste de  commande redémarre NVDA avec le niveau de journ
 ++ Affichage  des éléments visibles de l'objet en avant plan ++[hdr16]
 Par défaut, cette fonctionnalité est installée avec geste de commande. 
 
-Elle  installe deux scripts rangés sous la rubrique "Focus système" du dialogue "Gestes de commande":
+Elle  installe deux scripts rangés dans la catégorie "Focus système" du dialogue "Gestes de commande" de NVDA:
+
 +++ Affichage   des éléments visibles de l'objet sous le focus +++
 La description de ce script est: "Afficher les éléments visibles composant l'objet en avant plan".
 
 Il se lance à l'aide de la commande "KEY_OBJECTS_LIST" de l'interpréteur.
+
 Aucun geste de commande ne lui est attribué.
 
 Le script lance la recherche de ces éléments. Celle-ci peut prendre un temps  conséquent. Un signal sonore toute les deux secondes  est émis  pendant cette recherche.
@@ -757,15 +806,19 @@ Cette boite de dialogue  présente :
 - la case à cocher pour choisir si les éléments sans étiquette, ni description doivent être pris en compte ou non (par défaut, les éléments non étiquetés ne sont pas pris en compte),
 - la liste des types d'éléments disponible,
 - la liste des éléments pour le type sélectionné,
-- le bouton pour faire un clic souris gauche sur l'élément sélectionné,
+- le bouton pour faire un clic souris gauche sur l'élément sélectionné (bouton par défaut quand on est dans la liste des objets),
 - le bouton pour faire un clic souris droit sur l'élément sélectionné,
 - le bouton pour amener l'objet navigateur de NVDA et le pointeur souris sur l'élément sélectionné,
 - le bouton pour quitter le dialogue.
 
 
+Dans la liste des éléments, il est possible de changer le type des objets  à lister sans quitter la liste:
+- soit en utilisant les flèches de direction gauche ou droite,
+- soit en tapant la première lettre du type d'objet désiré.
+
+
 +++ Annonce ou affichage   des éléments visibles de l'objet sous le focus +++
 La description de ce script est: "Dire l'objet en avant-plan. Deux appuis: afficher les éléments visibles composant l'objet en avant plan".
-
 Il se lance à l'aide du geste de commande "MAIN_KEY_OBJECTS_LIST " qui lui est affecté par défaut.
 
 Un simple appui lance le script de base de NVDA qui annonce tous les objets de l'objet en avant plan.
@@ -776,14 +829,14 @@ Un double appui lance le script précédent "Affichage  des éléments visibles 
 ++ Commutation rapide de profil vocal ++[hdr17]
 Cette fonctionnalité est installée par défaut sans geste de commande.
 
-Elle permet de changer rapidement de profil vocal en donnant la possibilité de mémoriser, pour le profil de configuration courant, jusqu'à 8 profils vocaux  et de sélectionner  rapidement un de ces profils vocaux.
+Elle permet de changer rapidement de profil vocal en donnant la possibilité de mémoriser jusqu'à 8 profils vocaux  et de sélectionner  rapidement un de ces profils vocaux.
 
 Un profil vocal est défini par:
 - le synthétiseur vocal utilisé et ses paramètres vocaux de configuration (comme "voix", "volume", "débit", ...),
 - les paramètres vocaux de configuration de NVDA (comme "Niveau de ponctuations et symboles", "Dire majuscule après les majuscules", ...). 
 
 
-Elle installe les scripts suivants  rangés sous la rubrique "Commutation de profil vocal" du dialogue "Gestes de commande":
+Elle installe les scripts suivants  rangés dans la catégorie "Commutation de profil vocal" du dialogue "Gestes de commande" de NVDA:
 
 +++ Gestion des sélecteurs de profil vocal +++
 La description de ce script est: "Afficher le dialogue pour gérer les sélecteurs de profil vocal".
@@ -796,7 +849,8 @@ Il se lance:
 Ce script affiche la boite de dialogue "Gestion des sélecteurs de profil vocal du profil de configuration NomDuProfil" (où NomDuProfil est le nom du profil de configuration déclenché).
 
 Cette boite de dialogue permet de gérer  l'association sélecteur- profil vocal et présente:
-- la liste des sélecteurs, 
+- la case à cocher "Utiliser les sélecteurs associés sous le profil de configuration normale",
+- la liste " sélecteurs", 
 - le bouton "Activer",
 - le bouton "Associer le profil vocal",
 - le bouton "Modifier le profil vocal",
@@ -806,14 +860,23 @@ Cette boite de dialogue permet de gérer  l'association sélecteur- profil vocal
 - le bouton "Fermer".
 
 
+La liste "Sélecteurs"   présentent la liste des sélecteurs libres ou associés à un profil vocal.  Les sélecteurs associés sont:
+-  ceux qui  ont été associés  sous le profil de configuration courant (son nom est indiqué dans le titre du dialogue),
+- ceux qui ont été associé sous le profil de configuration normale si la case à cocher "Utiliser les sélecteurs associés sous le profil de configuration  normale" est cochée. L'indication "configuration normale" est alors indiquée pour ces sélecteurs.
+
+  
 Lorsque le sélecteur  est indiqué "libre", le bouton "Associer le profil vocal" permet d'associer le profil vocal courant à ce sélecteur. Ce bouton fait apparaitre une boite de dialogue permettant de donner un nom à ce profil vocal. Un nom par défaut est proposé. Le bouton "Défaut" permet de revenir à cette proposition.
 
 Lorsqu'un sélecteur est déjà associé à un profil vocal il est alors possible:
 - d'activer ce profil vocal avec le bouton "Activer le profil vocal": le profil devient le profil vocal courant et la boite se referme.
+- d'associer le profil courant au sélecteur à l'aide du bouton "associer le profil vocal". Ce profil remplace  alors le profil vocal associé à ce sélecteur,
 - de modifier le nom du profil vocal avec le bouton "Modifier le profil vocal",
 - de rompre l'association entre  le sélecteur et le profil vocal avec le bouton "Libérer le sélecteur". 
 - de rompre toutes les associations avec le bouton "Libérer tous les sélecteurs".
 
+
+Si le sélecteur  sélectionné est un sélecteur associé sous le profil de configuration normal, il n'est alors pas possible de le libérer, mais il peut être associé au profil courant.
+Seuls les sélecteurs associés sous le profil de configuration courant peuvent être libérés.
 
 Pour changer rapidement de profil vocal,  le mode "Commutation de profil vocal" est mis en place.
 
@@ -821,12 +884,14 @@ Pour activer ou désactiver ce mode, la commande "KEY_VOICE_PROFIL_SWITCHING" de
 
 Ce mode activé, les flèches droite ou gauche permettent  de se déplacer au premier sélecteur suivant ou précédent associé à un profil vocal et ainsi définir le profil vocal  associé à ce sélecteur  comme profil vocal courant.
 
+Les sélecteurs prisent en compte sont les sélecteurs de la liste "Sélecteurs" qui sont associés à un profil vocal.
+
 +++  Choix du Sélecteur de profil vocal précédent +++
 La description de ce script est : "Aller au premier sélecteur  précédent  associé à un profil vocal et définir ce profil vocal comme profil vocal courant".
 
 Il se lance à l'aide du geste de commande "MAIN_KEY_PREVIOUS_VOICEPROFILE" qui lui affecté par défaut.
 
-Le script recherche le premier sélecteur de profil vocal précédent le sélecteur courant et associé à un profil vocal. Puis il positionne ce profil vocal comme profil vocal courant.
+Le script recherche, dans la liste "Sélecteurs", le premier  sélecteur précédent le sélecteur courant    associé à un profil vocal. Puis il positionne ce profil vocal comme profil vocal courant.
 
 
 +++ Choix du Sélecteur de profil vocal suivant +++
@@ -834,11 +899,11 @@ La description de ce script est : "Aller au premier sélecteur  suivant  associ�
 
 Il se lance à l'aide du geste de commande "MAIN_KEY_NEXT_VOICEPROFILE" qui lui affecté par défaut.
 
-Le script recherche le premier sélecteur de profil vocal suivant le sélecteur courant et associé à un profil vocal. Puis il positionne ce profil vocal comme profil vocal courant.
+Le script recherche, dans la liste "Sélecteurs", le premier sélecteur de profil vocal suivant le sélecteur courant associé à un profil vocal. Puis il positionne ce profil vocal comme profil vocal courant.
+
 +++ Choix du sélecteur de profil vocal par son numéro +++
 8 scripts sont installés.
-
-La description de ces scripts est: "Positionner le sélecteur x comme sélecteur courant et définir, si possible, son profil vocal associé comme profil vocal courant" (où x est le numéro du sélecteur).
+La description de ces scripts est: «Positionner le sélecteur x comme sélecteur courant et définir, si possible, son profil vocal associé comme profil vocal courant" (où x est le numéro du sélecteur).
 
 Chaque script se lance à l'aide du geste  de commande "MAIN_KEY_VOICEPROFILE_SELECTOR" affecté par défaut.
 
@@ -851,16 +916,20 @@ Elle permet de rendre rémanente les touches NVDA ("Insert" du pavé numérique 
 
 L'objectif étant de pouvoir n'utiliser qu'un seul doigt par exemple pour composer un geste de commande nécessitant l'appui sur plusieurs touches.
 
-Pour activer ou désactiver le mode rémanence, il suffit de composer l'une des  séquences de touches clavier suivante:
+Elle place une  catégorie"Rémanence des touches" dans le dialogue "Paramètres" de l'extension.
+
+Pour activer ou désactiver la rémanence des touches, il suffit de composer l'une des  séquences de touches clavier suivante:
 - "Majuscule droit", "Control droit", "majuscule droit",
 - "majuscule gauche", "control gauche", "majuscule gauche".
 
+La rémanence des touches peut être activée automatiquement au démarrage de NVDA en cochant la case à cocher "Activer la rémanence des touches au démarrage de NVDA" de la catégorie "Rémanence des touches".
 
-L'activation ou la désactivation de ce mode est signalé vocalement.
-Quand le mode "Rémanence " est activé,  l'appui sur une des touches NVDA ou de modification déclenche une temporisation  et la touche est mémorisée.
-Cette temporisation est configurable par l'option "durée de la rémanence des touches" du sous-menu "Options avancées" du module. Elle peut être comprise entre 1 et 5 secondes.
+L'activation ou la désactivation de la rémanence  est signalé vocalement.
 
-Le début et la fin de cette rémanence est signalée par un bip qui peut être désactivé à l'aide des cases à cocher suivantes du sous-menu "Options avancées" du module:
+Quand la rémanence  est activée,  l'appui sur une des touches NVDA ou de modification déclenche une temporisation  et la touche est mémorisée.
+Cette temporisation est configurable par l'option "durée de la rémanence des touches" de la catégorie "Rémanence des touches".
+
+Le début et la fin de cette rémanence est signalée par un bip qui peut être désactivé à l'aide des cases à cocher suivantes de la catégorie "Rémanence des touches":
 - Émettre  un bip au démarrage de la rémanence d'une touche,
 - Émettre  un bip à la fin de la rémanence d'une touche.
 
@@ -868,7 +937,9 @@ Le début et la fin de cette rémanence est signalée par un bip qui peut être 
 Elles sont cochées par défaut.
 
 Pendant cette temporisation,  tout nouvel appui sur une de ces touches relance la temporisation et cette nouvelle touche est elle aussi mémorisée, mais aucun beep n'est émis.
+
 L'appui sur une toute autre touche  du clavier exécute le geste de commande composé de la combinaison  de toutes les touches mémorisées avec  cette dernière touche.
+
 A chaque fois que cette  dernière touche sera de nouveau tapée pendant la  temporisation, le geste de commande sera de nouveau exécuté.
 
 Si cette touche est tapée hors temporisation, elle est exécuté seule et les touches mémorisées sont oubliées.
@@ -877,6 +948,28 @@ Attention:
 Il faut attendre  la fin de la rémanence pour faire traiter toute nouvelle touche individuellement. Par exemple: "alt" pour faire apparaitre un menu puis dérouler les éléments du menu.
 
 Il est cependant possible d'arrêter la rémanence avant la fin de la temporisation, en retapant la dernière touche  rémanente.
+
+
++++ Rémanence spécifique pour le site gmail.com +++
+Cette rémanence est spécifiquement  mise en place pour le site gmail.com et n'est active uniquement  dans la page "https://mail.google.com/mail/#inbox".
+
+Elle n'est pas  active par défaut. Une case à cocher "Rémanence spécifique pour gmail.com" est  prévue dans la catégorie "Rémanence des touches".
+
+Dans cette page, il est possible de taper des raccourcis pour lancer des commandes mais   certains d'entre eux enchainent deux lettres. En particulier, les lettres "g", "h", "*" doivent être suivi d'une autre lettre.
+Cet enchainement doit être assez rapide pour provoquer l'exécution  de la commande associée.
+Cela pose problème aux personnes qui n'ont pas la dextérité suffisante.
+
+L'objectif  de cette rémanence est donc de retenir la première lettre en attendant que la seconde soit frappée.
+
+Lorsque la première lettre est frappée, une temporisation est démarrée (un bip sourd est audible) et la lettre est mémorisée.
+
+La frappe de la seconde lettre dans le délai de  rémanence  configuré provoque l'envoi des deux lettres au navigateur et la temporisation est arrêtée.
+
+Si aucune nouvelle lettre n'est frappée, la première lettre est envoyée au navigateur à l'échéance de la temporisation (un bip aigu est audible).
+
+Afin que NVDA envoie les lettres au navigateur, il est nécessaire de basculer en mode formulaire avant toute chose.
+
+
 
 ++ Arrêt de l'ordinateur ++[hdr19]
 Cette fonctionnalité ne peut pas être désinstallée.
@@ -894,7 +987,7 @@ Ce script affiche un dialogue composé des éléments suivants:
 
 Cette fonctionnalité installe aussi les scripts correspondants  aux fonctions des trois boutons.
 
-Tous les scripts sont rangé sous la rubrique "Extension des commandes de base de NVDA"  du dialogue "Gestes de commande", mais aucun geste ne leur est affectés.
+Tous les scripts sont rangé dans la catégorie "ADDON_SUMMARY"  du dialogue "Gestes de commande" de NVDA, mais aucun geste ne leur est affectés.
 
 
 ++ Gestion des gestes de commandes utilisateur ++[hdr20]
@@ -903,7 +996,7 @@ Cette fonctionnalité ne peut pas être désinstallée.
 De base, NVDA permet  d'ajouter ou de  supprimer des gestes de commande à l'aide du dialogue "gestes de commande". Mais il n'y a  aucun moyen de savoir quels sont les gestes ajoutés ou supprimés par l'utilisateur.
 C'est à ce besoin que veut répondre cette fonctionnalité.
 
-Pour cela, Elle ajoute le script dont la description est: "Afficher le dialogue pour gérer les Gestes de commande configurés par l'utilisateur".
+Pour cela, Elle ajoute le script dont la description est "Afficher le dialogue pour gérer les Gestes de commande configurés par l'utilisateur" et placé dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commandes" de NVDA.
 
 Il se lance à l'aide de la commande "KEY_USER_INPUT_GESTURE " de l'interpréteur. Aucun geste de commande ne lui est affecté par défaut.
 
@@ -915,10 +1008,10 @@ Le dialogue présente:
 - un bouton  pour annuler tous les ajouts ou suppression de  gestes de commande.
 
 
-Les  gestes de commandes  supprimés   d'une catégorie sont présentés sous la description: "Gestes de commande supprimées".
+Les  gestes de commandes  supprimés   d'une catégorie sont présentés avec la description: "Gestes de commande supprimées".
 
-Comme il n'est pas  possible de connaitre la catégorie et la description d'un geste de commande supprimés ou d'un geste de commande ajouté associé à un script d'un  module qui n'est pas chargé ou pas installé  au moment de l'affichage du dialogue ,ce geste  est présenté comme ceci:
-- la catégorie est nommée : " nom du module python". "Nom de la class python" (par exemple: appModules.notepad++.editWindow.EditWindow),
+Comme il n'est pas  possible de connaitre la catégorie et la description d'un geste de commande supprimés ou d'un geste de commande ajouté associé à un script d'une extension qui n'est pas activée ou pas installé  au moment de l'affichage du dialogue ,ce geste  est présenté comme ceci:
+- la catégorie est nommée : " nom du module python». Nom de la class python" (par exemple: appModules.notepad++.editWindow.EditWindow),
 - la description des gestes de commande ajoutés est nommée: "nom du script python"(par exemple: goToPreviousBookmark  ).
 
 
@@ -932,12 +1025,17 @@ Par défaut, cette fonctionnalité est installée sans geste de commande.
 
 Elle ne peut fonctionner que sous le système d'exploitation Windows 10.
 
-Elle installe deux scripts rangés sous la rubrique "État système" du dialogue "gestes de commande": 
+Elle place la catégorie "Contrôle du son" dans le dialogue "Paramètres".
+
+Elle installe aussi deux scripts rangés dans la catégorie "État système" du dialogue "gestes de commande" de NVDA:
 
 +++ Établir manuellement le son principal et du flux audio de NVDA +++
-Ce script se lance à l'aide du geste de commande "MAIN_KEY_VOLUME_ON" affecté par défaut.
+Ce script se lance:
+- soit à l'aide  de la commande "KEY_VOLUME_ON" de l'interpréteur,
+- soit à l'aide du geste de commande "MAIN_KEY_VOLUME_ON" affecté par défaut.
 
-Il établit le son pour le volume principal et pour le flux audio de NVDA et force les niveaux de chacun aux valeurs configurées  dans les options avancées sans tenir compte du niveau minimum.
+
+Il établit le son pour le volume principal et pour le flux audio de NVDA et force les niveaux de chacun aux valeurs configurées  dans le sous-menu "Contrôle du son" du sous-menu "Paramètres".
 
 +++ Couper ou établir le son du flux audio de l'application placée sous le focus +++
 Ce script se lance:
@@ -945,17 +1043,9 @@ Ce script se lance:
 - soit à l'aide du geste de commande "MAIN_KEY_TOGGLE_MUTE"  affecté par défaut.
 
 
-Cette commande coupe le son du flux audio de l'application placée sous le focus s'il est établi ou rétablit le son s'il est coupé.
+Cette commande coupe le son du flux audio de l'application placée sous le focus s'il est établi ou le rétablit  s'il est coupé.
 
 
-++ Outils de développement ++[hdr22]
-Cette fonctionnalité n'est pas installée par défaut.
-
-Elle installe un script rangé sous la rubrique "Outils" du dialogue "gestes de commande":
-+++ Conversion des fichiers de documentation +++
-Ce script se lance à l'aide de la commande "KEY_CONVERT_TO_HTML de l'interpréteur. Aucun geste de commande ne lui est assigné.
-
-Il affiche le dialogue "Conversion en HTML"  qui permet de sélectionner un des modules complémentaires  installés et de lancer la conversion en HTML des fichiers de documentation pour un langage particulier ou de tous les langages de ce module complémentaire.
 ++  Scripts pour Cliquer   à la position courante de l'objet navigateur ++[hdr23]
 Ces scripts permettent de faire, avec le bouton droit ou gauche de la souris, un simple ou un double clic à la position courante de l'objet navigateur.
 
@@ -971,24 +1061,160 @@ Les gestes de commandes de ces scripts sont:
 - "MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR": faire un simple clic droit à la position de l'objet navigateur. Le deuxième appui fait un double clic.
 
 
-Ces gestes de commandes peuvent être modifiés et se trouvent dans la catégorie "Souris" de la boite de dialogue "Gestes de commandes".
+Ces gestes de commandes peuvent être modifiés et se trouvent dans la catégorie "Souris" du dialogue "Gestes de commandes" de NVDA.
+
+
+
+++Compléments concernant la date et l'heur ++[hdr24]
+Cette fonctionnalité est installée par défaut sans geste de commande.
+
+Attention: installée  avec geste de commande, cette fonctionnalité peut être  en conflit avec l'extension "Clock" car le geste de commande "nvda+f12" est en commun.
+
+Cette fonctionnalité apporte:
+
++++ Copie de la date et de l'heure dans le presse-papier +++
+La description de ce script est: "Copier la date et l'heure dans le presse-papier".
+Ce script est rangés dans la catégorie "État système" du dialogue "Gestes de commande" de NVDA.
+
+Il se lance à l'aide de la commande "KEY_COPY_DATETIME" de l'interpréteur.
+Aucun geste de commande ne lui est attribué.
+
+
+Il permet comme sa description l'indique de copier la date et l'heure dans le presse-papier.
+
++++ Modification du script de base "NVDA+f12" +++
+Le geste de commande de base "NVDA + f12" donne l'heure sur un simple appui et la date sur un double appui.
+
+Cette fonctionnalité  ajoute la copie de la date et de l'heure dans le presse-papier sur un triple appui de ce geste.
+
++++ Annonce de l'heure indépendante du niveau de ponctuation +++
+
+Le geste de commande de base "NVDA + f12" donne l'heure sur un simple appui, mais  l'heure n'est pas annoncée  de la même façon suivant le Niveau de ponctuations et symboles   sélectionné dans  les paramètres vocaux.
+
+Cette fonctionnalité corrige ce petit défaut en annonçant l'heure avec le Niveau de ponctuations et symboles forcé à "Aucun" sans modifier le niveau défini dans les paramètres vocaux.
+
++++ Annonce de l'heure avec les secondes +++
+Par défaut, le geste de commande de NVDA annonce l'heure sans les secondes. 
+
+Cette fonctionnalité offre la possibilité de faire annoncer l'heure avec les secondes.
+
+Il suffit de cocher la case à cocher  "Dire l'heure avec les secondes" se trouvant dans la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension. Cette  option n'est pas cochée par défaut.
+
+++ Outils de développement ++[hdr22]
+Cette fonctionnalité n'est pas installée par défaut. 
+
+Elle installe le script dont la description est "Afficher le dialogue présentant les outils pour le développement d'extensions".
+
+Ce script est  rangé dans la catégorie "Outils" du dialogue "gestes de commande" de NVDA.
+
+Ce script se lance à l'aide de la commande "KEY_TOOLSFORADDON" de l'interpréteur. Aucun geste de commande ne lui est assigné.
+
+L'activation de ce script fait apparaitre  un dialogue présentant:
+- la liste des extensions installés,
+- un bouton pour mettre à jour, pour l'extension sélectionnée,  la version  définie dans le fichier buildVars.py,
+- un bouton pour mettre à jour le fichier "manifest.ini" de l'extension sélectionnée avec les informations de son fichier "buildVars.py",
+- un bouton pour créer, pour l'extension sélectionnée, le fichier catalogue (.pot),
+- un bouton pour préparer l'extension sélectionnée (exécute  en une seule fois plusieurs actions),
+- la liste des langages supportés par   l'extension sélectionnée,
+- un bouton pour créer, pour l'extension sélectionnée,  le fichier local "manifest.ini" pour une   ou toutes les langues qu'il supporte,
+- un bouton pour créer, pour l'extension sélectionnée, ses fichiers de documentation en HTML,
+- un bouton pour créer, pour l'extension sélectionnée, le fichier "buildVars.py" à partir des informations de son fichier manifest.ini,
+- un bouton pour ouvrir dans l'explorateur le dossier de l'extension  sélectionnée.
+
+
++++ Notions +++
+Pour packager une extension (créer le fichier d'installation de l'extension), il est conseillé d'utiliser le modèle "nvda adon scons template".
+Ce modèle utilise un fichier "buildVars.py" qui définit, pour une extension, toutes les informations nécessaires comme par exemple: son nom interne, sa version, son nom et sa description à traduire dans chaque langue supportée par lui.
+Ce modèle est aussi utilisé pour  permettre la traduction des chaines de caractères de l'extension avec le système de traduction mise en place par la communauté "NVDA-addon.org".
+
+L'objectif de ce modèle est, quand une extension a été mise  au point, par simple commande et après avoir renseigné le fichier "buildVars.py" de:
+- créer le fichier manifest.ini",
+- créer tous les fichiers locaux manifest.ini,
+- compiler  tous les fichiers .po,
+- créer les fichiers html de documentation,
+- enfin créer le fichier .nvda-addon d'installation de l'extension.
+
+
+Quand on crée une extension,  il n'y a rien. Il faut par soi-même créer  le fichier "manifest.ini», éventuellement le fichier local "manifest.ini" et le fichier de documentation.
+
+L'objectif de ces outils se place dans cette condition et est:
+- d'une part, de se rapprocher du modèle "adon scons template" pour qu'il soit assez facile de packager l'extension  que l'on a fini de mettre au point,
+- d'autre part, de tester tout ou partie avant d'utiliser le modèle  pour créer l'extension.
+
+
++++ Création du fichier buildVars.py +++
+La première étape est   de créer le fichier "buildVars.py" à partir des informations du fichier  "manifest.ini" que l'on a créé pour la mise au point de l'extension.
+
+Le bouton "Créer le fichier buildVars.py"  lance cette opération.
+
+C'est uniquement ce fichier que l'on modifiera ensuite pour mettre à jour le fichier "manifest.ini" (changement de version ou de description par exemple).
+
+Pour être utilisé avec le modèle "adon scons template", il faudra le compléter en renseignant les informations qui ne se trouvent pas dans le fichier "manifest.ini".
+
++++ Mise à jour de la version de l'extension +++
+Le bouton "Mettre à jour la version de l'extension" permet de modifier la version définie dans le fichier buildVars.py de l'extension sélectionnée.
+
+Il présente une boite de dialogue  contenant une zone d'édition initialisée avec la version courante du fichier.
+
+L'appui sur le bouton "OK" enregistre la nouvelle version dans le fichier.
+
+
+
++++ Mise à jour du fichier manifest.ini +++
+Le fichier "manifest.ini" doit être mis à jour dès que le fichier "buildVars.py" est modifié.
+
+Utiliser le bouton "Mettre à jour le fichier manifest.ini" pour cela.
+
++++ Création de fichier local manifest.ini +++
+Toute modification de l'information "addon_summary" ou "addon_description"  du fichier "buildVars.py" nécessite la traduction de cette description dans chaque langue supportée par l'extension (prise en compte dans le fichier nvda.po et compilation de ce fichier).
+
+Pour que le gestionnaire d'extensions présente ces  informations à l'utilisateur pour la langue  choisie pour NVDA, il faut créer  ou mettre à jour le fichier local "manifest.ini" pour cette langue.
+
+Le bouton "Créer le fichier  manifest.ini local" permet cela. Il est possible de mettre à jour le fichier pour la langue sélectionnée ou pour toutes les langues.
+
++++ Créer la documentation HTML +++
+Les fichiers de La documentation de l'extension peuvent être soit au format  "markdown"(.md) soit au format "txt2tags" (.t2t).
+
+Pour être présenté à l'utilisateur dans un navigateur,  ces fichiers doivent être convertis en HTML.
+
+Cela est possible simplement à l'aide du bouton "Créer les fichiers HTML de documentation" après avoir sélectionner l'extension  dans la liste des extensions et choisi un langage ou l'ensemble des langages dans la liste des langages.
+
+Ouvert dans le navigateur, ces fichiers HTML  ont besoin de fichiers de style (style.css pour les fichiers Markdown et style_t2t.css pour les fichiers txt2tags) placé dans le dossier doc de l'extension.
+
+
++++ Création du fichier catalogue +++
+Le bouton "Créer le fichier POT" permet de créer le fichier catalogue de l'extension sélectionnée.
+
+Une fois créé, ce fichier est placé dans le dossier "locale\en" de l'extension et est nommé "nom-version.pot" où "nom" est le nom de l'extension et "version" sa version.
+
++++ Préparation de l'extension +++
+Le bouton "Préparer l'extension" lance, pour l'extension sélectionnée, l'exécution des actions suivantes:
+- mise à jour de son fichier "manifest.ini" à partir du fichier "buildVars.py",
+- création du fichier "manifest.ini" local pour chaque  langue supportée,
+- création des fichiers HTML de documentation,
+- création du fichier catalogue.
+
+
++++ Exploration du dossier de l'extension +++
+Le bouton "Explorer le dossier de l'extension" ouvre l'explorateur Windows dans le dossier de l'extension sélectionnée.
 
 + Options +
 ++ Suppression de l'annonce de la description des objets dans les rubans  Windows ++[hdr100]
 
 Dans les rubans Windows, NVDA est trop bavard sans nécessité.
-Par défaut, Le module empêche  l'annonce de la description qui semble bien inutile.
+Par défaut, cette extension empêche  l'annonce de la description qui semble bien inutile.
 
-Mais ceci peut être désactivé à l'aide de l'option "Ne pas annoncer la description des objets dans les rubans Windows" qui se trouve dans le sous-menu "Options" du menu "Paramètres du module d'extension des commandes globales de NVDA".
+Mais ceci peut être désactivé à l'aide de l'option "Ne pas annoncer la description des objets dans les rubans Windows" qui se trouve dans la catégorie "Ordinateur" du dialogue "Paramètres de l'extension".
+
 Un redémarrage de NVDA sera alors nécessaire pour la prise en compte  de l'option.
 
 
 ++ Annonce du mot focalisé après une suppression de mot ++[hdr101]
 Dans certaines application telle que WordPad , microsoft Word, il est possible  d'effacer le mot suivant avec la commande "control+suppr", mais NVDA ne prononce pas le mot qui suit la position du curseur après la suppression.
 
-Par défaut, le module permet à NVDA de prononcer ce mot.
+Par défaut, cette extension permet à NVDA de prononcer ce mot.
 
-Ceci peut être empêché en décochant  l'option "Annoncer le mot focalisé après une suppression de mot" qui se trouve dans le sous-menu "Options" du menu "Paramètres du module d'extension des commandes de base de NVDA".
+Ceci peut être empêché en décochant  l'option "Annoncer le mot focalisé après une suppression de mot" de la catégorie  "Divers" du dialogue "Paramètres" de l'extension.
 
 
 ++ Agrandissement automatique des fenêtres ++[hdr102]
@@ -996,7 +1222,7 @@ Cette option  permet d'agrandir automatiquement les fenêtres qui sont mises au 
 
 Par défaut, elle est activée.
 
-Vous pouvez la désactivée en décochant l'option "Agrandir automatiquement les fenêtres" du sous-menu "Options" du menu "Paramètres du module d'extension des commandes Globales de NVDA".
+Vous pouvez la désactivée en décochant l'option "Agrandir automatiquement les fenêtres" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension.
 
 
 ++ Annonce des ponctuations lors de déplacement par mot ++[hdr103]
@@ -1008,7 +1234,7 @@ Cette option permet de configurer le niveau  de symboles et de ponctuations  qui
 
 Ce choix est enregistré pour le profil de configuration courant.
 
-Elle se configure dans le sous-menu "Options" du menu "Paramètres du module d'extension des commandes Globales de NVDA".
+Elle se configure dans la catégorie "Divers" du dialogue "Paramètres" de l'extension.
 
 Elle n'est présente que si la fonctionnalité "Annonce de la  fonction associée aux commandes d'édition   du style "copier", "Coller" est installée.
 
@@ -1019,7 +1245,7 @@ Elle se présente sous la forme d'une liste qui permet de choisir:
 
 + Options avancées +
 ++ Signalement par son de l'inscription d'une erreur dans le journal de NVDA ++[hdr300]
-Les utilisateurs expérimentés ont pu remarquer que lorsqu'ils utilisent une version de développement de NVDA,  toute erreur inscrite dans le journal de NVDA est signaler par un son. Mais avec les versions finales ou releases candidates, ce signal n'est pas émis.
+Les utilisateurs expérimentés ont pu remarquer que lorsqu'ils utilisent une version de développement de NVDA (version snapshot master ou next), toute erreur inscrite dans le journal de NVDA est signaler par un son. Mais avec les versions finales ou releases candidates, ce signal n'est pas émis.
 
 Cette option offre le choix entre:
 - diffuser le signal sonore quel que soit la version de NVDA,
@@ -1028,97 +1254,134 @@ Cette option offre le choix entre:
 - de diffuser le signal seulement pour les versions de développement.
 
 
-Pour  faire ce choix, il suffit de sélectionner l'option dans la liste déroulante nommée "Jouer un son lors de l'inscription d'une erreur dans le journal" du sous-menu "Options avancées du menu "Paramètres du module Extension des commandes  de bases de NVDA"
+Pour  faire ce choix, il suffit de sélectionner l'option dans la liste déroulante nommée "Jouer un son lors de l'inscription d'une erreur dans le journal" de la catégorie "Avancés" du dialogue "Paramètres" de l'extension. Par défaut, l'option "Seulement pour les versions de développement" est sélectionnée.
 
-Par défaut, l'option "Seulement pour les versions de développement" est sélectionnée.
+++ Rétablissement automatique du son principal et de NVDA au chargement de l'extension ++[hdr301]
+Cette option, si la fonctionnalité "Contrôle du son" est installée, permet de rétablir, au chargement de cette extension, le volume principal et celui de NVDA et de positionner le niveau de chaque volume à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil maximum défini par configuration.
 
-++ Rétablissement automatique du son principal et de NVDA au chargement du module ++[hdr301]
-Cette option permet de rétablir, au chargement du module, le volume principal et celui de NVDA et de positionner le niveau de chaque volume à une valeur définie par configuration dans le cas où celui-ci est inférieur au niveau minimum défini par configuration.
+Pour cela,  la catégorie "Contrôle du son" du dialogue "Paramètres" de l'extension, présente les éléments de configuration suivants:
+- la case à coché "Établir automatiquement le son principal et de NVDA au chargement de l'extension" qui permet d'activer ou désactiver cette option,
+- le seuil de rétablissement du volume principal en dessous duquel son niveau   sera automatiquement rétabli,
+- le niveau   du volume principal à rétablir,
+- le seuil  de rétablissement du volume de NVDA en dessous duquel son niveau   sera rétabli,
+- le niveau  du volume de NVDA à rétablir.
 
-Pour cela,  le dialogue "Options avancées" présente les champs de configuration suivants:
-- la case à coché "Établir automatiquement le son principal et de NVDA au chargement du module" qui permet d'activer ou désactiver cette option,
-- le niveau minimum du volume principal en dessous duquel son niveau   sera rétabli,
-- le niveau du volume principal à rétablir,
-- le niveau minimum du volume de NVDA en dessous duquel son niveau   sera rétabli,
-- le niveau par défaut du volume de NVDA à rétablir.
 
+À son lancement, cette extension vérifie que le volume principal et celui de NVDA sont au-dessus du seuil  de rétablissement configuré pour chacun. 
+
+Si ce n'est pas le cas, cette extension fixe alors le niveau du volume  à la valeur du niveau   à rétablir configurée.
 
 Une impossibilité technique empêche de pouvoir positionner le niveau du volume de NVDA au-dessus de 50%.
-Lors de l'installation du module, les niveaux du volume principal et de NVDA sont pris en compte pour définir les niveaux à rétablir.
+
+Lors de l'installation de cette extension, les niveaux du volume principal et de NVDA sont pris en compte pour définir les valeurs des niveaux à rétablir.
 
 
 
-++ Titrage des boites de dialogue avec le nom du module ++[hdr302]
-Cette option permet de titrer ou non les boites de dialogue du module avec le nom du module.
-Par défaut, cette option est cochée et le titre des boites se présente sous la forme: "Module complémentaire Extension des commandes  de base de NVDA - NVDA - titre du dialogue".
+++ Titrage des boites de dialogue avec le nom de l'extension ++[hdr302]
+Cette option permet de titrer ou non les boites de dialogue de cette extension avec  son nom.
+Elle se trouve dans la catégorie "Avancées" du dialogue "Paramètres de l'extension.
 
+Par défaut, cette option est cochée et le titre des boites se présente sous la forme: "ADDON_SUMMARY - NVDA - titre du dialogue".
 
 
 ++ Configuration de la temporisation d'attente de répétition du même geste de commande ++[hdr303]
-Certains scripts du module réalisent différentes actions suivant le nombre de fois  où le geste de commande associé au script est composé.
+Certains scripts de cette extension réalisent différentes actions suivant le nombre de fois  où le geste de commande associé au script est composé.
 La répétition du geste de commande doit se faire dans un bref délai  (250 ms par défaut).
 Pour un script réalisant trois actions différentes, le mécanisme est :
-- Au premier appi, la temporisation est lancée, 
-- si il n'y a pas de second appui avant l'échéance de la temporisation, la première action est réalisé. Sinon la temporisation est relancée 
-- si il n'y a pas de troisième appui avant l'échéance de la temporisation, la seconde action est réalisé. Sinon, la temporisation est arrêtée et la troisième action est réalisée.
+- Au premier appui, la temporisation est lancée, 
+- si il n'y a pas de second appui avant l'échéance de la temporisation, la première action est réalisée. Sinon la temporisation est relancée 
+- si il n'y a pas de troisième appui avant l'échéance de la temporisation, la seconde action est réalisée. Sinon, la temporisation est arrêtée et la troisième action est réalisée.
 
 
 Suivant la dextérité de l'utilisateur ou la configuration matérielle, cette temporisation peut être trop longue ou trop courte.
-L'option intitulée "Temporisation d'attente de répétition du même geste de commande" du menu "Options avancées" permet d'ajuster cette temporisation suivant le besoin.
+L'option intitulée "Temporisation d'attente de répétition du même geste de commande"  de la catégorie "Avancés" du dialogue "Paramètres" de l'extension permet d'ajuster cette temporisation suivant le besoin.
 
 
 + Autres améliorations +
 
-++ Annonce de l'heure indépendante du niveau de ponctuation ++[hdr200]
-
-Le geste de commande de base "NVDA + f12" donne l'heure sur un simple appui et la date sur un double appui.
-Mais  l'heure n'est pas annoncée  de la même façon suivant le niveau de ponctuation sélectionné dans  les paramètres vocaux.
-
-Le module corrige ce petit défaut.
-++ Copie de la date et de l'heure dans le presse-papier ++[hdr201]
-Le geste de commande de base "NVDA + f12" donne l'heure sur un simple appui et la date sur un double appui.
-
-Le module ajoute la copie de la date et de l'heure sur un triple appui de ce geste.
-
-
-
 ++ Exploration du dossier de configuration ou dossier programme de NVDA++[hdr202]
-Le module ajoute dans le menu "outils" de NVDA un sous-menu "Explorer NVDA" qui propose deux sous-menus:
+Cette extension ajoute dans le menu "outils" de NVDA un sous-menu "Explorer NVDA" qui propose deux éléments de choix:
 - "explorer mon dossier de configuration": pour ouvrir dans l'explorateur de Windows son dossier utilisateur "userConfig",
 - "Explorer le dossier programme" : pour ouvrir dans l'explorateur le dossier programme de NVDA.
 
 
-Il est possible d'associer, à chacun d'eux, un geste de commande à l'aide du dialogue "Geste de commandes" de NVDA.
-
-Cela correspond aux deux scripts rangés sous la rubrique "Extension des commandes de base de NVDA" du dialogue "Gestes de commande" et dont la description est:
+Deux scripts, rangés dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA, sont prévus pour réaliser ces mêmes actions  et avec les descriptions suivantes:
 - "Ouvrir dans l'explorateur mon dossier de configuration",
 - "Ouvrir dans l'explorateur le dossier programmes de NVDA".
 
 
 Par défaut, aucun geste de commande ne leur est associé.
 
-++ Présentation du formatage du texte dans une boite de dialogue ++[hdr203]
+++ Présentation de la mise en forme  du texte dans une boite de dialogue ++[hdr203]
 De base, un double appui du geste de commande "NVDA+f" présente les informations de mise en forme sous la forme d'un document HTML.
 
-Ce script a pour but de les compléter et les afficher plutôt dans une boite de dialogue.
+Ce script a pour but de les compléter et les afficher plutôt dans une boite de dialogue afin de pouvoir les lire  en utilisant les flèches de direction.
 
 Il se lance à l'aide de  la commande "KEY_REPORT_FORMATTING" de l'interpréteur. 
 Aucun geste de commande ne lui est affecté par défaut.
 
 La description du script est: "Afficher, dans une boite de dialogue, les informations de mise en forme à la position actuelle du curseur de revue dans un document".
 
-Il est rangé sous la rubrique "Extension des commandes de base de NVDA" du dialogue "Gestes de commande".
+Il est rangé sous la rubrique "ADDON_SUMMARY" du dialogue "Gestes de commande de NVDA".
 
 ++ Annonce du texte des boites de dialogues du style confirmation++[hdr204]
 NVDA considère  pour certaines boites de dialogue comme celles de confirmation, que le texte qu'elles contiennent est une description.
 
-Donc si l'option "Annoncer la description de l'objet" du sous-menu "Présentation des objets" n'est pas cochée, le texte n'est pas annoncé par NVDA. 
+Donc si l'option "Annoncer la description de l'objet" de la catégorie "Présentation des objets" du dialogue "Paramètres" De NVDA n'est pas cochée, le texte n'est pas annoncé par NVDA. 
 
-Le module met en place l'option "Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boite de dialogue du style confirmation" dans le sous-menu "Options avancées"  pour forcer, si elle est cochée, l'annonce du texte de ces boites dans tous les cas. Cette option est cochée par défaut.
+Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boite de dialogue du style confirmation" dans la catégorie "Avancés" du dialogue "Paramètres" de l'extension pour forcer, si elle est cochée, l'annonce du texte de ces boites dans tous les cas. Cette option est cochée par défaut.
 
 
-+ Résumé des commandes apportées par le module +
++ Résumé des commandes apportées par cette extension +
 ++ Gestes de commande installés systématiquement ++
+
+| KEY_SHELL | KEY_SHELL | Aucun | Lancer l'interpréteur de commandes de l'extension |
+
+++ Commandes de l'interpréteur ++
+
+| Commande | Description |
+| KEY_APPLICATION_INFORMATIONS | Afficher les informations sur  l'application sous le focus |
+| KEY_OBJECTS_LIST | Afficher les éléments visibles composant l'objet en avant plan |
+| KEY_COPY_DATETIME | Copier la date et l'heure dans le presse-papier |
+| KEY_REPORT_FORMATTING | Afficher, dans une boite de dialogue, les informations de mise en forme à la position actuelle du curseur de revue dans un document |
+| KEY_ADDON_SETTINGS | Afficher le dialogue de paramétrage de l'extension |
+| KEY_RENAMING | Afficher le dialogue Renommage des touches clavier |
+| KEY_SELECTIVE_ANNOUNCEMENT | Afficher le dialogue pour configurer les annonces sélectives des touches de commandes |
+| KEY_COMPLEX_SYMBOL | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
+| KEY_LAST_USED_COMPLEX_SYMBOL | Afficher la liste des derniers symboles complexes composés |
+| KEY_DISPLAY_SPEECH_HISTORY |  Afficher les enregistrements de l'historique vocal |
+| KEY_WINDOWS_LIST | Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
+| KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
+| KEY_MINUTE_TIMER | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante   ou d'arrêter celle-ci |
+| KEY_MODULE_GUIDE | Ouvrir le manuel utilisateur de l'extension |
+| KEY_HELP_SHELL | Lister les commandes de l'interpréteur de l'extension |
+| KEY_LOG_VIEW | Afficher le dialogue de gestion des journaux de NVDA |
+| KEY_SAY_CURRENT_FOLDER | Annoncer le dossier présélectionné dans les boites de dialogue du style "ouvrir", "Enregistrer", enregistrer sous», etc. |
+| KEY_VOICE_PROFIL_SWITCHING | Activer / désactiver le mode "Commutation de profil vocal" |
+| KEY_SHUTDOWN | Afficher le dialogue pour Arrêter, redémarrer ou mettre en veille l'ordinateur |
+| KEY_TOGGLE_MUTE | Couper ou établir le son pour l'application courante |
+| KEY_VOLUME_ON | Établir le son principal et de NVDA |
+| KEY_TOOLSFORADDON | Afficher le dialogue qui présente les outils pour le développement d'extensions |
+| KEY_USER_INPUT_GESTURE  | Afficher le dialogue Gestes de commande utilisateur |
+| KEY_MANAGE_VOICE_PROFIL | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
+++ Gestes de commande installés par les fonctionnalités ++
+
++++ Affichage de la  liste des icones de la zone de notification et des fenêtres des applications lancées +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| Liste des icônes et fenêtres actives | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des applications lancées |
+
++++Aide  à la composition de symboles complexes +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| Aide  à la composition de Symboles complexes | MAIN_KEY_COMPLEX_SYMBOL  | MAIN_KEY_COMPLEX_SYMBOL | Aucune | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
+
++++ Informations sur l'application sous le focus +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| Annoncer le Nom et la Version de l'application focalisée | MAIN_KEY_REPORT_NAME_VERSION  | MAIN_KEY_REPORT_NAME_VERSION | Aucune | Annoncer le nom et la version de l'application focalisée |
+| Annoncer le Profil de configuration | MAIN_KEY_CONFIGURATION_PROFILE  | MAIN_KEY_CONFIGURATION_PROFILE | Aucune | Taper deux fois, annoncer le profil de configuration courant |
+
+
+
++++ Extension des fonctionnalités du tampon virtuel +++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | KEY_CURRENT_ROW_REPORT | KEY_CURRENT_ROW_REPORT | aucun | annoncer les cellules de la ligne courante du tableau  |
 | KEY_CURRENT_COLUMN_REPORT | KEY_CURRENT_COLUMN_REPORT | aucun | annoncer les cellules de la colonne courante du tableau  |
@@ -1132,50 +1395,48 @@ Le module met en place l'option "Ne pas tenir compte de l'option Annoncer la des
 | KEY_MOVE_FIRST_CELL_COLUMN | KEY_MOVE_FIRST_CELL_COLUMN | aucun | Aller à la première cellule de la colonne |
 | KEY_MOVE_LAST_CELL_COLUMN | KEY_MOVE_LAST_CELL_COLUMN | aucun | Aller à la dernière cellule de la colonne |
 | KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | aucun | Annoncer l'adresse (URL) du document. Deux appuis: copier cette adresse dans le presse-papier | 
-| KEY_SHELL | KEY_SHELL | Aucun | Lancer l'interpréteur de commandes du module |
-| KEY_DATE_TIME | KEY_DATE_TIME | Aucun | Annoncer l'heure. Deux appuis: annoncer la date. Trois appuis: copier la date et l'heure dans le presse-papier |
 
-++ Gestes de commande installés à la demande ++
++++ Annonce du dossier  présélectionner des boites de dialogue du style  Ouvrir,enregistrer, enregistrer sous +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| Annoncer le Dossier présélectionné | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Aucune | Annoncer le dossier présélectionné dans les boites de dialogue du style "ouvrir", "Enregistrer", enregistrer sous», etc. |
 
-|| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Liste des icônes et fenêtres actives | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des applications lancées |
-| Aide  à la composition de Symboles complexes | MAIN_KEY_COMPLEX_SYMBOL  | MAIN_KEY_COMPLEX_SYMBOL | Aucune | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
-| Annoncer le Nom et la Version de l'application focalisée | MAIN_KEY_REPORT_NAME_VERSION  | MAIN_KEY_REPORT_NAME_VERSION | Aucune | Annoncer le nom et la version de l'application focalisée |
-| Annoncer le Profil de configuration | MAIN_KEY_CONFIGURATION_PROFILE  | MAIN_KEY_CONFIGURATION_PROFILE | Aucune | Taper deux fois, annoncer le profil de configuration courant |
-| Annoncer le Dossier présélectionné | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Aucune | Annoncer le dossier présélectionné dans les boites de dialogue du style "ouvrir", "Enregistrer", enregistrer sous», etc |
++++ Journaux de NVDA +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Ouvrir le Journal | MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | Aucune | Ouvrir le journal courant de NVDA. Deux appuis: ouvrir son ancien journal. Trois appuis: copier le chemin du journal courant dans le presse-papier |
+
++++ Historique des annonces vocales +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Annoncer l'enregistrement précédent | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent  enregistrement de l'historique vocal |
 | Annoncer l'enregistrement suivant | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l'enregistrement suivant de l'historique vocal |
 | Annoncer l'enregistrement courant | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique vocal. Second appui: l'enregistrer dans le presse-papier. Troisième appui: afficher l'historique |
+
++++ Minuterie +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| Minuterie | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Aucune | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon  de l'arrêter ou de  consulter la durée restante   |
+
++++ Redémarage de NVDA +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Redémarrage de NVDA | MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | Aucune | Redémarrer NVDA. Deux appuis: redémarrer en niveau de journalisation débogage |
-| Minuterie | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Aucune | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante   ou d'arrêter celle-ci |
+
++++ Affichage des éléments visibles composant l'objet en avant plan +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Affichage des objets | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Aucune | Dire l'objet en avant-plan. Deux appuis: afficher les éléments visibles le composant |
+
++++ Commutation de profil vocal +++
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Choix du sélecteur | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur (1 à 8) comme sélecteur courant et définir, si possible, son profil vocal associé comme profil vocal courant  |
 | Profil vocal suivant | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Aucune | Aller au premier sélecteur suivant associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
 | Profil vocal précédent | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Aucune | Aller au premier sélecteur précédent associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
 | Association du profil vocal | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Associer le profil vocal courant  au sélecteur courant. Deux appuis: libérer le sélecteur de son profil vocal associé. Trois appuis: libérer tous les sélecteurs de leur profil vocal associé  |
+
++++ Contrôle du son +++
+
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Établir son | MAIN_KEY_VOLUME_ON | MAIN_KEY_VOLUME_ON | Aucune | Établir le son principal et de NVDA |
+| Couper volume | MAIN_KEY_TOGGLE_MUTE | MAIN_KEY_TOGGLE_MUTE | aucune | Couper ou établir le son pour l'application sous le focus |
 
-++ Commandes de l'interpréteur ++
++++ Date et heure- compléments +++
 
-| Commande | Description |
-| KEY_APPLICATION_INFORMATIONS | Afficher les informations sur  l'application sous le focus |
-| KEY_OBJECTS_LIST | Afficher les éléments visibles composant l'objet en avant plan |
-| KEY_CONVERT_TO_HTML | Afficher le dialogue pour convertir en HTML, les fichiers de documentation d'un des modules complémentaires installés |
-| KEY_REPORT_FORMATTING | Afficher, dans une boite de dialogue, les informations de mise en forme à la position actuelle du curseur de revue dans un document |
-| KEY_COMPLEX_SYMBOL | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
-| KEY_LAST_USED_COMPLEX_SYMBOL | Afficher la liste des derniers symboles complexes composés |
-| KEY_DISPLAY_SPEECH_HISTORY |  Afficher les enregistrements de l'historique vocal |
-| KEY_WINDOWS_LIST | Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
-| KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
-| KEY_MINUTE_TIMER | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante   ou d'arrêter celle-ci |
-| KEY_MODULE_GUIDE | Ouvrir le manuel utilisateur du module |
-| KEY_HELP_SHELL | Lister les commandes de l'interpréteur du module|
-| KEY_LOG_VIEW | Afficher le dialogue de gestion des journaux de NVDA |
-| KEY_SAY_CURRENT_FOLDER | Annoncer le dossier présélectionné dans les boites de dialogue du style "ouvrir", "Enregistrer", enregistrer sous», etc. |
-| KEY_VOICE_PROFIL_SWITCHING | Activer / désactiver le mode "Commutation de profil vocal" |
-| KEY_SHUTDOWN | Afficher le dialogue pour Arrêter, redémarrer ou mettre en veille l'ordinateur |
-| KEY_TOGGLE_MUTE | Couper ou établir le son pour l'application courante |
-| KEY_USER_INPUT_GESTURE  | Afficher le dialogue Gestes de commande utilisateur |
-| KEY_MANAGE_VOICE_PROFIL | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| date et heure  | KEY_DATE_TIME | KEY_DATE_TIME | aucune | Annoncer l'heure. Deux appuis: annoncer la date. Trois appuis: copier la date et l'heure dans le presse-papier |
 

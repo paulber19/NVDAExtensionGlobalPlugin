@@ -7,11 +7,16 @@
 import addonHandler
 from logHandler import log
 import os.path
-from cStringIO import StringIO
-import configobj
-from validate import Validator
+from configobj import ConfigObj
+# ConfigObj 5.1.0 and later integrates validate module.
+try:
+	from configobj.validate import Validator
+except ImportError:
+	from validate import Validator
 import globalVars
 from locale import getdefaultlocale
+from ..utils.py3Compatibility import importStringIO 
+StringIO = importStringIO ()
 
 _configSpec = """
 [KeyboardKeys]
@@ -53,7 +58,7 @@ def getEditionKeyCommands(obj= None):
 	if obj is None:
 		return d
 	appName = obj.appModule.appName
-	if appName in conf.keys():
+	if appName in conf:
 		
 		d.update(conf[appName])
 	return d
@@ -63,7 +68,7 @@ def getKeyboardIniConfig():
 	if _conf is not None:
 		return _conf
 	path = getKeyboardKeysIniFilePath()
-	conf = configobj.ConfigObj(path, configspec=StringIO(_configSpec), encoding="utf-8", list_values = False)
+	conf = ConfigObj(path, configspec=StringIO(_configSpec), encoding="utf-8", list_values = False)
 	conf.newlines = "\r\n"
 	val = Validator()
 	ret = conf.validate(val, preserve_errors=True, copy=True)

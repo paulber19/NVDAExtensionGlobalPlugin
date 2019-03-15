@@ -16,22 +16,43 @@ import queueHandler
 import config
 from gui import messageBox
 import core
+from .py3Compatibility import longint
 
 # winuser.h constant
 SC_MAXIMIZE     = 0xF030
 WS_MAXIMIZE         = 0x01000000
 WM_SYSCOMMAND = 0x112
 # window style
-WS_MAXIMIZE = 0x01000000L #The window is initially maximized
-WS_MAXIMIZEBOX = 0x00010000L #The window has a maximize button. Cannot be combined with the WS_EX_CONTEXTHELP style. The WS_SYSMENU style must also be specif 
-WS_MINIMIZE = 0x20000000L # The window is initially minimized. Same as the WS_ICONIC style.
-
-WS_MINIMIZEBOX= 0x00020000L #The window has a minimize button. Cannot be combined with the WS_EX_CONTEXTHELP style. The WS_SYSMENU style must also be specif
+WS_MAXIMIZE = longint(0x01000000) #The window is initially maximized
+WS_MAXIMIZEBOX = longint(0x00010000) #The window has a maximize button. Cannot be combined with the WS_EX_CONTEXTHELP style. The WS_SYSMENU style must also be specif 
+WS_MINIMIZE = longint(0x20000000) # The window is initially minimized. Same as the WS_ICONIC style.
+WS_MINIMIZEBOX= longint(0x00020000) #The window has a minimize button. Cannot be combined with the WS_EX_CONTEXTHELP style. The WS_SYSMENU style must also be specif
 # global timer
 _speakTimer= None
 
 
+# timer for repeatCount management
+GB_scriptTaskTimer= None
+
 _audioOutputDevice = None
+
+def delayScriptTask( func, *args, **kwargs):		
+	global GB_scriptTaskTimer
+	from ..settings import _addonConfigManager
+	delay= _addonConfigManager.getDelayBetweenSameGesture()
+	GB_scriptTaskTimer = wx.CallLater(delay,  func, *args, **kwargs)
+	
+def stopDelayScriptTask():
+	global GB_scriptTaskTimer
+	if GB_scriptTaskTimer is not None:
+		GB_scriptTaskTimer.Stop()
+		GB_scriptTaskTimer = None
+
+def clearDelayScriptTask():
+	global GB_scriptTaskTimer
+	GB_scriptTaskTimer= None
+
+
 def setAudioOutputDevice(device):
 	global _audioOutputDevice
 	_audioOutputDevice = device
@@ -79,6 +100,7 @@ def isInteger(stringToTest):
 def speakLater(delay = 0, msg = ""):
 	global _speakTimer
 	def callback(msg):
+		speech.cancelSpeech()
 		queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, msg)
 	
 	if _speakTimer:

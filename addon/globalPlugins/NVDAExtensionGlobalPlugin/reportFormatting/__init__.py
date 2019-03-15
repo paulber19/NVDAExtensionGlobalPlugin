@@ -6,9 +6,10 @@
 
 import addonHandler
 addonHandler.initTranslation()
+import colors
 from ..utils.NVDAStrings import NVDAString
 from ..utils.informationDialog import InformationDialog
-import colors
+from ..utils.py3Compatibility import iterate_items, _unicode, _unicode
 
 
 def getTextAlignmentText(attrs):
@@ -39,13 +40,13 @@ def getColorText(attrs):
 	backgroundColor=attrs.get("background-color")
 	if color and backgroundColor :
 		colorText = NVDAString("{color} on {backgroundColor}").format(
-			color=color.name if isinstance(color,colors.RGB) else unicode(color),
-			backgroundColor=backgroundColor.name if isinstance(backgroundColor,colors.RGB) else unicode(backgroundColor))
+			color=color.name if isinstance(color,colors.RGB) else _unicode(color),
+			backgroundColor=backgroundColor.name if isinstance(backgroundColor,colors.RGB) else _unicode(backgroundColor))
 		
 	elif color :
-		colorText = NVDAString("{color}").format(color=color.name if isinstance(color,colors.RGB) else unicode(color))
+		colorText = NVDAString("{color}").format(color=color.name if isinstance(color,colors.RGB) else _unicode(color))
 	elif backgroundColor :
-		colorText = NVDAString("{backgroundColor} background").format(backgroundColor=backgroundColor.name if isinstance(backgroundColor,colors.RGB) else unicode(backgroundColor))
+		colorText = NVDAString("{backgroundColor} background").format(backgroundColor=backgroundColor.name if isinstance(backgroundColor,colors.RGB) else _unicode(backgroundColor))
 	if colorText:
 		# Translators: this is a element in report formatting dialog box.
 		colorText =  _("Color: %s" %colorText)
@@ -153,12 +154,12 @@ def getParagraphIndentation(attrs):
 		'first-line-indent':( NVDAString("first line indent"), NVDAString("no first line indent"), ),
 		}
 	text =None
-	for attr,(label,noVal) in indentLabels.iteritems():
+	for attr,(label,noVal) in iterate_items(indentLabels):
 		newVal=attrs.get(attr)
 		if newVal :
-			text= u"%s\r\n	%s %s" %(text, label,newVal) if text else u"\r\n	%s %s" %(label,newVal) 
+			text= _unicode("%s\r\n	%s %s") %(text, label,newVal) if text else _unicode("\r\n	%s %s") %(label,newVal) 
 		else:
-			text = u"%s\r\n	%s" %(text,noVal) if text else "\r\n	%s" %(noVal) 
+			text = _unicode("%s\r\n	%s") %(text,noVal) if text else "\r\n	%s" %(noVal) 
 	if text:
 		# Translators: this is a element in report formatting dialog box.
 		text = _("Paragraph's indentation:%s") %text

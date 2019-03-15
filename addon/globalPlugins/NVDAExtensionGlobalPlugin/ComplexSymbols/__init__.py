@@ -17,19 +17,21 @@ import ui
 import speech
 import gui
 from gui import guiHelper
-import symbols
 import queueHandler
-from ..utils.NVDAStrings import NVDAString
-from ..utils import  speakLater, isOpened, makeAddonWindowTitle
 import core
 import config
+from . import symbols
+from ..utils.NVDAStrings import NVDAString
+from ..utils import  speakLater, isOpened, makeAddonWindowTitle
+from ..utils.py3Compatibility import baseString
+
 
 
 
 _lastUsedSymbols = []
 
 
-	# NVDA copyToClip function modified to accept symbols
+	# NVDA copyToClip function modified to accept non breaking space symbols
 def copyToClip(text):
 
 	"""Copies the given text to the windows clipboard.
@@ -38,8 +40,16 @@ def copyToClip(text):
 @param text: the text which will be copied to the clipboard
 @type text: string
 """
+	if isinstance(text,baseString) and len(text)>0:
+		if len(text) == 1 and ord(text) == 160:
+			goodToCopy = True
+		elif not text.isspace():
+			goodToCopy = True
+		else:
+			goodToCopy = False
+
 	#if isinstance(text,basestring) and len(text)>0 and not text.isspace():
-	if isinstance(text,basestring) and len(text)>0:
+	if goodToCopy:
 		try:
 			win32clipboard.OpenClipboard()
 		except win32clipboard.error:
@@ -63,6 +73,7 @@ def SendKey(keys):
 	KeyboardInputGesture.fromName(keys).send()
 
 class complexSymbolsDialog(wx.Dialog):
+	shouldSuspendConfigProfileTriggers = True
 	_instance = None
 	title = None
 
@@ -197,10 +208,13 @@ class complexSymbolsDialog(wx.Dialog):
 			log.error("error copyToClip symbol:%s (%s)  code = %d" %(l, symbol,c))
 		
 		else:
+			# Translators: This is a message announced  in complex symbols dialog.
+			msg =_("{0} pasted").format(self.symbolDescriptionList[index])
+			speech.speakMessage(msg)
+			time.sleep(2.0)
 			core.callLater( 200, SendKey, "Control+v")
-		#self.updateLastSymbolsList(symbolDescription, symbol)		
-		from ..settings import _addonConfigManager as conf
-		wx.CallLater(800, conf.updateLastSymbolsList, symbolDescription, symbol)
+		from ..settings import _addonConfigManager
+		_addonConfigManager.updateLastSymbolsList( symbolDescription, symbol)
 		self.Close()
 	
 	def onCopyButton(self, event):
@@ -220,11 +234,11 @@ class complexSymbolsDialog(wx.Dialog):
 			msg = _("Symbol cannot copied to the clipboard")
 		else:
 			# Translators: This is a message announced  in complex symbols dialog.
-			msg =_("{} symbol copied to clipboard").format(self.symbolDescriptionList[index])
+			msg =_("{0} copied").format(self.symbolDescriptionList[index])
 		speech.speakMessage(msg)
-		time.sleep(3.0)
-		from ..settings import _addonConfigManager as conf
-		core.callLater(800, conf.updateLastSymbolsList, symbolDescription, symbol)
+		time.sleep(2.0)
+		from ..settings import _addonConfigManager
+		_addonConfigManager .updateLastSymbolsList(symbolDescription, symbol)
 		self.Close()
 
 	
@@ -267,6 +281,7 @@ class complexSymbolsDialog(wx.Dialog):
 
 
 class ManageSymbolsDialog(wx.Dialog):
+	shouldSuspendConfigProfileTriggers = True
 	# Translators: This is the title of Manage Symbols Dialog window.
 	title = _("User symbols manager")
 	
@@ -473,9 +488,9 @@ class ManageSymbolsDialog(wx.Dialog):
 			if entryDialog.ShowModal() != wx.ID_OK:
 				return
 			categoryName = entryDialog.Value
-			if categoryName in self.userComplexSymbols.keys() or categoryName in self.categoryNamesList:
+			if categoryName in self.userComplexSymbols or categoryName in self.categoryNamesList:
 				# Translators: This is a message announced in   Manage Symbols Dialog.
-				core.callLater(300,ui.message, _("%s category allready exist"%s))
+				core.callLater(300,ui.message, _("%s category allready exists")%categoryName)
 			else:
 				self.userComplexSymbols[categoryName] = {}
 				self.categoryNamesList.append(categoryName)
@@ -520,6 +535,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		self.Close()
 
 class AddSymbolDialog(wx.Dialog):
+	shouldSuspendConfigProfileTriggers = True
 	# Translators: This is the title  of  the add symbol dialog.
 	title = _("Adding Symbol in %s category")
 	
@@ -541,6 +557,7 @@ class AddSymbolDialog(wx.Dialog):
 		self.CentreOnScreen()
 
 class LastUsedComplexSymbolsDialog(wx.Dialog):
+	shouldSuspendConfigProfileTriggers = True
 	_instance = None
 	title = None
 
@@ -580,7 +597,7 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		else:
 			# for wxPython 3
 			self.symbolsListBox_ID = wx.NewId()
-		self.symbolsListBox =sHelper.addLabeledControl(symbolsListLabelText, wx.ListBox,id = self.symbolsListBox_ID,name= "Symbols" ,choices=[desc for (desc, symbol) in self.lastUsedSymbols], style = wx.LB_SINGLE |wx.LB_ALWAYS_SB|wx.WANTS_CHARS,size= (948, 130))
+		self.symbolsListBox =sHelper.addLabeledControl(symbolsListLabelText, wx.ListBox,id = self.symbolsListBox_ID,name= "Symbols" ,choices=[desc for (desc, symbol) in self.lastUsedSymbols], style = wx.LB_SINGLE |wx.LB_ALWAYS_SB,size= (948, 130))
 		if self.symbolsListBox.GetCount():
 			self.symbolsListBox.SetSelection(0)
 		
@@ -591,7 +608,6 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		copyButton =  bHelper.addButton(self, label=_("&Copy to clipboard"))
 		# Translators: This is a label of a button appearing on Last Used Complex Symbols Dialog.
 		pasteButton =  bHelper.addButton(self,label=_("&Past"))
-		# Translators: This is a label of a button appearing on Last Used Complex Symbols Dialog.
 		pasteButton.SetDefault()
 		# Translators: This is a label of a button appearing on last Used Symbols dialog.
 		cleanButton =  bHelper.addButton(self,label=_("&Delete all"))
@@ -606,32 +622,11 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		pasteButton.Bind(wx.EVT_BUTTON,self.onPasteButton)
 		cleanButton.Bind(wx.EVT_BUTTON,self.onCleanButton)
 		closeButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
-		self.symbolsListBox.Bind(wx.EVT_KEY_DOWN, self.onKeydown)
 		self.SetEscapeId(wx.ID_CLOSE)
+	
 	def Destroy(self):
 		LastUsedComplexSymbolsDialog._instance = None
 		super(LastUsedComplexSymbolsDialog, self).Destroy()
-	
-	def onKeydown(self, event):
-		keyCode= event.GetKeyCode()
-		if keyCode == wx.WXK_SPACE:
-			index = self.symbolsListBox.GetSelection()
-			if index == -1:
-				return
-			symbol = self.lastUsedSymbols[index]
-			c = ord(symbol[1])
-			core.callLater(400,speech.speakMessage, "%d," % c)
-			core.callLater(450, speech.speakSpelling,hex(c))
-			return
-		if keyCode == wx.WXK_TAB:
-			shiftDown = event.ShiftDown()
-			if shiftDown:
-				wx.Window.Navigate(self.symbolsListBox,wx.NavigationKeyEvent.IsBackward)
-			else:
-				wx.Window.Navigate(self.symbolsListBox,wx.NavigationKeyEvent.IsForward)
-			return
-
-		event.Skip()
 	
 	def onPasteButton(self, event):
 		index = self.symbolsListBox.GetSelection()
@@ -644,10 +639,13 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		if result == False:
 			c = ord(symbol)
 			log.error("error copyToClip symbol:%s (%s)  code = %d" %(description, symbol,c))
-		
 		else:
+			# Translators: This is a message announced  in complex symbols dialog.
+			msg =_("{0} pasted").format(description)
+			speech.speakMessage(msg)
+			time.sleep(2.0)
 			core.callLater( 200, SendKey, "Control+v")
-		
+	
 		self.Close()
 	
 	def onCopyButton(self, event):
@@ -663,9 +661,9 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 			log.error("error copyToClip symbol:%s (%s)  code = %d" %(description, symbol,c))
 		else:
 			# Translators: This is a message announced  in Last Used Complex Symbols Dialog.
-			text =_("{} symbol copied to clipboard").format(description)
+			text =_("{0} copied").format(description)
 			speech.speakMessage(text)
-			time.sleep(3.0)
+			time.sleep(2.0)
 		self.Close()
 	
 	def onCleanButton(self, event):
@@ -675,22 +673,21 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
 			wx.YES|wx.NO) == wx.YES:
-			pass
-			from ..settings import _addonConfigManager as conf
-			core.callLater(800, conf.cleanLastUsedSymbolsList,)
+			from ..settings import _addonConfigManager
+			_addonConfigManager.cleanLastUsedSymbolsList()
 		self.Close()
-		
+	
 	@classmethod
 	def run(cls):
 		if isOpened(cls):
 			return
-		from ..settings import _addonConfigManager as conf
-		lastUsedSymbols = conf.getLastUsedSymbols()
+		from ..settings import _addonConfigManager
+		lastUsedSymbols = _addonConfigManager.getLastUsedSymbols()
 		if len(lastUsedSymbols) == 0:
 			# Translators: message to the user when there is no used symbol recorded.
 			speech.speakMessage(_("There is no symbol recorded"))
 			return
-		gui.mainFrame.prePopup()		
+		gui.mainFrame.prePopup()
 		d =   cls(gui.mainFrame, lastUsedSymbols)
 		d.CentreOnScreen()
 		d.Show()

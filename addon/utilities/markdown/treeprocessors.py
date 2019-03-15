@@ -1,3 +1,4 @@
+# modified by paulber19 because future warning
 import markdown
 import re
 
@@ -169,7 +170,9 @@ class InlineProcessor(Treeprocessor):
                         linkText(text)
 
                     if not isString(node): # it's Element
-                        for child in [node] + node.getchildren():
+# modified by paulber19 because future warning
+#                        for child in [node] + node.getchildren():
+                        for child in [node] + list(node):
                             if child.tail:
                                 if child.tail.strip():
                                     self.__processElementText(node, child, False)
@@ -224,7 +227,10 @@ class InlineProcessor(Treeprocessor):
         if not isString(node):
             if not isinstance(node.text, markdown.AtomicString):
                 # We need to process current node too
-                for child in [node] + node.getchildren():
+# modified by paulber19 because future warning
+#                for child in [node] + node.getchildren():
+                for child in [node] + list(node):
+
                     if not isString(node):
                         if child.text:
                             child.text = self.__handleInline(child.text,
@@ -263,7 +269,8 @@ class InlineProcessor(Treeprocessor):
         while stack:
             currElement = stack.pop()
             insertQueue = []
-            for child in currElement.getchildren():
+#            for child in currElement.getchildren():
+            for child in list(currElement):
                 if child.text and not isinstance(child.text, markdown.AtomicString):
                     text = child.text
                     child.text = None
@@ -271,8 +278,9 @@ class InlineProcessor(Treeprocessor):
                                                     text), child)
                     stack += lst
                     insertQueue.append((child, lst))
-
-                if child.getchildren():
+# modified by paulber19 because future warning
+#                if child.getchildren():
+                if list(child):
                     stack.append(child)
 
             for element, lst in insertQueue:

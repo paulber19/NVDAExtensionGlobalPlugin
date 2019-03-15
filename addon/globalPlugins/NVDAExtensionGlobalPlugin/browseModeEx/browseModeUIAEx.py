@@ -7,19 +7,21 @@
 import addonHandler
 addonHandler.initTranslation()
 from logHandler import log
-from .. import NVDAString
 from ctypes import byref
 from comtypes import COMError
 from comtypes.automation import VARIANT
 import ui
 import speech
 import controlTypes
-#import NVDAObjects.UIA.edge
 import UIABrowseMode 
+import UIAHandler
 from UIABrowseMode import UIABrowseModeDocument, UIAHeadingQuicknavIterator, UIATextRangeQuickNavItem
 from UIAUtils import *
-import UIAHandler
-from .__init__ import  BrowseModeDocumentTreeInterceptorEx , ElementsListDialogEx
+from ..utils.NVDAStrings import NVDAString
+from .__init__ import  BrowseModeDocumentTreeInterceptorEx 
+from . import elementsList
+from ..utils.py3Compatibility import rangeGen, _unicode
+from . import UIAParagraph
 
 
 
@@ -35,14 +37,14 @@ class UIATextRangeQuickNavItemEx(UIABrowseMode .UIATextRangeQuickNavItem):
 		# Translators: label when object has no name.
 		name = name if name  else _("No label")
 		if (self.itemType == "edit"): # or (self.itemType == "formField" and obj.role == controlTypes.ROLE_EDITABLETEXT):
-			value= u"{name} {role} {value}" .format(name = name, role = controlTypes.roleLabels[obj.role], value = value)
+			value= _unicode("{name} {role} {value}") .format(name = name, role = controlTypes.roleLabels[obj.role], value = value)
 		elif self.itemType == "checkBox":
 			state = controlTypes.stateLabels[controlTypes.STATE_CHECKED] if controlTypes.STATE_CHECKED in obj.states else controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
-			value =  u"{name} {state}" .format(name= name, state = state)
+			value =  _unicode("{name} {state}") .format(name= name, state = state)
 		elif self.itemType == "formField":
 			if obj.role == controlTypes.ROLE_CHECKBOX:
 				state = controlTypes.stateLabels[controlTypes.STATE_CHECKED] if controlTypes.STATE_CHECKED in obj.states else controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
-				value =  u"{name} {state}" .format(name= name, state = state)
+				value =  _unicode("{name} {state}") .format(name= name, state = state)
 		return value
 
 def UIAControlQuicknavIteratorEx(itemType,document,position,UIACondition,direction="next",itemClass=UIATextRangeQuickNavItemEx):
@@ -54,7 +56,7 @@ def UIAControlQuicknavIteratorEx(itemType,document,position,UIACondition,directi
 		# All items are requested (such as for elements list)
 		elements=document.rootNVDAObject.UIAElement.findAll(UIAHandler.TreeScope_Descendants,UIACondition)
 		if elements:
-			for index in xrange(elements.length):
+			for index in rangeGen(elements.length):
 				element=elements.getElement(index)
 				try:
 					elementRange=document.rootNVDAObject.UIATextPattern.rangeFromChild(element)
@@ -220,7 +222,7 @@ def UIAControlQuicknavIteratorEx(itemType,document,position,UIACondition,directi
 
 
 UIABrowseMode .UIAControlQuicknavIterator= UIAControlQuicknavIteratorEx
-import UIAParagraph
+
 class UIABrowseModeDocumentEx(BrowseModeDocumentTreeInterceptorEx , UIABrowseModeDocument):
 	def _iterNodesByType(self,nodeType,direction="next",pos=None):
 		if nodeType=="paragraph":
@@ -230,12 +232,9 @@ class UIABrowseModeDocumentEx(BrowseModeDocumentTreeInterceptorEx , UIABrowseMod
 			cond2=UIAHandler.handler.clientObject.createPropertyCondition(UIAHandler.UIA_AriaRolePropertyId, "main")
 			condition = UIAHandler.handler.clientObject.CreateAndCondition(cond1, cond2)
 			return UIAControlQuicknavIteratorEx(nodeType,self,pos,condition,direction)
-
-			return UIAControlQuicknavIterator(nodeType,self,pos,condition,direction)
 		return super(UIABrowseModeDocumentEx, self)._iterNodesByType(nodeType,direction, pos)
 
-class EdgeElementsListDialog(ElementsListDialogEx):
-
+class EdgeElementsListDialog(elementsList.ElementsListDialogEx):
 	ELEMENT_TYPES = (
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.

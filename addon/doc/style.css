@@ -1,0 +1,82 @@
+﻿@charset "utf-8";
+body {
+	margin : 0 5% 0 5%; 
+	font-family : Verdana, Arial, Helvetica, Sans-serif;
+	font-size: 0.9em;
+	background-color : #dce4ed;
+	counter-reset: h1
+}
+
+h1 {
+	margin-bottom:1.65em;
+	text-align: center;
+	font-size: 1.9em;
+	color : #cc0000;
+	text-decoration : underline;
+	counter-reset: h2
+}
+
+h2 {
+	margin : 1.4em 0 1.4em 0;
+	text-align: left;
+	font-weight: bold;
+	font-size: 1.15em;
+	text-indent:20px;
+	padding-top:0.15em;
+	padding-bottom:0.3em;
+	background-color : #cccccc;
+	color : #0c419a;
+	counter-reset: h3
+}
+
+h3 {
+	font-size: 0.95em;
+	text-indent:70px;
+	color : #0c419a;
+	counter-reset: h4
+	}
+
+
+h2:before {
+	counter-increment: h2;
+	content:  counter(h2) ". "
+}
+
+h3:before {
+	counter-increment: h3;
+	content: counter(h2) "." counter(h3) ". "
+}
+
+h4:before {
+	counter-increment: h4;
+	content: counter(h2) "." counter(h3) "." counter(h4) ". "
+}
+
+dt { 
+	font-weight : bold; 
+	float : left; 
+	width: 10%;
+	clear: left
+	} 
+dd { 
+	margin : 0 0 0.4em 0; 
+	float : left;
+	width: 90%;
+	display: block;
+} 
+p {
+	clear : both; 
+	font-size: 0.9em;
+} 
+li {
+	font-size: 0.9em;
+	} 
+a {
+	text-decoration : none; 
+	font-weight : bold;
+} 
+:active { 
+text-decoration : none; 
+}
+a:focus, a:hover {color: red}
+:link {color: rgb(110,110,110}

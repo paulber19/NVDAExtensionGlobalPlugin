@@ -10,16 +10,18 @@ import speech
 import ui
 import api
 from ..utils.informationDialog import InformationDialog
-from ..settings import toggleSpeechRecordWithNumberOption
+from ..settings import toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption
+from ..utils.py3Compatibility import baseString, _unicode
 
+# constants
 MAX_RECORD = 200
+# global variables
 _speechRecorder = None
-_isActive = False
-_oldSpeak = None
-_oldSpeakSpelling = None
+_oldSpeak = speech.speak
+_oldSpeakSpelling = speech.speakSpelling
 
 def mySpeak(sequence, *args, **kwargs):
-	text = "".join([x for x in sequence if isinstance(x, basestring)])
+	text = "".join([x for x in sequence if isinstance(x, baseString)])
 	_speechRecorder.record(text)
 	_oldSpeak(sequence, *args, **kwargs)
 
@@ -28,29 +30,23 @@ def mySpeakSpelling(text, *args, **kwargs):
 	_oldSpeakSpelling(text, *args, **kwargs)
 	
 def initialize():
-	global _isActive,_oldSpeak, _oldSpeakSpelling, _speechRecorder
-	if _isActive :
-		return
+	global _speechRecorder
+	if _speechRecorder  is not None: return
 	_speechRecorder = SpeechRecorderManager()
-	_oldSpeak = speech.speak
 	speech.speak = mySpeak
-	_oldSpeakSpelling = speech.speakSpelling
 	speech.speakSpelling = mySpeakSpelling
-	_isActive = True
 
 def terminate():
-	global _isActive,_oldSpeak, _oldSpeakSpelling, _speechRecorder
-	if not _isActive: return
+	global _speechRecorder
+	if _speechRecorder  is  None: return
 	speech.speak = _oldSpeak
-	_oldSpeak = None
 	speech.speakSpelling = _oldSpeakSpelling
-	_oldSpeakSpelling = None
 	_speechRecorder = None
-	_isActive = False
-def isActive():
-	return _isActive
+
 def getSpeechRecorder():
 	return _speechRecorder
+def isActive():
+	return _speechRecorder is not None
 
 class SpeechRecorderManager(object):
 	def __init__ (self):
@@ -102,16 +98,21 @@ class SpeechRecorderManager(object):
 		self._onMonitoring = oldOnMonitoring
 		
 	def displaySpeechHistory(self):
-		text = ""
+		text = []
 		for index in range(0, len(self._speechHistory)):
 			s = self._speechHistory[index]
 			if toggleSpeechRecordWithNumberOption(False):
-				text = u"{index}: {annonce}\r\n{text}".format(index = index+1, annonce = s, text = text)
+				text.append( _unicode(" {index}: {annonce}").format(index = index+1, annonce = s))
 			else:
-				text = u"{annonce}\r\n{text}".format(annonce = s, text = text)			
+				text .append(_unicode(s))
+		if not toggleSpeechRecordInAscendingOrderOption (False):
+			text.reverse()
+		text = "\r\n".join(text)
+
 		# Translators:  title of informations  dialog.
 		dialogTitle = _("Speech history")
+		insertionPointOnLastLine = True if toggleSpeechRecordInAscendingOrderOption (False) else False
 		# Translators: label of information area.
 		informationLabel = _("Records:")
-		InformationDialog.run(None, dialogTitle, informationLabel, text)
+		InformationDialog.run(None, dialogTitle, informationLabel, text, insertionPointOnLastLine)
 		
