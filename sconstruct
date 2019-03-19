@@ -104,9 +104,9 @@ def createAddonHelp(dir):
 		readmeTarget = env.Command( "readme.md",readmePath,  Copy("$TARGET", "$SOURCE"))
 		env.Depends(addon, readmeTarget)
 		env.NoClean(readmeTarget)
-		cssPath = os.path.join(docsDir, "style_md.css")
+		cssPath = os.path.join(docsDir, "style.css")
 		if os.path.isfile(cssPath):
-			cssTarget = env.Command( "style_md.css",cssPath,  Copy("$TARGET", "$SOURCE"))
+			cssTarget = env.Command( "style.css",cssPath,  Copy("$TARGET", "$SOURCE"))
 			env.Depends(addon, cssTarget)
 			env.NoClean(cssTarget)
 	else:
@@ -115,8 +115,8 @@ def createAddonHelp(dir):
 			readmeTarget = env.Command(readmePath, "readme.md", Copy("$TARGET", "$SOURCE"))
 			env.Depends(addon, readmeTarget)
 		# copy css file  (if exists) from repository root to addon/doc folder
-		if os.path.isfile("style_md.css"):
-			cssPath = os.path.join(docsDir, "style_md.css")
+		if os.path.isfile("style.css"):
+			cssPath = os.path.join(docsDir, "style.css")
 			cssTarget = env.Command(cssPath, "style.css", Copy("$TARGET", "$SOURCE"))
 			env.Depends(addon, cssTarget)
 
