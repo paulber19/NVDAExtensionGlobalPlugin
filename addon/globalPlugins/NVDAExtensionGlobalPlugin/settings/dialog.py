@@ -22,7 +22,6 @@ from .addonConfig import *
 
 
 def askForNVDARestart():
-
 	if gui.messageBox(
 		# Translators: A message asking the user if they wish to restart NVDA as NVDAExtensionGlobalPlugin addon settings changes have been made. 
 		_("Some Changes have been made . You must save the configuration and restart NVDA for these changes to take effect. Would you like to do it now?"),
@@ -30,7 +29,13 @@ def askForNVDARestart():
 		wx.YES|wx.NO|wx.ICON_WARNING)==wx.YES:
 		_addonConfigManager.saveSettings(True)
 		queueHandler.queueFunction(queueHandler.eventQueue,core.restart)
-
+		return
+	gui.messageBox(
+		# Translators: A message  to user
+		_("Don't forget to save the configuration for the changes to take effect !"),
+		makeAddonWindowTitle(NVDAString("Warning")),
+		wx.OK|wx.ICON_WARNING)
+		
 class FeaturesInstallationSettingsPanel(SettingsPanel):
 	# Translators: This is the label for the Installed features dialog.
 	title = _("features's installation")
@@ -205,7 +210,6 @@ class FeaturesInstallationSettingsPanel(SettingsPanel):
 			if not getInstallFeatureOption (ID_DateAndTime) == C_Install:
 				# set  report  time with second to default value
 				if toggleReportTimeWithSecondsOption (False): toggleReportTimeWithSecondsOption (True)
-
 			self.restartNVDA = True
 	
 	def postSave(self):
@@ -247,7 +251,7 @@ class VariousSettingsPanel(SettingsPanel):
 		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		sHelper.addItem(group)
 		# Translators: This is the label for a combobox in the Various settings panel.
-		labelText = _("&Punctuation/symbol &level on word movement:")
+		labelText = _("&Punctuation/symbol level on word movement:")
 		symbolLevelLabels=characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS
 		symbolLevelChoices= [symbolLevelLabels[level] for level in characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS]
 		# Translators: This is the label for an item  in combobox in the
@@ -396,10 +400,21 @@ class AdvancedSettingsPanel(SettingsPanel):
 		self.delayBetweenSameGestureBox  .SetSelection(choice.index(_addonConfigManager.getDelayBetweenSameGesture()))
 		
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
-		labelText = _("&Does not take account of the option to Announce the description of the object during the display of the dialog box style confirmation")
+		labelText = _("&Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation")
 		self.byPassNoDescriptionOptionBox=sHelper.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
 		self.byPassNoDescriptionOptionBox.SetValue(toggleByPassNoDescriptionAdvancedOption (False))
-	
+		# Translators: This is the label for a group of editing options in the Advanced settings panel.
+		groupText = _("Numeric keypad")
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		sHelper.addItem(group)
+		# Translators: This is the label for a checkbox in the advanced settings panel.
+		labelText = _("&Allow the failover to the normal use of the arrow keys on the numeric keypad")
+		self.enableNumpadNavigationModeToggleOptionBox=group.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
+		self.enableNumpadNavigationModeToggleOptionBox.SetValue(toggleEnableNumpadNavigationModeToggleAdvancedOption (False))
+		# Translators: This is the label for a checkbox in the advanced settings panel.
+		labelText = _("&Enable the arrow keypad's keys  at NVDA's start")
+		self.activateNumpadNavigationModeAtStartOptionBox =group.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
+		self.activateNumpadNavigationModeAtStartOptionBox.SetValue(toggleActivateNumpadNavigationModeAtStartAdvancedOption (False))
 	def saveSettingChanges (self):
 		self.restartNVDA = False
 		playSoundOnErrorsOption = self.playSoundOnErrorsOptionChoiceBox.GetSelection()
@@ -413,7 +428,13 @@ class AdvancedSettingsPanel(SettingsPanel):
 		if self.byPassNoDescriptionOptionBox.IsChecked() != toggleByPassNoDescriptionAdvancedOption (False):
 			toggleByPassNoDescriptionAdvancedOption ()
 			self.restartNVDA = True
-	
+		if self.enableNumpadNavigationModeToggleOptionBox.IsChecked() != toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
+			toggleEnableNumpadNavigationModeToggleAdvancedOption()
+			# in all cases, disable numpad navigation mode
+			from ..commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
+			_myInputManager .setNumpadNavigationMode( False)
+		if self.activateNumpadNavigationModeAtStartOptionBox.IsChecked() != toggleActivateNumpadNavigationModeAtStartAdvancedOption(False):
+			toggleActivateNumpadNavigationModeAtStartAdvancedOption()
 	def postSave(self):
 		if self.restartNVDA:
 			askForNVDARestart()		
@@ -439,7 +460,7 @@ class VolumeControlSettingsPanel(SettingsPanel):
 		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Volume control settings panel.
-		labelText = _("Set on &volume at the loading of the module")
+		labelText = _("Set on &volume at the loading of the add-on")
 		self.setOnMainAndNVDAVolumeOptionCheckBox=group.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
 		self.setOnMainAndNVDAVolumeOptionCheckBox.SetValue(toggleSetOnMainAndNVDAVolumeAdvancedOption(False))
 		# Translators: This is the label for a group of main volume options in the 
@@ -456,8 +477,7 @@ class VolumeControlSettingsPanel(SettingsPanel):
 		labelText= _("&Recovery level:")
 		self.masterVolumeLevelBox  = group.addLabeledControl(labelText, wx.Choice, choices= [str(x) for x in choice  ])
 		self.masterVolumeLevelBox  .SetSelection(choice.index(_addonConfigManager.getMasterVolumeLevel()))
-		# Translators: This is the label for a group of NVDA volumeoptions in the 
-		# Various settings panel
+		# Translators: This is the label for a group of NVDA volume options in the control volume settings panel
 		groupText = _("NVDA volume")
 		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		sHelper.addItem(group)
@@ -469,20 +489,36 @@ class VolumeControlSettingsPanel(SettingsPanel):
 		labelText=_("R&ecovery level:")
 		self.NVDAVolumeLevelBox  = group.addLabeledControl(labelText, wx.Choice, choices= [str(x) for x in choice[5:]  ])
 		self.NVDAVolumeLevelBox  .SetSelection(choice[5:].index(_addonConfigManager.getNVDAVolumeLevel()))
-	
+		# Translators: This is the label for a group of application  volume control options in the 
+		# volume ontrol  settings panel
+		groupText = _("Volume c&hange")
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		sHelper.addItem(group)
+		# Translators: This is a label for a  choice box in volume control settings panel.
+		labelText=_("Ste&ps's size:")
+		choice = [str(x) for x in range(1, 21)]
+		self.volumeChangeStepLevelBox= group.addLabeledControl(labelText, wx.Choice, choices= list(reversed(choice)))
+		self.volumeChangeStepLevelBox.SetStringSelection(str(_addonConfigManager.getVolumeChangeStepLevel())	)
+		# Translators: This is the label for a checkbox in the Volume control settings panel.
+		labelText = _("R&eport volume changes")
+		self.reportVolumeChangeOptionCheckBox=group.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
+		self.reportVolumeChangeOptionCheckBox.SetValue(toggleReportVolumeChangeAdvancedOption(False))
 	def saveSettingChanges (self):
 		self.restartNVDA = False
 		if self.setOnMainAndNVDAVolumeOptionCheckBox.IsChecked() != toggleSetOnMainAndNVDAVolumeAdvancedOption (False):
 			toggleSetOnMainAndNVDAVolumeAdvancedOption ()
-		levelString = self.minMasterVolumeLevelBox.GetString(self.minMasterVolumeLevelBox.GetSelection())
+		levelString = self.minMasterVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMinMasterVolumeLevel(int(levelString))
-		levelString = self.masterVolumeLevelBox.GetString(self.masterVolumeLevelBox.GetSelection())
+		levelString = self.masterVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMasterVolumeLevel(int(levelString))
-		levelString = self.NVDAVolumeLevelBox.GetString(self.minNVDAVolumeLevelBox.GetSelection())
+		levelString = self.NVDAVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMinNVDAVolumeLevel(int(levelString))
-		levelString = self.NVDAVolumeLevelBox.GetString(self.NVDAVolumeLevelBox.GetSelection())
+		levelString = self.NVDAVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setNVDAVolumeLevel(int(levelString))
-	
+		levelString = self.volumeChangeStepLevelBox.GetStringSelection()
+		_addonConfigManager.setVolumeChangeStepLevel(int(levelString))
+		if self.reportVolumeChangeOptionCheckBox.IsChecked() != toggleReportVolumeChangeAdvancedOption (False):
+			toggleReportVolumeChangeAdvancedOption ()
 	def postSave(self):
 		if self.restartNVDA:
 			askForNVDARestart()		
@@ -504,6 +540,10 @@ class KeysRemanenceSettingsPanel(SettingsPanel):
 	def makeSettings(self, settingsSizer):
 		from ..settings import _addonConfigManager, PSOE_NoVersion, PSOE_AllVersions
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		# Translators: This is the label for a checkbox in the Keys remanence settings panel.
+		labelText = _("&Only NVDA key in remanence")
+		self.onlyNVDAKeyInRemanenceAdvancedOptionBox=sHelper.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
+		self.onlyNVDAKeyInRemanenceAdvancedOptionBox.SetValue(toggleOnlyNVDAKeyInRemanenceAdvancedOption (False))
 		# Translators: This is the label for a checkbox in the Keys remanence settings panel.
 		labelText = _("Activate &remanence at NVDA's start")
 		self.remanenceAtNVDAStartAdvancedOptionBox=sHelper.addItem (wx.CheckBox(self,wx.ID_ANY, label= labelText))
@@ -529,6 +569,8 @@ class KeysRemanenceSettingsPanel(SettingsPanel):
 	
 	def saveSettingChanges (self):
 		self.restartNVDA = False
+		if self.onlyNVDAKeyInRemanenceAdvancedOptionBox.IsChecked() != toggleOnlyNVDAKeyInRemanenceAdvancedOption (False):
+			toggleOnlyNVDAKeyInRemanenceAdvancedOption ()
 		if self.remanenceAtNVDAStartAdvancedOptionBox.IsChecked() != toggleRemanenceAtNVDAStartAdvancedOption (False):
 			toggleRemanenceAtNVDAStartAdvancedOption ()
 		remanenceDelay = self.remanenceDelayBox.GetSelection()

@@ -17,6 +17,21 @@ Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poira
 %!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
 %!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
 
++ v8.1 (05/05/2019) +
+Compatibilité avec NVDA 2019.2
+Fonctionnalités:
+- possibilité de limiter la rémanence à la seule touche "NVDA".
+- compléments pour la fonctionnalité "Contrôle du son":
+ -  augmenter , diminuer, maximiser ou minimiser  le volume de l'application sous le focus,
+ - augmenter , diminuer, maximiser ou minimiser  le volume principal,
+ - regroupement de ses gestes de commandes sous la catégorie "contrôle du son",
+- possibilité d'utiliser  les touches   du pavé numérique comme touche de direction (fonctionnement normal de Windows).
+
+
+Correction de bugs:
+- non sauvegarde de certains paramètres lors de l'enregistrement manuelle et quand l'option "ne pas enregistrer la configuration" était cochée.
+- fonctionnalité"Outils de développement": correction  de la mauvaise prise en compte des sous-languages pour la création de la documentation d'une extension.
+
 
 + v8.0 (13/02/2019) +
 Fonctionnalités:
@@ -42,12 +57,18 @@ Développement:
 - Nouveaux outils pour le développement d'extensions basés sur un fichier buildVars.py:
  - mise à jour de la version de l'extension dans le fichier buildVars.py,
  - mise à jour  du fichier manifest.ini,
- - création du fichier local manifest.ini,
+ - création du fichier manifest.ini de localisation,
  - création des fichiers HTML de documentation,
  - création du fichier .pot,
  - création du fichier buildVars.py,
  - préparation de l'extension,
  - exploration du dossier de l'extension.
+
+
+
++ v7.4.3 (07/01/2019) +
+- correction du fichier keyboard.ini espagnol  qui provoquait le plantage de NVDA en langue espagnole.
+- traduction en langue arabe  de l'interface du module
 
 
 + v7.4.2 (22/12/2018) +

@@ -11,7 +11,6 @@ import api
 import winUser
 import time
 import wx
-import win32con
 from keyboardHandler import KeyboardInputGesture
 import speech
 import oleacc
@@ -27,6 +26,13 @@ utilitiesPath= os.path.join(_curAddon.path, "utilities")
 sys.path.append(utilitiesPath)
 import win32gui
 del sys.path[-1]
+# win32con constant
+GW_OWNER = 4
+WS_EX_APPWINDOW = 262144
+GWL_EXSTYLE = (-20)
+WS_EX_TOOLWINDOW = 128
+SW_MAXIMIZE = 3
+
 
 # flags  placement
 
@@ -43,10 +49,10 @@ def isRealWindow(hWnd):
 		return False 
 	if win32gui.GetParent(hWnd) != 0: 
 		return False 
-	hasNoOwner = win32gui.GetWindow(hWnd, win32con.GW_OWNER) == 0 
-	lExStyle = win32gui.GetWindowLong(hWnd, win32con.GWL_EXSTYLE) 
-	if (((lExStyle & win32con.WS_EX_TOOLWINDOW) == 0 and hasNoOwner) 
-	or ((lExStyle & win32con.WS_EX_APPWINDOW != 0) and not hasNoOwner)): 
+	hasNoOwner = win32gui.GetWindow(hWnd, GW_OWNER) == 0 
+	lExStyle = win32gui.GetWindowLong(hWnd, GWL_EXSTYLE) 
+	if (((lExStyle & WS_EX_TOOLWINDOW) == 0 and hasNoOwner) 
+	or ((lExStyle & WS_EX_APPWINDOW != 0) and not hasNoOwner)): 
 		if winUser.getWindowText(hWnd): 
 			return True 
 
@@ -252,7 +258,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		winUser.setForegroundWindow(hwnd)
 		time.sleep(0.1)
 		winUser.setFocus(hwnd)
-		win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE) 
+		win32gui.ShowWindow(hwnd, SW_MAXIMIZE) 
 		
 	@classmethod
 	def run(cls):

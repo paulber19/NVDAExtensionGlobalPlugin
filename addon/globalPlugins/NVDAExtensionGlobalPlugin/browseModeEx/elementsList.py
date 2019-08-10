@@ -121,7 +121,11 @@ class ElementsListDialogEx(wx.Dialog):
 
 		# Translators: The label of an editable text field to filter the elements
 		# in the browse mode Elements List dialog.
-		filterText = NVDAString("Filt&er by:")
+		filterText = NVDAString("Filter b&y:")
+		if filterText == "Filter b&y:":
+			# for nvda version lower nvda 2019.2
+			filterText = NVDAString("Filt&er by:")
+			
 		labeledCtrl = gui.guiHelper.LabeledControlHelper(self, filterText, wx.TextCtrl)
 		self.filterEdit = labeledCtrl.control
 		self.filterEdit.Bind(wx.EVT_TEXT, self.onFilterEditTextChange)

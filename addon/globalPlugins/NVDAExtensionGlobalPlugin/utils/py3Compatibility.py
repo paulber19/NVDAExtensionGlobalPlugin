@@ -33,7 +33,7 @@ def importStringIO ():
 		from io import StringIO
 	else:
 		from cStringIO import StringIO
-		return StringIO
+	return StringIO
 
 def longint(i):
 	if py3:

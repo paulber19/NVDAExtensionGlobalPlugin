@@ -3,7 +3,7 @@ Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poira
 
 
 % add-on version
-%!PostProc (html): ADDON_VERSION 8.0
+%!PostProc (html): ADDON_VERSION 8.1
 % add-on summary
 %!PostProc (html): ADDON_SUMMARY Extension des commandes de base de NVDA
 %!Target: html
@@ -71,6 +71,7 @@ Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poira
 %!PostProc (html): KEY_SELECTIVE_ANNOUNCEMENT f3
 %!PostProc (html): KEY_COMPLEX_SYMBOL f4
 %!PostProc (html): KEY_LAST_USED_COMPLEX_SYMBOL control+f4
+%!PostProc (html): KEY_TOGGLE_NUMPAD_NAVIGATION f5
 %!PostProc (html): KEY_DISPLAY_SPEECH_HISTORY f9
 %!PostProc (html): KEY_WINDOWS_LIST F10
 %!PostProc (html): KEY_ICONS_List F11
@@ -83,6 +84,14 @@ Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poira
 %!PostProc (html): KEY_SHUTDOWN r
 %!PostProc (html): KEY_TOGGLE_MUTE s
 %!PostProc (html): KEY_VOLUME_ON control+s
+%!PostProc (html): KEY_MAIN_VOLUME_UP control+flèche haut
+%!PostProc (html): KEY_MAIN_VOLUME_DOWN control+flèche bas
+%!PostProc (html): KEY_MAIN_VOLUME_MAX control+page précédente
+%!PostProc (html): KEY_MAIN_VOLUME_MIN control+page suivante
+%!PostProc (html): KEY_APP_VOLUME_UP flèche haut
+%!PostProc (html): KEY_APP_VOLUME_DOWN flèche bas
+%!PostProc (html): KEY_APP_VOLUME_MAX page précédente
+%!PostProc (html): KEY_APP_VOLUME_MIN page suivante
 %!PostProc (html): KEY_TOOLSFORADDON t
 %!PostProc (html): KEY_USER_INPUT_GESTURE u
 %!PostProc (html): KEY_MANAGE_VOICE_PROFIL v
@@ -123,13 +132,14 @@ Cette extension ajoute aux commandes globales de NVDA:
  - [rémanence des touches NVDA et de modification et rémanence spécifique pour le site gmail.com #hdr18],
  - [Arrêt, redémarrage ou mise en veille prolongée de l'ordinateur #hdr19],
  - [gestion des gestes de commande configurés par l'utilisateur #hdr20],
- - [control du son #hdr21] (Windows 10 uniquement):
+ - [contrôle du son #hdr21] (Windows 10 uniquement):
   - couper ou établir  le son pour le flux audio de l'application sous le focus,
-  - établir manuellement le son principal et du flux audio de NVDA ,
+  - établir manuellement ou automatiquement le son principal et celui du flux audio de NVDA ,
+  - modifier le niveau du volume principal ou celui du flux audio de l'application sous le focus,
  - [Outils pour le  développement d'extensions #hdr22]:
   - création du fichier buildVars.py à partir du fichier manifest.ini de l'extension,
   - mise à jour du fichier manifest.ini à partir des informations du fichier buildVars.py,
-  - création du fichier manifest.ini local pour une ou toutes les langues supportées par l'extension,
+  - création du fichier manifest.ini de localisation pour une ou toutes les langues supportées par l'extension,
   - création de la documentation HTML de l'extension pour une ou toutes les langues,
   - préparation de l'extension,
   - exploration du dossier de l'extension,
@@ -149,7 +159,8 @@ Cette extension ajoute aux commandes globales de NVDA:
  - [Signalement par un son de l'inscription d'une erreur dans le journal de NVDA #hdr300],
  - [Rétablissement automatique du volume principal et de NVDA au chargement de l'extension #hdr301],
  - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
- - [configuration de la temporisation d'attente de répétition du même geste de commande #hdr303].
+ - [configuration de la temporisation d'attente de répétition du même geste de commande #hdr303],
+ - [utilisation possible des touches du pavé numérique comme touches de direction (fonctionnement normal du clavier) #hdr304].
 - et les autres améliorations:
  - [menu pour explorer le dossier de configuration de l'utilisateur ou le dossier programme de NVDA#hdr202],
  - [présentation des informations de mise en forme du texte dans une boite de dialogue  en lieu et place d'un document HTML #hdr203],
@@ -176,11 +187,11 @@ Cette configuration est enregistrée de deux manières suivant la fonctionnalit�
 - dans le fichier NVDA.ini ou le fichier du profil de configuration du profil déclenché au moment de la modification pour la configuration qui sera utilisée uniquement lorsque ce profil sera déclenché.
 
 
-NVDA offre l'option "Sauvegarder la configuration en quittant" (voir manuel utilisateur de NVDA) qui permet de  sauvegarder automatiquement la configuration de NVDA en quittant ou en redémarrant NVDA. Si cette option n'est pas cochée, la configuration n'est sauvegardée que sur action de l'utilisateur.
+NVDA offre l'option "Sauvegarder la configuration en quittant" (voir manuel utilisateur de NVDA) qui permet de  sauvegarder automatiquement la configuration de NVDA en quittant ou en redémarrant NVDA. Si cette option n'est pas cochée, la configuration n'est sauvegardée que sur action de l'utilisateur ou sur modification concernant un paramètre nécessitant le redémarrage de NVDA.
 
 Cette extension suit ce mode de fonctionnement.
 
-Certaines modifications de paramètres de l'extension nécessite la sauvegarde de la configuration et le redémarrage de NVDA. Dans ce cas, il est proposé à l'utilisateur la sauvegarde et le redémarrage immédiat.
+Certaines modifications de paramètres de l'extension nécessite la sauvegarde de la configuration et le redémarrage de NVDA. Dans ce cas, il est proposé à l'utilisateur la sauvegarde et le redémarrage immédiat comme le fait NVDA lorsque il y a changement du langage.
 
 
 Lors de la désinstallation de l'extension, son fichier de configuration est supprimé et la configuration de l'extension est effacée de tous les profils de configuration.
@@ -929,6 +940,8 @@ L'activation ou la désactivation de la rémanence  est signalé vocalement.
 Quand la rémanence  est activée,  l'appui sur une des touches NVDA ou de modification déclenche une temporisation  et la touche est mémorisée.
 Cette temporisation est configurable par l'option "durée de la rémanence des touches" de la catégorie "Rémanence des touches".
 
+Il est aussi possible de limiter la rémanence à la seule touche "NVDA" en cochant la case à cocher  "Seule la touche NVDA est rémanente" située dans la même catégorie. Par défaut, cette case n'est pas cochée et toutes les touches de modification sont rémanentes.
+
 Le début et la fin de cette rémanence est signalée par un bip qui peut être désactivé à l'aide des cases à cocher suivantes de la catégorie "Rémanence des touches":
 - Émettre  un bip au démarrage de la rémanence d'une touche,
 - Émettre  un bip à la fin de la rémanence d'une touche.
@@ -1027,7 +1040,7 @@ Elle ne peut fonctionner que sous le système d'exploitation Windows 10.
 
 Elle place la catégorie "Contrôle du son" dans le dialogue "Paramètres".
 
-Elle installe aussi deux scripts rangés dans la catégorie "État système" du dialogue "gestes de commande" de NVDA:
+Elle installe les scripts suivants rangés sous la catégorie "Contrôle du son" dans le dialogue "Gestes de commandes":
 
 +++ Établir manuellement le son principal et du flux audio de NVDA +++
 Ce script se lance:
@@ -1045,6 +1058,41 @@ Ce script se lance:
 
 Cette commande coupe le son du flux audio de l'application placée sous le focus s'il est établi ou le rétablit  s'il est coupé.
 
++++ Modifier le volume du   flux audio de l'application sous le focus +++
+Ces scripts permettent d'augmenter, diminuer, maximiser ou minimiser le volume du flux de  l'application présente sous le focus.
+
+Ils sont installés sans gestes de commandes. Mais il est toujours possible de leur en attribuer avec le dialogue "Gestes de commandes".
+
+Ils se lancent à l'aide des commandes suivantes de  l'interpréteur:
+- "KEY_APP_VOLUME_UP" ou "KEY_APP_VOLUME_DOWN" pour augmenter ou diminuer le volume,
+- "KEY_APP_VOLUME_MAX" ou "KEY_APP_VOLUME_MIN" pour maximiser ou minimiser le volume.
+
+
+Ces commandes , contrairement aux  autres commandes de l'interpréteur, peuvent être répéter sans être obliger de relancer  celui-ci. L'interpréteur reste toujours actif.
+ Une fois le niveau de volume fixé, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
+ 
+L'augmentation ou la diminution du volume se fait par pas.  Il est possible de régler la taille de ces pas dans les paramètres de l'extension  sous la catégorie "Contrôle du son", en choisissant la taille du pas.
+La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. la taille est réglé sur 5, ce qui correspond  à environ 3% de  variation du volume dans le contrôle du volume de Windows.
+
+La modification du volume est signalée  vocalement par des messages comme: "Plus for, moins fort, "Au maximum", "Au minimum". Mais  ceci peut être empêché à l'aide de l'option "Annoncer les modifications de volume" située dans la même catégorie. Cette option est sélectionnée par défaut.
+
++++ Modifier le volume principal +++
+Ces scripts permettent d'augmenter, diminuer, maximiser ou minimiser le volume principal.
+
+Ils sont installés sans gestes de commandes. Mais il est toujours possible de leur en attribuer avec le dialogue "Gestes de commandes".
+
+Ils se lancent à l'aide des commandes suivantes de  l'interpréteur:
+- "KEY_MAIN_VOLUME_UP" ou "KEY_MAIN_VOLUME_DOWN" pour augmenter ou diminuer le volume,
+- "KEY_MAIN_VOLUME_MAX" ou "KEY_MAIN_VOLUME_MIN" pour maximiser ou minimiser le volume.
+
+
+Ces commandes , contrairement aux  autres commandes de l'interpréteur, peuvent être répéter sans être obliger de relancer  celui-ci. L'interpréteur reste toujours actif.
+ Une fois le niveau de volume fixé, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
+ 
+L'augmentation ou la diminution du volume se fait par pas.  Il est possible de régler la taille de ces pas dans les paramètres de l'extension  sous la catégorie "Contrôle du son", en choisissant la taille du pas.
+La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. Par défaut, la taille est réglé sur 5, ce qui correspond à environ 3% de variation du volume dans le contrôle du volume de Windows.
+
+La modification du volume est signalée  vocalement par des messages comme: "Plus for, moins fort, "Au maximum", "Au minimum". Mais  ceci peut être empêché à l'aide de l'option "Annoncer les modifications de volume" située dans la même catégorie. Cette option est sélectionnée par défaut.
 
 ++  Scripts pour Cliquer   à la position courante de l'objet navigateur ++[hdr23]
 Ces scripts permettent de faire, avec le bouton droit ou gauche de la souris, un simple ou un double clic à la position courante de l'objet navigateur.
@@ -1065,7 +1113,7 @@ Ces gestes de commandes peuvent être modifiés et se trouvent dans la catégori
 
 
 
-++Compléments concernant la date et l'heur ++[hdr24]
+++ Compléments concernant la date et l'heur ++[hdr24]
 Cette fonctionnalité est installée par défaut sans geste de commande.
 
 Attention: installée  avec geste de commande, cette fonctionnalité peut être  en conflit avec l'extension "Clock" car le geste de commande "nvda+f12" est en commun.
@@ -1116,7 +1164,7 @@ L'activation de ce script fait apparaitre  un dialogue présentant:
 - un bouton pour créer, pour l'extension sélectionnée, le fichier catalogue (.pot),
 - un bouton pour préparer l'extension sélectionnée (exécute  en une seule fois plusieurs actions),
 - la liste des langages supportés par   l'extension sélectionnée,
-- un bouton pour créer, pour l'extension sélectionnée,  le fichier local "manifest.ini" pour une   ou toutes les langues qu'il supporte,
+- un bouton pour créer, pour l'extension sélectionnée,  le fichier "manifest.ini" de localisation pour une   ou toutes les langues qu'il supporte,
 - un bouton pour créer, pour l'extension sélectionnée, ses fichiers de documentation en HTML,
 - un bouton pour créer, pour l'extension sélectionnée, le fichier "buildVars.py" à partir des informations de son fichier manifest.ini,
 - un bouton pour ouvrir dans l'explorateur le dossier de l'extension  sélectionnée.
@@ -1129,13 +1177,13 @@ Ce modèle est aussi utilisé pour  permettre la traduction des chaines de carac
 
 L'objectif de ce modèle est, quand une extension a été mise  au point, par simple commande et après avoir renseigné le fichier "buildVars.py" de:
 - créer le fichier manifest.ini",
-- créer tous les fichiers locaux manifest.ini,
+- créer tous les fichiers "manifest.ini" de localisation,
 - compiler  tous les fichiers .po,
 - créer les fichiers html de documentation,
 - enfin créer le fichier .nvda-addon d'installation de l'extension.
 
 
-Quand on crée une extension,  il n'y a rien. Il faut par soi-même créer  le fichier "manifest.ini», éventuellement le fichier local "manifest.ini" et le fichier de documentation.
+Quand on crée une extension,  il n'y a rien. Il faut par soi-même créer  le fichier "manifest.ini", éventuellement le fichier "manifest.ini" de localisation et le fichier de documentation.
 
 L'objectif de ces outils se place dans cette condition et est:
 - d'une part, de se rapprocher du modèle "adon scons template" pour qu'il soit assez facile de packager l'extension  que l'on a fini de mettre au point,
@@ -1165,12 +1213,12 @@ Le fichier "manifest.ini" doit être mis à jour dès que le fichier "buildVars.
 
 Utiliser le bouton "Mettre à jour le fichier manifest.ini" pour cela.
 
-+++ Création de fichier local manifest.ini +++
++++ Création de fichier  "manifest.ini" de localisation +++
 Toute modification de l'information "addon_summary" ou "addon_description"  du fichier "buildVars.py" nécessite la traduction de cette description dans chaque langue supportée par l'extension (prise en compte dans le fichier nvda.po et compilation de ce fichier).
 
-Pour que le gestionnaire d'extensions présente ces  informations à l'utilisateur pour la langue  choisie pour NVDA, il faut créer  ou mettre à jour le fichier local "manifest.ini" pour cette langue.
+Pour que le gestionnaire d'extensions présente ces  informations à l'utilisateur pour la langue  choisie pour NVDA, il faut créer  ou mettre à jour le fichier "manifest.ini" de localisation pour cette langue.
 
-Le bouton "Créer le fichier  manifest.ini local" permet cela. Il est possible de mettre à jour le fichier pour la langue sélectionnée ou pour toutes les langues.
+Le bouton "Créer le fichier  manifest.ini de localisation" permet cela. Il est possible de mettre à jour le fichier pour la langue sélectionnée ou pour toutes les langues.
 
 +++ Créer la documentation HTML +++
 Les fichiers de La documentation de l'extension peuvent être soit au format  "markdown"(.md) soit au format "txt2tags" (.t2t).
@@ -1190,7 +1238,7 @@ Une fois créé, ce fichier est placé dans le dossier "locale\en" de l'extensio
 +++ Préparation de l'extension +++
 Le bouton "Préparer l'extension" lance, pour l'extension sélectionnée, l'exécution des actions suivantes:
 - mise à jour de son fichier "manifest.ini" à partir du fichier "buildVars.py",
-- création du fichier "manifest.ini" local pour chaque  langue supportée,
+- création du fichier "manifest.ini" de localisation pour chaque  langue supportée,
 - création des fichiers HTML de documentation,
 - création du fichier catalogue.
 
@@ -1295,6 +1343,37 @@ Pour un script réalisant trois actions différentes, le mécanisme est :
 
 Suivant la dextérité de l'utilisateur ou la configuration matérielle, cette temporisation peut être trop longue ou trop courte.
 L'option intitulée "Temporisation d'attente de répétition du même geste de commande"  de la catégorie "Avancés" du dialogue "Paramètres" de l'extension permet d'ajuster cette temporisation suivant le besoin.
+++ Utilisation des touches de direction du pavé numérique ++[hdr304]
+Par défaut, NVDA utilise, pour toutes dispositions de clavier, les touches de direction du pavé numérique pour activer les scripts de revue de texte. Ce sont les touches nommées "pavnum" suivi d'un chiffre (compris entre 1 et 4 et 6 et 9).
+Pour une disposition de clavier d'ordinateur portable, NVDA propose d'autres touches pour activer ces scripts car en principe il n'y a pas de pavé numérique.
+Cette option répond à deux situations:
+- l'utilisateur est sur ordinateur de bureau avec un clavier avec pavé numérique et  préfère la disposition de clavier "ordinateur portable" de NVDA,
+-l'utilisateur est sur un ordinateur portable avec pavé numérique, mais les touches de direction sont très mal placées.
+
+
+Dans les deux cas, le pavé numérique est utilisé en doublon par NVDA.
+
+Le but de cette option est de rendre   à chaque  touche de direction du pavé numérique son fonctionnement normal, composé seule ou avec une touche de modification comme "control", "alt","majuscule" (La touche "NVDA" est exclue).
+Ces touches  sont:
+- les touches "flèches droite et gauche",
+- les touches "flèches haut et bas",
+- les  touches "page précédente et suivante",
+- les touches "début et fin".
+
+
+Cette extension installe un script dont la description est "Activer ou désactiver les touches de direction du pavé numérique ". Aucun geste de commande ne lui est affecté.
+
+Il se lance à l'aide de la commande "KEY_TOGGLE_NUMPAD_NAVIGATION" de l'interpréteur de commande et permet d'activer ou désactiver les touches de direction du pavé numérique.
+
+Chaque déclenchement  de ce script active ou désactive  le fonctionnement des touches de direction.
+
+L'option "Autoriser le basculement vers l'utilisation normale des touches de direction du pavé numérique"  de la catégorie "Options avancées" control ce script. Si cette option n'est pas cochée, les touches de direction ne peuvent pas être activées.
+
+L'option "Activer les touches de direction  du pavé numérique au démarrage de NVDA " de la même catégorie, permet, si elle est cochée, d'activer les touches  de direction du pavé numérique dès le démarrage de NVDA. Mais il faut aussi que la précédente option soit cochée.
+
+
+
+
 
 
 + Autres améliorations +
@@ -1334,7 +1413,7 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 
 + Résumé des commandes apportées par cette extension +
 ++ Gestes de commande installés systématiquement ++
-
+| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | KEY_SHELL | KEY_SHELL | Aucun | Lancer l'interpréteur de commandes de l'extension |
 
 ++ Commandes de l'interpréteur ++
@@ -1349,6 +1428,7 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 | KEY_SELECTIVE_ANNOUNCEMENT | Afficher le dialogue pour configurer les annonces sélectives des touches de commandes |
 | KEY_COMPLEX_SYMBOL | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
 | KEY_LAST_USED_COMPLEX_SYMBOL | Afficher la liste des derniers symboles complexes composés |
+| KEY_TOGGLE_NUMPAD_NAVIGATION | Activer ou désactiver les touches de direction du pavé numérique |
 | KEY_DISPLAY_SPEECH_HISTORY |  Afficher les enregistrements de l'historique vocal |
 | KEY_WINDOWS_LIST | Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 | KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
@@ -1430,10 +1510,17 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 | Association du profil vocal | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Associer le profil vocal courant  au sélecteur courant. Deux appuis: libérer le sélecteur de son profil vocal associé. Trois appuis: libérer tous les sélecteurs de leur profil vocal associé  |
 
 +++ Contrôle du son +++
-
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Établir son | MAIN_KEY_VOLUME_ON | MAIN_KEY_VOLUME_ON | Aucune | Établir le son principal et de NVDA |
 | Couper volume | MAIN_KEY_TOGGLE_MUTE | MAIN_KEY_TOGGLE_MUTE | aucune | Couper ou établir le son pour l'application sous le focus |
+| Augmenter volume principal | KEY_MAIN_VOLUME_UP | KEY_MAIN_VOLUME_UP | Aucune | Augmenter le volume principal |
+| Diminuer volume principal | KEY_MAIN_VOLUME_DOWN | KEY_MAIN_VOLUME_DOWN | Aucune | Diminuer le volume principal |
+| Maximiser volume principal | KEY_MAIN_VOLUME_MAX | KEY_MAIN_VOLUME_MAX | Aucune | Maximiser le volume principal |
+| Minimiser volume principal | KEY_MAIN_VOLUME_MIN | KEY_MAIN_VOLUME_MIN | Aucune | Minimiser le volume principal |
+| Augmenter volume application | KEY_APP_VOLUME_UP | KEY_APP_VOLUME_UP | Aucune | Augmenter le volume de l'application sous le focus |
+| Diminuer volume application | KEY_APP_VOLUME_DOWN | KEY_APP_VOLUME_DOWN | Aucune | Diminuer le volume de l'application sous le focus |
+| Maximiser volume application | KEY_APP_VOLUME_MAX | KEY_APP_VOLUME_MAX | Aucune | Maximiser le volume de l'application sous le focus |
+| Minimiser volume application | KEY_APP_VOLUME_MIN | KEY_APP_VOLUME_MIN | Aucune | Minimiser le volume de l'application sous le focus |
 
 +++ Date et heure- compléments +++
 

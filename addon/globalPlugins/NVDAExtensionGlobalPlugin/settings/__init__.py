@@ -51,10 +51,7 @@ def toggleOption (id, toggle = True):
 	sct = SCT_Options
 	if toggle:
 		conf[sct][id] = not conf[sct][id]
-		_addonConfigManager.saveSettings()
 	return conf[sct][id]
-	
-
 
 def toggleReportNextWordOnDeletionOption (toggle = True):
 	return toggleOption(ID_ReportNextWordOnDeletion   , toggle)
@@ -77,7 +74,6 @@ def toggleAdvancedOption (id, toggle = True):
 	sct = SCT_AdvancedOptions
 	if toggle:
 		conf[sct][id] = not conf[sct][id]
-		_addonConfigManager.saveSettings()
 	return conf[sct][id]
 	
 
@@ -88,18 +84,30 @@ def toggleBeepAtRemanenceEndAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_BeepAtRemanenceEnd,toggle)
 def toggleSetOnMainAndNVDAVolumeAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_SetOnMainAndNVDAVolume,toggle)
+def toggleReportVolumeChangeAdvancedOption(toggle = True):
+	return toggleAdvancedOption(ID_ReportVolumeChange,toggle)
+
 def toggleDialogTitleWithAddonSummaryAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_DialogTitleWithAddonSummary,toggle)
 
 def toggleByPassNoDescriptionAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_ByPassNoDescription,toggle)	
+def toggleOnlyNVDAKeyInRemanenceAdvancedOption (toggle = True):
+	return toggleAdvancedOption(ID_OnlyNVDAKeyInRemanence,toggle)
 def toggleRemanenceAtNVDAStartAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_RemanenceAtNVDAStart,toggle)
 def toggleRemanenceForGmailAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_RemanenceForGmail,toggle)
+def toggleEnableNumpadNavigationModeToggleAdvancedOption (toggle = True):
+	return toggleAdvancedOption(ID_EnableNumpadNavigationModeToggle,toggle)
+def toggleActivateNumpadNavigationModeAtStartAdvancedOption (toggle = True):
+	return toggleAdvancedOption(ID_ActivateNumpadNavigationModeAtStart,toggle)
+
+
+
 
 class AddonConfigurationManager():
-	_currentConfigVersion = "2.4"
+	_currentConfigVersion = "2.5"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
 		"1.9" : AddonConfiguration19,
@@ -107,7 +115,8 @@ class AddonConfigurationManager():
 		"2.1" : AddonConfiguration21,
 		"2.2" : AddonConfiguration22,
 		"2.3" : AddonConfiguration23,
-				"2.4" : AddonConfiguration24,
+		"2.4" : AddonConfiguration24,
+		"2.5" : AddonConfiguration25,
 		}
 	def __init__(self, ) :
 		global _addonConfigManager
@@ -115,8 +124,34 @@ class AddonConfigurationManager():
 		self.addonName = self.curAddon.manifest["name"]
 		from keyLabels import localizedKeyLabels
 		self.basicLocalizedKeyLabels = localizedKeyLabels.copy()
+		self.restoreAddonProfilesConfig(self.addonName)
 		self.loadSettings()
 		self.setIsTestVersionFlag()
+		config.post_configSave.register(self.handlePostConfigSave)
+
+
+	def restoreAddonProfilesConfig(self, addonName):
+		conf = config.conf
+		save = False
+		if "%s-temp"%addonName in conf.profiles[0]:
+			log.warning("restoreAddonProfilesConfig profile[0]")
+			conf.profiles[0][addonName] = conf.profiles[0]["%s-temp"%addonName].copy()
+			del conf.profiles[0]["%s-temp"%addonName]
+			save = True
+		profileNames = []
+		profileNames.extend(config.conf.listProfiles())
+		for name in profileNames:
+			profile = config.conf._getProfile(name)
+			if profile.get("%s-temp"%addonName):
+				log.warning("restoreAddonProfilesConfig: profile %s"%name)
+				profile[addonName] = profile["%s-temp"%addonName].copy()
+				del profile["%s-temp"%addonName]
+				config.conf._dirtyProfiles.add(name)
+				save = True
+		# We save the configuration, in case the user would not have checked the "Save configuration on exit" checkbox in General settings.
+		if save and config.conf['general']['saveConfigurationOnExit']:
+			config.conf.save()
+	
 	
 	def loadSettings(self):
 		addonConfigFile = os.path.join(globalVars.appArgs.configPath, self._configFileName)
@@ -155,8 +190,8 @@ class AddonConfigurationManager():
 			if doMerge:
 				self.mergeSettings(oldConfigFile)
 			os.remove(oldConfigFile)
-		#create or update config file
-		self.saveSettings()
+		if not os.path.exists(addonConfigFile):
+						self.saveSettings(True)
 	
 	def setDefaultVolumeControl(self):
 		from ..volumeControl import getSpeakerVolume, getNVDAVolume
@@ -217,8 +252,10 @@ class AddonConfigurationManager():
 		for sect in[SCT_RedefinedKeyLabels, ]: 
 			if sect in oldConfig.sections:
 				self.addonConfig[sect] = oldConfig[sect]
-
-		self.saveSettings()
+	
+	def handlePostConfigSave(self):
+		self.saveSettings(True)
+	
 	def saveSettings(self, force= False):
 		#We never want to save config if runing securely
 		if globalVars.appArgs.secure: return
@@ -234,19 +271,15 @@ class AddonConfigurationManager():
 			return
 		try:
 			self.addonConfig.write()
+			log.warning("add-on configuration saved")
 		except:
-			log.warning("Could not save configuration - probably read only file system")
-	
-	def saveConf(self):
-		# We save the configuration, in case the user would not have checked the "Save configuration on exit" checkbox in General settings.
-		if not config.conf['general']['saveConfigurationOnExit']:
-			config.conf.save ()
+			log.warning("Could not save add-on configuration - probably read only file system")
 	
 	def terminate(self):
+		log.warning("addonConfigManager terminate")
 		self.saveSettings()
-
-
-
+		config.post_configSave.unregister(self.handlePostConfigSave)
+	
 	def saveRedefinedKeyLabels(self, keyLabels):
 		from languageHandler import curLang
 		lang = curLang.split("-")[0]
@@ -260,10 +293,7 @@ class AddonConfigurationManager():
 		conf[SCT_RedefinedKeyLabels][lang]  = {}
 		for keyName in keyLabels:
 			conf[SCT_RedefinedKeyLabels][lang] [keyName] = keyLabels[keyName]
-		self.saveSettings()
-			
-
-		
+	
 	def getRedefinedKeyLabels(self):
 		from languageHandler import curLang
 		lang = curLang.split("-")[0]
@@ -273,7 +303,7 @@ class AddonConfigurationManager():
 			if len(labels):
 				return labels
 		return {}
-	# 
+	
 	def saveCommandKeysSelectiveAnnouncement(self, keysDic,speakCommandKeysOption):
 		conf = config.conf
 		addonName = self.addonName
@@ -284,7 +314,6 @@ class AddonConfigurationManager():
 			conf[addonName][SCT_CommandKeysAnnouncement] = {}
 		
 		conf[addonName][SCT_CommandKeysAnnouncement][sectName] = keysDic.copy()
-		self.saveSettings()
 		
 	def getCommandKeysSelectiveAnnouncement (self, speakCommandKeysOption):
 		conf = config.conf
@@ -312,7 +341,7 @@ class AddonConfigurationManager():
 				and SCT_CommandKeysAnnouncement in profile[self.addonName]):
 				del profile[self.addonName][SCT_CommandKeysAnnouncement ]
 				config.conf._dirtyProfiles.add(name)
-		self.saveConf()
+		#self.saveConf()
 	
 	def reDefineKeyboardKeyLabels(self):
 		from keyLabels import localizedKeyLabels 
@@ -371,7 +400,7 @@ class AddonConfigurationManager():
 				and sct in profile[self.addonName]):
 				del profile[self.addonName][sct]
 				config.conf._dirtyProfiles.add(name)
-		self.saveConf()
+		#self.saveConf()
 	
 	def getLastUsedSymbolsSection(self, profileName):
 		if profileName is None:
@@ -464,7 +493,7 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		conf[SCT_MinuteTimer][ID_RingCount] = ringCount
 		conf[SCT_MinuteTimer][ID_DelayBetweenRings] = delayBetweenRings
-		self.saveSettings()
+	
 	def getLastMinuteTimerDatas(self):
 			conf = self.addonConfig
 			return (conf[SCT_MinuteTimer][ID_LastDuration], conf[SCT_MinuteTimer][ID_LastAnnounce], conf[SCT_MinuteTimer][ID_LastDelayBeforeEndDuration])
@@ -474,7 +503,6 @@ class AddonConfigurationManager():
 		conf[SCT_MinuteTimer][ID_LastDuration] = lastDuration
 		conf[SCT_MinuteTimer][ID_LastAnnounce] = lastAnnounce
 		conf[SCT_MinuteTimer][ID_LastDelayBeforeEndDuration] = lastDelayBeforeEndDuration
-		self.saveSettings()
 	
 	def saveSymbolLevelOnWordCaretMovement(self, level):
 		#We never want to save config if runing securely
@@ -487,7 +515,6 @@ class AddonConfigurationManager():
 			conf[self.addonName][SCT_Options] = {}
 		
 		conf[self.addonName][SCT_Options][ID_SymbolLevelOnWordCaretMovement] = str(level) if level is not None else "None"
-		self.saveSettings()
 	
 	def getSymbolLevelOnWordCaretMovement(self):
 		conf = config.conf
@@ -508,9 +535,8 @@ class AddonConfigurationManager():
 			conf[SCT_AdvancedOptions][ID_PlaySoundOnErrors] = option
 		else:
 			conf[SCT_AdvancedOptions][ID_PlaySoundOnErrors] = PSOE_SnapshotVersions
-		self.saveSettings()
 		self.setIsTestVersionFlag(option)
-	
+		
 	def getIsTestVersionFlag(self):
 		return buildVersion.isTestVersion
 		
@@ -571,6 +597,13 @@ class AddonConfigurationManager():
 	def setNVDAVolumeLevel(self, level):
 		self.addonConfig[SCT_AdvancedOptions][ID_NVDAVolumeLevel] = level
 	
+	
+	def getVolumeChangeStepLevel(self):
+		return self.addonConfig[SCT_AdvancedOptions][ID_VolumeChangeStepLevel] 
+	
+	def setVolumeChangeStepLevel(self, level):
+		self.addonConfig[SCT_AdvancedOptions][ID_VolumeChangeStepLevel] = level
+
 	
 	def getDelayBetweenSameGesture(self):
 		conf = self.addonConfig

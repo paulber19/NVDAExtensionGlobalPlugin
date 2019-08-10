@@ -4,7 +4,7 @@ Autor: paulber19 (paulber19@laposte.net)  con la participación de Daniel Poirau
 
 %!Target: html
 %!Encoding: UTF-8
-%!style:..\style.css
+%!style:..\style_t2t.css
 %!Options: --toc
 % Remove the Table of Contents heading from the toc.
 %!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
@@ -19,38 +19,71 @@ Autor: paulber19 (paulber19@laposte.net)  con la participación de Daniel Poirau
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
 
 
-+ v8.0 (05/01/2019) + 
-- se ha añadido la posibilidad de permitir la persistencia de las claves en la puesta en marcha de NVDA. 
-- además de la remanencia específica para el sitio gmail.com. 
-- la reorganización del menú "configuración". 
-- nuevas herramientas para el desarrollo de add-on basado en un archivo buildVars.py 
-- actualizar el archivo de manifiesto.ini, 
-- creación del archivo local de manifiesto.ini, 
-- creación del archivo .bote, 
-- creación del archivo buildVars.py, 
-- preparación del módulo, 
-- explorar la carpeta del módulo. 
++ v8.1 (05/05/2019) +
+Nueva características:
+- Posibilidad de limitar la remanencia a la única tecla "NVDA".
+- Suplementos para la funcionalidad "Control de sonido":
+ - Aumentar, disminuir, maximizar o minimizar el volumen de la aplicación enfocada,
+ - Aumentar, disminuir, maximizar o minimizar el volumen principal,
+ - Agrupación de estos gestos de entrada en la categoría "control de sonido",
+- Posibilidad de usar las teclas del teclado numérico como las teclas de flechas (funcionamiento normal de Windows).
+
+
+Corección de Fallos:
+- Funcionalidad "Herramientas de desarrollo": Se ah correjido  la mala   tenída en cuenta de los sub-idiomas para la creación de la documentación de  un complemento.
+
+
++ v8.0 (13/02/2019) +
+Nueva características:
+- En el cuadro de diálogo "Lista de elementos visibles que componen el objeto en primer plano", posibilidad de cambiar el tipo de objeto sin salir de la lista de objetos.
+- Se ha añadido la posibilidad de habilitar la remanencia de las teclas al iniciar NVDA.
+- Se ha añadido la remanencia específica para el sitio gmail.com.
+- Reorganización del submenú "Opciones" .
+- Se ha añadido la funcionalidad "fecha y hora - suplemento" que agrupa la copia de la fecha y la hora al portapapeles (con "nvda + f12"), el anuncio de la hora con los segundos y el anuncio de la Fecha y hora sin la puntuación.
+- Nuevo script "Copiar fecha y hora" en el intérprete de órdenes.
+- Reestructuración de la funcionalidad "Cambio de perfil de voz" para la elección de los selectores en un perfil de configuración.  La configuración anterior de esta funcionalidad no es compatible y se eliminará la primera vez que uses esta funcionalidad.
+- Posibilidad de mostrar los registros del historial de los anuncios del habla en orden ascendente o descendente.
+- Al desinstalar una funcionalidad, eliminación completa de su configuración,
+- Reestructuración completa de la documentación para usar el término "extension" en lugar de "module complémentaire" (impuesto por los traductores de NVDA en francés),
+- Eliminación del tiempo de espera entre pulsar la tecla para todos los scripts  básicos de NVDA modificados por el complemento.
+
+
+Corección de Fallos:
+- No se muestran todos los gestos de entrada añadidos o eliminados por el usuario (Cuadro de diálogo "Gestos de entrada del usuario").
+
+
+Desarrollo:
+- Preparación para la compatibilidad con Python 3.
+- Nuevas herramientas para el desarrollo de complementos basados en un archivo buildVars.py:
+- Actualizar la versión del complemento en el archivo buildVars.py, 
+- Actualizar el archivo manifest.ini, 
+- Creación del archivo manifest.ini de localización, 
+- Creación de los archivos HTML de documentación,
+- Creación del archivo .pot, 
+- Creación del archivo buildVars.py, 
+- Preparación del complemento, 
+- Explorar la carpeta del complemento. 
 
 
 + v7.4.3 (07/01/2019) +
-- archivo de corrección de teclado.ini español que provocó el bloqueo de NVDA en el idioma español.
-- Traducción al árabe de la interfaz del módulo
+- Correjido el archivo keyboard.ini español que probocava el bloqueo de NVDA en el idioma español.
+- Traducción al árabe de la interfaz del complemento
 
 
 + v7.4.2 (22/12/2018) +
-- Corrección de la documentación 
-- fija la incorrecta colocación de los botones en el cuadro de diálogo "el Último de los símbolos compuestos".
+- Se ha correjido la documentación, 
+- Se ha correjido la ubicación incorrecta de los botones en el cuadro de diálogo "Últimos símbolos compuestos".
 
 
-+ v7.4.1 (221/12/2018) +
-Se ha solucionado el problema de los anuncios en inglés comandos de teclado en braille.
++ v7.4.1 (21/12/2018) +
+Se ha correjido el problema de los anuncios en inglés de las órdenes desde un teclado braille.
 
 + v7.4 (16/12/2018) +
 1- Nueva características:
-- Añadido, para los navegadores "Firefox" y Google Chrome", de tipo  "Clicable" para  el modo de navegación y el cuadro de diálogo "Lista de elementos",
-- Añadido, para los navegadores "Firefox" Internet Explorer, Microsoft Edge y Google Chrome", de tipo "Párrafo " para  el modo de navegación y el cuadro de diálogo "Lista de elementos",
-- Añadido  el script para hacer  un simple  y un double clic izquierdo en la posición actual del navegador de objetos.
-- Añadido  el script para hacer  un simple  y un double clic derecho en la posición actual del navegador de objetos.
+- Añadido, para los navegadores "Firefox" y Google Chrome", de tipo "Cliqueable" para  el modo exploración y el cuadro de diálogo "Lista de elementos",
+- Añadido, para los navegadores "Firefox" Internet Explorer, Microsoft Edge y Google Chrome", de tipo "Párrafo " para el modo exploración y el cuadro de diálogo "Lista de elementos",
+- Añadido  el script para hacer un simple y un doble clic izquierdo en la posición actual del navegador de objetos.
+- Añadido el script para hacer un simple y un doble clic derecho en la posición actual del navegador de objetos.
 
 
 2- Varios:
@@ -64,16 +97,16 @@ Finalización de la puesta en compatibilidad con NVDA 2018.3 y con wxPython 4.
 - Nueva características:
  - Almacenados los últimos símbolos y cuadros de diálogo para mostrarlos y recomponerlos,
  - El nuevo cuadro de diálogo Herramientas de desarrollo que permite la posibilidad de convertir los archivos de documentación de los complementos,
- - Añadido el tipo de elemento "Punto de referencia principal" para el modo de navegación (navegador Firefox, Internet Explorer, Google Chrome y Microsoft Edge),
+ - Añadido el tipo de elemento "Región principal" para el modo de navegación (navegador Firefox, Internet Explorer, Google Chrome y Microsoft Edge),
  - Añadida la opción avanzada para configurar el retardo de espera de repetición del mismo gesto de entrada,
  - Desactivación bajo la opción de parámetro "Anunciar Descripciones de Objeto" mientras se muestran los cuadros de diálogo de estilo de confirmación (mostrados por gui.messageBox) para que NVDA anuncie el mensaje contenido en estos cuadros,
- - Añadida la opción para la navegación en bucle en el documento en la búsqueda de un elemento anterior o siguiente,
+ - Añadida la opción para navegar en bucle en el documento en la búsqueda de un elemento anterior o siguiente,
  - Añadido un pitido repetitivo al buscar elementos en el cuadro de diálogo "Lista de elementos" (NVDA+f7),
  - Colocación del botón "Hibernar" en primer lugar en el cuadro de diálogo "Apagar el ordenador",
  - El menú de configuración del complemento cambió para parecerse al menú de configuración de NVDA,
 
 
-- Corección de Errores:
+- Corección de Fallos:
  - Corrección de las etiquetas de lista de opciones de los diálogos de configuración del complemento.
  - Corrección de la no interrupción del pitido al buscar elementos de la ventana en primer plano en la interrupción de escape,
   - Problema de pie de página cuando la conversión incorrecta de un documento t2t (modificación del archivo txt2tags.py y supresión del pie de página).
@@ -87,7 +120,7 @@ Finalización de la puesta en compatibilidad con NVDA 2018.3 y con wxPython 4.
 
 + v7.2 (20 de Junio de 2018) +
 - Puesta en compatibilidad con las versiones de desarrollo de NVDA que se preparan para la transición a wxPython 4 (NVDA 2018.3),
-- Se corrigió un error al destruir la última ventana en la lista de ventanas.
+- Correjido un  fallo al destruir la última ventana en la lista de ventanas.
 - Se añadió una opción para deshabilitar la numeración de los registros del historial de los anuncios del habla,
 - Se añadió una opción para titular o no los diálogos con el nombre del complemento,
 - Desactivación del parámetro "Anunciar Descripciones de Objeto" mientras se muestran los cuadros de diálogo del complemento, de estilo gui.messageBox, para escuchar el mensaje contenido en estos cuadros.
@@ -97,7 +130,7 @@ Finalización de la puesta en compatibilidad con NVDA 2018.3 y con wxPython 4.
 Corrección que no tenía en cuenta la configuración del complemento para la funcionalidad "Remanencia de teclas".
 
 + v7.1.1 (5 de Junio de 2018) +
-Se ha solucionado el problema de no poder leer el resultado del reconocimiento óptico.
+Se ha correjido el problema de no poder leer el resultado del reconocimiento óptico.
 
 + v7.1 (1 de Junio de 2018) +
 Puesta en compatibilidad con NVDA 2018.2
@@ -128,7 +161,7 @@ Esta versión del complemento no es compatible con versiones anteriores a la ver
 - La documentación ha sido reorganizada: el capítulo "Historial" se mueve al capítulo "Generalidades" y el historial del complemento se coloca en un archivo separado (change.html).
 
 
-++ Corección de Errores ++
+++ Corección de Fallos ++
 - Corrección de las descripciones erróneas de los gestos de entrada de los scripts que reemplazan a los scripts básicos,
 - En la corrupción del archivo de configuración, restableciendo la configuración a los valores predeterminados.
 
@@ -177,7 +210,7 @@ Corrección de fallo:
 
 
 + v6.1 (10 de Enero de 2017) +
-- Configuración del nivel de símbolos y puntuación al moverse por palabra,
+- Configuración del nivel de símbolos y puntuación al moverse por palabras,
 - Nuevo cambio de la órden de teclado para el temporizador,
 - Corrección de la no copia de la dirección del documento al portapapeles ("NVDA+a")
 
@@ -197,7 +230,7 @@ Corrección de fallo en el anuncio de puntuación palabra por palabra.
 - script para reiniciar NVDA,
 - script para mostrar los elementos visibles que componen el objeto en primer plano,
 - Cambio de órden de teclado para lanzar el temporizador,
-- Anuncia la puntuación al moverse por palabra,
+- Anuncia la puntuación al moverse por palabras,
 - Rediseño de todos los diálogos para explotar los servicios de guiHelper,
 - Compatibilidad con NVDA 2016.4.
 
@@ -302,7 +335,7 @@ Corrección de fallos:
 
 
 + v3.4 (28 de Noviembre de 2014) +
-- Modificación del acceso directo "nvda+control+v" ya se utiliza en "nvda+shift+f1"
+- Modificación del atajo "nvda+control+v" ya se utiliza en "nvda+shift+f1"
 - Limpieza del código
 
 

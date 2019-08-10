@@ -27,7 +27,7 @@ import core
 from inputCore import NoInputGestureAction
 from ..utils.NVDAStrings import NVDAString
 from ..utils import speakLater, makeAddonWindowTitle
-from ..settings import _addonConfigManager, toggleBeepAtRemanenceStartAdvancedOption, toggleBeepAtRemanenceEndAdvancedOption
+from ..settings import _addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption, toggleBeepAtRemanenceEndAdvancedOption, isInstall
 from ..settings.addonConfig import ID_CommandKeysSelectiveAnnouncement , ID_KeyRemanence
 from ..utils.keyboard import getKeyboardKeys
 from keyboardHandler import KeyboardInputGesture
@@ -76,8 +76,11 @@ class MyInputManager (inputCore.InputManager):
 		self.taskTimer = None
 		if _addonConfigManager.getRemanenceAtNVDAStart():
 			self.taskTimer = wx.CallLater(4000, self.toggleRemanenceActivation)
-
+		self.hasPreviousRemanenceActivationOn = False
 		super(MyInputManager , self).__init__()
+		from ..settings import  toggleEnableNumpadNavigationModeToggleAdvancedOption, toggleActivateNumpadNavigationModeAtStartAdvancedOption
+		if toggleEnableNumpadNavigationModeToggleAdvancedOption(False) and toggleActivateNumpadNavigationModeAtStartAdvancedOption(False):
+			self.setNumpadNavigationMode(True)
 	
 	def stopRemanence(self, beep = False):
 		if self.remanenceActivation is False:
@@ -92,7 +95,10 @@ class MyInputManager (inputCore.InputManager):
 	def startRemanence(self, gesture):
 		def endRemanence (gesture):
 			self.stopRemanence(beep = True)
-			gesture.noAction = False
+			if gesture.isNVDAModifierKey:
+				gesture.noAction = True
+			else:
+				gesture.noAction = False
 			queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, gesture)
 		
 		if self.remanenceActivation is False:
@@ -102,8 +108,6 @@ class MyInputManager (inputCore.InputManager):
 				tones.beep(100, 60)
 		else:
 			self.remanenceTimer.Stop()
-		if gesture is not None:
-			gesture.noAction = True
 		self.remanenceTimer = core.callLater(_addonConfigManager.getRemanenceDelay(), endRemanence, gesture)
 	
 	def isRemanenceStarted(self):
@@ -117,8 +121,13 @@ class MyInputManager (inputCore.InputManager):
 			self.TaskTimer = None
 		if self.remanenceActivation is False:
 			self.remanenceActivation = True
-			# Translators: message to user to report keys remanence is on.
-			msg = _("Keys's remanence activation on")
+			if _addonConfigManager.getRemanenceAtNVDAStart() and not self.hasPreviousRemanenceActivationOn:
+				# don's say first activation
+				msg = None
+				self.hasPreviousRemanenceActivationOn = True
+			else:
+				# Translators: message to user to report keys remanence is on.
+				msg = _("Keys's remanence activation on")
 			specialForGmail.initialize()
 		else:
 			self.stopRemanence()
@@ -128,11 +137,16 @@ class MyInputManager (inputCore.InputManager):
 			specialForGmail.terminate()
 		curAddon = addonHandler.getCodeAddon()
 		addonSummary = curAddon.manifest['summary']
-		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, "%s - %s"%(addonSummary, msg))
+		if msg is not None:
+			queueHandler.queueFunction(queueHandler.eventQueue, ui.message, "%s - %s"%(addonSummary, msg))
 	
-	
-	def manageRemanenceActivation(self, modifier):
-		self.lastModifiersForActivation.append(modifier)
+	def manageRemanenceActivation(self, gesture):
+		if not gesture.isModifier:
+			# it's not a modifier key, so forget all previous saved modifiers for activation.
+			self.lastModifiersForActivation = []
+			return False
+		# only modifier key can be in activation sequence
+		self.lastModifiersForActivation.append(gesture)
 		if len(self.lastModifiersForActivation) >5:
 			self.lastModifiersForActivation = self.lastModifiersForActivation[1:]
 		if len(self.lastModifiersForActivation) <3:
@@ -143,38 +157,39 @@ class MyInputManager (inputCore.InputManager):
 			s  = s+","+modifier.mainKeyName
 		if s[1:] not in self.activationSequences:
 			return False
-			
 		self.lastModifiersForActivation = []
 		self.toggleRemanenceActivation()
+		self.stopRemanence()
 		return True
 		
+
+		
+	def isRemanenceKey(self, gesture):
+		if (toggleOnlyNVDAKeyInRemanenceAdvancedOption (False) and gesture.mainKeyName.lower() == "nvda"
+			or not toggleOnlyNVDAKeyInRemanenceAdvancedOption (False)  and gesture.isModifier):
+			return True
+		return False
 	
 	def manageRemanence(self, currentGesture):
-		from ..settings import isInstall
 		if not isInstall(ID_KeyRemanence):
 			return None
 		delayBetweenGestures = time.time() - self.lastGestureTime if self.lastGestureTime else time.time()
 		self.lastGestureTime = time.time()
 		lastGesture = self.lastGesture
 		self.lastGesture = currentGesture
-		if currentGesture.isModifier:
-			# only modifier key can be in activation sequence
-			if self.manageRemanenceActivation(currentGesture):
-				self.stopRemanence()
-				return None
-		else:
-			# it's not a modifier key, so forget all previous saved modifiers for activation.
-			self.lastModifiersForActivation = []
+		if self.manageRemanenceActivation(currentGesture):
+			return None
 		if not self.remanenceActivation:
 			return None
-		if currentGesture.isModifier:
+		if self.isRemanenceKey(currentGesture):
 			# if gesture is the same than last saved modifier , stop remanence
 			if self.isRemanenceStarted() and currentGesture.displayName == self.lastModifiers[-1].displayName:
 				self.stopRemanence(beep = True)
 				return None
 			self.lastModifiers.append(currentGesture)
 			queueHandler.queueFunction(queueHandler.eventQueue, self.startRemanence, currentGesture)
-			currentGesture.noAction = True
+			if not currentGesture.isNVDAModifierKey:
+				currentGesture.noAction = True
 			return None
 		if (currentGesture.mainKeyName.lower() == "capslock" ):
 			self.stopRemanence()
@@ -185,9 +200,16 @@ class MyInputManager (inputCore.InputManager):
 				self.lastModifiersForRepeat = []
 				return None
 		else:
+			if currentGesture.isModifier:
+				self.lastModifiers.append(currentGesture)
+				currentGesture.noAction = True
+				return None
 			#remanence is started, so saved last modifiers for repeat
 			self.lastModifiersForRepeat = self.lastModifiers[:]
 			self.stopRemanence()
+		if len(self.lastModifiersForRepeat ) == 0:
+			return None
+
 		#calculate new gesture with all saved modifier keys
 		modifiers = set()
 		for modifier in self.lastModifiersForRepeat:
@@ -195,9 +217,6 @@ class MyInputManager (inputCore.InputManager):
 		vkCode  = currentGesture.vkCode 
 		scanCode= currentGesture.scanCode 
 		extended = currentGesture.isExtended
-		for modifier in self.lastModifiersForRepeat:
-			extended = extended or modifier.isExtended
-		extended = True
 		newGesture = KeyboardInputGesture(modifiers, vkCode, scanCode, extended)
 		return newGesture
 	
@@ -206,14 +225,51 @@ class MyInputManager (inputCore.InputManager):
 			self.executeGesture(gesture, bypassRemanence = True)
 		except inputCore.NoInputGestureAction:
 			gesture.send()
-
 		except:
 			log.error("internal_keyDownEvent", exc_info=True)
 
+	enableNumpadNnavigationKeys = False
+	
+	def setNumpadNavigationMode(self, state ):
+		self.enableNumpadNnavigationKeys= state
+		if state:
+			# unbind nvda object  navigation script keystroke bound to numpad keys
+			numpadKeyNames = ["kb:numpad%s"%str(x) for x in range(1, 10)]
+			d = {"globalCommands.GlobalCommands": {
+				"None": numpadKeyNames}}
+			self.localeGestureMap.update(d)
+		else:
+			self.loadLocaleGestureMap()
+	
+	def toggleNavigationNumpadMode(self):
+		state = not self.enableNumpadNnavigationKeys
+		self.setNumpadNavigationMode(state)
+		if state:
+			# Translators: message to user to report numpad navigation mode change.
+			msg = _("Nnumeric keypad's arrow keys enabled")
+		else:
+			# Translators: message to user to report numpad navigation mode change.
+			msg = _("Nnumeric keypad's arrow keys disabled")
+		queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage,msg)	
+	def getNumpadKeyReplacement(self, gesture):
+		if not self.enableNumpadNnavigationKeys : return None
+		if gesture.isModifier or "nvda" in gesture.displayName.lower():
+			# excluded modifier key and numpad keys with NVDA modifiers
+			return None
+		numpadKeyNames = ["numpad%s"%str(x) for x in range(1, 10)]
+		numpadKeyNames.remove("numpad5")
+		if gesture.mainKeyName in numpadKeyNames:
+			vkCode  = gesture.vkCode 
+			scanCode= gesture.scanCode 
+			extended = not gesture.isExtended
+			newGesture = KeyboardInputGesture(gesture.modifiers, vkCode, scanCode, extended)
+			return newGesture
+		return None
+		
 	
 	def executeGesture(self, gesture, bypassRemanence = False):
 		"""Perform the action associated with a gesture.
-		@param gesture: The gesture to execute.
+		@param gesture: The gesture to execute
 		@type gesture: L{InputGesture}
 		@raise NoInputGestureAction: If there is no action to perform.
 		"""
@@ -229,7 +285,10 @@ class MyInputManager (inputCore.InputManager):
 			if newGesture is not None:
 				queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, newGesture)
 				return
-		
+			newGesture = self.getNumpadKeyReplacement(gesture)
+			if newGesture is not None:
+				queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, newGesture)
+				return
 		script = gesture.script
 		focus = api.getFocusObject()
 		if focus.sleepMode is focus.SLEEP_FULL or (focus.sleepMode and not getattr(script, 'allowInSleepMode', False)):
@@ -275,16 +334,14 @@ class MyInputManager (inputCore.InputManager):
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, gesture.displayName)
 		
 		gesture.reportExtra()
-	
 		# #2953: if an intercepted command Script (script that sends a gesture) is queued
 		# then queue all following gestures (that don't have a script) with a fake script so that they remain in order.
 		if not script and(bypassRemanence or scriptHandler._numIncompleteInterceptedCommandScripts):
 			script=lambda gesture: gesture.send()
-	
+
 		if script:
 			scriptHandler.queueScript(script, gesture)
 			return
-
 		raise NoInputGestureAction
 		
 	def speakGesture(self, gesture):

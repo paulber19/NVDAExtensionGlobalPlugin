@@ -9,25 +9,53 @@ from logHandler import log
 
 curConfigFileName = "NVDAExtensionGlobalPluginAddon.ini"
 
-def deleteAddonProfilesConfig(addonName):
+def saveAddonProfilesConfig(addonName):
 	import config
 	conf = config.conf
+	save = False
 	if addonName in conf.profiles[0]:
+		log.warning("saveAddonProfilesConfig profile[0]")
+		conf.profiles[0]["%s-temp"%addonName] = conf.profiles[0][addonName].copy()
 		del conf.profiles[0][addonName]
+		save = True
 	profileNames = []
 	profileNames.extend(config.conf.listProfiles())
 	for name in profileNames:
 		profile = config.conf._getProfile(name)
 		if profile.get(addonName):
+			log.warning("saveAddonProfilesConfig: profile %s"%name)
+			profile["%s-temp"%addonName] = profile[addonName].copy()
 			del profile[addonName]
 			config.conf._dirtyProfiles.add(name)
-	log.info("%s: Addon profile configuration  cleared"%addonName)
+			save = True
+			
+	# We save the configuration,if changes
+	if save:
+		config.conf.save()
+
+def deleteAddonProfilesConfig(addonName):
+	import config
+	conf = config.conf
+	save = False
+	if addonName in conf.profiles[0]:
+		log.warning("%s section deleted from profile: normal configuration "%addonName)
+		del conf.profiles[0][addonName]
+		save = True
+	profileNames = []
+	profileNames.extend(config.conf.listProfiles())
+	for name in profileNames:
+		profile = config.conf._getProfile(name)
+		if profile.get(addonName):
+			log.warning("%s  section deleted from profile:%s "%(addonName, name))
+			del profile[addonName]
+			save = True
+			config.conf._dirtyProfiles.add(name)
 	# We save the configuration, in case the user would not have checked the "Save configuration on exit" checkbox in General settings.
-	if config.conf['general']['saveConfigurationOnExit']:
+	if save and config.conf['general']['saveConfigurationOnExit']:
 		config.conf.save()
 	
 def onInstall():
-	log.debug("OnInstall")
+	log.warning("OnInstall")
 	import addonHandler
 	addonHandler.initTranslation()
 	import gui, wx,shutil
@@ -56,6 +84,7 @@ def onInstall():
 			dest = os.path.join(curPath, curConfigFileName)
 			try:
 				shutil.copy(addonConfigFile, dest)
+				saveAddonProfilesConfig(addonName)
 			except:
 				log.error("Addon configuration cannot be saved: %s"%addonConfigFile)
 				# clean up all add-on configuration
@@ -75,7 +104,7 @@ def onInstall():
 
 def onUninstall():
 	import os, globalVars, sys
-	log.debug("OnUnInstall")
+	log.warning("OnUnInstall")
 	#include the module directory to the path
 	curPath = os.path.dirname(__file__).decode("mbcs")
 	sys.path.append(curPath)

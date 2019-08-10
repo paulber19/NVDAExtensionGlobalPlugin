@@ -53,6 +53,7 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * controle du volume principal et de NVDA:
 	* coupure ou remise du son pour l'application focalisée,
 	* établissement du volume principal ou de NVDA au démarrage de l'extension,
+	* modifier le volume principal ou du flux audio de l'application sous le focus,
 
 
 * Outils pour le développement d'extensions,
@@ -71,7 +72,8 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 
 * signaler, par un son, l'inscription d'une erreur dans le journal  aussi pour les versions finales  et release candidate de NVDA,
 * Titrer les dialogues avec le nom de l'extension,
-* Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boites de dialogue du style confirmation.
+* Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boites de dialogue du style confirmation,
+* utiliser les touches du pavé numérique comme touche de direction.
 
 
 ## Divers autres éléments  ##
@@ -81,6 +83,6 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * script pour redémarrer rapidement NVDA.
 
 
-[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.0.nvda-addon
+[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.1.nvda-addon
 
 [2]:

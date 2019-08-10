@@ -59,7 +59,8 @@ _addonSummary = _curAddon.manifest['summary']
 SCRCAT_MODULE = _unicode(_addonSummary)
 # Translators: The name of a category of NVDA commands.
 SCRCAT_SWITCH_VOICE_PROFILE = _("Switch voice profile")
-
+# Translators: The name of a category of NVDA commands.
+SCRCAT_VOLUME_CONTROL= _("Volume control")
 def finally_(func, final):
 	"""Calls final after func, even if it fails."""
 	def wrap(f):
@@ -149,10 +150,19 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"openCurrentOrOldNVDALogFile": (("kb:nvda+shift+j",), ID_OpenCurrentOrOldNVDALogFile ),
 		"setMainAndNVDAVolume": (("kb:nvda+escape",), ID_VolumeControl),
 		"toggleCurrentAppVolumeMute": (("kb:nvda+pause",), ID_VolumeControl),
+		"increaseFocusedAppVolume": (None, ID_VolumeControl),
+		"decreaseFocusedAppVolume": (None, ID_VolumeControl),
+		"maximizeFocusedAppVolume": (None, ID_VolumeControl),
+		"minimizeFocusedAppVolume": (None, ID_VolumeControl),
+		"increaseSpeakersVolume": (None, ID_VolumeControl),
+		"decreaseSpeakersVolume": (None, ID_VolumeControl),
+		"maximizeSpeakersVolume": (None, ID_VolumeControl),
+		"minimizeSpeakersVolume": (None, ID_VolumeControl),
 		"toolsForAddon": (None, ID_Tools),
 		"leftClickAtNavigatorObjectPosition": (("kb:nvda+,",), None),
 		"rightClickAtNavigatorObjectPosition": (("kb:nvda+shift+,",), None),
 		"addonSettingsDialog":  (None, None),
+		"toggleNumpadNavigationMode":  (None, None),
 		}
 	
 	# a dictionnary to map shell script to gesture and installation check function
@@ -166,6 +176,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"commandKeySelectiveAnnouncement": ("kb:f3", ID_CommandKeysSelectiveAnnouncement ),
 		"ComplexSymbolHelp" : ("kb:f4", ID_ComplexSymbols ,),
 		"lastUsedComplexSymbolsList" : ("kb:control+f4", ID_ComplexSymbols,),
+		"toggleNumpadNavigationMode": ("kb:f5", None),
 		"displaySpeechHistoryRecords": ("kb:f9", ID_SpeechHistory ),
 		"report_WindowsList" : ("kb:f10", ID_SystrayIconsAndActiveWindowsList),
 		"report_SystrayIcons": ("kb:f11", ID_SystrayIconsAndActiveWindowsList),
@@ -178,6 +189,14 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"shutdownComputerDialog": ("kb:r", None),
 		"toggleCurrentAppVolumeMute": ("kb:s", ID_VolumeControl),
 		"setMainAndNVDAVolume": ("kb:control+s", ID_VolumeControl),
+		"increaseFocusedAppVolume": ("kb:upArrow", ID_VolumeControl),
+		"decreaseFocusedAppVolume": ("kb:downArrow", ID_VolumeControl),
+		"maximizeFocusedAppVolume": ("kb:pageUp", ID_VolumeControl),
+		"minimizeFocusedAppVolume": ("kb:pageDown", ID_VolumeControl),
+		"increaseSpeakersVolume": ("kb:control+upArrow", ID_VolumeControl),
+		"decreaseSpeakersVolume": ("kb:control+downArrow", ID_VolumeControl),
+		"maximizeSpeakersVolume": ("kb:control+pageUp", ID_VolumeControl),
+		"minimizeSpeakersVolume": ("kb:control+pageDown", ID_VolumeControl),
 		"toolsForAddon": ("kb:t", ID_Tools),
 		"activateUserInputGesturesDialog": ("kb:u", None),
 		"manageVoiceProfileSelectors": ("kb:v", ID_VoiceProfileSwitching ),
@@ -220,7 +239,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Input help mode message for display minute timer dialog command.
 		"minuteTimer" : (_("Display dialog to start the minute timer.If minute timer already started, display dialog to report duration "), None),
 		# Translators: Input help mode message for display addon user guide command.
-		"displayModuleUserGuide" : (_("Display module user's guide"), None),
+		"displayModuleUserGuide" : (_("Display add-on user's guide"), None),
 		# Translators: Input help mode message for display shell command help dialog command.
 		"displayHelp" : (_("Display commands shell's list"), None),
 		# Translators: Input help mode message for display log management dialog command.
@@ -284,17 +303,35 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		#Translators: Input help mode message for activate user input gesture dialog command.
 		"activateUserInputGesturesDialog": (_("Displays the dialog to manage the input gestures configured by user"), None),
 		#Translators: Input help mode message for set on main and NVDA volume command.
-		"setMainAndNVDAVolume" : (_("Set on main and NVDA volume"), globalCommands.SCRCAT_SYSTEM),
+		"setMainAndNVDAVolume" : (_("Set on main and NVDA volume"), SCRCAT_VOLUME_CONTROL),
 		#Translators: Input help mode message for toggle current focused application's volume command.
-		"toggleCurrentAppVolumeMute" : (_("Toggle current focused application volume mute"), globalCommands.SCRCAT_SYSTEM),
+		"toggleCurrentAppVolumeMute" : (_("Toggle current focused application volume mute"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for increase volume of current focused application command.
+		"increaseFocusedAppVolume" : (_("Increase volume of current focused application"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for decrease volume of current focused application command.
+		"decreaseFocusedAppVolume" : (_("Decrease volume of current focused application"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for maximize volume of current focused application command.
+		"maximizeFocusedAppVolume" : (_("Maximize volume of current focused application"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for minimize volume of current focused application command.
+		"minimizeFocusedAppVolume" : (_("Minimize volume of current focused application"), SCRCAT_VOLUME_CONTROL),
 		# Translators: Input help mode message for tools for add-on developpement dialog command.
+		#Translators: Input help mode message for increase volume of speakers command.
+		"increaseSpeakersVolume" : (_("Increase volume of speakers"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for decrease volume of speakers command.
+		"decreaseSpeakersVolume" : (_("Decrease volume of speakers"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for maximize volume of speakers command.
+		"maximizeSpeakersVolume" : (_("Maximize volume of speakers"), SCRCAT_VOLUME_CONTROL),
+		#Translators: Input help mode message for minimize volume of speakers command.
+		"minimizeSpeakersVolume" : (_("Minimize volume of speakers"), SCRCAT_VOLUME_CONTROL),
 		"toolsForAddon": (_("Display tools for add-on developpement dialog "), globalCommands.SCRCAT_TOOLS),
 		# Translators: Input help mode message for leftclick mouse button at navigator cursor position script command.
 		"leftClickAtNavigatorObjectPosition" : (_("Click the left mouse button at navigator object position. Twice: click twice  this button at this position"), globalCommands.SCRCAT_MOUSE),
 		# Translators: Input help mode message for right click mouse button at navigator cursor position script command.
-		"rightClickAtNavigatorObjectPosition" : (_("Click the right mouse button at navigator object position. Twice: click twice  this button at this position"), globalCommands.SCRCAT_MOUSE),
+		"rightClickAtNavigatorObjectPosition" : (_("Click the right mouse button at naviHgator object position. Twice: click twice  this button at this position"), globalCommands.SCRCAT_MOUSE),
 		# Translators: Input help mode message for addon settings dialog script command.
 		"addonSettingsDialog": (_("Display add-on settings dialog"), None),
+		# Translators: Input help mode message for toggle numpad navigation mode command.
+		"toggleNumpadNavigationMode": (_("Enable or disable the use  of numpad keys as navigationnall keys"), None),
 		}
 	
 	def __init__(self, *args, **kwargs):
@@ -305,8 +342,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.maximizeWindowTimer = None
 		log.info("Loaded %s version %s" %(addonName, addonVersion))
 		self.installSettingsMenu()
-		if isInstall(ID_CommandKeysSelectiveAnnouncement ):
-			commandKeysSelectiveAnnouncementAndRemanence.initialize()
+		commandKeysSelectiveAnnouncementAndRemanence.initialize()
 		if isInstall(ID_ExtendedVirtualBuffer):
 			from . import browseModeEx
 			self.browseModeExChooseNVDAObjectOverlayClasses = browseModeEx.chooseNVDAObjectOverlayClasses
@@ -444,13 +480,16 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		script = globalPluginHandler.GlobalPlugin.getScript(self, gesture)
 		if not script:
 			script = finally_(self.script_error, self.finish)
+			return finally_(script, self.finish)
+		if hasattr(script, "noFinish") and script.noFinish:
+			return finally_(script, self.noFinish)
 		return finally_(script, self.finish)
-	
 	def finish(self):
 		self.toggling = False
 		self.clearGestureBindings()
 		self._bindGestures()
-	
+	def noFinish(self):
+		return
 	def script_error(self, gesture):
 		tones.beep(420, 40)
 	
@@ -965,7 +1004,33 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			speech.speakMessage(_("The main volume and that of NVDA are established and their level sets to the one in the configuration"))
 		else:
 			speech.speakMessage(_("Not available on this operating's system"))
-	
+	def script_increaseFocusedAppVolume (self, gesture):
+		wx.CallAfter(volumeControl.changeFocusedAppVolume, action= "increase")
+	script_increaseFocusedAppVolume .noFinish = True
+
+	def script_decreaseFocusedAppVolume(self, gesture):
+		wx.CallAfter(volumeControl.changeFocusedAppVolume, action = "decrease")
+	script_decreaseFocusedAppVolume .noFinish = True
+
+	def script_maximizeFocusedAppVolume(self, gesture):
+		wx.CallAfter(volumeControl.changeFocusedAppVolume, action = "max")
+	script_maximizeFocusedAppVolume .noFinish = True
+	def script_minimizeFocusedAppVolume(self, gesture):
+		wx.CallAfter(volumeControl.changeFocusedAppVolume, action = "min")
+	script_minimizeFocusedAppVolume .noFinish = True
+	def script_increaseSpeakersVolume (self, gesture):
+		wx.CallAfter(volumeControl.changeSpeakersVolume, action= "increase")
+	script_increaseSpeakersVolume .noFinish = True
+	def script_decreaseSpeakersVolume(self, gesture):
+		wx.CallAfter(volumeControl.changeSpeakersVolume, action = "decrease")
+	script_decreaseSpeakersVolume .noFinish = True	
+	def script_maximizeSpeakersVolume(self, gesture):
+		wx.CallAfter(volumeControl.changeSpeakersVolume, action = "max")
+	script_maximizeSpeakersVolume .noFinish = True	
+	def script_minimizeSpeakersVolume(self, gesture):
+		wx.CallAfter(volumeControl.changeSpeakersVolume, action = "min")
+	script_minimizeSpeakersVolume .noFinish = True
+		
 	def script_manageVoiceProfileSelectors(self, gesture):
 		from . import switchVoiceProfile
 		wx.CallAfter(switchVoiceProfile.SelectorsManagementDialog .run, self)
@@ -1023,22 +1088,22 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		ui.message(_("Selector %s is free") %selector)
 	
 	def script_setVoiceProfileSelector1(self, gesture):
-		self.setVoiceProfileSelector("1")
+		wx.CallAfter(self.setVoiceProfileSelector,"1")
 	def script_setVoiceProfileSelector2(self, gesture):
-		self.setVoiceProfileSelector("2")
+		wx.CallAfter(self.setVoiceProfileSelector,"2")
 	def script_setVoiceProfileSelector3(self, gesture):
-		self.setVoiceProfileSelector("3")
+		wx.CallAfter(self.setVoiceProfileSelector, "3")
 	def script_setVoiceProfileSelector4(self, gesture):
-		self.setVoiceProfileSelector("4")
+		wx.CallAfter(self.setVoiceProfileSelector, "4")
 	def script_setVoiceProfileSelector5(self, gesture):
-		self.setVoiceProfileSelector("5")
+		wx.CallAfter(self.setVoiceProfileSelector, "5")
 	
 	def script_setVoiceProfileSelector6(self, gesture):
-		self.setVoiceProfileSelector("6")
+		wx.CallAfter(self.setVoiceProfileSelector, "6")
 	def script_setVoiceProfileSelector7(self, gesture):
-		self.setVoiceProfileSelector("7")
+		wx.CallAfter(self.setVoiceProfileSelector, "7")
 	def script_setVoiceProfileSelector8(self, gesture):
-		self.setVoiceProfileSelector("8")
+		wx.CallAfter(self.setVoiceProfileSelector, "8")
 	
 	def script_activateUserInputGesturesDialog(self, gesture):
 		from .userInputGestures import UserInputGesturesDialog
@@ -1148,13 +1213,21 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		else:
 			callback(True)
 	
+	enableNumpadNnavigationKeys = False
+	def script_toggleNumpadNavigationMode(self, gesture):
+		from .settings import  toggleEnableNumpadNavigationModeToggleAdvancedOption
+		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
+			# Translators: message to user to report unavailable command.
+			msg = _("Numeric pad navigation mode toggle is not  available")
+			speech.speakMessage(msg)
+			return
 
+		from commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
+		_myInputManager .toggleNavigationNumpadMode()
+	
 	def script_test (self, gesture):
 		print("test")
 		ui.message("NVDAExtensionGlobalPlugin test")
-
-		
-		
 
 class HelperDialog(wx.Dialog):
 	_instance = None

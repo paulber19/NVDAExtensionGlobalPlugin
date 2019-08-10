@@ -17,26 +17,26 @@ addon_info = {
 	"addon_summary" : _("NVDA global commands extension"),
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
-	"addon_description" : _("""This Module has been developed with the participation of Daniel Poiraud.
+	"addon_description" : _("""This add-on has been developed with the participation of Daniel Poiraud.
 It is not compatible with versions of NVDA below to 2018.3.2.
 It adds to NVDA:
 1- The features
 some features can be enabled or disabled individually.
 * Display of the list of icons in the notification area ,
 * Display of the windows list of running applications,
-* Assistance in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2
+* Help in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2
 	and possibility to add its own categories and symbols,
 * Extension of the functionality of the virtual buffer
 	for browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, and Google Chrome:
 
-	* new commands for navigation mode (paragraph, division, anchor, main landmark,
+	* new commands for navigation mode (paragraph, division, anchor, main area,
 	* new types of elements for the dialog box opened by "NVDA+F7" (radio button, paragraph, frame, checkBox, etc) with the announcement of the number of items found,
 	* commands for the tables:
 	announce the cells of a row /column , go to first/last cell in the row/current column, move the column/row preceding or following with announcement possible of the cells in that row/column,
 	* announcement of the URL of the document,
-	* navigation loop,
+	* navigate in loop,
 * Announcement of the function associated with editing commands
-  style Copy, Paste, etc.,
+	style Copy, Paste, etc.,
 * Announcement of the name of the folder pre-selected in the dialog boxes like "Open","Save", "Save as",etc.,
 * display of information on the focused application:
 	* the current profile configuration,
@@ -53,24 +53,26 @@ some features can be enabled or disabled individually.
 * display of visible elements making up the object in the foreground,
 * fast switching of voice profile,
 * remanence of the modifier keys,
-* shutdown, restart or put on prolonged sleep the computer,
-* control the master or NVDA volume:
+* shutdown, reboot or hybernate the computer,
+* control the main or NVDA volume:
 	* mute or unmute volume  for the focused application,
-	* establishment of the main Windows  or NVDA volume at the add-on loading,
+	* establishment of the main Windows  or NVDA volume at the start  of add-on,
+	* modification of main volume or audio stream's volume of focused application.
 * Tools for development of add-on
 * supplements regarding the date and time: copy date and time to clipboard, report time with seconds
 
 
 2- The options
-* remove the ad from the description of the objects in the ribbons Windows,
+* remove the announcement from the description of the objects in the Windows ribbons ,
 * proclaim the word focused when deleting a word,
 * automatically maximize the foreground window,
-* announce punctuations and symbols when moving by word .
+* announce punctuations and symbols when moving by word in a document.
 
 3-  The advanced options
 * report, with a sound, the registration of an error in the NVDA log also for the final versions and release candidate of NVDA,
-* Caption dialog title with the name of the module,
-* Do not take account of the option to Announce the description of the object during the display of the dialog box style confirmation.
+* Caption dialog title with the name of the addon,
+* Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation,
+* use numeric keypad's keys as arrow keys.
 
 
 4- Various other elements
@@ -80,7 +82,7 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version" : "8.0",
+	"addon_version" : "8.1",
 	# Author(s)
 	"addon_author" : "PaulBer19",
 	# URL for the add-on documentation support
@@ -90,7 +92,7 @@ some features can be enabled or disabled individually.
 	# Minimum NVDA version supported (e.g. "2018.3")
 	"addon_minimumNVDAVersion" : "2018.3.2",
 	# Last NVDA version supported/tested (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion" : "2019.1.0",
+	"addon_lastTestedNVDAVersion" : "2019.2.0",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel" : None,
 }
@@ -107,7 +109,7 @@ pythonSources = [
 	os.path.join(mainPath, "activeWindowsListReport", "*.py"),
 	os.path.join(mainPath, "browseModeEx", "*.py"),
 	os.path.join(mainPath, "clipboardCommandAnnouncement", "*.py"),
-	os.path.join(mainPath, "commandKeysSelectiveAnnouncement", "*.py"),
+	os.path.join(mainPath, "commandKeysSelectiveAnnouncementAndRemanence", "*.py"),
 	os.path.join(mainPath, "ComplexSymbols", "*.py"),
 	os.path.join(mainPath, "currentFolder", "*.py"),
 	os.path.join(mainPath, "extendedNetUIHWND", "*.py"),
