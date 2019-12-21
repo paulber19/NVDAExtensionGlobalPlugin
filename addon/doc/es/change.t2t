@@ -1,22 +1,25 @@
-Complemento Extensión de las órdenes básicas de NVDA - Historial
-Autor: paulber19 (paulber19@laposte.net)  con la participación de Daniel Poiraud
+ ADDON_SUMMARY- Historial
+Autor: ADDON_AUTHOR_NAME con la participación de Daniel Poiraud
 
 
-%!Target: html
-%!Encoding: UTF-8
-%!style:..\style_t2t.css
-%!Options: --toc
-% Remove the Table of Contents heading from the toc.
-%!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
+%!includeconf: ../addon_global.t2tconf
+%!includeconf: addon_informations.t2tconf
 
-% h1 in html should really be the document title only.
-% Therefore, change h1 through h5 in the output to h2 through h6.
-%!PostProc(html): ^<H5>(.*)</H5>$ <H6>\1</H6>
-%!PostProc(html): ^<H4>(.*)</H4>$ <H5>\1</H5>
-%!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
-%!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
-%!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
+URL: ADDON_AUTHOR_URL
+
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
+
+
+
++ 9.0 (15/12/2019) +
+Compatibilidad con NVDA 2019.3
+
+Nueva características:
+- Posibilidad de restablecer completamente la configuración del complemento.
+- Búsqueda y instalación automática  de las actualizaciones.
+- Posibilidad de usar la tecla de bloqueo numérico para cambiar al teclado numérico estándar.
+- Se ha añadido las teclas "multiplicar", "dividir" y "más" en uso estándar del teclado numérico.
+- Reorganización de las categorías en las opciones del complemento.
 
 
 + v8.1 (05/05/2019) +
@@ -38,7 +41,7 @@ Nueva características:
 - En el cuadro de diálogo "Lista de elementos visibles que componen el objeto en primer plano", posibilidad de cambiar el tipo de objeto sin salir de la lista de objetos.
 - Se ha añadido la posibilidad de habilitar la remanencia de las teclas al iniciar NVDA.
 - Se ha añadido la remanencia específica para el sitio gmail.com.
-- Reorganización del submenú "Opciones" .
+- Reorganización del submenú "Opciones".
 - Se ha añadido la funcionalidad "fecha y hora - suplemento" que agrupa la copia de la fecha y la hora al portapapeles (con "nvda + f12"), el anuncio de la hora con los segundos y el anuncio de la Fecha y hora sin la puntuación.
 - Nuevo script "Copiar fecha y hora" en el intérprete de órdenes.
 - Reestructuración de la funcionalidad "Cambio de perfil de voz" para la elección de los selectores en un perfil de configuración.  La configuración anterior de esta funcionalidad no es compatible y se eliminará la primera vez que uses esta funcionalidad.
@@ -427,7 +430,7 @@ Corrección de fallos:
 
 + v2.0.0 (3 de Octubre de 2012) +
 - Traducción de las teclas,
-- Navegación simplificada entre grupos de comandos mediante la tecla "t", y entre las categorías de teclado mediante la tecla "s".
+- Navegación simplificada entre grupos de órdenes mediante la tecla "t", y entre las categorías de teclado mediante la tecla "s".
 - Añadido un botón de ayuda 
 - Se tiene en cuenta de los archivos gestures.ini
 

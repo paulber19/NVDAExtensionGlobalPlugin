@@ -74,8 +74,8 @@ class ListeNotification(wx.Dialog):
 		ListeNotification._instance = None
 		super(ListeNotification, self).Destroy()
 	def getListeIcones(self):
-		hd=windll.user32.FindWindowExA(None,None,"Shell_TrayWnd",None)
-		path = ("TrayNotifyWnd","SysPager","ToolbarWindow32")
+		hd=windll.user32.FindWindowExA(None,None,b"Shell_TrayWnd",None)
+		path = (b"TrayNotifyWnd",b"SysPager",b"ToolbarWindow32")
 		for element in path:
 			hd = windll.user32.FindWindowExA(hd,0,element,0)
 		oListe=AccessibleObjectFromWindow(hd,-4)
@@ -91,10 +91,10 @@ class ListeNotification(wx.Dialog):
 				name =name.replace ("\n",". ")
 				name =name.replace ("\r", "")
 				location=oListe.accLocation(i)
-				location=(location[0]+location[2]/2,location[1]+location[3]/2)
-				self.PositionXY.append(location)
+				x = int(location[0]+location[2]/2)
+				y = int(location[1]+location[3]/2)
+				self.PositionXY.append((x,y))
 				l.append(name)
-
 		return l
 
 	def getPositionXY (self):

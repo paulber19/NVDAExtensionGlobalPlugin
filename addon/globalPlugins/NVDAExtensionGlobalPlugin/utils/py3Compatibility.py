@@ -46,10 +46,26 @@ def reLoad(mod):
 		importlib.reload(mod)
 	else:
 		reload(mod)
+def getCommonUtilitiesPath():
+	curAddonPath = getAddonPath()
+	return os.path.join(curAddonPath,"utilities")
+
 
 def getUtilitiesPath():
-	curAddon = addonHandler.getCodeAddon()
+	curAddonPath = getAddonPath()
 	if py3:
-		return os.path.join(curAddon.path, "utilitiesPy3")
+		utilities = "utilitiesPy3"
 	else:
-		return os.path.join(curAddon.path, "utilities")	
+		utilities = "utilitiesPy2"
+	return os.path.join(curAddonPath,utilities)
+
+def getAddonPath(addon = None):
+	if addon is None:
+		addon = addonHandler.getCodeAddon()
+	if sys.version.startswith("3"):
+		# for python 3
+		addonPath = addon.path
+	else:
+		# for python 2
+		addonPath = addon.path.encode("mbcs")
+	return addonPath

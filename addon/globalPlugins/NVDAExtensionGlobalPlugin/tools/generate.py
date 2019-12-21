@@ -9,8 +9,9 @@ addonHandler.initTranslation()
 from logHandler import log
 import codecs
 import os
+import sys
 import gettext
-
+from ..utils.py3Compatibility import py3
 def generateManifest(dest, addonInfo, template):
 	_ = ""
 	manifest = template.format(**addonInfo)
@@ -32,7 +33,12 @@ def getVariablesBetweenBrass(stringToFormat):
 
 
 def generateTranslatedManifest(addon, addonInfos, language, template):
-	_ = getTranslationsInstance(addon, language ).ugettext
+	if py3:
+		# for python 3
+		_ = getTranslationsInstance(addon, language ).gettext
+	else:
+		# for python 2
+		_ = getTranslationsInstance(addon, language ).ugettext
 	vars = {}
 	translatedVars = {}
 	allTranslated = True

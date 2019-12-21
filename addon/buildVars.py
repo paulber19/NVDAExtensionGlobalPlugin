@@ -18,7 +18,6 @@ addon_info = {
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description" : _("""This add-on has been developed with the participation of Daniel Poiraud.
-It is not compatible with versions of NVDA below to 2018.3.2.
 It adds to NVDA:
 1- The features
 some features can be enabled or disabled individually.
@@ -72,7 +71,7 @@ some features can be enabled or disabled individually.
 * report, with a sound, the registration of an error in the NVDA log also for the final versions and release candidate of NVDA,
 * Caption dialog title with the name of the addon,
 * Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation,
-* use numeric keypad's keys as arrow keys.
+* use numeric keypad's keys conventionally.
 
 
 4- Various other elements
@@ -82,7 +81,7 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version" : "8.1",
+	"addon_version" : "9.0-beta5",
 	# Author(s)
 	"addon_author" : "PaulBer19",
 	# URL for the add-on documentation support
@@ -90,11 +89,11 @@ some features can be enabled or disabled individually.
 	# Documentation file name
 	"addon_docFileName" : "addonUserManual.html",
 	# Minimum NVDA version supported (e.g. "2018.3")
-	"addon_minimumNVDAVersion" : "2018.3.2",
+	"addon_minimumNVDAVersion" : "2019.1",
 	# Last NVDA version supported/tested (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion" : "2019.2.0",
+	"addon_lastTestedNVDAVersion" : "2019.3.0",
 	# Add-on update channel (default is stable or None)
-	"addon_updateChannel" : None,
+	"addon_updateChannel" : "dev",
 }
 
 
@@ -112,6 +111,7 @@ pythonSources = [
 	os.path.join(mainPath, "commandKeysSelectiveAnnouncementAndRemanence", "*.py"),
 	os.path.join(mainPath, "ComplexSymbols", "*.py"),
 	os.path.join(mainPath, "currentFolder", "*.py"),
+	os.path.join(mainPath, "computerTools", "*.py"),
 	os.path.join(mainPath, "extendedNetUIHWND", "*.py"),
 	os.path.join(mainPath, "keyboardKeyRenaming", "*.py"),
 	os.path.join(mainPath, "minuteTimer", "*.py"),
@@ -123,9 +123,9 @@ pythonSources = [
 	os.path.join(mainPath, "switchVoiceProfile", "*.py"),
 	os.path.join(mainPath, "systemTrayIconsList", "*.py"),
 	os.path.join(mainPath, "tools", "*.py"),
+	os.path.join(mainPath, "updateHandler", "*.py"),
 	os.path.join(mainPath, "userInputGestures", "*.py"),
 	os.path.join(mainPath, "utils", "*.py"),
-	os.path.join(mainPath, "volumeControl", "*.py"),
 	os.path.join(mainPath, "winExplorer", "*.py"),
 	]
 

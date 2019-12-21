@@ -1,17 +1,16 @@
 # Extension des commandes  de base de NVDA #
 
-* Auteur : PaulBer19
+* Auteur : PaulBer19 avec la participation de Daniel Poiraud. 
 * URL : paulber19@laposte.net
-* Télécharger [version stable][1]
-* Télécharger [version de développement][2]
+* Télécharger:
+	* [version stable][1]
+	* [version de développement][2]
+* Compatibilité:
+	* version minimum de NVDAsupportée: 2019.1
+	* dernière version de NVDA testée: 2019.3
 
 
-Cette extension a été développé  avec la participation de Daniel Poiraud. 
-
-Elle n'est pas compatible avec les versions de NVDA inférieures à la  2018.3.2.
-
-
-Elle  ajoute à NVDA:
+Cette extension  ajoute à NVDA:
 ## Les fonctionnalités ##
 
 Certaines fonctionnalités peuvent être activées ou désactivées individuellement.
@@ -50,7 +49,7 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * commutation rapide de profil vocal,
 * rémanence des touches de modification,
 * arrêter, redémarrer ou mettre en veille prolongé l'ordinateur,
-* controle du volume principal et de NVDA:
+* contrôle du volume principal et de NVDA:
 	* coupure ou remise du son pour l'application focalisée,
 	* établissement du volume principal ou de NVDA au démarrage de l'extension,
 	* modifier le volume principal ou du flux audio de l'application sous le focus,
@@ -73,7 +72,7 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * signaler, par un son, l'inscription d'une erreur dans le journal  aussi pour les versions finales  et release candidate de NVDA,
 * Titrer les dialogues avec le nom de l'extension,
 * Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boites de dialogue du style confirmation,
-* utiliser les touches du pavé numérique comme touche de direction.
+* pouvoir utiliser le pavé numérique de manière classique.
 
 
 ## Divers autres éléments  ##
@@ -83,6 +82,6 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * script pour redémarrer rapidement NVDA.
 
 
-[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.1.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.0.nvda-addon
 
-[2]:
+[2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

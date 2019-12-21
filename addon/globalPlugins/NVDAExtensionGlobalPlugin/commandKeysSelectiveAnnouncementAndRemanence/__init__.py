@@ -235,6 +235,7 @@ class MyInputManager (inputCore.InputManager):
 		if state:
 			# unbind nvda object  navigation script keystroke bound to numpad keys
 			numpadKeyNames = ["kb:numpad%s"%str(x) for x in range(1, 10)]
+			numpadKeyNames .extend (["kb:numpadMultiply", "kb:numpadDivide", "kb:numpadPlus",])
 			d = {"globalCommands.GlobalCommands": {
 				"None": numpadKeyNames}}
 			self.localeGestureMap.update(d)
@@ -246,11 +247,12 @@ class MyInputManager (inputCore.InputManager):
 		self.setNumpadNavigationMode(state)
 		if state:
 			# Translators: message to user to report numpad navigation mode change.
-			msg = _("Nnumeric keypad's arrow keys enabled")
+			msg = _("Standard use of the numeric keypad enabled")
 		else:
 			# Translators: message to user to report numpad navigation mode change.
-			msg = _("Nnumeric keypad's arrow keys disabled")
-		queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage,msg)	
+			msg = _("Standard use of the numeric keypad disabled")
+		queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage,msg)
+	
 	def getNumpadKeyReplacement(self, gesture):
 		if not self.enableNumpadNnavigationKeys : return None
 		if gesture.isModifier or "nvda" in gesture.displayName.lower():
@@ -291,6 +293,7 @@ class MyInputManager (inputCore.InputManager):
 				return
 		script = gesture.script
 		focus = api.getFocusObject()
+		#print ("focus: %s, %s"%(gesture.mainKeyName, focus.__dict__))
 		if focus.sleepMode is focus.SLEEP_FULL or (focus.sleepMode and not getattr(script, 'allowInSleepMode', False)):
 			raise NoInputGestureAction
 	
@@ -333,7 +336,7 @@ class MyInputManager (inputCore.InputManager):
 		elif config.conf["keyboard"]["speakCommandKeys"] and gesture.shouldReportAsCommand:
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, gesture.displayName)
 		
-		gesture.reportExtra()
+		if not script: gesture.reportExtra()
 		# #2953: if an intercepted command Script (script that sends a gesture) is queued
 		# then queue all following gestures (that don't have a script) with a fake script so that they remain in order.
 		if not script and(bypassRemanence or scriptHandler._numIncompleteInterceptedCommandScripts):

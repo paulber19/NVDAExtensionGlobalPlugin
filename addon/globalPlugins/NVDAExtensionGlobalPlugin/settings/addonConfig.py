@@ -33,6 +33,10 @@ SCT_ShutdownComputer = "ShutdownComputer"
 
 # general section items
 ID_ConfigVersion = "ConfigVersion"
+ID_AutoUpdate = "AutoUpdate"
+ID_UpdateReleaseVersionsToDevVersions  = "UpdateReleaseVersionsToDevVersions"
+ID_LastChecked = "lastChecked"
+ID_RemindUpdate = "RemindUpdate"
 # InstallFeatureOption section  items
 ID_ActiveWindowsListReport = "ActiveWindowsListReport" # to be deleted later
 ID_SystrayIconsList = "SystrayIconsList" # to be deleted later
@@ -105,7 +109,7 @@ ID_MaximumOfLastUsedSymbols = "MaximumOfLastUsedSymbols"
 ID_ByPassNoDescription = "ByPassNoDescription"
 ID_EnableNumpadNavigationModeToggle = "EnableNumpadNavigationModeToggle"
 ID_ActivateNumpadNavigationModeAtStart = "ActivateNumpadNavigationModeAtStart"
-
+ID_ActivateNumpadStandardUseWithNumLock = "ActivateNumpadStandardUseWithNumLock"
 
 PSOE_NoVersion = 0
 PSOE_SnapshotVersions = 1
@@ -564,7 +568,11 @@ class AddonConfiguration25(BaseAddonConfiguration):
 	_version = "2.5"
 	_GeneralConfSpec = """[{section}]
 	{idConfigVersion} = string(default = {version})
-		""".format(section = SCT_General,idConfigVersion = ID_ConfigVersion, version= _version)
+	{autoUpdate} = boolean(default=True)
+	{updateReleaseToDev} = boolean(default=False)
+	{lastChecked} = integer(default=0)
+	{remindUpdate} = boolean(default=False)
+		""".format(section = SCT_General,idConfigVersion = ID_ConfigVersion, version= _version, autoUpdate = ID_AutoUpdate, updateReleaseToDev = ID_UpdateReleaseVersionsToDevVersions , lastChecked = ID_LastChecked, remindUpdate= ID_RemindUpdate)
 	_FeatureAuthorizationsConfSpec = """[{section}]
 		{SystrayIconsAndActiveWindowsList} = integer(default={install})
 		{complexSymbols} = integer(default= {installWithoutGesture})
@@ -635,6 +643,9 @@ class AddonConfiguration25(BaseAddonConfiguration):
 		{byPassNoDescription}  = boolean(default=True)
 		{enableNumpadNavigationModeToggle}  = boolean(default=False)
 		{activateNumpadNavigationModeAtStart}  = boolean(default=False)
+		{activateNumpadStandardUseWithNumLock}  = boolean(default=False)
+		
+
 		""".format(section = SCT_AdvancedOptions,playSoundOnErrors = ID_PlaySoundOnErrors,
 			onlyNVDAKeyInRemanence = ID_OnlyNVDAKeyInRemanence, remanenceAtNVDAStart = ID_RemanenceAtNVDAStart, remanenceDelay = ID_RemanenceDelay, beepAtRemanenceStart = ID_BeepAtRemanenceStart, beepAtRemanenceEnd = ID_BeepAtRemanenceEnd,remanenceForGmail = ID_RemanenceForGmail,
 			setOnMainAndNVDAVolume = ID_SetOnMainAndNVDAVolume,
@@ -643,7 +654,7 @@ class AddonConfiguration25(BaseAddonConfiguration):
 			dialogTitleWithAddonSummary = ID_DialogTitleWithAddonSummary, delayBetweenSameGesture = ID_DelayBetweenSameGesture, maximumOfLastUsedSymbols = ID_MaximumOfLastUsedSymbols, byPassNoDescription = ID_ByPassNoDescription,
 			c_MinMasterVolumeLevel = C_MinMasterVolumeLevel, c_MasterVolumeLevel = C_MasterVolumeLevel, c_MinNVDAVolumeLevel = C_MinNVDAVolumeLevel, c_NVDAVolumeLevel = C_NVDAVolumeLevel,
 			c_MaximumOfLastUsedSymbols= C_MaximumOfLastUsedSymbols,
-			enableNumpadNavigationModeToggle = ID_EnableNumpadNavigationModeToggle, activateNumpadNavigationModeAtStart = ID_ActivateNumpadNavigationModeAtStart,
+			enableNumpadNavigationModeToggle = ID_EnableNumpadNavigationModeToggle, activateNumpadNavigationModeAtStart = ID_ActivateNumpadNavigationModeAtStart, activateNumpadStandardUseWithNumLock = ID_ActivateNumpadStandardUseWithNumLock
 			)
 	
 	_ShutdownComputerConfSpec = """[{section}]

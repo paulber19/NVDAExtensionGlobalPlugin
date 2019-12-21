@@ -1,16 +1,19 @@
-# NVDA extension global plugin #
+# NVDA global commands extension #
 
-* Author : PaulBer19
+* Author : PaulBer19 with the participation of Daniel Poiraud
 * URL : paulber19@laposte.net
-* Download [stable version][1]
-* Download [developpement version][2]
+* Download:
+	* [stable version][1]
+	* [developpement version][2]
+* Compatibility:
+	* minimum supported NVDA version: 2019.1
+	* last tested NVDA version: 2019.3
 
 
-This Add-on has been developed with the participation of Daniel Poiraud.
 
-It is not compatible with versions of NVDA below to 2018.3.2.
 
-It adds to NVDA:
+
+The add-on  adds to NVDA:
 ## The features ##
 
 some features can be enabled or disabled individually.
@@ -74,7 +77,7 @@ some features can be enabled or disabled individually.
 * report, with a sound, the registration of an error in the NVDA log also for the final versions and release candidate of NVDA,
 * Caption dialog title with the name of the addon,
 * Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation,
-* use the  numeric keypad's keys  as arrow keys.
+* use the  numeric keypad's keys  conventionally.
 
 
 ## Various other elements ##
@@ -84,6 +87,7 @@ some features can be enabled or disabled individually.
 * script to quickly restart NVDA.
 
 
-[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.1.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.0.nvda-addon
 
-[2]:
+[2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
+

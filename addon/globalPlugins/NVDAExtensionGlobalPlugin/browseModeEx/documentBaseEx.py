@@ -13,7 +13,6 @@ import collections
 import gui
 from scriptHandler import isScriptWaiting, getLastScriptRepeatCount
 from ..utils.NVDAStrings import NVDAString
-
 import queueHandler
 import speech
 import ui
@@ -22,6 +21,8 @@ import itertools
 import api
 import config
 import controlTypes
+import sys
+from ..utils.py3Compatibility import py3
 SCRCAT_TABLE = _("Table")
 
 class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
@@ -40,10 +41,18 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		"kb:control+alt+shift+downArrow" : "moveToLastCellOfColumn",
 		}
 	# set category of base NVDA scripts
-	documentBase.DocumentWithTableNavigation.script_nextRow.__func__.category = SCRCAT_TABLE
-	documentBase.DocumentWithTableNavigation.script_previousRow.__func__.category = SCRCAT_TABLE
-	documentBase.DocumentWithTableNavigation.script_nextColumn.__func__.category = SCRCAT_TABLE
-	documentBase.DocumentWithTableNavigation.script_previousColumn.__func__.category = SCRCAT_TABLE
+	if py3:
+		# for python 3
+		documentBase.DocumentWithTableNavigation.script_nextRow.category = SCRCAT_TABLE
+		documentBase.DocumentWithTableNavigation.script_previousRow.category = SCRCAT_TABLE
+		documentBase.DocumentWithTableNavigation.script_nextColumn.category = SCRCAT_TABLE
+		documentBase.DocumentWithTableNavigation.script_previousColumn.category = SCRCAT_TABLE
+	else:
+		# for python 2
+		documentBase.DocumentWithTableNavigation.script_nextRow.__func__.category = SCRCAT_TABLE
+		documentBase.DocumentWithTableNavigation.script_previousRow.__func__.category = SCRCAT_TABLE
+		documentBase.DocumentWithTableNavigation.script_nextColumn.__func__.category = SCRCAT_TABLE
+		documentBase.DocumentWithTableNavigation.script_previousColumn.__func__.category = SCRCAT_TABLE
 	
 	def __init__(self,rootNVDAObject):
 		super(DocumentWithTableNavigationEx,self).__init__(rootNVDAObject)

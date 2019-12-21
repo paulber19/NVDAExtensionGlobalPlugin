@@ -9,8 +9,6 @@ addonHandler.initTranslation()
 from logHandler import log
 import time
 import wx
-import win32clipboard
-import win32con
 import api
 from keyboardHandler import KeyboardInputGesture
 import ui
@@ -20,53 +18,54 @@ from gui import guiHelper
 import queueHandler
 import core
 import config
+import sys
 from . import symbols
+from ..utils.py3Compatibility import py3
 from ..utils.NVDAStrings import NVDAString
 from ..utils import  speakLater, isOpened, makeAddonWindowTitle
-from ..utils.py3Compatibility import baseString
-
-
-
 
 _lastUsedSymbols = []
 
-
+if  py3:
+	from api import copyToClip
+else:
 	# NVDA copyToClip function modified to accept non breaking space symbols
-def copyToClip(text):
-
-	"""Copies the given text to the windows clipboard.
-@returns: True if it succeeds, False otherwise.
-@rtype: boolean
-@param text: the text which will be copied to the clipboard
-@type text: string
-"""
-	if isinstance(text,baseString) and len(text)>0:
-		if len(text) == 1 and ord(text) == 160:
-			goodToCopy = True
-		elif not text.isspace():
-			goodToCopy = True
-		else:
-			goodToCopy = False
-
-	#if isinstance(text,basestring) and len(text)>0 and not text.isspace():
-	if goodToCopy:
-		try:
-			win32clipboard.OpenClipboard()
-		except win32clipboard.error:
-			return False
-		try:
-			win32clipboard.EmptyClipboard()
-			win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text)
-		finally:
-			win32clipboard.CloseClipboard()
-		win32clipboard.OpenClipboard() # there seems to be a bug so to retrieve unicode text we have to reopen the clipboard
-		try:
-			got = 	win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-		finally:
-			win32clipboard.CloseClipboard()
-		if got == text:
-			return True
-	return False
+	def copyToClip(text):
+		"""Copies the given text to the windows clipboard.
+		@returns: True if it succeeds, False otherwise.
+		@rtype: boolean
+		@param text: the text which will be copied to the clipboard
+		@type text: string
+		"""
+		import win32con
+		import win32clipboard
+		if isinstance(text,basestring) and len(text)>0:
+			if len(text) == 1 and ord(text) == 160:
+				goodToCopy = True
+			elif not text.isspace():
+				goodToCopy = True
+			else:
+				goodToCopy = False
+	
+		#if isinstance(text,basestring) and len(text)>0 and not text.isspace():
+		if goodToCopy:
+			try:
+				win32clipboard.OpenClipboard()
+			except win32clipboard.error:
+				return False
+			try:
+				win32clipboard.EmptyClipboard()
+				win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text)
+			finally:
+				win32clipboard.CloseClipboard()
+			win32clipboard.OpenClipboard() # there seems to be a bug so to retrieve unicode text we have to reopen the clipboard
+			try:
+				got = 	win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+			finally:
+				win32clipboard.CloseClipboard()
+			if got == text:
+				return True
+		return False
 
 
 def SendKey(keys):

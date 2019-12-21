@@ -7,6 +7,7 @@ import wx
 import gui
 import api
 import glob
+from ..utils.py3Compatibility import  py3, getAddonPath, getCommonUtilitiesPath
 
 XGETTEXT_COMMON_ARGS = (
 	"--msgid-bugs-address\"={gettext_package_bugs_address}\" "
@@ -34,7 +35,7 @@ def generatePotFile(addon, potFileName, buildVarsAddonInfo, buildVarsI18nSources
 		'gettext_package_name' : buildVarsAddonInfo['addon_name'],
 		'gettext_package_version' : buildVarsAddonInfo['addon_version']
 	}
-	addonPath = addon.path.encode("mbcs")
+	addonPath = getAddonPath(addon)
 	potFileDir = os.path.join(addonPath, "locale", "en")
 	files = glob.glob(os.path.join(potFileDir , "*.pot"))
 	for f in files:
@@ -48,8 +49,8 @@ def generatePotFile(addon, potFileName, buildVarsAddonInfo, buildVarsI18nSources
 		return -1
 	gettextVars["TARGET"] = potFile
 	gettextVars["inputDirectory"] = addonPath
-	curAddon = addonHandler.getCodeAddon()
-	xgettextPath = os.path.join(curAddon.path.encode("mbcs"), "utilities","xgettext.exe")
+	utilitiesPath = getCommonUtilitiesPath()
+	xgettextPath = os.path.join(utilitiesPath, "xgettext.exe")
 	sources = ""
 	for item in i18nSources:
 		f = item.replace(addon.path +"\\", "")
@@ -60,3 +61,50 @@ def generatePotFile(addon, potFileName, buildVarsAddonInfo, buildVarsI18nSources
 	p = subprocess.Popen(commandLine)
 	retval = p.wait()
 	return retval
+def compilePoFiles1(addon):
+	utilitiesPath = getCommonUtilitiesPath()
+	msgfmtPath = os.path.join(utilitiesPath, "msgfmt.exe")
+	prefixe = "nvda"
+	p = os.path.join(addon.path, "locale", "*", "LC_MESSAGES", prefixe, ".po")
+	poFiles = glob.glob(p)
+	for poFile in poFiles:
+		moPath = os.path.split(poFile)
+		moFile = os.path.join(moPath, prefixe, ".mo")
+		commandLine = ["msgfmtPath", "-o", moFile, poFile]
+		#subprocess.run(commandLine,check=True)
+
+def compilePoFiles(addon):
+	utilitiesPath = getCommonUtilitiesPath()
+	if py3:
+	#  for python 3
+		msgfmtPath = os.path.join(utilitiesPath, "msgfmt.exe")
+	else:
+		# for python 2
+		msgfmtPath = os.path.join(utilitiesPath, "msgfmt.exe").decode("mbcs")
+	prefixe = "nvda"
+	localeDir = os.path.join(addon.path, "locale")
+	poFiles = []
+	for root, directories, files in os.walk(localeDir): 
+		for filename in files: 
+			if os.path.isdir(filename): continue
+			if not filename.endswith(".po"): continue
+			poFiles.append(os.path.join(root, filename))
+	count = 0
+	for poFile in poFiles:
+		moPath = os.path.split(poFile)[0]
+		moFile = os.path.join(moPath, "%s.mo"%prefixe)
+		if os.path.exists(moFile):
+			os.remove(moFile)
+
+		commandLine = ["\"%s\""%msgfmtPath, "-o", "\"%s\""%moFile, "\"%s\""%poFile]
+		if py3:
+			# for python 3
+			commandLine = " ".join(commandLine)
+		else:
+			# for python 2
+			commandLine = " ".join(commandLine).encode("mbcs")
+		p = subprocess.Popen(commandLine)
+		retval = p.wait()
+		if retval == 0:
+			count += 1
+	return  (count, len(poFiles))

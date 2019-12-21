@@ -8,16 +8,88 @@ import gettext
 import os
 import os.path
 import zipfile
-
+import sys
+py3 = sys.version.startswith("3")
 import buildVars
-import txt2tagsEx
+if py3:
+	import txt2tags as txt2tags
+else:
+	import txt2tags25 as txt2tags
+import markdown2 as markdown
+
+def writeHTMLFile(dest, htmlText, lang, title, cssFileName):
+	cssFile =cssFileName if cssFileName is not None else "style.css"
+	#lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
+	with codecs.open(dest, "w", "utf-8") as f:
+		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
+			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
+			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
+			"<head>\n" +
+			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
+			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n"%cssFile +
+			"<title>%s</title>\n" % title +
+			"</head>\n"
+		)
+		f.write(htmlText)
+		f.write("\n</html>\n")
+	f.close()
+def getHTMLBody(dest):
+	src = codecs.open( dest, "r","utf_8",errors="replace")
+	startTag=  "</head>"
+	endTag= "<!-- html code generated"
+	appendLine = False
+	text =[]
+	for sLine in src:
+		line = sLine.lower()
+		startTagFound = line.find(startTag)
+		endTagFound = line.find(endTag)
+		if startTagFound >= 0:
+			appendLine = True
+			sLine = sLine[startTagFound+len(startTag):]
+			text.append(sLine)
+			continue
+		elif endTagFound >=0:
+			sLine = sLine[: endTagFound]
+			text.append(sLine)
+			break
+		if appendLine:
+			text.append(sLine)
+	text.append("</body>")
+	return "".join(text)
+
 def t2t2html(source, dest):
-	txt2tagsEx.exec_command_line([source,])
+	txt2tags.exec_command_line([source,])
+	htmlText = getHTMLBody(dest)
+	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
+	localeLang = os.path.basename(os.path.dirname(source))
+	try:
 	
+		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).ugettext
+		title=u"{0} {1}".format(_(buildVars.addon_info["addon_summary"]), buildVars.addon_info["addon_version"])
+	except:
+		title=u"{0} {1}".format(buildVars.addon_info["addon_summary"], buildVars.addon_info["addon_version"])
+	writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style_t2t.css")
+	return
+	"""
+	with codecs.open(dest, "w", "utf-8") as f:
+		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
+			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
+			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
+			"<head>\n" +
+			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
+			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../style_t2t.css\" media=\"screen\"/>\n" +
+			"<title>%s</title>\n" % title +
+			"</head>\n<body>\n"
+		)
+		f.write(htmlText)
+		f.write("\n</body>\n</html>")
+	"""
 
 
 def md2html(source, dest):
-	import markdown
+	
 	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
 	localeLang = os.path.basename(os.path.dirname(source))
 	try:
@@ -33,7 +105,10 @@ def md2html(source, dest):
 		mdText = f.read()
 		for k, v in headerDic.iteritems():
 			mdText = mdText.replace(k, v, 1)
-		htmlText = markdown.markdown(mdText)
+		htmlText = "<body>\n" +markdown.markdown(mdText) +"\n</body>"
+		writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style.css")
+		return
+	"""
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
@@ -46,8 +121,8 @@ def md2html(source, dest):
 			"</head>\n<body>\n"
 		)
 		f.write(htmlText)
-		f.write("\n</body>\n</html>")
-
+		f.write("\n</body>\n</html>\n")
+	"""
 def generateT2tHelpFiles (source, target, env, for_signature):
 	action = env.Action(lambda target, source, env : t2t2html(source[0].abspath, target[0].abspath) and None,
 	lambda target, source, env : "Generating %s" % target[0])

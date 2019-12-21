@@ -1,17 +1,17 @@
-# Extensión de las órdenes básicas de NVDA #
+# Complemento Extensión de las órdenes básicas de NVDA #
 
-* Autores: paulber19
+* Autores: paulber19 con la participación de Daniel Poiraud
 * URL : paulber19@laposte.net
-* Descargar [versión de desarrollo][1]
-* Descargar [versión de desarrollo][2]
+* Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
+* Descargar:
+	* [la versión estable][1]
+	* [versión de desarrollo][2]
+* Compatibilidad:
+	* mínima de NVDA requerida: 2019.1
+	* última versión de NVDA probada: 2019.3
 
 
-Este complemento fue desarrollado con la participación de Daniel Poiraud.
-
-No es compatible con versiones de NVDA anteriores a la 2018.3.2.
-
-
-Este complemento añade a NVDA:
+Añade a NVDA:
 ## Las características ##
 
 Algunas de ellas se pueden habilitar o deshabilitar individualmente.
@@ -21,7 +21,7 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Ayuda para la composición de símbolos complejos como por ejemplo, un "e" en la "o", un símbolo Exponente 2 y la opción de añadir tus propias categorías y símbolos,
 * Extensión de la funcionalidad del modo exploración de NVDA para los navegadores Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge y Google Chrome:
 
-	* Órdenes para el modo exploración (párrafo, división, ancla, región principal),
+	* Órdenes para el modo exploración (párrafo, división, ancla, región),
 	* Nuevos tipos de elementos para el cuadro de diálogo abierto con "NVDA+F7" (botón de opción, párrafos, marco, casillas de verificación, etc.) con el anuncio del número de elementos encontrados,
 	* Órdenes para las tablas: 
 		* Anunciar las celdas de una fila/columna, ir a la primera o última celda en la fila/columna actual, mover a la columna/fila que precede y seguir con el posible anuncio de las celdas en la misma fila o columna,
@@ -70,7 +70,7 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Anunciar, con un sonido, la escritura de un error en el registro también para la versión final o RC de NVDA,
 * Titular los diálogos con el nombre del complemento,
 * No tomar en cuenta la opción Anunciar descripciones de objeto al mostrar los diálogos de estilo de confirmación,
-* Usar las teclas del teclado numérico como las teclas de flechas.
+* Poder  usar las teclas del teclado numérico de manera clásica.
 
 
 ## Varios otros elementos: ##
@@ -80,6 +80,6 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Script para reiniciar rápidamente NVDA.
 
 
-[1]: https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-8.1.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.0.nvda-addon
 
-[2]:
+[2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

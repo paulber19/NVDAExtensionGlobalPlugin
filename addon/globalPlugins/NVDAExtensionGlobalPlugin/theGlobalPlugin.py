@@ -45,14 +45,14 @@ from .settings import *
 from .settings.dialog import AddonSettingsDialog
 from . import commandKeysSelectiveAnnouncementAndRemanence
 from . import speechHistory
-from . import volumeControl
+from .computerTools import volumeControl as volumeControl 
 from .utils.NVDAStrings import NVDAString
 from .utils import maximizeWindow, makeAddonWindowTitle, isOpened
 from .utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
 from .utils import special
 from .utils import runInThread
 from .utils.informationDialog import InformationDialog
-from .utils.py3Compatibility import _unicode
+from .utils.py3Compatibility import  py3, _unicode
 _curAddon = addonHandler.getCodeAddon()
 _addonSummary = _curAddon.manifest['summary']
 # module script categories
@@ -85,14 +85,20 @@ def fetchAddon(processID, appName):
 	# First, check whether the module exists.
 	# We need to do this separately because even though an ImportError is raised when a module can't be found, it might also be raised for other reasons.
 	# Python 2.x can't properly handle unicode module names, so convert them.
-	modName = appName.encode("mbcs")
+	if py3:
+		modName = appName
+	else:
+		modName = appName.encode("mbcs")
 	if appModuleHandler.doesAppModuleExist(modName):
 		try:
 			mod = __import__("appModules.%s" % modName, globals(), locals(), ("appModules",))
 			# check if we can create appModule
 			#appModule = __import__("appModules.%s" % modName, globals(), locals(), ("appModules",)).AppModule(processID, appName)
 			mod.AppModule(processID, appName)
-			path = mod.__file__.decode("mbcs")
+			if py3:
+				path = mod.__file__
+			else:
+				path = mod.__file__.decode("mbcs")
 			l = path.split("\\")
 			for i in reversed(list(range(0,len(l)))):
 				item = l[i]
@@ -162,7 +168,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"leftClickAtNavigatorObjectPosition": (("kb:nvda+,",), None),
 		"rightClickAtNavigatorObjectPosition": (("kb:nvda+shift+,",), None),
 		"addonSettingsDialog":  (None, None),
-		"toggleNumpadNavigationMode":  (None, None),
+		"toggleNumpadStandardUse":  (None, None),
+		"toggleNumpadStandardUseWithNumlockKey": (("kb:numlock",), None),
 		}
 	
 	# a dictionnary to map shell script to gesture and installation check function
@@ -176,7 +183,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"commandKeySelectiveAnnouncement": ("kb:f3", ID_CommandKeysSelectiveAnnouncement ),
 		"ComplexSymbolHelp" : ("kb:f4", ID_ComplexSymbols ,),
 		"lastUsedComplexSymbolsList" : ("kb:control+f4", ID_ComplexSymbols,),
-		"toggleNumpadNavigationMode": ("kb:f5", None),
+		"toggleNumpadStandardUse": ("kb:f5", None),
 		"displaySpeechHistoryRecords": ("kb:f9", ID_SpeechHistory ),
 		"report_WindowsList" : ("kb:f10", ID_SystrayIconsAndActiveWindowsList),
 		"report_SystrayIcons": ("kb:f11", ID_SystrayIconsAndActiveWindowsList),
@@ -283,7 +290,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Input help mode message for toggle current app volume mute command.
 		"toggleCurrentAppVolumeMute": (_("Toggle current application's volume mute"), None),
 		# Translators: Input help mode message for launch module layer command.
-		"moduleLayer": (_("Launch  commands's shell of add-on"), None),
+		"moduleLayer": (_("Launch  %s commands's shell")%_addonSummary, None),
 		#Translators: Input help mode message for set VoiceProfile Selector 1 command.
 		"setVoiceProfileSelector1": (_("Set selector 1 as current selector and Sets , if possible, it associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE ),
 		#Translators: Input help mode message for set VoiceProfile Selector 2 command.
@@ -330,8 +337,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"rightClickAtNavigatorObjectPosition" : (_("Click the right mouse button at naviHgator object position. Twice: click twice  this button at this position"), globalCommands.SCRCAT_MOUSE),
 		# Translators: Input help mode message for addon settings dialog script command.
 		"addonSettingsDialog": (_("Display add-on settings dialog"), None),
-		# Translators: Input help mode message for toggle numpad navigation mode command.
-		"toggleNumpadNavigationMode": (_("Enable or disable the use  of numpad keys as navigationnall keys"), None),
+		# Translators: Input help mode message for toggle standard use of nunumeric keypad.
+		"toggleNumpadStandardUse": (_("Enable or disable the standard use  of numeric keypad"), None),
 		}
 	
 	def __init__(self, *args, **kwargs):
@@ -361,11 +368,15 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		core.callLater(200,self.installShellScriptDocs)
 		self.switchVoiceProfileMode = "off"
 		if toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
-			volumeControl.setSpeakerVolume(withMin = True)
-			volumeControl.setNVDAVolume(withMin = True)
+			volumeControl.setNVDAVolume (withMin = True)
+			volumeControl.setSpeakerVolume (withMin = True)
 		if toggleByPassNoDescriptionAdvancedOption (False):
 			self.oldGuiMessageBox = gui.messageBox
 			gui.messageBox = special.messageBox
+		from .settings import toggleAutoUpdateGeneralOptions, toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
+		if toggleAutoUpdateGeneralOptions(False):
+			from . updateHandler import autoUpdateCheck
+			autoUpdateCheck(toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 	
 	def _bindGestures(self):
 		for script in self._mainScriptToGestureAndfeatureOption:
@@ -446,6 +457,11 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 				_("Command keys selective announcement..."),
 				"")
 			gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.onCommandKeysSelectiveAnnouncementMenu, self.commandKeysSelectiveAnnouncementMenu)
+		self.resetConfigurationMenu = menu.Append(wx.ID_ANY,
+			# Translators: name of the option in the menu.
+			_("Reset configuration to default values"),
+			"")
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, self.onResetConfiguration, self.resetConfigurationMenu)
 		self.toolsMenu = gui.mainFrame.sysTrayIcon.toolsMenu
 		menu = wx.Menu()
 		self.exploreNVDAMenu = self.toolsMenu .AppendSubMenu(menu ,
@@ -531,6 +547,10 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def onKeyboardKeysRenamingMenu (self, evt):
 		from .keyboardKeyRenaming import KeyboardKeyRenamingDialog
 		gui.mainFrame._popupSettingsDialog(KeyboardKeyRenamingDialog)
+	def onResetConfiguration(self, evt):
+		from .settings import _addonConfigManager
+		wx.CallAfter(_addonConfigManager.resetConfiguration)
+
 	def exploreFolder(self, path):
 		import subprocess
 		cmd = "explorer \"{path}\"" .format(path = path)
@@ -710,7 +730,6 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	def script_reportAppProductNameAndVersion(self, gesture):
 		def callback (repeatCount):
-
 			clearDelayScriptTask()
 			obj = api.getFocusObject()
 			appName = obj.appModule.productName
@@ -723,8 +742,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 				api.copyToClip(text)
 				# Translators: message to report that product name and version copied to clipboard.
 				ui.message(_("Product name and version has been copied to clipboard"))
-		stopDelayScriptTask()
 		
+		stopDelayScriptTask()
 		repeatCount = scriptHandler.getLastScriptRepeatCount()
 		if repeatCount == 0:
 			delayScriptTask(callback,repeatCount)
@@ -779,7 +798,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return message
 		textList = []
 		focus=api.getFocusObject()
-		appName=appModuleHandler.getAppNameFromProcessID(focus.processID,True)
+		appProcessName=appModuleHandler.getAppNameFromProcessID(focus.processID,True)
+		appName = "%s, %s"%(appProcessName,focus.appModule.productName)
 		appVersion = focus.appModule.productVersion
 		# Translators: Indicates the name of the current program and it version.
 		msg = _("Application: {appName} {appVersion}") .format(appName = appName, appVersion = appVersion)
@@ -970,22 +990,22 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		os.startfile(path)
 	
 	def script_shutdownComputerDialog(self, gesture):
-		from . import shutdown
-		shutdown.ComputerShutdownDialog.run()
+		from .computerTools import shutdown_gui as shutdown_gui
+		shutdown_gui.ComputerShutdownDialog.run()
 	def script_shutdownComputer(self, gesture):
-		from .shutdown.shutdown import shutdown
+		from .computerTools.shutdown_util import shutdown as shutdown
 		forceClose = True
 		timeout = 0
 		shutdown(timeout,forceClose)
 	
 	def script_rebootComputer(self, gesture):
-		from .shutdown.shutdown import reboot
+		from .computerTools.shutdown_util import reboot as reboot
 		forceClose = True
 		timeout = 0
 		reboot(timeout,forceClose)
 	
 	def script_hibernateComputer(self, gesture):
-		from .shutdown.shutdown import suspend
+		from .computerTools.shutdown_util import suspend as suspend
 		suspend(hibernate=True)
 	
 	def script_toggleCurrentAppVolumeMute (self, gesture):
@@ -1147,8 +1167,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 					# Translators: Reported when the object has no location for the mouse to move to it.
 					ui.message(_("Object has no location"))
 					return
-				x=left+(width/2)
-				y=top+(height/2)
+				x=int(left+(width/2))
+				y=int(top+(height/2))
 			oldSpeechMode = speech.speechMode
 			speech.speechMode = speech.speechMode_off
 			winUser.setCursorPos(x,y)
@@ -1190,8 +1210,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 					# Translators: Reported when the object has no location for the mouse to move to it.
 					ui.message(_("Object has no location"))
 					return
-				x=left+(width/2)
-				y=top+(height/2)
+				x=int(left+(width/2))
+				y=int(top+(height/2))
 			oldSpeechMode = speech.speechMode
 			speech.speechMode = speech.speechMode_off
 			winUser.setCursorPos(x,y)
@@ -1214,20 +1234,47 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			callback(True)
 	
 	enableNumpadNnavigationKeys = False
-	def script_toggleNumpadNavigationMode(self, gesture):
+	def script_toggleNumpadStandardUse(self, gesture):
 		from .settings import  toggleEnableNumpadNavigationModeToggleAdvancedOption
 		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
 			# Translators: message to user to report unavailable command.
 			msg = _("Numeric pad navigation mode toggle is not  available")
 			speech.speakMessage(msg)
 			return
-
-		from commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
+		from .commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
 		_myInputManager .toggleNavigationNumpadMode()
-	
+
+	def script_toggleNumpadStandardUseWithNumlockKey(self, gesture):
+		def callback(gesture):
+			clearDelayScriptTask()
+			gesture.reportExtra()
+			
+		stopDelayScriptTask()
+		if not  toggleEnableNumpadNavigationModeToggleAdvancedOption(False) or    not toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False):
+			gesture.send()
+			callback(gesture)
+			return
+		count = scriptHandler.getLastScriptRepeatCount()
+		gesture.send()
+		if count ==0:
+			delayScriptTask(callback, gesture)
+		else:
+			self.script_toggleNumpadStandardUse(None)
+
+
+
+
+		
 	def script_test (self, gesture):
 		print("test")
 		ui.message("NVDAExtensionGlobalPlugin test")
+		from .updateHandler.update_check import CheckForAddonUpdate
+		fileName= os.path.join(globalVars.appArgs.configPath, "myAddons.latest")
+		wx.CallAfter(CheckForAddonUpdate, None, updateInfosFile = fileName, auto = False, releaseToDev = toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
+
+
+
+
 
 class HelperDialog(wx.Dialog):
 	_instance = None

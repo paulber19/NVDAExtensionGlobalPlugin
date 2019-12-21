@@ -160,10 +160,13 @@ class BrowseModeDocumentTreeInterceptorEx (documentBaseEx.DocumentWithTableNavig
 				return
 			ui.message(msg)
 			winsound.PlaySound("default",1)
-		item.moveTo()
+		# #8831: Report before moving because moving might change the focus, which
+		# might mutate the document, potentially invalidating info if it is
+		# offset-based.
 		if not gesture or not willSayAllResume(gesture):
 			item.report(readUnit=readUnit)
-
+		item.moveTo()
+		
 def chooseNVDAObjectOverlayClasses(obj, clsList):
 	#print "clsList: %s" %clsList
 	if NVDAObjects.UIA.edge.EdgeHTMLRoot in clsList:

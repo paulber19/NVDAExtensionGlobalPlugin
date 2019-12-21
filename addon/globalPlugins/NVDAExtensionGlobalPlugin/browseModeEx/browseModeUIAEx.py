@@ -33,9 +33,8 @@ class UIATextRangeQuickNavItemEx(UIABrowseMode .UIATextRangeQuickNavItem):
 	def label(self):
 		value = super(UIATextRangeQuickNavItemEx , self).label
 		obj=self.obj
-		name=obj.name
 		# Translators: label when object has no name.
-		name = name if name  else _("No label")
+		name = obj.name if name  else _("No label")
 		if (self.itemType == "edit"): # or (self.itemType == "formField" and obj.role == controlTypes.ROLE_EDITABLETEXT):
 			value= _unicode("{name} {role} {value}") .format(name = name, role = controlTypes.roleLabels[obj.role], value = value)
 		elif self.itemType == "checkBox":

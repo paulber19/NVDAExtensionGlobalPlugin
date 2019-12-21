@@ -7,6 +7,7 @@
 import addonHandler
 from logHandler import log
 import os.path
+import sys
 from configobj import ConfigObj
 # ConfigObj 5.1.0 and later integrates validate module.
 try:
@@ -15,7 +16,7 @@ except ImportError:
 	from validate import Validator
 import globalVars
 from locale import getdefaultlocale
-from ..utils.py3Compatibility import importStringIO 
+from ..utils.py3Compatibility import py3, importStringIO 
 StringIO = importStringIO ()
 
 _configSpec = """
@@ -39,7 +40,12 @@ def getKeyboardKeysIniFilePath():
 		langs.append(lang.split("_")[0])
 	langs.append("en")
 	for lang in langs:
-		langDir = os.path.join(addonFolderPath,"locale",lang.encode("utf-8"))
+		if py3:
+			# for python 3
+			langDir = os.path.join(addonFolderPath,"locale",lang)
+		else:
+			# for python 2
+			langDir = os.path.join(addonFolderPath,"locale",lang.encode("utf-8"))
 		if os.path.exists(langDir):
 			file=os.path.join(langDir,"keyboard.ini")
 			if os.path.isfile(file):

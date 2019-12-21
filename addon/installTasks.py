@@ -9,12 +9,12 @@ from logHandler import log
 
 curConfigFileName = "NVDAExtensionGlobalPluginAddon.ini"
 
-def saveAddonProfilesConfig(addonName):
+def saveCurAddonConfigurationProfiles(addonName):
 	import config
 	conf = config.conf
 	save = False
 	if addonName in conf.profiles[0]:
-		log.warning("saveAddonProfilesConfig profile[0]")
+		log.warning("saveCurAddonConfigurationProfiles profile[0]")
 		conf.profiles[0]["%s-temp"%addonName] = conf.profiles[0][addonName].copy()
 		del conf.profiles[0][addonName]
 		save = True
@@ -23,7 +23,7 @@ def saveAddonProfilesConfig(addonName):
 	for name in profileNames:
 		profile = config.conf._getProfile(name)
 		if profile.get(addonName):
-			log.warning("saveAddonProfilesConfig: profile %s"%name)
+			log.warning("saveCurAddonConfigurationProfiles: profile %s"%name)
 			profile["%s-temp"%addonName] = profile[addonName].copy()
 			del profile[addonName]
 			config.conf._dirtyProfiles.add(name)
@@ -51,7 +51,7 @@ def deleteAddonProfilesConfig(addonName):
 			save = True
 			config.conf._dirtyProfiles.add(name)
 	# We save the configuration, in case the user would not have checked the "Save configuration on exit" checkbox in General settings.
-	if save and config.conf['general']['saveConfigurationOnExit']:
+	if save :
 		config.conf.save()
 	
 def onInstall():
@@ -60,14 +60,17 @@ def onInstall():
 	addonHandler.initTranslation()
 	import gui, wx,shutil
 	import os, globalVars, sys
-	#include the module directory to the path
-	curPath = os.path.dirname(__file__).decode("mbcs")
+	if sys.version.startswith("3"):
+		curPath = os.path.dirname(__file__)
+	else:
+		curPath = os.path.dirname(__file__).decode("mbcs")
 	sys.path.append(curPath)
-	import buildVars
-	addonName = buildVars.addon_info["addon_name"]
-	addonSummary = _(buildVars.addon_info["addon_summary"])
 	from onInstall import checkWindowListAddonInstalled ,installNewSymbols
 	del sys.path[-1]
+	from addonHandler import _availableAddons 
+	addon = _availableAddons [curPath]
+	addonName = addon.manifest["name"]
+	addonSummary = addon.manifest["summary"]
 	checkWindowListAddonInstalled ()
 	installNewSymbols()
 	# save old configuration if user wants it
@@ -84,29 +87,26 @@ def onInstall():
 			dest = os.path.join(curPath, curConfigFileName)
 			try:
 				shutil.copy(addonConfigFile, dest)
-				saveAddonProfilesConfig(addonName)
+				saveCurAddonConfigurationProfiles(addonName)
 			except:
 				log.error("Addon configuration cannot be saved: %s"%addonConfigFile)
-				# clean up all add-on configuration
-				deleteAddonProfilesConfig(addonName)
-		else:
-			# user don't want to save configuration
-			# clean up all add-on configuration
-			deleteAddonProfilesConfig(addonName)
-		# in all cases, addon config file must deleted
+
 		os.remove(addonConfigFile )
 		if os.path.exists(addonConfigFile):
 			log.error("Error on deletion of NVDAExtensionGlobalPlugin addon settings file: %s"%addonConfigFile)
-	else:
-		# no previous addon config, but try to clear nvda.ini file and profiles
-		deleteAddonProfilesConfig(addonName)
-	
+	# in all cases, clean up all add-on configuration
+	deleteAddonProfilesConfig(addonName)
 
 def onUninstall():
 	import os, globalVars, sys
 	log.warning("OnUnInstall")
 	#include the module directory to the path
-	curPath = os.path.dirname(__file__).decode("mbcs")
+	if  sys.version.startswith("3"):
+		# for ppython 3
+		curPath = os.path.dirname(__file__)
+	else:
+		# for python 2
+		curPath = os.path.dirname(__file__).decode("mbcs")
 	sys.path.append(curPath)
 	import buildVars
 	addonName = buildVars.addon_info["addon_name"]

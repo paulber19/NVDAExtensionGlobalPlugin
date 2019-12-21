@@ -9,6 +9,7 @@ import addonHandler
 addonHandler.initTranslation()
 from logHandler import log
 import os
+import sys
 import globalVars
 import characterProcessing
 from characterProcessing import SpeechSymbolProcessor
@@ -31,8 +32,12 @@ def getNewSymbolsFile(folder):
 	newSymbolsFileName = "symbols-" +lang + ".dic"
 	newSymbolsFileList = os.listdir(folder)
 	if newSymbolsFileName in newSymbolsFileList:
-		return newSymbolsFileName.encode("utf-8")
-	
+		if sys.version.startswith("3"):
+			# for python 3
+			return newSymbolsFileName
+		else:
+			# for python 2
+			return newSymbolsFileName.encode("utf-8")
 	return None
 
 def getSymbolsFilesList(folder):

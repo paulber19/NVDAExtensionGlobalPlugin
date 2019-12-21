@@ -1,6 +1,6 @@
 #NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py
 #A part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2016  paulber19
+#Copyright (C) 2016-2019  paulber19
 #This file is covered by the GNU General Public License.
 #See the file COPYING for more details.
 
@@ -12,63 +12,46 @@ import winUser
 import time
 import wx
 from keyboardHandler import KeyboardInputGesture
+import ctypes
 import speech
 import oleacc
-from ..utils.NVDAStrings import NVDAString
-from ..utils import isOpened, makeAddonWindowTitle
 from gui import guiHelper, mainFrame
 import NVDAObjects.window
 import queueHandler
 import os
 import sys
-_curAddon = addonHandler.getCodeAddon()
-utilitiesPath= os.path.join(_curAddon.path, "utilities")
-sys.path.append(utilitiesPath)
-import win32gui
-del sys.path[-1]
-# win32con constant
-GW_OWNER = 4
-WS_EX_APPWINDOW = 262144
-GWL_EXSTYLE = (-20)
-WS_EX_TOOLWINDOW = 128
-SW_MAXIMIZE = 3
+from ..utils.py3Compatibility import getUtilitiesPath
+from ..utils.NVDAStrings import NVDAString
+from ..utils import isOpened, makeAddonWindowTitle
+from .user32 import *
 
-
-# flags  placement
-
-WPF_RESTORETOMAXIMIZED= 0x0002 
-SW_SHOWNORMAL= 1
-SW_SHOWMINIMIZED = 2
-SW_SHOWMAXIMIZED = 3 
 
 # Translators: this is the list  of  windows titles which do not be displayed.
 _windowsToIgnore = _("Start menu|Charm Bar")
 
+
 def isRealWindow(hWnd): 
 	if not winUser.isWindowVisible(hWnd): 
 		return False 
-	if win32gui.GetParent(hWnd) != 0: 
+	if getParent(hWnd):
 		return False 
-	hasNoOwner = win32gui.GetWindow(hWnd, GW_OWNER) == 0 
-	lExStyle = win32gui.GetWindowLong(hWnd, GWL_EXSTYLE) 
+	hasNoOwner = winUser.getWindow(hWnd, winUser.GW_OWNER) == 0 
+	lExStyle = getExtendedWindowStyle(hWnd) 
 	if (((lExStyle & WS_EX_TOOLWINDOW) == 0 and hasNoOwner) 
 	or ((lExStyle & WS_EX_APPWINDOW != 0) and not hasNoOwner)): 
 		if winUser.getWindowText(hWnd): 
 			return True 
-
-	return False 
 
 def getactiveWindows():
 	def callback(hWnd, windows):
 		# we exclude non real windows
 		if not isRealWindow(hWnd):
 			return True
-		
 		title = winUser.getWindowText(hWnd)
-		if title in _windowsToIgnore.split("|"):
+		placement = getWindowPlacement(hwnd)
+		flags = placement.flags
+		if not flags or title in _windowsToIgnore.split("|"):
 			return True
-		
-		placement = win32gui.GetWindowPlacement(hWnd)
 		windows.append((title,hWnd )) 
 		return True
 	
@@ -79,7 +62,11 @@ def getactiveWindows():
 	desktopWindowHandle = api.getDesktopObject().windowHandle
 	windowsList.append((desktopWindowName, desktopWindowHandle))
 	# we start enumeration
-	win32gui.EnumWindows(callback, windowsList)
+	l = enumWindows()
+	for hwnd in l:
+		callback(hwnd, windowsList)
+
+
 	return windowsList 
 
 class ActiveWindowsListDisplay(wx.Dialog):
@@ -116,10 +103,10 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			if hwnd == myHwnd:
 				continue
 			# we fill the list
+			placement = getWindowPlacement(hwnd)
+			flags = placement.flags
+			showCmd = placement.showCmd
 			self.activeWindows.append(f)
-			placement = win32gui.GetWindowPlacement(hwnd)
-			flags = placement[0]
-			showCmd = placement[1]
 			# normal state, restored state is not signaled
 			state= ""
 			if showCmd == SW_SHOWMINIMIZED:
@@ -258,8 +245,8 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		winUser.setForegroundWindow(hwnd)
 		time.sleep(0.1)
 		winUser.setFocus(hwnd)
-		win32gui.ShowWindow(hwnd, SW_MAXIMIZE) 
-		
+		from ..utils import maximizeWindow
+		maximizeWindow(hwnd)
 	@classmethod
 	def run(cls):
 		if isOpened(cls):

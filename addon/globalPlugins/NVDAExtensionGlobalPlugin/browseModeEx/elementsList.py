@@ -250,7 +250,7 @@ class ElementsListDialogEx(wx.Dialog):
 	def filter(self, filterText, newElementType=False):
 		# If this is a new element type, use the element nearest the cursor.
 		# Otherwise, use the currently selected element.
-
+		# #8753: wxPython 4 returns "invalid tree item" when the tree view is empty, so use initial element if appropriate.
 		try:
 			if wx.version().startswith("4"):
 				# for wxPython 4
@@ -434,8 +434,11 @@ class ElementsListDialogEx(wx.Dialog):
 		else:
 			def move():
 				speech.cancelSpeech()
-				item.moveTo()
+				# #8831: Report before moving because moving might change the focus, which
+				# might mutate the document, potentially invalidating info if it is
+				# offset-based.
 				item.report()
+				item.moveTo()
 			# We must use core.callLater rather than wx.CallLater to ensure that the callback runs within NVDA's core pump.
 			# If it didn't, and it directly or indirectly called wx.Yield, it could start executing NVDA's core pump from within the yield, causing recursion.
 			core.callLater(100, move)

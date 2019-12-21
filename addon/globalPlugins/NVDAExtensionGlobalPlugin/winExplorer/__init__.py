@@ -18,7 +18,10 @@ import winUser
 import NVDAObjects
 import queueHandler
 import itertools
-import sayAllHandler
+# py3 import sayAllHandler
+from . import sayAllHandler
+
+
 import core
 from ..utils import PutWindowOnForeground, getPositionXY, mouseClick, makeAddonWindowTitle
 from ..utils.NVDAStrings import NVDAString

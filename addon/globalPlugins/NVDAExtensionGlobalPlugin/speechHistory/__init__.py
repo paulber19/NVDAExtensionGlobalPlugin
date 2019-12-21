@@ -6,6 +6,7 @@
 
 import addonHandler
 addonHandler.initTranslation()
+from logHandler import log
 import speech
 import ui
 import api

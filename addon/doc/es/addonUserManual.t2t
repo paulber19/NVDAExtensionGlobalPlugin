@@ -1,106 +1,25 @@
 ADDON_SUMMARY - manual del usuario
-Autor: paulber19 (paulber19@laposte.net)  con la participación de Daniel Poiraud
+Autor: ADDON_AUTHOR_NAME con la participación de Daniel Poiraud
 
 
-% add-on version
-%!PostProc (html): ADDON_VERSION 8.1
-% add-on summary
-%!PostProc (html): ADDON_SUMMARY Complemento Extensión de las órdenes básicas de NVDA
-%!Target: html
-%!Encoding: UTF-8
-%!Options: --toc
-%!style:..\style_t2t.css
-% Remove the Table of Contents heading from the toc.
-%!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
-
-% h1 in html should really be the document title only.
-% Therefore, change h1 through h5 in the output to h2 through h6.
-%!PostProc(html): ^<H5>(.*)</H5>$ <H6>\1</H6>
-%!PostProc(html): ^<H4>(.*)</H4>$ <H5>\1</H5>
-%!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
-%!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
-%!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
-% script command keys  definition
-%!PostProc (html): KEY_NEXT_ROW_REPORT NVDA+alt+Flecha Abajo
-%!PostProc (html): KEY_PREVIOUS_ROW_REPORT NVDA+alt+Flecha Arriba
-%!PostProc (html): KEY_NEXT_COLUMN_REPORT NVDA+alt+Flecha Derecha
-%!PostProc (html): KEY_PREVIOUS_COLUMN_REPORT NVDA+alt+Flecha Izquierda
-%!PostProc (html): KEY_MOVE_FIRST_CELL_ROW control+alt+mayúscula+Flecha Izquierda
-%!PostProc (html): KEY_MOVE_LAST_CELL_ROW control+alt+mayúscula+Flecha Derecha
-%!PostProc (html): KEY_MOVE_FIRST_CELL_COLUMN control+alt+mayúscula+Flecha Arriba
-%!PostProc (html): KEY_MOVE_LAST_CELL_COLUMN control+alt+mayúscula+Flecha Abajo
-%!PostProc (html): KEY_CURRENT_ROW_REPORT NVDA+alt+j
-%!PostProc (html): KEY_CURRENT_COLUMN_REPORT NVDA+alt+l
-%!PostProc (html): KEY1_CELL_POSITION_REPORT NVDA+alt+5 Teclado numérico
-%!PostProc (html): KEY2_CELL_POSITION_REPORT NVDA+alt+;
-%!PostProc (html): KEY1_DOCUMENT_ADDRESS NVDA+a
-%!PostProc (html): KEY2_DOCUMENT_ADDRESS NVDA+mayúscula+a
-
-% main script command keys definition
-%!PostProc (html): KEY_SHELL NVDA+j
-%!PostProc (html): KEY_DATE_TIME NVDA + F12
-
-% default fonctionnality  script command keys definition
-%!PostProc (html): MAIN_KEY_ICONS_List NVDA + F11
-%!PostProc (html): MAIN_KEY_COMPLEX_SYMBOL NVDA + Mayúscula + f4
-%!PostProc (html): MAIN_KEY_REPORT_NAME_VERSION NVDA + mayúscula + f1
-%!PostProc (html): MAIN_KEY_CONFIGURATION_PROFILE NVDA+ control +F1
-%!PostProc (html): MAIN_KEY_SAY_CURRENT_FOLDER NVDA+o
-%!PostProc (html): MAIN_KEY_LOG_VIEW NVDA+mayúscula+j
-%!PostProc (html): MAIN_KEY_PREVIOUS_RECORD NVDA+control+f8
-%!PostProc (html): MAIN_KEY_CURRENT_RECORD NVDA+control+f9
-%!PostProc (html): MAIN_KEY_NEXT_RECORD NVDA+control+f10
-%!PostProc (html): MAIN_KEY_MINUTE_TIMER NVDA+mayúscula+f12
-%!PostProc (html): MAIN_KEY_RESTART_NVDA NVDA+control+f4
-%!PostProc (html): MAIN_KEY_OBJECTS_LIST NVDA+b
-%!PostProc (html): MAIN_KEY_VOICEPROFILE_SELECTOR nvda+mayúscula+control+ número del selector
-%!PostProc (html): MAIN_KEY_NEXT_VOICEPROFILE nvda+mayúscula+control+Flecha Derecha
-%!PostProc (html): MAIN_KEY_PREVIOUS_VOICEPROFILE nvda+mayúscula+control+Flecha Izquierda
-%!PostProc (html): MAIN_KEY_MANAGE_SELECTOR nvda+mayúscula+control+m
-%!PostProc (html): MAIN_KEY_VOLUME_ON nvda+mayúscula+escape"
-%!PostProc (html): MAIN_KEY_TOGGLE_MUTE nvda+mayúscula+pausa
-%!PostProc (html): MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR nvda+,
-%!PostProc (html): MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR nvda+,
-%!PostProc (html): MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR nvda+mayúscula+,
-% script shell command keys definitions
-%!PostProc (html): KEY_APPLICATION_INFORMATIONS a
-%!PostProc (html): KEY_OBJECTS_LIST b
-%!PostProc (html): KEY_COPY_DATETIME c
-%!PostProc (html): KEY_REPORT_FORMATTING f
-%!PostProc (html): KEY_ADDON_SETTINGS f1
-%!PostProc (html): KEY_RENAMING f2
-%!PostProc (html): KEY_SELECTIVE_ANNOUNCEMENT f3
-%!PostProc (html): KEY_COMPLEX_SYMBOL f4
-%!PostProc (html): KEY_LAST_USED_COMPLEX_SYMBOL control+f4
-%!PostProc (html): KEY_TOGGLE_NUMPAD_NAVIGATION f5
-%!PostProc (html): KEY_DISPLAY_SPEECH_HISTORY f9
-%!PostProc (html): KEY_WINDOWS_LIST F10
-%!PostProc (html): KEY_ICONS_List F11
-%!PostProc (html): KEY_MINUTE_TIMER f12
-%!PostProc (html): KEY_MODULE_GUIDE g
-%!PostProc (html): KEY_HELP_SHELL h
-%!PostProc (html): KEY_LOG_VIEW j
-%!PostProc (html): KEY_SAY_CURRENT_FOLDER o
-%!PostProc (html): KEY_VOICE_PROFIL_SWITCHING p
-%!PostProc (html): KEY_SHUTDOWN r
-%!PostProc (html): KEY_TOGGLE_MUTE s
-%!PostProc (html): KEY_VOLUME_ON control+s
-%!PostProc (html): KEY_MAIN_VOLUME_UP control+Flecha Arriba
-%!PostProc (html): KEY_MAIN_VOLUME_DOWN control+Flecha Abajo
-%!PostProc (html): KEY_MAIN_VOLUME_MAX control+rePág
-%!PostProc (html): KEY_MAIN_VOLUME_MIN control+avPág
-%!PostProc (html): KEY_APP_VOLUME_UP Flecha Arriba
-%!PostProc (html): KEY_APP_VOLUME_DOWN Flecha Abajo
-%!PostProc (html): KEY_APP_VOLUME_MAX rePág
-%!PostProc (html): KEY_APP_VOLUME_MIN avPág
-%!PostProc (html): KEY_TOOLSFORADDON t
-%!PostProc (html): KEY_USER_INPUT_GESTURE u
-%!PostProc (html): KEY_MANAGE_VOICE_PROFIL v
-
-Descargar: [version ADDON_VERSION https://rawgit.com/paulber007/AllMyNVDAAddons/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-ADDON_VERSION.nvda-addon]
-
+%!includeconf: ../addon_userManual.t2tconf
+%!includeconf: addon_informations.t2tconf
+%!includeconf: addon_keys.t2tconf
+URL: ADDON_AUTHOR_URL
 
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
+
+Descargar:
+- [Versión estable ADDON_VERSION ADDON_DOWNLOAD_SERVER1]
+- [Versiones de desarrollo ADDON_DEV_URL]
+
+
+Compatibilidad:
+- mínima de NVDA requerida: 2019.1
+- última versión de NVDA probada: 2019.3
+
+
+
 
 
 = Índice =[toc]
@@ -114,7 +33,7 @@ Este complemento añade a las órdenes globales de NVDA:
 - las siguientes características:
  - [Mostrar la lista de iconos  en la bandeja del sistema y las ventanas de las aplicaciones lanzadas #hdr1],
  - [Ayuda para la composición de símbolos complejos #hdr3] como por ejemplo un "e" en la "o", un punto de interrogación invertida...,
- - [Informar o mostrar información sobre la aplicación enfocada, como su versión o el perfil de configuración activa #hdr4],
+ - [Informar o mostrar información sobre la aplicación enfocada, como su versión o el perfil de configuración activo #hdr4],
  - [Extensión de la funcionalidad del modo exploración #hdr5] para los navegadores Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge y Google Chrome:
   - Nuevas órdenes para el modo de navegación: (párrafo, división, ancla, región principal),
   - Nuevos tipos de elementos presentado como una lista en el cuadro de diálogo "Lista de Elementos" abierto por NVDA+f7: (lista, casilla de verificación, párrafo, división, marco, ...) y anuncio  del número de elementos correspondientes al tipo seleccionado,
@@ -165,7 +84,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Restablecimiento automático del volumen principal y de NVDA al cargar el complemento #hdr301],
  - [Titular los cuadros de diálogos del complemento con el nombre del complemento #hdr302],
  - [Configuración del retardo de espera de repetición para el mismo gesto de entrada #hdr303],
- - [Posibilidad de usar las teclas del teclado numérico como las teclas de flechas (funcionamiento normal del teclado) #hdr304].
+ - [Posibilidad de usar las teclas del teclado numérico de manera estándar #hdr304].
 - Y otras mejoras:
  - [Menú para explorar tu carpeta de configuración o la carpeta del programa NVDA en archivos de programa #hdr202],
  - [Presentación de la información de formato del texto en un cuadro de diálogo, en lugar de un documento HTML #hdr203],
@@ -176,15 +95,14 @@ Este complemento añade a las órdenes globales de NVDA:
 En el menú "Preferencias" de NVDA, se añade el submenú "ADDON_SUMMARY" que propone, según el caso, las siguientes opciones:
 - Sistemáticamente el submenú Opciones que abre un cuadro de diálogo similar al menú "Opciones" de NVDA y que presenta las siguientes categorías:
  - "Instalación de las funcionalidades": permite ver el estado de instalación de cada funcionalidad proporcionada por el complemento y, posiblemente, modificarlo.
- - "Varios" para configurar las opciones sin clasificar proporcionadas por el complemento,
- - "Ordenador" para configurar las opciones del complemento relacionada con el sistema operativo Windows,
- - Remanencia de las teclas (si la funcionalidad está instalada),
- - Control de sonido (si la funcionalidad está instalada),
- - Avanzadas:   opciones para usuarios experimentados.
- 
-
+ - "Suplementos a NVDA" para configurar las opciones relacionada con NVDA proporcionadas por el complemento,
+ - "Ordenador" para configurar las opciones  relacionadas con la funcionalidad relativa al  ordenador (sistema operativo Windows, Control de sonido),
+   - "Teclado": para configurar las opciones  relacionadas con el teclado (Remanencia de las teclas,   Uso del teclado numérico),
+  - Avanzadas:   opciones para usuarios experimentados,
+ - Actualización: opciones que controlan la actualización del complemento.
 - "Renombrar teclas del teclado" (si la funcionalidad está instalada): te permite modificar, según sea necesario, los nombres de las teclas del teclado que NVDA proporciona de forma predeterminada,
-- "Anuncio selectivo de teclas de órdenes" (si la funcionalidad está instalada): anuncia de forma selectiva el nombre de las teclas del teclado según sea necesario.
+- "Anuncio selectivo de teclas de órdenes" (si la funcionalidad está instalada): anuncia de forma selectiva el nombre de las teclas del teclado según sea necesario,
+- "Reinicialización de la configuración" para restablecer la configuración en su estado inicial durante la primera instalación del complemento.
 
  
 Esta configuración se guarda de dos maneras dependiendo de la funcionalidad o las opciones en cuestión:
@@ -196,7 +114,7 @@ NVDA ofrece la opción "Guardar Configuración al Salir" (consulte la Guía del 
 
 Este complemento sigue este modo de funcionamiento.
 
-Algunos cambios en las opciones del complemento requiere que se guarde la configuración y que se reinicie NVDA. En este caso, se propone al usuario la salvaguarda y el reinicio inmediato.
+Algunos cambios en las opciones del complemento requiere que se guarde la configuración y que se reinicie NVDA. En este caso, se propone al usuario la salvaguarda y el reinicio inmediato como lo hace NVDA cuando hay un cambio de idioma.
 
 
 Cuando se desinstala el complemento, su archivo de configuración se elimina y la configuración del complemento se elimina de todos los perfiles de configuración.
@@ -205,10 +123,34 @@ Cuando se desinstala una funcionalidad, su configuración, si la hay, se elimina
 
 En el caso de una actualización, la instalación del complemento ofrece la posibilidad de conservar (en la medida de lo posible) o no la configuración anterior.
 
-++ Compatibilidad ++
-Este complemento no es compatible con versiones de NVDA inferiores a la 2018.3.2.
+Mediante el submenú "Reinicialización de la configuración ", es posible restablecer la configuración en el mismo estado que cuando se instalo primero el complemento, incluyendo la registrada en los perfiles de configuración.
 
-Dado que la configuración de la funcionalidad "Cambio de perfil de voz" ha cambiado desde la versión 8 del complemento esta se eliminará al actualizar desde una versión anterior del complemento. Se liberan todos los selectores y se eliminan los perfiles de voz asociados.
+Esto iniciará desde cero sin tener que desinstalar y volver a instalar el complemento en caso de cualquier problema
+
+++ Actualización ++
+La actualización del complemento por defecto se hace automáticamente poco  tiempo después de iniciar NVDA (entre 20 y 600 segundos) y como máximo una vez al día.
+
+Puedes desactivar esta actualización desmarcando la opción "Buscar automáticamente actualizaciones" que se encuentra en la categoría "Actualización".
+La versión del complemento puede ser:
+- Ya sea una versión estable: su número de versión es de tipo "8.2" por ejemplo.
+- Ya sea una versión de desarrollo: su número de versión es entonces de tipo "8.2-dev1", o "8.1-rc1", o "8.1-beta2".
+
+
+Por defecto, una versión estable se actualiza con la última versión estable (Número de versión superior).
+Sin embargo, es posible actualizar la versión actual estable con una versión de desarrollo de la próxima versión estable. Simplemente marcando la opción "Actualizar también versiones estable hacia versiones de desarrollo" situado en la categoría "Actualización".
+
+Una versión de desarrollo se actualiza con una versión de desarrollo más reciente o con su versión estable.
+
+El botón "Buscar actualización" situado en la categoría "Actualización" te permite buscar inmediatamente una actualización.
+
+En el caso de una actualización automática, y si se detecta una nueva versión, el cuadro de diálogo "Actualización" aparece para proponer:
+- Ya sea la instalación inmediata de la nueva versión,
+- Ya sea posponer la actualización a más tarde. En este caso, la búsqueda se reiniciará al menos una hora más tarde.
+
+
+++ Compatibilidad ++
+
+Dado que la configuración de la funcionalidad "Cambio de perfil de voz" ha cambiado desde la versión 9.0 del complemento esta se eliminará al actualizar desde una versión anterior del complemento. Se liberan todos los selectores y se eliminan los perfiles de voz asociados.
 
 
 ++ Historial ++
@@ -368,7 +310,7 @@ Estos símbolos se enumeran en el orden del archivo "symbolCategories.dic" (ver 
 
 Sin embargo, si uno está en la lista de símbolos y si un símbolo es seleccionado, pulsando la tecla "Intro" causa la pulsación sobre el botón "Pegar".
 
-Situado sobre un símbolo, pulsando la tecla "Espacio" causa la vocalización del código del símbolo bajo la forma: código en decimal seguido del código en hexadecimal deletreadó. Esto te puede servir si deseas componer manualmente el símbolo con la órden Windows "Alt + 0" seguido por el código decimal compuesto en el teclado numérico.
+Situado sobre un símbolo, pulsando la tecla "Espacio" causa la verbalización del código del símbolo bajo la forma: código en decimal seguido del código en hexadecimal deletreadó. Esto te puede servir si deseas componer manualmente el símbolo con la órden Windows "Alt + 0" seguido por el código decimal compuesto en el teclado numérico.
 
 Pulsando uno de los tres botones cierra el cuadro de diálogo.
 
@@ -499,7 +441,7 @@ Tipos básicos:
 - Encabezado,
 - Campo de formulario,
 - Botón,
-- Región,
+- Región ,
 
 
 Tipos añadidos por el complemento:
@@ -537,7 +479,7 @@ El tipo "Campo de edición" da la lista de los campos de edición del documento 
 - Anuncia el contenido del campo de edición.
 
 
-Asimismo, cada campo de formulario se presenta vocalmente según su tipo.
+Asimismo, cada campo de formulario se presenta verbalmente según su tipo.
 
 +++ Scripts para las tablas +++
 Para los navegadores Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefox, GoogleChrome, es posible cuando el cursor está en una celda de tabla de:
@@ -576,7 +518,7 @@ El complemento añade, como opción, la capacidad de examinar cíclicamente el d
 
 El pasaje por el principio o el final del documento se indica mediante un sonido y un mensaje de voz.
 
-La opción "Navegar en bucle" en la categoría "Varios" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento permite habilitar o deshabilitar este funcionamiento.
+La opción "Navegar en bucle" en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento permite habilitar o deshabilitar este funcionamiento.
 
 Esta opción solo se muestra si la funcionalidad "Extensión de la funcionalidad del modo exploración" está instalada.
 
@@ -587,7 +529,7 @@ Por defecto, esta opción no está marcada. El funcionamiento básico de NVDA se
 ++ Anuncio de la funcionalidad asociada a las órdenes de edición de estilo  "Copiar", "Pegar" ++[hdr7]
 Esta funcionalidad se instala de forma predeterminada.
 
-Las funciones activadas mediante las órdenes de teclado "control+v", "control+c", "control+x",  "control+z" no siendo vocalizado por NVDA, el complemento se encarga.
+Las funciones activadas mediante las órdenes de teclado "control+v", "control+c", "control+x",  "control+z" no son verbalizadas  por NVDA, el complemento se encarga.
 
 No se realiza ningún control sobre el resultado de la función.
 Pero para las órdenes de teclado "control+c", "control+x", la ausencia de selección de texto se indica en los árboles y las listas.
@@ -686,8 +628,8 @@ Este script se lanza mediante la órden "KEY_DISPLAY_SPEECH_HISTORY" del intérp
 Presenta el cuadro de diálogo "Historial de los anuncios del habla" que enumera estos registros en orden descendente según su antigüedad. Se utiliza un botón para copiar el registro seleccionado al portapapeles.
 
 Por defecto:
-- Los registros están numerados. Esta numeración se puede desactivar mediante la opción "Numerar los registros del historial de los anuncios del habla" en la categoría "Varios" en el diálogo "ADDON_SUMMARY - Opciones".
-- Los registros se presentan en orden descendente. La opción "Mostrar los registros del historial de los anuncios del habla en órden ascendente" de esta misma categoría permite visualizarlas en orden inverso.
+- Los registros están numerados. Esta numeración se puede desactivar mediante la opción "Numerar los registros del historial de los anuncios del habla" del grupo "Historial de los anuncios del habla" en la categoría "Suplementos a NVDA" en el diálogo "ADDON_SUMMARY - Opciones".
+- Los registros se presentan en orden descendente. La opción "Mostrar los registros del historial de los anuncios del habla en órden ascendente" de este mismo grupo permite mostrarlos en orden inverso.
 
 
 ++ Renombrar teclas del teclado ++[hdr12]
@@ -933,21 +875,21 @@ Permite hacer persistentes las teclas NVDA ("Insert" del teclado numérico norma
 
 El objetivo es usar solo un dedo, por ejemplo, para componer un gesto de entrada que requiera mantener pulsadas todas las teclas.
 
-Esta coloca una categoría "Remanencia de las teclas" en el diálogo "Opciones" del complemento.
+Esta coloca un grupo "Remanencia de las teclas" en la categoría "Teclado" en el diálogo "Opciones" del complemento.
 
-Para activar o desactivar el modo de remanencia, simplemente componga una de las siguientes secuencias de teclas:
+Para activar o desactivar el modo de remanencia, simplemente componga una de las siguientes secuencias de teclas:		
 - "mayúscula derecha", "Control derecha", "mayúscula derecha",
 - "mayúscula izquierda", "control izquierda", "mayúscula izquierda".
 
-La remanencia de las teclas se pueden activar de forma automática al iniciar NVDA marcando la casilla de verificación "Activar la remanencia de las teclas cuando se inicia NVDA" en la categoría "Remanencia de las teclas".
+La remanencia de las teclas se pueden activar de forma automática al iniciar NVDA marcando la casilla de verificación "Activar la remanencia de las teclas cuando se inicia NVDA" del grupo "Remanencia de las teclas".
 
-La activación o desactivación de este modo es indicado vocalmente.
+La activación o desactivación de este modo es indicado verbalmente.
 Cuando el modo "Remanencia " esté activado,  al pulsar una de las teclas NVDA o la modificadora desencadena un retardo y la tecla se almacena.
-Este retardo de tiempo es configurable mediante la opción "Duración de la remanencia de las  teclas" en la categoría "Remanencia de las teclas.
+Este retardo de tiempo es configurable mediante la opción "Duración de la remanencia de las  teclas" del grupo "Remanencia de las teclas.
 
-También es posible limitar la remanencia a la única tecla "NVDA" marcando la casilla de verificación "Solo la tecla NVDA está en remanencia" ubicada en la misma categoría. Por defecto, esta casilla no está marcada y todas las teclas modificadoras son persistentes.
+También es posible limitar la remanencia a la única tecla "NVDA" marcando la casilla de verificación "Solo la tecla NVDA está en remanencia" ubicado en el mismo grupo. Por defecto, esta casilla no está marcada y todas las teclas modificadoras son persistentes.
 
-El inicio y el final de esta remanencia se indican mediante un pitido que se puede desactivar mediante las siguientes casillas de verificación en la categoría "Remanencia de las teclas:
+El inicio y el final de esta remanencia se indican mediante un pitido que se puede desactivar mediante las siguientes casillas de verificación en el   grupo "Remanencia de las teclas":
 - Emitir un pitido al inicio de la remanencia de una tecla ,
 - Emitir un pitido al final de la remanencia de una tecla .
 
@@ -971,7 +913,7 @@ Sin embargo, es posible detener la remanencia antes de que finalice el retardo, 
 +++ Remanencia específica para el sitio gmail.com +++
 Esta persistencia está configurada específicamente para el sitio gmail.com y está activa solo en la página "https://mail.google.com/mail/#inbox".
 
-Esta no está activa por defecto. Una casilla de verificación "Remanencia específica para gmail.com" esta prevista en la categoría "Remanencia de las teclas".
+Esta no está activa por defecto. Una casilla de verificación "Remanencia específica para gmail.com" esta prevista en el grupo "Remanencia de las teclas".
 
 En esta página, es posible escribir atajos para ejecutar las órdenes pero algunas de ellas encadenan dos letras. En particular, las letras "g", "h", "*" deben ir seguidas de otra letra.
 Esta secuencia debe ser lo suficientemente rápida para provocar la ejecución de la órden asociada.
@@ -1043,7 +985,7 @@ De forma predeterminada, esta funcionalidad se instala sin gesto de entrada.
 
 Solo puede funcionar bajo el sistema operativo Windows 10.
 
-Coloca la categoría "Control de sonido" en el cuadro de diálogo "Opciones".
+Si se instala con o sin gestos de entrada, está coloca el grupo "Control de sonido" en la categoría "Ordenador" en el cuadro de diálogo "Opciones".
 
 Instala los siguientes scripts en la categoría "Control de sonido" en el cuadro de diálogo "Gestos de Entrada":
 
@@ -1076,10 +1018,10 @@ Se lanzan con las siguientes órdenes del intérprete:
 Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repetirse sin tener que reiniciarlo. El intérprete permanece activo.
  Una vez que se establece el nivel de volumen, debes presionar la tecla "Escape" para salir del intérprete.
  
-El aumento ou la disminución del volumen se realiza en pasos. Es posible ajustar el tamaño de estos pasos en las opciones del complemento en la categoría "Control de sonido", seleccionando el tamaño del paso.
+El aumento ou la disminución del volumen se realiza en pasos. Es posible ajustar el tamaño de estos pasos en las opciones del complemento en la categoría "Ordenador" del grupo "Control de sonido", seleccionando el tamaño del paso.
 El tamaño 1 es el paso más pequeño, el tamaño 20 es el paso más grande. el tamaño se establece en 5, que corresponde a aproximadamente el 3% del cambio de volumen en el control de volumen de Windows.
 
-El cambio de volumen se indica vocalmente mediante mensajes como: "más fuerte", "menos fuerte", "al máximo", "al mínimo". pero esto se puede evitar con la opción "Anunciar los cambios de volumen" situado en la misma categoría. Esta opción está seleccionada por defecto.
+El cambio de volumen se indica verbalmente mediante mensajes como: "más fuerte", "menos fuerte", "al máximo", "al mínimo". pero esto se puede evitar con la opción "Anunciar los cambios de volumen" situado en la misma categoría. Esta opción está seleccionada por defecto.
 
 +++ Cambiar el volumen principal +++
 Estos scripts hacen posible aumentar, disminuir, maximizar o minimizar el volumen principal.
@@ -1094,10 +1036,10 @@ Se lanzan con las siguientes órdenes del intérprete:
 Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repetirse sin tener que reiniciarlo. El intérprete permanece activo.
  Una vez que se establece el nivel de volumen, debes presionar la tecla "Escape" para salir del intérprete.
  
-El aumento ou la disminución del volumen se realiza en pasos. Es posible ajustar el tamaño de estos pasos en las opciones del complemento en la categoría "Control de sonido", seleccionando el tamaño del paso.
+El aumento ou la disminución del volumen se realiza en pasos. Es posible ajustar el tamaño de estos pasos en las opciones del complemento en la categoría "Ordenador" del grupo "Control de sonido", seleccionando el tamaño del paso.
 El tamaño 1 es el paso más pequeño, el tamaño 20 es el paso más grande. el tamaño se establece en 5, que corresponde a aproximadamente el 3% del cambio de volumen en el control de volumen de Windows.
 
-El cambio de volumen se indica vocalmente mediante mensajes como: "más fuerte", "menos fuerte", "al máximo", "al mínimo". pero esto se puede evitar con la opción "Anunciar los cambios de volumen" situado en la misma categoría. Esta opción está seleccionada por defecto.
+El cambio de volumen se indica verbalmente mediante mensajes como: "más fuerte", "menos fuerte", "al máximo", "al mínimo". pero esto se puede evitar con la opción "Anunciar los cambios de volumen" situado en la misma categoría. Esta opción está seleccionada por defecto.
 
 ++ Scripts para hacer clic en la posición actual del navegador de objetos ++[hdr23]
 Estos scripts permiten hacer, con el botón derecho o izquierdo del ratón, un simple o un doble clic en la posición actual del navegador de objetos.
@@ -1268,7 +1210,7 @@ En algunas aplicaciones como WordPad , microsoft Word, es posible eliminar la si
 
 Por defecto, el complemento le permite a NVDA pronunciar esta palabra.
 
-Esto se puede evitar desmarcando la opción "Anunciar la palabra enfocada después de una eliminación de palabras" que está en la categoría "Varios" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
+Esto se puede evitar desmarcando la opción "Anunciar la palabra enfocada después de una eliminación de palabras" que está en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
 
 
 ++ Maximizar automáticamente las ventanas ++[hdr102]
@@ -1288,7 +1230,7 @@ Esta opción te permite configurar el nivel de símbolos y puntuación que sólo
 
 Esta opción se registra para el perfil de configuración actual.
 
-Esto se configura en la categoría "Varios" del diálogo "ADDON_SUMMARY - Opciones" del complemento.
+Esto se configura en la categoría "Suplementos a NVDA" del diálogo "ADDON_SUMMARY - Opciones" del complemento.
 
 Sólo está presente si la funcionalidad "Anuncio de la funcionalidad asociada a las órdenes de edición de estilo "Copiar", "Pegar" está instalada.
 
@@ -1315,7 +1257,7 @@ Por defecto, la opción "Solo para versiones de desarrollo de NVDA" está selecc
 ++ Restablecimiento automático del volumen principal y de NVDA al cargar el complemento ++[hdr301]
 Esta opción, si está instalada la funcionalidad "Control de sonido", permite restablecer, al cargar este complemento, el volumen principal y el de NVDA y configurar el nivel de cada volumen a un valor definido por la configuración en caso de que Esto es menor que el umbral máximo definido por la configuración.
 
-Para ello, la categoría "Control de sonido del diálogo "ADDON_SUMMARY - Opciones" del complemento presenta los siguientes elementos de configuración:
+Para ello, el grupo "Control de sonido" en la categoría "Ordenador" del diálogo "ADDON_SUMMARY - Opciones" del complemento presenta los siguientes elementos de configuración:
 - La casilla de verificación "Ajustar automáticamente el sonido principal y de NVDA al cargar el complemento" que permite habilitar o deshabilitar esta opción,
 - El humbral de restablecimiento del volumen principal debajo de que nivel será restablecido,
 - El nivel del volumen principal a restablecer,
@@ -1329,7 +1271,7 @@ Si este no es el caso, este complemento luego ajusta el nivel de volumen al valo
 
 Una imposibilidad técnica imposibilita para que se pueda ajustar el nivel del volumen de NVDA por encima del 50%.
 
-Al instalar el complemento, los niveles del volumen principal y de NVDA se tienen en cuenta para definir los niveles a restablecer.
+Al instalar el complemento, los niveles actuales del volumen principal y de NVDA se tienen en cuenta para definir los niveles a restablecer.
 
 
 
@@ -1351,37 +1293,27 @@ Para un script que realiza tres acciones diferentes, el mecanismo es:
 
 Dependiendo de la destreza del usuario o de la configuración del hardware, esta duración puede ser demasiado larga o demasiado corta.
 La opción titulada "Duración  de repetición del mismo gesto de entrada" en la categoría "Avanzadas" del diálogo "Opciones" del complemento permite ajustar esta Duración según sea necesario.
-++ Utilización de las teclas direccionales del teclado numérico ++[hdr304]
-De forma predeterminada, NVDA usa las teclas de flechas del teclado numérico para todas las  distribuciones de teclado, para habilitar los scripts  de revisión de pantalla. Estas son las teclas llamadas "teclado numérico" seguidas de una cifra (incluida  entre 1 y 4 y 6 y 9).
-Para una distribución de teclado en un ordenador portátil, NVDA proporciona otras teclas para activar estos scripts porque en principio no hay un teclado numérico.
-Esta opción responde a dos situaciones:
-- El usuario está en  un ordenador de escritorio con un teclado de escritorio con teclado numérico y prefiere la disposición del teclado "ordenador portátil" de NVDA,
-- El usuario está en un ordenador portátil con teclado numérico, pero las teclas de flechas están muy mal colocadas.
+++ Utilización estándar del teclado numérico ++[hdr304]
+De forma predeterminada, NVDA usa algunas teclas del teclado numérico como las teclas de flecha, las teclas "multiplicar", "dividir" y la tecla "más" para habilitar los scripts.
 
 
-En ambos casos, el teclado numérico se usa en doble por NVDA.
+El propósito de esta opción es devolver a cada tecla del teclado numérico de manera temporal o permanente su funcionamiento normal, compuesto solo o con una tecla modificadora como "control", "alt","mayúscula" (La tecla "NVDA" está excluida).
 
-El propósito de esta opción es devolver a cada tecla de dirección del teclado numérico su funcionamiento normal, compuesto solo o con una tecla modificadora como "control", "alt","mayúscula" (La tecla "NVDA" está excluida).
 Estas teclas son:
 - Las teclas "flechas derecha y izquierda",
 - Las teclas "flechas arriba y abajo",
 - Las teclas "retroceso de página y avance de página",
-- Las teclas "inicio y fin".
+- Las teclas "inicio y fin",
+- Las teclas "multiplicar" y "dividir",
+- La tecla "más".
 
 
-Este complemento instala un script cuya descripción es "Habilitar o deshabilitar las teclas direccionales del teclado numérico". No se le asigna ningún gesto de entrada.
+Para cambiar el teclado numérico en funcionamiento estándar o NVDA y si la opción "Permitir el uso estándar del teclado numérico" del grupo "Teclado numérico" en la categoría "Teclado" está marcada, el complemento proporciona:
+- Un script cuya descripción es "Habilitar o deshabilitar el uso estándar del teclado numérico". No se le asigna ningún gesto de entrada.
+- La órden "KEY_TOGGLE_NUMPAD_NAVIGATION" del intérprete de órdenes.
+- El uso de la tecla "Bloqueo numérico" si la opción "Habilitar o deshabilitar el uso estándar de teclado numérico con la tecla bloqueo numérico" (grupo Teclado numérico", categoría "Teclado") está marcada.
 
-Este se lanza mediante la órden "KEY_TOGGLE_NUMPAD_NAVIGATION" del intérprete de órdenes y permite habilitar o deshabilitar las teclas direccionales del teclado numérico.
-
-Cada activación de este script habilita o inhabilita el funcionamiento de las teclas de flechas.
-
-La opción "Permitir el cambio normal para el uso de las teclas direccionales del teclado numérico" de la categoría "Opciones avanzadas" controlan este script. Si esta opción no está marcada, las teclas de flechas no se pueden activar.
-
-La opción "Habilitar las teclas direccionales del teclado numérico cuando se inicia NVDA" de la misma categoría, permite, si se marca, de activar las teclas de dirección del teclado numérico al inicio de NVDA. Pero también es necesario que la opción anterior esté marcada.
-
-
-
-
+La opción "Habilitar el uso estándar del teclado numérico cuando se inicia NVDA" (grupo Teclado numérico", categoría "Teclado"), permite, si se marca, de usar el teclado numérico de manera estándar al inicio de NVDA pero también es necesario que la opción que permite el uso estándar del teclado numérico esté marcada.
 
 
 + Otras mejoras +
@@ -1405,11 +1337,13 @@ De forma básica, una doble pulsación del gesto de entrada "NVDA+f" presenta la
 Este script apunta a completarlos y mostrarlos en un cuadro de diálogo para que pueda leerlos utilizando las flechas.
 
 Éste se lanza con la ayuda del gesto de órden "KEY_REPORT_FORMATTING" del intérprete. 
-No se le asigna ningún gesto de entrada por defecto.
+
 
 La descripción del script es: "Mostrar información de formato para la posición actual del cursor de revisión dentro de un documento en el cuadro de diálogo".
 
 Este está almacenado en la categoría "ADDON_SUMMARY" del diálogo "Gesto de Entrada" de NVDA.
+
+No se le asigna ningún gesto de entrada por defecto.
 
 ++ Anuncio del texto de los cuadros de diálogo de estilo de confirmación ++[hdr204]
 NVDA considera para ciertos cuadros de diálogo como los de confirmación, que el texto que contienen es una descripción.

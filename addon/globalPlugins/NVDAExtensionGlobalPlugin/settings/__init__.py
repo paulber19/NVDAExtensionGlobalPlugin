@@ -11,6 +11,7 @@ addonHandler.initTranslation()
 from logHandler import log
 import os
 import core
+import queueHandler
 import sys
 import globalVars
 import config
@@ -23,10 +24,8 @@ try:
 	from configobj.validate import Validator, VdtTypeError
 except ImportError:
 	from validate import Validator, VdtTypeError
-	
 
 from .addonConfig import *
-
 def getInstallFeatureOption (featureID):
 	conf = _addonConfigManager.addonConfig
 	return conf[SCT_InstallFeatureOptions][featureID]
@@ -45,13 +44,28 @@ def isInstallWithoutGesture(featureID):
 	conf = _addonConfigManager.addonConfig
 	option = conf[SCT_InstallFeatureOptions][featureID]
 	return True if option == C_InstallWithoutGesture else False
-def toggleOption (id, toggle = True):
+def TOGGLE(sct, id, toggle):
 	global _addonConfigManager
 	conf = _addonConfigManager.addonConfig
-	sct = SCT_Options
 	if toggle:
 		conf[sct][id] = not conf[sct][id]
 	return conf[sct][id]
+	
+def toggleGeneralOptions(id, toggle):
+	sct = SCT_General
+	return TOGGLE(sct, id, toggle)
+
+def toggleAutoUpdateGeneralOptions(toggle = True):
+	return toggleGeneralOptions(ID_AutoUpdate, toggle)
+
+def toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(toggle = True):
+	return toggleGeneralOptions(ID_UpdateReleaseVersionsToDevVersions, toggle)
+def toggleRemindUpdateGeneralOptions(toggle = True):
+	return toggleGeneralOptions(ID_RemindUpdate, toggle)
+def toggleOption (id, toggle):
+	sct = SCT_Options
+	return TOGGLE(sct, id, toggle)
+
 
 def toggleReportNextWordOnDeletionOption (toggle = True):
 	return toggleOption(ID_ReportNextWordOnDeletion   , toggle)
@@ -68,13 +82,10 @@ def toggleSpeechRecordInAscendingOrderOption(toggle = True):
 	return toggleOption(ID_SpeechRecordInAscendingOrder, toggle)
 def toggleLoopInNavigationModeOption (toggle = True):
 	return toggleOption(ID_LoopInNavigationMode, toggle)
-def toggleAdvancedOption (id, toggle = True):
-	global _addonConfigManager
-	conf = _addonConfigManager.addonConfig
+def toggleAdvancedOption (id, toggle):
 	sct = SCT_AdvancedOptions
-	if toggle:
-		conf[sct][id] = not conf[sct][id]
-	return conf[sct][id]
+	return TOGGLE(sct, id, toggle)
+
 	
 
 
@@ -102,9 +113,8 @@ def toggleEnableNumpadNavigationModeToggleAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_EnableNumpadNavigationModeToggle,toggle)
 def toggleActivateNumpadNavigationModeAtStartAdvancedOption (toggle = True):
 	return toggleAdvancedOption(ID_ActivateNumpadNavigationModeAtStart,toggle)
-
-
-
+def toggleActivateNumpadStandardUseWithNumLockAdvancedOption(toggle = True):
+	return toggleAdvancedOption(ID_ActivateNumpadStandardUseWithNumLock,toggle)
 
 class AddonConfigurationManager():
 	_currentConfigVersion = "2.5"
@@ -149,7 +159,7 @@ class AddonConfigurationManager():
 				config.conf._dirtyProfiles.add(name)
 				save = True
 		# We save the configuration, in case the user would not have checked the "Save configuration on exit" checkbox in General settings.
-		if save and config.conf['general']['saveConfigurationOnExit']:
+		if save :
 			config.conf.save()
 	
 	
@@ -194,10 +204,11 @@ class AddonConfigurationManager():
 						self.saveSettings(True)
 	
 	def setDefaultVolumeControl(self):
-		from ..volumeControl import getSpeakerVolume, getNVDAVolume
-		curVolume = int(getSpeakerVolume()*100)
+		from ..computerTools.volumeControl import getSpeakerVolume, getNVDAVolume
+		curVolume = getSpeakerVolume()
 		if curVolume is None:
 			return
+		curVolume = int(curVolume* 100)
 		if curVolume >50: curVolume = 50
 		curVolume = 10*int(curVolume/10)
 		if curVolume == 0: curVolume = 10
@@ -274,6 +285,43 @@ class AddonConfigurationManager():
 			log.warning("add-on configuration saved")
 		except:
 			log.warning("Could not save add-on configuration - probably read only file system")
+	
+	def deleteNVDAAddonConfiguration(self):
+		addonName = self.addonName
+		conf = config.conf
+		save = False
+		if self.addonName in conf.profiles[0]:
+			log.warning ("%s section deleted from profile: %s"%(self.addonName, "normal configuration"))
+			del conf.profiles[0][self.addonName]
+			save = True
+		profileNames = []
+		profileNames.extend(config.conf.listProfiles())
+		for name in profileNames:
+			profile = config.conf._getProfile(name)
+			if profile.get(self.addonName):
+				log.warning ("%s section deleted from profile: %s"%(self.addonName, profile.name))
+				del profile[self.addonName]
+				config.conf._dirtyProfiles.add(name)
+				save = True
+		if save:
+			config.conf.save()
+			return True
+		return False
+	
+	def resetConfiguration(self):
+		from ..utils import makeAddonWindowTitle
+		if gui.messageBox(
+			# Translators: A message asking the user to confirm reset of configuration.
+			_("The add-on configuration will be reset to factory values and NVDA  will be restarted. Would you like to continue ?"),
+			makeAddonWindowTitle(_("Configuration reset")),
+			wx.YES|wx.NO|wx.ICON_WARNING)==wx.NO:
+			return
+		addonConfigFile = os.path.join(globalVars.appArgs.configPath, self._configFileName)
+		os.remove(addonConfigFile)
+		self.addonConfig = self._versionToConfiguration[self._currentConfigVersion](None)
+		self.saveSettings(True)
+		self.deleteNVDAAddonConfiguration()
+		queueHandler.queueFunction(queueHandler.eventQueue,core.restart)
 	
 	def terminate(self):
 		log.warning("addonConfigManager terminate")
@@ -379,8 +427,6 @@ class AddonConfigurationManager():
 				conf[SCT_CategoriesAndSymbols][lang][sect] = {}
 			for symbol in userComplexSymbols[sect]:
 				conf[SCT_CategoriesAndSymbols	][lang][sect][symbol] = userComplexSymbols[sect][symbol]
-		
-		conf.write()
 	
 	def deleceAllUserComplexSymbols(self):
 		conf = self.addonConfig
@@ -612,7 +658,12 @@ class AddonConfigurationManager():
 	def setDelayBetweenSameGesture(self, delay):
 		conf = self.addonConfig
 		conf[SCT_AdvancedOptions][ID_DelayBetweenSameGesture]  = str(delay)
-	
+	def getLastChecked(self):
+		conf = self.addonConfig
+		return conf[SCT_General][ID_LastChecked] 
+	def setLastChecked(self, lastTime):
+		conf = self.addonConfig
+		conf[SCT_General][ID_LastChecked]  = int(lastTime)
 
 # singleton for addon configuration manager
 _addonConfigManager = AddonConfigurationManager()

@@ -1,36 +1,36 @@
- Extension des commandes  de base de NVDA - Historique
-Auteur: paulber19 (paulber19@laposte.net)  avec la participation de Daniel Poiraud
+ ADDON_SUMMARY - Historique
+Auteur: ADDON_AUTHOR_NAME avec la participation de Daniel Poiraud
 
 
-%!Target: html
-%!Encoding: UTF-8
-%!style:..\style_t2t.css
-%!Options: --toc
-% Remove the Table of Contents heading from the toc.
-%!PostProc(html): '^.*\<LI\>\<A HREF="#toc"\>.*\</A\>.*$' ''
+%!includeconf: ../addon_global.t2tconf
+%!includeconf: addon_informations.t2tconf
+URL: ADDON_AUTHOR_URL
 
-% h1 in html should really be the document title only.
-% Therefore, change h1 through h5 in the output to h2 through h6.
-%!PostProc(html): ^<H5>(.*)</H5>$ <H6>\1</H6>
-%!PostProc(html): ^<H4>(.*)</H4>$ <H5>\1</H5>
-%!PostProc(html): ^<H3>(.*)</H3>$ <H4>\1</H4>
-%!PostProc(html): ^<H2>(.*)</H2>$ <H3>\1</H3>
-%!PostProc(html): ^<H1>(.*)</H1>$ <H2>\1</H2>
++ v9.0 (15/12/2019) +
+Compatibilité avec NVDA 2019.3
+
+Nouvelles fonctionnalités:
+- possibilité de réinitialiser complètement la configuration de l'extension.
+- recherche et installation automatique de mises à jour.
+- utilisation possible de la touche verrouillage numérique pour basculer en pavé numérique standard.
+- ajout des touches "multiplier", "diviser" et "plus"  en utilisation standard du pavé numérique.
+- réorganisation des catégories des paramètres de l'extension.
+
 
 + v8.1 (05/05/2019) +
 Compatibilité avec NVDA 2019.2
 Fonctionnalités:
 - possibilité de limiter la rémanence à la seule touche "NVDA".
 - compléments pour la fonctionnalité "Contrôle du son":
- -  augmenter , diminuer, maximiser ou minimiser  le volume de l'application sous le focus,
- - augmenter , diminuer, maximiser ou minimiser  le volume principal,
+ - augmenter, diminuer, maximiser ou minimiser  le volume de l'application sous le focus,
+ - augmenter, diminuer, maximiser ou minimiser  le volume principal,
  - regroupement de ses gestes de commandes sous la catégorie "contrôle du son",
 - possibilité d'utiliser  les touches   du pavé numérique comme touche de direction (fonctionnement normal de Windows).
 
 
 Correction de bugs:
 - non sauvegarde de certains paramètres lors de l'enregistrement manuelle et quand l'option "ne pas enregistrer la configuration" était cochée.
-- fonctionnalité"Outils de développement": correction  de la mauvaise prise en compte des sous-languages pour la création de la documentation d'une extension.
+- fonctionnalité "Outils de développement": correction  de la mauvaise prise en compte des sous-langages pour la création de la documentation d'une extension.
 
 
 + v8.0 (13/02/2019) +
@@ -38,12 +38,12 @@ Fonctionnalités:
 - dans le dialogue "Liste des éléments visibles composant l'objet en avant plan", possibilité de changer de type d'objet sans quitter la liste des objets.
 -  ajout de la possibilité d'activer la rémanence des touches au démarrage de NVDA.
 - ajout de la rémanence spécifique pour le site gmail.com.
-- réorganisation du sous-menu "paramètres" .
+- réorganisation du sous-menu "paramètres".
 - ajout de la fonctionnalité "date et heure - complément" qui regroupe la copie de la date et heure dans le presse-papier (avec "nvda+f12"), l'annonce de l'heure avec les secondes et l'annonce de la date et heure sans ponctuation.
 - nouveau  script "copier la date et l'heure"  dans l'interpréteur de commande.
 - reprise de la fonctionnalité "Commutation de profil vocal" pour le choix des sélecteurs sous un profil de configuration.  La précédente configuration de cette fonctionnalité n'est pas compatible  et sera donc effacée à la première utilisation de cette fonctionnalité.
 - possibilité d'afficher les enregistrements de l'historique vocal dans l'ordre croissant ou décroissant.
-- lors de la désinstallation d'une fonctionnalité, suppression complète de sa configuration ,
+- lors de la désinstallation d'une fonctionnalité, suppression complète de sa configuration,
 - reprise complète de la documentation pour l'utilisation du terme "extension" à la place de "module complémentaire" (imposée par les traducteurs de NVDA),
 -  suppression du délai d'attente entre appui touche pour tous les scripts  de base de NVDA modifiés par l'extension.
 
@@ -89,7 +89,7 @@ Correction du problème de l'annonce en anglais des commandes issues d'un clavie
 
 2- divers:
 - possibilité de lancer le script sélectionné dans le dialogue présentant les scripts de l'interpréteur,
-- possibilité, pour les traducteurs, de configurer les commandes d'édition du type "control+c, control+a" pour chaque langue et pour certaines applications le nécessitant,
+- possibilité, pour les traducteurs, de configurer les commandes d'édition du type "control + c, control + a" pour chaque langue et pour certaines applications le nécessitant,
 - utilisation de CentreOnScreen" à la place de "Centre".
 
 
@@ -103,7 +103,7 @@ Finalisation de la mise  en  compatibilité avec NVDA 2018.3   et avec wxPython 
  - désactivation sous option du paramètre "Annoncer la description de l'objet" pendant l'affichage des boites de dialogue  du style confirmation (affichées par gui.messageBox) pour que NVDA annonce le message contenu dans ces boites,
  - ajout de l'option pour naviguer en boucle dans le document à la recherche d'un élément précédent ou suivant,
  - ajout d'un bip sonore répétitif pendant la recherche des éléments dans le dialogue "Liste des éléments" (NVDA+f7),
- - placement du bouton "Mise en veille" en première place dans le dialogue "arrêt de l'ordinateur",
+ - placement du bouton "Mise en veille prolongée" en première place dans le dialogue "arrêt de l'ordinateur",
  - menu de paramétrage du module  modifié pour ressembler au menu de paramétrage de NVDA,
 
 
@@ -146,7 +146,7 @@ Cette version du module n'est pas compatible avec les versions antérieures à l
 - installation par configuration des fonctionnalités avec ou sans gestes de commande,
 - nouvelle fonctionnalité "Rémanence des touches"  permettant de composer les gestes de commandes utilisant les  touches NVDA, Control, Alt, Majuscule ou Windows, avec un seul doigt,
 - annonce ou affichage du  nom et  numéro de version du module complémentaire activé pour  l'application placée sous le focus,
-- arrêt, redémarrage ou mise en veille de l'ordinateur,
+- arrêt, redémarrage ou mise en veille prolongée de l'ordinateur,
 - gestion des gestes de commande configurés par l'utilisateur.
 - Control du son de l'ordinateur (Windows 10)  pour:
  - couper ou rétablir le son du flux audio de l'application sous le focus,
