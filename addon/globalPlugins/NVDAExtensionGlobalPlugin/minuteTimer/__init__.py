@@ -37,7 +37,7 @@ def minuteTimer():
 class MinuteTimer(object):
 	def __init__(self, duration, announce, ringCount, delayBetweenRings, delayBeforeEndDuration = None):
 		#duration in seconds
-		self.duration = duration*60
+		self.duration = int(duration*60)
 		#vocal announce  to be spoken at the end of duration
 		self.announce = announce
 		# number of rings 
@@ -49,19 +49,17 @@ class MinuteTimer(object):
 		# ring sound file
 		path = addonHandler.getCodeAddon().path
 		self.ringFile =os.path.join(path, "sounds", "ringin.wav") 
-
-
 		if self.delayBeforeEndDuration is None:
-			self.speakAnnounceTimer = wx.CallLater(1000*self.duration, self.speakAnnounce)
+			self.speakAnnounceTimer = wx.CallLater(int(1000*self.duration), self.speakAnnounce)
 		else:
-			self.speakAnnounceTimer = wx.CallLater(1000*(self.duration -60*self.delayBeforeEndDuration), self.speakAnnounceBeforeEnd)
+			self.speakAnnounceTimer = wx.CallLater(int(1000*(self.duration -int(60*self.delayBeforeEndDuration))), self.speakAnnounceBeforeEnd)
 		self.ringTimer = None
 		self.startTime = int(time.time())
 	
 	def speakAnnounceBeforeEnd(self):
 		msg = _("End duration in %s minutes")%self.delayBeforeEndDuration  if self.delayBeforeEndDuration >1 else _("End duration inone minute")
 		speech.speakMessage(msg)
-		self.speakAnnounceTimer = wx.CallLater(1000*60*self.delayBeforeEndDuration, self.speakAnnounce)	
+		self.speakAnnounceTimer = wx.CallLater(int(1000*60*self.delayBeforeEndDuration), self.speakAnnounce)
 		
 	def speakAnnounce(self):
 		global _curMinuteTimer
@@ -89,13 +87,10 @@ class MinuteTimer(object):
 		if self.speakAnnounceTimer is not None:
 			self.speakAnnounceTimer.Stop()
 			self.speakAnnounceTimer = None
-			
-
 
 class MinuteTimerLaunchDialog(wx.Dialog):
 	_instance = None
 	title = None
-
 	
 	def __new__(cls, *args, **kwargs):
 		if MinuteTimerLaunchDialog._instance is not None:
@@ -307,7 +302,6 @@ class CurrentMinuteTimerDialog(wx.Dialog):
 	def Destroy(self):
 		CurrentMinuteTimerDialog._instance = None
 		super(CurrentMinuteTimerDialog, self).Destroy()
-	
 	def onFocus(self, evt):
 		self.remainingDurationEdit .SetSelection(0,0)
 		evt.Skip()
@@ -322,12 +316,12 @@ class CurrentMinuteTimerDialog(wx.Dialog):
 		self.Close()
 		
 	def monitorRemainingTime(self):
+		if CurrentMinuteTimerDialog._instance is None: return
 		remainingTime = 0 if _curMinuteTimer is None else _curMinuteTimer.getRemainingTime() 
 		if remainingTime == 0:
 			return
-		minutes = remainingTime/60
-		seconds = remainingTime%60
-		
+		minutes = int(remainingTime/60)
+		seconds = int(remainingTime%60)
 		delay = 5000
 		if minutes == 0:
 			# Translators: this is a message to the user.
@@ -335,11 +329,9 @@ class CurrentMinuteTimerDialog(wx.Dialog):
 		else:
 			# Translators: this is a message to the user.
 			text = _("{minutes} minutes {seconds}") .format(minutes = minutes, seconds = seconds)
-		
 		self.remainingDurationEdit.SetValue(text)
-		if (minutes == 0) and seconds/5 == 0:
+		if (minutes == 0) and int(seconds/5) == 0:
 			delay = 1000
-		
 		if self.remainingDurationEdit.HasFocus():
 			speakLater(100,text)
 		wx.CallLater(delay, self.monitorRemainingTime)

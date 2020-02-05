@@ -30,9 +30,10 @@ from ..utils import speakLater, makeAddonWindowTitle
 from ..settings import _addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption, toggleBeepAtRemanenceEndAdvancedOption, isInstall
 from ..settings.addonConfig import ID_CommandKeysSelectiveAnnouncement , ID_KeyRemanence
 from ..utils.keyboard import getKeyboardKeys
+from ..utils.py3Compatibility import  py3
 from keyboardHandler import KeyboardInputGesture
 from . import specialForGmail
-
+from ..utils.py3Compatibility import  py3, _unicode
 
 _NVDA_InputManager = None
 _myInputManager = None
@@ -68,7 +69,7 @@ class MyInputManager (inputCore.InputManager):
 	lastGesture = None
 	lastModifierForRepeat = []
 	lastGestureTime = None
-
+	enableNumpadNnavigationKeys = False
 	
 	def __init__(self):
 		self.commandKeysFilter = CommandKeysFilter()
@@ -81,7 +82,7 @@ class MyInputManager (inputCore.InputManager):
 		from ..settings import  toggleEnableNumpadNavigationModeToggleAdvancedOption, toggleActivateNumpadNavigationModeAtStartAdvancedOption
 		if toggleEnableNumpadNavigationModeToggleAdvancedOption(False) and toggleActivateNumpadNavigationModeAtStartAdvancedOption(False):
 			self.setNumpadNavigationMode(True)
-	
+		self.NVDAExecuteGesture = _NVDA_InputManager .executeGesture
 	def stopRemanence(self, beep = False):
 		if self.remanenceActivation is False:
 			return
@@ -222,13 +223,12 @@ class MyInputManager (inputCore.InputManager):
 	
 	def executeNewGesture(self, gesture):
 		try:
-			self.executeGesture(gesture, bypassRemanence = True)
+			self.executeKeyboardGesture(gesture, bypassRemanence = True)
 		except inputCore.NoInputGestureAction:
 			gesture.send()
 		except:
 			log.error("internal_keyDownEvent", exc_info=True)
 
-	enableNumpadNnavigationKeys = False
 	
 	def setNumpadNavigationMode(self, state ):
 		self.enableNumpadNnavigationKeys= state
@@ -268,8 +268,9 @@ class MyInputManager (inputCore.InputManager):
 			return newGesture
 		return None
 		
-	
-	def executeGesture(self, gesture, bypassRemanence = False):
+		
+
+	def executeKeyboardGesture(self, gesture, bypassRemanence = False):
 		"""Perform the action associated with a gesture.
 		@param gesture: The gesture to execute
 		@type gesture: L{InputGesture}
@@ -282,18 +283,16 @@ class MyInputManager (inputCore.InputManager):
 			# This lets gestures pass through unhindered where possible,
 			# as well as stopping a flood of actions when the core revives.
 			raise NoInputGestureAction
-		if  isinstance(gesture, KeyboardInputGesture):
-			newGesture = self.manageRemanence(gesture) if not bypassRemanence else None
-			if newGesture is not None:
-				queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, newGesture)
-				return
-			newGesture = self.getNumpadKeyReplacement(gesture)
-			if newGesture is not None:
-				queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, newGesture)
-				return
+		newGesture = self.manageRemanence(gesture) if not bypassRemanence else None
+		if newGesture is not None:
+			queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, newGesture)
+			return
+		newGesture = self.getNumpadKeyReplacement(gesture)
+		if newGesture is not None:
+			queueHandler.queueFunction(queueHandler.eventQueue, self.executeNewGesture, newGesture)
+			return
 		script = gesture.script
 		focus = api.getFocusObject()
-		#print ("focus: %s, %s"%(gesture.mainKeyName, focus.__dict__))
 		if focus.sleepMode is focus.SLEEP_FULL or (focus.sleepMode and not getattr(script, 'allowInSleepMode', False)):
 			raise NoInputGestureAction
 	
@@ -314,9 +313,11 @@ class MyInputManager (inputCore.InputManager):
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
 		elif speechEffect in (gesture.SPEECHEFFECT_PAUSE, gesture.SPEECHEFFECT_RESUME):
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.pauseSpeech, speechEffect == gesture.SPEECHEFFECT_PAUSE)
-	
+		if py3 and gesture.shouldPreventSystemIdle:
+			winKernel.SetThreadExecutionState(winKernel.ES_SYSTEM_REQUIRED | winKernel.ES_DISPLAY_REQUIRED)
 		if log.isEnabledFor(log.IO) and not gesture.isModifier:
-				log.io("Input: %s" % gesture.identifiers[0])
+			self._lastInputTime = time.time()
+			log.io("Input: %s" % gesture.identifiers[0])
 		
 		if self._captureFunc:
 			try:
@@ -331,22 +332,27 @@ class MyInputManager (inputCore.InputManager):
 				gesture.normalizedModifiers = []
 				return 
 			raise NoInputGestureAction
-		if  isinstance(gesture, KeyboardInputGesture): 
-			self.speakGesture(gesture)
-		elif config.conf["keyboard"]["speakCommandKeys"] and gesture.shouldReportAsCommand:
-			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, gesture.displayName)
-		
+		self.speakGesture(gesture)
 		if not script: gesture.reportExtra()
 		# #2953: if an intercepted command Script (script that sends a gesture) is queued
 		# then queue all following gestures (that don't have a script) with a fake script so that they remain in order.
 		if not script and(bypassRemanence or scriptHandler._numIncompleteInterceptedCommandScripts):
 			script=lambda gesture: gesture.send()
-
 		if script:
 			scriptHandler.queueScript(script, gesture)
 			return
 		raise NoInputGestureAction
-		
+
+	
+	def executeGesture(self, gesture):
+		try:
+			if  isinstance(gesture, KeyboardInputGesture):
+				self.executeKeyboardGesture(gesture)
+			else:
+				self.NVDAExecuteGesture  (gesture)
+		except NoInputGestureAction:
+			raise NoInputGestureAction
+
 	def speakGesture(self, gesture):
 		if not gesture.shouldReportAsCommand:
 			return
@@ -681,11 +687,18 @@ def initialize():
 	global _NVDA_InputManager, _myInputManager
 	_NVDA_InputManager = inputCore.manager
 	_myInputManager = MyInputManager()
+	_myInputManager ._captureFunc =inputCore.manager._captureFunc 
+	_myInputManager .localeGestureMap  = inputCore.manager.localeGestureMap 
+	_myInputManager .userGestureMap  = inputCore.manager.userGestureMap 
+	_myInputManager._lastInputTime  = inputCore.manager._lastInputTime 
+	_myInputManager.lastModifierWasInSayAll = inputCore.manager.lastModifierWasInSayAll
 	inputCore.manager = _myInputManager
+	log.warning("commandKeysSelectiveAnnouncementAndRemanence initialized")
 
 def terminate():
 	global _NVDA_InputManager, _myInputManager
-	inputCore.manager = _NVDA_InputManager
-	_NVDAInputManager = None
+	if _NVDA_InputManager is not None:
+		inputCore.manager = _NVDA_InputManager
+		_NVDAInputManager = None
 	_myInputManager = None
 	specialForGmail.terminate()

@@ -349,7 +349,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.maximizeWindowTimer = None
 		log.info("Loaded %s version %s" %(addonName, addonVersion))
 		self.installSettingsMenu()
-		commandKeysSelectiveAnnouncementAndRemanence.initialize()
+		if isInstall(ID_CommandKeysSelectiveAnnouncement ) or isInstall(ID_KeyRemanence ):
+			wx.CallLater(800, commandKeysSelectiveAnnouncementAndRemanence.initialize)
 		if isInstall(ID_ExtendedVirtualBuffer):
 			from . import browseModeEx
 			self.browseModeExChooseNVDAObjectOverlayClasses = browseModeEx.chooseNVDAObjectOverlayClasses
@@ -359,7 +360,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			from . import extendedNetUIHWND
 			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses = extendedNetUIHWND.chooseNVDAObjectOverlayClasses
 		if isInstall(ID_SpeechHistory):
-			speechHistory.initialize()
+			wx.CallLater(800, speechHistory.initialize)
 		if isInstall(ID_KeyboardKeyRenaming):
 			settings._addonConfigManager.reDefineKeyboardKeyLabels()
 		self.toggling = False
@@ -377,7 +378,6 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if toggleAutoUpdateGeneralOptions(False):
 			from . updateHandler import autoUpdateCheck
 			autoUpdateCheck(toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
-	
 	def _bindGestures(self):
 		for script in self._mainScriptToGestureAndfeatureOption:
 			(gestures, featureID) = self._mainScriptToGestureAndfeatureOption[script]
@@ -510,6 +510,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		tones.beep(420, 40)
 	
 	def terminate(self):
+		commandKeysSelectiveAnnouncementAndRemanence.terminate()
 		if self._repeatBeepOnAudio is not None:
 			self._repeatBeepOnAudio .stop()
 			self._repeatBeepOnAudio = None
@@ -1235,20 +1236,25 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	
 	enableNumpadNnavigationKeys = False
 	def script_toggleNumpadStandardUse(self, gesture):
+		if not isInstall(ID_CommandKeysSelectiveAnnouncement ) and not isInstall(ID_KeyRemanence ):
+			speech.speakMessage(_("This functionnality is only available if selective command announcement or speech remanence functionnality is installed"))
+			return
 		from .settings import  toggleEnableNumpadNavigationModeToggleAdvancedOption
 		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
 			# Translators: message to user to report unavailable command.
 			msg = _("Numeric pad navigation mode toggle is not  available")
-			speech.speakMessage(msg)
+			speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "speech's remanence functionnality" is installed"""))
 			return
 		from .commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
 		_myInputManager .toggleNavigationNumpadMode()
 
 	def script_toggleNumpadStandardUseWithNumlockKey(self, gesture):
+
 		def callback(gesture):
 			clearDelayScriptTask()
-			gesture.reportExtra()
-			
+			if isInstall(ID_CommandKeysSelectiveAnnouncement ) or isInstall(ID_KeyRemanence ):
+				gesture.reportExtra()
+		
 		stopDelayScriptTask()
 		if not  toggleEnableNumpadNavigationModeToggleAdvancedOption(False) or    not toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False):
 			gesture.send()
@@ -1259,8 +1265,10 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if count ==0:
 			delayScriptTask(callback, gesture)
 		else:
-			self.script_toggleNumpadStandardUse(None)
-
+			if not isInstall(ID_CommandKeysSelectiveAnnouncement ) and not isInstall(ID_KeyRemanence ):
+				speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "speech's remanence functionnality" is installed"""))
+				return
+			self.script_toggleNumpadStandardUse(gesture)
 
 
 
@@ -1268,13 +1276,6 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def script_test (self, gesture):
 		print("test")
 		ui.message("NVDAExtensionGlobalPlugin test")
-		from .updateHandler.update_check import CheckForAddonUpdate
-		fileName= os.path.join(globalVars.appArgs.configPath, "myAddons.latest")
-		wx.CallAfter(CheckForAddonUpdate, None, updateInfosFile = fileName, auto = False, releaseToDev = toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
-
-
-
-
 
 class HelperDialog(wx.Dialog):
 	_instance = None

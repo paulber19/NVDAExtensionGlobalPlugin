@@ -12,20 +12,29 @@ from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 import sys
 import api
+import tones
 import appModuleHandler
 
 from ..utils.py3Compatibility import getUtilitiesPath, getCommonUtilitiesPath
 commonUtilitiesPath = getCommonUtilitiesPath()
 utilitiesPath = getUtilitiesPath()
-pycawPath = os.path.join(commonUtilitiesPath, "pycaw")
+pycawPath = os.path.join(utilitiesPath, "pycaw")
 sys.path.append(commonUtilitiesPath)
 sys.path.append(utilitiesPath)
 sys.path.append(pycawPath)
-import enum
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 del sys.path[-1]
 del sys.path[-1]
 del sys.path[-1]
+
+try:
+	devices = AudioUtilities.GetSpeakers()
+	interface = devices.Activate( IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+	_volume = cast(interface, POINTER(IAudioEndpointVolume))
+except:
+	# no supported 
+	_volume = None
+	log.warning("AudioUtilities getSpeaker not supported on this system")
 
 def toggleProcessVolume(processName):
 	""" Mutes or unmute process volume """
@@ -33,8 +42,9 @@ def toggleProcessVolume(processName):
 		sessions = AudioUtilities.GetAllSessions()
 	except:
 		# no supported 
-		raise RuntimeError("AudioUtilities not supported on this system")
-	for session in sessions:
+		log.warning("AudioUtilities getAllCessions not supported on this system")
+		return
+	for session in _sessions:
 		try:
 			name = session.Process.name()
 		except:
@@ -53,44 +63,21 @@ def toggleProcessVolume(processName):
 # momentary : some pycaw don't work on python 3
 from ..utils.py3Compatibility import py3
 def getSpeakerVolume():
-	if py3:
-		return None
-	try:
-		devices = AudioUtilities.GetSpeakers()
-	except:
-		# no supported 
-		return None
-	interface = devices.Activate( IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-	volume = cast(interface, POINTER(IAudioEndpointVolume))
-	volumeLevel = volume.GetMasterVolumeLevelScalar()
+	if _volume is None: return None
+	volumeLevel = _volume.GetMasterVolumeLevelScalar()
 	return volumeLevel
 	
 def setSpeakerVolume(withMin = False):
-	if py3:
-		return False
 	from ..settings import _addonConfigManager 
 	""" Unmute speaker volume if it's mute
 	and set level volume to configured volume if it's lowest than configured min volume level """
-	try:
-		devices = AudioUtilities.GetSpeakers()
-	except:
-		# no supported 
-		return False
-
-	interface = devices.Activate( IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-	try:
-		# fake code to don't get stder errors  with python 3???
-		volume = cast(interface, POINTER(IAudioEndpointVolume))
-	except:
-		pass
+	if _volume is None: return False
+	volume = _volume
 	volumeLevel = volume.GetMasterVolumeLevelScalar()
 	mute = volume.GetMute()
-
 	if mute:
 		volume.SetMute(0, None)
 		log.warning(" Unmute master volume")
-	
-
 	minLevel = float(_addonConfigManager .getMinMasterVolumeLevel())/100
 	if not withMin or (withMin and volumeLevel <= minLevel):
 		level = float(_addonConfigManager .getMasterVolumeLevel())/100
@@ -99,9 +86,10 @@ def setSpeakerVolume(withMin = False):
 	return True
 def getNVDAVolume():
 	try:
-			sessions = AudioUtilities.GetAllSessions()
+		sessions = AudioUtilities.GetAllSessions()
 	except:
-		# no supported
+		# no supported 
+		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return False
 	for session in sessions:
 		try:
@@ -118,7 +106,8 @@ def setNVDAVolume(withMin = False):
 	try:
 		sessions = AudioUtilities.GetAllSessions()
 	except:
-		# no supported
+		# no supported 
+		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return False
 	for session in sessions:
 		try:
@@ -152,7 +141,8 @@ def changeFocusedAppVolume(action = "increase"):
 	try:
 		sessions = AudioUtilities.GetAllSessions()
 	except:
-		# no supported
+		# no supported 
+		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return
 	for session in sessions:
 		try:
@@ -196,18 +186,8 @@ def changeFocusedAppVolume(action = "increase"):
 	
 def changeSpeakersVolume(action = "increase"):
 	from ..settings import _addonConfigManager , toggleReportVolumeChangeAdvancedOption
-	try:
-		devices = AudioUtilities.GetSpeakers()
-	except:
-		# no supported 
-		return False
-	if py3:
-		# not available for this nvda version
-# Translators: message to user to inform that this features is not available for this nvda version.
-		speech.speakMessage(_("Not available for this NVDA version"))
-		return False
-	interface = devices.Activate( IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-	volume = cast(interface, POINTER(IAudioEndpointVolume))
+	if _volume is None: return False
+	volume = _volume
 	mute = volume.GetMute()
 	if mute:
 		volume.SetMute(not mute, None)

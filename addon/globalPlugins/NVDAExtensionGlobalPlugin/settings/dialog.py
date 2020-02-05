@@ -580,7 +580,8 @@ class KeyboardSettingsPanel(SettingsPanel):
 			toggleEnableNumpadNavigationModeToggleAdvancedOption()
 			# in all cases, disable numpad navigation mode
 			from ..commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
-			_myInputManager .setNumpadNavigationMode( False)
+			if _myInputManager is not None:
+				_myInputManager .setNumpadNavigationMode( False)
 		if self.activateNumpadNavigationModeAtStartOptionBox.IsChecked() != toggleActivateNumpadNavigationModeAtStartAdvancedOption(False):
 			toggleActivateNumpadNavigationModeAtStartAdvancedOption()
 		if self.activateNumpadStandardUseWithNumLockOptionBox.IsChecked() != toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False):

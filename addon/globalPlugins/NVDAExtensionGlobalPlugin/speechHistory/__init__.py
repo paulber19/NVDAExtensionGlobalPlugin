@@ -18,24 +18,29 @@ from ..utils.py3Compatibility import baseString, _unicode
 MAX_RECORD = 200
 # global variables
 _speechRecorder = None
-_oldSpeak = speech.speak
-_oldSpeakSpelling = speech.speakSpelling
+_oldSpeak = None
+_oldSpeakSpelling = None
 
 def mySpeak(sequence, *args, **kwargs):
-	text = "".join([x for x in sequence if isinstance(x, baseString)])
-	_speechRecorder.record(text)
 	_oldSpeak(sequence, *args, **kwargs)
+	text = " ".join([x for x in sequence if isinstance(x, baseString)])
+	_speechRecorder.record(text)
+
 
 def mySpeakSpelling(text, *args, **kwargs):
-	_speechRecorder.record(text)
 	_oldSpeakSpelling(text, *args, **kwargs)
+	_speechRecorder.record(text)
+
 	
 def initialize():
-	global _speechRecorder
+	global _speechRecorder, _oldSpeak, _oldSpeakSpelling
 	if _speechRecorder  is not None: return
 	_speechRecorder = SpeechRecorderManager()
+	_oldSpeak = speech.speak
+	_oldSpeakSpelling = speech.speakSpelling
 	speech.speak = mySpeak
 	speech.speakSpelling = mySpeakSpelling
+	log.warning("speechHistory initialized")
 
 def terminate():
 	global _speechRecorder
