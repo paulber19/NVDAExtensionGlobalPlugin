@@ -44,7 +44,7 @@ def toggleProcessVolume(processName):
 		# no supported 
 		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return
-	for session in _sessions:
+	for session in sessions:
 		try:
 			name = session.Process.name()
 		except:
