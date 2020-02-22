@@ -85,10 +85,7 @@ def fetchAddon(processID, appName):
 	# First, check whether the module exists.
 	# We need to do this separately because even though an ImportError is raised when a module can't be found, it might also be raised for other reasons.
 	# Python 2.x can't properly handle unicode module names, so convert them.
-	if py3:
-		modName = appName
-	else:
-		modName = appName.encode("mbcs")
+	modName = appName if py3 else appName.encode("mbcs")
 	if appModuleHandler.doesAppModuleExist(modName):
 		try:
 			mod = __import__("appModules.%s" % modName, globals(), locals(), ("appModules",))
@@ -121,7 +118,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures={}
 	_mainScriptToGestureAndfeatureOption = {
-		"test": (("kb:nvda+control+shift+f11",) , None),
+		#"test": (("kb:nvda+control+shift+f11",) , None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx" : (("kb:nvda+control+f1",), ID_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion" : (("kb:nvda+shift+f1",), ID_FocusedApplicationInformations),
@@ -858,7 +855,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			clearDelayScriptTask()
 			if action == "copyPath":
 				logFile = os.path.join(os.path.dirname(_getDefaultLogFilePath()), "nvda.log")
-				if api.copyToClip(logFile.decode("mbcs")):
+				path = logFile if py3 else logFile.decode("mbcs")
+				if api.copyToClip(path):
 					ui.message(_("Current log file path copied to clipboard"))
 				else:
 					ui.message(_("Current log file path  cannot be copied to clipboard"))
@@ -1272,10 +1270,18 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 
 
-		
+	def checkUpdateWithLocalMyAddonsFile(self, auto= False):
+		path = "F:\\nvdaprojet\\paulber007Repositories\\AllMyNVDAAddons\\myAddons.latest"
+		from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
+		from .updateHandler.update_check import CheckForAddonUpdate
+		wx.CallAfter(CheckForAddonUpdate, addonName = None, updateInfosFile  = path, auto = auto, releaseToDev = toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 	def script_test (self, gesture):
 		print("test")
 		ui.message("NVDAExtensionGlobalPlugin test")
+		self.checkUpdateWithLocalMyAddonsFile()
+
+
+		
 
 class HelperDialog(wx.Dialog):
 	_instance = None

@@ -374,7 +374,11 @@ class CheckForAddonUpdate(object):
 			loader = importlib.machinery.SourceFileLoader(moduleName, fileName)
 			spec = importlib.util.spec_from_loader(loader.name, loader)
 			mod = importlib.util.module_from_spec(spec)
-			loader.exec_module(mod)
+			try:
+				loader.exec_module(mod)
+			except:
+				log.error("importCodePy3: cannot load myAddons.latest module")
+				mod = None
 			return mod
 
 		res = None
@@ -419,8 +423,9 @@ class CheckForAddonUpdate(object):
 				os.remove(file)
 			except:
 				log.warning("error: cannot remove %s file"%file)
-		if mod is None:
-			self.errorUpdateDialog()
+		if mod is None :
+			if not self.auto:
+				self.errorUpdateDialog()
 			return
 		updateInfos = mod.lastAddonVersions.copy()
 		del mod
