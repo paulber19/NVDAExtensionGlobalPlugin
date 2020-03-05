@@ -10,7 +10,7 @@
 	* last tested NVDA version: 2019.3
 
 
-
+Traductor (s): automatic translation from french language
 
 
 The add-on  adds to NVDA:

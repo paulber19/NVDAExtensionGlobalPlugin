@@ -10,6 +10,7 @@
 	* dernière version de NVDA testée: 2019.3
 
 
+Traducteur (s): auteur de l'extension
 Cette extension  ajoute à NVDA:
 ## Les fonctionnalités ##
 

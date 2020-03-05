@@ -2,7 +2,7 @@
 
 * Autores: paulber19 con la participación de Daniel Poiraud
 * URL : paulber19@laposte.net
-* Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
+
 * Descargar:
 	* [la versión estable][1]
 	* [versión de desarrollo][2]
@@ -10,6 +10,8 @@
 	* mínima de NVDA requerida: 2019.1
 	* última versión de NVDA probada: 2019.3
 
+
+* Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
 
 Añade a NVDA:
 ## Las características ##
