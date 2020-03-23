@@ -81,7 +81,7 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version" : "9.0.3",
+	"addon_version" : "9.0.4",
 	# Author(s)
 	"addon_author" : "PaulBer19",
 	# URL for the add-on documentation support
@@ -91,7 +91,7 @@ some features can be enabled or disabled individually.
 	# Minimum NVDA version supported (e.g. "2018.3")
 	"addon_minimumNVDAVersion" : "2019.1",
 	# Last NVDA version supported/tested (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion" : "2019.3.0",
+	"addon_lastTestedNVDAVersion" : "2020.1",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel" : "dev",
 }
