@@ -620,7 +620,8 @@ class UpdateSettingsPanel(SettingsPanel):
 	
 	def onCheckForUpdate(self, evt):
 		from ..updateHandler import addonUpdateCheck
-		wx.CallAfter(addonUpdateCheck, auto = False, releaseToDev = toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
+		releaseToDevVersion = self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked() # or toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False)
+		wx.CallAfter(addonUpdateCheck, auto = False, releaseToDev =releaseToDevVersion  )
 		self.Close()
 		
 	def saveSettingChanges (self):

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: NVDAExtensionGlobalPlugin 9.0.4\n"
+"Project-Id-Version: NVDAExtensionGlobalPlugin 9.0.5\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2020-03-23 15:43+0100\n"
+"POT-Creation-Date: 2020-04-02 12:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2269,7 +2269,7 @@ msgstr ""
 #. Translators: This is the label for the Advanced settings panel.
 #. Translators: The title of the dialog displayed while downloading add-on update.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:599
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:129
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:104
 msgid "Update"
 msgstr ""
 
@@ -2289,7 +2289,7 @@ msgid "&Check for update"
 msgstr ""
 
 #. Translators: title of add-on parameters dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:656
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:657
 msgid "Parameters"
 msgstr ""
 
@@ -2883,85 +2883,79 @@ msgstr ""
 msgid "No add-on installed"
 msgstr ""
 
-#. Translators: The message displayed when the add-on requires a newer version of Windows.
-#. gui.messageBox(_("{name} add-on is not compatible with this version of Windows.").format(name = addonName),
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:63
-msgid "The update is not compatible with this version of Windows."
-msgstr ""
-
 #. Translators: The message displayed when trying to update an add-on that is not going to be compatible with the current version of NVDA.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:82
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:59
 msgid ""
 "The update is not compatible with this version of NVDA. Minimum NVDA "
 "version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}."
 msgstr ""
 
 #. Translators: The progress message indicating the name of the add-on being downloaded.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:131
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:106
 msgid "Downloading {name}"
 msgstr ""
 
 #. Translators: A message indicating that an error occurred while downloading an update to NVDA.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:145
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:120
 msgid "Error downloading update for {name}."
 msgstr ""
 
 #. Translators: The message displayed when an error occurs when trying to update an add-on package due to package problems.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:201
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:176
 msgid "Cannot update {name} - missing file or invalid file format"
 msgstr ""
 
 #. Translators: The title of the dialog presented while an Addon is being updated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:232
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:206
 msgid "Updating"
 msgstr ""
 
 #. Translators: The message displayed while an addon is being updated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:234
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:208
 msgid "Please wait while the add-on is being updated."
 msgstr ""
 
 #. Translators: The message displayed when an error occurs when installing an add-on package.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:241
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:215
 msgid "Failed to update {name} add-on"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:297
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:271
 msgid "{summary} - update"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:306
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:280
 msgid "The service is temporarily under maintenance. Please, try again later."
 msgstr ""
 
 #. Translators: message to user to report a new version.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:327
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:301
 #, python-format
 msgid "New version available, version %s. Do you want download it now?"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:341
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:315
 #, python-format
 msgid "You are up-to-date. %s is the latest version."
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:347
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:321
 msgid "Oops! There was a problem checking for updates. Please retry later"
 msgstr ""
 
 #. Translators: This is a label of a button appearing on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:506
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:475
 msgid "&Yes"
 msgstr ""
 
 #. Translators: This is a label of a button appearing on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:510
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:479
 msgid "&No"
 msgstr ""
 
 #. this prompt was triggered by auto update checker
 #. Translators: The label of a button to remind the user later about performing some action.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:514
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:483
 msgid "&Later"
 msgstr ""
 

@@ -1,6 +1,6 @@
 # updateCheck.py
 # common Part of all of my add-on
-# Copyright 2019 Paulber19
+# Copyright 2019-2020 Paulber19
 #some parts of code comes from others add-ons:
 # add-on Updater (author Joseph Lee)
 # brailleExtender (author Andre-Abush )
@@ -27,45 +27,21 @@ from updateCheck import UpdateDownloader
 import tempfile
 import threading
 py3 = sys.version.startswith("3")
-try:
-	from addonAPIVersion import getAPIVersionTupleFromString
-except:
-	# for compatibility with nvda 2018.4.1
-	import re
-	
-	
-	ADDON_API_VERSION_REGEX = re.compile(r"^(0|\d{4})\.(\d)(?:\.(\d))?$")
-	def getAPIVersionTupleFromString(version):
-		"""Converts a string containing an NVDA version to a tuple of the form (versionYear, versionMajor, versionMinor)"""
-		match = ADDON_API_VERSION_REGEX.match(version)
-		if not match:
-			raise ValueError(version)
-		return tuple(int(i) if i is not None else 0 for i in match.groups())
+import addonAPIVersion
 
 
 
 _curAddon = addonHandler.getCodeAddon()
 _curAddonName = _curAddon.manifest["name"]
-def checkCompatibility(addonName,minimumNVDAVersion = None, lastTestedVersion = None, minimumWindowsVersion =None, auto = True):
-	def checkWindowsCompatibility(minimumWindowsVersion, auto):
-			# Some add-ons require a specific Windows release or later.
-			import winVersion
-			if minimumWindowsVersion is None:
-				minimumWindowsVersion = winVersion.winVersion[:3]
-			else:
-				minimumWindowsVersion = [int(data) for data in minimumWindowsVersion.split(".")]
-			minimumWinMajor, minimumWinMinor, minimumWinBuild = minimumWindowsVersion
-			winMajor, winMinor, winBuild = winVersion.winVersion[:3]
-			if (winMajor, winMinor, winBuild) < (minimumWinMajor, minimumWinMinor, minimumWinBuild):
-				if not auto:
-					# Translators: The message displayed when the add-on requires a newer version of Windows.
-					#gui.messageBox(_("{name} add-on is not compatible with this version of Windows.").format(name = addonName),
-					gui.messageBox(_("The update is not compatible with this version of Windows."),
+def checkCompatibility(addonName,minimumNVDAVersion = None, lastTestedVersion = None, auto = True):
+	
+	def isCompatible(minimumNVDAVersion, lastTestedNVDAVersion):
+		currentAPIVersion=addonAPIVersion.CURRENT
+		hasAddonGotRequiredSupport = minimumNVDAVersion <= currentAPIVersion
+		backwardsCompatToVersion=addonAPIVersion.BACK_COMPAT_TO
+		return hasAddonGotRequiredSupport and (lastTestedNVDAVersion >= backwardsCompatToVersion)
 
-						makAddonWindow(NVDAString("Error")),
-						wx.OK | wx.ICON_ERROR)
-				return False
-			return True
+
 	def checkNVDACompatibility(minimumNVDAVersion, lastTestedNVDAVersion, auto):
 		# Check compatibility with NVDA 
 		import versionInfo
@@ -76,18 +52,17 @@ def checkCompatibility(addonName,minimumNVDAVersion = None, lastTestedVersion = 
 		# For NVDA version, only version_year.version_major will be checked.
 		minimumYear, minimumMajor = minimumNVDAVersion[:2]
 		lastTestedYear, lastTestedMajor = lastTestedNVDAVersion[:2]
-		if not ((minimumYear, minimumMajor) <= (versionInfo.version_year, versionInfo.version_major) <= (lastTestedYear, lastTestedMajor)):
-			if not auto:
-				# Translators: The message displayed when trying to update an add-on that is not going to be compatible with the current version of NVDA.
-				gui.messageBox(_("The update is not compatible with this version of NVDA. Minimum NVDA version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}.").format(minYear = minimumYear, minMajor = minimumMajor, testedYear=lastTestedYear, testedMajor=lastTestedMajor),
+
+		if isCompatible(minimumNVDAVersion, lastTestedNVDAVersion): return True
+		if  not auto:
+			# Translators: The message displayed when trying to update an add-on that is not going to be compatible with the current version of NVDA.
+			gui.messageBox(_("The update is not compatible with this version of NVDA. Minimum NVDA version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}.").format(minYear = minimumYear, minMajor = minimumMajor, testedYear=lastTestedYear, testedMajor=lastTestedMajor),
 				makeAddonWindowTitle(NVDAString("Error")),
 				wx.OK | wx.ICON_ERROR)
-			return False
-		return True
+		return False
+	
 	res = checkNVDACompatibility(minimumNVDAVersion, lastTestedVersion, auto)
-	if res:
-		return checkWindowsCompatibility( minimumWindowsVersion, auto)
-	return False
+	return res
 
 def makeAddonWindowTitle(dialogTitle):
 	curAddon = addonHandler.getCodeAddon()
@@ -212,9 +187,8 @@ class AddonUpdateDownloader(UpdateDownloader):
 				return
 			minimumNVDAVersion = bundle.manifest.get("minimumNVDAVersion", None)
 			lastTestedNVDAVersion = bundle.manifest.get("lastTestedNVDAVersion", None)
-			minimumWindowsVersion = bundle.manifest.get("minimumWindowsVersion", None)
 			bundleName=bundle.manifest['name']
-			if not checkCompatibility(bundleName, minimumNVDAVersion, lastTestedNVDAVersion, minimumWindowsVersion):
+			if not checkCompatibility(bundleName, minimumNVDAVersion, lastTestedNVDAVersion):
 				self.continueUpdatingAddons()
 				return
 			isDisabled = False
@@ -317,7 +291,7 @@ class CheckForAddonUpdate(object):
 			self.upToDateDialog(self.auto)
 			return
 		(version, url, minimumNVDAVersion, lastTestedNVDAVersion) = newUpdate
-		if not checkCompatibility(self.addon.manifest["summary"], minimumNVDAVersion, lastTestedNVDAVersion, None, auto):
+		if not checkCompatibility(self.addon.manifest["summary"], minimumNVDAVersion, lastTestedNVDAVersion, auto):
 			return
 		url = "{baseURL}/{url}/{addonName}-{version}.nvda-addon".format(baseURL = latestUpdateInfos["baseURL"], addonName = self.addon.manifest["name"], url= url, version = version)
 		self.availableUpdateDialog (version, url) 
@@ -374,17 +348,13 @@ class CheckForAddonUpdate(object):
 			loader = importlib.machinery.SourceFileLoader(moduleName, fileName)
 			spec = importlib.util.spec_from_loader(loader.name, loader)
 			mod = importlib.util.module_from_spec(spec)
-			try:
-				loader.exec_module(mod)
-			except:
-				log.error("importCodePy3: cannot load myAddons.latest module")
-				mod = None
+			loader.exec_module(mod)
 			return mod
 
 		res = None
 		if updateInfosFile is None:
 			try:
-				url = "https://github.com/paulber007/AllMyNVDAAddons/raw/master/myAddons.latest"
+				url = "https://rawgit.com/paulber007/AllMyNVDAAddons/master/myAddons.latest"
 				res = urlopen(url)
 			except IOError as e:
 				log.warning("Fail to download update informations: error = %s"%e)
@@ -423,9 +393,8 @@ class CheckForAddonUpdate(object):
 				os.remove(file)
 			except:
 				log.warning("error: cannot remove %s file"%file)
-		if mod is None :
-			if not self.auto:
-				self.errorUpdateDialog()
+		if mod is None:
+			self.errorUpdateDialog()
 			return
 		updateInfos = mod.lastAddonVersions.copy()
 		del mod
@@ -483,9 +452,9 @@ class CheckForAddonUpdate(object):
 		else:
 			url = "{url}/{channel}".format(channel = updateChannel, url = addonUpdateInfos["localURL"])
 		minimumVersion = addonUpdateInfos[updateChannel].get("minimumNVDAVersion", None)
-		minimumNVDAVersion = getAPIVersionTupleFromString(minimumVersion) if minimumVersion is not None else None
+		minimumNVDAVersion = addonAPIVersion .getAPIVersionTupleFromString(minimumVersion) if minimumVersion is not None else None
 		lastTestedVersion= addonUpdateInfos[updateChannel].get("lastTestedNVDAVersion", None)
-		lastTestedNVDAVersion = getAPIVersionTupleFromString(lastTestedVersion) if lastTestedVersion is not None else None
+		lastTestedNVDAVersion = addonAPIVersion .getAPIVersionTupleFromString(lastTestedVersion) if lastTestedVersion is not None else None
 		return (latestVersion, url, minimumNVDAVersion, lastTestedNVDAVersion)
 	
 	def processUpdate(self, url):
