@@ -1,6 +1,6 @@
 #NVDAExtensionGlobalPlugin/NVDALogs/__init__.py
 #A part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2017 paulber19
+#Copyright (C) 2017-2020 paulber19
 #This file is covered by the GNU General Public License.
 #See the file COPYING for more details.
 import addonHandler
@@ -14,6 +14,7 @@ import os
 from logHandler import log,_getDefaultLogFilePath
 import ui
 from ..utils import makeAddonWindowTitle
+from ..utils.py3Compatibility import  py3
 
 
 class NVDALogsManagementDialog (wx.Dialog):
@@ -82,7 +83,9 @@ class NVDALogsManagementDialog (wx.Dialog):
 	
 	def onCopyCurrentLogPathButton (self, evt):
 		logFile = os.path.join(os.path.dirname(_getDefaultLogFilePath()), "nvda.log")
-		if api.copyToClip(logFile.decode("mbcs")):
+		if not py3:
+			logFile = logFile.decode("mbcs")
+		if api.copyToClip(logFile):
 			ui.message(_("Current log file  path  copied to clipboard"))
 		else:
 			ui.message(_("Current log file  path   cannot be copied to clipboard"))				
