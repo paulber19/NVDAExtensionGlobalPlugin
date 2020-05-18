@@ -71,7 +71,8 @@ def deepCopy(agregSection):
 				value = tuple(value)
 			newdict[key] = value
 		return newdict
-
+# timer for switchTo method
+GB_SwitchToTimer = None
 
 class SwitchVoiceProfilesManager(object):
 	_configVersion = 2
@@ -190,9 +191,15 @@ class SwitchVoiceProfilesManager(object):
 		conf[KEY_LastSelector] =selector
 	
 	def switchToVoiceProfile(self, selector, silent = False):
-		def finish(msg):
-			queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
-			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, msg)
+		def finish(synthName, synthspeechConfig, msg):
+			# stop previous synth because oneCore voice switch don't work without it
+			setSynth(None)
+			config.conf[SCT_Speech] = synthSpeechConfig.copy()
+			setSynth(synthName)
+			getSynth().saveSettings()
+			if  msg:
+				speech.speakMessage(msg)
+
 		voiceProfileSwitchingSect = self.getConfig()
 		newProfile = self.getVoiceProfile(selector)
 		synthName = None
@@ -210,17 +217,11 @@ class SwitchVoiceProfilesManager(object):
 				wx.YES|wx.NO|wx.ICON_WARNING)==wx.YES:
 				core.callLater(200, self.freeSelector, selector)
 			return
-		
-		
-		d = deepCopy(config.conf[SCT_Speech] )
-		d.update(newProfile[SCT_Speech].copy())
-		config.conf[SCT_Speech] = d.copy()
-		setSynth(synthName)
-		getSynth().saveSettings()
+		synthSpeechConfig = deepCopy(config.conf[SCT_Speech] )
+		synthSpeechConfig.update(newProfile[SCT_Speech].copy())
 		self.setLastSelector(selector)
-		if silent: return
-		msg = _("Selector {selector}: {name}").format(selector = selector, name = voiceProfileName)
-		wx.CallLater(50, finish, msg)
+		msg = None if silent else  _("Selector {selector}: {name}").format(selector = selector, name = voiceProfileName)
+		queueHandler.queueFunction(queueHandler.eventQueue,finish, synthName, synthSpeechConfig, msg )
 	
 	def nextVoiceProfile(self, forward = True):
 		def moveSelector(currentSelector, forward):
@@ -238,8 +239,17 @@ class SwitchVoiceProfilesManager(object):
 			sSelector = str(iSelector)
 			if not self.isSet(sSelector,not self.getUseNormalConfigurationSelectorsFlag() ):
 				continue
-			self.switchToVoiceProfile(sSelector)
+			# NVDA crash if synth switch too rapidly
+			def switchTo(selector):
+				global GB_SwitchToTimer
+				GB_SwitchToTimer = None
+				self.switchToVoiceProfile(sSelector)
+
+			global GB_SwitchToTimer
+			if GB_SwitchToTimer is not None:
+				GB_SwitchToTimer.Stop()
 			self.setLastSelector(sSelector)
+			GB_SwitchToTimer = wx.CallLater(300, switchTo, sSelector)
 			return
 		if self.isSet(lastSelector):
 			#Translators: this is a message to inform the user that there is no other voice profile.
@@ -254,6 +264,7 @@ class SwitchVoiceProfilesManager(object):
 
 	
 	def setVoiceProfile(self, selector, silent = False):
+		
 		self.setLastSelector(selector)
 		if not self.isSet(selector):
 			#Translators: this is  a message to inform the user  that the selector is not set.

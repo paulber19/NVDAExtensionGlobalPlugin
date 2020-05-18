@@ -137,7 +137,6 @@ La version de l'extension peut être:
 
 
 Par défaut, une  version stable est mise à jour avec une version stable plus récente (numéro de version supérieur).
-
 Mais il est possible de mettre à jour la version stable courante avec une version de développement de la prochaine version stable. Il suffit de cocher l'option "Mettre aussi à jour les versions stable vers les versions de développement  " situé dans la catégorie "Mise à jour".
 
 Une version de développement  est mise à jour avec une version de développement plus récente ou avec sa version stable.
@@ -540,20 +539,19 @@ Si l'extension  fakeClipboardAnnouncement est installée (qui réalise la même 
 ++ Annonce du dossier sélectionné dans les boites de dialogue du style "Ouvrir", "Enregistrer", "Enregistrer sous" ++[hdr8]
 Cette fonctionnalité est installée par défaut sans geste de commande.
 
-Elle ajoute, dans les boites  de dialogue du style "Ouvrir", "Enregistrer", "Enregistrer sous", "Chercher dans", le script qui  permet de connaitre le nom du dossier qui est sélectionné pour définir l'emplacement ou le fichier sera rechercher où enregistrer.
+Elle ajoute, pour les boites  de dialogue du style "Ouvrir", "Enregistrer", "Enregistrer sous", "Chercher dans", des scripts qui  permettent de connaitre le nom et le chemin du dossier qui est sélectionné pour définir l'emplacement ou le fichier sera rechercher où enregistrer.
 
-La description  de ce script est: "Annoncer le dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer".
-
-Ce script est rangé dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA.
-
-Il se lance :
-- soit avec la commande "KEY_SAY_CURRENT_FOLDER" de l'interpréteur 
-- soit avec le geste de commande "MAIN_KEY_SAY_CURRENT_FOLDER " qui lui est affecté par défaut.
+Ces scripts sont rangés dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA.
+Ce sont:
+- "Annoncer le nom du dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer. Deux appuis: annoncer son chemin complet": geste de commande "MAIN_KEY_SAY_CURRENT_FOLDER " qui lui est affecté par défaut.
+- "Annoncer le nom du dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer: commande "KEY_SAY_CURRENT_FOLDERNAME" de l'interpréteur .
+- "Annoncer le chemin complet du dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer: commande "KEY_SAY_CURRENT_FOLDERPATH" de l'interpréteur .
 
 
-Attention, ce script ne fonctionne que dans  des boites de dialogue conforme au standard Windows.
+Aucun geste de commande n'est associé aux deux derniers scripts, mais il est possible de leur en associer un à l'aite du dialogue "Geste de commandes" de NVDA.
 
-Le geste de commande déclenche l'annonce du nom du dossier sélectionné dans la boite de dialogue et si possible le chemin de ce dossier.
+Attention, ces scripts ne fonctionnent que dans  des boites de dialogue conforme au standard Windows.
+
 
 ++ Journaux de NVDA ++[hdr9]
 Cette fonctionnalité est par défaut, installée sans geste de commande.
@@ -602,23 +600,22 @@ Pour réécouter ces enregistrements, les scripts suivants, rangés dans la cat�
 +++ Annonce du précédent enregistrement +++
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_PREVIOUS_RECORD"  affecté par défaut.
 
-Le geste de commande déclenche l'annonce  du précédent enregistrement  par rapport au dernier enregistrement annoncé.
+Le geste de commande déclenche l'annonce  du précédent enregistrement  par rapport au dernier enregistrement annoncé et le copier dans le presse-papier.
 
 +++ Annonce de l'enregistrement suivant  +++
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_NEXT_RECORD"  affecté par défaut.
 
-Le geste de commande déclenche l'annonce de l'enregistrement suivant par rapport au dernier enregistrement annoncé.
+Le geste de commande déclenche l'annonce de l'enregistrement suivant par rapport au dernier enregistrement annoncé et le copier dans le presse-papier
 
 +++ Ré annoncer le dernier enregistrement annoncé +++
 La description de ce script est: "Annoncer l'enregistrement courant  de l'historique des  annonces vocales. Deux appuis: l'enregistrer dans le presse-papier. Trois appui: afficher tout l'historique".
 
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_CURRENT_RECORD"  affecté par défaut.
 
-Un simple appui déclenche l'annonce du dernier enregistrement annoncé.
+Un simple appui déclenche l'annonce du dernier enregistrement annoncé et sa copie dans le presse-papier
 
-Un double appui, copie cet enregistrement  dans le presse-papier.
 
-Un triple  appui, affiche tout l'historique.
+Un double  appui, affiche tout l'historique.
 
 +++ Afficher l'historique vocal +++
 La description de ce script est: "Afficher les enregistrements de l'historique vocal".
@@ -1428,9 +1425,9 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 
 +++ Historique des annonces vocales +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Annoncer l'enregistrement précédent | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent  enregistrement de l'historique vocal |
-| Annoncer l'enregistrement suivant | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l'enregistrement suivant de l'historique vocal |
-| Annoncer l'enregistrement courant | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique vocal. Second appui: l'enregistrer dans le presse-papier. Troisième appui: afficher l'historique |
+| Annoncer l'enregistrement précédent | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent  enregistrement de l'historique vocal  et le copier dansle presse-papier |
+| Annoncer l'enregistrement suivant | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l'enregistrement suivant de l'historique vocal et le copier dans le presse-papier |
+| Annoncer l'enregistrement courant | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique vocal  et le copier dans le presse-papier. Second appui: afficher l'historique |
 
 +++ Minuterie +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |

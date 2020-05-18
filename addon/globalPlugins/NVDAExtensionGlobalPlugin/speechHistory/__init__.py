@@ -8,6 +8,7 @@ import addonHandler
 addonHandler.initTranslation()
 from logHandler import log
 import speech
+import tones
 import ui
 import api
 from ..utils.informationDialog import InformationDialog
@@ -82,25 +83,11 @@ class SpeechRecorderManager(object):
 		elif position == "next" and index < len(self._speechHistory) -1:
 			index+= 1
 		if (position != "current") and (index == self._lastSpeechHistoryReportIndex):
-			# Translators: message presented when there is no more record in speech history.
-			speech.speakMessage(_("No more recorded vocal announce"))
-			# Translators: message presented when the record is on the top or bottom of the speech history.
-			msg = _("Oldest recorded announce") if (position == "previous") else _("Last recorded announce")
-			ui.message("%s: %s" %(msg,self._speechHistory[index]))
-		
-		else:
-			self._lastSpeechHistoryReportIndex = index
-			text= self._speechHistory[index]
-			ui.message(text)
-
-			if toClip and position == "current":
-				if api.copyToClip(text):
-					# Translators: message presented when the text is copied to the clipboard.
-					speech.speakMessage(_("Copied to clipboard"))
-				else:
-					# Translators: message presented when the text cannot be copied to the clipboard.
-					speech.speakMessage(_("Cannot copy to clipboard"))
-			
+			tones.beep(100, 40)
+		self._lastSpeechHistoryReportIndex = index
+		text= self._speechHistory[index]
+		ui.message(text)
+		api.copyToClip(text)
 		self._onMonitoring = oldOnMonitoring
 		
 	def displaySpeechHistory(self):

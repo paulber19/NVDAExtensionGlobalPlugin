@@ -1,8 +1,8 @@
 #NVDAExtensionGlobalPlugin/theGlobalPlugin.py
 # a part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2016-2017 Paulber19
+#Copyright (C) 2016-2020 Paulber19
 #This file is covered by the GNU General Public License.
-#See the file COPYING for more details.
+
 
 import addonHandler
 addonHandler.initTranslation()
@@ -188,7 +188,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"displayModuleUserGuide":("kb:g", None),
 		"displayHelp": ("kb:h", None),
 		"NVDALogsManagement":("kb:j", ID_OpenCurrentOrOldNVDALogFile ),
-		"reportCurrentFolder":("kb:o", ID_CurrentFolderReport ),
+		"reportCurrentFolderName":("kb:o", ID_CurrentFolderReport ),
+		"reportCurrentFolderFullPath":("kb:control+o", ID_CurrentFolderReport ),
 		"toggleSwitchVoiceProfileMode": ("kb:p", ID_VoiceProfileSwitching ),
 		"shutdownComputerDialog": ("kb:r", None),
 		"toggleCurrentAppVolumeMute": ("kb:s", ID_VolumeControl),
@@ -251,7 +252,11 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Input help mode message for open current or old log command.
 		"openCurrentOrOldNVDALogFile": (_("Open current NVDA log file. Pressing this key twice, open the old NVDA log file. Pressing third, copy current log path to the clipboard"), globalCommands.SCRCAT_TOOLS),
 		# Translators: Input help mode message for report current folder command in open or save dialog box.
-		"reportCurrentFolder" : (_("report current selected folder in the open andSave dialog box"), None),
+		"reportCurrentFolder" : (_("report the name of current selected folder in the open or Save dialog box. Twice: report full path"), None),
+		# Translators: Input help mode message for report current folder name command in open or save dialog box.
+		"reportCurrentFolderName" : (_("report the name of current selected folder in the open or Save dialog box"), None),
+		# Translators: Input help mode message for report current folder path command in open or save dialog box.
+		"reportCurrentFolderFullPath" : (_("report the full path  of current selected folder in the open or Save dialog box"), None),
 		# Translators: Input help mode message for open user config folder command.
 		"exploreUserConfigFolder": (_("Explor my user configuration's folder"), None),
 		# Translators: Input help mode message for open NVDA program files folder command.
@@ -259,11 +264,11 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Input help mode message for display speech history records list dialog command.
 		"displaySpeechHistoryRecords" : (_("display speech history records"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for report previous speech history record command.
-		"reportPreviousSpeechHistoryRecord": (_("Report previous record of the speech history"), globalCommands.SCRCAT_SPEECH),
+		"reportPreviousSpeechHistoryRecord": (_("Report previous record of the speech history and copy it to clipboard"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for report current speech history record command.
-		"reportCurrentSpeechHistoryRecord": (_("Report current record of the speech history. Twice: copy it to clipboard.Third: display speech history"), globalCommands.SCRCAT_SPEECH),
+		"reportCurrentSpeechHistoryRecord": (_("Report current record of the speech history and copy it to clipboard.Twice: display speech history"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for report next speech history record command.
-		"reportNextSpeechHistoryRecord": (_("Report next record of the speech history"), globalCommands.SCRCAT_SPEECH),
+		"reportNextSpeechHistoryRecord": (_("Report next record of the speech history and copy it  to clipboard"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for restart NVDA in  default or debug log level command.
 		"restartEx": (_("Restart NVDA. Twice: restart with log levelset to debug"), inputCore.SCRCAT_MISC ),
 		# Translators: Input help mode message for toggle switch voice profile mode command.
@@ -842,9 +847,27 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		dialogTitle = _("Application context's informations's informations")
 		InformationDialog.run(None, dialogTitle, "","\r\n".join(textList))
 	
-	def script_reportCurrentFolder (self, gesture):
+	def script_reportCurrentFolderName (self, gesture):
+		stopDelayScriptTask()
+		reportCurrentFolder(False)
+
+	def script_reportCurrentFolderFullPath (self, gesture):
 		stopDelayScriptTask()
 		reportCurrentFolder(True)
+
+	
+	def script_reportCurrentFolder (self, gesture):
+		def callback (sayPath = False):
+			clearDelayScriptTask()
+			reportCurrentFolder(sayPath)
+		stopDelayScriptTask()
+		if scriptHandler.getLastScriptRepeatCount() == 0:
+			delayScriptTask(callback)
+		else:
+			reportCurrentFolder(True)
+
+
+
 	
 	def script_NVDALogsManagement(self, gesture):
 		from .NVDALogs import NVDALogsManagementDialog
@@ -892,18 +915,16 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			speechHistory.getSpeechRecorder().reportSpeechHistory("next")
 	
 	def script_reportCurrentSpeechHistoryRecord(self, gesture):
-		def callback(toClip = False):
+		def callback():
 			clearDelayScriptTask()
 			if speechHistory.isActive():
-				speechHistory.getSpeechRecorder().reportSpeechHistory("current", toClip )
+				speechHistory.getSpeechRecorder().reportSpeechHistory("current")
 		
 		
 		stopDelayScriptTask()
 		count = scriptHandler.getLastScriptRepeatCount()
 		if count == 0:
-			delayScriptTask(callback, False)
-		elif count == 1:
-			delayScriptTask(callback, True)
+			delayScriptTask(callback)
 		else:
 			speechHistory.getSpeechRecorder().displaySpeechHistory()
 	
