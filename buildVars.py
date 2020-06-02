@@ -81,7 +81,7 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version" : "9.1.2",
+	"addon_version" : "9.1.3",
 	# Author(s)
 	"addon_author" : "PaulBer19",
 	# URL for the add-on documentation support

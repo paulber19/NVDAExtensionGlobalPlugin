@@ -1,0 +1,2712 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: NVDAExtensionGlobalPlugin\n"
+"Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
+"POT-Creation-Date: 2020-04-09 19:53+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: TRẦN MẠNH <tvhuy12@gmail.com>\n"
+"Language-Team: paulber19 <paulber19@laposte.net>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Generator: Poedit 1.8.6\n"
+"X-Poedit-Bookmarks: 77,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: utilities\n"
+"X-Poedit-SearchPathExcluded-1: utilitiesPy2\n"
+"X-Poedit-SearchPathExcluded-2: utilitiesPy3\n"
+
+#: buildVars.py:17
+msgid "NVDA global commands extension"
+msgstr "Mở rộng lệnh toàn cầu NVDA"
+
+#: buildVars.py:20
+msgid ""
+"This add-on has been developed with the participation of Daniel Poiraud.\n"
+"It adds to NVDA:\n"
+"1- The features\n"
+"some features can be enabled or disabled individually.\n"
+"* Display of the list of icons in the notification area ,\n"
+"* Display of the windows list of running applications,\n"
+"* Help in the composition of a symbol that is complex such as, for example, "
+"a a e related, a symbol power of 2\n"
+"\tand possibility to add its own categories and symbols,\n"
+"* Extension of the functionality of the virtual buffer\n"
+"\tfor browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, "
+"and Google Chrome:\n"
+"\n"
+"\t* new commands for navigation mode (paragraph, division, anchor, main "
+"area,\n"
+"\t* new types of elements for the dialog box opened by \"NVDA+F7\" (radio "
+"button, paragraph, frame, checkBox, etc) with the announcement of the number "
+"of items found,\n"
+"\t* commands for the tables:\n"
+"\tannounce the cells of a row /column , go to first/last cell in the row/"
+"current column, move the column/row preceding or following with announcement "
+"possible of the cells in that row/column,\n"
+"\t* announcement of the URL of the document,\n"
+"\t* navigate in loop,\n"
+"* Announcement of the function associated with editing commands\n"
+"\tstyle Copy, Paste, etc.,\n"
+"* Announcement of the name of the folder pre-selected in the dialog boxes "
+"like \"Open\",\"Save\", \"Save as\",etc.,\n"
+"* display of information on the focused application:\n"
+"\t* the current profile configuration,\n"
+"\t* the name and version number of the application,\n"
+"\t* the add-on loaded for the application,\n"
+"*\tNVDA logs tools:\n"
+"\t* Opening the previous or current log,\n"
+"\t* copy of current Log path to the clipboard,\n"
+"\n"
+"* history of voice speechs,\n"
+"* renaming keyboard keys,\n"
+"* selective announcement of  command keyboard keys ,\n"
+"* simple countdown timer,\n"
+"* display of visible elements making up the object in the foreground,\n"
+"* fast switching of voice profile,\n"
+"* remanence of the modifier keys,\n"
+"* shutdown, reboot or hybernate the computer,\n"
+"* control the main or NVDA volume:\n"
+"\t* mute or unmute volume  for the focused application,\n"
+"\t* establishment of the main Windows  or NVDA volume at the start  of add-"
+"on,\n"
+"\t* modification of main volume or audio stream's volume of focused "
+"application.\n"
+"* Tools for development of add-on\n"
+"* supplements regarding the date and time: copy date and time to clipboard, "
+"report time with seconds\n"
+"\n"
+"\n"
+"2- The options\n"
+"* remove the announcement from the description of the objects in the Windows "
+"ribbons ,\n"
+"* proclaim the word focused when deleting a word,\n"
+"* automatically maximize the foreground window,\n"
+"* announce punctuations and symbols when moving by word in a document.\n"
+"\n"
+"3-  The advanced options\n"
+"* report, with a sound, the registration of an error in the NVDA log also "
+"for the final versions and release candidate of NVDA,\n"
+"* Caption dialog title with the name of the addon,\n"
+"* Do not take account of the option called Report object descriptions during "
+"the display of the dialog box style confirmation,\n"
+"* use numeric keypad's keys conventionally.\n"
+"\n"
+"\n"
+"4- Various other elements\n"
+"* presentation formatting of the text in a dialog box,\n"
+"* sub-menus to explore the program folders or configuration,\n"
+"* script to quickly restart NVDA.\n"
+msgstr ""
+"Mô-đun này đã được phát triển với sự tham gia của Daniel Poiraud.\n"
+"Nó không tương thích với các phiên bản NVDA bên dưới đến 2018.3.2.\n"
+"Nó thêm vào NVDA:\n"
+"1- The features\n"
+"một số tính năng có thể được bật hoặc tắt riêng lẻ.\n"
+"* Hiển thị danh sách các biểu tượng trong vùng thông báo ,\n"
+"* Display of the windows list of running applications,\n"
+"* Assistance in the composition of a symbol that is complex such as, for "
+"example, a a e related, a symbol power of 2\n"
+"\tand possibility to add its own categories and symbols,\n"
+"* Extension of the functionality of the virtual buffer\n"
+"\tfor browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, "
+"and Google Chrome:\n"
+"\n"
+"\t* new commands for navigation mode (paragraph, division, anchor, main "
+"landmark,\n"
+"\t* new types of elements for the dialog box opened by \"NVDA+F7\" (radio "
+"button, paragraph, frame, checkBox, etc) with the announcement of the number "
+"of items found,\n"
+"\t* commands for the tables:\n"
+"\tannounce the cells of a row /column , go to first/last cell in the row/"
+"current column, move the column/row preceding or following with announcement "
+"possible of the cells in that row/column,\n"
+"\t* announcement of the URL of the document,\n"
+"\t* navigation loop,\n"
+"* Announcement of the function associated with editing commands\n"
+"  style Copy, Paste, etc.,\n"
+"* Announcement of the name of the folder pre-selected in the dialog boxes "
+"like \"Open\",\"Save\", \"Save as\",etc.,\n"
+"* display of information on the focused application:\n"
+"\t* the current profile configuration,\n"
+"\t* the name and version number of the application,\n"
+"\t* the add-on loaded for the application,\n"
+"*\tNVDA logs tools:\n"
+"\t* Opening the previous or current log,\n"
+"\t* copy of current Log path to the clipboard,\n"
+"\n"
+"* history of voice speechs,\n"
+"* renaming keyboard keys,\n"
+"* selective announcement of  command keyboard keys ,\n"
+"* simple countdown timer,\n"
+"* display of visible elements making up the object in the foreground,\n"
+"* fast switching of voice profile,\n"
+"* remanence of the modifier keys,\n"
+"* shutdown, restart or put on prolonged sleep the computer,\n"
+"* control the master or NVDA volume:\n"
+"\t* mute or unmute volume  for the focused application,\n"
+"\t* establishment of the main Windows  or NVDA volume at the add-on "
+"loading,\n"
+"\t* modification of main volume or audio flow's volume of focused "
+"application,\n"
+"* Tools for development of add-on\n"
+"* supplements regarding the date and time: copy date and time to clipboard, "
+"report time with seconds\n"
+"\n"
+"\n"
+"2- The options\n"
+"* remove the ad from the description of the objects in the ribbons Windows,\n"
+"* proclaim the word focused when deleting a word,\n"
+"* automatically maximize the foreground window,\n"
+"* announce punctuations and symbols when moving by word .\n"
+"\n"
+"3-  The advanced options\n"
+"* report, with a sound, the registration of an error in the NVDA log also "
+"for the final versions and release candidate of NVDA,\n"
+"* Caption dialog title with the name of the module,\n"
+"* Do not take account of the option called Report object descriptions during "
+"the display of the dialog box style confirmation,\n"
+"* use numeric keypad's keys as arrow keys.\n"
+"\n"
+"\n"
+"4- Various other elements\n"
+"* presentation formatting of the text in a dialog box,\n"
+"* sub-menus to explore the program folders or configuration,\n"
+"* script to quickly restart NVDA.\n"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:90
+msgid "Help for Complex symbols edition"
+msgstr "Trợ giúp cho phiên bản biểu tượng phức tạp"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:111
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:310
+msgid "&Categories:"
+msgstr "&Thể loại:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:123
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:323
+msgid "S&ymbols:"
+msgstr "S & Ymbols:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:129
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:607
+msgid "&Copy to clipboard"
+msgstr "&Sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:131
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:609
+msgid "&Past"
+msgstr "&Past"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:135
+msgid "&Manage yours symbols"
+msgstr "& Quản lý biểu tượng của bạn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:199
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:223
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:410
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:634
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:654
+msgid "No symbol selected"
+msgstr "Không có biểu tượng được chọn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:211
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:643
+msgid "{0} pasted"
+msgstr "{0} đã dán"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:233
+msgid "Symbol cannot copied to the clipboard"
+msgstr "Biểu tượng không thể được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:236
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:663
+msgid "{0} copied"
+msgstr "{0} đã sao chép"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:269
+msgid "Error: no basic symbols installed"
+msgstr "Lỗi: không cài đặt các ký hiệu cơ bản"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:271
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:285
+msgid "User symbols manager"
+msgstr "Trình quản lý ký hiệu người dùng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:329
+msgid "&Add a symbol"
+msgstr "& Thêm một biểu tượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:331
+msgid "&Delete the symbol"
+msgstr "& Xóa biểu tượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:333
+msgid "Add a &category"
+msgstr "Thêm một & thể loại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:335
+msgid "De&lete the category"
+msgstr "Hủy bỏ danh mục"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:340
+msgid "&Save"
+msgstr "&lưu "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:419
+#, python-format
+msgid "%s symbol deleted"
+msgstr "Biểu tượng% s đã bị xóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:428
+msgid "No symbol entered"
+msgstr "Không có biểu tượng nào được nhập"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:432
+msgid "Symbol is not valid"
+msgstr "Biểu tượng không hợp lệ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:436
+msgid "There is no description for the symbol"
+msgstr "Không có mô tả cho biểu tượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:445
+#, python-format
+msgid ""
+"The symbol is allready in this category under \"%s\" description. Do you "
+"want to replace it ?"
+msgstr ""
+"The symbol is allready in this category under \"%s\" description. Do you "
+"want to replace it ?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:447
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:455
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:514
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:673
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:531
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:627
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:659
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:673
+msgid "Confirmation"
+msgstr "Xác nhận"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:453
+msgid ""
+"The symbol is allready in {oldCat} category. Do you want to add this symbol "
+"also in {newCat} category?"
+msgstr ""
+"Biểu tượng đã sẵn sàng trong danh mục {oldCat}. Bạn có muốn thêm biểu tượng "
+"này trong danh mục {newCat} không?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:476
+#, python-format
+msgid "%s symbol has been added"
+msgstr "Biểu tượng% s đã được thêm vào"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:483
+msgid "Entry category name:"
+msgstr "Tên danh mục:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:485
+msgid "Adding category"
+msgstr "Thêm thể loại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:492
+#, python-format
+msgid "%s category allready exists"
+msgstr "Danh mục% s đã sẵn sàng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:507
+msgid "You cannot delete this basic category."
+msgstr "Bạn không thể xóa danh mục cơ bản này."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:512
+msgid "Do you vwant realy delete this category and all its symbols ?"
+msgstr "Bạn có thực sự xóa thể loại này và tất cả các biểu tượng của nó?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:526
+#, python-format
+msgid "%s category has been deleted"
+msgstr "Danh mục% s đã bị xóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:539
+#, python-format
+msgid "Adding Symbol in %s category"
+msgstr "Thêm Biểu tượng trong danh mục% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:546
+msgid "Enter the Symbol:"
+msgstr "Nhập biểu tượng:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:549
+msgid "Enter the Description:"
+msgstr "Nhập mô tả:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:577
+msgid "Last used complex symbols"
+msgstr "Biểu tượng phức tạp được sử dụng lần cuối"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:592
+msgid "&Symbols:"
+msgstr "& Biểu tượng:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:612
+msgid "&Delete all"
+msgstr "&Xóa hết"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:671
+msgid "Do you want really delete all symbols of the list"
+msgstr "Bạn có muốn thực sự xóa tất cả các biểu tượng của danh sách"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:687
+msgid "There is no symbol recorded"
+msgstr "Không có biểu tượng được ghi lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:34
+msgid "NVDA logs management"
+msgstr "Quản lý nhật ký NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:44
+msgid "Open current &log"
+msgstr "Mở hiện tại và đăng nhập"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:46
+msgid "Open &old log"
+msgstr "Mở và nhật ký cũ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:48
+msgid "Copy log &path to clipboard"
+msgstr "Sao chép nhật ký và đường dẫn vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:70
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:896
+msgid "Open Error"
+msgstr "Lỗi mở"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:74
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:892
+msgid "Current log file can not be opened"
+msgstr "Tệp nhật ký hiện tại không thể mở được"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:80
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:889
+msgid "Previous log file can not be opened"
+msgstr "Tệp nhật ký trước đó không thể mở được"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:89
+msgid "Current log file  path  copied to clipboard"
+msgstr "Đường dẫn tệp nhật ký hiện tại được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:91
+msgid "Current log file  path   cannot be copied to clipboard"
+msgstr "Đường dẫn tệp nhật ký hiện tại không thể được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:96
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:736
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/__init__.py:115
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/__init__.py:149
+#, python-format
+msgid "%s dialog is allready open"
+msgstr "Hộp thoại% s đã sẵn sàng mở"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:30
+msgid "Start menu|Charm Bar"
+msgstr "Menu bắt đầu | Charm Bar"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:87
+msgid "Windows'list"
+msgstr "Danh sách Windows"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:115
+msgid "Minimized"
+msgstr "Tối thiểu hóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:119
+msgid "Maximized"
+msgstr "Tối đa hóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:128
+msgid "Current &applications"
+msgstr "Hiện tại & ứng dụng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:135
+msgid "&Switch to"
+msgstr "&Chuyển sang"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:138
+msgid "&Destroy"
+msgstr "&buộc đóng "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:184
+msgid "Impossible to destroy desktop window"
+msgstr "Không thể đóng cửa sổ máy tính để bàn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:198
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:214
+msgid "Impossible to destroy the window"
+msgstr "Không thể đóng cửa sổ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:35
+msgid "moves to the next paragraph"
+msgstr "chuyển sang đoạn tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:37
+msgid "no next paragraph"
+msgstr "không có đoạn tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:39
+msgid "moves to the previous paragraph"
+msgstr "Chuyển đến đoạn trước"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:41
+msgid "no previous paragraph"
+msgstr "Không có đoạn trước"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:44
+msgid "moves to the next division"
+msgstr "chuyển sang bộ phận tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:46
+msgid "no next division"
+msgstr "không có bộ phận tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:48
+msgid "moves to the previous division"
+msgstr "chuyển đến bộ phận trước"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:50
+msgid "no previous division"
+msgstr "Không có bộ phận trước"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:53
+msgid "moves to the next main landmark"
+msgstr "di chuyển đến mốc chính tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:55
+msgid "no next main landmark"
+msgstr "không có mốc chính tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:57
+msgid "moves to the previous main landmark"
+msgstr "di chuyển đến mốc chính trước đó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:59
+msgid "no previous main landmark"
+msgstr "không có mốc chính trước đó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:63
+msgid "moves to the next clickable element"
+msgstr "di chuyển đến phần tử có thể nhấp tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:65
+msgid "no next clickable element"
+msgstr "không có yếu tố có thể nhấp tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:67
+msgid "moves to the previous clickable element"
+msgstr "di chuyển đến phần tử có thể nhấp trước đó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:69
+msgid "no previous clickable element"
+msgstr "Không có mục nào có thể nhấp trước đó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:114
+msgid "Copied to clipboard"
+msgstr "Sao chép vào bộ nhớ tạm "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:117
+msgid "Cannot copy to clipboard"
+msgstr "Không thể sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:127
+msgid "Report document 's address (URL). Twice: copy it to clipboard"
+msgstr "Báo cáo địa chỉ của tài liệu (URL). Hai lần: sao chép nó vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:151
+msgid "Return to bottom of page"
+msgstr "Trở về cuối trang"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:155
+msgid "Return to top of page"
+msgstr "Quay trở lại đầu trang"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:37
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:224
+msgid "No label"
+msgstr "Không nhãn "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:240
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:28
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:450
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:44
+msgid "Link"
+msgstr "Liên kết"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:243
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:31
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:453
+msgid "Heading"
+msgstr "Tiêu đề"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:246
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:34
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:456
+msgid "Form field"
+msgstr "BIỂU MẪU "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:249
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:37
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:459
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:28
+msgid "Button"
+msgstr "nút"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:252
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:40
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:462
+msgid "Landmark"
+msgstr "MỐC "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:255
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:43
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:465
+msgid "Radio button"
+msgstr "Nút radio"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:258
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:46
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:468
+msgid "Paragraph"
+msgstr "Đoạn văn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:261
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:55
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:477
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:30
+msgid "Check box"
+msgstr "Hộp kiểm"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:264
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:58
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:480
+msgid "Combo box"
+msgstr "Hộp tổ hợpDANH SÁCH THẢ XUỐNG"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:267
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:26
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:61
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:483
+msgid "Table"
+msgstr "BẢNG Table"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:271
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:67
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:489
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:32
+msgid "Edit"
+msgstr "Biên tậpNHẬP LIỆU"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:274
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:70
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:492
+msgid "List"
+msgstr "Danh sách"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:277
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:79
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:501
+msgid "Graphic"
+msgstr "HÌNH ẢNH "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:281
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:85
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:507
+msgid "Separator"
+msgstr "Dấu phân cách"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:98
+msgid "Report current table row's cells"
+msgstr "Báo cáo các ô của bảng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:104
+msgid "Report current table column's cells"
+msgstr "Báo cáo các ô của cột bảng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:141
+msgid "Move to and report next table row"
+msgstr "Di chuyển đến và báo cáo hàng tiếp theo của bảng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:147
+msgid "Move to and report previous table row"
+msgstr "Di chuyển đến và báo cáo hàng trước của bảng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:153
+msgid "Move to and report next table column"
+msgstr "Di chuyển đến và báo cáo cột bảng tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:160
+msgid "Move to and report previous table column"
+msgstr "Di chuyển đến và báo cáo cột bảng trước"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:183
+msgid "Report current table cell position"
+msgstr "Báo cáo vị trí ô hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:189
+msgid "Move to first cell of table row"
+msgstr "Di chuyển đến ô đầu tiên của hàng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:196
+msgid "Move to last cell of table row"
+msgstr "Di chuyển đến ô cuối cùng của hàng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:202
+msgid "Move to first cell of table column"
+msgstr "Di chuyển đến ô đầu tiên của cột bảng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:208
+msgid "Move to last cell of table column"
+msgstr "Di chuyển đến ô cuối cùng của cột bảng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:49
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:471
+msgid "Frame"
+msgstr "Khung"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:52
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:474
+msgid "Division"
+msgstr "Bộ phận"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:64
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:486
+msgid "Blocquote"
+msgstr "Khối"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:73
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:495
+msgid "List item"
+msgstr "Danh sách mục"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:76
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:498
+msgid "Anchor"
+msgstr "Anchor"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:82
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:504
+msgid "Embedded object"
+msgstr "Đối tượng nhúng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:238
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:264
+#, python-format
+msgid "%s elements"
+msgstr "yếu tố% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:238
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:264
+msgid "One element"
+msgstr "Một yếu tố"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:242
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:267
+msgid "no element"
+msgstr "không có yếu tố"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:510
+msgid "Clickable"
+msgstr "Có thể nhấp"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:64
+msgid "Cut"
+msgstr "Cắt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:66
+msgid "Paste"
+msgstr "Dán"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:68
+msgid "Copy"
+msgstr "Sao chép"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:70
+msgid "UnDo"
+msgstr "Hoàn tác"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:72
+msgid "select all"
+msgstr "Chọn tất cả"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:311
+msgid " one selected object"
+msgstr "một đối tượng được chọn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:314
+#, python-format
+msgid "%s selected objects"
+msgstr "% s đối tượng được chọn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:131
+msgid "Keys's remanence activation on"
+msgstr "Kích hoạt phần còn lại của phím trên"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:137
+msgid "Keys's remanence activation off"
+msgstr "Tắt khóa kích hoạt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:250
+msgid "Standard use of the numeric keypad enabled"
+msgstr "Tiêu chuẩn sử dụng bàn phím số được bật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:253
+msgid "Standard use of the numeric keypad disabled"
+msgstr "Tiêu chuẩn sử dụng bàn phím số bị vô hiệu hóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:413
+msgid "Command keys selective Announcement"
+msgstr "Phím lệnh Thông báo chọn lọc"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:482
+msgid "Check &excluded keys:"
+msgstr "Kiểm tra và loại trừ các khóa:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:495
+msgid "W&ith key combination:"
+msgstr "Tổ hợp phím W & ith:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:526
+msgid "Do not speak command &keys"
+msgstr "Không nói lệnh & phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:529
+#, python-format
+msgid "Do you want save changes made in \"%s\" mode"
+msgstr "Bạn có muốn lưu các thay đổi được thực hiện trong \"%s\" mode"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:642
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:663
+msgid "No more checked command key"
+msgstr "Không có phím lệnh được kiểm tra"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:39
+msgid "Computer's shut down"
+msgstr "bạn muốn làm gìMáy tính tắt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:49
+msgid "&Hibernate"
+msgstr "& Ngủ đông"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:51
+msgid "&Shutdown"
+msgstr "&Tắt nguồn "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:53
+msgid "&Reboot"
+msgstr "&Khởi động lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:56
+msgid "F&orce running programs to close without warning"
+msgstr " &  đóng chương chình và không có cảnh báo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:62
+msgid "&Delay befor shutdown or reboot between {min} and {max} seconds"
+msgstr ""
+"& Trì hoãn trước khi tắt máy hoặc khởi động lại trong khoảng từ {min} đến "
+"{max} giây"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:26
+msgid "Shut down ..."
+msgstr "TẮT MÁY"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:34
+msgid "Computer's rebooting ..."
+msgstr "Máy tính khởi động lại ..."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:68
+msgid "Hibernate isn't available. Sleep mode is activated."
+msgstr "chế độ ngủ đông không có sẵn. Chế độ ngủ được kích hoạt."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:57
+msgid "Volume on"
+msgstr "tăng âm lượngâm lượng bật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:59
+msgid "volume off"
+msgstr "giảm âm lượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:61
+msgid "No audio controller for this application"
+msgstr "Không có bộ điều khiển âm thanh cho ứng dụng này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:138
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1035
+msgid "Unavailable for NVDA"
+msgstr "Không có sẵn cho NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:162
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:202
+msgid "stronger"
+msgstr "to lên "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:166
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:206
+msgid "strongest"
+msgstr "nhỏ đi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:170
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:210
+msgid "max"
+msgstr "to nhất đến mức tối đa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:174
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:214
+msgid "min"
+msgstr "bé nhất"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:223
+msgid "At maximum"
+msgstr "đến mức tối đa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:226
+msgid "At minimum"
+msgstr "Ở mức tối thiểu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+msgid "Open"
+msgstr "Mở"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+msgid "Save"
+msgstr "lưu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+msgid "Save as"
+msgstr "Lưu thành"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+msgid "Find in"
+msgstr "Tìm trong"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:53
+msgid "Selected folder name not found"
+msgstr "Không tìm thấy tên thư mục đã chọn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:61
+#, python-format
+msgid "Folder %s"
+msgstr "Thư mục %s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:24
+msgid "Keyboard Key renaming"
+msgstr "Đổi tên bàn phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:41
+msgid "NVDA defined key labels:"
+msgstr "Nhãn chính được xác định NVDA:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:45
+msgid "Modified label:"
+msgstr "Nhãn đã sửa đổi:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:61
+msgid "&Modify"
+msgstr "& Sửa đổi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:63
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:40
+msgid "&Remove"
+msgstr "&gỡ cài đặt "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:65
+msgid "R&emove al"
+msgstr "& chuyển đến"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:113
+#, python-format
+msgid "Redefined in %s"
+msgstr "xác định lại trong% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:137
+msgid "Entry new label:"
+msgstr "Nhập nhãn mới:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:139
+msgid "Key label redifinition"
+msgstr "Xác định lại nhãn chính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:147
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:168
+msgid "New name is removed"
+msgstr "Tên mới bị xóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:152
+msgid "No modification"
+msgstr "Không sửa đổi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:176
+msgid "All replacement labels have been removed"
+msgstr "Tất cả các nhãn thay thế đã được gỡ bỏ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:60
+#, python-format
+msgid "End duration in %s minutes"
+msgstr "Thời lượng kết thúc sau% s phút"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:60
+msgid "End duration inone minute"
+msgstr "Thời lượng kết thúc trong một phút"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:75
+msgid "End ofduration"
+msgstr "Hết hạn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:105
+msgid "Launch of the Minute timer"
+msgstr "khởi động đồng hồ bấm giờ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:116
+msgid "Enter the minute timer &duration (in minutes):"
+msgstr "Nhập bộ đếm thời gian & thời lượng phút (tính bằng phút):"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:120
+msgid "Enter the &annonce to be spoken at the end of duration:"
+msgstr "Nhập & annonce sẽ được nói vào cuối thời lượng:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:125
+msgid "Delayto be alerted before ending (in minutes):"
+msgstr "Trì hoãn để được cảnh báo trước khi kết thúc (tính bằng phút):"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:131
+msgid "Ring's &Options"
+msgstr "Nhẫn & Tùy chọn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:167
+msgid "Duration is not valid"
+msgstr "Thời lượng không hợp lệ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:176
+msgid ""
+"The Delay to be notified before duration ending must be smaller than duration"
+msgstr ""
+"Độ trễ được thông báo trước khi kết thúc thời lượng phải nhỏ hơn thời lượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:185
+#, python-format
+msgid "Minute timer started for %s minutes"
+msgstr "Hẹn giờ phút bắt đầu cho% s phút"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:209
+msgid "Ring options "
+msgstr "Tùy chọn nhẫn "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:224
+msgid "&Number of rings:"
+msgstr "& Số lượng nhẫn:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:231
+msgid "&Delay between rings (in miliseconds):"
+msgstr "& Độ trễ giữa các vòng (tính bằng milisecond):"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:269
+msgid "Current minute timer"
+msgstr "Hẹn giờ phút hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:280
+msgid "Remaining duration:"
+msgstr "Thời lượng còn lại:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:286
+msgid "&Stop"
+msgstr "&Dừng lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:315
+msgid "Minute timer is stopped"
+msgstr "Hẹn giờ phút bị dừng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:328
+#, python-format
+msgid "%s seconds"
+msgstr "% s giây"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:331
+msgid "{minutes} minutes {seconds}"
+msgstr "{phút} phút {giây}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:34
+#, python-format
+msgid "Text's alignment: %s"
+msgstr "Căn chỉnh văn bản:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:52
+#, python-format
+msgid "Color: %s"
+msgstr "Màu sắc: %s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:61
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:66
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:71
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:76
+#, python-format
+msgid "Attributes: %s"
+msgstr "Các thuộc tính:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:99
+#, python-format
+msgid "Vertical alignment: %s"
+msgstr "Căn dọc:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:106
+msgid "Font:"
+msgstr "Nét chữ:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:110
+#, python-format
+msgid "Family: %s"
+msgstr "Gia đình:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:115
+#, python-format
+msgid "Name: %s"
+msgstr "Tên:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:121
+#, python-format
+msgid "Size: %s"
+msgstr "Kích cỡ :% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:146
+#, python-format
+msgid "Position: %s"
+msgstr "Vị trí:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:165
+#, python-format
+msgid "Paragraph's indentation:%s"
+msgstr "Đoạn văn thụt lề:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:196
+#, python-format
+msgid "style: %s"
+msgstr "kiểu:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:224
+#, python-format
+msgid "Line spacing: %s"
+msgstr "Dãn cách dòng:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:244
+#, python-format
+msgid "Indentations: %s"
+msgstr "Ấn độ:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:251
+msgid "Formatting's Informations"
+msgstr "Thông tin định dạng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:186
+#, python-format
+msgid ""
+"The configuration file of %s addon contains errors. The addon configuration "
+"has been reset to default configuration"
+msgstr ""
+"Tệp cấu hình của addon% s chứa lỗi. Cấu hình addon đã được đặt lại về cấu "
+"hình mặc định"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:249
+#, python-format
+msgid ""
+"The old configuration file of %s addon contains errors. It's not possible to "
+"keep previous configuration"
+msgstr "Tệp cấu hình cũ của addon% s chứa lỗi. Không thể giữ cấu hình trước đó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:315
+msgid ""
+"The add-on configuration will be reset to factory values and NVDA  will be "
+"restarted. Would you like to continue ?"
+msgstr ""
+"Cấu hình bổ trợ sẽ được đặt lại về giá trị gốc và NVDA sẽ được khởi động "
+"lại. Bạn có muốn tiếp tục không ?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:316
+msgid "Configuration reset"
+msgstr "Khôi phục về cấu hình mặc định"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/addonConfig.py:128
+msgid "It's time"
+msgstr "bây giờ là"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:27
+msgid ""
+"Some Changes have been made . You must save the configuration and restart "
+"NVDA for these changes to take effect. Would you like to do it now?"
+msgstr ""
+"Một số thay đổi đã được thực hiện. Bạn phải lưu cấu hình và khởi động lại "
+"NVDA để những thay đổi này có hiệu lực. Bạn có muốn làm điều đó bây giờ?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:35
+msgid "Don't forget to save the configuration for the changes to take effect !"
+msgstr "Đừng quên lưu cấu hình để các thay đổi có hiệu lực!"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:41
+msgid "features's installation"
+msgstr "cài đặt tính năng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:47
+msgid "Do not install"
+msgstr "Không được cài đặt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:48
+msgid "Install"
+msgstr "cài đặt "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:49
+msgid "Install without gesture"
+msgstr "Cài đặt mà không cần cử chỉ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:54
+msgid "Display &systray icons and running application windows lists:"
+msgstr "Hiển thị & biểu tượng hệ thống và danh sách cửa sổ ứng dụng đang chạy:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:58
+msgid "&complex symbols edition help:"
+msgstr "& hướng dẫn biểu tượng phức tạp "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:62
+msgid "&Focused Application's informations:"
+msgstr "& thông tim của ứng dụng đang chạy "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:66
+msgid "&Extended Virtual Buffer:"
+msgstr "mở rộng chức năng cho trình duyệt "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:70
+msgid "c&lipboard command announcement:"
+msgstr "Thông báo lệnh "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:74
+msgid "C&urrent folder report:"
+msgstr "thông báo thư mục được chọn "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:78
+msgid "&NVDA's log Files:"
+msgstr "& Tệp nhật ký của NVDA:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:82
+msgid "Speech &history:"
+msgstr "lịch sử & giọng nói :"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:86
+msgid "&Keyboard Key renaming:"
+msgstr "& Đổi tên phím bàn phím:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:90
+msgid "C&ommand keys selective announcement:"
+msgstr "thông báo phím trọn lọc "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:94
+msgid "Minute &timer:"
+msgstr "Phút & giờ:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:98
+msgid "NVDA's &restart:"
+msgstr "khởi động lại & NVDA:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:102
+msgid "Display visible items making up the foreground &object:"
+msgstr "HIỂN THỊ CÁC ĐỐI TƯỢNG ĐƯỢC NHÌN THAAYS"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:106
+msgid "&Voice profil switching:"
+msgstr "& Chuyển đổi CẤU HÌNH GIỌNG NÓI "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:110
+msgid "Ke&ys's remanence:"
+msgstr "Phần còn lại của Ke & ys:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:114
+msgid "Volu&me's control:"
+msgstr "Kiểm soát âm lượng "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:118
+msgid "&Developpement's tools"
+msgstr "& Công cụ CHO nhà phát triển"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:122
+msgid "Date and time - supplements"
+msgstr "Ngày và giờ - bổ sung"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:224
+msgid "NVDA enhancements"
+msgstr "Cải tiến NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:233
+msgid "Editing"
+msgstr "Chỉnh sửa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:237
+msgid "&Report next word on deletion"
+msgstr "& thông báo khi xóa từ tiếp theo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:241
+msgid "maximum number of last &used symbols recorded:"
+msgstr "số kí hiệu tối đa được ghi lại khi sử dụng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:251
+msgid "Cursor's moving"
+msgstr "Di chuyển con trỏ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:255
+msgid "&Punctuation/symbol level on word movement:"
+msgstr "& đọc dấu câu khi di chuyển từng từ "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:260
+msgid "Current configuration profil's level"
+msgstr "mức cấu hình hiện tại "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:269
+#: globalPlugins/NVDAExtensionGlobalPlugin/speechHistory/__init__.py:106
+msgid "Speech history"
+msgstr "Lịch sử giọng nói "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:273
+msgid "&Number the records "
+msgstr "& đánh số lịch sử giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:277
+msgid "&Display records in ascending order"
+msgstr "& hiển thị lịch sử giọng nói theo thứ tự tăng dần"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:286
+msgid "Browser"
+msgstr "Trình duyệt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:290
+msgid "Na&vigate in loop"
+msgstr "điều hướng trình duyệt vòng lập"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:323
+msgid "Computer"
+msgstr "Máy vi tính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:330
+msgid "Windows"
+msgstr "cửa sổ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:334
+msgid "&No object description inWindows ribbons"
+msgstr "& Không mô tả đối tượng trong ruy băng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:338
+msgid "Automatically &maximize windows"
+msgstr "Tự động & tối đa hóa cửa sổ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:342
+msgid "Report &windows clock's time with seconds"
+msgstr "thông báo  &thời gian bằng dây"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:349
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:63
+msgid "Volume control"
+msgstr "Kiểm soát âm lượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:353
+msgid "Main and NVDA"
+msgstr "Chính và NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:357
+msgid "Set on &volume at the loading of the add-on"
+msgstr "tự động phục hồi âm lượng khi tải phần mở rộng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:361
+msgid "Main volume"
+msgstr "âm lượng chính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:365
+msgid "&Threshold of recovery of the volume:"
+msgstr "& phục hồi ngưỡng âm lượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:370
+msgid "&Recovery level:"
+msgstr "& Cấp độ phục hồi:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:374
+msgid "NVDA volume"
+msgstr "âm lượng NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:378
+msgid "Th&reshold of recovery of the volume:"
+msgstr " & phục hồi và dữ âm lượng:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:382
+msgid "R&ecovery level:"
+msgstr "Cấp độ R & âm lượng chính :"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:386
+msgid "Volume c&hange"
+msgstr "Volume c&hange"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:390
+msgid "Ste&ps's size:"
+msgstr "Kích thước của Ste & ps:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:395
+msgid "R&eport volume changes"
+msgstr "Thay đổi âm lượng R & eport"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:436
+msgid "advanced"
+msgstr "nâng cao"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:440
+msgid "For No NVDA's version"
+msgstr "Không có "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:442
+msgid "For Only the NVDA's snapshot versions"
+msgstr "Chỉ cho các phiên bản chụp nhanh của NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:444
+msgid "Only until the next NVDA restart"
+msgstr "Chỉ đến khi NVDA tiếp theo khởi động lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:446
+msgid "For all NVDA's versions"
+msgstr "Đối với tất cả các phiên bản của NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:458
+msgid "&Play sound on logged errors:"
+msgstr "& Phát âm thanh trên các lỗi đã đăng nhập:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:462
+msgid "&Title dialog with add-on name"
+msgstr "& tiêu đề hộp thoại là tên của phần mở rộng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:466
+msgid "&Delay between repeat of same gesture:"
+msgstr "& độ chễ để lập lại cử chỉ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:473
+msgid ""
+"&Do not take account of the option called Report object descriptions during "
+"the display of the dialog box style confirmation"
+msgstr ""
+"& Không xem xét tùy chọn có tên Báo cáo mô tả đối tượng trong khi hiển thị "
+"xác nhận hộp thoại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:501
+msgid "Keyboard"
+msgstr "Bàn phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:514
+msgid "Keys's remanence"
+msgstr "phím tắt còn lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:518
+msgid "&Only NVDA key in remanence"
+msgstr "& Chỉ có khóa NVDA còn lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:522
+msgid "Activate &remanence at NVDA's start"
+msgstr "Kích hoạt và làm lại khi bắt đầu NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:526
+msgid "&Remanence's delay (in milliseconds):"
+msgstr "độ trễ khi đợi nhấn phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:532
+msgid "Play &sound at the start of remanence"
+msgstr "phát âm thanh khi bắt đầu tổ hợp phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:536
+msgid "Play sound at the &end of remanence"
+msgstr "Phát âm thanh vào cuối tổ hợp phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:540
+msgid "Special remanence for &Gmail.com"
+msgstr "chức năng thêm cho gmail"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:547
+msgid "Numeric keypad"
+msgstr "Bàn phím số"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:551
+msgid "&allow the standard use of the numeric keypad"
+msgstr "& cho phép sử dụng bàn phím số"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:555
+msgid "&Enable the standard use of the numeric keypad at NVDA's start"
+msgstr "& sử dụng bàn phím số khi khởi động nvda"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:559
+msgid "&Enable / disable numeric keypad's standard use  with num lock key"
+msgstr "& Bật / tắt sử dụng tiêu chuẩn của bàn phím số với phím khóa num"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:599
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:104
+msgid "Update"
+msgstr "Cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:608
+msgid "Automatically check for &updates "
+msgstr "Tự động kiểm tra và cập nhật "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:612
+msgid "Update also release versions to &developpement versions"
+msgstr "cập nhật cả bản phát triển và ổn định"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:616
+msgid "&Check for update"
+msgstr "&Kiểm tra cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:658
+msgid "Parameters"
+msgstr "Thông số"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/speechHistory/__init__.py:109
+msgid "Records:"
+msgstr "lịch sử "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:112
+msgid ""
+"The current configuration of the \"Voice profile switching\"feature is not "
+"compatible with this add-on's version, All selectors have been released and "
+"the voice profiles deleted. Sorry for the inconvenience."
+msgstr ""
+"tất cả bộ đọc không tương thích đã bị xóa,xin lỗi vì sự  bất tiện này ."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:114
+msgid "warning"
+msgstr "cảnh báo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:207
+msgid ""
+"Impossible, the synthetizer of voice profile {voiceProfileName} associated "
+"to selector {selector} is not available. Do you want to free this selector ?"
+msgstr "bộ đọc không thể sử dụng.bạn có muốn xóa không"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:209
+msgid "Synthetizer error"
+msgstr "bộ đọc  bị lỗi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:222
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:249
+msgid "Selector {selector}: {name}"
+msgstr "tên bộ đọc"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:246
+msgid "no other selector set to voice profile"
+msgstr "không có bộ đọc được gán cho cấu hình giọng nói này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:253
+msgid "no selector set to voice profile"
+msgstr "không có bộ đọc được gán cho cấu hình giọng nói này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:260
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:353
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1128
+#, python-format
+msgid "Selector %s is free"
+msgstr "Bộ đọc % s là miễn phí"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:295
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:545
+msgid "yes"
+msgstr "Đúng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:295
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:545
+msgid "no"
+msgstr "Không"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:343
+msgid "{name} voice profile set to selector {selector}"
+msgstr "tên cấu hình giọng nói được đặt thành"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:363
+msgid "all selectors are freed from their vocal profile"
+msgstr "tất cả bộ đọc bị xóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:416
+#, python-format
+msgid "Voice profile selectors's Management  of profile %s"
+msgstr "Quản lý hồ sơ giọng nói Quản lý hồ sơ% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:424
+msgid "&Selectors"
+msgstr "& bộ đọc"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:445
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:688
+msgid "free"
+msgstr "miễn phí"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:480
+msgid "&Use selectors associated under normal cconfiguration's profile"
+msgstr "&sử dụng bộ đọc được liên kết với cấu hình bình thường"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:493
+msgid "&Activate voice profile"
+msgstr "& Kích hoạt hồ sơ giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:495
+msgid "A&ssociate voice profile"
+msgstr "Hồ sơ giọng nói của A & ssociate"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:497
+msgid "&Modify voice profile"
+msgstr "& Sửa đổi hồ sơ giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:499
+msgid "&Free selector"
+msgstr "& Bộ đọc miễn phí"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:501
+msgid "&Free all selectors"
+msgstr "& Miễn phí tất cả các công cụ "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:503
+msgid "Voice profile's &informations"
+msgstr "Hồ sơ và thông tin bằng giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:551
+msgid "Automatic language switching (when supported)"
+msgstr "Chuyển đổi ngôn ngữ tự động (khi được hỗ trợ)"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:552
+msgid "Automatic dialect switching (when supported)"
+msgstr "Tự động chuyển giọng theo vùng miền (nếu có hỗ trợ)"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:553
+msgid "Punctuation/symbol level"
+msgstr "mức độ đọc dấu câu và kí hiệu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:554
+msgid "Trust voice's language when processing characters and symbols"
+msgstr "Sử dụng giọng đọc của ngôn ngữ để xử lý ký hiệu và ký tự"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:555
+msgid ""
+"Include Unicode Consortium data (including emoji) when processing characters "
+"and symbols"
+msgstr ""
+"Bao gồm dữ liệu từ Unicode Consortium (bao gồm cả biểu tượng cảm xúc) trong "
+"quá trình xử lý các ký tự và ký hiệu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:558
+msgid "Capital pitch change percentage"
+msgstr "độ cao"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:559
+msgid "Say cap before capitals"
+msgstr "Thông báo chữ hoaSay cap before capitals"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:560
+msgid "Beep for capitals"
+msgstr "Bíp cho chữ hoa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:561
+msgid "Use spelling functionality if supported"
+msgstr "Sử dụng chức năng chính tả nếu được hỗ trợ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:567
+#, python-format
+msgid "selector: %s"
+msgstr "selector: %s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:568
+#, python-format
+msgid "Voice profile name: %s"
+msgstr "Tên hồ sơ giọng nói:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:571
+#, python-format
+msgid "Associated under %s configuration profile"
+msgstr "Liên kết theo cấu hình% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:573
+#, python-format
+msgid "Synthetizer: %s"
+msgstr "Tổng hợp:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:575
+#, python-format
+msgid "Output device: %s"
+msgstr "Thiết bị đầu ra%s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:602
+msgid "Voice profile 's informations"
+msgstr "Thông tin hồ sơ giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:625
+msgid ""
+"Selector {selector} is already set to {voiceProfileName} voice profile. Do "
+"you want to replace this voice profile?"
+msgstr ""
+"cấu hình này đã có một bộ đọc bạn có muốn thay thế nó bằng bộ đọc đã chọn "
+"không"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:657
+msgid ""
+"Do you want realy free selector {selector} associated to voice profile "
+"{voiceProfileName}"
+msgstr "bạn có muốn bộ đọc này được liên kết với cấu hình hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:671
+msgid ""
+"Do you want realy free all selectors set to this configuration profile ?"
+msgstr "bạn có muốn bộ đọc này được liên kết với cấu hình hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:749
+msgid "Modify voice profile "
+msgstr "Sửa đổi cấu hình giọng nói "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:758
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:806
+msgid "voice profile name:"
+msgstr "tên hồ sơ giọng nói:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:763
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:811
+msgid "&Default"
+msgstr "&Mặc định"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:782
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:861
+msgid "You must set the name of voice profile"
+msgstr "Bạn phải đặt tên của hồ sơ giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:791
+msgid "Voice profile association"
+msgstr "Hiệp hội hồ sơ giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:33
+msgid "NVDA - System tray icons 's list"
+msgstr "NVDA - Danh sách biểu tượng khay hệ thốngdanh sách khay hệ thống"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:43
+msgid "&Icons"
+msgstr "& Biểu tượng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:51
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:116
+msgid "&Right click"
+msgstr "&Nhấp chuột phải"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:54
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:113
+msgid "&Left click"
+msgstr "&Ấn chuột trái"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:56
+msgid "Dou&ble  left click"
+msgstr "nhấp đúp chuột trái"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:61
+msgid "Switch voice profile"
+msgstr "Chuyển đổi cấu hình giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:212
+msgid ""
+"Display the running application windows's list with opportunity to put one "
+"of them on the foreground or destroy it"
+msgstr ""
+"ứng dụng đang chạy.ở đây bạn có thể đặt nó vào trạng thái nền hoặc đóng nó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:214
+msgid "Shows the list of buttons on the System Tray"
+msgstr "Hiển thị danh sách các nút trên Khay hệ thống"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:217
+msgid "Display dialog to shut down, reboot or hibernate the computer"
+msgstr "Hiển thị hộp thoại để tắt, khởi động lại hoặc ngủ đông máy tính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:219
+msgid "Shutt down the computer"
+msgstr "Tắt máy tính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:221
+msgid "Reboot the computer"
+msgstr "Khởi động lại máy tính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:223
+msgid "Hibernate the computer"
+msgstr "Ngủ đông máy tính"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:225
+msgid "Allow you to copy or type complex symbol"
+msgstr "Cho phép bạn sao chép hoặc gõ biểu tượng phức tạp"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:227
+msgid "Display the list of last used symbols"
+msgstr "Hiển thị danh sách các ký hiệu được sử dụng cuối cùng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:229
+msgid "Display the list's visible items making up current foreground object"
+msgstr "hiển thị các mục tạo nên đối tượng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:231
+msgid "If pressed twice: display the list's visible items making up it"
+msgstr "Nếu nhấn hai lần: hiển thị các mục hiển thị của danh sách tạo thành nó"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:235
+msgid "{systrayIconsDoc}. Twice, {activeWindowsDoc}"
+msgstr "{systrayIconsDoc}. Twice, {activeWindowsDoc}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:237
+msgid "Report the application 's name and version"
+msgstr "thông báo tên và phiên bản của ứng dụng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:239
+msgid ""
+"Speaks the filename of the active application along with the name of the "
+"currently loaded appModule python file. Pressing this key twice,speak the "
+"name and state of the current configuration profile"
+msgstr ""
+"Nói tên tệp của ứng dụng đang hoạt động cùng với tên của tệp python "
+"appModule hiện đang được tải. Nhấn phím này hai lần, nói tên và trạng thái "
+"của cấu hình hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:241
+msgid ""
+"Report the name and version number of add-on activated for focused "
+"application"
+msgstr ""
+"thông báo tên và số phiên bản của tiện ích bổ sung được kích hoạt cho ứng "
+"dụng hiện tại "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:243
+msgid "Display informations about the focused application"
+msgstr "Hiển thị thông tin về ứng dụng hiện tại "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:245
+msgid ""
+"Display dialog to start the minute timer.If minute timer already started, "
+"display dialog to report duration "
+msgstr "bắt đầu bộ hẹn giờ nếu nó đã bắt đầu hiển thị thời gian còn lại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:247
+msgid "Display add-on user's guide"
+msgstr "Hiển thị hướng dẫn sử dụng tiện ích bổ sung"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:249
+msgid "Display commands shell's list"
+msgstr "Hiển thị danh sách shell "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:251
+msgid "Open a dialog to manage NVDA logs"
+msgstr "Mở hộp thoại để quản lý nhật ký NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:253
+msgid ""
+"Open current NVDA log file. Pressing this key twice, open the old NVDA log "
+"file. Pressing third, copy current log path to the clipboard"
+msgstr ""
+"Mở tệp nhật ký NVDA hiện tại. Nhấn phím này hai lần, mở tệp nhật ký NVDA cũ. "
+"Nhấn thứ ba, sao chép đường dẫn nhật ký hiện tại vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:255
+msgid ""
+"report the name of current selected folder in the open or Save dialog box. "
+"Twice: report full path"
+msgstr ""
+"thông báo tên của thư mục được chọn hiện tại trong hộp thoại mở hoặc Lưu. "
+"Hai lần: báo cáo đường dẫn đầy đủ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:257
+msgid ""
+"report the name of current selected folder in the open or Save dialog box"
+msgstr ""
+"thông báo tên của thư mục được chọn hiện tại trong hộp thoại mở hoặc Lưu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:259
+msgid ""
+"report the full path  of current selected folder in the open or Save dialog "
+"box"
+msgstr ""
+"thông báo đường dẫn đầy đủ của thư mục được chọn hiện tại trong hộp thoại mở "
+"hoặc Lưu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:261
+msgid "Explor my user configuration's folder"
+msgstr "Khám phá thư mục cấu hình người dùng của tôi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:263
+msgid "Explore NVDA programs's folder"
+msgstr "Khám phá thư mục của chương trình NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:265
+msgid "display speech history records"
+msgstr "hiển thị lịch sử giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:267
+msgid "Report previous record of the speech history and copy it to clipboard"
+msgstr ""
+"Báo cáo hồ sơ trước đó của lịch sử bài phát biểu và sao chép nó vào "
+"clipboardthông báo lời nói chước và chép vào bộ nhớ tạm"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:269
+msgid ""
+"Report current record of the speech history and copy it to clipboard.Twice: "
+"display speech history"
+msgstr ""
+"Báo cáo bản ghi hiện tại của lịch sử giọng nói và sao chép nó vào clipboard."
+"Twice: hiển thị lịch sử giọng nóithông báo lời nói hiện tại và chép nó vào "
+"bộ nhớ tạm"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:271
+msgid "Report next record of the speech history and copy it  to clipboard"
+msgstr ""
+"Báo cáo bản ghi tiếp theo của lịch sử bài phát biểu và sao chép nó vào "
+"clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:273
+msgid "Restart NVDA. Twice: restart with log levelset to debug"
+msgstr "Khởi động lại NVDA. Hai lần: khởi động lại với nhật kí gỡ lỗi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:275
+msgid "Toggle voice profile switch mode"
+msgstr "chuyển đổi cấu hình giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:277
+msgid "Display dialog to manage voice profile selectors"
+msgstr "Hiển thị hộp thoại để quản lý bộ ĐỌC cấu hình giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:279
+msgid ""
+"Go backward to the first selector associated to a voice profile and set this "
+"voice profile as current voice profile"
+msgstr ""
+"Quay trở lại bộ chọn đầu tiên được liên kết với cấu hình giọng nói và đặt "
+"cấu hình giọng nói này làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:281
+msgid ""
+"Go to forward to the first selector associated to a voice profile and set "
+"this voice profile as current voice profile"
+msgstr ""
+"Chuyển đến bộ chọn đầu tiên được liên kết với cấu hình giọng nói và đặt cấu "
+"hình giọng nói này làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:283
+msgid "Display keyboard key renaming dialog"
+msgstr "Hiển thị hộp thoại đổi tên bàn phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:285
+msgid "Display command key selective announcement dialog"
+msgstr "Hiển thị hộp thoại thông báo chọn lọc khóa lệnh"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:287
+msgid ""
+"Reports the current time. Twice, reports the current date. Third: copy date "
+"and time to the clipboard"
+msgstr ""
+"Báo cáo thời gian hiện tại. Hai lần, báo cáo ngày hiện tại. 3 LẦN : sao chép "
+"ngày và thời gian vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:289
+msgid "Copy date and time to the clipboard"
+msgstr "Sao chép ngày giờ vào bảng tạm"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:291
+msgid ""
+"Display formatting info for the current review cursor position within a "
+"document in dialog box"
+msgstr ""
+"Hiển thị thông tin định dạng cho vị trí con trỏ đánh giá hiện tại trong tài "
+"liệu trong hộp thoại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:293
+msgid "Toggle current application's volume mute"
+msgstr "Chuyển đổi im lặng âm lượng của ứng dụng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:295
+#, python-format
+msgid "Launch  %s commands's shell"
+msgstr "Khởi chạy shell của lệnh% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:297
+msgid ""
+"Set selector 1 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 1 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:299
+msgid ""
+"Set selector 2 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 2 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:301
+msgid ""
+"Set selector 3 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 3 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:303
+msgid ""
+"Set selector 4 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 4 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:305
+msgid ""
+"Set selector 5 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 5 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:307
+msgid ""
+"Set selector 6 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 6 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:309
+msgid ""
+"Set selector 7 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 7 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:311
+msgid ""
+"Set selector 8 as current selector and Sets , if possible, it associated "
+"voice profile as current voice profile"
+msgstr ""
+"Đặt bộ chọn 8 làm bộ chọn hiện tại , nếu có thể, nó sẽ liên kết cấu hình "
+"giọng nói làm cấu hình giọng nói hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:313
+msgid "Displays the dialog to manage the input gestures configured by user"
+msgstr ""
+"Hiển thị hộp thoại để quản lý các cử chỉ đầu vào được định cấu hình bởi "
+"người dùng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:315
+msgid "Set on main and NVDA volume"
+msgstr "Đặt trên âm lượng chính và NVDAcài đặt âm lượng chính và nvda"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:317
+msgid "Toggle current focused application volume mute"
+msgstr "tắt tiếng hoặc cài đặt âm thanh cho ứng dụng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:319
+msgid "Increase volume of current focused application"
+msgstr "Tăng âm lượng của ứng dụng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:321
+msgid "Decrease volume of current focused application"
+msgstr "Giảm âm lượng của ứng dụng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:323
+msgid "Maximize volume of current focused application"
+msgstr "Tối đa âm lượng của ứng dụng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:325
+msgid "Minimize volume of current focused application"
+msgstr "im lặng khối lượng của ứng dụng hiện tại"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:328
+msgid "Increase volume of speakers"
+msgstr "Tăng âm lượng loa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:330
+msgid "Decrease volume of speakers"
+msgstr "Giảm âm lượng loa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:332
+msgid "Maximize volume of speakers"
+msgstr "Tối đa âm lượng của loa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:334
+msgid "Minimize volume of speakers"
+msgstr "im lặng âm lượng của loa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:335
+msgid "Display tools for add-on developpement dialog "
+msgstr "Hiển thị công cụ cho hộp thoại phát triển bổ trợ "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:337
+msgid ""
+"Click the left mouse button at navigator object position. Twice: click "
+"twice  this button at this position"
+msgstr ""
+"Nhấp vào nút chuột trái ở vị trí đối tượng điều hướng. Hai lần: nhấp hai lần "
+"nút này ở vị trí này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:339
+msgid ""
+"Click the right mouse button at naviHgator object position. Twice: click "
+"twice  this button at this position"
+msgstr ""
+"Nhấp chuột phải vào vị trí đối tượng naviHgator. Hai lần: nhấp hai lần nút "
+"này ở vị trí này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:341
+msgid "Display add-on settings dialog"
+msgstr "Hiển thị hộp thoại cài đặt bổ trợ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:343
+msgid "Enable or disable the standard use  of numeric keypad"
+msgstr "Kích hoạt hoặc vô hiệu hóa việc sử dụng tiêu chuẩn của bàn phím số"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:412
+#, python-format
+msgid "(command: %s)"
+msgstr "(lệnh:% s)"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:443
+#, python-format
+msgid "%s add-on configuration menu"
+msgstr "Menu cấu hình bổ trợ% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:446
+msgid "Settings..."
+msgstr "Cài đặt ..."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:453
+msgid "Keyboard Keys renaming..."
+msgstr "đổi tên bàn phím"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:459
+msgid "Command keys selective announcement..."
+msgstr "thông báo phím tắt trọn lọc "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:464
+msgid "Reset configuration to default values"
+msgstr "Đặt lại cấu hình về giá trị mặc định"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:471
+msgid "Explore &NVDA"
+msgstr "Khám phá & NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:473
+msgid "Menu to explore NVDA program or configuration"
+msgstr "Menu chương trình hoặc cấu hình NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:476
+msgid "My &configuration's folder"
+msgstr "Thư mục và cấu hình của tôi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:481
+msgid "NVDA &Program folder"
+msgstr "Thư mục chương trình & NVDA"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:615
+msgid "{0} copied to clipboard"
+msgstr "{0} được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:686
+msgid "Configuration's profile {profileName} {state}"
+msgstr "Cấu hình của hồ sơ {profileName} {state}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:741
+msgid "{0} version {1}"
+msgstr "{0} phiên bản {1}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:747
+msgid "Product name and version has been copied to clipboard"
+msgstr "Tên và phiên bản phần mềm đã được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:763
+msgid "addon: {name}, version: {version}"
+msgstr "addon: {name}, phiên bản: {phiên bản}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:767
+msgid "No addon"
+msgstr "Không có addon"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:800
+msgid "Configuration profile: {profileName} {state}"
+msgstr "Cấu hình cấu hình: {profileName} {state}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:808
+msgid "Application: {appName} {appVersion}"
+msgstr "Ứng dụng: {appName} {appVersion}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:831
+msgid "{summary}, version: {version}"
+msgstr "{tóm tắt}, phiên bản: {phiên bản}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:834
+#, python-format
+msgid "Active add-on: %s"
+msgstr "Bổ trợ hoạt động:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:837
+#, python-format
+msgid "addd-on's path: %s"
+msgstr "đường dẫn addd-on:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:841
+msgid ""
+"Warning: it seems that others add-ons are installed and activated for this "
+"application"
+msgstr ""
+"Cảnh báo: có vẻ như các tiện ích bổ sung khác được cài đặt và kích hoạt cho "
+"ứng dụng này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:844
+#, python-format
+msgid "Loaded python module: %s"
+msgstr "Đã tải mô-đun python:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:847
+msgid "Application context's informations's informations"
+msgstr "Thông tin đi tắt ứng dụng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:883
+msgid "Current log file path copied to clipboard"
+msgstr "Đường dẫn tệp nhật ký hiện tại được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:885
+msgid "Current log file path  cannot be copied to clipboard"
+msgstr "Đường dẫn tệp nhật ký hiện tại không thể được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1009
+msgid "Please wait"
+msgstr "Xin vui lòng chờ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1040
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1046
+msgid "Not available on this operating's system"
+msgstr "Không khả dụng trên hệ điều hành này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1044
+msgid ""
+"The main volume and that of NVDA are established and their level sets to the "
+"one in the configuration"
+msgstr "âm lượng chính của nvda được thiết lập "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1106
+msgid "Voice profile switch mode on"
+msgstr "Chế độ chuyển đổi cấu hình giọng nói bật "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1111
+msgid "Voice profile switch mode off"
+msgstr "Tắt chế độ chuyển đổi cấu hình giọng nói"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1151
+msgid "There has been no change of gesture made by the user"
+msgstr "Không thay đổi cử chỉ của người dùng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1173
+msgid "Double left click"
+msgstr "Nhấp đúp chuột trái"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1188
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1231
+msgid "Object has no location"
+msgstr "Đối tượng không có vị trí"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1216
+msgid "Double right click"
+msgstr "Nhấp đúp chuột phải"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1259
+msgid ""
+"This functionnality is only available if selective command announcement or "
+"speech remanence functionnality is installed"
+msgstr ""
+"Chức năng này chỉ khả dụng nếu thông báo lệnh chọn lọc hoặc chức năng phục "
+"hồi giọng nói được cài đặt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1264
+msgid "Numeric pad navigation mode toggle is not  available"
+msgstr "Chuyển đổi chế độ điều hướng số không có sẵn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1265
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1288
+msgid ""
+"This functionnality is only available if \"command key selective announcement"
+"\" or \"speech's remanence functionnality\" is installed"
+msgstr ""
+"This functionnality is only available if \"command key selective announcement"
+"\" or \"speech's remanence functionnality\" is installed"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1323
+msgid "Shell's scripts"
+msgstr "Kịch bản của Shell"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1355
+msgid "Description: command"
+msgstr "Mô tả: lệnh"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1362
+msgid "&Run script"
+msgstr "&Chạy script"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:65
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:299
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:330
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:389
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:426
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:751
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:791
+msgid "Error: buildVars.py file is not found"
+msgstr "Lỗi: không tìm thấy tệp buildVars.py"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:121
+msgid "error"
+msgstr "lỗi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:123
+#, python-format
+msgid "Cannot get  add-on translated manifest of %s language"
+msgstr "Không thể nhận bản kê khai dịch bổ trợ của ngôn ngữ% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:241
+msgid "Creation of HTML documentation files"
+msgstr "Tạo tập tin tài liệu HTML"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:244
+msgid "No documentation file to convert"
+msgstr "Không có tệp tài liệu để chuyển đổi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:264
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:487
+msgid "No html file converted"
+msgstr "Không có tệp html nào được chuyển đổi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:285
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:493
+#, python-format
+msgid "%s files converted"
+msgstr "% s tập tin được chuyển đổi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:290
+msgid "Creation  of manifest.ini file"
+msgstr "Tạo tập tin manifest.ini"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:304
+msgid ""
+" the manifest.ini  file already exists. Do you really want to update it ?"
+msgstr "tập tin manifest.ini đã tồn tại. Bạn có thực sự muốn cập nhật nó?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:314
+msgid "manifest.ini file has been updated"
+msgstr "tập tin manifest.ini đã được cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:321
+msgid "Creation  of locale manifest.ini file"
+msgstr "Tạo tập tin manifest.ini"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:339
+msgid "No language for this add-on"
+msgstr "Không có ngôn ngữ cho tiện ích này"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:348
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:451
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:540
+#, python-format
+msgid "Error: %s file is not found"
+msgstr "Lỗi: không tìm thấy tệp% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:361
+msgid "Creation  of localization manifest.ini file"
+msgstr "Tạo tập tin manifest.ini nội địa hóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:363
+#, python-format
+msgid "Some translation strings are missing for \"%s\" language"
+msgstr "Some translation strings are missing for \"%s\" language"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:368
+#, python-format
+msgid "%s localization manifest.ini files  created"
+msgstr "% s tệp tin bản địa hóa được tạo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:371
+msgid "No localization manifest.ini file created"
+msgstr "Không có tệp manifest.ini nội địa hóa được tạo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:378
+#, python-format
+msgid "Creation of POT file of %s add-on"
+msgstr "Tạo tệp POT của% s add-on"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:395
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:502
+#, python-format
+msgid "%s file created"
+msgstr "% s tập tin được tạo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:398
+msgid "Impossible to create POT file: no source file defined in buildVars.py"
+msgstr ""
+"Không thể tạo tệp POT: không có tệp nguồn nào được xác định trong buildVars."
+"py"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:400
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:504
+msgid "Impossible to create POT file"
+msgstr "Không thể tạo tệp POT"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:417
+#, python-format
+msgid "Prepare %s add-on"
+msgstr "Chuẩn bị tiện ích% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:429
+msgid "Prepare add-on start"
+msgstr "chuẩn bị bắt đầu phần mở rộng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:442
+msgid "Manifest.ini file updated"
+msgstr "Đã cập nhật tệp Manifest.ini"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:467
+#, python-format
+msgid "%s localization manifest.ini files created or updated"
+msgstr "% s tệp tin bản địa hóa được tạo hoặc cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:472
+#, python-format
+msgid "But for this languages  translated string are missing: %s"
+msgstr "Nhưng đối với ngôn ngữ này, chuỗi dịch bị thiếu:% s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:490
+msgid "one file converted"
+msgstr "một tập tin được chuyển đổi"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:494
+#, python-format
+msgid "%s HTML files created"
+msgstr "% s tệp HTML được tạo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:509
+msgid "{count} poFiles compiled on {nb}"
+msgstr "{Count} poFiles được biên dịch trên {nb}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:516
+msgid "Add-on bundle could not be created"
+msgstr "Không thể tạo gói bổ trợ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:519
+msgid "The {name} file has been created and recorded in {dir} folder"
+msgstr "Tệp {name} đã được tạo và ghi lại trong thư mục {dir}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:523
+msgid "Completed"
+msgstr "Đã hoàn thành"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:532
+msgid "Creation of buildVars.py file"
+msgstr "Tạo tập tin buildVars.py"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:549
+msgid "Warning: buildVars.py already exist. Do you want to replace it ?"
+msgstr "Cảnh báo: buildVars.py đã tồn tại. Bạn có muốn thay thế nó ?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:583
+msgid "buildVars.py file created"
+msgstr "tập tin buildVars.py được tạo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:603
+msgid "Tools for add-on developpement"
+msgstr "công cụ để phát triển tiện ích bổ sung"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:621
+msgid "&Add-ons:"
+msgstr "& Tiện ích:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:627
+msgid "Update add-on &version"
+msgstr "Cập nhật tiện ích & phiên bản"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:629
+msgid "&Update manifest.ini file"
+msgstr "& Cập nhật tập tin manifest.ini"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:631
+msgid "Create P&OT file"
+msgstr "Tạo tập tin P & OT"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:633
+msgid "&Prepare addon"
+msgstr "& Chuẩn bị addon"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:636
+msgid "&Languages:"
+msgstr "& Ngôn ngữ:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:642
+msgid "Create &localization manifest.ini file"
+msgstr "Tạo và bản địa hóa tệp manifest.ini"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:644
+msgid "Create &HTML documentation files"
+msgstr "& tạo tệp tài liệu HTML"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:646
+msgid "Create &buildVars file"
+msgstr "Tạo và xây dựng tập tin"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:648
+msgid "&Explore add-on folder"
+msgstr "& Khám phá thư mục bổ trợ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:680
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:54
+msgid "All"
+msgstr "Tất cả"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:747
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:782
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:798
+msgid "Update add-on version"
+msgstr "Cập nhật phiên bản bổ trợ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:767
+msgid "Error: buildVars.py file has no add-on version line"
+msgstr "Lỗi: tệp buildVars.py không có dòng phiên bản bổ trợ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:776
+msgid "Version of buildVars.py file has been updated"
+msgstr "Phiên bản của tệp buildVars.py đã được cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:796
+msgid "Entry add-on version:"
+msgstr "Nhập phiên bản bổ trợ:"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:813
+msgid "No add-on installed"
+msgstr "Không cài đặt tiện ích bổ sung"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:59
+msgid ""
+"The update is not compatible with this version of NVDA. Minimum NVDA "
+"version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}."
+msgstr ""
+"Bản cập nhật không tương thích với phiên bản NVDA này. Phiên bản NVDA tối "
+"thiểu: {minYear} {minMajor}, được thử nghiệm lần cuối: {testsYear}. {Đã kiểm "
+"traMajor}."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:106
+msgid "Downloading {name}"
+msgstr "Đang tải xuống {name}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:120
+msgid "Error downloading update for {name}."
+msgstr "Lỗi tải xuống bản cập nhật cho {name}."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:176
+msgid "Cannot update {name} - missing file or invalid file format"
+msgstr ""
+"Không thể cập nhật {name} - tệp bị thiếu hoặc định dạng tệp không hợp lệ"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:206
+msgid "Updating"
+msgstr "Đang cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:208
+msgid "Please wait while the add-on is being updated."
+msgstr "Vui lòng đợi trong khi tiện ích đang được cập nhật."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:215
+msgid "Failed to update {name} add-on"
+msgstr "Không thể cập nhật bổ trợ {name}"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:271
+msgid "{summary} - update"
+msgstr "{tóm tắt} - cập nhật"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:280
+msgid "The service is temporarily under maintenance. Please, try again later."
+msgstr "Dịch vụ này đang được bảo trì tạm thời. Vui lòng thử lại sau."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:301
+#, python-format
+msgid "New version available, version %s. Do you want download it now?"
+msgstr "Phiên bản mới có sẵn, phiên bản% s. Bạn có muốn tải về nó bây giờ?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:315
+#, python-format
+msgid "You are up-to-date. %s is the latest version."
+msgstr "Bạn đã cập nhật. % s là phiên bản mới nhất."
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:321
+msgid "Oops! There was a problem checking for updates. Please retry later"
+msgstr "! Có vấn đề khi kiểm tra cập nhật. Vui lòng thử lại sau"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:475
+msgid "&Yes"
+msgstr "&Đúng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:479
+msgid "&No"
+msgstr "&Không"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:483
+msgid "&Later"
+msgstr "&Một lát sau"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:23
+msgid "User  input Gestures"
+msgstr "Cử chỉ đầu vào của người dùng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:44
+msgid "Remove &all"
+msgstr "Bỏ tất cả"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:82
+msgid "{main} ({source})"
+msgstr "{nguồn chính})"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:125
+msgid ""
+"Do you really want to erase all the modification of gesture control that "
+"have been made ?"
+msgstr ""
+"Bạn có thực sự muốn xóa tất cả các sửa đổi của cử chỉ đã được chỉnh sửa ?"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:127
+msgid "NVDAExtensionGlobalPlugin add-on - warning"
+msgstr "NVDATiện ích mở rộngGlobalPlugin add-on - cảnh báo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:203
+msgid "Deleted gestures"
+msgstr "Cử chỉ đã xóa"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:34
+msgid "Informations"
+msgstr "Thông tin"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:60
+msgid "Co&py to Clipboard"
+msgstr "Sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:78
+msgid "Copied"
+msgstr "Sao chép"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:84
+msgid "Error, the information cannot be copied to the clipboard"
+msgstr "Lỗi, thông tin không thể được sao chép vào clipboard"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/runInThread.py:48
+msgid "interrupted"
+msgstr "bị gián đoạn"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/__init__.py:117
+msgid "Elements's searching"
+msgstr "Yếu tố tìm kiếmtìm kiếm thành phần"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:34
+msgid "List, list's item"
+msgstr "Danh sách, danh sách các mục"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:36
+msgid "Tree view, treeview's item"
+msgstr "Chế độ xem cây, mục treeviewcây thư mục "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:38
+msgid "ComboBox"
+msgstr "ComboBoxdanh sách thả xuống "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:40
+msgid "Tab"
+msgstr "Tab"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:42
+msgid "Slider"
+msgstr "Thanh trượt"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:46
+msgid "Table, table's item"
+msgstr "Bảng, mục của bảng"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:48
+msgid "Menu, menu's item"
+msgstr "Menu, mục của menu"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:50
+msgid "Container (Tools bar, panel, application, ...)"
+msgstr "Container (Thanh công cụ, bảng điều khiển, ứng dụng, ...)"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:52
+msgid "Text"
+msgstr "văn bản "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:85
+msgid "list of visible items making up the object in the foreground"
+msgstr "danh sách các đối tượng được tìm thấy "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:96
+msgid "Ignore untaggeditems"
+msgstr "Bỏ qua unsaggeditems"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:100
+msgid "&Type: "
+msgstr "&Kiểu: "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:104
+msgid "Elements:"
+msgstr "Các thành phần "
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:118
+msgid "Move &navigator object to it"
+msgstr "Di chuyển và điều hướng đến nó"
+
+#: installTasks.py:83
+msgid "Do you want to keep previous add-on configuration settings ?"
+msgstr "bạn có muốn dữ các thiết lập từ chước không"
+
+#: installTasks.py:85
+#, python-format
+msgid "%s - installation"
+msgstr "% s - cài đặt"
+
+#: onInstall.py:124
+#, python-format
+msgid ""
+"Attention, you must uninstall %s addon because it is now included in this "
+"addon."
+msgstr ""
+"Chú ý, bạn phải gỡ cài đặt addon% s vì hiện tại nó đã được bao gồm trong "
+"addon này."
+
+#~ msgid "No more recorded vocal announce"
+#~ msgstr "Plus d'autre annonce vocale enregistrée"
+
+#~ msgid "Oldest recorded announce"
+#~ msgstr "Plus vieille annonce enregistrée"
+
+#~ msgid "Last recorded announce"
+#~ msgstr "Dernière annonce enregistrée"
+
+#~ msgid "The update is not compatible with this version of Windows."
+#~ msgstr "La mise à jour n'est pas compatible avec cette version de Windows"
+
+#~ msgid ""
+#~ "Attention: this add-on is not compatible with the \"%s\" add-on  which "
+#~ "also seems to be installed and activated. To resolve this conflict, you "
+#~ "must disable the \"command keys selective announcement\" and \"Speech "
+#~ "remanence\" features."
+#~ msgstr ""
+#~ "Attention: cette extension n'est pas compatible avec l'extension \"%s\"  "
+#~ "qui semble être aussi installée et activée. Pour résoudre ce conflit, "
+#~ "vous devez désactiver les fonctionnalités \"Annonce sélective des touches "
+#~ "decommande\" et \"Rémanence des touches\"."
+
+#~ msgid "Not available for this NVDA version"
+#~ msgstr "Pas disponible pour cette version de NVDA"
