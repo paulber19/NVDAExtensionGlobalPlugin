@@ -266,7 +266,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Input help mode message for report previous speech history record command.
 		"reportPreviousSpeechHistoryRecord": (_("Report previous record of the speech history and copy it to clipboard"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for report current speech history record command.
-		"reportCurrentSpeechHistoryRecord": (_("Report current record of the speech history and copy it to clipboard.Twice: display speech history"), globalCommands.SCRCAT_SPEECH),
+		"reportCurrentSpeechHistoryRecord": (_("Report current record of the speech history and copy it to clipboard. Twice: display speech history"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for report next speech history record command.
 		"reportNextSpeechHistoryRecord": (_("Report next record of the speech history and copy it  to clipboard"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message for restart NVDA in  default or debug log level command.
@@ -936,6 +936,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			"detectFormatAfterCursor":False,
 			"reportFontName":True,"reportFontSize":True,"reportFontAttributes":True,"reportColor":True,"reportRevisions":False,"reportEmphasis":False,
 			"reportStyle":True,"reportAlignment":True,"reportSpellingErrors":True,
+			"reportSuperscriptsAndSubscripts": True,
 			"reportPage":False,"reportLineNumber":False,"reportLineIndentation":True,"reportLineIndentationWithTones":False,"reportParagraphIndentation":True,"reportLineSpacing":True,"reportTables":False,
 			"reportLinks":False,"reportHeadings":False,"reportLists":False,
 			"reportBlockQuotes":False,"reportComments":False,
@@ -1256,13 +1257,13 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	enableNumpadNnavigationKeys = False
 	def script_toggleNumpadStandardUse(self, gesture):
 		if not isInstall(ID_CommandKeysSelectiveAnnouncement ) and not isInstall(ID_KeyRemanence ):
-			speech.speakMessage(_("This functionnality is only available if selective command announcement or speech remanence functionnality is installed"))
+			speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))
 			return
 		from .settings import  toggleEnableNumpadNavigationModeToggleAdvancedOption
 		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
 			# Translators: message to user to report unavailable command.
 			msg = _("Numeric pad navigation mode toggle is not  available")
-			speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "speech's remanence functionnality" is installed"""))
+			speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))
 			return
 		from .commandKeysSelectiveAnnouncementAndRemanence import  _myInputManager 
 		_myInputManager .toggleNavigationNumpadMode()
@@ -1285,7 +1286,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			delayScriptTask(callback, gesture)
 		else:
 			if not isInstall(ID_CommandKeysSelectiveAnnouncement ) and not isInstall(ID_KeyRemanence ):
-				speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "speech's remanence functionnality" is installed"""))
+				speech.speakMessage(_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))
 				return
 			self.script_toggleNumpadStandardUse(gesture)
 

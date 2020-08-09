@@ -14,8 +14,8 @@ Descargar:
 
 
 Compatibilidad:
-- mínima de NVDA requerida: 2019.1
-- última versión de NVDA probada: 2019.3
+- mínima de NVDA requerida: MINIMUM_NVDA_VERSION
+- última versión de NVDA probada: LAST_TESTED_NVDA_VERSION
 
 
 
@@ -538,20 +538,21 @@ Si el complemento fakeClipboardAnnouncement está instalado (que realiza la mism
 ++ Anuncio de la carpeta seleccionada en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como" ++[hdr8]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
 
-Añade, en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como", "Buscar en", el script que permite conocer el nombre de la carpeta que es seleccionada para definir la ubicación donde el archivo será buscado o guardado.
+Añade, en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como", "Buscar en", el script que permite conocer el nombre y la ruta de la carpeta que es seleccionada para definir la ubicación donde el archivo será buscado o guardado.
 
 La descripción de este script es: "Anunciar la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar".
 
 Este script se almacena en la categoría "ADDON_SUMMARY" del cuadro de diálogo "Gestos de Entrada".
+Estos son:
+- "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa": gesto de entrada "MAIN_KEY_SAY_CURRENT_FOLDER" asignado a él por defecto.
+- "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar": órden "KEY_SAY_CURRENT_FOLDER" del intérprete.
+- "Anunciar la ruta completa de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar": órden "KEY_SAY_CURRENT_FOLDERPATH" del intérprete.
 
-Él se lanza:
-- Ya sea con la órden "KEY_SAY_CURRENT_FOLDER" del intérprete 
-- Ya sea con el gesto de entrada "MAIN_KEY_SAY_CURRENT_FOLDER" asignado a él por defecto.
 
+Ningún gesto de entrada esta asociado con los dos últimos scripts, pero es posible asociarlos en el cuadro de diálogo "Gestos de Entrada" de NVDA.
 
-Tenga cuidado, este script solo funciona en cuadros de diálogo compatibles con el estándar de Windows.
+Tenga cuidado, estos scripts solo funcionan en cuadros de diálogo compatibles con el estándar de Windows.
 
-El gesto de entrada activa el anuncio del nombre de la carpeta seleccionada en el cuadro de diálogo y, si es posible, la ruta de esta carpeta.
 
 ++ Registros de NVDA ++[hdr9]
 Esta funcionalidad está, por defecto, instalada sin gesto de entrada.
@@ -601,23 +602,22 @@ Para volver a escuchar estos registros, los siguientes scripts, que se encuentra
 +++ Anuncio del registro anterior +++
 Este script se lanza mediante el gesto de entrada, "MAIN_KEY_PREVIOUS_RECORD" asignado por defecto.
 
-El gesto de entrada activa el anuncio del registro anterior en relación con el último registro anunciado.
+El gesto de entrada activa el anuncio del registro anterior en relación con el último registro anunciado y cópiarlo al portapapeles.
 
 +++ Anuncio del siguiente registro +++
 Este script se lanza mediante el gesto de entrada, "MAIN_KEY_NEXT_RECORD" asignado por defecto.
 
-El gesto de entrada activa el anuncio del siguiente registro en relación con el último registro anunciado.
+El gesto de entrada activa el anuncio del siguiente registro en relación con el último registro anunciado y cópiarlo al portapapeles.
 
 +++ Re-anunciar el último registro anunciado +++
-La descripción de este script es: "Anunciar el registro actual del historial de los anuncios del habla. Pulsando dos veces: para cópiarlo al portapapeles. Pulsando tres veces: para mostrar el historial de los anuncios del habla".
+La descripción de este script es: "Anunciar el registro actual del historial de los anuncios del habla y cópiarlo al portapapeles. Pulsando dos veces: para mostrar todo el historial de los anuncios del habla".
 
 Este script se lanza mediante el gesto de entrada, "MAIN_KEY_CURRENT_RECORD" asignado por defecto.
 
-Una simple pulsación activa El anuncio del último registro anunciado.
+Una simple pulsación activa El anuncio del último registro anunciado y cópiarlo al portapapeles.
 
-Una doble pulsación, copia este registro al portapapeles.
+Una doble pulsación, para mostrar todo el historial de los anuncios del habla.
 
-Una triple pulsación, muestra el historial de los anuncios del habla.
 
 +++ Mostrar el historial del habla +++
 La descripción de este script es: "Mostrar los registros del historial de los anuncios del habla".
@@ -1427,9 +1427,9 @@ El complemento pone en su lugar la opción "No tomar en cuenta la opción Anunci
 
 +++ Historial de los anuncios del habla +++
 | Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Anunciar el registro anterior del historial de los anuncios del habla  | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Ninguno | Anunciar el registro anterior del historial de los anuncios del habla |
-| Anunciar el siguiente registro del historial de los anuncios del habla  | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Ninguno | Anunciar el siguiente registro del historial de los anuncios del habla |
-| Anunciar el registro actual del historial de los anuncios del habla | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Ninguno | Anunciar el registro actual del historial de los anuncios del habla. Pulsando dos veces: para cópiarlo al portapapeles. Pulsando tres veces: para mostrar el historial de los anuncios del habla |
+| Anunciar el registro anterior del historial de los anuncios del habla  | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Ninguno | Anunciar el registro anterior del historial de los anuncios del habla y cópiarlo al portapapeles |
+| Anunciar el siguiente registro del historial de los anuncios del habla  | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Ninguno | Anunciar el siguiente registro del historial de los anuncios del habla y cópiarlo al portapapeles |
+| Anunciar el registro actual del historial de los anuncios del habla | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Ninguno | Anunciar el registro actual del historial de los anuncios del habla y cópiarlo al portapapeles. Pulsando dos veces: para mostrar todo el  historial de los anuncios del habla |
 
 +++ Temporizador de minutos +++
 | Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |

@@ -122,10 +122,6 @@ class Gecko_ia2_Ex(VirtualBufferEx,virtualBuffers.gecko_ia2 .Gecko_ia2):
 	def _get_ElementsListDialog(self):
 		return elementsList.GeckoElementsListDialog
 
-class Gecko_ia2Pre14Ex(Gecko_ia2_Ex):
-	def _searchableTagValues(self, values):
-		# #2287: In Gecko < 14, tag values are upper case.
-		return [val.upper() for val in values]
 
 class ChromeVBufEx(Gecko_ia2_Ex): #GeckoVBuf):
 	

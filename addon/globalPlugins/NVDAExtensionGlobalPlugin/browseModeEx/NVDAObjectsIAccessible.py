@@ -6,7 +6,7 @@
 
 import controlTypes
 import NVDAObjects
-from .virtualBuffersEx import MSHTMLEx, Gecko_ia2Pre14Ex, Gecko_ia2_Ex, ChromeVBufEx
+from .virtualBuffersEx import MSHTMLEx, Gecko_ia2_Ex, ChromeVBufEx
 from . import virtualBuffersEx
 
 
@@ -19,14 +19,8 @@ class NVDAObjectMSHTMLEx(NVDAObjects.IAccessible.MSHTML.MSHTML):
 class NVDAObjectMozillaDocumentEx(NVDAObjects.IAccessible.mozilla .Document):
 	
 	def _get_treeInterceptorClass(self):
-		ver=NVDAObjects.IAccessible.mozilla.getGeckoVersion(self)
-		if (not ver or ver.full.startswith('1.9')) and self.windowClassName!="MozillaContentWindowClass":
-			return super(NVDAObjectMozillaDocumentEx,self).treeInterceptorClass
 		if controlTypes.STATE_EDITABLE not in self.states:
-			if ver and ver.major < 14:
-				return Gecko_ia2Pre14Ex
-			else:
-				return Gecko_ia2_Ex
+			return Gecko_ia2_Ex
 		return super(NVDAObjectMozillaDocumentEx,self).treeInterceptorClass
 
 import NVDAObjects.IAccessible.chromium
