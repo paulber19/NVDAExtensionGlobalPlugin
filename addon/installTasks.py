@@ -99,7 +99,6 @@ def onInstall():
 
 def onUninstall():
 	import os, globalVars, sys
-	log.warning("OnUnInstall")
 	#include the module directory to the path
 	if  sys.version.startswith("3"):
 		# for ppython 3

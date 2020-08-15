@@ -12,7 +12,7 @@ import globalVars
 import wx
 import sys
 import gui
-from gui.settingsDialogs import SettingsDialog, InputGesturesDialog
+from gui.settingsDialogs import SettingsDialog
 import inputCore
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle
