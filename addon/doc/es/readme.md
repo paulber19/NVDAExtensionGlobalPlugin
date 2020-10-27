@@ -2,13 +2,13 @@
 
 * Autores: paulber19 con la participación de Daniel Poiraud
 * URL : paulber19@laposte.net
-
+* Repositorio en GitHub: [https://github.com/paulber19/NVDAExtensionGlobalPlugin.git][3]
 * Descargar:
-	* [la versión estable][1]
+	* [versión estable][1]
 	* [versión de desarrollo][2]
 * Compatibilidad:
 	* mínima de NVDA requerida: 2019.1
-	* última versión de NVDA probada: 2020.2
+	* última versión de NVDA probada: 2020.3
 
 
 * Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
@@ -62,7 +62,7 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 ## Las opciones: ##
 
 * Eliminar el anuncio de la descripción de los objetos en las cintas de Windows,
-* Anunciar la palabra enfocada durante la eliminación de palabras,
+* Anunciar la palabra enfocada durante la eliminación de palabras (para las versiones de NVDA anteriores a la 2020.3),
 * Maximizar automáticamente la ventana en primer plano,
 * Anunciar la puntuación y los símbolos al moverse por palabras.
 
@@ -82,6 +82,6 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Script para reiniciar rápidamente NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.2.2.nvda-addon
-
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.3.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
+[3]: https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

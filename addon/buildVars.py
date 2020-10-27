@@ -1,23 +1,30 @@
 # -*- coding: UTF-8 -*-
 
+import os.path
+
 # Build customizations
 # Change this file instead of sconstruct or manifest files, whenever possible.
 
+
 # Full getext (please don't change)
-_ = lambda x : x
+def _(arg):
+	return arg
 
 # Add-on information variables
 addon_info = {
-	# for previously unpublished addons, please follow the community guidelines at:
+	# for previously unpublished addons, please follow
+	# the community guidelines at:
 	# https://bitbucket.org/nvdaaddonteam/todo/raw/master/guideLines.txt
 	# add-on Name, internal for nvda
-	"addon_name" : "NVDAExtensionGlobalPlugin",
+	"addon_name": "NVDAExtensionGlobalPlugin",
 	# Add-on summary, usually the user visible name of the addon.
-	# Translators: Summary for this add-on to be shown on installation and add-on information.
-	"addon_summary" : _("NVDA global commands extension"),
+	# Translators: Summary for this add-on to be shown on installation
+	# and add-on information.
+	"addon_summary": _("NVDA global commands extension"),
 	# Add-on description
-	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
-	"addon_description" : _("""This add-on has been developed with the participation of Daniel Poiraud.
+	# Translators: Long description to be shown for this add-on on
+	# add-on information from add-ons manager
+	"addon_description": _("""This add-on has been developed with the participation of Daniel Poiraud.
 It adds to NVDA:
 1- The features
 some features can be enabled or disabled individually.
@@ -47,15 +54,15 @@ some features can be enabled or disabled individually.
 
 * history of voice speechs,
 * renaming keyboard keys,
-* selective announcement of  command keyboard keys ,
+* selective announcement of command keyboard keys ,
 * simple countdown timer,
 * display of visible elements making up the object in the foreground,
 * fast switching of voice profile,
 * remanence of the modifier keys,
 * shutdown, reboot or hybernate the computer,
 * control the main or NVDA volume:
-	* mute or unmute volume  for the focused application,
-	* establishment of the main Windows  or NVDA volume at the start  of add-on,
+	* mute or unmute volume for the focused application,
+	* establishment of the main Windows or NVDA volume at the start of add-on,
 	* modification of main volume or audio stream's volume of focused application.
 * Tools for development of add-on
 * supplements regarding the date and time: copy date and time to clipboard, report time with seconds
@@ -63,11 +70,11 @@ some features can be enabled or disabled individually.
 
 2- The options
 * remove the announcement from the description of the objects in the Windows ribbons ,
-* proclaim the word focused when deleting a word,
+* proclaim the word focused when deleting a word (for NVDA versions lower than 2020.3),
 * automatically maximize the foreground window,
 * announce punctuations and symbols when moving by word in a document.
 
-3-  The advanced options
+3- The advanced options
 * report, with a sound, the registration of an error in the NVDA log also for the final versions and release candidate of NVDA,
 * Caption dialog title with the name of the addon,
 * Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation,
@@ -81,26 +88,24 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version" : "9.2.2",
+	"addon_version": "9.3",
 	# Author(s)
-	"addon_author" : "PaulBer19",
+	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support
-	"addon_url" : "paulber19@laposte.net",
+	"addon_url": "paulber19@laposte.net",
 	# Documentation file name
-	"addon_docFileName" : "addonUserManual.html",
+	"addon_docFileName": "addonUserManual.html",
 	# Minimum NVDA version supported (e.g. "2018.3")
-	"addon_minimumNVDAVersion" : "2019.1",
-	# Last NVDA version supported/tested (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion" : "2020.2",
+	"addon_minimumNVDAVersion": "2019.1",
+	# Last NVDA version supported/tested
+	# (e.g. "2018.4", ideally more recent than minimum version)
+	"addon_lastTestedNVDAVersion": "2020.2",
 	# Add-on update channel (default is stable or None)
-	"addon_updateChannel" : "dev",
+	"addon_updateChannel": "dev",
 }
 
-
-import os.path
 # Define the python files that are the sources of your add-on.
 # You can use glob expressions here, they will be expanded.
-#pythonSources = []
 mainPath = os.path.join("addon", "globalPlugins", "NVDAExtensionGlobalPlugin")
 pythonSources = [
 	os.path.join("addon", "*.py"),
@@ -108,7 +113,8 @@ pythonSources = [
 	os.path.join(mainPath, "activeWindowsListReport", "*.py"),
 	os.path.join(mainPath, "browseModeEx", "*.py"),
 	os.path.join(mainPath, "clipboardCommandAnnouncement", "*.py"),
-	os.path.join(mainPath, "commandKeysSelectiveAnnouncementAndRemanence", "*.py"),
+	os.path.join(
+		mainPath, "commandKeysSelectiveAnnouncementAndRemanence", "*.py"),
 	os.path.join(mainPath, "ComplexSymbols", "*.py"),
 	os.path.join(mainPath, "currentFolder", "*.py"),
 	os.path.join(mainPath, "computerTools", "*.py"),
@@ -131,8 +137,9 @@ pythonSources = [
 
 
 # Files that contain strings for translation. Usually your python sources
-i18nSources = pythonSources 
+i18nSources = pythonSources
 
 # Files that will be ignored when building the nvda-addon file
-# Paths are relative to the addon directory, not to the root directory of your addon sources.
+# Paths are relative to the addon directory,
+# not to the root directory of your addon sources.
 excludedFiles = []

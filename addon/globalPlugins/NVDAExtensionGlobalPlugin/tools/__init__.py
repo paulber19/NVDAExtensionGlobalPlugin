@@ -1,81 +1,89 @@
-#NVDAExtensionGlobalPlugin/tools/__init__.py
+# globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2016-2017 Paulber19
-#This file is covered by the GNU General Public License.
-#See the file COPYING for more details.
+# Copyright (C) 2016 -2020 Paulber19
+# This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
 import addonHandler
-addonHandler.initTranslation()
 from logHandler import log
 import speech
-import time
 import codecs
 import os
-from ctypes import *
+from ctypes import *  # noqa:F403
 import zipfile
 import gui
 import wx
 import sys
 import languageHandler
-import sayAllHandler
 from ..utils import isOpened, makeAddonWindowTitle
 from ..utils import runInThread
 from ..utils.py3Compatibility import py3, iterate_items, reLoad, _unicode
 from .generate import generateManifest, generateTranslatedManifest
 from .gettextTools import generatePotFile, compilePoFiles
+import shutil
+
+addonHandler.initTranslation()
+
 if py3:
 	# for python 3
 	_curModuleFilePath = os.path.dirname(__file__)
 else:
 	# for python 2
-	_curModuleFilePath  = os.path.dirname(__file__).decode("mbcs")
+	_curModuleFilePath = os.path.dirname(__file__).decode("mbcs")
 
-# Translators:  strings used to generate  readme.md file
+# Translators: strings used to generate readme.md file
 _buildVarsStrings = {
 	"addonInfoStart": "addon_info = {",
 	"addonInfoEnd": "}",
 	}
-# a part of NVDA add-on template  SCONSTRUCT file
-	#author: Rui Batista <ruiandrebatista@gmail.com>
 
-def get_all_file_paths(directory): 
-	file_paths = [] 
-	for root, directories, files in os.walk(directory): 
-		if root[len(directory)+1:] == "debugTools": continue
-		for filename in files: 
+
+def get_all_file_paths(directory):
+	file_paths = []
+	for root, directories, files in os.walk(directory):
+		if root[len(directory)+1:] == "debugTools":
+			continue
+		for filename in files:
 			if os.path.isdir(filename):
-				if filename in ["__pycache",] : continue
+				if filename in ["__pycache", ]:
+					continue
 			else:
-				if os.path.splitext(filename)[1] in [".pyo", ".pyc", ".nvda-addon", ".pickle"]: continue
-			filepath = os.path.join(root, filename) 
-			file_paths.append(filepath) 
+				if os.path.splitext(filename)[1]\
+					in [".pyo", ".pyc", ".nvda-addon", ".pickle"]:
+					continue
+			filepath = os.path.join(root, filename)
+			file_paths.append(filepath)
 	return file_paths
 
-def createAddonBundleFromPath(addon): 
+
+def createAddonBundleFromPath(addon):
 	file_paths = get_all_file_paths(addon.path)
-	addonSummary= addon.manifest["summary"]
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad (buildVars)
+		reLoad(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
-		# Translators: message to user.
-		gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: buildVars.py file is not found"),
+			dialogTitle, wx.OK)
 		return None
-	addonFileName = "%s-%s.nvda-addon"%(buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
+	addonFileName = "%s-%s.nvda-addon" % (
+		buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
 	dest = os.path.join(addon.path, addonFileName)
 	if os.path.exists(dest):
 		# delete previous bundle
 		os.remove(dest)
-	with zipfile.ZipFile(dest,'w', zipfile.ZIP_DEFLATED) as zip: 
-		for file in file_paths: 
+	with zipfile.ZipFile(dest, 'w', zipfile.ZIP_DEFLATED) as zip:
+		for file in file_paths:
 			relativePath = os.path.relpath(file, addon.path)
-			zip.write(file, relativePath) 
+			zip.write(file, relativePath)
 	return addonFileName
 
-def getLocaleLanguages (addon):
+
+def getLocaleLanguages(addon):
 	langs = []
 	if "locale" in os.listdir(addon.path):
 		localeFolder = os.path.join(addon.path, "locale")
@@ -86,15 +94,17 @@ def getLocaleLanguages (addon):
 				langs.append(item)
 	return langs
 
-def getDocLanguages (addon):
-	localeLanguages = getLocaleLanguages (addon)
+
+def getDocLanguages(addon):
+	localeLanguages = getLocaleLanguages(addon)
 	langs = []
 	if "doc" in os.listdir(addon.path):
 		docFolder = os.path.join(addon.path, "doc")
 		dirs = os.listdir(docFolder)
 		for item in dirs:
 			f = os.path.join(docFolder, item)
-			if not os.path.isdir(f): continue
+			if not os.path.isdir(f):
+				continue
 			if item in localeLanguages:
 				langs.append(item)
 			elif "_" in item and item.split("_")[0] in localeLanguages:
@@ -104,47 +114,48 @@ def getDocLanguages (addon):
 	return langs
 
 
-def getMmanifestInfos (addon, lang):
+def getMmanifestInfos(addon, lang):
 	path = addon.path
 	manifest_path = os.path.join(path, addonHandler.MANIFEST_FILENAME)
 	with open(manifest_path) as f:
 		translatedInput = None
-		translatedPath  = os.path.join("locale", lang)
-		p = os.path.join(path, translatedPath, addonHandler.MANIFEST_FILENAME )
+		translatedPath = os.path.join("locale", lang)
+		p = os.path.join(path, translatedPath, addonHandler.MANIFEST_FILENAME)
 		if os.path.exists(p):
 			log.debug("Using manifest translation from %s", p)
 			translatedInput = open(p, 'rb')
 			try:
 				return addonHandler.AddonManifest(f, translatedInput)
-			except:
+			except:  # noqa:E722
 				# Translators: dialog title on errorr.
 				dialogTitle = _("error")
-				# Translators: message to the user on  getting addon manifest.
-				gui.messageBox(_("Cannot get  add-on translated manifest of %s language")%lang, dialogTitle, wx.OK|wx.ICON_ERROR)
+				gui.messageBox(
+					# Translators: message to the user on getting addon manifest.
+					_("Cannot get add-on translated manifest of %s language") % lang,
+					dialogTitle, wx.OK | wx.ICON_ERROR)
 	return addonHandler.AddonManifest(manifest_path)
 
 
-
-
-
-
 def writeHTMLFile(dest, htmlText, title, cssFileName):
-	cssFile =cssFileName if cssFileName is not None else "style.css"
+	cssFile = cssFileName if cssFileName is not None else "style.css"
 	lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
 	with codecs.open(dest, "w", "utf-8") as f:
-		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+		f.write(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
 			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
+			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +  # noqa:E501
 			"<head>\n" +
-			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
-			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n"%cssFile +
+			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +  # noqa:E501
+			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n" % cssFile +  # noqa:E501
 			"<title>%s</title>\n" % title +
 			"</head>\n"
-		)
+			)
 		f.write(htmlText)
 		f.write("\n</html>\n")
 	f.close()
+
+
 def md2html(source):
 	from ..utils.py3Compatibility import getCommonUtilitiesPath
 	commonUtilitiesPath = getCommonUtilitiesPath()
@@ -152,7 +163,6 @@ def md2html(source):
 	sys.path.append(markdownPath)
 	from markdown2 import markdown
 	del sys.path[-1]
-	
 	headerDic = {
 		"[[!meta title=\"": "# ",
 		"\"]]": " #",
@@ -162,15 +172,16 @@ def md2html(source):
 		for k, v in iterate_items(headerDic):
 			mdText = mdText.replace(k, v, 1)
 		htmlText = markdown(mdText)
-	htmlText = "<body>\n" +htmlText + "\n</body>"
+	htmlText = "<body>\n" + htmlText + "\n</body>"
 	return htmlText
 
+
 def getHTMLBody(dest):
-	src = codecs.open( dest, "r","utf_8",errors="replace")
-	startTag=  "</head>"
-	endTag= "<!-- html code generated"
+	src = codecs.open(dest, "r", "utf_8", errors="replace")
+	startTag = "</head>"
+	endTag = "<!-- html code generated"
 	appendLine = False
-	text =[]
+	text = []
 	for sLine in src:
 		line = sLine.lower()
 		startTagFound = line.find(startTag)
@@ -180,7 +191,7 @@ def getHTMLBody(dest):
 			sLine = sLine[startTagFound+len(startTag):]
 			text.append(sLine)
 			continue
-		elif endTagFound >=0:
+		elif endTagFound >= 0:
 			sLine = sLine[: endTagFound]
 			text.append(sLine)
 			break
@@ -195,11 +206,12 @@ def t2t2html(source, dest):
 	sys.path.append(getUtilitiesPath())
 	import txt2tags
 	del sys.path[-1]
-	txt2tags.exec_command_line(["%s"%(source),])
+	txt2tags.exec_command_line(["%s" % (source), ])
 	# we don't want the footer
 	htmlText = getHTMLBody(dest)
 	os.remove(dest)
 	return htmlText
+
 
 def generateHTMLFiles(addon, docDirs):
 	mdCount = 0
@@ -217,77 +229,83 @@ def generateHTMLFiles(addon, docDirs):
 				continue
 			base = addon.path.join(f[:-1])
 			dest = os.path.join(d, base+".html")
-			manifest = getMmanifestInfos (addon, lang)
-			title="%s %s"%(manifest["summary"], manifest["version"])
+			manifest = getMmanifestInfos(addon, lang)
+			title = "%s %s" % (manifest["summary"], manifest["version"])
 			if ext == "t2t":
-				htmlText = t2t2html(theFile, dest) 
+				htmlText = t2t2html(theFile, dest)
 				cssFileName = "style_t2t.css"
 				t2tCount += 1
 			elif ext == "md":
-				htmlText = md2html(theFile) 
+				htmlText = md2html(theFile)
 				cssFileName = "style.css"
-				mdCount+=1
+				mdCount += 1
 			writeHTMLFile(dest, htmlText, title, cssFileName)
 	return (mdCount, t2tCount)
-import shutil
+
+
 def clean(addon):
 	if os.path.exists(os.path.join(addon.path, "buildVars.pyo")):
 		os.remove(os.path.join(addon.path, "buildVars.pyo"))
 	if os.path.exists(os.path.join(addon.path, "buildVars.pyc")):
 		os.remove(os.path.join(addon.path, "buildVars.pyc"))
 
+
 def _makeHTML(addon, lang):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of HTML documentation files")
 	if "doc" not in os.listdir(addon.path):
-		# Translators: message to user no doc folder
-		gui.messageBox(_("No documentation file to convert"), dialogTitle,wx.OK|wx.ICON_ERROR)
+		gui.messageBox(
+			# Translators: message to user no doc folder
+			_("No documentation file to convert"),
+			dialogTitle, wx.OK | wx.ICON_ERROR)
 		return
 	docFolder = os.path.join(addon.path, "doc")
-	#dirList = os.listdir(docFolder)
-	dirList = getDocLanguages (addon)
+	dirList = getDocLanguages(addon)
 	docDirs = []
 	if lang == "all":
 		for item in dirList:
-			theDir = os.path.join(docFolder,item)
+			theDir = os.path.join(docFolder, item)
 			docDirs.append(theDir)
 	else:
 		for item in dirList:
-			if (item == lang
-				or "_" in item and item.split("_")[0] == lang):
-				theDir = os.path.join(docFolder,item)
+			if (item == lang or "_" in item and item.split("_")[0] == lang):
+				theDir = os.path.join(docFolder, item)
 				docDirs.append(theDir)
-	(mdCount, t2tCount) = generateHTMLFiles(addon,  docDirs)
+	(mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
 	n = mdCount+t2tCount
 	if n == 0:
-		# Translators: message to user no converted document
-		gui.messageBox(_("No html file converted"),dialogTitle, wx.OK)
+		gui.messageBox(
+			# Translators: message to user no converted document
+			_("No html file converted"),
+			dialogTitle, wx.OK)
 	else:
 		# copy css style file
 		curAddon = addonHandler.getCodeAddon()
 		if mdCount:
-			source= os.path.join(curAddon.path, "doc", "style_md.css")
-			dest= os.path.join(docFolder, "style_md.css")
+			source = os.path.join(curAddon.path, "doc", "style_md.css")
+			dest = os.path.join(docFolder, "style_md.css")
 			try:
 				shutil.copy(source, dest)
-			except:
+			except:  # noqa:E722
 				pass
 		elif t2tCount:
-			source= os.path.join(curAddon.path, "doc", "style_t2t.css")
-			dest= os.path.join(docFolder, "style_t2t.css")
+			source = os.path.join(curAddon.path, "doc", "style_t2t.css")
+			dest = os.path.join(docFolder, "style_t2t.css")
 			try:
 				shutil.copy(source, dest)
-			except:
+			except:  # noqa:E722
 				pass
-
-		
-		# Translators: message to user to report number of converted documents
-		gui.messageBox(_("%s files converted") %n, dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user to report number of converted documents
+			_("%s files converted") % n,
+			dialogTitle, wx.OK)
 	# clean up
 		clean(addon)
-def _makeMainManifestIni(addon ):
+
+
+def _makeMainManifestIni(addon):
 	# Translators: title of dialog
-	dialogTitle = _("Creation  of manifest.ini file")
+	dialogTitle = _("Creation of manifest.ini file")
 	sys.path.append(addon.path)
 	try:
 		import buildVars
@@ -295,16 +313,19 @@ def _makeMainManifestIni(addon ):
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
-		# Translators: message to user.
-		gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: buildVars.py file is not found"),
+			dialogTitle, wx.OK)
 		return
-	dest= os.path.join(addon.path, "manifest.ini")
+	dest = os.path.join(addon.path, "manifest.ini")
 	if os.path.exists(dest):
-		# Translators: message to user to confirm the update of manifest.ini.
-		msg = _(" the manifest.ini  file already exists. Do you really want to update it ?")
-		if gui.messageBox(msg, dialogTitle,wx.YES|wx.NO) == wx.NO:
+		if gui.messageBox(
+			# Translators: message to user to confirm the update of manifest.ini.
+			_(" the manifest.ini file already exists. Do you really want to update it ?"),  # noqa:E501
+			dialogTitle, wx.YES | wx.NO) == wx.NO:
 			return
-	templateFile = os.path.join(_curModuleFilePath , "manifest.ini.tpl")
+	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
 		manifest_template = f.read()
 	from .generate import generateManifest
@@ -312,249 +333,270 @@ def _makeMainManifestIni(addon ):
 	generateManifest(dest, addonInfo, manifest_template)
 	# Translators: message to user to report end of manifest.ini creation
 	msg = _("manifest.ini file has been updated")
-	gui.messageBox(msg, dialogTitle,wx.OK)
+	gui.messageBox(msg, dialogTitle, wx.OK)
 	# clean up
 	clean(addon)
-		
+
+
 def _makeLocaleManifestIni(addon, lang):
-	#Translators: title of dialog
-	dialogTitle = _("Creation  of locale manifest.ini file")
+	# Translators: title of dialog
+	dialogTitle = _("Creation of localization manifest.ini file")
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad (buildVars)
+		reLoad(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
-		# Translators: message to user.
-		gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: buildVars.py file is not found"),
+			dialogTitle, wx.OK)
 		return
-	templateFile = os.path.join(_curModuleFilePath , "manifest-translated.ini.tpl")
+	templateFile = os.path.join(
+		_curModuleFilePath, "manifest-translated.ini.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
 		manifest_template = f.read()
 	from .generate import generateTranslatedManifest
-	localeDir= os.path.join(addon.path, "locale")
-	if  not os.path.exists(localeDir):
-		# Translators: message to user  
-		gui.messageBox(_("No language for this add-on"), dialogTitle,wx.OK)
+	localeDir = os.path.join(addon.path, "locale")
+	if not os.path.exists(localeDir):
+		gui.messageBox(
+			# Translators: message to user
+			_("No language for this add-on"),
+			dialogTitle, wx.OK)
 		return
 	if lang == "all":
 		langs = os.listdir(localeDir)
 	else:
-		langs = [lang,]
+		langs = [lang, ]
 	manifest = getManifest(addon)
 	if manifest is None:
-		# Translators: message to user.
-		gui.messageBox(_("Error: %s file is not found")%addonHandler.MANIFEST_FILENAME ,  dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: %s file is not found") % addonHandler.MANIFEST_FILENAME,
+			dialogTitle, wx.OK)
 		return
 	count = 0
 	noTranslation = []
 	for lang in langs:
-		moFile =  os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
-		if  not os.path.exists(moFile):
+		moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
+		if not os.path.exists(moFile):
 			continue
-		if not generateTranslatedManifest(addon, manifest, lang, manifest_template ):
+		if not generateTranslatedManifest(addon, manifest, lang, manifest_template):
 			noTranslation.append(lang)
 		count = count+1
 	if len(noTranslation):
 		# Translators: title of dialog
-		dialogTitle = _("Creation  of localization manifest.ini file")
+		dialogTitle = _("Creation of localization manifest.ini file")
 		# Translators: message to user.
-		missingTranslationMsg=_("Some translation strings are missing for \"%s\" language")%lang
-		gui.messageBox(missingTranslationMsg, dialogTitle,wx.OK)
-	
+		missingTranslationMsg = _("Some translation strings are missing for \"%s\" language") % lang  # noqa:E501
+		gui.messageBox(missingTranslationMsg, dialogTitle, wx.OK)
 	if count:
-		# Translators:  message to user to report number of translated manifest.ini  files.
-		msg = _("%s localization manifest.ini files  created")%count
+		# Translators: message to user
+		# to report number of translated manifest.ini files.
+		msg = _("%s localization manifest.ini files created") % count
 	else:
 		# Translators: message to user to report no translated manifest.ini file .
 		msg = _("No localization manifest.ini file created")
-	gui.messageBox(msg, dialogTitle,wx.OK)
+	gui.messageBox(msg, dialogTitle, wx.OK)
 	# clean up
 	clean(addon)
+
+
 def _generatePOTFile(addon):
-	addonSummary= addon.manifest["summary"]
+	addonSummary = addon.manifest["summary"]
 	# Translators: title of dialog
-	dialogTitle = _("Creation of POT file of %s add-on")%addonSummary
+	dialogTitle = _("Creation of POT file of %s add-on") % addonSummary
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad (buildVars)
-
-
+		reLoad(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
-		# Translators: message to user.
-		gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
-		return
-	potFileName = "%s-%s.pot"%(buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
 
-	retval = generatePotFile(addon, potFileName, buildVars.addon_info, buildVars.i18nSources)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: buildVars.py file is not found"),
+			dialogTitle, wx.OK)
+		return
+	potFileName = "%s-%s.pot" % (
+		buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
+
+	retval = generatePotFile(
+		addon, potFileName, buildVars.addon_info, buildVars.i18nSources)
 	if retval == 0:
-		msg = _("%s file created")%potFileName
+		msg = _("%s file created") % potFileName
 	else:
 		if retval == -1:
-			msg = _("Impossible to create POT file: no source file defined in buildVars.py")
+			msg = _("Impossible to create POT file: no source file defined in buildVars.py")  # noqa:E501
 		else:
-			msg  = _("Impossible to create POT file")
-	gui.messageBox(msg, dialogTitle,wx.OK)
+			msg = _("Impossible to create POT file")
+	gui.messageBox(msg, dialogTitle, wx.OK)
 	# clean up
 	clean(addon)
 
 
 def getManifest(addon):
-	manifest_path = os.path.join(addon.path, addonHandler.MANIFEST_FILENAME )
+	manifest_path = os.path.join(addon.path, addonHandler.MANIFEST_FILENAME)
 	if os.path.exists(manifest_path):
 		with open(manifest_path) as f:
 			manifest = addonHandler.AddonManifest(f)
 			return manifest
 	return None
 
+
 def _prepareAddon(addon):
-	addonSummary= addon.manifest["summary"]
+	addonSummary = addon.manifest["summary"]
 	# Translators: title of dialog
-	dialogTitle = _("Prepare %s add-on")%addonSummary
+	dialogTitle = _("Prepare %s add-on") % addonSummary
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad (buildVars)
+		reLoad(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
-		# Translators: message to user.
-		gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: buildVars.py file is not found"),
+			dialogTitle, wx.OK)
 		return
 	# start
 	speech.speakMessage(_("Prepare add-on start"))
-	th = runInThread.RepeatBeep(delay = 2.0, beep = (200,200), isRunning= None)
-	th.start()	
-	#update of main manifest.ini file
-	dest= os.path.join(addon.path, "manifest.ini")
-	templateFile = os.path.join(_curModuleFilePath , "manifest.ini.tpl")
+	th = runInThread.RepeatBeep(delay=2.0, beep=(200, 200), isRunning=None)
+	th.start()
+	# update of main manifest.ini file
+	dest = os.path.join(addon.path, "manifest.ini")
+	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
 		manifest_template = f.read()
-	buildVarsInfos = {}
 	addonInfo = buildVars.addon_info.copy()
 	generateManifest(dest, addonInfo, manifest_template)
 	textList = []
 	# Translators: part of message to report update of manifest.ini file
 	textList.append(_("Manifest.ini file updated"))
 	# update or creation of all translated manifest.ini files
-	templateFile = os.path.join(_curModuleFilePath , "manifest-translated.ini.tpl")
+	templateFile = os.path.join(_curModuleFilePath, "manifest-translated.ini.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
 		manifest_template = f.read()
-	localeDir= os.path.join(addon.path, "locale")
+	localeDir = os.path.join(addon.path, "locale")
 	manifest = getManifest(addon)
 	if manifest is None:
-		# Translators: message to user.
-		gui.messageBox(_("Error: %s file is not found")%addonHandler.MANIFEST_FILENAME ,  dialogTitle,wx.OK)
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: %s file is not found") % addonHandler.MANIFEST_FILENAME,
+			dialogTitle, wx.OK)
 	else:
-		if  os.path.exists(localeDir):
+		if os.path.exists(localeDir):
 			langs = os.listdir(localeDir)
 			count = 0
 
 			noTranslations = []
 			for lang in langs:
-				moFile =  os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
-				if  not os.path.exists(moFile):
+				moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
+				if not os.path.exists(moFile):
 					continue
-				if not generateTranslatedManifest(addon, manifest, lang, manifest_template ):
+				if not generateTranslatedManifest(
+					addon, manifest, lang, manifest_template):
 					noTranslations.append(lang)
-				count +=1
+				count += 1
 			if count:
 				# Translators: message to user to report number of created files.
-				msg =  _("%s localization manifest.ini files created or updated")%count
+				msg = _("%s localization manifest.ini files created or updated") % count
 				if len(noTranslations):
 					text = ", ".join(noTranslations)
-					log .warning("generateTranslatedManifest: no translation for language: %s"%text)
+					log .warning("generateTranslatedManifest: no translation for language: %s" % text)  # noqa:E501
 					# Translators: message to user to report missing translated strings.
-					msg = msg + _("But for this languages  translated string are missing: %s")%text
+					msg = msg + _("But for this languages translated string are missing: %s") % text  # noqa:E501
 				textList.append(msg)
-	#convert all doc files to html
+	# convert all doc files to html
 	if "doc" in os.listdir(addon.path):
 		docFolder = os.path.join(addon.path, "doc")
 		dirList = os.listdir(docFolder)
 		docDirs = []
 		for item in dirList:
-			theDir = os.path.join(docFolder,item)
+			theDir = os.path.join(docFolder, item)
 			if os.path.isdir(theDir):
 				docDirs.append(theDir)
 		(mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
-		cnt = mdCount +t2tCount
-		if cnt== 0:
+		cnt = mdCount + t2tCount
+		if cnt == 0:
 			# Translators: message to user to report no document converted
 			msg = _("No html file converted")
-		elif cnt== 1:
+		elif cnt == 1:
 			# Translators: message to user to report only one document converted to html
 			msg = _("one file converted")
 		else:
-			# Translators: message to user to report number of documents converted to html
-			msg = _("%s files converted")%cnt
-			msg = _("%s HTML files created")%cnt
+			# Translators: message to user to report number of
+			# documents converted to html
+			msg = _("%s files converted") % cnt
+			msg = _("%s HTML files created") % cnt
 		textList.append(msg)
 
 	# create pot file
 	from .gettextTools import generatePotFile
-	potFileName = "%s-%s.pot"%(buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
-	retval = generatePotFile(addon, potFileName, buildVars.addon_info, buildVars.i18nSources)
+	potFileName = "%s-%s.pot" % (
+		buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
+	retval = generatePotFile(
+		addon, potFileName, buildVars.addon_info, buildVars.i18nSources)
 	if retval == 0:
-		msg = _("%s file created")%potFileName
+		msg = _("%s file created") % potFileName
 	else:
-		msg  = _("Impossible to create POT file")
+		msg = _("Impossible to create POT file")
 	textList.append(msg)
 	# compile all .po files
 	(count, nbOfPoFiles) = compilePoFiles(addon)
 	# Translators: message to report number of po files compiled.
-	msg = _("{count} poFiles compiled on {nb}").format(count = count, nb = nbOfPoFiles)
+	msg = _("{count} poFiles compiled on {nb}").format(
+		count=count, nb=nbOfPoFiles)
 	textList.append(msg)
-	
-	#""" Creates the bundle 
+	# """ Creates the bundle
 	bundleName = createAddonBundleFromPath(addon)
 	if bundleName is None:
-		# Translators: message to report that add-on bundle  is not created.
+		# Translators: message to report that add-on bundle is not created.
 		msg = _("Add-on bundle could not be created")
 	else:
 		# Translators: message to report add-on bundle file.
-		msg = _("The {name} file has been created and recorded in {dir} folder").format(name = bundleName, dir = addon.path)
+		msg = _("The {name} file has been created and recorded in {dir} folder")\
+			.format(name=bundleName, dir=addon.path)
 	textList.append(msg)
 	text = "\r\n".join(textList)
 	# Translators: message to user
-	msg = _("Completed")+ "\r\n\r\n"+text
+	msg = _("Completed") + "\r\n\r\n" + text
 	th.stop()
-	wx.CallAfter(gui.messageBox, msg, dialogTitle,wx.OK)
-	#clean up
+	wx.CallAfter(gui.messageBox, msg, dialogTitle, wx.OK)
+	# clean up
 	clean(addon)
 
 
 def _createBuildVarsFile(addon):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of buildVars.py file")
-	templateFile = os.path.join(_curModuleFilePath , "buildVars.py.tpl")
+	templateFile = os.path.join(_curModuleFilePath, "buildVars.py.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
 		buildVars_template = f.read()
-	
-	manifest_path = os.path.join(addon.path, addonHandler.MANIFEST_FILENAME )
+	manifest_path = os.path.join(addon.path, addonHandler.MANIFEST_FILENAME)
 	if not os.path.exists(manifest_path):
-		# Translators: message to user.
-		gui.messageBox(_("Error: %s file is not found")%addonHandler.MANIFEST_FILENAME ,  dialogTitle,wx.OK)
+
+		gui.messageBox(
+			# Translators: message to user.
+			_("Error: %s file is not found") % addonHandler.MANIFEST_FILENAME,
+			dialogTitle, wx.OK)
 		return
 	with open(manifest_path) as f:
 		manifest = addonHandler.AddonManifest(f)
-	
-	
-	dest= os.path.join(addon.path, "buildVars.py")
+	dest = os.path.join(addon.path, "buildVars.py")
 	if os.path.exists(dest):
 		# Translators: message to user.
 		msg = _("Warning: buildVars.py already exist. Do you want to replace it ?")
-		if gui.messageBox(msg, dialogTitle,wx.YES|wx.NO) == wx.NO:
+		if gui.messageBox(msg, dialogTitle, wx.YES | wx.NO) == wx.NO:
 			return
 
-	default_vars= {
+	default_vars = {
 		"name": "addonTemplate",
 		"summary": "Add-on user visible name",
-		"description": """Description for the add-on.
-		It can span multiple lines.""",
+		"description": """Description for the add-on. It can span multiple lines.""",  # noqa:E501
 		"version": "x.y",
 		"author": _unicode("name <name@domain.com>"),
 		"url": None,
@@ -570,31 +612,31 @@ def _createBuildVarsFile(addon):
 		if manifest[var] is None:
 			continue
 		if type(manifest[var]) == tuple:
-			l = [ str(x) for x in manifest[var]]
-			vars[var]  = ".".join(l)
+			tempList = [str(x) for x in manifest[var]]
+			vars[var] = ".".join(tempList)
 			continue
 		vars[var] = manifest[var]
-	buildVars  = buildVars_template.format(**vars)
+	buildVars = buildVars_template.format(**vars)
 	buildVars = buildVars.replace("\"None\"", "None")
 	buildVars = buildVars.replace("_(\"\"\"None\"\"\")", "None")
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(buildVars)
 	# Translators message to user to report buildVars.py has been created
 		msg = _("buildVars.py file created")
-	gui.messageBox(msg, dialogTitle,wx.OK)
-	#clean up
+	gui.messageBox(msg, dialogTitle, wx.OK)
+	# clean up
 	clean(addon)
-	
+
 
 class ToolsForAddonDialog(wx.Dialog):
 	_instance = None
 	title = None
-	
+
 	def __new__(cls, *args, **kwargs):
 		if ToolsForAddonDialog._instance is not None:
 			return ToolsForAddonDialog._instance
 		return super(ToolsForAddonDialog, cls).__new__(cls, *args, **kwargs)
-	
+
 	def __init__(self, parent, addonsList):
 		if ToolsForAddonDialog._instance is not None:
 			return
@@ -602,74 +644,88 @@ class ToolsForAddonDialog(wx.Dialog):
 		# Translators: This is the title of the dialog
 		dialogTitle = _("Tools for add-on developpement")
 		title = ToolsForAddonDialog.title = makeAddonWindowTitle(dialogTitle)
-		super(ToolsForAddonDialog, self).__init__(parent,-1,title, style = wx.CAPTION|wx.CLOSE_BOX|wx.TAB_TRAVERSAL)
+		super(ToolsForAddonDialog, self).__init__(
+			parent, -1, title, style=wx.CAPTION | wx.CLOSE_BOX | wx.TAB_TRAVERSAL)
 		self.addonsList = addonsList
 		languageNames = languageHandler.getAvailableLanguages()
 		self.languages = {x[0]: x[1] for x in languageNames}
 		self.doGui()
 
-	
 	@classmethod
 	def getAddonsList(self):
-		return [addon for addon in addonHandler.getAvailableAddons() ]
+		return [addon for addon in addonHandler.getAvailableAddons()]
 
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# the addons list
 		# Translators: This is a label appearing on Convert to HTML dialog.
-		labelText=_("&Add-ons:")
-		addonNamesList = ["%s %s"%(addon.manifest["summary"], addon.manifest["version"]) for addon in self.addonsList]
-		self.addonsListBox =sHelper.addLabeledControl(labelText, wx.ListBox, id = wx.ID_ANY, name= "addons",choices = addonNamesList)
+		labelText = _("&Add-ons:")
+		addonNamesList = ["%s %s" % (addon.manifest["summary"], addon.manifest["version"]) for addon in self.addonsList]  # noqa:E501
+		self.addonsListBox = sHelper.addLabeledControl(
+			labelText, wx.ListBox, id=wx.ID_ANY, name="addons", choices=addonNamesList)
 		self.addonsListBox.SetSelection(0)
-		bHelper= gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators:  this is a label appearing on tools for add-on dialog
-		updateVersionButton= bHelper.addButton(self, label  = _("Update add-on &version"))
-		# Translators:  this is a label appearing on tools for add-on dialog
-		updateManifestIniButton= bHelper.addButton(self, label  = _("&Update manifest.ini file"))
-		# Translators:  this is a label appearing on tools for add-on dialog
-		createPOTFileButton= bHelper.addButton(self, label  = _("Create P&OT file"))
-		# Translators:  this is a label appearing on tools for add-on dialog
-		prepareAddonButton= bHelper.addButton(self, label  = _("&Prepare addon"))
+		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
+		# Translators: this is a label appearing on tools for add-on dialog
+		updateVersionButton = bHelper.addButton(
+			self, label=_("Update add-on &version"))
+
+		updateManifestIniButton = bHelper.addButton(
+			self,
+			# Translators: this is a label appearing on tools for add-on dialog
+			label=_("&Update manifest.ini file"))
+		createPOTFileButton = bHelper.addButton(self, label=_("Create P&OT file"))
+		# Translators: this is a label appearing on tools for add-on dialog
+		prepareAddonButton = bHelper.addButton(self, label=_("&Prepare addon"))
 		sHelper.addItem(bHelper)
 		# Translators: This is a label appearing on Convert to HTML dialog.
-		labelText=_("&Languages:")
+		labelText = _("&Languages:")
 		langs = []
-		self.languagesListBox =sHelper.addLabeledControl(labelText, wx.ListBox,id = wx.ID_ANY, name= "languages",choices = langs)
+		self.languagesListBox = sHelper.addLabeledControl(
+			labelText, wx.ListBox, id=wx.ID_ANY, name="languages", choices=langs)
 		self.updateLanguagesListBox()
-		bHelper= gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators:  this is a label appearing on tools for add-on dialog
-		createLocaleManifestIniButton= bHelper.addButton(self, label  = _("Create &localization manifest.ini file"))
-		# Translators:  this is a label appearing on tools for add-on dialog
-		createHTMLDocumentationButton= bHelper.addButton(self, label  = _("Create &HTML documentation files"))
-		# Translators:  this is a label appearing on tools for add-on dialog
-		createBuildVarsFileButton= bHelper.addButton(self, label  = _("Create &buildVars file"))
-		# Translators:  this is a label appearing on tools for add-on dialog
-		exploreAddonFolderButton= bHelper.addButton(self, label  = _("&Explore add-on folder"))
+		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
+		# Translators: this is a label appearing on tools for add-on dialog
+		createLocaleManifestIniButton = bHelper.addButton(
+			self, label=_("Create &localization manifest.ini file"))
+		# Translators: this is a label appearing on tools for add-on dialog
+		createHTMLDocumentationButton = bHelper.addButton(
+			self, label=_("Create &HTML documentation files"))
+		# Translators: this is a label appearing on tools for add-on dialog
+		createBuildVarsFileButton = bHelper.addButton(
+			self, label=_("Create &buildVars file"))
+		# Translators: this is a label appearing on tools for add-on dialog
+		exploreAddonFolderButton = bHelper.addButton(
+			self, label=_("&Explore add-on folder"))
 		sHelper.addItem(bHelper)
-		bHelper = sHelper.addDialogDismissButtons(gui.gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
-		cancelButton= bHelper.addButton(self, id = wx.ID_CANCEL)
-		mainSizer.Add(sHelper.sizer, border=gui.guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)
+		bHelper = sHelper.addDialogDismissButtons(
+			gui.gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
+		cancelButton = bHelper.addButton(self, id=wx.ID_CANCEL)
+		mainSizer.Add(
+			sHelper.sizer, border=gui.guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)
 		mainSizer.Fit(self)
 		self.SetSizer(mainSizer)
 		# Events
 		self.addonsListBox.Bind(wx.EVT_LISTBOX, self.onSelectAddon)
 		cancelButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
-		createBuildVarsFileButton.Bind(wx.EVT_BUTTON, self.onCreateBuildVarsFileButton)
+		createBuildVarsFileButton.Bind(
+			wx.EVT_BUTTON, self.onCreateBuildVarsFileButton)
 		updateManifestIniButton.Bind(wx.EVT_BUTTON, self.onUpdateManifestIniButton)
-		createLocaleManifestIniButton.Bind(wx.EVT_BUTTON, self.onCreateLocaleManifestIniButton)
-		createHTMLDocumentationButton.Bind(wx.EVT_BUTTON, self.oncreateHTMLDocumentationButton)
+		createLocaleManifestIniButton.Bind(
+			wx.EVT_BUTTON, self.onCreateLocaleManifestIniButton)
+		createHTMLDocumentationButton.Bind(
+			wx.EVT_BUTTON, self.oncreateHTMLDocumentationButton)
 		createPOTFileButton.Bind(wx.EVT_BUTTON, self.oncreatePOTFileButton)
 		prepareAddonButton.Bind(wx.EVT_BUTTON, self.onPrepareAddonButton)
 		exploreAddonFolderButton.Bind(wx.EVT_BUTTON, self.onExploreAddonFolderButton)
 		updateVersionButton.Bind(wx.EVT_BUTTON, self.onUpdateVersionButton)
 		self.SetEscapeId(wx.ID_CANCEL)
-	
+
 	def updateLanguagesListBox(self):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		localeLanguages = getLocaleLanguages(addon)
-		#choice = [self.languages[x] for x in self.localeLanguages]
+		# choice = [self.languages[x] for x in self.localeLanguages]
 		choice = []
 		self.localeLanguages = []
 		for lang in localeLanguages:
@@ -682,53 +738,53 @@ class ToolsForAddonDialog(wx.Dialog):
 		self.languagesListBox.AppendItems(choice)
 		if len(choice):
 			self.languagesListBox.SetSelection(0)
-	
+
 	def Destroy(self):
 		ToolsForAddonDialog._instance = None
 		super(ToolsForAddonDialog, self).Destroy()
-	
+
 	def onSelectAddon(self, event):
 		self.updateLanguagesListBox()
 		event.Skip()
 
-	
 	def onCreateBuildVarsFileButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		_createBuildVarsFile(addon)
-	
-	
+
 	def onUpdateManifestIniButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
-		_makeMainManifestIni( addon)
+		_makeMainManifestIni(addon)
+
 	def onCreateLocaleManifestIniButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		index = self.languagesListBox.GetSelection()
 		lang = self.localeLanguages[index]
 		_makeLocaleManifestIni(addon, lang)
-	
+
 	def oncreateHTMLDocumentationButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		index = self.languagesListBox.GetSelection()
 		lang = self.localeLanguages[index]
-		_makeHTML(addon,lang)
-		if  self.languagesListBox.Count>1:
+		_makeHTML(addon, lang)
+		if self.languagesListBox.Count > 1:
 			self.languagesListBox.SetFocus()
 		else:
 			self.addonsListBox.SetFocus()
+
 	def oncreatePOTFileButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		_generatePOTFile(addon)
-	
+
 	def onPrepareAddonButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		_prepareAddon(addon)
-	
+
 	def onExploreAddonFolderButton(self, event):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
@@ -739,42 +795,51 @@ class ToolsForAddonDialog(wx.Dialog):
 		else:
 			# for python 2
 			path = addon.path.encode("mbcs")
-		cmd = "explorer \"{path}\"" .format(path = path)
+		cmd = "explorer \"{path}\"" .format(path=path)
 		wx.CallLater(300, subprocess.call, cmd, shell=True)
 		self.Close()
+
 	def updateAddonVersion(self, addon, oldVersion, newVersion):
 		# Translators: title of dialog
 		dialogTitle = _("Update add-on version")
-		buildVarsFile= os.path.join(addon.path, "buildVars.py")
+		buildVarsFile = os.path.join(addon.path, "buildVars.py")
 		if not os.path.exists(buildVarsFile):
-			# Translators: message to user.
-			gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
+			gui.messageBox(
+				# Translators: no comment
+				_("Error: buildVars.py file is not found"),
+				dialogTitle, wx.OK)
 			return
 		buildVarsList = []
-		buildVars = codecs.open( buildVarsFile , "r","utf_8",errors="replace")
+		buildVars = codecs.open(buildVarsFile, "r", "utf_8", errors="replace")
 		for line in buildVars:
 			buildVarsList.append(line)
 		buildVars.close()
-	
-		match = "\"addon_version\"" 
+		match = "\"addon_version\""
 		found = False
-		for line in  buildVarsList:
+		for line in buildVarsList:
 			if match in line:
 				found = True
 				break
 		if not found:
-			# Translators: message to user add-on version line not found
-			gui.messageBox(_("Error: buildVars.py file has no add-on version line"),  dialogTitle,wx.OK)			
+			gui.messageBox(
+				# Translators: message to user add-on version line not found
+				_("Error: buildVars.py file has no add-on version line"),
+				dialogTitle, wx.OK)
 			return
 		index = buildVarsList.index(line)
 		buildVarsList[index] = line.replace(oldVersion, newVersion)
-		dest = codecs.open(buildVarsFile,"w","utf_8",errors="replace")
+		dest = codecs.open(buildVarsFile, "w", "utf_8", errors="replace")
 		for line in buildVarsList:
 			dest.write(line)
 		dest.close()
 		# Translators: message to user add-on version has been updated.
-		gui.messageBox(_("Version of buildVars.py file has been updated"),  dialogTitle,wx.OK)			
-	
+		gui.messageBox(
+			# Translators: message to user  updating add-on's version
+			# of buildVars.py file.
+			_("Version of buildVars.py file has been updated"),
+			dialogTitle,
+			wx.OK)
+
 	def onUpdateVersionButton(self, evt):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
@@ -788,33 +853,37 @@ class ToolsForAddonDialog(wx.Dialog):
 		except ImportError:
 			del sys.path[-1]
 			# Translators: message to user.
-			gui.messageBox(_("Error: buildVars.py file is not found"),  dialogTitle,wx.OK)
+			gui.messageBox(
+				# Translators: message to user buildVars.py file is not found.
+				_("Error: buildVars.py file is not found"),
+				dialogTitle,
+				wx.OK)
 			return
 		version = buildVars.addon_info["addon_version"]
-		with wx.TextEntryDialog(self, 
+		with wx.TextEntryDialog(
+			self,
 			# Translators: Message to show on the dialog.
 			_("Entry add-on version:"),
-			# Translators: This is a title  of text control  of dialog box in   Manage Symbols Dialog.
+			# Translators: This is a title of text control
+			# in dialog box in Manage Symbols Dialog.
 			_("Update add-on version"),
 			"") as entryDialog:
 			entryDialog.SetValue(version)
 			if entryDialog.ShowModal() != wx.ID_OK:
 				return
-			newVersion= entryDialog.Value
-
+			newVersion = entryDialog.Value
 			self.updateAddonVersion(addon, version, newVersion)
-	
+
 	@classmethod
 	def run(cls):
 		if isOpened(cls):
 			return
 		addonsList = cls.getAddonsList()
 		if len(addonsList) == 0:
-			speech.speakMessage (_("No add-on installed"))
+			speech.speakMessage(_("No add-on installed"))
 			return
 		gui.mainFrame.prePopup()
-		d =   cls(gui.mainFrame, addonsList)
+		d = cls(gui.mainFrame, addonsList)
 		d.CentreOnScreen()
 		d.Show()
 		gui.mainFrame.postPopup()
-

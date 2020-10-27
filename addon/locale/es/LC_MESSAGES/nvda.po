@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2020-08-05 09:50+0200\n"
-"PO-Revision-Date: 2020-08-05 10:12+0200\n"
+"POT-Creation-Date: 2020-10-14 17:47+0200\n"
+"PO-Revision-Date: 2020-10-14 17:51+0200\n"
 "Last-Translator: Rémy Ruiz <remyruiz@gmail.com>\n"
 "Language-Team: Rémy Ruiz <remyruiz@gmail.com>\n"
 "Language: es\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: utilitiesPy2\n"
 "X-Poedit-SearchPathExcluded-2: utilitiesPy3\n"
 
-#: buildVars.py:17
+#: buildVars.py:23
 msgid "NVDA global commands extension"
 msgstr "Extensión de las órdenes básicas de NVDA"
 
-#: buildVars.py:20
+#: buildVars.py:27
 msgid ""
 "This add-on has been developed with the participation of Daniel Poiraud.\n"
 "It adds to NVDA:\n"
@@ -68,15 +68,15 @@ msgid ""
 "\n"
 "* history of voice speechs,\n"
 "* renaming keyboard keys,\n"
-"* selective announcement of  command keyboard keys ,\n"
+"* selective announcement of command keyboard keys ,\n"
 "* simple countdown timer,\n"
 "* display of visible elements making up the object in the foreground,\n"
 "* fast switching of voice profile,\n"
 "* remanence of the modifier keys,\n"
 "* shutdown, reboot or hybernate the computer,\n"
 "* control the main or NVDA volume:\n"
-"\t* mute or unmute volume  for the focused application,\n"
-"\t* establishment of the main Windows  or NVDA volume at the start  of add-"
+"\t* mute or unmute volume for the focused application,\n"
+"\t* establishment of the main Windows or NVDA volume at the start of add-"
 "on,\n"
 "\t* modification of main volume or audio stream's volume of focused "
 "application.\n"
@@ -88,11 +88,12 @@ msgid ""
 "2- The options\n"
 "* remove the announcement from the description of the objects in the Windows "
 "ribbons ,\n"
-"* proclaim the word focused when deleting a word,\n"
+"* proclaim the word focused when deleting a word (for NVDA versions lower "
+"than 2020.3),\n"
 "* automatically maximize the foreground window,\n"
 "* announce punctuations and symbols when moving by word in a document.\n"
 "\n"
-"3-  The advanced options\n"
+"3- The advanced options\n"
 "* report, with a sound, the registration of an error in the NVDA log also "
 "for the final versions and release candidate of NVDA,\n"
 "* Caption dialog title with the name of the addon,\n"
@@ -162,7 +163,8 @@ msgstr ""
 "2- Las opciones:\n"
 "* Eliminar el anuncio de la descripción de los objetos en las cintas de "
 "Windows,\n"
-"* Anunciar la palabra enfocada durante la eliminación de palabras,\n"
+"* Anunciar la palabra enfocada durante la eliminación de palabras (para las "
+"versiones de NVDA anteriores a la 2020.3),\n"
 "* Maximizar automáticamente la ventana en primer plano,\n"
 "* Anunciar la puntuación y los símbolos al moverse por palabras.\n"
 "\n"
@@ -176,113 +178,113 @@ msgstr ""
 "\n"
 "\n"
 "4- Varios otros elementos:\n"
-"* Presentación del formato de texto en un cuadro de edición,\n"
+"* Presentación del formato de texto en un cuadro de diálogo,\n"
 "* Submenú para explorar las carpetas programa NVDA o configuración de "
 "usuario,\n"
 "* Script para reiniciar rápidamente NVDA.\n"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:90
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:89
 msgid "Help for Complex symbols edition"
 msgstr "Ayuda para la composición de símbolos complejos"
 
 #: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:111
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:310
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:325
 msgid "&Categories:"
 msgstr "&Categorías:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:123
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:323
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:125
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:339
 msgid "S&ymbols:"
 msgstr "Sí&mbolos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:129
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:607
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:139
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:666
 msgid "&Copy to clipboard"
 msgstr "&Copiar al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:131
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:609
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:142
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:669
 msgid "&Past"
 msgstr "&Pegar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:135
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:149
 msgid "&Manage yours symbols"
 msgstr "&Gestionar tus símbolos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:199
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:223
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:410
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:634
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:654
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:215
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:238
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:441
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:698
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:717
 msgid "No symbol selected"
 msgstr "No hay ningún símbolo seleccionado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:211
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:643
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:226
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:707
 #, python-brace-format
 msgid "{0} pasted"
 msgstr "{0} pegado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:233
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:247
 msgid "Symbol cannot copied to the clipboard"
 msgstr "El símbolo no puede copiarse al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:236
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:663
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:250
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:726
 #, python-brace-format
 msgid "{0} copied"
 msgstr "{0} copiado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:269
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:282
 msgid "Error: no basic symbols installed"
 msgstr "Error: no hay símbolos básicos instalados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:271
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:284
 msgid "Warning"
 msgstr "Advertencia"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:285
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:298
 msgid "User symbols manager"
 msgstr "Administrador de símbolos del usuario"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:329
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:353
 msgid "&Add a symbol"
 msgstr "&Añadir un símbolo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:331
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:356
 msgid "&Delete the symbol"
 msgstr "&Eliminar el símbolo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:333
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:359
 msgid "Add a &category"
 msgstr "Añadir una &categoría"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:335
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:363
 msgid "De&lete the category"
 msgstr "E&liminar la categoría"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:340
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:370
 msgid "&Save"
 msgstr "&Guardar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:419
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:453
 #, python-format
 msgid "%s symbol deleted"
 msgstr "El símbolo %s ha sido eliminado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:428
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:461
 msgid "No symbol entered"
 msgstr "Ningún símbolo introducido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:432
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:468
 msgid "Symbol is not valid"
 msgstr "El símbolo introducido no es válido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:436
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:475
 msgid "There is no description for the symbol"
 msgstr "No hay ninguna descripción para el símbolo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:445
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:484
 #, python-format
 msgid ""
 "The symbol is allready in this category under \"%s\" description. Do you "
@@ -291,18 +293,18 @@ msgstr ""
 "El símbolo ya está dentro de esta categoría bajo la descripción \"%s\". "
 "¿Quieres reemplazarlo?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:447
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:455
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:514
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:673
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:531
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:638
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:670
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:684
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:486
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:494
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:562
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:736
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:589
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:675
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:714
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:727
 msgid "Confirmation"
 msgstr "Confirmación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:453
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:492
 #, python-brace-format
 msgid ""
 "The symbol is allready in {oldCat} category. Do you want to add this symbol "
@@ -311,160 +313,161 @@ msgstr ""
 "El símbolo ya está en la categoría {oldCat}. ¿Deseas añadir este símbolo en "
 "la categoría {newCat}?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:476
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:516
 #, python-format
 msgid "%s symbol has been added"
 msgstr "Se ha añadido el símbolo %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:483
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:523
 msgid "Entry category name:"
 msgstr "Introducir el nombre de la categoría:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:485
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:526
 msgid "Adding category"
 msgstr "Añadir categoría"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:492
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:537
 #, python-format
 msgid "%s category allready exists"
 msgstr "La categoría %s ya existe"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:507
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:555
 msgid "You cannot delete this basic category."
 msgstr "No puedes eliminar esta categoría básica"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:512
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:560
 msgid "Do you vwant realy delete this category and all its symbols ?"
 msgstr "¿Realmente deseas eliminar esta categoría y todos sus símbolos?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:526
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:577
 #, python-format
 msgid "%s category has been deleted"
 msgstr "La categoría %s ha sido eliminada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:539
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:590
 #, python-format
 msgid "Adding Symbol in %s category"
 msgstr "Añadiendo un símbolo a la categoría %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:546
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:599
 msgid "Enter the Symbol:"
 msgstr "Introducir el símbolo:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:549
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:603
 msgid "Enter the Description:"
 msgstr "Introducir la descripción:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:577
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:633
 msgid "Last used complex symbols"
 msgstr "Últimos símbolos complejos compuestos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:592
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:649
 msgid "&Symbols:"
 msgstr "&Símbolos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:612
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:673
 msgid "&Delete all"
 msgstr "&Eliminar todo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:671
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:734
 msgid "Do you want really delete all symbols of the list"
 msgstr "¿Realmente deseas eliminar todos los símbolos de la lista?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:687
+#: globalPlugins/NVDAExtensionGlobalPlugin/ComplexSymbols/__init__.py:750
 msgid "There is no symbol recorded"
 msgstr "No hay ningún símbolo registrado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:34
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:37
 msgid "NVDA logs management"
 msgstr "Gestión de los registros de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:44
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:48
 msgid "Open current &log"
 msgstr "Abrir el &registro actual"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:46
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:51
 msgid "Open &old log"
 msgstr "Abrir el registro &anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:48
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:55
 msgid "Copy log &path to clipboard"
 msgstr "Copia la &ruta del registro actual al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:70
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:896
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:84
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:999
 msgid "Open Error"
 msgstr "Error al abrir el archivo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:74
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:892
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:89
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:991
 msgid "Current log file can not be opened"
 msgstr "El archivo de registro actual no se puede abrir"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:80
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:889
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:97
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:987
 msgid "Previous log file can not be opened"
 msgstr "El archivo de registro anterior no se puede abrir"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:89
-msgid "Current log file  path  copied to clipboard"
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:106
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:980
+msgid "Current log file path copied to clipboard"
 msgstr "La ruta del archivo de registro actual se ha copiado al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:91
-msgid "Current log file  path   cannot be copied to clipboard"
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:108
+msgid "Current log file path   cannot be copied to clipboard"
 msgstr ""
 "La ruta del archivo de registro actual no se puede copiar al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:96
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:747
-#: globalPlugins/NVDAExtensionGlobalPlugin/utils/__init__.py:115
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/__init__.py:149
+#: globalPlugins/NVDAExtensionGlobalPlugin/NVDALogs/__init__.py:113
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:791
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/__init__.py:136
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/__init__.py:151
 #, python-format
 msgid "%s dialog is allready open"
 msgstr "El diálogo %s ya está abierto"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:30
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:25
 msgid "Start menu|Charm Bar"
 msgstr "Menú Inicio|Charm Bar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:87
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:80
 msgid "Windows'list"
 msgstr "Lista de ventanas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:115
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:109
 msgid "Minimized"
 msgstr "Minimizado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:119
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:113
 msgid "Maximized"
 msgstr "Maximizado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:128
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:123
 msgid "Current &applications"
 msgstr "&Aplicaciones actuales"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:135
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:140
 msgid "&Switch to"
 msgstr "Ca&mbiar a"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:138
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:147
 msgid "&Destroy"
 msgstr "&Destruir"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:184
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:196
 msgid "Impossible to destroy desktop window"
 msgstr "¡No es posible destruir la ventana del escritorio!"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:198
-#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:214
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:209
+#: globalPlugins/NVDAExtensionGlobalPlugin/activeWindowsListReport/__init__.py:226
 msgid "Impossible to destroy the window"
 msgstr "No es posible destruir la ventana"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:35
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:34
 msgid "moves to the next paragraph"
 msgstr "Ir al párrafo siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:37
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:36
 msgid "no next paragraph"
 msgstr "No hay ningún párrafo siguiente"
 
@@ -476,370 +479,370 @@ msgstr "Ir al párrafo anterior"
 msgid "no previous paragraph"
 msgstr "No hay ningún párrafo anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:44
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:47
 msgid "moves to the next division"
 msgstr "Ir a la división siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:46
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:49
 msgid "no next division"
 msgstr "No hay ninguna división siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:48
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:52
 msgid "moves to the previous division"
 msgstr "Ir a la división anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:50
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:54
 msgid "no previous division"
 msgstr "No hay ninguna división anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:53
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:60
 msgid "moves to the next main landmark"
 msgstr "Ir a la región principal siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:55
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:62
 msgid "no next main landmark"
 msgstr "No hay ninguna región principal siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:57
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:65
 msgid "moves to the previous main landmark"
 msgstr "Ir a la región principal anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:59
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:67
 msgid "no previous main landmark"
 msgstr "No hay ninguna región principal anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:63
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:74
 msgid "moves to the next clickable element"
 msgstr "Ir al elemento cliqueable siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:65
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:76
 msgid "no next clickable element"
 msgstr "No hay ningún elemento cliqueable siguiente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:67
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:79
 msgid "moves to the previous clickable element"
 msgstr "Ir al elemento cliqueable anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:69
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:81
 msgid "no previous clickable element"
 msgstr "No hay ningún elemento cliqueable anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:114
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:138
 msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:117
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:142
 msgid "Cannot copy to clipboard"
 msgstr "No se puede copiar al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:127
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:151
 msgid "Report document 's address (URL). Twice: copy it to clipboard"
 msgstr ""
 "Anunciar la dirección (URL) del documento. Pulsando dos veces: para copiarla "
 "al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:151
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:179
 msgid "Return to bottom of page"
 msgstr "Volver al final de la página"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:155
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/__init__.py:184
 msgid "Return to top of page"
 msgstr "Volver al inicio de la página"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:37
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:224
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:30
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:270
 msgid "No label"
 msgstr "Sin etiqueta"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:240
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:28
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:450
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:44
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:308
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:27
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:453
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:53
 msgid "Link"
 msgstr "Enlace"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:243
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:31
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:453
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:311
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:30
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:456
 msgid "Heading"
 msgstr "Encabezado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:246
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:34
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:456
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:314
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:33
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:459
 msgid "Form field"
 msgstr "Campo de formulario"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:249
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:37
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:459
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:28
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:317
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:36
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:462
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:29
 msgid "Button"
 msgstr "Botón"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:252
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:40
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:462
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:320
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:39
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:465
 msgid "Landmark"
 msgstr "Región"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:255
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:43
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:465
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:323
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:42
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:468
 msgid "Radio button"
 msgstr "Botón de opción"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:258
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:46
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:468
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:326
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:45
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:471
 msgid "Paragraph"
 msgstr "Párrafo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:261
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:55
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:477
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:30
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:329
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:54
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:480
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:32
 msgid "Check box"
 msgstr "Casilla de verificación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:264
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:58
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:480
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:332
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:57
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:483
 msgid "Combo box"
 msgstr "Cuadro combinado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:267
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:26
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:61
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:483
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:335
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:18
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:60
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:486
 msgid "Table"
 msgstr "Tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:271
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:67
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:489
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:32
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:339
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:66
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:492
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:35
 msgid "Edit"
 msgstr "Campo de edición"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:274
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:70
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:492
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:342
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:69
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:495
 msgid "List"
 msgstr "Lista"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:277
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:79
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:501
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:345
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:78
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:504
 msgid "Graphic"
 msgstr "Gráfico"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:281
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:85
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:507
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/browseModeUIAEx.py:349
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:84
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:510
 msgid "Separator"
 msgstr "Separador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:98
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:105
 msgid "Report current table row's cells"
 msgstr "Anunciar las celdas en la fila actual de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:104
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:111
 msgid "Report current table column's cells"
 msgstr "Anunciar las celdas en la columna actual de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:141
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:160
 msgid "Move to and report next table row"
 msgstr "Ir a la siguiente fila de la tabla y anunciar las celdas de la misma"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:147
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:167
 msgid "Move to and report previous table row"
 msgstr "Ir a la fila anterior de la tabla y anunciar las celdas de la misma"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:153
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:174
 msgid "Move to and report next table column"
 msgstr ""
 "Ir a la siguiente columna de la tabla y anunciar las celdas de la misma"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:160
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:181
 msgid "Move to and report previous table column"
 msgstr "Ir a la columna anterior de la tabla y anunciar las celdas de la misma"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:183
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:209
 msgid "Report current table cell position"
 msgstr "Anunciar la posición de la celda actual de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:189
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:215
 msgid "Move to first cell of table row"
 msgstr "Ir a la primera celda de la fila de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:196
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:222
 msgid "Move to last cell of table row"
 msgstr "Ir a la última celda de la fila de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:202
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:229
 msgid "Move to first cell of table column"
 msgstr "Ir a la primera celda de la columna de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:208
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/documentBaseEx.py:236
 msgid "Move to last cell of table column"
 msgstr "Ir a la última celda de la columna de la tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:49
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:471
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:48
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:474
 msgid "Frame"
 msgstr "Marco"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:52
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:474
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:51
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:477
 msgid "Division"
 msgstr "División"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:64
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:486
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:63
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:489
 msgid "Blocquote"
 msgstr "Cita"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:73
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:495
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:72
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:498
 msgid "List item"
 msgstr "Elemento de lista"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:76
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:498
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:75
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:501
 msgid "Anchor"
 msgstr "Ancla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:82
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:504
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:81
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:507
 msgid "Embedded object"
 msgstr "Objeto integrado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:238
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:264
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:255
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:316
 #, python-format
 msgid "%s elements"
 msgstr "%s elementos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:238
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:264
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:255
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:316
 msgid "One element"
 msgstr "Un elemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:242
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:267
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:261
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:319
 msgid "no element"
 msgstr "Ningún elemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:510
+#: globalPlugins/NVDAExtensionGlobalPlugin/browseModeEx/elementsList.py:513
 msgid "Clickable"
 msgstr "Cliqueable"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:64
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:75
 msgid "Cut"
 msgstr "Cortar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:66
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:77
 msgid "Paste"
 msgstr "Pegar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:68
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:79
 msgid "Copy"
 msgstr "Copiar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:70
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:81
 msgid "UnDo"
 msgstr "Deshacer"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:72
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:83
 msgid "select all"
 msgstr "seleccionar todo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:311
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:345
 msgid " one selected object"
 msgstr "un objeto seleccionado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:314
+#: globalPlugins/NVDAExtensionGlobalPlugin/clipboardCommandAnnouncement/__init__.py:348
 #, python-format
 msgid "%s selected objects"
 msgstr "%s objetos seleccionados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:131
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:140
 msgid "Keys's remanence activation on"
 msgstr "Remanencia de teclas activada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:137
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:146
 msgid "Keys's remanence activation off"
 msgstr "Remanencia de teclas desactivada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:250
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:278
 msgid "Standard use of the numeric keypad enabled"
 msgstr "Uso estándar del teclado numérico habilitado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:253
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:281
 msgid "Standard use of the numeric keypad disabled"
 msgstr "Uso estándar del teclado numérico deshabilitado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:413
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:448
 msgid "Command keys selective Announcement"
 msgstr "Anuncio selectivo de teclas de órdenes"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:482
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:522
 msgid "Check &excluded keys:"
 msgstr "Marcar las teclas &excluidas:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:495
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:537
 msgid "W&ith key combination:"
 msgstr "Con la comb&inación de teclas:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:526
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:582
 msgid "Do not speak command &keys"
 msgstr "No verbalizar las &teclas de órdenes"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:529
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:586
 #, python-format
 msgid "Do you want save changes made in \"%s\" mode"
 msgstr "¿Deseas guardar los cambios hechos en el modo \"%s\"?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:642
-#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:663
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:700
+#: globalPlugins/NVDAExtensionGlobalPlugin/commandKeysSelectiveAnnouncementAndRemanence/__init__.py:719
 msgid "No more checked command key"
 msgstr "No hay más teclas de órdenes marcadas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:39
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:32
 msgid "Computer's shut down"
 msgstr "Apagado del ordenador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:49
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:43
 msgid "&Hibernate"
 msgstr "&Hibernar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:51
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:46
 msgid "&Shutdown"
 msgstr "&Apagar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:53
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:49
 msgid "&Reboot"
 msgstr "&Reiniciar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:56
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:53
 msgid "F&orce running programs to close without warning"
 msgstr "F&orzar programas en ejecución para cerrar sin previo aviso"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:62
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_gui.py:59
 #, python-brace-format
 msgid "&Delay befor shutdown or reboot between {min} and {max} seconds"
 msgstr "&Duración antes de apagar o reiniciar entre {min} y {max} segundos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:26
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:27
 msgid "Shut down ..."
 msgstr "Apagar ..."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:34
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:37
 msgid "Computer's rebooting ..."
 msgstr "Reinicio del ordenador ..."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:68
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/shutdown_util.py:79
 msgid "Hibernate isn't available. Sleep mode is activated."
 msgstr "Como no se permite hibernar, el modo suspender se activa."
 
@@ -855,65 +858,65 @@ msgstr "Volumen deshabilitado"
 msgid "No audio controller for this application"
 msgstr "No hay controlador de audio para esta aplicación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:138
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1035
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:147
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1153
 msgid "Unavailable for NVDA"
 msgstr "No disponible para NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:162
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:202
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:171
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:211
 msgid "stronger"
 msgstr "más fuerte"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:166
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:206
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:175
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:215
 msgid "strongest"
 msgstr "menos fuerte"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:170
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:210
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:179
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:219
 msgid "max"
 msgstr "al máximo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:174
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:214
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:183
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:223
 msgid "min"
 msgstr "al mínimo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:223
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:232
 msgid "At maximum"
 msgstr "al máximo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:226
+#: globalPlugins/NVDAExtensionGlobalPlugin/computerTools/volumeControl.py:235
 msgid "At minimum"
 msgstr "al mínimo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:26
 msgid "Open"
 msgstr "Abrir"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:26
 msgid "Save"
 msgstr "Guardar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:26
 msgid "Save as"
 msgstr "Guardar como"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:25
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:26
 msgid "Find in"
 msgstr "Buscar en"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:53
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:63
 msgid "Selected folder name not found"
 msgstr "No se pudo encontrar el nombre de la carpeta"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:61
+#: globalPlugins/NVDAExtensionGlobalPlugin/currentFolder/__init__.py:71
 #, python-format
 msgid "Folder %s"
 msgstr "Carpeta %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:24
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:23
 msgid "Keyboard Key renaming"
 msgstr "Renombrar las teclas del teclado"
 
@@ -921,7 +924,7 @@ msgstr "Renombrar las teclas del teclado"
 msgid "NVDA defined key labels:"
 msgstr "Etiquetas definidas en NVDA:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:45
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:49
 msgid "Modified label:"
 msgstr "Etiqueta de reemplazo:"
 
@@ -930,7 +933,7 @@ msgid "&Modify"
 msgstr "&Modificar"
 
 #: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:63
-#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:40
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:49
 msgid "&Remove"
 msgstr "&Eliminar"
 
@@ -938,195 +941,191 @@ msgstr "&Eliminar"
 msgid "R&emove al"
 msgstr "E&liminar todo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:113
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:114
 #, python-format
 msgid "Redefined in %s"
 msgstr "Redefinido en %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:137
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:138
 msgid "Entry new label:"
 msgstr "Introducir la etiqueta de reemplazo:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:139
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:140
 msgid "Key label redifinition"
 msgstr "Redefinición de etiqueta"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:147
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:168
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:148
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:167
 msgid "New name is removed"
 msgstr "La etiqueta de reemplazo está eliminada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:152
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:153
 msgid "No modification"
 msgstr "Ninguna modificación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:176
+#: globalPlugins/NVDAExtensionGlobalPlugin/keyboardKeyRenaming/__init__.py:175
 msgid "All replacement labels have been removed"
 msgstr "Todas las etiquetas de reemplazo han sido eliminadas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:60
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:65
 #, python-format
 msgid "End duration in %s minutes"
 msgstr "Final de la duración en %s minutos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:60
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:66
 msgid "End duration inone minute"
 msgstr "Final de la duración en un minuto"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:75
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:83
 msgid "End ofduration"
 msgstr "Final de la duración"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:105
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:114
 msgid "Launch of the Minute timer"
 msgstr "Ejecutar el temporizador de minutos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:116
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:127
 msgid "Enter the minute timer &duration (in minutes):"
 msgstr "Introducir la &duración del temporizador de minutos (en minutos):"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:120
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:132
 msgid "Enter the &annonce to be spoken at the end of duration:"
 msgstr ""
 "Introducir el &anuncio para mostrar cuando finalice el temporizador de "
 "minutos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:125
-msgid "Delayto be alerted before ending (in minutes):"
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:138
+msgid "Delay to be alerted before ending (in minutes):"
 msgstr ""
 "Duración en el que debe notificarse antes de que finalice el temporizador de "
 "minutos (en minutos):"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:131
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:147
 msgid "Ring's &Options"
 msgstr "&Opciones del tono de campanadas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:167
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:185
 msgid "Duration is not valid"
 msgstr "La duración no es válida"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:176
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:195
 msgid ""
 "The Delay to be notified before duration ending must be smaller than duration"
 msgstr ""
 "La duración en el que debe notificarse antes de que finalice el temporizador "
 "de minutos debe ser más corto que la duración del temporizador de minutos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:185
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:205
 #, python-format
 msgid "Minute timer started for %s minutes"
 msgstr "El temporizador de minutos se inició por %s minutos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:209
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:227
 msgid "Ring options "
 msgstr "Opciones del tono de campanadas "
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:224
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:244
 msgid "&Number of rings:"
 msgstr "&Número de tonos de campanadas:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:231
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:252
 msgid "&Delay between rings (in miliseconds):"
 msgstr "&Duración entre los tonos de campanadas (en milisegundos):"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:269
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:292
 msgid "Current minute timer"
 msgstr "Temporizador de minutos actual"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:280
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:304
 msgid "Remaining duration:"
 msgstr "Duración restante:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:286
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:313
 msgid "&Stop"
 msgstr "&Detener"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:315
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:344
 msgid "Minute timer is stopped"
 msgstr "El temporizador de minutos se detuvó"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:328
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:359
 #, python-format
 msgid "%s seconds"
 msgstr "%s segundos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:331
+#: globalPlugins/NVDAExtensionGlobalPlugin/minuteTimer/__init__.py:362
 #, python-brace-format
 msgid "{minutes} minutes {seconds}"
 msgstr "{minutes} minutos {seconds}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:34
-#, python-format
-msgid "Text's alignment: %s"
-msgstr "Alineación del texto: %s"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:52
-#, python-format
-msgid "Color: %s"
-msgstr "Color: %s"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:61
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:66
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:71
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:76
-#, python-format
-msgid "Attributes: %s"
-msgstr "Atributos: %s"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:99
-#, python-format
-msgid "Vertical alignment: %s"
-msgstr "Alineación vertical: %s"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:106
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:18
 msgid "Font:"
 msgstr "Fuente:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:110
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:22
 #, python-format
 msgid "Family: %s"
 msgstr "Familia: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:115
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:27
 #, python-format
 msgid "Name: %s"
 msgstr "Nombre: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:121
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:33
 #, python-format
 msgid "Size: %s"
 msgstr "Tamaño: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:146
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:81
+#, python-format
+msgid "Text's alignment: %s"
+msgstr "Alineación del texto: %s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:135
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:140
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:145
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:150
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:155
+#, python-format
+msgid "Attributes: %s"
+msgstr "Atributos: %s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:181
+#, python-format
+msgid "Vertical alignment: %s"
+msgstr "Alineación vertical: %s"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:198
 #, python-format
 msgid "Position: %s"
 msgstr "Posición: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:165
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:253
 #, python-format
 msgid "Paragraph's indentation:%s"
 msgstr "Sangría del párrafo: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:196
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:285
 #, python-format
 msgid "style: %s"
 msgstr "Estilo: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:224
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:310
 #, python-format
 msgid "Line spacing: %s"
 msgstr "Espaciado de línea: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:244
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:329
 #, python-format
 msgid "Indentations: %s"
 msgstr "Indentaciones: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:251
+#: globalPlugins/NVDAExtensionGlobalPlugin/reportFormatting/__init__.py:336
 msgid "Formatting's Informations"
 msgstr "Información de formato"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:186
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:252
 #, python-format
 msgid ""
 "The configuration file of %s addon contains errors. The addon configuration "
@@ -1136,7 +1135,7 @@ msgstr ""
 "configuración del complemento se ha restablecido a los valores "
 "predeterminados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:249
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:321
 #, python-format
 msgid ""
 "The old configuration file of %s addon contains errors. It's not possible to "
@@ -1145,15 +1144,15 @@ msgstr ""
 "El archivo de la configuración anterior del complemento %s contiene errores. "
 "No es posible conservar la configuración anterior"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:315
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:393
 msgid ""
-"The add-on configuration will be reset to factory values and NVDA  will be "
+"The add-on configuration will be reset to factory values and NVDA will be "
 "restarted. Would you like to continue ?"
 msgstr ""
 "La configuración del complemento será completamente restablecido a los "
 "valores de fábrica y NVDA será reiniciado. ¿Deseas continuar?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:316
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/__init__.py:394
 msgid "Configuration reset"
 msgstr "Reinicialización de la configuración"
 
@@ -1174,252 +1173,252 @@ msgid "Don't forget to save the configuration for the changes to take effect !"
 msgstr ""
 "¡No olvide guardar la configuración para que los cambios surtan efecto!"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:41
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:42
 msgid "features's installation"
 msgstr "Instalación de las funcionalidades"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:47
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:50
 msgid "Do not install"
 msgstr "No instalar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:48
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:51
 msgid "Install"
 msgstr "Instalar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:49
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:52
 msgid "Install without gesture"
 msgstr "Instalar sin gesto de entrada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:54
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:57
 msgid "Display &systray icons and running application windows lists:"
 msgstr ""
 "Mostrar los iconos en la bandeja del &sistema y la lista de ventanas de las "
 "aplicaciones lanzadas:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:58
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:61
 msgid "&complex symbols edition help:"
 msgstr "&Ayuda para la composición de símbolos complejos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:62
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:65
 msgid "&Focused Application's informations:"
 msgstr "Información sobre la aplicación en&focada:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:66
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:69
 msgid "&Extended Virtual Buffer:"
 msgstr "&Extensión de la funcionalidad del modo exploración:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:70
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:73
 msgid "c&lipboard command announcement:"
 msgstr "Anuncio de la funcionalidad asociada a &las órdenes de edición:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:74
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:77
 msgid "C&urrent folder report:"
 msgstr ""
 "Anuncio de la carpeta preseleccionada en &cuadros de diálogo de estilo "
 "Abrir, Guardar, Guardar como:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:78
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:81
 msgid "&NVDA's log Files:"
 msgstr "Archivos de registro de &NVDA:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:82
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:85
 msgid "Speech &history:"
 msgstr "&Historial de los anuncios del habla:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:86
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:89
 msgid "&Keyboard Key renaming:"
 msgstr "Renombrar &teclas del teclado:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:90
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:93
 msgid "C&ommand keys selective announcement:"
 msgstr "Anuncio selectiv&o de teclas de órdenes:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:94
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:97
 msgid "Minute &timer:"
 msgstr "&Temporizador de minutos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:98
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:101
 msgid "NVDA's &restart:"
 msgstr "&Reinicio de NVDA:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:102
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:105
 msgid "Display visible items making up the foreground &object:"
 msgstr ""
 "Mostrar los elementos visibles que componen el &objeto en primer plano:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:106
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:109
 msgid "&Voice profil switching:"
 msgstr "&Cambio de perfil de voz:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:110
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:113
 msgid "Ke&ys's remanence:"
 msgstr "Remanencia de las t&eclas:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:114
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:117
 msgid "Volu&me's control:"
 msgstr "Co&ntrol de sonido:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:118
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:121
 msgid "&Developpement's tools"
 msgstr "Herramientas de &desarrollo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:122
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:125
 msgid "Date and time - supplements"
 msgstr "Fecha y hora - suplementos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:224
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:225
 msgid "NVDA enhancements"
 msgstr "Suplementos a NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:233
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:235
 msgid "Editing"
 msgstr "Edición"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:237
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:242
 msgid "&Report next word on deletion"
 msgstr "&Anunciar la palabra enfocada después de una eliminación de palabras"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:241
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:252
 msgid "maximum number of last &used symbols recorded:"
 msgstr "Número máximo de últimos símbolos &compuestos registrados:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:251
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:261
 msgid "Cursor's moving"
 msgstr "Movimiento del cursor"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:255
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:265
 msgid "&Punctuation/symbol level on word movement:"
 msgstr "Nivel de símbolos y &puntuación al moverse por palabra:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:260
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:270
 msgid "Current configuration profil's level"
 msgstr "Nivel de perfil de configuración actual"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:269
-#: globalPlugins/NVDAExtensionGlobalPlugin/speechHistory/__init__.py:106
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:278
+#: globalPlugins/NVDAExtensionGlobalPlugin/speechHistory/__init__.py:115
 msgid "Speech history"
 msgstr "Historial de los anuncios del habla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:273
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:282
 msgid "&Number the records "
 msgstr "&Numerar los registros del historial de los anuncios del habla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:277
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:286
 msgid "&Display records in ascending order"
 msgstr ""
 "&Mostrar los registros del historial de los anuncios del habla en órden "
 "ascendente"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:286
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:293
 msgid "Browser"
 msgstr "Navegador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:290
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:297
 msgid "Na&vigate in loop"
 msgstr "Navegar en &bucle"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:323
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:327
 msgid "Computer"
 msgstr "Ordenador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:330
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:336
 msgid "Windows"
 msgstr "Windows"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:334
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:340
 msgid "&No object description inWindows ribbons"
 msgstr "&No anunciar la descripción de los objetos en las cintas de Windows"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:338
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:346
 msgid "Automatically &maximize windows"
 msgstr "Maximizar auto&máticamente las ventanas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:342
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:350
 msgid "Report &windows clock's time with seconds"
 msgstr "Anunciar la hora del reloj de &Windows con los segundos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:349
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:63
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:357
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:57
 msgid "Volume control"
 msgstr "Control de sonido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:353
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:361
 msgid "Main and NVDA"
 msgstr "Sonido principal y de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:357
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:365
 msgid "Set on &volume at the loading of the add-on"
 msgstr "Ajustar automáticamente el &sonido al cargar el complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:361
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:369
 msgid "Main volume"
 msgstr "Volumen principal"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:365
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:373
 msgid "&Threshold of recovery of the volume:"
 msgstr "&Umbral de restablecimiento del volumen:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:370
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:378
 msgid "&Recovery level:"
 msgstr "&Nivel de restablecimiento:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:374
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:382
 msgid "NVDA volume"
 msgstr "Volumen de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:378
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:386
 msgid "Th&reshold of recovery of the volume:"
 msgstr "De esta forma se restablecerá el umb&ral del volumen:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:382
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:390
 msgid "R&ecovery level:"
 msgstr "&Nivel de restablecimiento:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:386
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:394
 msgid "Volume c&hange"
 msgstr "&Cambio de volumen"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:390
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:398
 msgid "Ste&ps's size:"
 msgstr "Tamaño de los &pasos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:395
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:403
 msgid "R&eport volume changes"
 msgstr "Anunciar &los cambios de volumen"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:436
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:441
 msgid "advanced"
 msgstr "Avanzadas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:440
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:444
 msgid "For No NVDA's version"
 msgstr "Para ninguna versión de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:442
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:446
 msgid "For Only the NVDA's snapshot versions"
 msgstr "Solo para versiones de desarrollo de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:444
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:448
 msgid "Only until the next NVDA restart"
 msgstr "Hasta el próximo reinicio de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:446
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:450
 msgid "For all NVDA's versions"
 msgstr "Para todas las versiones de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:458
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:461
 msgid "&Play sound on logged errors:"
 msgstr "&Reproducir un sonido al escribir un error en el registro:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:462
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:465
 msgid "&Title dialog with add-on name"
 msgstr "&Titular los diálogos con el nombre del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:466
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:469
 msgid "&Delay between repeat of same gesture:"
 msgstr "&Duración de repetición del mismo gesto de entrada:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:473
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:475
 msgid ""
 "&Do not take account of the option called Report object descriptions during "
 "the display of the dialog box style confirmation"
@@ -1427,82 +1426,84 @@ msgstr ""
 "&No tomar en cuenta la opción Anunciar descripciones de objeto al mostrar "
 "los diálogos de estilo de confirmación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:501
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:502
 msgid "Keyboard"
 msgstr "Teclado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:514
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:511
 msgid "Keys's remanence"
 msgstr "Remanencia de las teclas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:518
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:515
 msgid "&Only NVDA key in remanence"
 msgstr "&Solo la tecla NVDA está en remanencia"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:522
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:519
 msgid "Activate &remanence at NVDA's start"
 msgstr "Activar la &remanencia de las teclas cuando se inicia NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:526
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:523
 msgid "&Remanence's delay (in milliseconds):"
 msgstr "Duración de la &remanencia (en milisegundos):"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:532
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:530
 msgid "Play &sound at the start of remanence"
 msgstr "Emitir un pitido al &inicio de la remanencia de una tecla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:536
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:534
 msgid "Play sound at the &end of remanence"
 msgstr "Emitir un pitido al &final de la remanencia de una tecla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:540
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:538
 msgid "Special remanence for &Gmail.com"
 msgstr "Remanencia específica para &Gmail.com"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:547
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:545
 msgid "Numeric keypad"
 msgstr "Teclado numérico"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:551
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:549
 msgid "&allow the standard use of the numeric keypad"
 msgstr "Permitir el &uso estándar del teclado numérico"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:555
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:553
 msgid "&Enable the standard use of the numeric keypad at NVDA's start"
 msgstr "Hab&ilitar el uso estándar del teclado numérico cuando se inicia NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:559
-msgid "&Enable / disable numeric keypad's standard use  with num lock key"
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:557
+msgid "&Enable / disable numeric keypad's standard use with num lock key"
 msgstr ""
 "Habilitar o deshabilitar el us&o estándar de teclado numérico con la tecla "
 "bloqueo numérico"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:599
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:104
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:593
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:105
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:105
 msgid "Update"
 msgstr "Actualización"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:608
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:602
 msgid "Automatically check for &updates "
 msgstr "Buscar automáticamente &actualizaciones"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:612
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:606
 msgid "Update also release versions to &developpement versions"
 msgstr "Actualizar también versiones estable hacia versiones de &desarrollo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:616
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:610
 msgid "&Check for update"
 msgstr "&Buscar actualización"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:658
+#: globalPlugins/NVDAExtensionGlobalPlugin/settings/dialog.py:662
 msgid "Parameters"
 msgstr "Parámetros"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/speechHistory/__init__.py:109
+#: globalPlugins/NVDAExtensionGlobalPlugin/speechHistory/__init__.py:121
 msgid "Records:"
 msgstr "Registrados:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:113
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:119
 msgid ""
 "The current configuration of the \"Voice profile switching\"feature is not "
 "compatible with this add-on's version, All selectors have been released and "
@@ -1513,11 +1514,11 @@ msgstr ""
 "selectores y se han eliminado los perfiles de voz. Lo siento por los "
 "inconvenientes ocasionados."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:115
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:121
 msgid "warning"
 msgstr "Advertencia"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:214
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:217
 #, python-brace-format
 msgid ""
 "Impossible, the synthetizer of voice profile {voiceProfileName} associated "
@@ -1526,109 +1527,109 @@ msgstr ""
 "Imposible, el sintetizador de perfil de voz {voiceProfileName} asociado con "
 "el selector {selector} no está instalado. ¿Quieres liberar este selector?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:216
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:219
 msgid "Synthetizer error"
 msgstr "Error de Sintetizador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:223
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:259
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:226
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:265
 #, python-brace-format
 msgid "Selector {selector}: {name}"
 msgstr "Selector {selector}: {name}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:256
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:262
 msgid "no other selector set to voice profile"
 msgstr "Ningún otro selector está asociado con un perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:263
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:270
 msgid "no selector set to voice profile"
 msgstr "Ningún selector está asociado con un perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:271
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:364
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1128
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:276
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:371
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1255
 #, python-format
 msgid "Selector %s is free"
 msgstr "El selector %s está libre"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:306
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:556
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:311
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:587
 msgid "yes"
 msgstr "sí"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:306
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:556
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:311
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:587
 msgid "no"
 msgstr "no"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:354
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:361
 #, python-brace-format
 msgid "{name} voice profile set to selector {selector}"
 msgstr "Perfil de voz {name} asociado al selector {selector}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:374
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:380
 msgid "all selectors are freed from their vocal profile"
 msgstr "Todos los selectores están libres de su perfil de voz asociado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:427
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:436
 #, python-format
-msgid "Voice profile selectors's Management  of profile %s"
+msgid "Voice profile selectors's Management of profile %s"
 msgstr "Administrar los selectores del perfil de voz del perfil de %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:435
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:445
 msgid "&Selectors"
 msgstr "&Selectores"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:456
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:699
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:469
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:741
 msgid "free"
 msgstr "libre"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:491
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:505
 msgid "&Use selectors associated under normal cconfiguration's profile"
 msgstr "&Usar los selectores asociados en el perfil de configuración normal"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:504
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:525
 msgid "&Activate voice profile"
 msgstr "&Activar el perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:506
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:529
 msgid "A&ssociate voice profile"
 msgstr "A&sociar el perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:508
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:532
 msgid "&Modify voice profile"
 msgstr "&Modificar el perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:510
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:535
 msgid "&Free selector"
 msgstr "&Liberar el selector"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:512
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:538
 msgid "&Free all selectors"
 msgstr "Li&berar todos los selectores"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:514
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:542
 msgid "Voice profile's &informations"
 msgstr "&Información del perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:562
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:592
 msgid "Automatic language switching (when supported)"
 msgstr "Cambio automático de idioma (cuando esté soportado)"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:563
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:593
 msgid "Automatic dialect switching (when supported)"
 msgstr "Cambio automático de dialecto (cuando esté soportado)"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:564
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:594
 msgid "Punctuation/symbol level"
 msgstr "Nivel de Puntuación y símbolos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:565
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:595
 msgid "Trust voice's language when processing characters and symbols"
 msgstr "Confiar en el idioma de la voz al procesar caracteres y símbolos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:566
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:596
 msgid ""
 "Include Unicode Consortium data (including emoji) when processing characters "
 "and symbols"
@@ -1636,52 +1637,52 @@ msgstr ""
 "Incluir datos Unicode Consortium (incluyendo emoji) al procesar caracteres y "
 "símbolos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:569
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:599
 msgid "Capital pitch change percentage"
 msgstr "Porcentaje de Cambio en el tono para Mayúsculas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:570
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:600
 msgid "Say cap before capitals"
 msgstr "Decir mayus antes de mayúsculas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:571
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:601
 msgid "Beep for capitals"
 msgstr "Pitar para mayúsculas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:572
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:602
 msgid "Use spelling functionality if supported"
 msgstr "Utilizar funcionalidad de deletreo si está soportada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:578
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:608
 #, python-format
 msgid "selector: %s"
 msgstr "selector: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:579
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:611
 #, python-format
 msgid "Voice profile name: %s"
 msgstr "Nombre del perfil de voz: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:582
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:616
 #, python-format
 msgid "Associated under %s configuration profile"
 msgstr "Asociado bajo el perfil de configuración %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:584
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:620
 #, python-format
 msgid "Synthetizer: %s"
 msgstr "Sintetizador: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:586
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:624
 #, python-format
 msgid "Output device: %s"
 msgstr "Dispositivo de Salida: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:613
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:651
 msgid "Voice profile 's informations"
 msgstr "Información del perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:636
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:673
 #, python-brace-format
 msgid ""
 "Selector {selector} is already set to {voiceProfileName} voice profile. Do "
@@ -1691,7 +1692,7 @@ msgstr ""
 "{voiceProfileName}. ¿Deseas reemplazar este perfil de voz con el perfil de "
 "voz actual?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:668
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:712
 #, python-brace-format
 msgid ""
 "Do you want realy free selector {selector} associated to voice profile "
@@ -1700,63 +1701,63 @@ msgstr ""
 "¿Seguro que quieres eliminar la asociación entre el selector {selector} y el "
 "perfil de voz {voiceProfileName}?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:682
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:725
 msgid ""
 "Do you want realy free all selectors set to this configuration profile ?"
 msgstr ""
 "¿Realmente deseas eliminar todas las asociaciones entre el selector y el "
 "perfil de voz?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:760
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:805
 msgid "Modify voice profile "
 msgstr "Modificar el perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:769
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:817
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:815
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:873
 msgid "voice profile name:"
 msgstr "Nombre del perfil de voz:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:774
 #: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:822
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:880
 msgid "&Default"
 msgstr "Pre&determinado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:793
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:872
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:848
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:936
 msgid "You must set the name of voice profile"
 msgstr "Debes dar un nombre al perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:802
+#: globalPlugins/NVDAExtensionGlobalPlugin/switchVoiceProfile/__init__.py:857
 msgid "Voice profile association"
 msgstr "Asociación de perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:33
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:34
 msgid "NVDA - System tray icons 's list"
 msgstr "NVDA - Lista de iconos en la bandeja del sistema"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:43
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:45
 msgid "&Icons"
 msgstr "&Iconos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:51
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:116
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:59
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:156
 msgid "&Right click"
 msgstr "Simple clic &derecho"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:54
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:113
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:63
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:153
 msgid "&Left click"
 msgstr "Simple clic &izquierdo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:56
-msgid "Dou&ble  left click"
+#: globalPlugins/NVDAExtensionGlobalPlugin/systemTrayIconsList/__init__.py:67
+msgid "Dou&ble left click"
 msgstr "Do&ble clic izquierdo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:61
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:55
 msgid "Switch voice profile"
 msgstr "Cambiar el perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:212
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:209
 msgid ""
 "Display the running application windows's list with opportunity to put one "
 "of them on the foreground or destroy it"
@@ -1764,11 +1765,11 @@ msgstr ""
 "Mostrar la lista de ventanas de las aplicaciones lanzadas con la posibilidad "
 "de cambiar a una de ellas o destruirla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:214
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:212
 msgid "Shows the list of buttons on the System Tray"
 msgstr "Mostrar la lista de iconos en la bandeja del sistema"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:217
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:216
 msgid "Display dialog to shut down, reboot or hibernate the computer"
 msgstr "Mostrar el diálogo para apagar, reiniciar o hibernar el ordenador"
 
@@ -1776,44 +1777,44 @@ msgstr "Mostrar el diálogo para apagar, reiniciar o hibernar el ordenador"
 msgid "Shutt down the computer"
 msgstr "Apagar el ordenador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:221
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:222
 msgid "Reboot the computer"
 msgstr "Reiniciar el ordenador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:223
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:225
 msgid "Hibernate the computer"
 msgstr "Hibernar el ordenador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:225
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:228
 msgid "Allow you to copy or type complex symbol"
 msgstr ""
 "Componer un símbolo complejo como por ejemplo una vocal acentuada, un "
 "símbolo matemático"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:227
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:231
 msgid "Display the list of last used symbols"
 msgstr "Mostrar la lista de los últimos símbolos complejos compuestos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:229
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:234
 msgid "Display the list's visible items making up current foreground object"
 msgstr "Mostrar los elementos visibles que componen el objeto en primer plano"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:231
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:237
 msgid "If pressed twice: display the list's visible items making up it"
 msgstr ""
 "Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto "
 "en primer plano"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:235
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:242
 #, python-brace-format
 msgid "{systrayIconsDoc}. Twice, {activeWindowsDoc}"
 msgstr "{systrayIconsDoc}. Pulsando dos veces, {activeWindowsDoc}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:237
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:245
 msgid "Report the application 's name and version"
 msgstr "Anunciar el nombre y el número de versión de la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:239
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:248
 msgid ""
 "Speaks the filename of the active application along with the name of the "
 "currently loaded appModule python file. Pressing this key twice,speak the "
@@ -1823,7 +1824,7 @@ msgstr ""
 "del módulo python cargado. Pulsando dos veces: anunciar el nombre y el "
 "estado del perfil de configuración"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:241
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:251
 msgid ""
 "Report the name and version number of add-on activated for focused "
 "application"
@@ -1831,11 +1832,11 @@ msgstr ""
 "Anunciar el nombre y el número de versión del complemento activado para la "
 "aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:243
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:254
 msgid "Display informations about the focused application"
 msgstr "Mostrar información acerca de la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:245
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:257
 msgid ""
 "Display dialog to start the minute timer.If minute timer already started, "
 "display dialog to report duration "
@@ -1844,19 +1845,19 @@ msgstr ""
 "sea para iniciarlo o si no para consultar la duración restante o para "
 "detenerlo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:247
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:260
 msgid "Display add-on user's guide"
 msgstr "Mostrar la guía del usuario del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:249
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:263
 msgid "Display commands shell's list"
 msgstr "Mostrar la lista de órdenes del intérprete del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:251
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:266
 msgid "Open a dialog to manage NVDA logs"
 msgstr "Mostrar el diálogo para administrar los registros de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:253
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:269
 msgid ""
 "Open current NVDA log file. Pressing this key twice, open the old NVDA log "
 "file. Pressing third, copy current log path to the clipboard"
@@ -1865,7 +1866,7 @@ msgstr ""
 "registro. Pulsando tres veces: copiar la ruta del registro actual al "
 "portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:255
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:272
 msgid ""
 "report the name of current selected folder in the open or Save dialog box. "
 "Twice: report full path"
@@ -1873,40 +1874,40 @@ msgstr ""
 "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de "
 "estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:257
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:275
 msgid ""
 "report the name of current selected folder in the open or Save dialog box"
 msgstr ""
 "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de "
 "estilo Abrir, Guardar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:259
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:278
 msgid ""
-"report the full path  of current selected folder in the open or Save dialog "
+"report the full path of current selected folder in the open or Save dialog "
 "box"
 msgstr ""
 "Anunciar la ruta completa de la carpeta seleccionada en cuadros de diálogo "
 "de estilo Abrir, Guardar"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:261
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:281
 msgid "Explor my user configuration's folder"
 msgstr "Abrir en el explorador mi carpeta de configuración"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:263
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:284
 msgid "Explore NVDA programs's folder"
 msgstr "Abrir en el explorador la carpeta del programa NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:265
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:287
 msgid "display speech history records"
 msgstr "Mostrar los registros del historial de los anuncios del habla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:267
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:290
 msgid "Report previous record of the speech history and copy it to clipboard"
 msgstr ""
 "Anunciar el registro anterior del historial de los anuncios del habla y "
 "cópiarlo al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:269
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:293
 msgid ""
 "Report current record of the speech history and copy it to clipboard. Twice: "
 "display speech history"
@@ -1915,27 +1916,27 @@ msgstr ""
 "cópiarlo al portapapeles. Pulsando dos veces: para mostrar todo el historial "
 "de los anuncios del habla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:271
-msgid "Report next record of the speech history and copy it  to clipboard"
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:296
+msgid "Report next record of the speech history and copy it to clipboard"
 msgstr ""
 "Anunciar el siguiente registro del historial de los anuncios del habla y "
 "cópiarlo al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:273
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:299
 msgid "Restart NVDA. Twice: restart with log levelset to debug"
 msgstr ""
 "Reiniciar NVDA. Pulsando dos veces: reiniciar con el nivel de registro en "
 "depuración"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:275
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:302
 msgid "Toggle voice profile switch mode"
 msgstr "Alternar el modo de cambio de perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:277
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:305
 msgid "Display dialog to manage voice profile selectors"
 msgstr "Mostrar el diálogo para administrar los selectores de perfil de voz"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:279
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:308
 msgid ""
 "Go backward to the first selector associated to a voice profile and set this "
 "voice profile as current voice profile"
@@ -1943,7 +1944,7 @@ msgstr ""
 "Ir al primer selector siguiente asociado con un perfil de voz y configurar "
 "este perfil de voz como un perfil de voz actual"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:281
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:311
 msgid ""
 "Go to forward to the first selector associated to a voice profile and set "
 "this voice profile as current voice profile"
@@ -1951,15 +1952,15 @@ msgstr ""
 "Ir al primer selector anterior asociado con un perfil de voz y configurar "
 "este perfil de voz como un perfil de voz actual"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:283
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:314
 msgid "Display keyboard key renaming dialog"
 msgstr "Mostrar el diálogo Renombrar teclas del teclado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:285
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:317
 msgid "Display command key selective announcement dialog"
 msgstr "Mostrar el diálogo Anuncio selectivo de teclas de órdenes"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:287
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:320
 msgid ""
 "Reports the current time. Twice, reports the current date. Third: copy date "
 "and time to the clipboard"
@@ -1967,11 +1968,11 @@ msgstr ""
 "Anunciar la hora actual. Pulsando dos veces, anunciar la fecha actual. "
 "Pulsando tres veces: copiar la fecha y hora al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:289
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:323
 msgid "Copy date and time to the clipboard"
 msgstr "Copiar fecha y hora al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:291
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:326
 msgid ""
 "Display formatting info for the current review cursor position within a "
 "document in dialog box"
@@ -1979,16 +1980,12 @@ msgstr ""
 "Mostrar información de formato para la posición actual del cursor de "
 "revisión dentro de un documento en el cuadro de diálogo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:293
-msgid "Toggle current application's volume mute"
-msgstr "Silenciar o reestablecer el sonido para la aplicación actual"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:295
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:329
 #, python-format
-msgid "Launch  %s commands's shell"
+msgid "Launch %s commands's shell"
 msgstr "Ejecutar el intérprete  de órdenes del %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:297
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:332
 msgid ""
 "Set selector 1 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -1996,7 +1993,7 @@ msgstr ""
 "Establezca el selector 1 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:299
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:335
 msgid ""
 "Set selector 2 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2004,7 +2001,7 @@ msgstr ""
 "Establezca el selector 2 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:301
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:338
 msgid ""
 "Set selector 3 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2012,7 +2009,7 @@ msgstr ""
 "Establezca el selector 3 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:303
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:341
 msgid ""
 "Set selector 4 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2020,7 +2017,7 @@ msgstr ""
 "Establezca el selector 4 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:305
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:344
 msgid ""
 "Set selector 5 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2028,7 +2025,7 @@ msgstr ""
 "Establezca el selector 5 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:307
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:347
 msgid ""
 "Set selector 6 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2036,7 +2033,7 @@ msgstr ""
 "Establezca el selector 6 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:309
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:350
 msgid ""
 "Set selector 7 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2044,7 +2041,7 @@ msgstr ""
 "Establezca el selector 7 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:311
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:353
 msgid ""
 "Set selector 8 as current selector and Sets , if possible, it associated "
 "voice profile as current voice profile"
@@ -2052,181 +2049,181 @@ msgstr ""
 "Establezca el selector 8 como el selector actual y, si es posible, defina su "
 "perfil de voz asociado como un perfil de voz actual."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:313
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:356
 msgid "Displays the dialog to manage the input gestures configured by user"
 msgstr ""
 "Mostrar el diálogo para administrar los gestos de entrada configurados por "
 "el usuario"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:315
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:359
 msgid "Set on main and NVDA volume"
 msgstr "Ajustar el sonido principal y de NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:317
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:362
 msgid "Toggle current focused application volume mute"
 msgstr "Silenciar o reestablecer el sonido para la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:319
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:365
 msgid "Increase volume of current focused application"
 msgstr "Aumentar el volumen de la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:321
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:368
 msgid "Decrease volume of current focused application"
 msgstr "Disminuir el volumen de la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:323
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:371
 msgid "Maximize volume of current focused application"
 msgstr "Maximizar el volumen de la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:325
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:374
 msgid "Minimize volume of current focused application"
 msgstr "Minimizar el volumen de la aplicación enfocada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:328
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:378
 msgid "Increase volume of speakers"
 msgstr "Aumentar el volumen principal"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:330
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:381
 msgid "Decrease volume of speakers"
 msgstr "Disminuir el volumen principal"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:332
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:384
 msgid "Maximize volume of speakers"
 msgstr "Maximizar el volumen principal"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:334
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:387
 msgid "Minimize volume of speakers"
 msgstr "Minimizar el volumen principal"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:335
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:390
 msgid "Display tools for add-on developpement dialog "
 msgstr ""
 "Mostrar el diálogo que presenta las herramientas para el desarrollo de "
 "complementos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:337
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:393
 msgid ""
-"Click the left mouse button at navigator object position. Twice: click "
-"twice  this button at this position"
+"Click the left mouse button at navigator object position. Twice: click twice "
+"this button at this position"
 msgstr ""
 "Simple clic izquierdo del ratón a la posición actual del navegador de "
 "objetos. Dos veces: doble clic izquierdo en esta posición"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:339
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:396
 msgid ""
 "Click the right mouse button at naviHgator object position. Twice: click "
-"twice  this button at this position"
+"twice this button at this position"
 msgstr ""
 "Simple clic derecho del ratón a la posición actual del navegador de objetos. "
 "Dos veces: doble clic derecho en esta posición"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:341
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:399
 msgid "Display add-on settings dialog"
 msgstr "Mostrar el diálogo de configuración del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:343
-msgid "Enable or disable the standard use  of numeric keypad"
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:402
+msgid "Enable or disable the standard use of numeric keypad"
 msgstr "Habilitar o deshabilitar el uso estándar del teclado numérico"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:412
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:478
 #, python-format
 msgid "(command: %s)"
 msgstr "(órden: %s)"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:443
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:512
 #, python-format
 msgid "%s add-on configuration menu"
 msgstr "Menú de configuración del complemento %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:446
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:516
 msgid "Settings..."
 msgstr "Opciones..."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:453
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:524
 msgid "Keyboard Keys renaming..."
 msgstr "Renombrar teclas del teclado..."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:459
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:534
 msgid "Command keys selective announcement..."
 msgstr "Anuncio selectivo de teclas de órdenes..."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:464
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:543
 msgid "Reset configuration to default values"
 msgstr "Reiniciar la configuración a los valores predeterminados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:471
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:553
 msgid "Explore &NVDA"
 msgstr "Explorar &NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:473
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:555
 msgid "Menu to explore NVDA program or configuration"
 msgstr ""
 "Menú para explorar las carpetas programa NVDA o configuración de usuario"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:476
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:559
 msgid "My &configuration's folder"
 msgstr "Mi &carpeta de configuración"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:481
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:568
 msgid "NVDA &Program folder"
 msgstr "La carpeta del &programa NVDA"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:615
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:702
 #, python-brace-format
 msgid "{0} copied to clipboard"
 msgstr "{0} copiado al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:686
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:773
 #, python-brace-format
 msgid "Configuration's profile {profileName} {state}"
 msgstr "Perfil de configuración {profileName} {state}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:741
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:828
 #, python-brace-format
 msgid "{0} version {1}"
 msgstr "{0} versión {1}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:747
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:835
 msgid "Product name and version has been copied to clipboard"
 msgstr ""
 "El nombre y número de versión de la aplicación ha sido copiado al "
 "portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:763
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:852
 #, python-brace-format
 msgid "addon: {name}, version: {version}"
 msgstr "complemento: {name}, versión: {version}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:767
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:858
 msgid "No addon"
 msgstr "Ningún complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:800
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:893
 #, python-brace-format
 msgid "Configuration profile: {profileName} {state}"
 msgstr "Configuración del perfil: {profileName} {state}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:808
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:903
 #, python-brace-format
 msgid "Application: {appName} {appVersion}"
 msgstr "Aplicación: {appName} {appVersion}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:831
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:928
 #, python-brace-format
 msgid "{summary}, version: {version}"
 msgstr "{summary}, versión: {version}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:834
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:933
 #, python-format
 msgid "Active add-on: %s"
 msgstr "Complemento activo: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:837
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:936
 #, python-format
 msgid "addd-on's path: %s"
 msgstr "Ruta del complemento: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:841
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:941
 msgid ""
 "Warning: it seems that others add-ons are installed and activated for this "
 "application"
@@ -2234,34 +2231,30 @@ msgstr ""
 "Advertencia: parece que otros complementos están instalados y activados para "
 "esta aplicación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:844
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:944
 #, python-format
 msgid "Loaded python module: %s"
 msgstr "Módulo python cargado: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:847
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:947
 msgid "Application context's informations's informations"
 msgstr "Información del contexto de la aplicación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:883
-msgid "Current log file path copied to clipboard"
-msgstr "La ruta del archivo de registro actual se ha copiado al portapapeles"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:885
-msgid "Current log file path  cannot be copied to clipboard"
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:982
+msgid "Current log file path cannot be copied to clipboard"
 msgstr ""
 "La ruta del archivo de registro actual no se puede copiar al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1009
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1126
 msgid "Please wait"
 msgstr "Espera por favor"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1040
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1046
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1158
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1166
 msgid "Not available on this operating's system"
 msgstr "No disponible para este sistema operativo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1044
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1164
 msgid ""
 "The main volume and that of NVDA are established and their level sets to the "
 "one in the configuration"
@@ -2269,34 +2262,34 @@ msgstr ""
 "El volumen principal y el volumen de NVDA se configuran y sus niveles se "
 "establecen en los valores configurados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1106
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1234
 msgid "Voice profile switch mode on"
 msgstr "Modo de cambio de perfil de voz activado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1111
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1239
 msgid "Voice profile switch mode off"
 msgstr "Modo de cambio de perfil de voz desactivado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1151
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1286
 msgid "There has been no change of gesture made by the user"
 msgstr "No ha habido ningún cambio de gesto de entrada hecho por el usuario"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1173
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1308
 msgid "Double left click"
 msgstr "Doble clic izquierdo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1188
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1231
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1324
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1368
 msgid "Object has no location"
 msgstr "El objeto no tiene coordenadas"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1216
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1352
 msgid "Double right click"
 msgstr "Doble clic derecho"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1259
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1265
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1288
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1397
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1404
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1431
 msgid ""
 "This functionnality is only available if \"command key selective announcement"
 "\" or \"keys's remanence functionnality\" is installed"
@@ -2305,265 +2298,258 @@ msgstr ""
 "selectivo de las teclas de órdenes\" o la funcionalidad \"Remanencia de "
 "teclas\" esta instalado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1264
-msgid "Numeric pad navigation mode toggle is not  available"
-msgstr ""
-"El cambio para el uso de las teclas direccionales del teclado numérico no "
-"está permitido"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1323
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1467
 msgid "Shell's scripts"
 msgstr "Scripts del intérprete de órdenes"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1355
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1501
 msgid "Description: command"
 msgstr "Descripción: órden"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1362
+#: globalPlugins/NVDAExtensionGlobalPlugin/theGlobalPlugin.py:1516
 msgid "&Run script"
 msgstr "&Lanzar el script"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:65
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:299
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:330
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:389
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:426
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:751
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:791
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:70
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:321
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:356
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:423
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:465
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:812
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:861
 msgid "Error: buildVars.py file is not found"
 msgstr "Error: archivo buildVars.py no encontrado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:121
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:131
 msgid "error"
 msgstr "error"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:123
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:134
 #, python-format
-msgid "Cannot get  add-on translated manifest of %s language"
+msgid "Cannot get add-on translated manifest of %s language"
 msgstr ""
 "No se puede obtener el archivo de traducción manifest.ini del idioma %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:241
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:258
 msgid "Creation of HTML documentation files"
 msgstr "Creación de los archivos HTML de documentación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:244
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:262
 msgid "No documentation file to convert"
 msgstr "No hay ningún archivo de documentación a convertir"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:264
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:487
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:282
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:529
 msgid "No html file converted"
 msgstr "No hay ningún archivo convertido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:285
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:493
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:303
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:536
 #, python-format
 msgid "%s files converted"
 msgstr "%s archivos convertidos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:290
-msgid "Creation  of manifest.ini file"
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:311
+msgid "Creation of manifest.ini file"
 msgstr "Creación del archivo manifest.ini"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:304
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:328
 msgid ""
-" the manifest.ini  file already exists. Do you really want to update it ?"
+" the manifest.ini file already exists. Do you really want to update it ?"
 msgstr "El archivo manifest.ini ya existe. ¿Realmente quieres actualizarlo?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:314
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:338
 msgid "manifest.ini file has been updated"
 msgstr "El archivo manifest.ini ha sido actualizado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:321
-msgid "Creation  of locale manifest.ini file"
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:346
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:393
+msgid "Creation of localization manifest.ini file"
 msgstr "Creación del archivo manifest.ini de localización"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:339
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:368
 msgid "No language for this add-on"
 msgstr "No hay ningún idioma presente para este complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:348
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:451
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:540
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:379
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:491
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:587
 #, python-format
 msgid "Error: %s file is not found"
 msgstr "Error: archivo %s no encontrado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:361
-msgid "Creation  of localization manifest.ini file"
-msgstr "Creación del archivo manifest.ini de localización"
-
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:363
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:395
 #, python-format
 msgid "Some translation strings are missing for \"%s\" language"
 msgstr "Algunas cadenas no están traducidas para el idioma \"%s\""
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:368
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:400
 #, python-format
-msgid "%s localization manifest.ini files  created"
+msgid "%s localization manifest.ini files created"
 msgstr "%s archivos manifest.ini de localización creados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:371
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:403
 msgid "No localization manifest.ini file created"
 msgstr "Ningún archivo manifest.ini de localización creado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:378
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:412
 #, python-format
 msgid "Creation of POT file of %s add-on"
 msgstr "Creación del archivo POT para el complemento %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:395
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:502
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:432
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:547
 #, python-format
 msgid "%s file created"
 msgstr "El archivo %s fue creado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:398
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:435
 msgid "Impossible to create POT file: no source file defined in buildVars.py"
 msgstr ""
 "No es posible crear el archivo POT. No se definió el archivo fuente en "
 "buildVars.py"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:400
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:504
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:437
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:549
 msgid "Impossible to create POT file"
 msgstr "No es posible crear el archivo POT"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:417
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:455
 #, python-format
 msgid "Prepare %s add-on"
 msgstr "Preparación del complemento %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:429
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:469
 msgid "Prepare add-on start"
 msgstr "Iniciando la preparación del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:442
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:481
 msgid "Manifest.ini file updated"
 msgstr "Archivo manifest.ini actualizado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:467
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:509
 #, python-format
 msgid "%s localization manifest.ini files created or updated"
 msgstr "%s archivos manifest.ini de localización creados o actualizados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:472
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:514
 #, python-format
-msgid "But for this languages  translated string are missing: %s"
+msgid "But for this languages translated string are missing: %s"
 msgstr "Pero algunas cadenas no están traducidas en algunos idiomas: %s"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:490
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:532
 msgid "one file converted"
 msgstr "un archivo convertido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:494
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:537
 #, python-format
 msgid "%s HTML files created"
 msgstr "%s archivos HTML creados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:509
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:554
 #, python-brace-format
 msgid "{count} poFiles compiled on {nb}"
 msgstr "{count} archivos .po compilados sobre {nb}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:516
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:561
 msgid "Add-on bundle could not be created"
 msgstr "El complemento no se pudo crear"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:519
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:564
 #, python-brace-format
 msgid "The {name} file has been created and recorded in {dir} folder"
 msgstr "El archivo {name} ha sido creado y guardado en la carpeta {dir}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:523
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:569
 msgid "Completed"
 msgstr "Terminado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:532
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:578
 msgid "Creation of buildVars.py file"
 msgstr "Creación del archivo buildVars.py"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:549
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:595
 msgid "Warning: buildVars.py already exist. Do you want to replace it ?"
 msgstr "Atención: el archivo buildVars.py ya existe. ¿Quieres reemplazarlo?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:583
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:628
 msgid "buildVars.py file created"
 msgstr "El archivo buildVars.py fue creado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:603
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:648
 msgid "Tools for add-on developpement"
 msgstr "Herramientas para el desarrollo de complementos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:621
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:666
 msgid "&Add-ons:"
 msgstr "&Complementos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:627
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:674
 msgid "Update add-on &version"
 msgstr "Actualizar la &versión del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:629
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:679
 msgid "&Update manifest.ini file"
 msgstr "Actualizar el &archivo manifest.ini"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:631
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:680
 msgid "Create P&OT file"
 msgstr "Crear el archivo P&OT"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:633
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:682
 msgid "&Prepare addon"
 msgstr "&Preparar el complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:636
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:685
 msgid "&Languages:"
 msgstr "&Idiomas:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:642
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:693
 msgid "Create &localization manifest.ini file"
 msgstr "Crear el archivo manifest.ini de &localización"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:644
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:696
 msgid "Create &HTML documentation files"
 msgstr "Crear los archivos &HTML de documentación"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:646
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:699
 msgid "Create &buildVars file"
 msgstr "Crear el archivo &buildVars.py"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:648
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:702
 msgid "&Explore add-on folder"
 msgstr "&Explorar la carpeta del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:680
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:54
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:739
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:68
 msgid "All"
 msgstr "Todo"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:747
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:782
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:798
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:807
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:850
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:872
 msgid "Update add-on version"
 msgstr "Actualizar la versión del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:767
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:829
 msgid "Error: buildVars.py file has no add-on version line"
 msgstr "Error: el archivo buildVars.py no contiene la línea de versión"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:776
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:842
 msgid "Version of buildVars.py file has been updated"
 msgstr "La versión del archivo buildVars.py ha sido actualizada"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:796
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:869
 msgid "Entry add-on version:"
 msgstr "Introducir la versión del complemento"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:813
+#: globalPlugins/NVDAExtensionGlobalPlugin/tools/__init__.py:886
 msgid "No add-on installed"
 msgstr "No hay ningún complemento instalado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:59
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:58
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:58
 #, python-brace-format
 msgid ""
 "The update is not compatible with this version of NVDA. Minimum NVDA "
@@ -2572,80 +2558,112 @@ msgstr ""
 "La actualización no es compatible con esta versión de NVDA. Versión mínima "
 "de NVDA: {minYear}.{minMajor}, última probada: {testedYear}.{testedMajor}."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:106
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:108
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:108
 #, python-brace-format
 msgid "Downloading {name}"
 msgstr "Descargando {name}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:120
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:123
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:123
 #, python-brace-format
 msgid "Error downloading update for {name}."
 msgstr "Error al descargar la actualización de {name}."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:176
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:182
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:182
 #, python-brace-format
 msgid "Cannot update {name} - missing file or invalid file format"
 msgstr ""
 "No se puede actualizar {name} - archivo ausente o formato de archivo no "
 "válido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:206
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:218
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:218
 msgid "Updating"
 msgstr "Actualizando"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:208
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:220
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:220
 msgid "Please wait while the add-on is being updated."
 msgstr "Por favor, espera mientras se actualiza el complemento."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:215
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:231
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:231
 #, python-brace-format
 msgid "Failed to update {name} add-on"
 msgstr "Fallo al actualizar el complemento {name}"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:271
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:289
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:289
 #, python-brace-format
 msgid "{summary} - update"
 msgstr "{summary} - actualización"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:280
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:299
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:299
 msgid "The service is temporarily under maintenance. Please, try again later."
 msgstr ""
 "El servicio está actualmente en mantenimiento. Por favor, inténtelo de nuevo "
 "más tarde."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:301
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:327
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:347
 #, python-format
 msgid "New version available, version %s. Do you want download it now?"
 msgstr "Nueva versión disponible: versión %s. ¿Quieres descargarla ahora?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:315
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:344
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:364
 #, python-format
 msgid "You are up-to-date. %s is the latest version."
 msgstr "Estás al día, %s es la versión más reciente."
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:321
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:351
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:371
 msgid "Oops! There was a problem checking for updates. Please retry later"
 msgstr ""
 "¡Huy! Hubo un problema al buscar las actualizaciones. Por favor, inténtelo "
 "de nuevo más tarde"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:475
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:522
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:547
 msgid "&Yes"
 msgstr "&Sí"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:479
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:527
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:552
 msgid "&No"
 msgstr "&No"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:483
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check -
+#: Copie.py:532
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:557
 msgid "&Later"
 msgstr "&Más tarde"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:23
-msgid "User  input Gestures"
+#: globalPlugins/NVDAExtensionGlobalPlugin/updateHandler/update_check.py:561
+msgid "Wha&t's new"
+msgstr "Qué hay &de nuevo"
+
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:24
+msgid "User input Gestures"
 msgstr "Gestos de entrada del usuario"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:44
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:54
 msgid "Remove &all"
 msgstr "Eliminar &todo"
 
@@ -2654,7 +2672,7 @@ msgstr "Eliminar &todo"
 msgid "{main} ({source})"
 msgstr "{main} ({source})"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:125
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:113
 msgid ""
 "Do you really want to erase all the modification of gesture control that "
 "have been made ?"
@@ -2662,100 +2680,100 @@ msgstr ""
 "¿Realmente quieres borrar todos los cambios de gesto de entrada que se han "
 "hecho?"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:127
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:115
 msgid "NVDAExtensionGlobalPlugin add-on - warning"
 msgstr "Complemento Extensión de las órdenes básicas de NVDA - Advertencia"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:203
+#: globalPlugins/NVDAExtensionGlobalPlugin/userInputGestures/__init__.py:202
 msgid "Deleted gestures"
 msgstr "Gestos de Entrada eliminados"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:34
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:39
 msgid "Informations"
 msgstr "Información"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:60
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:72
 msgid "Co&py to Clipboard"
 msgstr "Co&piar al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:78
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:97
 msgid "Copied"
 msgstr "Copiado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:84
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/informationDialog.py:104
 msgid "Error, the information cannot be copied to the clipboard"
 msgstr "Error, la información no puede copiarse al portapapeles"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/utils/runInThread.py:48
+#: globalPlugins/NVDAExtensionGlobalPlugin/utils/runInThread.py:45
 msgid "interrupted"
 msgstr "Interrumpido"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/__init__.py:117
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/__init__.py:119
 msgid "Elements's searching"
 msgstr "Buscando los elementos"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:34
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:38
 msgid "List, list's item"
 msgstr "Lista, elemento de lista"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:36
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:41
 msgid "Tree view, treeview's item"
 msgstr "Vista en árbol, elemento de vista en árbol"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:38
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:44
 msgid "ComboBox"
 msgstr "Cuadro combinado"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:40
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:47
 msgid "Tab"
 msgstr "Pestaña"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:42
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:50
 msgid "Slider"
 msgstr "Deslizador"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:46
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:56
 msgid "Table, table's item"
 msgstr "Tabla, elemento de tabla"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:48
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:59
 msgid "Menu, menu's item"
 msgstr "Menú, elemento del menú"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:50
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:62
 msgid "Container (Tools bar, panel, application, ...)"
 msgstr "Contenedor (Barra de herramientas, panel, aplicación, ...)"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:52
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:65
 msgid "Text"
 msgstr "Texto"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:85
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:115
 msgid "list of visible items making up the object in the foreground"
 msgstr "Lista de elementos visibles que componen el objeto en primer plano"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:96
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:127
 msgid "Ignore untaggeditems"
 msgstr "Ignorar elementos sin etiqueta"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:100
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:132
 msgid "&Type: "
 msgstr "&Tipo: "
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:104
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:139
 msgid "Elements:"
 msgstr "Elementos:"
 
-#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:118
+#: globalPlugins/NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py:159
 msgid "Move &navigator object to it"
 msgstr "Llevar el &Navegador de objetos y el puntero del ratón"
 
-#: installTasks.py:83
+#: installTasks.py:89
 msgid "Do you want to keep previous add-on configuration settings ?"
 msgstr ""
 "¿Deseas conservar las opciones de configuración del complemento anterior?"
 
-#: installTasks.py:85
+#: installTasks.py:91
 #, python-format
 msgid "%s - installation"
 msgstr "%s - instalación"
@@ -2768,6 +2786,269 @@ msgid ""
 msgstr ""
 "Atención, debe desinstalar el complemento %s porque ahora se incluye en este "
 "complemento."
+
+#~ msgid "Creation of locale manifest.ini file"
+#~ msgstr "Creación del archivo manifest.ini de localización"
+
+#~ msgid " % s dialog is allready open"
+#~ msgstr "El diálogo %s ya está abierto"
+
+#~ msgid ""
+#~ "This add-on has been developed with the participation of Daniel Poiraud.\n"
+#~ "It adds to NVDA:\n"
+#~ "1- The features\n"
+#~ "some features can be enabled or disabled individually.\n"
+#~ "* Display of the list of icons in the notification area ,\n"
+#~ "* Display of the windows list of running applications,\n"
+#~ "* Help in the composition of a symbol that is complex such as, for "
+#~ "example, a a e related, a symbol power of 2\n"
+#~ "\tand possibility to add its own categories and symbols,\n"
+#~ "* Extension of the functionality of the virtual buffer\n"
+#~ "\tfor browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft "
+#~ "Edge, and Google Chrome:\n"
+#~ "\n"
+#~ "\t* new commands for navigation mode (paragraph, division, anchor, main "
+#~ "area,\n"
+#~ "\t* new types of elements for the dialog box opened by \"NVDA+F7\" (radio "
+#~ "button, paragraph, frame, checkBox, etc) with the announcement of the "
+#~ "number of items found,\n"
+#~ "\t* commands for the tables:\n"
+#~ "\tannounce the cells of a row /column , go to first/last cell in the row/"
+#~ "current column, move the column/row preceding or following with "
+#~ "announcement possible of the cells in that row/column,\n"
+#~ "\t* announcement of the URL of the document,\n"
+#~ "\t* navigate in loop,\n"
+#~ "* Announcement of the function associated with editing commands\n"
+#~ "\tstyle Copy, Paste, etc.,\n"
+#~ "* Announcement of the name of the folder pre-selected in the dialog boxes "
+#~ "like \"Open\",\"Save\", \"Save as\",etc.,\n"
+#~ "* display of information on the focused application:\n"
+#~ "\t* the current profile configuration,\n"
+#~ "\t* the name and version number of the application,\n"
+#~ "\t* the add-on loaded for the application,\n"
+#~ "*\tNVDA logs tools:\n"
+#~ "\t* Opening the previous or current log,\n"
+#~ "\t* copy of current Log path to the clipboard,\n"
+#~ "\n"
+#~ "* history of voice speechs,\n"
+#~ "* renaming keyboard keys,\n"
+#~ "* selective announcement of  command keyboard keys ,\n"
+#~ "* simple countdown timer,\n"
+#~ "* display of visible elements making up the object in the foreground,\n"
+#~ "* fast switching of voice profile,\n"
+#~ "* remanence of the modifier keys,\n"
+#~ "* shutdown, reboot or hybernate the computer,\n"
+#~ "* control the main or NVDA volume:\n"
+#~ "\t* mute or unmute volume  for the focused application,\n"
+#~ "\t* establishment of the main Windows  or NVDA volume at the start  of "
+#~ "add-on,\n"
+#~ "\t* modification of main volume or audio stream's volume of focused "
+#~ "application.\n"
+#~ "* Tools for development of add-on\n"
+#~ "* supplements regarding the date and time: copy date and time to "
+#~ "clipboard, report time with seconds\n"
+#~ "\n"
+#~ "\n"
+#~ "2- The options\n"
+#~ "* remove the announcement from the description of the objects in the "
+#~ "Windows ribbons ,\n"
+#~ "* proclaim the word focused when deleting a word,\n"
+#~ "* automatically maximize the foreground window,\n"
+#~ "* announce punctuations and symbols when moving by word in a document.\n"
+#~ "\n"
+#~ "3-  The advanced options\n"
+#~ "* report, with a sound, the registration of an error in the NVDA log also "
+#~ "for the final versions and release candidate of NVDA,\n"
+#~ "* Caption dialog title with the name of the addon,\n"
+#~ "* Do not take account of the option called Report object descriptions "
+#~ "during the display of the dialog box style confirmation,\n"
+#~ "* use numeric keypad's keys conventionally.\n"
+#~ "\n"
+#~ "\n"
+#~ "4- Various other elements\n"
+#~ "* presentation formatting of the text in a dialog box,\n"
+#~ "* sub-menus to explore the program folders or configuration,\n"
+#~ "* script to quickly restart NVDA.\n"
+#~ msgstr ""
+#~ "Este complemento fue desarrollado con la participación de Daniel "
+#~ "Poiraud.\n"
+#~ "Añade a NVDA:\n"
+#~ "1- Las características\n"
+#~ "Algunas de ellas se pueden habilitar o deshabilitar individualmente:\n"
+#~ "* Mostrar la lista de iconos en la bandeja del sistema,\n"
+#~ "* Mostrar la lista de ventanas de las aplicaciones lanzadas,\n"
+#~ "* Ayuda para la composición de símbolos complejos como por ejemplo, un \"e"
+#~ "\" en la \"o\" o un símbolo Exponente 2\n"
+#~ "  y la opción de añadir tus propias categorías y símbolos,\n"
+#~ "* Extensión de la funcionalidad del modo exploración de NVDA\n"
+#~ "  para los navegadores Mozilla Firefox, Microsoft Internet Explorer, "
+#~ "Microsoft Edge y Google Chrome:\n"
+#~ "\n"
+#~ "\t* Órdenes para el modo exploración (párrafo, división, ancla, región),\n"
+#~ "\t* Nuevos tipos de elementos para el cuadro de diálogo abierto con \"NVDA"
+#~ "+F7\" (botón de opción, párrafos, marco, casillas de verificación, etc.) "
+#~ "con el anuncio del número de elementos encontrados,\n"
+#~ "\t* Órdenes para las tablas:\n"
+#~ "  Anunciar las celdas de una fila/columna, ir a la primera o última celda "
+#~ "en la fila/columna actual, mover a la columna/fila que precede y seguir "
+#~ "con el posible anuncio de las celdas en la misma fila o columna,\n"
+#~ "\t* Anuncio de la dirección URL del documento,\n"
+#~ "\t* Navegar en bucle,\n"
+#~ "* Anuncio de la funcionalidad asociada a las órdenes de edición\n"
+#~ "  de estilo Copiar, Pegar, etc,\n"
+#~ "* Anuncio del nombre de la carpeta preseleccionada en cuadros de diálogo "
+#~ "de estilo Abrir, Guardar, Guardar como,\n"
+#~ "* Mostrar información sobre la aplicación enfocada:\n"
+#~ "\t* El perfil de configuración actual,\n"
+#~ "\t* El nombre y número de versión de la aplicación,\n"
+#~ "\t* El nombre del complemento activo asociado a la aplicación,\n"
+#~ "* Herramientas para los registros de NVDA:\n"
+#~ "\t* Abrir el registro anterior o actual,\n"
+#~ "\t* Copiar la carpeta del registro actual al portapapeles,\n"
+#~ "\n"
+#~ "* Historial de los anuncios del habla,\n"
+#~ "* Renombrar teclas del teclado,\n"
+#~ "* Anuncio selectivo de las teclas de órdenes,\n"
+#~ "* Simple temporizador de minutos,\n"
+#~ "* Mostrar los objetos visibles en primer plano,\n"
+#~ "* Cambio rápido de perfil de voz,\n"
+#~ "* Remanencia de teclas modificadoras,\n"
+#~ "* Reiniciar, apagar o ivernar el ordenador,\n"
+#~ "* Control del volumen principal y de NVDA:\n"
+#~ "\t* Silenciar o reestablecer el sonido para la aplicación enfocada,\n"
+#~ "\t* Establecer el volumen principal o de NVDA al iniciar el complemento,\n"
+#~ "\t* Cambiar el volumen principal o el flujo de audio de la aplicación "
+#~ "enfocada,\n"
+#~ "\n"
+#~ "* Herramientas para el desarrollo de complementos,\n"
+#~ "* Suplementos de fecha y hora: Copiar fecha y hora actual al "
+#~ "portapapeles, anunciar hora del reloj de Windows con los segundos.\n"
+#~ "\n"
+#~ "2- Las opciones:\n"
+#~ "* Eliminar el anuncio de la descripción de los objetos en las cintas de "
+#~ "Windows,\n"
+#~ "* Anunciar la palabra enfocada durante la eliminación de palabras,\n"
+#~ "* Maximizar automáticamente la ventana en primer plano,\n"
+#~ "* Anunciar la puntuación y los símbolos al moverse por palabras.\n"
+#~ "\n"
+#~ "3- Las opciones avanzadas:\n"
+#~ "* Anunciar, con un sonido, la escritura de un error en el registro "
+#~ "también para la versión final o RC de NVDA,\n"
+#~ "* Titular los diálogos con el nombre del complemento,\n"
+#~ "* No tomar en cuenta la opción Anunciar descripciones de objeto al "
+#~ "mostrar los diálogos de estilo de confirmación,\n"
+#~ "* Poder  usar las teclas del teclado numérico de manera clásica.\n"
+#~ "\n"
+#~ "\n"
+#~ "4- Varios otros elementos:\n"
+#~ "* Presentación del formato de texto en un cuadro de edición,\n"
+#~ "* Submenú para explorar las carpetas programa NVDA o configuración de "
+#~ "usuario,\n"
+#~ "* Script para reiniciar rápidamente NVDA.\n"
+
+#~ msgid "Current log file  path  copied to clipboard"
+#~ msgstr ""
+#~ "La ruta del archivo de registro actual se ha copiado al portapapeles"
+
+#~ msgid "Current log file  path   cannot be copied to clipboard"
+#~ msgstr ""
+#~ "La ruta del archivo de registro actual no se puede copiar al portapapeles"
+
+#~ msgid "Delayto be alerted before ending (in minutes):"
+#~ msgstr ""
+#~ "Duración en el que debe notificarse antes de que finalice el temporizador "
+#~ "de minutos (en minutos):"
+
+#~ msgid "Color: %s"
+#~ msgstr "Color: %s"
+
+#~ msgid ""
+#~ "The add-on configuration will be reset to factory values and NVDA  will "
+#~ "be restarted. Would you like to continue ?"
+#~ msgstr ""
+#~ "La configuración del complemento será completamente restablecido a los "
+#~ "valores de fábrica y NVDA será reiniciado. ¿Deseas continuar?"
+
+#~ msgid "&Enable / disable numeric keypad's standard use  with num lock key"
+#~ msgstr ""
+#~ "Habilitar o deshabilitar el us&o estándar de teclado numérico con la "
+#~ "tecla bloqueo numérico"
+
+#~ msgid "Voice profile selectors's Management  of profile %s"
+#~ msgstr "Administrar los selectores del perfil de voz del perfil de %s"
+
+#~ msgid "Dou&ble  left click"
+#~ msgstr "Do&ble clic izquierdo"
+
+#~ msgid ""
+#~ "report the full path  of current selected folder in the open or Save "
+#~ "dialog box"
+#~ msgstr ""
+#~ "Anunciar la ruta completa de la carpeta seleccionada en cuadros de "
+#~ "diálogo de estilo Abrir, Guardar"
+
+#~ msgid "Report next record of the speech history and copy it  to clipboard"
+#~ msgstr ""
+#~ "Anunciar el siguiente registro del historial de los anuncios del habla y "
+#~ "cópiarlo al portapapeles"
+
+#~ msgid "Toggle current application's volume mute"
+#~ msgstr "Silenciar o reestablecer el sonido para la aplicación actual"
+
+#~ msgid "Launch  %s commands's shell"
+#~ msgstr "Ejecutar el intérprete  de órdenes del %s"
+
+#~ msgid ""
+#~ "Click the left mouse button at navigator object position. Twice: click "
+#~ "twice  this button at this position"
+#~ msgstr ""
+#~ "Simple clic izquierdo del ratón a la posición actual del navegador de "
+#~ "objetos. Dos veces: doble clic izquierdo en esta posición"
+
+#~ msgid ""
+#~ "Click the right mouse button at naviHgator object position. Twice: click "
+#~ "twice  this button at this position"
+#~ msgstr ""
+#~ "Simple clic derecho del ratón a la posición actual del navegador de "
+#~ "objetos. Dos veces: doble clic derecho en esta posición"
+
+#~ msgid "Enable or disable the standard use  of numeric keypad"
+#~ msgstr "Habilitar o deshabilitar el uso estándar del teclado numérico"
+
+#~ msgid "Current log file path  cannot be copied to clipboard"
+#~ msgstr ""
+#~ "La ruta del archivo de registro actual no se puede copiar al portapapeles"
+
+#~ msgid "Numeric pad navigation mode toggle is not  available"
+#~ msgstr ""
+#~ "El cambio para el uso de las teclas direccionales del teclado numérico no "
+#~ "está permitido"
+
+#~ msgid "Cannot get  add-on translated manifest of %s language"
+#~ msgstr ""
+#~ "No se puede obtener el archivo de traducción manifest.ini del idioma %s"
+
+#~ msgid "Creation  of manifest.ini file"
+#~ msgstr "Creación del archivo manifest.ini"
+
+#~ msgid ""
+#~ " the manifest.ini  file already exists. Do you really want to update it ?"
+#~ msgstr "El archivo manifest.ini ya existe. ¿Realmente quieres actualizarlo?"
+
+#~ msgid "Creation  of locale manifest.ini file"
+#~ msgstr "Creación del archivo manifest.ini de localización"
+
+#~ msgid "Creation  of localization manifest.ini file"
+#~ msgstr "Creación del archivo manifest.ini de localización"
+
+#~ msgid "%s localization manifest.ini files  created"
+#~ msgstr "%s archivos manifest.ini de localización creados"
+
+#~ msgid "But for this languages  translated string are missing: %s"
+#~ msgstr "Pero algunas cadenas no están traducidas en algunos idiomas: %s"
+
+#~ msgid "User  input Gestures"
+#~ msgstr "Gestos de entrada del usuario"
 
 #~ msgid ""
 #~ "This functionnality is only available if selective command announcement "

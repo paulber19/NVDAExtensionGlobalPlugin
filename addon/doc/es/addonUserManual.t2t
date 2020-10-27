@@ -7,6 +7,8 @@ Autor: ADDON_AUTHOR_NAME con la participación de Daniel Poiraud
 %!includeconf: addon_keys.t2tconf
 URL: ADDON_AUTHOR_URL
 
+Repositorio en GitHub: [ADDON_REPOSITORY]
+
 
 Descargar:
 - [Versión estable ADDON_VERSION ADDON_DOWNLOAD_SERVER1]
@@ -75,7 +77,7 @@ Este complemento añade a las órdenes globales de NVDA:
 
 - Las opciones:
  - [Eliminar el anuncio de la descripción de los objetos en las cintas de Windows #hdr100],
- - [Anuncio de la palabra enfocada después de eliminar la palabra #hdr101],
+ - [Anuncio de la palabra enfocada después de eliminar la palabra (para las versiones de NVDA anteriores a la 2020.3) #hdr101],
  - [Maximizar automáticamente las ventanas #hdr102],
  - [Anunciar sistemáticamente la puntuación al moverse por palabras #hdr103],
  - Las opciones avanzadas:
@@ -138,13 +140,33 @@ La versión del complemento puede ser:
 Por defecto, una versión estable se actualiza con la última versión estable (Número de versión superior).
 Sin embargo, es posible actualizar la versión actual estable con una versión de desarrollo de la próxima versión estable. Simplemente marcando la opción "Actualizar también versiones estable hacia versiones de desarrollo" situado en la categoría "Actualización".
 
-Una versión de desarrollo se actualiza con una versión de desarrollo más reciente o con su versión estable.
+Una versión de desarrollo se actualiza:
+- con una versión de desarrollo más reciente,
+- con su versión estable,
+- o la última versión estable si la opción anterior no está marcada.
+
 
 El botón "Buscar actualización" situado en la categoría "Actualización" te permite buscar inmediatamente una actualización.
 
 En el caso de una actualización automática, y si se detecta una nueva versión, el cuadro de diálogo "Actualización" aparece para proponer:
-- Ya sea la instalación inmediata de la nueva versión,
-- Ya sea posponer la actualización a más tarde. En este caso, la búsqueda se reiniciará al menos una hora más tarde.
+- ya sea la instalación inmediata de la nueva versión,
+- ya sea para posponer la actualización a más tarde. En este caso, la búsqueda se reiniciará como mínimo una hora más tarde.
+
+
+El botón "Qué hay de nuevo" ofrece la posibilidad, de abrir en el navegador, el historial del complemento y asi poder conocer las novedades de la versión propuesta.
+
+
+++ Funcionamiento en Modo seguro ++
+En este modo, el funcionamiento del complemento se degrada.
+
+Como NVDA, no es posible guardar los cambios de configuración.
+
+Algunas características no están disponibles, tales como:
+- "Mostrar la lista de iconos en la bandeja del sistema y las ventanas de las aplicaciones lanzadas",
+- "Registros de NVDA",
+- "Herramientas de desarrollo".
+- Actualización del complemento.
+
 
 
 ++ Compatibilidad ++
@@ -153,7 +175,7 @@ Dado que la configuración de la funcionalidad "Cambio de perfil de voz" ha camb
 
 
 ++ Historial ++
-El historial de las versiones del complemento está en el archivo ["change.html" change.html]
+El historial de las versiones del complemento está en el archivo ["changes.html" changes.html]
 
 + Funcionalidades +
 ++ Instalación de una funcionalidad ++
@@ -181,10 +203,10 @@ Para los scripts que se pueden iniciar mediante una órden del intérprete, esto
 
 Dependiendo de la opción  de la instalación de una funcionalidad ("Instalar, " o "Instalar sin gesto de entrada"), los gestos de entrada proporcionados por defecto se atribuyen o no a los scripts de esta funcionalidad.
 
-De forma predeterminada, la gran mayoría de los scripts que pueden ser lanzados mediante el intérprete de órdenes no se asignan a ningún gesto de órden.
+De forma predeterminada, la gran mayoría de los scripts que pueden ser lanzados mediante el intérprete de órdenes no se asignan a ningún gesto de entrada.
 
 +++ Intérprete de órdenes +++
-Éste se lanza con la ayuda del gesto de órden "KEY_SHELL". Un pitido es audible.
+Éste se lanza con la ayuda del gesto de entrada "KEY_SHELL". Un pitido es audible.
 
 Entonces es posible activar los scripts de  las funcionalidades con la ayuda   de órdenes.
 
@@ -228,7 +250,7 @@ Muestra un cuadro de diálogo que contiene:
 - El botón "Cancelar" para cerrar el cuadro de diálogo y terminar el script.
 
 
-La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Shift+Tab" y en la lista con las flechas de dirección arriba y abajo.
+La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Mayúscula+Tab" y en la lista con las flechas de dirección arriba y abajo.
 
 Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
 
@@ -251,7 +273,7 @@ Muestra un cuadro de diálogo que contiene:
 - El botón "Cancelar" para cerrar el cuadro de diálogo y terminar el script.
 
 
-La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Shift+Tab" y en la lista con las flechas de dirección arriba y abajo.
+La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Mayúscula+Tab" y en la lista con las flechas de dirección arriba y abajo.
 Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
 
 En la lista, las aplicaciones son indicadas como Maximizado o Minimizado.
@@ -267,9 +289,9 @@ Por defecto, el gesto de entrada "MAIN_KEY_ICONS_List" se le asigna.
 
 No se le asigna ninguna órden  al intérprete.
 
-Una simple pulsación del gesto de entrada "MAIN_KEY_ICONS_List" lanza  el script "Mostrar la lista de iconos en la bandeja del sistema" (ver arriba).
+Una simple pulsación del gesto de entrada "MAIN_KEY_ICONS_List" lanza  el script "Mostrar la lista de iconos en la bandeja del sistema" (ver más arriba).
 
-Una doble pulsación lanza el script "Mostrar la lista de ventanas de las aplicaciones lanzadas" (ver arriba).
+Una doble pulsación lanza el script "Mostrar la lista de ventanas de las aplicaciones lanzadas" (ver más arriba).
 
 
 ++ Ayuda para la composición de símbolos complejos ++[hdr3]
@@ -298,7 +320,7 @@ Muestra el cuadro de diálogo "Ayuda para la composición de símbolos complejos
 - El botón "Cerrar" para cerrar el cuadro de diálogo.  
 
 
-Para moverte en el cuadro de diálogo  debes hacer "Tab" o "Shift+Tab".
+Para moverte en el cuadro de diálogo  debes hacer "Tab" o "Mayúscula+Tab".
 
 Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
 
@@ -432,9 +454,10 @@ Este complemento añade las siguientes órdenes para el modo de navegación:
 A excepción de los primeros cuatro, estas órdenes no se implementan en el navegador Microsoft Edge.
 
 +++ Nuevos tipos de elementos para el script "NVDA + f7" +++
-Básicamente, el script integrado en NVDA y activado por la órden "NVDA + f7", muestra el cuadro de diálogo "Lista de elementos" con la lista de algunos elementos presentes en una página web.
+Básicamente, el script integrado en NVDA y activado por el gesto de entrada "NVDA + f7", muestra el cuadro de diálogo "Lista de elementos" con la lista de algunos elementos presentes en una página web.
 Este complemento aumenta el número de tipos de elementos que se pueden seleccionar.
 La lista de estos tipos se convierte en:
+
 Tipos básicos:
 - Enlace,
 - Encabezado,
@@ -544,8 +567,8 @@ La descripción de este script es: "Anunciar la carpeta seleccionada para los cu
 
 Este script se almacena en la categoría "ADDON_SUMMARY" del cuadro de diálogo "Gestos de Entrada".
 Estos son:
-- "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa": gesto de entrada "MAIN_KEY_SAY_CURRENT_FOLDER" asignado a él por defecto.
-- "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar": órden "KEY_SAY_CURRENT_FOLDER" del intérprete.
+- "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa": gesto de entrada "MAIN_KEY_SAY_CURRENT_FOLDER " asignado a él por defecto.
+- "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar": órden "KEY_SAY_CURRENT_FOLDERNAME" del intérprete.
 - "Anunciar la ruta completa de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar": órden "KEY_SAY_CURRENT_FOLDERPATH" del intérprete.
 
 
@@ -821,10 +844,7 @@ Este cuadro de diálogo le permite administrar la asociación de perfil de selec
 La lista "Selectores" presenta la lista de selectores libres o asociados con un perfil de voz. Los selectores asociados son:
 - Aquellos que se han asociado con el perfil de configuración actual (su nombre se indica en el título del diálogo),
 - Aquellos que se han asociado con el perfil de configuración normal si la casilla de verificación "Usar los selectores asociados en el perfil de configuración normal" está marcada. La indicación "configuración normal" se indica entonces para estos selectores.
-
-
 Cuando el selector se indica como "libre", el botón "Asociar el perfil de voz" permite asociar el perfil de voz actual con este selector. Este botón abre un cuadro de diálogo que permite asignar  un nombre a este perfil de voz. Un nombre por defecto es propuesto. El botón  "Predeterminado" permite retornar a esta propuesta.
-
 Cuando un selector ya está asociado con un perfil de voz entonces es posible:
 - Activar este perfil de voz con el botón "Activar el perfil de voz": el perfil se convierte en el perfil de voz actual y el cuadro se cierra.
 - Asociar el perfil actual con el selector mediante el botón "Asociar el perfil de voz". luego reemplaza el perfil de voz asociado con este selector,
@@ -889,8 +909,8 @@ Este retardo de tiempo es configurable mediante la opción "Duración de la rema
 También es posible limitar la remanencia a la única tecla "NVDA" marcando la casilla de verificación "Solo la tecla NVDA está en remanencia" ubicado en el mismo grupo. Por defecto, esta casilla no está marcada y todas las teclas modificadoras son persistentes.
 
 El inicio y el final de esta remanencia se indican mediante un pitido que se puede desactivar mediante las siguientes casillas de verificación en el   grupo "Remanencia de las teclas":
-- Emitir un pitido al inicio de la remanencia de una tecla ,
-- Emitir un pitido al final de la remanencia de una tecla .
+- Emitir un pitido al inicio de la remanencia de una tecla,
+- Emitir un pitido al final de la remanencia de una tecla.
 
 
 Están marcadas de forma predeterminada.
@@ -1062,7 +1082,7 @@ Estos gestos de entrada pueden ser modificados y están en la categoría "Ratón
 ++ Suplementos  concerniente a la fecha y hora ++[hdr24]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
 
-Atención: Instalada con gesto de entrada, esta función puede entrar en conflicto con el complemento "Clock"(Reloj") " porque el gesto de entrada "nvda+f12" es común.
+Atención: Instalada con gesto de entrada, esta función puede entrar en conflicto con el complemento "Clock" ("Reloj") " porque el gesto de entrada "nvda+f12" es común.
 
 Esta funcionalidad trae:
 
@@ -1113,7 +1133,7 @@ Activando este  script abre un diálogo presentando:
 - La lista de idiomas soportados por el complemento seleccionado,
 - Un botón para crear, para el complemento seleccionado, el archivo "manifest.ini" de localización para uno o todos los idiomas que admite,
 - Un botón para crear, para el complemento seleccionado, sus archivos de documentación en HTML,
-- Un botón para crear, para el complemento seleccionado, el archivo "buildVars.py" a partir des la información de su archivo manifest.ini,
+- Un botón para crear, para el complemento seleccionado, el archivo "buildVars.py" a partir de la información de su archivo manifest.ini,
 - Un botón para abrir en el explorador la carpeta del complemento seleccionado.
 
 
@@ -1205,9 +1225,9 @@ Entonces será necesario reiniciar NVDA para tener en cuenta la opción.
 
 
 ++ Anuncio de la palabra enfocada después de la eliminación de palabras ++[hdr101]
-En algunas aplicaciones como WordPad , microsoft Word, es posible eliminar la siguiente palabra con la órden "control+suprimir", pero NVDA no pronuncia la palabra después de la posición del cursor después de la eliminación.
+En algunas aplicaciones como WordPad , microsoft Word, es posible eliminar la siguiente palabra con la órden "control+suprimir", pero las versiones de NVDA anteriores a la 2020.3 no pronuncian la palabra después de la posición del cursor después de la eliminación.
 
-Por defecto, el complemento le permite a NVDA pronunciar esta palabra.
+Por defecto, el complemento permite que estas versiones de NVDA pronuncien esta palabra.
 
 Esto se puede evitar desmarcando la opción "Anunciar la palabra enfocada después de una eliminación de palabras" que está en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
 
@@ -1283,7 +1303,7 @@ Por defecto, esta opción está marcada y el título de los cuadros de diálogo 
 
 ++ Configuración del retardo de espera de repetición para el mismo gesto de entrada ++[hdr303]
 Algunos de los scripts del complemento realizan diferentes acciones dependiendo de la cantidad de veces que se compone el gesto de entrada asociado con el script.
-La repetición del gesto de entrada debe realizarse dentro de poco tiempo (250 ms de forma predeterminada).
+La repetición del gesto de entrada debe realizarse dentro de poco tiempo (500 ms de forma predeterminada).
 Para un script que realiza tres acciones diferentes, el mecanismo es:
 - En la primera pulsación, se inicia el temporizador, 
 - Si no hay una segunda pulsación antes de la expiración del temporizador, se realiza la primera acción. De lo contrario se reinicia el temporizador,
@@ -1310,7 +1330,7 @@ Estas teclas son:
 Para cambiar el teclado numérico en funcionamiento estándar o NVDA y si la opción "Permitir el uso estándar del teclado numérico" del grupo "Teclado numérico" en la categoría "Teclado" está marcada, el complemento proporciona:
 - Un script cuya descripción es "Habilitar o deshabilitar el uso estándar del teclado numérico". No se le asigna ningún gesto de entrada.
 - La órden "KEY_TOGGLE_NUMPAD_NAVIGATION" del intérprete de órdenes.
-- El uso de la tecla "Bloqueo numérico" si la opción "Habilitar o deshabilitar el uso estándar de teclado numérico con la tecla bloqueo numérico" (grupo Teclado numérico", categoría "Teclado") está marcada.
+- La activación pulsando dos veces seguidas la tecla "Bloqueo numérico" si la opción "Habilitar o deshabilitar el uso estándar de teclado numérico con la tecla bloqueo numérico" (grupo Teclado numérico", categoría "Teclado") está marcada.
 
 La opción "Habilitar el uso estándar del teclado numérico cuando se inicia NVDA" (grupo Teclado numérico", categoría "Teclado"), permite, si se marca, de usar el teclado numérico de manera estándar al inicio de NVDA pero también es necesario que la opción que permite el uso estándar del teclado numérico esté marcada.
 
@@ -1377,7 +1397,7 @@ El complemento pone en su lugar la opción "No tomar en cuenta la opción Anunci
 | KEY_MODULE_GUIDE | Mostrar la guía del usuario del complemento |
 | KEY_HELP_SHELL | Mostrar la lista de órdenes del intérprete del complemento |
 | KEY_LOG_VIEW | Mostrar el diálogo para administrar los registros de NVDA |
-| KEY_SAY_CURRENT_FOLDER | Anunciar la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar |
+| KEY_SAY_CURRENT_FOLDERNAME | Anunciar la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar |
 | KEY_VOICE_PROFIL_SWITCHING | Alternar el modo de cambio de perfil de voz |
 | KEY_SHUTDOWN | Mostrar el diálogo para apagar, reiniciar o hibernar el ordenador |
 | KEY_TOGGLE_MUTE | Silenciar o reestablecer el sonido para la aplicación enfocada |

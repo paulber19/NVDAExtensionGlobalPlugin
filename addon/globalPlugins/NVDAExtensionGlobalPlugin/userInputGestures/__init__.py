@@ -1,54 +1,64 @@
-#NVDAExtensionGlobalPlugin/userInputGestures/__init__.py
-#A part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2016-2019  paulber19
-#This file is covered by the GNU General Public License.
-#See the file COPYING for more details.
+# globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures/__init__.py
+# A part of NVDAExtensionGlobalPlugin add-on
+# Copyright (C) 2016 - 2020 paulber19
+# This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
 import addonHandler
-addonHandler.initTranslation()
 from logHandler import log
 import os
 import globalVars
 import wx
 import sys
 import gui
-from gui.settingsDialogs import SettingsDialog
 import inputCore
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle
 from ..utils.py3Compatibility import baseString
+addonHandler.initTranslation()
+
 
 class UserInputGesturesDialog(gui.SettingsDialog):
-	# Translators: The title of the user Input Gestures dialog where the user can remap user input gestures for commands.
-	title = _("User  input Gestures")
+	# Translators: The title of the user Input Gestures dialog
+	# where the user can remap user input gestures for commands.
+	title = _("User input Gestures")
+
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(UserInputGesturesDialog, self).__init__(parent)
-	
+
 	def makeSettings(self, settingsSizer):
-		tree = self.tree = wx.TreeCtrl(self, size=wx.Size(600, 400), style=wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT | wx.TR_SINGLE )
+		tree = self.tree = wx.TreeCtrl(
+			self,
+			size=wx.Size(600, 400),
+			style=wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT | wx.TR_SINGLE)  # noqa:E501
 		self.treeRoot = tree.AddRoot("root")
 		tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.onTreeSelect)
 		settingsSizer.Add(tree, proportion=1, flag=wx.EXPAND)
-		GestureMappingsRetriever = _UserGestureMappingsRetriever(obj=gui.mainFrame.prevFocus, ancestors=gui.mainFrame.prevFocusAncestors)
+		GestureMappingsRetriever = _UserGestureMappingsRetriever(
+			obj=gui.mainFrame.prevFocus,
+			ancestors=gui.mainFrame.prevFocusAncestors)
 		self.gestures = GestureMappingsRetriever.results
 		self.userGestureMap = GestureMappingsRetriever.userGestureMap
 		self.populateTree()
-		settingsSizer.AddSpacer(gui.guiHelper.SPACE_BETWEEN_ASSOCIATED_CONTROL_VERTICAL)
+		settingsSizer.AddSpacer(
+			gui.guiHelper.SPACE_BETWEEN_ASSOCIATED_CONTROL_VERTICAL)
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators: The label of a button to remove a gesture in the user Input Gestures dialog.
+		# Translators: The label of a button to remove a gesture
+		# in the user Input Gestures dialog.
 		self.removeButton = bHelper.addButton(self, label=_("&Remove"))
 		self.removeButton.Bind(wx.EVT_BUTTON, self.onRemove)
 		self.removeButton.Disable()
-		# Translators: The label of a button to remove all gesture in the user Input Gestures dialog.
+		# Translators: The label of a button to remove all gesture
+		# in the user Input Gestures dialog.
 		self.removeAllButton = bHelper.addButton(self, label=_("Remove &all"))
 		self.removeAllButton.Bind(wx.EVT_BUTTON, self.onRemoveAll)
 		self.pendingRemoves = set()
 		settingsSizer.Add(bHelper.sizer)
-	
+
 	def postInit(self):
 		self.tree.SetFocus()
-	
+
 	def populateTree(self, filter=''):
 		for category in sorted(self.gestures):
 			treeCat = self.tree.AppendItem(self.treeRoot, category)
@@ -56,23 +66,13 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 			for command in sorted(commands):
 				treeCom = self.tree.AppendItem(treeCat, command)
 				commandInfo = commands[command]
-				if wx.version().startswith("4"):
-					# for wxPython 4
-					self.tree.SetItemData(treeCom, commandInfo)
-				else:
-					# for wxPython 3
-					self.tree.SetItemPyData(treeCom, commandInfo)
+				self.tree.SetItemData(treeCom, commandInfo)
 				for gesture in commandInfo.gestures:
 					treeGes = self.tree.AppendItem(treeCom, self._formatGesture(gesture))
-					if wx.version().startswith("4"):
-						# for wxPython 4
-						self.tree.SetItemData(treeGes, gesture)
-					else:
-						# for wxPython 3
-						self.tree.SetItemPyData(treeGes, gesture)
+					self.tree.SetItemData(treeGes, gesture)
 			if not self.tree.ItemHasChildren(treeCat):
 				self.tree.Delete(treeCat)
-	
+
 	def _formatGesture(self, identifier):
 		try:
 			source, main = inputCore.getDisplayTextForGestureIdentifier(identifier)
@@ -82,54 +82,42 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 			return _("{main} ({source})").format(main=main, source=source)
 		except LookupError:
 			return identifier
-	
+
 	def onTreeSelect(self, evt):
 		try:
 			item = self.tree.Selection
 		except RuntimeError:
 			return
-		if wx.version().startswith("4"):
-			#for wxPython 4
-			data = self.tree.GetItemData(item)
-		else:
-			# for wxPython 3
-			data = self.tree.GetItemPyData(item)
-		isCommand = isinstance(data, AllGesturesScriptInfo)
+		data = self.tree.GetItemData(item)
 		isGesture = isinstance(data, baseString)
 		self.removeButton.Enabled = isGesture
-	
+
 	def onRemove(self, evt):
 		treeGes = self.tree.Selection
-		if wx.version().startswith("4"):
-			# for wxPython 4
-			gesture = self.tree.GetItemData(treeGes)
-		else:
-			# for wxPython 3
-			gesture = self.tree.GetItemPyData(treeGes)
+		gesture = self.tree.GetItemData(treeGes)
 		treeCom = self.tree.GetItemParent(treeGes)
-		if wx.version().startswith("4"):
-			# for wxPython 4
-			scriptInfo = self.tree.GetItemData(treeCom)
-		else:
-			# for wxPython 3
-			scriptInfo = self.tree.GetItemPyData(treeCom)
-		entry = (gesture, scriptInfo.moduleName, scriptInfo.className, scriptInfo.scriptName)
+		scriptInfo = self.tree.GetItemData(treeCom)
+		entry = (
+			gesture,
+			scriptInfo.moduleName,
+			scriptInfo.className,
+			scriptInfo.scriptName)
 		self.pendingRemoves.add(entry)
 		self.tree.Delete(treeGes)
 		scriptInfo.gestures.remove(gesture)
 		self.tree.SetFocus()
-	
+
 	def onRemoveAll(self, evt):
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you really want to erase all the modification of gesture control that have been made ?"),
+			_("Do you really want to erase all the modification of gesture control that have been made ?"),  # noqa:E501
 			# Translators: the title of a message box dialog.
 			_("NVDAExtensionGlobalPlugin add-on - warning"),
-			wx.YES|wx.NO|wx.ICON_WARNING) ==wx.NO:
+			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
 			return
 		inputCore.manager.userGestureMap.clear()
 		inputCore.manager.userGestureMap.save()
-	
+
 	def onOk(self, evt):
 		for gesture, module, className, scriptName in self.pendingRemoves:
 			try:
@@ -141,13 +129,16 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 			# Only save if there is something to save.
 			try:
 				self.userGestureMap.save()
-			except:
+			except:  # noqa:E722
 				log.debugWarning("", exc_info=True)
-				# Translators: An error displayed when saving user defined input gestures fails.
-				gui.messageBox(NVDAString("Error saving user defined gestures - probably read only file system."),
+				# Translators: An error displayed
+				# when saving user defined input gestures fails.
+				gui.messageBox(
+					NVDAString("Error saving user defined gestures - probably read only file system."),  # noqa:E501
 					NVDAString("Error"), wx.OK | wx.ICON_ERROR)
 		inputCore.manager.loadUserGestureMap()
 		super(UserInputGesturesDialog, self).onOk(evt)
+
 
 class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 	def __init__(self, obj, ancestors):
@@ -158,20 +149,21 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		self.userGestureMap = UserGestureMap()
 		self.userGestureMap.clear()
 		try:
-			self.userGestureMap.load(os.path.join(globalVars.appArgs.configPath, "gestures.ini"))
+			self.userGestureMap.load(
+				os.path.join(globalVars.appArgs.configPath, "gestures.ini"))
 		except IOError:
 			log.debugWarning("No user gesture map")
 			return
 		self.addGlobalMap(self.userGestureMap)
-	
+
 	def addToResults(self, scriptInfo):
 		if scriptInfo.category not in self.results:
 			self.results[scriptInfo.category] = {}
-		self.results[scriptInfo.category] [scriptInfo.displayName] = scriptInfo
-	
+		self.results[scriptInfo.category][scriptInfo.displayName] = scriptInfo
+
 	def addGlobalMap(self, gmap):
-		for cls, moduleName, className, gesture, scriptName in gmap.getScriptsForAllGestures():
-			c = "%s.%s"%(moduleName, className)
+		for cls, moduleName, className, gesture, scriptName in gmap.getScriptsForAllGestures():  # noqa:E501
+			c = "%s.%s" % (moduleName, className)
 			key = (c, gesture)
 			if key in self.handledGestures:
 				continue
@@ -183,18 +175,25 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 					script = getattr(cls, "script_%s" % scriptName)
 				except AttributeError:
 					script = None
-				scriptInfo = self.makeNormalScriptInfo(cls, moduleName, className, scriptName, script)
+				scriptInfo = self.makeNormalScriptInfo(
+					cls, moduleName, className, scriptName, script)
 				if not scriptInfo:
 					continue
 				self.scriptInfo[scriptInfo.cls, scriptInfo.scriptName] = scriptInfo
 				self.addToResults(scriptInfo)
 			scriptInfo.gestures.append(gesture)
-	
-	def makeNormalScriptInfo(self, cls, moduleName, className, scriptName, script):
+
+	def makeNormalScriptInfo(
+		self,
+		cls,
+		moduleName,
+		className,
+		scriptName,
+		script):
 		info = AllGesturesScriptInfo(cls, moduleName, className, scriptName)
 		category = self.getScriptCategory(cls, script)
 		if category is None:
-			category = "%s.%s" %(moduleName, className)
+			category = "%s.%s" % (moduleName, className)
 		info.category = category
 		if script is None:
 			if scriptName:
@@ -206,7 +205,7 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 			if not info.displayName:
 				return None
 		return info
-	
+
 	def getScriptCategory(self, cls, script):
 		try:
 			return script.category
@@ -218,16 +217,25 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 			pass
 		return None
 
+
 class AllGesturesScriptInfo(inputCore.AllGesturesScriptInfo):
-	__slots__ = ("cls", "moduleName", "className", "scriptName", "category", "displayName", "gestures")
-	
+	__slots__ = (
+		"cls",
+		"moduleName",
+		"className",
+		"scriptName",
+		"category",
+		"displayName",
+		"gestures")
+
 	def __init__(self, cls, moduleName, className, scriptName):
 		self.cls = cls
 		self.moduleName = moduleName
 		self.className = className
 		self.scriptName = scriptName
 		self.gestures = []
-	
+
+
 class UserGestureMap(inputCore.GlobalGestureMap):
 	def getScriptsForGesture(self, gesture):
 		try:
@@ -238,17 +246,17 @@ class UserGestureMap(inputCore.GlobalGestureMap):
 			try:
 				module = sys.modules[moduleName]
 				cls = getattr(module, className)
-			except:
+			except:  # noqa:E722
 				cls = None
 			yield cls, moduleName, className, scriptName
-	
+
 	def getScriptsForAllGestures(self):
 		"""Get all of the scripts and their gestures.
 		@return: The Python class, gesture and script name for each mapping;
-			the script name may be C{None} indicating that the gesture should be unbound for this class.
+			the script name may be C{None}
+			indicating that the gesture should be unbound for this class.
 		@rtype: generator of (class, str, str)
 		"""
 		for gesture in self._map:
-			for cls, moduleName, className, scriptName in self.getScriptsForGesture(gesture):
+			for cls, moduleName, className, scriptName in self.getScriptsForGesture(gesture):  # noqa:E501
 				yield cls, moduleName, className, gesture, scriptName
-

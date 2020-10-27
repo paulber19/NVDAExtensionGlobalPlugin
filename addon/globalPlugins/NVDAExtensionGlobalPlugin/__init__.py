@@ -1,21 +1,13 @@
-#NVDAExtensionGlobalPlugin/__init__.py
+# globalPlugins\NVDAExtensionGlobalPlugin\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-#Copyright (C) 2016-2017 Paulber19
-#This file is covered by the GNU General Public License.
-#See the file COPYING for more details.
-import globalVars
-import config
+# Copyright (C) 2016 - 2020 Paulber19
+# This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
-#this add-on is disabled when loading in the secure screen,
-# as well as if NVDA is running as a Windows Store Desktop Bridge application.
-if (globalVars.appArgs.secure 
-	or (hasattr (config, "isAppX") and config.isAppX)):
-	import globalPluginHandler
-	class GlobalPlugin (globalPluginHandler.GlobalPlugin):
-		pass
-else:
+from . import theGlobalPlugin
 
-	from . import theGlobalPlugin
-	class GlobalPlugin (theGlobalPlugin.NVDAExtensionGlobalPlugin):
-		def chooseNVDAObjectOverlayClasses(self, obj, clsList):
-			super(GlobalPlugin , self).chooseNVDAObjectOverlayClasses(obj, clsList)
+class GlobalPlugin (theGlobalPlugin.NVDAExtensionGlobalPlugin):
+	# ??? this definition is necessary.
+	# if not, the method of the NVDAExtensionGlobalPlugin class is never called.
+	def chooseNVDAObjectOverlayClasses(self, obj, clsList):
+		super(GlobalPlugin, self).chooseNVDAObjectOverlayClasses(obj, clsList)

@@ -1,278 +1,313 @@
-#NVDAExtensionGlobalPlugin/reportFormating/__init__
-#A part of  NvDAextensionGlobalPlugin
-#Copyright (C) 2016 paulber19
-#This file is covered by the GNU General Public License.
-#See the file COPYING for more details.
+# globalPlugins\NVDAExtensionGlobalPlugin\reportFormating\__init__
+# A part of NvDAextensionGlobalPlugin
+# Copyright (C) 2016 - 2020 paulber19
+# This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
 import addonHandler
-addonHandler.initTranslation()
 import colors
 from ..utils.NVDAStrings import NVDAString
 from ..utils.informationDialog import InformationDialog
-from ..utils.py3Compatibility import iterate_items, _unicode, _unicode
+from ..utils.py3Compatibility import iterate_items, _unicode
+addonHandler.initTranslation()
+
+
 def getFontText(attrs):
 	font = None
 	# Translators: this is a element in report formatting dialog box.
 	fontTitle = _("Font:")
-	fontFamily=attrs.get("font-family")
+	fontFamily = attrs.get("font-family")
 	if fontFamily:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Family: %s") %fontFamily
-		font = "%s\r\n	%s" %(fontTitle,text)
-	fontName=attrs.get("font-name")
-	if fontName :
+		text = _("Family: %s") % fontFamily
+		font = "%s\r\n	%s" % (fontTitle, text)
+	fontName = attrs.get("font-name")
+	if fontName:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Name: %s")%fontName
-		font = "%s\r\n	%s"%(font,text) if font else "%s\r\n	%s" %(fontTitle,text)
-	fontSize=attrs.get("font-size")
-	if fontSize :
+		text = _("Name: %s") % fontName
+		font = "%s\r\n	%s" % (font, text)\
+			if font else "%s\r\n	%s" % (fontTitle, text)
+	fontSize = attrs.get("font-size")
+	if fontSize:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Size: %s") %fontSize
-		font = "%s\r\n	%s" %(font, text) if font else "%s\r\n	%s" %(fontTitle,text)
-		#attributes
+		text = _("Size: %s") % fontSize
+		font = "%s\r\n	%s" % (font, text)\
+			if font else "%s\r\n	%s" % (fontTitle, text)
+		# attributes
 	attrText = getAttributesText(attrs)
 	if attrText:
-		font = "%s\r\n	%s" %(font, attrText) if font else "%s\r\n	%s" %(fontTitle,attrText)
+		font = "%s\r\n	%s" % (font, attrText)\
+			if font else "%s\r\n	%s" % (fontTitle, attrText)
 	# color
 	colorText = getColorText(attrs)
 	if colorText:
-		font = "%s\r\n	%s" %(font, colorText) if font else "%s\r\n	%s" %(fontTitle,colorText)
+		font = "%s\r\n	%s" % (font, colorText)\
+			if font else "%s\r\n	%s" % (fontTitle, colorText)
 	# emphasis
 	emphasisText = getEmphasisText(attrs)
 	if emphasisText:
-		font = "%s\r\n	%s" %(font, emphasisText) if font else "%s\r\n	%s" %(fontTitle,emphasisText)
+		font = "%s\r\n	%s" % (font, emphasisText)\
+			if font else "%s\r\n	%s" % (fontTitle, emphasisText)
 	return font
 
+
 def getStyleText(attrs):
-	style=attrs.get("style")
-	if not style: 
+	style = attrs.get("style")
+	if not style:
 		# Translators: this is a element in report formatting dialog box.
 		style = NVDAString("default style")
 	return style
 
+
 def getTextAlignmentText(attrs):
 	text = None
-	textAlign=attrs.get("text-align")
-	if textAlign :
-		textAlign=textAlign.lower() if textAlign else textAlign
-		if textAlign=="left":
-			text= NVDAString("align left")
-		elif textAlign=="center":
-			text=NVDAString("align center")
-		elif textAlign=="right":
-			text= NVDAString("align right")
-		elif textAlign=="justify":
-			text= NVDAString("align justify")
-		elif textAlign=="distribute":
-			text= NVDAString("align distributed")
+	textAlign = attrs.get("text-align")
+	if textAlign:
+		textAlign = textAlign.lower() if textAlign else textAlign
+		if textAlign == "left":
+			text = NVDAString("align left")
+		elif textAlign == "center":
+			text = NVDAString("align center")
+		elif textAlign == "right":
+			text = NVDAString("align right")
+		elif textAlign == "justify":
+			text = NVDAString("align justify")
+		elif textAlign == "distribute":
+			text = NVDAString("align distributed")
 		else:
-			text=NVDAString("align default")
+			text = NVDAString("align default")
 	if text:
 		# Translators: this is a element in report formatting dialog box.
-		text =  _("Text's alignment: %s") %text
+		text = _("Text's alignment: %s") % text
 	return text
 
-def getColorText (attrs):
+
+def getColorText(attrs):
 	textList = []
-	color=attrs.get("color")
-	backgroundColor=attrs.get("background-color")
-	backgroundColor2=attrs.get("background-color2")
-	#bgColorChanged=backgroundColor!=oldBackgroundColor or backgroundColor2!=oldBackgroundColor2
-	bgColorText=backgroundColor.name if isinstance(backgroundColor,colors.RGB) else backgroundColor
+	color = attrs.get("color")
+	backgroundColor = attrs.get("background-color")
+	backgroundColor2 = attrs.get("background-color2")
+	bgColorText = backgroundColor.name\
+		if isinstance(backgroundColor, colors.RGB) else backgroundColor
 	if backgroundColor2:
-		bg2Name=backgroundColor2.name if isinstance(backgroundColor2,colors.RGB) else backgroundColor2
+		bg2Name = backgroundColor2.name if isinstance(backgroundColor2, colors.RGB) else backgroundColor2  # noqa:E501
 		# Translators: Reported when there are two background colors.
-		# This occurs when, for example, a gradient pattern is applied to a spreadsheet cell.
+		# This occurs when, for example,
+		# a gradient pattern is applied to a spreadsheet cell.
 		# {color1} will be replaced with the first background color.
 		# {color2} will be replaced with the second background color.
-		bgColorText=_("{color1} to {color2}").format(color1=bgColorText,color2=bg2Name)
+		bgColorText = NVDAString("{color1} to {color2}").format(
+			color1=bgColorText, color2=bg2Name)
 	if color and backgroundColor:
 		# Translators: Reported when both the text and background colors change.
 		# {color} will be replaced with the text color.
 		# {backgroundColor} will be replaced with the background color.
-		textList.append(_("{color} on {backgroundColor}").format(
-			color=color.name if isinstance(color,colors.RGB) else color,
+		textList.append(NVDAString("{color} on {backgroundColor}").format(
+			color=color.name if isinstance(color, colors.RGB) else color,
 			backgroundColor=bgColorText))
 	elif color:
-		# Translators: Reported when the text color changes (but not the background color).
+		# Translators: Reported when the text color changes
+		# (but not the background color).
 		# {color} will be replaced with the text color.
-		textList.append(_("{color}").format(color=color.name if isinstance(color,colors.RGB) else color))
-	elif backgroundColor: # and bgColorChanged:
-		# Translators: Reported when the background color changes (but not the text color).
+		textList.append(NVDAString("{color}").format(
+			color=color.name if isinstance(color, colors.RGB) else color))
+	elif backgroundColor:
+		# Translators: Reported when the background color changes
+		# (but not the text color).
 		# {backgroundColor} will be replaced with the background color.
-		textList.append(_("{backgroundColor} background").format(backgroundColor=bgColorText))
-	backgroundPattern=attrs.get("background-pattern")
+		textList.append(
+			NVDAString("{backgroundColor} background").format(backgroundColor=bgColorText))
+	backgroundPattern = attrs.get("background-pattern")
 	if backgroundPattern:
-			textList.append(_("background pattern {pattern}").format(pattern=backgroundPattern))
+		textList.append(NVDAString("background pattern {pattern}").format(
+			pattern=backgroundPattern))
 	if textList:
 		return ", ".join(textList)
 	return None
+
+
 def getAttributesText(attrs):
 	attrib = None
-	bold=attrs.get("bold")
+	bold = attrs.get("bold")
 	if bold:
-		text=NVDAString("bold")
+		text = NVDAString("bold")
 		# Translators: this is a element in report formatting dialog box.
-		attrib = _("Attributes: %s") %text
-	italic=attrs.get("italic")
+		attrib = _("Attributes: %s") % text
+	italic = attrs.get("italic")
 	if italic:
-		text=NVDAString("italic")
+		text = NVDAString("italic")
 		# Translators: this is a element in report formatting dialog box.
-		attrib = "%s, %s" %(attrib, text) if attrib else _("Attributes: %s")%text
-	strikethrough=attrs.get("strikethrough")
+		attrib = "%s, %s" % (attrib, text) if attrib else _("Attributes: %s") % text
+	strikethrough = attrs.get("strikethrough")
 	if strikethrough:
-		text=NVDAString("strikethrough")
+		text = NVDAString("strikethrough")
 		# Translators: this is a element in report formatting dialog box.
-		attrib = "%s, %s" %(attrib,text) if attrib else _("Attributes: %s")%text
-	underline=attrs.get("underline")
-	if underline :
-		text= NVDAString("underlined")
+		attrib = "%s, %s" % (attrib, text) if attrib else _("Attributes: %s") % text
+	underline = attrs.get("underline")
+	if underline:
+		text = NVDAString("underlined")
 		# Translators: this is a element in report formatting dialog box.
-		attrib = "%s, %s" %(attrib,text) if attrib else _("Attributes: %s")%text
+		attrib = "%s, %s" % (attrib, text) if attrib else _("Attributes: %s") % text
 	hidden = attrs.get("hidden")
 	if hidden:
 		# Translators: Reported when text is hidden.
 		text = NVDAString("hidden")
-		attrib = "%s, %s" %(attrib,text) if attrib else _("Attributes: %s")%text
+		attrib = "%s, %s" % (attrib, text) if attrib else _("Attributes: %s") % text
 
 	return attrib
+
+
 def getVerticalAlignmentText(attrs):
-	text= None
-	verticalAlign=attrs.get("vertical-align")
-	if verticalAlign :
-		verticalAlign=verticalAlign.lower() if verticalAlign else verticalAlign
-		if verticalAlign=="top":
-			text= NVDAString("vertical align top")
-		elif verticalAlign in("center","middle"):
-			text= NVDAString("vertical align middle")
-		elif verticalAlign=="bottom":
-			text= NVDAString("vertical align bottom")
-		elif verticalAlign=="baseline":
-			text= NVDAString("vertical align baseline")
-		elif verticalAlign=="justify":
-			text= NVDAString("vertical align justified")
-		elif verticalAlign=="distributed":
-			text= NVDAString("vertical align distributed") 
+	text = None
+	verticalAlign = attrs.get("vertical-align")
+	if verticalAlign:
+		verticalAlign = verticalAlign.lower() if verticalAlign else verticalAlign
+		if verticalAlign == "top":
+			text = NVDAString("vertical align top")
+		elif verticalAlign in ("center", "middle"):
+			text = NVDAString("vertical align middle")
+		elif verticalAlign == "bottom":
+			text = NVDAString("vertical align bottom")
+		elif verticalAlign == "baseline":
+			text = NVDAString("vertical align baseline")
+		elif verticalAlign == "justify":
+			text = NVDAString("vertical align justified")
+		elif verticalAlign == "distributed":
+			text = NVDAString("vertical align distributed")
 		else:
-			text= NVDAString("vertical align default")
+			text = NVDAString("vertical align default")
 	if text:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Vertical alignment: %s")%text
-	
+		text = _("Vertical alignment: %s") % text
 	return text
 
 
 def getPositionText(attrs):
 	text = None
-	textPosition=attrs.get("text-position")
-	if textPosition :
-		textPosition=textPosition.lower() if textPosition else textPosition
-		if textPosition=="super":
-			text=NVDAString("superscript")
-		elif textPosition=="sub":
-			text= NVDAString("subscript")
+	textPosition = attrs.get("text-position")
+	if textPosition:
+		textPosition = textPosition.lower() if textPosition else textPosition
+		if textPosition == "super":
+			text = NVDAString("superscript")
+		elif textPosition == "sub":
+			text = NVDAString("subscript")
 		else:
-			text= NVDAString("baseline")
+			text = NVDAString("baseline")
 	if text:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Position: %s") %text
+		text = _("Position: %s") % text
 	return text
-		
+
+
 def getEmphasisText(attrs):
 	textList = []
-	# marked text 
-	marked=attrs.get("marked")
+	# marked text
+	marked = attrs.get("marked")
 	if marked:
 		# Translators: Reported when text is marked
-		text=NVDAString("marked")
+		text = NVDAString("marked")
 		textList.append(text)
 	# strong text
-	strong=attrs.get("strong")
+	strong = attrs.get("strong")
 	if strong:
 		# Translators: Reported when text is marked as strong (e.g. bold)
-		text= NVDAString("strong")
+		text = NVDAString("strong")
 		textList.append(text)
-	# emphasised text 
-	emphasised=attrs.get("emphasised")
+	# emphasised text
+	emphasised = attrs.get("emphasised")
 	if emphasised:
 		# Translators: Reported when text is marked as emphasised
-		text= NVDAString("emphasised")
+		text = NVDAString("emphasised")
 		textList.append(text)
 	if textList:
 		return ", ".join(textList)
 	return None
+
+
 def getParagraphIndentation(attrs):
-	indentLabels={
-		'left-indent':( NVDAString("left indent"), NVDAString("no left indent"), ),
-		'right-indent':( NVDAString("right indent"), NVDAString("no right indent"), ),
-		'hanging-indent':( NVDAString("hanging indent"), NVDAString("no hanging indent"), ),
-		'first-line-indent':( NVDAString("first line indent"), NVDAString("no first line indent"), ),
+	indentLabels = {
+		'left-indent': (
+			NVDAString("left indent"),
+			NVDAString("no left indent"), ),
+		'right-indent': (
+			NVDAString("right indent"),
+			NVDAString("no right indent"), ),
+		'hanging-indent': (
+			NVDAString("hanging indent"),
+			NVDAString("no hanging indent"), ),
+		'first-line-indent': (
+			NVDAString("first line indent"),
+			NVDAString("no first line indent"), ),
 		}
-	text =None
-	for attr,(label,noVal) in iterate_items(indentLabels):
-		newVal=attrs.get(attr)
-		if newVal :
-			text= _unicode("%s\r\n	%s %s") %(text, label,newVal) if text else _unicode("\r\n	%s %s") %(label,newVal) 
+	text = None
+	for attr, (label, noVal) in iterate_items(indentLabels):
+		newVal = attrs.get(attr)
+		if newVal:
+			text = _unicode("%s\r\n	%s %s") % (
+				text, label, newVal) if text else _unicode("\r\n	%s %s") % (label, newVal)
 		else:
-			text = _unicode("%s\r\n	%s") %(text,noVal) if text else "\r\n	%s" %(noVal) 
+			text = _unicode("%s\r\n	%s") % (
+				text, noVal) if text else "\r\n	%s" % (noVal)
 	if text:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Paragraph's indentation:%s") %text
+		text = _("Paragraph's indentation:%s") % text
 	return text
 
+
 def getSpellingErrorText(attrs):
-	invalidSpelling=attrs.get("invalid-spelling")
+	invalidSpelling = attrs.get("invalid-spelling")
 	if invalidSpelling:
 		return NVDAString("spelling error")
 	return None
 
+
 def getGrammarErrorText(attrs):
-	invalidGrammar=attrs.get("invalid-grammar")
+	invalidGrammar = attrs.get("invalid-grammar")
 	if invalidGrammar:
 		return NVDAString("grammar error")
 	return None
 
 
 def getBorderStyleText(attrs):
-	borderStyle=attrs.get("border-style")
+	borderStyle = attrs.get("border-style")
 	if borderStyle:
-		text=borderStyle
+		text = borderStyle
 	else:
 		# Translators: Indicates that cell does not have border lines.
-		text=NVDAString("no border lines")
+		text = NVDAString("no border lines")
 	return text
+
+
 def getFormatFieldText(attrs):
-	textList=[]
+	textList = []
 	# style
-	style=getStyleText(attrs)
-	textList.append(_("style: %s")%style)
+	style = getStyleText(attrs)
+	textList.append(_("style: %s") % style)
 	# font
 	font = getFontText(attrs)
 	if font:
 		textList.append(font)
-#position
+# position
 		position = getPositionText(attrs)
 		if position:
 			textList.append(position)
-		
 	# text's alignment
 	textAlignment = getTextAlignmentText(attrs)
 	if textAlignment:
 		textList.append(textAlignment)
 
 	# paraggraph indentation
-	paragraphIndentation =  getParagraphIndentation(attrs)
+	paragraphIndentation = getParagraphIndentation(attrs)
 	if paragraphIndentation:
 		textList.append(paragraphIndentation)
 	VAlignment = getVerticalAlignmentText(attrs)
 	if VAlignment:
 		textList.append(VAlignment)
-	#line spacing
-	lineSpacing=attrs.get("line-spacing")
-	if lineSpacing :
+	# line spacing
+	lineSpacing = attrs.get("line-spacing")
+	if lineSpacing:
 		# Translators: a type of line spacing (E.g. single line spacing).
-		textList.append(_("Line spacing: %s")%lineSpacing)
-	
+		textList.append(_("Line spacing: %s") % lineSpacing)
 	# spelling error
 	spellingError = getSpellingErrorText(attrs)
 	if spellingError:
@@ -281,7 +316,7 @@ def getFormatFieldText(attrs):
 	grammarError = getGrammarErrorText(attrs)
 	if grammarError:
 		textList.append(grammarError)
-	#border stylTexte
+	# border stylTexte
 	borderStyle = getBorderStyleText(attrs)
 	if borderStyle:
 		textList.append(borderStyle)
@@ -291,14 +326,12 @@ def displayFormattingInformations(indentation, formatField):
 	text = None
 	if indentation:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Indentations: %s") %indentation
-		
-	l = getFormatFieldText(formatField)
-	for t in l:
-		text = text+"\r\n" +t if text else t
+		text = _("Indentations: %s") % indentation
+	tempList = getFormatFieldText(formatField)
+	for t in tempList:
+		text = text + "\r\n" + t if text else t
 	if text != "":
-		# Translators: this is the title of information dialog to show formatting informations.
+		# Translators: this is the title of information dialog
+		# to show formatting informations.
 		dialogTitle = _("Formatting's Informations")
-		InformationDialog.run(None, dialogTitle,"",  text)
-	
-	
+		InformationDialog.run(None, dialogTitle, "", text)

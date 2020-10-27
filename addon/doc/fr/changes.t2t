@@ -1,15 +1,34 @@
- ADDON_SUMMARY - Historique
+ADDON_SUMMARY - Historique
 Auteur: ADDON_AUTHOR_NAME avec la participation de Daniel Poiraud
 
 
 %!includeconf: ../addon_global.t2tconf
 %!includeconf: addon_informations.t2tconf
 URL: ADDON_AUTHOR_URL
+
+Dépot GitHub: [ADDON_REPOSITORY]
+
+
+
++ v9.3 (27/10/2020) +
+- compatibilité avec NVDA 2020.3
+- Correction de l'utilisation du delai de répétition du même script.
+- Augmentation de la limite haute de la durée de rémanence.
+- Augmentation de la limite haute de la temporisation de répétition du même geste de commande.
+- Correction pour pouvoir utiliser les touches "majuscule" et "control" avec les touches de direction en utilisation standard du pavé numérique.
+- suppression, pour les versions de NVDA supérieures à la 2020.3, de l'annonce du mot focalisé après suppression par "control+supp" (maintenant prise en charge par NVDA).
+- fonctionnement partiel de l'extension en mode sécurisé.
+- Suppression du code spécifique pour wxPython 3.
+- gros nettoyage du code (correction des erreurs soulevées par l'analyseur Flake8).
+- correction des fautes dans la documentation.
+- ajout du bouton "Quoi de neuf" dans le dialogue proposant l'installation d'une nouvelle mise à jour.
+
+
 + v9.2.2 (15/08/2020) +
-Correction de l'erreur survenant lors du lancement du script "Afficher le dialogue pour gérer les gestes de commande configurés par l'utilisateur ". (avec version 2020.3 alpha)
+Correction de l'erreur survenant lors du lancement du script "Afficher le dialogue pour gérer les gestes de commande configurés par l'utilisateur" (avec version 2020.3 alpha)
 
 + v9.2.1 (10/08/2020) +
-Ajout de la traduction espagnole
+Ajout de la traduction espagnole.
 - correction de l'erreur dans le journal avec le script "reportFormatting" et mise à niveau de ce script.
 - correction de l'erreur engendrée par le nettoyage de code dans les versions alpha de NVDA.
 
@@ -28,12 +47,12 @@ Ajout traduction turque.
 
 + v9.1 (01/05/2020) +
 - compatibilité avec NVDA 2020.1
-- reprise des scripts pour annoncer le nom et le chemin complet  du dossier sélectionné   des boites de dialogue du style "Ouvrir", "Enregistrer sous".
+- reprise des scripts pour annoncer le nom et le chemin complet du dossier sélectionné des boites de dialogue du style "Ouvrir", "Enregistrer sous".
 - reprise des scripts pour annoncer les enregistrements de l'historique des annonces vocales pour une copie direct dans le presse-papier.
 
 
 + v9.0.8 (10/04/2020) +
-Correction de l'erreur produite  lors de l'appui sur le bouton "copier le chemin" du dialogue "Gestion des journaux de NVDA".
+Correction de l'erreur produite lors de l'appui sur le bouton "copier le chemin" du dialogue "Gestion des journaux de NVDA".
 
 + v9.0.7 (09/04/2020) +
 Ajout de la traduction arabe.
@@ -42,24 +61,24 @@ Ajout de la traduction arabe.
 Ajout de la traduction portugaise.
 
 + v9.0.5 (02/04/2020) +
-- Préparation à la  compatibilité avec NVDA 2020.2.
+- Préparation à la compatibilité avec NVDA 2020.2.
 - mise en conformité pour le test de compatibilité d'une extension avec NVDA.
 
 
 + v9.0.4 (23/03/2020) +
-Préparation à la  compatibilité avec NVDA 2020.1.
+Préparation à la compatibilité avec NVDA 2020.1.
 
 + v9.0.3 (05/03/2020) +
 Correction de l'erreur avec le script "nvda+f7" sur Microsoft Edge.
 
 + v9.0.2 (22/02/2020) +
-- Corrections du bug:  erreur   du script pour copier le chemin du journal dans le presse-papier.
+- Corrections du bug: erreur du script pour copier le chemin du journal dans le presse-papier.
 - meilleure gestion d'une erreur d'importation du fichier myAddons.latest.
 
 
 + v9.0.1 (06/02/2020) +
 - Correction du bug avec le script "nvda+pause".
-- correction de  la date de sortie de la version 9.0.
+- correction de la date de sortie de la version 9.0.
 
 
 
@@ -70,40 +89,41 @@ Nouvelles fonctionnalités:
 - possibilité de réinitialiser complètement la configuration de l'extension.
 - recherche et installation automatique de mises à jour.
 - utilisation possible de la touche verrouillage numérique pour basculer en pavé numérique standard.
-- ajout des touches "multiplier", "diviser" et "plus"  en utilisation standard du pavé numérique.
+- ajout des touches "multiplier", "diviser" et "plus" en utilisation standard du pavé numérique.
 - réorganisation des catégories des paramètres de l'extension.
 - avertissement pour incompatibilité avec d'autres extensions.
 
 
 + v8.1 (05/05/2019) +
 Compatibilité avec NVDA 2019.2
+
 Fonctionnalités:
 - possibilité de limiter la rémanence à la seule touche "NVDA".
 - compléments pour la fonctionnalité "Contrôle du son":
- - augmenter, diminuer, maximiser ou minimiser  le volume de l'application sous le focus,
- - augmenter, diminuer, maximiser ou minimiser  le volume principal,
+ - augmenter, diminuer, maximiser ou minimiser le volume de l'application sous le focus,
+ - augmenter, diminuer, maximiser ou minimiser le volume principal,
  - regroupement de ses gestes de commandes sous la catégorie "contrôle du son",
-- possibilité d'utiliser  les touches   du pavé numérique comme touche de direction (fonctionnement normal de Windows).
+- possibilité d'utiliser les touches du pavé numérique comme touche de direction (fonctionnement normal de Windows).
 
 
 Correction de bugs:
 - non sauvegarde de certains paramètres lors de l'enregistrement manuelle et quand l'option "ne pas enregistrer la configuration" était cochée.
-- fonctionnalité "Outils de développement": correction  de la mauvaise prise en compte des sous-langages pour la création de la documentation d'une extension.
+- fonctionnalité "Outils de développement": correction de la mauvaise prise en compte des sous-langages pour la création de la documentation d'une extension.
 
 
 + v8.0 (13/02/2019) +
 Fonctionnalités:
 - dans le dialogue "Liste des éléments visibles composant l'objet en avant plan", possibilité de changer de type d'objet sans quitter la liste des objets.
--  ajout de la possibilité d'activer la rémanence des touches au démarrage de NVDA.
+- ajout de la possibilité d'activer la rémanence des touches au démarrage de NVDA.
 - ajout de la rémanence spécifique pour le site gmail.com.
 - réorganisation du sous-menu "paramètres".
 - ajout de la fonctionnalité "date et heure - complément" qui regroupe la copie de la date et heure dans le presse-papier (avec "nvda+f12"), l'annonce de l'heure avec les secondes et l'annonce de la date et heure sans ponctuation.
-- nouveau  script "copier la date et l'heure"  dans l'interpréteur de commande.
-- reprise de la fonctionnalité "Commutation de profil vocal" pour le choix des sélecteurs sous un profil de configuration.  La précédente configuration de cette fonctionnalité n'est pas compatible  et sera donc effacée à la première utilisation de cette fonctionnalité.
+- nouveau script "copier la date et l'heure" dans l'interpréteur de commande.
+- reprise de la fonctionnalité "Commutation de profil vocal" pour le choix des sélecteurs sous un profil de configuration. La précédente configuration de cette fonctionnalité n'est pas compatible et sera donc effacée à la première utilisation de cette fonctionnalité.
 - possibilité d'afficher les enregistrements de l'historique vocal dans l'ordre croissant ou décroissant.
 - lors de la désinstallation d'une fonctionnalité, suppression complète de sa configuration,
 - reprise complète de la documentation pour l'utilisation du terme "extension" à la place de "module complémentaire" (imposée par les traducteurs de NVDA),
--  suppression du délai d'attente entre appui touche pour tous les scripts  de base de NVDA modifiés par l'extension.
+- suppression du délai d'attente entre appui touche pour tous les scripts de base de NVDA modifiés par l'extension.
 
 
 Corrections de bugs:
@@ -114,7 +134,7 @@ Développement:
 - préparation à la compatibilité avec python 3.
 - Nouveaux outils pour le développement d'extensions basés sur un fichier buildVars.py:
  - mise à jour de la version de l'extension dans le fichier buildVars.py,
- - mise à jour  du fichier manifest.ini,
+ - mise à jour du fichier manifest.ini,
  - création du fichier manifest.ini de localisation,
  - création des fichiers HTML de documentation,
  - création du fichier .pot,
@@ -125,8 +145,8 @@ Développement:
 
 
 + v7.4.3 (07/01/2019) +
-- correction du fichier keyboard.ini espagnol  qui provoquait le plantage de NVDA en langue espagnole.
-- traduction en langue arabe  de l'interface du module
+- correction du fichier keyboard.ini espagnol qui provoquait le plantage de NVDA en langue espagnole.
+- traduction en langue arabe de l'interface du module
 
 
 + v7.4.2 (22/12/2018) +
@@ -139,10 +159,10 @@ Correction du problème de l'annonce en anglais des commandes issues d'un clavie
 
 + v7.4 (16/12/2018) +
 1- Nouvelles fonctionnalités:
-- ajout, pour les navigateurs "Firefox" et Google Chrome", du type "cliquable" pour le mode  navigation et le dialogue "Liste des éléments",
-- ajout, pour les navigateurs "Firefox" Internet Explorer, Microsoft Edge et Google Chrome", du type "paragraphe" pour le mode  navigation et le dialogue "Liste des éléments",
-- ajout du script pour faire un simple  et double clic gauche à la position courante de l'objet navigateur.
-- ajout du script pour faire un simple  et double clic droit à la position courante de l'objet navigateur.
+- ajout, pour les navigateurs "Firefox" et Google Chrome", du type "cliquable" pour le mode navigation et le dialogue "Liste des éléments",
+- ajout, pour les navigateurs "Firefox" Internet Explorer, Microsoft Edge et Google Chrome", du type "paragraphe" pour le mode navigation et le dialogue "Liste des éléments",
+- ajout du script pour faire un simple et double clic gauche à la position courante de l'objet navigateur.
+- ajout du script pour faire un simple et double clic droit à la position courante de l'objet navigateur.
 
 
 2- divers:
@@ -152,29 +172,29 @@ Correction du problème de l'annonce en anglais des commandes issues d'un clavie
 
 
 + v7.3 (25/09/2018) +
-Finalisation de la mise  en  compatibilité avec NVDA 2018.3   et avec wxPython 4.
+Finalisation de la mise en compatibilité avec NVDA 2018.3 et avec wxPython 4.
 - nouvelles fonctionnalité:
- - mémorisation des derniers symboles composés et dialogue  pour les afficher et les recomposer,
- - nouveau dialogue Outils de développement qui permet la  possibilité de convertir les fichiers de documentation des modules complémentaires,
+ - mémorisation des derniers symboles composés et dialogue pour les afficher et les recomposer,
+ - nouveau dialogue Outils de développement qui permet la possibilité de convertir les fichiers de documentation des modules complémentaires,
  - ajout du type d'élément "région principale" pour le mode navigation (navigateur firefox, Internet Explorer, Google Chrome et Microsoft Edge),
  - ajout de l'option avancée pour configurer la temporisation d'attente de répétition du même geste de commande,
- - désactivation sous option du paramètre "Annoncer la description de l'objet" pendant l'affichage des boites de dialogue  du style confirmation (affichées par gui.messageBox) pour que NVDA annonce le message contenu dans ces boites,
+ - désactivation sous option du paramètre "Annoncer la description de l'objet" pendant l'affichage des boites de dialogue du style confirmation (affichées par gui.messageBox) pour que NVDA annonce le message contenu dans ces boites,
  - ajout de l'option pour naviguer en boucle dans le document à la recherche d'un élément précédent ou suivant,
  - ajout d'un bip sonore répétitif pendant la recherche des éléments dans le dialogue "Liste des éléments" (NVDA+f7),
  - placement du bouton "Mise en veille prolongée" en première place dans le dialogue "arrêt de l'ordinateur",
- - menu de paramétrage du module  modifié pour ressembler au menu de paramétrage de NVDA,
+ - menu de paramétrage du module modifié pour ressembler au menu de paramétrage de NVDA,
 
 
 - correction de bugs:
  - correction des libellés des listes de choix des boites de dialogue de configuration du module.
- - correction du non arrêt du bip sonore lors de la recherche des éléments de la fenêtre  au premier plan sur interruption par échappement,
-  - problème de pied de page lors de la mauvaise conversion d'un document t2t  (modification du fichier txt2tags.py et suppression du pied de page).
+ - correction du non arrêt du bip sonore lors de la recherche des éléments de la fenêtre au premier plan sur interruption par échappement,
+  - problème de pied de page lors de la mauvaise conversion d'un document t2t (modification du fichier txt2tags.py et suppression du pied de page).
 
 
 
 - divers:
- - remaniement du code source   avec le placement de tous les modules externes utilisés  dans un même dossier («utilities"). Ce dossier ne nécessite aucune traduction,
- - placement des fichiers wav dans  le dossier sounds.
+ - remaniement du code source avec le placement de tous les modules externes utilisés dans un même dossier («utilities"). Ce dossier ne nécessite aucune traduction,
+ - placement des fichiers wav dans le dossier sounds.
 
 
 + v7.2 (20 Juin 2018) +
@@ -189,7 +209,7 @@ Finalisation de la mise  en  compatibilité avec NVDA 2018.3   et avec wxPython 
 Correction de la non prise en compte de la configuration du module pour la fonctionnalité "Touches rémanentes".
 
 + v7.1.1 (5 Juin 2018) +
-Correction du problème d'impossibilité de lire  le résultat de  la reconnaissance optique.
+Correction du problème d'impossibilité de lire le résultat de la reconnaissance optique.
 
 + v7.1 (1 Juin 2018) +
 Mise en compatibilité avec NVDA 2018.2
@@ -202,18 +222,18 @@ Cette version du module n'est pas compatible avec les versions antérieures à l
 - support du navigateur Google Chrome par la fonctionnalité '"Extension des fonctionnalités du tampon virtuel",
 - mise en place de l'interpréteur de commandes permettant de lancer les scripts à l'aide d'une simple touche,
 - installation par configuration des fonctionnalités avec ou sans gestes de commande,
-- nouvelle fonctionnalité "Rémanence des touches"  permettant de composer les gestes de commandes utilisant les  touches NVDA, Control, Alt, Majuscule ou Windows, avec un seul doigt,
-- annonce ou affichage du  nom et  numéro de version du module complémentaire activé pour  l'application placée sous le focus,
+- nouvelle fonctionnalité "Rémanence des touches" permettant de composer les gestes de commandes utilisant les touches NVDA, Control, Alt, Majuscule ou Windows, avec un seul doigt,
+- annonce ou affichage du nom et numéro de version du module complémentaire activé pour l'application placée sous le focus,
 - arrêt, redémarrage ou mise en veille prolongée de l'ordinateur,
 - gestion des gestes de commande configurés par l'utilisateur.
-- Control du son de l'ordinateur (Windows 10)  pour:
+- Control du son de l'ordinateur (Windows 10) pour:
  - couper ou rétablir le son du flux audio de l'application sous le focus,
- - établir, par script  et au lancement du module, le son du flux audio principal et celui de NVDA.
+ - établir, par script et au lancement du module, le son du flux audio principal et celui de NVDA.
 
 
 ++ Changements ++
-- la plupart des fonctionnalités sont maintenant installées par défaut sans geste de commande. Il est cependant possible d'installer ces gestes en modifiant l'état d'installation de la fonctionnalité ou  d'affecter manuellement ces gestes,
-- le geste de commande "nvda+f12" peut annoncer  l'heure de l'horloge Windows  avec les secondes (option configurable),
+- la plupart des fonctionnalités sont maintenant installées par défaut sans geste de commande. Il est cependant possible d'installer ces gestes en modifiant l'état d'installation de la fonctionnalité ou d'affecter manuellement ces gestes,
+- le geste de commande "nvda+f12" peut annoncer l'heure de l'horloge Windows avec les secondes (option configurable),
 - le geste de commande "NVDA+f12" peut copier la date et l'heure dans le presse-papier (triple appui),
 - le geste de commande "NVDA+alt+k" ("Annoncer les cellules de la colonne courante ") est remplacé par "NVDA+alt+l" (conflit avec d'autre module complémentaire),
 - le geste de commande "NVDA+majuscule+4" ("Aide à la composition de symboles complexes") est remplacé par "NVDA+majuscule+ f4"(conflit avec d'autre module complémentaire),
@@ -221,14 +241,14 @@ Cette version du module n'est pas compatible avec les versions antérieures à l
 
 
 ++ Corrections de bogues ++
-- correction des mauvaises descriptions des gestes de commandes  des scripts remplaçant les scripts de base,
+- correction des mauvaises descriptions des gestes de commandes des scripts remplaçant les scripts de base,
 - sur corruption du fichier de configuration, réinitialisation de la configuration aux valeurs par défaut.
 
 
-+v6.5 (28 Aout 2017) +
++v6.5 (28 Août 2017) +
 - compatibilité avec NVDA 2017.3,
 - commande "w" modifiée en "y",
--  correction d'un bug de la fonctionnalité "commande sélective des touches de commandes",
+- correction d'un bug de la fonctionnalité "commande sélective des touches de commandes",
 - correction de la documentation de certains scripts.
 
 
@@ -248,17 +268,18 @@ Correction du problème rencontré dans Excel avec "control+c" ou "control+v"
 
 + v6.2 (13 Mars 2017) +
 Compatibilité avec nvda 2017.1
+
 Fonctionnalités:
 - possibilité d'avertissement avant l'échéance de la minuterie,
-- ajout des  commandes de déplacements dans un tableau pour Microsoft Edge,
+- ajout des commandes de déplacements dans un tableau pour Microsoft Edge,
 - redémarrage de NVDA avec le journal activé en mode débogage,
-- signalement par  un son de l'inscription d'une erreur dans le journal.
+- signalement par un son de l'inscription d'une erreur dans le journal.
 
 
 Correction de bug:
--  double annonce  de l'élément sous focus (dialogue Annonce sélective des touches de commandes),
-- non action du bouton "Gérer  vos symboles" du dialogue  " aide à la composition de symboles complexes",
-- impossibilité de création de nouvelle catégorie du dialogue  " gestion des symboles utilisateur",
+- double annonce de l'élément sous focus (dialogue Annonce sélective des touches de commandes),
+- non action du bouton "Gérer vos symboles" du dialogue " aide à la composition de symboles complexes",
+- impossibilité de création de nouvelle catégorie du dialogue " gestion des symboles utilisateur",
 - non prise en compte immédiate des traductions lors d'une mise à jour (double redémarrage de NVDA nécessaire),
 - "control+c" dans l'explorateur Windows fait sauter au premier fichier commençant par "c",
 - mauvaise annonce du nombre d'éléments sélectionnés (Explorateur Windows W10).
@@ -266,7 +287,7 @@ Correction de bug:
 
 + v6.1 (10 Janvier 2017) +
 - configuration du niveau de symboles et ponctuations pour les déplacements par mot.
-- nouveau changement de la commande clavier  pour la minuterie,
+- nouveau changement de la commande clavier pour la minuterie,
 - correction de la non copie de l'adresse du document dans le presse-papier ("NVDA+a")
 
 
@@ -281,7 +302,7 @@ Correction de bug sur annonce des ponctuations en déplacement mot par mot
 + v6.0 (23 Décembre 2016) +
 - possibilité de copier le chemin du journal courant dans le presse-papier,
 - possibilité d'afficher l'historique des annonces vocales et augmentation du nombre d'enregistrements à 200,
-- ajout partiel de la fonctionnalité "Extension du tampon virtuel" pour le navigateur  Microsoft Edge,
+- ajout partiel de la fonctionnalité "Extension du tampon virtuel" pour le navigateur Microsoft Edge,
 - script pour redémarrer NVDA,
 - script pour afficher les éléments visibles composant l'objet en avant plan,
 - changement de commande clavier pour lancer la minuterie,
@@ -292,7 +313,7 @@ Correction de bug sur annonce des ponctuations en déplacement mot par mot
 
 + v5.0.2 (30 Septembre 2016) +
 - correction du problème de blocage de W10 lors de maximisation de fenêtres,
-- indication dans la documentation, de la manière de sélectionner avec la souris, les éléments  dans les listes du dialogue "annonce sélective des commandes clavier".
+- indication dans la documentation, de la manière de sélectionner avec la souris, les éléments dans les listes du dialogue "annonce sélective des commandes clavier".
 
 
 + v5.0.1 (13 Septembre 2016) +
@@ -302,7 +323,7 @@ Correction de bugs:
 - commande "nvda+Majuscule+4" inopérante.
 
 
-+ v5.0 (23 Aout 2016) +
++ v5.0 (23 Août 2016) +
 - fonctionnalité de renommage des touches clavier
 - fonctionnalité de gestion de symboles complexes utilisateur
 - fonctionnalité d'annonce sélective des touches de commandes,
@@ -324,12 +345,12 @@ Correction de bugs:
 - scripts pour réécouter les précédentes annonces vocales
 - scripts pour annoncer les cellules des colonnes/lignes d'un tableau,
 - script pour annoncer l'adresse du document (Firefox et Internet Explorer),
-- modification du script de NVDA "nvda+f12" pour  annoncer l'heure sans dépendre du niveau de ponctuation.
+- modification du script de NVDA "nvda+f12" pour annoncer l'heure sans dépendre du niveau de ponctuation.
 
 
 + v4.1.3 (14 Mars 2016) +
 - utilisation des traductions de NVDA pour la boite de dialogue "NVDA+f7",
-- annonce des  commandes sans contrôle de la sélection pour toutes les applications.
+- annonce des commandes sans contrôle de la sélection pour toutes les applications.
 - reprise de la description de certains scripts,
 - suppression des fichiers changes.* et inclusion de l'historique dans le manuel utilisateur.
 
@@ -339,12 +360,12 @@ Correction de bugs:
 
 
 + v4.1.1 (5 Mars 2016) +
-- correction de bug : non annonce de la sélection dans  Libre office Writer
+- correction de bug : non annonce de la sélection dans Libre office Writer
 
 
 + v4.1 (25 Février 2016) +
 - mise en conformité avec NVDA 2016.1
-- complément dans la dénomination des éléments  dans la boite de dialogue NVDA+f7.
+- complément dans la dénomination des éléments dans la boite de dialogue NVDA+f7.
 - prise en compte de la sélection pour l'annonce des commandes d'édition
 - suppression de la description dans les rubans windows
 - agrandissement de la hauteur de la fenêtre des symboles complexes.
@@ -379,7 +400,7 @@ Correction de bugs:
 + v3.6 (28 Février 2015) +
 - nouveau script "nvda+alt+l" pour activer ou désactiver l'annonce du numéro de ligne,
 - annonce du mot suivant le mot supprimé par la commande "control+Suppr",
-- redimensionnement des fenêtres "liste des  fenêtres actives" et "liste des icônes de la zone de notification".
+- redimensionnement des fenêtres "liste des fenêtres actives" et "liste des icônes de la zone de notification".
 
 
 + v3.5 (20 Février 2015) +
@@ -397,7 +418,7 @@ Correction de bugs:
 + v3.3 (9 Octobre 2014) +
 - Ajout du script pour annoncer le nom et la version de l'application sous le curseur,
 - mise en conformité avec la version NVDA 2014.3:
-- accès à l'aide du module par le gestionnaire  de modules,
+- accès à l'aide du module par le gestionnaire de modules,
 - NVDA+h affiche maintenant le dialogue des gestes des commandes de NVDA.
 
 
@@ -412,13 +433,13 @@ Correction de bugs:
 
 
 + v3.0 (29 novembre 2013) +
-- Utilisation des   catégories de script apportées par NVDA 2013.3
+- Utilisation des catégories de script apportées par NVDA 2013.3
 - compatibilité avec la version 2014.1 de NVDA,
 - ajout du script pour annoncer le profil de configuration en cours
 - suppression du script pour afficher la liste des fenêtres (nvda+majuscule+f11)
 - ajout du script pour afficher la liste des icônes de la zone de notification et de la liste des fenêtres (nvda+f11)
 - uniformisation visuelle des boites de dialogue,
-- ajout de nouvelle commande de  navigation pour le buffer virtuel (paragraphe, division, ancre)
+- ajout de nouvelle commande de navigation pour le buffer virtuel (paragraphe, division, ancre)
 - ajout de nouveau type d'éléments pour la commande "nvda+F7".
 - Composition de symboles: le caractère "espace insécable est maintenant correctement copier dans le presse-papier.
 
@@ -430,23 +451,23 @@ Correction de bugs:
 
 + v2.4.2 (1 Avril 2013) +
 - erreur avec Firefox et thunderbird
-- erreur avec gesture contenant "plus" 
+- erreur avec gesture contenant "plus"
 
 
 + v2.4.1 (26 Mars 2013) +
 - affichage des commandes clavier du buffer virtuel par le script "NVDA+h"
-- ajout de nouvelles commandes  de déplacement pour le buffer virtuel: paragraphe, division, ancre.
+- ajout de nouvelles commandes de déplacement pour le buffer virtuel: paragraphe, division, ancre.
 
 
 + v2.3.8 (25 Mars 2013) +
 - correction fichier symbolCategories.dic fr et es.
-- correction problème lié  au nom de dossier accentué et leur utilisation  avec os.path.join
+- correction problème lié au nom de dossier accentué et leur utilisation avec os.path.join
 - dans onDestroyButton (activeWindowReport)
 
 
 + v2.3.7 (23 Mars 2013) +
 - traduction en Espagnol
-- correction de texte  et orthographe
+- correction de texte et orthographe
 - corrections dans les fichiers symbolCategories.dic et symboles-xx.dic
 
 
@@ -456,34 +477,35 @@ Correction de bugs:
 
 + v2.3.4 (11 janvier 2013) +
 - fenêtre sans titre
-- liste des symboles tronquée  
+- liste des symboles tronquée
 - fautes d'orthographe, etc
 
 
 + v2.3.3 (8 Janvier 2013) +
-- Bug de la liste  des catégories.
+- Bug de la liste des catégories.
 
-+ v2.3.2 (8 Janvier 2013) ++
-- nouveau script pour  aide à la  composition de symboles complexe (NVDA+majuscule+4) 
+
++ v2.3.2 (8 Janvier 2013) +
+- nouveau script pour aide à la composition de symboles complexe (NVDA+majuscule+4)
 
 
 + v2.2.1 (27 Octobre 2012) +
 
 - redimensionnement de la fenêtre en 1200X700,
-- mise en majuscule de la première lettre  du nom des touches,
+- mise en majuscule de la première lettre du nom des touches,
 - renommage des boutons "global" et "application" en "commandes globales" et "retour aux commandes du module complémentaire",
 - modification de l'aide pour signaler plus tôt l'utilisation possible des touches "t" et "s".
 
 
 + v2.2.0 (6 octobre 2012) +
 - regroupement en un seul script (NVDA+h) des deux script précédents.
-- intégration du global plugin "listDesFenetres-v100225".  
+- intégration du global plugin "listDesFenetres-v100225".
 
 
 + v2.0.0 (3 octobre 2012) +
 - traduction des touches,
 - navigation simplifiée entre les groupes de commandes à l'aide de la touche "t", et entre les catégories de clavier à l'aide de la touche "s".
-- ajout d'un bouton d'aide 
+- ajout d'un bouton d'aide
 - prise en compte des fichiers gestures.ini
 
 

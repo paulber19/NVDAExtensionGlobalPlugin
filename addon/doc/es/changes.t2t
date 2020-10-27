@@ -7,7 +7,23 @@ Autor: ADDON_AUTHOR_NAME con la participación de Daniel Poiraud
 
 URL: ADDON_AUTHOR_URL
 
+Repositorio en GitHub: [ADDON_REPOSITORY]
+
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
+
++ v9.3 (27/10/2020) +
+- compatibilidad con NVDA 2020.3
+- Corrección de la utilización del retardo de espera de repetición del mismo script.
+- Aumento del límite  alto de la duración de la remanencia.
+- Aumento del límite  alto del retardo de espera de repetición del mismo gesto de entrada.
+- Corrección para poder usar las teclas "mayúscula" y "control" con las teclas de flecha en uso estándar del teclado numérico.
+- eliminación, para las versiones de NVDA superiores a la 2020.3, del anuncio de la palabra enfocada después de la eliminación mediante "control+suprimir" (ahora apoyado por NVDA).
+- funcionamiento parcial del complemento en modo seguro.
+- Supresión de código específico para wxPython 3.
+- gran limpieza del código (corrección de errores planteado por el analizador Flake8).
+- corrección de errores en la documentación.
+- añadido el botón "Qué hay de nuevo" en el  cuadro de diálogo proponiendo la instalación de una nueva actualización.
+
 
 + v9.2.2 (15/08/2020) +
 Corrección del error que se producía al ejecutar el script "Mostrar el diálogo para administrar los gestos de entrada configurados por el usuario" (con version 2020.3 alpha).
@@ -84,9 +100,12 @@ Nueva características:
 - Posibilidad de usar la tecla de bloqueo numérico para cambiar al teclado numérico estándar.
 - Se ha añadido las teclas "multiplicar", "dividir" y "más" en uso estándar del teclado numérico.
 - Reorganización de las categorías en las opciones del complemento.
+- Advertencia de incompatibilidad con otros complementos.
 
 
 + v8.1 (05/05/2019) +
+Compatibilidad con NVDA 2019.2
+
 Nueva características:
 - Posibilidad de limitar la remanencia a la única tecla "NVDA".
 - Suplementos para la funcionalidad "Control de sonido":
@@ -97,6 +116,7 @@ Nueva características:
 
 
 Corección de Fallos:
+- No salvaguarda de algunos ajustes  durante la salvaguarda  manual y cuando la   opción "No guardar la configuración" fue marcado.
 - Funcionalidad "Herramientas de desarrollo": Se ah correjido  la mala   tenída en cuenta de los sub-idiomas para la creación de la documentación de  un complemento.
 
 
@@ -122,14 +142,14 @@ Corección de Fallos:
 Desarrollo:
 - Preparación para la compatibilidad con Python 3.
 - Nuevas herramientas para el desarrollo de complementos basados en un archivo buildVars.py:
-- Actualizar la versión del complemento en el archivo buildVars.py, 
-- Actualizar el archivo manifest.ini, 
-- Creación del archivo manifest.ini de localización, 
-- Creación de los archivos HTML de documentación,
-- Creación del archivo .pot, 
-- Creación del archivo buildVars.py, 
-- Preparación del complemento, 
-- Explorar la carpeta del complemento. 
+ - Actualizar la versión del complemento en el archivo buildVars.py, 
+ - Actualizar el archivo manifest.ini, 
+ - Creación del archivo manifest.ini de localización, 
+ - Creación de los archivos HTML de documentación,
+ - Creación del archivo .pot, 
+ - Creación del archivo buildVars.py, 
+ - Preparación del complemento, 
+ - Explorar la carpeta del complemento. 
 
 
 + v7.4.3 (07/01/2019) +
@@ -239,7 +259,7 @@ Esta versión del complemento no es compatible con versiones anteriores a la ver
 +v6.5 (28 de Agosto de 2017)+
 - Compatibilidad con NVDA 2017.3,
 - La órden "w" modificado en "y",
--  Corrección de un fallo en la funcionalidad "Anuncio selectivo de teclas de órdenes",
+- Corrección de un fallo en la funcionalidad "Anuncio selectivo de teclas de órdenes",
 - Corrección de la documentación de algunos scripts.
 
 
@@ -405,7 +425,7 @@ Corrección de fallos:
 
 
 + v3.4 (28 de Noviembre de 2014) +
-- Modificación del atajo "nvda+control+v" ya se utiliza en "nvda+shift+f1"
+- Modificación del atajo "nvda+control+v" ya se utiliza en "nvda+mayúscula+f1"
 - Limpieza del código
 
 
@@ -430,7 +450,7 @@ Corrección de fallos:
 - Utilización  de las categorías de script aportados por NVDA 2013.3
 - Compatibilidad con la versión 2014.1 de NVDA,
 - Se ha añadido el script para anunciar el perfil de configuración actual
-- Eliminación del script para mostrar la lista de las ventanas (nvda+shift+f11)
+- Eliminación del script para mostrar la lista de las ventanas (nvda+mayúscula+f11)
 - Se ha añadido el script para mostrar la lista de iconos en la bandeja del sistema y de la lista de las ventanas (nvda+f11)
 - Uniformización visual de los cuadros de  diálogo,
 - Añadido nueva órden de  navegación para el modo exploración (párrafo, división, ancla)
@@ -478,8 +498,9 @@ Corrección de fallos:
 + v2.3.3 (8 de Enero de 2013) +
 - Error  de la lista  de categorías.
 
-+ v2.3.2 (8 de Enero de 2013) ++
-- Nuevo script de ayuda para la composición de símbolos complejos (NVDA+shift+4) 
+
++ v2.3.2 (8 de Enero de 2013) +
+- Nuevo script de ayuda para la composición de símbolos complejos (NVDA+mayúscula+4) 
 
 
 + v2.2.1 (27 de Octubre de 2012) +
@@ -505,4 +526,4 @@ Corrección de fallos:
 + v1.0.0 (5 de Julio de 2012) +
 Creación del global plugin:
 - Script (NVDA+h) para mostrar las órdenes de teclado propio al complemento activo
-- Script (NVDA+shift+h) para mostrar las órdenes de teclado globales.
+- Script (NVDA+mayúscula+h) para mostrar las órdenes de teclado globales.

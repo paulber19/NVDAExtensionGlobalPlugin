@@ -1,5 +1,5 @@
-ADDON_SUMMARY - user's  manual
-Author: ADDON_AUTHOR_NAME with the  participation of Daniel Poiraud
+ADDON_SUMMARY - user's manual
+Author: ADDON_AUTHOR_NAME with the participation of Daniel Poiraud
 
 
 %!includeconf: ../addon_userManual.t2tconf
@@ -7,6 +7,8 @@ Author: ADDON_AUTHOR_NAME with the  participation of Daniel Poiraud
 %!includeconf: addon_keys.t2tconf
 
 URL: ADDON_AUTHOR_URL
+
+GitHub repository: [ADDON_REPOSITORY]
 
 Download:
 - [stable version ADDON_VERSION ADDON_DOWNLOAD_SERVER1]
@@ -25,5 +27,38 @@ Traductor (s): automatic translation from french language
 
 + Introduction +
 ++ General ++
-Sorry, but this manual is not available in English today. 
+Sorry, but this manual is not available in English today.
 The original manual is written in french ([french manual ../fr/addonUserManual.html]) and is not translated to this day.
+
+
+
+++ update ++
+The update of the extension is, by default, automatically a short time after the start of NVDA (between 20 and 600 seconds) and a maximum of once per day.
+It is possible to disable this update by unchecking the option "automatically check for updates" of "Update" category in the extension settings.
+The version of the extension can be:
+- a stable version: its version number is "1.0" for example.
+- either a development version: the version number is of the type "1.0-dev1", or "1.0-rc1", or "1.0-beta2".
+
+
+By default, the stable version is updated with a stable version more recent (higher version number).
+But it is possible to update the stable version running with a development version of the next stable version. Just check the option "Update also update the stable release to the versions of development" located in the "Update" category of extension settings.
+
+A development version is updated:
+- with a more recent development version,
+- with its stable version,
+- or with the latest stable version if the previous option is not checked.
+
+
+The button "Search for update" placed in the extension settings, menu item "Update", allows you to search immediately for an update.
+
+In the case of an automatic update and if a new version is detected, the "Update" dialog box is displayed to suggest:
+- either the immediate installation of the new version,
+- or to postpone the update until later. In this case, the search will be restarted at least one hour later.
+
+
+The "What's new" button offers the possibility of opening, in the browser, the history of the extension and thus being able to know the new features of the proposed version.
+
+
+++ Historique ++
+The version history of this add-on is in the file: ["changes.html" changes.html]
+
