@@ -6,7 +6,11 @@ import os.path
 # Change this file instead of sconstruct or manifest files, whenever possible.
 
 
-# Full getext (please don't change)
+# Since some strings in "addon_info" are translatable,
+# we need to include them in the .po files.
+# Gettext recognizes only strings given as parameters to the "_" function.
+# To avoid initializing translations in this module we simply roll our own "fake" "_" function
+# which returns whatever is given to it as an argument.
 def _(arg):
 	return arg
 
@@ -88,7 +92,7 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version": "9.3",
+	"addon_version": "9.4",
 	# Author(s)
 	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support
@@ -143,3 +147,10 @@ i18nSources = pythonSources
 # Paths are relative to the addon directory,
 # not to the root directory of your addon sources.
 excludedFiles = []
+
+# Base language for the NVDA add-on
+# If your add-on is written in a language other than english,
+# modify this variable.
+# For example:
+# set baseLanguage to "es" if your add-on is primarily written in spanish.
+baseLanguage = "en"

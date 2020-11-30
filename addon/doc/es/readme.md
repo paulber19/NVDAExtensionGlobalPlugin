@@ -1,8 +1,7 @@
 # Complemento Extensión de las órdenes básicas de NVDA #
 
 * Autores: paulber19 con la participación de Daniel Poiraud
-* URL : paulber19@laposte.net
-* Repositorio en GitHub: [https://github.com/paulber19/NVDAExtensionGlobalPlugin.git][3]
+* URL: paulber19@laposte.net
 * Descargar:
 	* [versión estable][1]
 	* [versión de desarrollo][2]
@@ -82,6 +81,6 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Script para reiniciar rápidamente NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.3.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.4.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
 [3]: https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

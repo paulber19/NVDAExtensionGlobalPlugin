@@ -1,9 +1,21 @@
 % NOTHING TO TRANSLATE
 % -----
-%!PostProc (html):ADDON_VERSION 9.3
-%!PostProc (html):MINIMUM_NVDA_VERSION  2019.1.1
+% download
+%%!PreProc:ADDON_DOWNLOAD_SERVER1 https://github.com/paulber007/AllMyNVDAAddons/raw/master/wordAccessEnhancement/ADDON_NAME-ADDON_VERSION.nvda-addon
+%%!PreProc:ADDON_DOWNLOAD_PREVIOUS https://github.com/paulber007/AllMyNVDAAddons/raw/master/wordAccessEnhancement/ADDON_NAME-ADDON_VERSION.nvda-addon
+%!PreProc:ADDON_DOWNLOAD_SERVER1 AllMyNVDAAddons_REPOSITORY_URL/raw/master/ADDON_NAME/ADDON_NAME-ADDON_CUR_VERSION.nvda-addon
+%!PreProc:ADDON_DOWNLOAD_PREVIOUS AllMyNVDAAddons_REPOSITORY_URL/raw/master/ADDON_NAME/ADDON_NAME-ADDON_PREV_VERSION.nvda-addon
+%!PreProc: ADDON_DEV_URL AllMyNVDAAddons_REPOSITORY_URL/tree/master/ADDON_NAME/dev
+%!PostProc: AllMyNVDAAddons_REPOSITORY_URL https://github.com/paulber007/AllMyNVDAAddons
+% addon repository
+%!PreProc: ADDON_REPOSITORY PAULBER19_REPOSITORY_URL/ADDON_REPOSITORY_NAME.git
+%!PostProc: PAULBER19_REPOSITORY_URL https://github.com/paulber19
+% specific add-on informations 
+%!PostProc: ADDON_NAME NVDAExtensionGlobalPlugin
+%!PostProc: ADDON_REPOSITORY_NAME NVDAExtensionGlobalPlugin
+% current stable version
+%!PostProc (html):ADDON_CUR_VERSION 9.4
+%!PostProc (html):MINIMUM_NVDA_VERSION  2019.1
 %!PostProc (html):LAST_TESTED_NVDA_VERSION  2020.3
-%!PreProc:ADDON_DOWNLOAD_SERVER1 https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-ADDON_VERSION.nvda-addon
-%!PreProc: ADDON_DEV_URL https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
-%!PreProc: ADDON_REPOSITORY https://github.com/paulber19/NVDAExtensionGlobalPlugin.git
-
+%previous stable version
+%!PostProc (html):ADDON_PREV_VERSION 9.3

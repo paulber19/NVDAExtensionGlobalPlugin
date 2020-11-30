@@ -3,16 +3,18 @@
 # Build customizations
 # Change this file instead of sconstruct or manifest files, whenever possible.
 
-# Full getext (please don't change)
+
+# Since some strings in "addon_info" are translatable,
+# we need to include them in the .po files.
+# Gettext recognizes only strings given as parameters to the "_" function.
+# To avoid initializing translations in this module we simply roll our own "fake" "_" function
+# which returns whatever is given to it as an argument.
 def _(arg):
 	return arg
 
 # Add-on information variables
 {addonInfoStart}
-	# for previously unpublished addons,
-	#	please follow the community guidelines at:
-	# https://bitbucket.org/nvdaaddonteam/todo/raw/master/guideLines.txt
-	# add-on Name, internal for nvda
+	# add-on Name/identifier, internal for NVDA
 	"addon_name": "{name}",
 	# Add-on summary, usually the user visible name of the addon.
 	# Translators: Summary for this add-on to be shown
@@ -50,3 +52,9 @@ i18nSources = pythonSources
 # Paths are relative to the addon directory,
 # not to the root directory of your addon sources.
 excludedFiles = []
+
+# If your add-on is written in a language other than english,
+# modify this variable.
+# For example:
+# set baseLanguage to "es" if your add-on is primarily written in spanish.
+baseLanguage = "en"

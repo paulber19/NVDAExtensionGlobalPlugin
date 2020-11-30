@@ -7,11 +7,11 @@ Autor: ADDON_AUTHOR_NAME con la participación de Daniel Poiraud
 %!includeconf: addon_keys.t2tconf
 URL: ADDON_AUTHOR_URL
 
-Repositorio en GitHub: [ADDON_REPOSITORY]
+Repositorio en GitHub: [ADDON_REPOSITORY ADDON_REPOSITORY]
 
 
 Descargar:
-- [Versión estable ADDON_VERSION ADDON_DOWNLOAD_SERVER1]
+- Versión estable: [ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
 - [Versiones de desarrollo ADDON_DEV_URL]
 
 
@@ -148,12 +148,14 @@ Una versión de desarrollo se actualiza:
 
 El botón "Buscar actualización" situado en la categoría "Actualización" te permite buscar inmediatamente una actualización.
 
+El botón "Ver historial" situado en la misma categoría te permite ver el historial de la versión actual en el navegador.
+
 En el caso de una actualización automática, y si se detecta una nueva versión, el cuadro de diálogo "Actualización" aparece para proponer:
 - ya sea la instalación inmediata de la nueva versión,
 - ya sea para posponer la actualización a más tarde. En este caso, la búsqueda se reiniciará como mínimo una hora más tarde.
 
 
-El botón "Qué hay de nuevo" ofrece la posibilidad, de abrir en el navegador, el historial del complemento y asi poder conocer las novedades de la versión propuesta.
+Para una actualización de una versión estable, el botón "Qué hay de nuevo" ofrece la posibilidad, de abrir en el navegador, el historial del complemento y asi poder conocer las novedades de la versión propuesta.
 
 
 ++ Funcionamiento en Modo seguro ++

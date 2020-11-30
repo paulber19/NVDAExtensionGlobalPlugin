@@ -1,8 +1,7 @@
 # NVDA global commands extension #
 
-* Author : PaulBer19 with the participation of Daniel Poiraud
-* URL : paulber19@laposte.net
-* GitHub repository: [https://github.com/paulber19/NVDAExtensionGlobalPlugin.git][3]
+* Author: PaulBer19 with the participation of Daniel Poiraud
+* URL: paulber19@laposte.net
 * Download:
 	* [stable version][1]
 	* [developpement version][2]
@@ -88,7 +87,6 @@ some features can be enabled or disabled individually.
 * script to quickly restart NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.3.nvda-addon
-
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.4.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
 [3]: https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

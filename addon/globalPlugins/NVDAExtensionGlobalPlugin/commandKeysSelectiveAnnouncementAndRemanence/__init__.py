@@ -35,6 +35,7 @@ addonHandler.initTranslation()
 
 _NVDA_InputManager = None
 _myInputManager = None
+_NVDA_ExecuteGesture = None
 
 
 _availableModifierKeysCombination = [
@@ -54,9 +55,18 @@ _availableModifierKeysCombination = [
 	["control", "shift"],
 	["shift", ],
 	]
+def myExecuteGesture(gesture): 
+	try:
+		if isinstance(gesture, KeyboardInputGesture):
+			_myInputManager.executeKeyboardGesture(gesture)
+		else:
+			_NVDA_ExecuteGesture(gesture)
+	except NoInputGestureAction:
+		raise NoInputGestureAction
 
 
-class MyInputManager (inputCore.InputManager):
+
+class MyInputManager (object):
 	# gesture's sequence to set remanence's activation
 	activationSequences = [
 		"rightShift,rightControl,rightShift",
@@ -74,19 +84,18 @@ class MyInputManager (inputCore.InputManager):
 	enableNumpadNnavigationKeys = False
 
 	def __init__(self):
+		super(MyInputManager, self).__init__()
 		self.commandKeysFilter = CommandKeysFilter()
 		from ..settings import _addonConfigManager
 		self.taskTimer = None
 		if _addonConfigManager.getRemanenceAtNVDAStart():
 			self.taskTimer = wx.CallLater(4000, self.toggleRemanenceActivation)
 		self.hasPreviousRemanenceActivationOn = False
-		super(MyInputManager, self).__init__()
 		from ..settings import toggleEnableNumpadNavigationModeToggleAdvancedOption, toggleActivateNumpadNavigationModeAtStartAdvancedOption  # noqa:E501
 		if (
 			toggleEnableNumpadNavigationModeToggleAdvancedOption(False)
 			and toggleActivateNumpadNavigationModeAtStartAdvancedOption(False)):
 			self.setNumpadNavigationMode(True)
-		self.NVDAExecuteGesture = _NVDA_InputManager .executeGesture
 
 	def stopRemanence(self, beep=False):
 		if self.remanenceActivation is False:
@@ -153,6 +162,7 @@ class MyInputManager (inputCore.InputManager):
 				ui.message,
 				"%s - %s" % (addonSummary, msg))
 			core.callLater(30, speech.speakMessage, "%s - %s" % (addonSummary, msg))
+
 	def manageRemanenceActivation(self, gesture):
 		if not gesture.isModifier:
 			# it's not a modifier key,
@@ -266,9 +276,9 @@ class MyInputManager (inputCore.InputManager):
 			numpadKeyNames .extend(["kb:shift+numpadMultiply", "kb:shift+numpadDivide", "kb:shift+numpadPlus"])  # noqa:E501
 			d = {"globalCommands.GlobalCommands": {
 				"None": numpadKeyNames}}
-			self.localeGestureMap.update(d)
+			_NVDA_InputManager.localeGestureMap.update(d)
 		else:
-			self.loadLocaleGestureMap()
+			_NVDA_InputManager.loadLocaleGestureMap()
 
 	def toggleNavigationNumpadMode(self):
 		state = not self.enableNumpadNnavigationKeys
@@ -327,11 +337,11 @@ class MyInputManager (inputCore.InputManager):
 			raise NoInputGestureAction
 		wasInSayAll = False
 		if gesture.isModifier:
-			if not self.lastModifierWasInSayAll:
-				wasInSayAll = self.lastModifierWasInSayAll = sayAllHandler.isRunning()
-		elif self.lastModifierWasInSayAll:
+			if not _NVDA_InputManager.lastModifierWasInSayAll:
+				wasInSayAll = _NVDA_InputManager.lastModifierWasInSayAll = sayAllHandler.isRunning()
+		elif _NVDA_InputManager.lastModifierWasInSayAll:
 			wasInSayAll = True
-			self.lastModifierWasInSayAll = False
+			_NVDA_InputManager.lastModifierWasInSayAll = False
 		else:
 			wasInSayAll = sayAllHandler.isRunning()
 		if wasInSayAll:
@@ -348,15 +358,15 @@ class MyInputManager (inputCore.InputManager):
 			winKernel.SetThreadExecutionState(
 				winKernel.ES_SYSTEM_REQUIRED | winKernel.ES_DISPLAY_REQUIRED)
 		if log.isEnabledFor(log.IO) and not gesture.isModifier:
-			self._lastInputTime = time.time()
+			_NVDA_InputManager._lastInputTime = time.time()
 			log.io("Input: %s" % gesture.identifiers[0])
-		if self._captureFunc:
+		if _NVDA_InputManager._captureFunc:
 			try:
-				if self._captureFunc(gesture) is False:
+				if _NVDA_InputManager._captureFunc(gesture) is False:
 					return
 			except:  # noqa:E722
 				log.error("Error in capture function, disabling", exc_info=True)
-				self._captureFunc = None
+				_NVDA_InputManager._captureFunc = None
 		if gesture.isModifier:
 			if gesture.noAction:
 				gesture.normalizedModifiers = []
@@ -376,16 +386,7 @@ class MyInputManager (inputCore.InputManager):
 			scriptHandler.queueScript(script, gesture)
 			return
 		raise NoInputGestureAction
-
-	def executeGesture(self, gesture):
-		try:
-			if isinstance(gesture, KeyboardInputGesture):
-				self.executeKeyboardGesture(gesture)
-			else:
-				self.NVDAExecuteGesture(gesture)
-		except NoInputGestureAction:
-			raise NoInputGestureAction
-
+	
 	def speakGesture(self, gesture):
 		if not gesture.shouldReportAsCommand:
 			return
@@ -433,8 +434,6 @@ class CommandKeysFilter(object):
 		else:
 			if keyLabel.lower() in self.keys:
 				return not self.checkModifiers(modifiers, keyLabel)
-			else:
-				return True
 		return True
 
 	def updateCommandKeysSelectiveAnnouncement(
@@ -510,10 +509,16 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		# gui
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# the speak command key flag
+		from versionInfo import version_year, version_major
+		NVDAVersion = [version_year, version_major]
+		if NVDAVersion >= [2020, 1]:
+			labelText = NVDAString("Speak c&ommand keys")
+		else:
+			labelText=NVDAString("Speak command &keys")
 		self.commandKeysCheckBox = sHelper.addItem(wx.CheckBox(
 			self,
 			wx.ID_ANY,
-			label=NVDAString("Speak command &keys")))
+			label=labelText))
 		self.commandKeysCheckBox.SetValue(
 			config.conf["keyboard"]["speakCommandKeys"])
 		# the keyboard key list box
@@ -742,21 +747,21 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 
 
 def initialize():
-	global _NVDA_InputManager, _myInputManager
-	_NVDA_InputManager = inputCore.manager
+	global _NVDA_InputManager, _myInputManager, _NVDA_ExecuteGesture
+	from inputCore import manager
+	_NVDA_InputManager = manager
+	_NVDA_ExecuteGesture = manager.executeGesture
+	manager.executeGesture = myExecuteGesture
 	_myInputManager = MyInputManager()
-	_myInputManager ._captureFunc = inputCore.manager._captureFunc
-	_myInputManager .localeGestureMap = inputCore.manager.localeGestureMap
-	_myInputManager .userGestureMap = inputCore.manager.userGestureMap
-	_myInputManager._lastInputTime = inputCore.manager._lastInputTime
-	_myInputManager.lastModifierWasInSayAll = inputCore.manager.lastModifierWasInSayAll  # noqa:E501
-	inputCore.manager = _myInputManager
 	log.warning("commandKeysSelectiveAnnouncementAndRemanence initialized")
 
 
 def terminate():
-	global _NVDA_InputManager, _myInputManager
-	if _NVDA_InputManager is not None:
-		inputCore.manager = _NVDA_InputManager
-	_myInputManager = None
+	global _NVDA_InputManager, _myInputManager, _NVDA_ExecuteGesture
+	if _NVDA_ExecuteGesture is not None:
+		from inputCore import manager
+		manager.executeGesture = _NVDA_ExecuteGesture
+		_NVDA_ExecuteGesture = None
 	specialForGmail.terminate()
+	_NVDA_InputManager = None
+	_myInputManager = None

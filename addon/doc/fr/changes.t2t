@@ -6,8 +6,21 @@ Auteur: ADDON_AUTHOR_NAME avec la participation de Daniel Poiraud
 %!includeconf: addon_informations.t2tconf
 URL: ADDON_AUTHOR_URL
 
-Dépot GitHub: [ADDON_REPOSITORY]
+Dépot GitHub: [ADDON_REPOSITORY ADDON_REPOSITORY]
 
+Téléchargement:
+- [Version actuelle: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
+- [Version précédente: ADDON_PREV_VERSION ADDON_DOWNLOAD_PREVIOUS]
+- [versions de développement ADDON_DEV_URL]
+
+
++ v9.4 (29/11/2020) +
+- correction du problème concernant:
+ - l'impossibilité d'affecter un geste de commande braille dans le dialogue "geste de commande",
+ - l'impossibilité d'avoir l'aide des gestes de commande braille quand l'aide à la saisie est activée.
+- ajout des liens de téléchargements dans l'historique de l'extension.
+- ajout du bouton "Voir l'historique" dans la catégorie "Mise à jour " des paramètres de l'extension.
+- correction du blocage de NVDA lors d'un copie coller vers la fenêtre de rédaction de Thunderbird.
 
 
 + v9.3 (27/10/2020) +

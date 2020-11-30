@@ -9,8 +9,10 @@ import addonHandler
 from logHandler import log
 import os
 import time
+import api
 import sys
 import gui
+import config
 import wx
 from .NVDAStrings import NVDAString
 import core
@@ -305,7 +307,6 @@ class CheckForAddonUpdate(object):
 			# no update for this add-on
 			wx.CallAfter(self.upToDateDialog, self.auto)
 			return
-		self.releaseNotesURL = self.getReleaseNotesURL(latestUpdateInfos)
 		newUpdate = self.checkForNewUpdate(addonUpdateInfos)
 		if newUpdate is None:
 			self.upToDateDialog(self.auto)
@@ -322,23 +323,23 @@ class CheckForAddonUpdate(object):
 			url=url,
 			version=version)
 		self.availableUpdateDialog(version, url)
-	def getReleaseNotesURL(self, latestUpdateInfos):
+	def getreleaseNoteURL (self):
 		baseURL = "https://rawgit.com/paulber007/AllMyNVDAAddons/master"
 		#baseURL = "https://github.com/paulber007/AllMyNVDAAddons/raw/master"
-		baseReleaseNotesURL = "{baseURL}/{addonName}/{releaseNotes}".format(
+		basereleaseNoteURL  = "{baseURL}/{addonName}/{releaseNotes}".format(
 			baseURL=baseURL,
 			addonName=self.addon.manifest["name"],
 			releaseNotes="releaseNotes")
 		from languageHandler import curLang
 		lang = curLang.split("_")[0]
 		url = "{url}/{language}/changes.html".format(
-			url=baseReleaseNotesURL,
+			url=basereleaseNoteURL ,
 			language=lang)
 		try:
 			res = urlopen(url)
 		except IOError as e:
 			url = "{url}/{language}/changes.html".format(
-				url=baseReleaseNotesURL,
+				url=basereleaseNoteURL ,
 				language="en")
 		return url
 
@@ -346,7 +347,7 @@ class CheckForAddonUpdate(object):
 		# Translators: message to user to report a new version.
 		message = _("New version available, version %s. Do you want download it now?") % version  # noqa:E501
 		with UpdateCheckResultDialog(
-				gui.mainFrame, self.title, message, auto=self.auto, releaseNotesURL=self.releaseNotesURL) as d:
+				gui.mainFrame, self.title, message, auto=self.auto, releaseNoteURL =self.releaseNoteURL ) as d:
 			res = d.ShowModal()
 			if res == wx.ID_NO:
 				return
@@ -513,9 +514,11 @@ class CheckForAddonUpdate(object):
 			return None
 		if updateChannel == "release":
 			url = addonUpdateInfos["localURL"]
+			self.releaseNoteURL  = self.getreleaseNoteURL ()
 		else:
 			url = "{url}/{channel}".format(
 				channel=updateChannel, url=addonUpdateInfos["localURL"])
+			self.releaseNoteURL  = None
 		minimumVersion = addonUpdateInfos[updateChannel].get(
 			"minimumNVDAVersion", None)
 		minimumNVDAVersion = addonAPIVersion .getAPIVersionTupleFromString(
@@ -533,7 +536,7 @@ class CheckForAddonUpdate(object):
 
 
 class UpdateCheckResultDialog(wx.Dialog):
-	def __init__(self, parent, title, message, auto, releaseNotesURL=None):
+	def __init__(self, parent, title, message, auto, releaseNoteURL =None):
 		super(UpdateCheckResultDialog, self).__init__(parent, -1, title=title)
 		self.parent = parent
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -556,8 +559,8 @@ class UpdateCheckResultDialog(wx.Dialog):
 			# about performing some action.
 			remindMeButton = bHelper.addButton(self, label=_("&Later"))
 			remindMeButton.Bind(wx.EVT_BUTTON, self.onLaterButton)
-		if releaseNotesURL is not None:
-			self.releaseNotesURL = releaseNotesURL
+		if releaseNoteURL  is not None:
+			self.releaseNoteURL  = releaseNoteURL 
 			releaseNotesButton = bHelper.addButton(self, label=_("Wha&t's new"))
 			releaseNotesButton .Bind(wx.EVT_BUTTON, self.onReleaseNotesButton)
 		
@@ -567,13 +570,19 @@ class UpdateCheckResultDialog(wx.Dialog):
 		mainSizer.Fit(self)
 		self.SetSizer(mainSizer)
 		self.CentreOnScreen()
+		# the text in the window must be spoken.
+		option = config.conf["presentation"]["reportObjectDescriptions"]
+		config.conf["presentation"]["reportObjectDescriptions"] = True
 		self.Show()
+		api.processPendingEvents()
+		config.conf["presentation"]["reportObjectDescriptions"] = option
+
 
 	def onLaterButton(self, evt):
 		self.EndModal(0)
 	def onReleaseNotesButton(self, evt):
 		import webbrowser
-		webbrowser.open(self.releaseNotesURL)
+		webbrowser.open(self.releaseNoteURL )
 
 
 	def onYesButton(self, evt):

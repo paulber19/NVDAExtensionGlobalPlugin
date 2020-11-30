@@ -191,9 +191,8 @@ class EditableTextEx(EditableText):
 			return
 		speech.speakMessage(_msgPaste)
 		gesture.send()
-		time.sleep(0.1)
 		from globalCommands import commands
-		commands.script_reportCurrentLine(None)
+		wx.CallLater(100, commands.script_reportCurrentLine, None)
 
 	def script_undo(self, gesture):
 		if (

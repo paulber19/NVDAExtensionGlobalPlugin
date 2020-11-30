@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: NVDAExtensionGlobalPlugin 9.3\n"
+"Project-Id-Version: NVDAExtensionGlobalPlugin 9.4\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2020-10-27 12:26+0100\n"
+"POT-Creation-Date: 2020-11-30 09:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,14 +20,14 @@ msgstr ""
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on to be shown on installation
 #. and add-on information.
-#: buildVars.py:23
+#: buildVars.py:27
 msgid "NVDA global commands extension"
 msgstr ""
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on
 #. add-on information from add-ons manager
-#: buildVars.py:27
+#: buildVars.py:31
 msgid ""
 "This add-on has been developed with the participation of Daniel Poiraud.\n"
 "It adds to NVDA:\n"
@@ -793,27 +793,30 @@ msgid "Double right click"
 msgstr ""
 
 #. Translators: message to user the fonctionnality is not available.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1397
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1404
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1431
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1401
 msgid ""
 "This functionnality is only available if \"command key selective announcement"
 "\" or \"keys's remanence functionnality\" is installed"
 msgstr ""
 
+#. Translators: message to user the fonctionnality is not available.
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1412
+msgid "The standard use of the numeric keypad  is is not allowed"
+msgstr ""
+
 #. Translators: this is the title of Helper dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1467
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1470
 msgid "Shell's scripts"
 msgstr ""
 
 #. the list box
 #. Translators: This is the label of the list appearing
 #. on Active Windows List Display dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1501
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1504
 msgid "Description: command"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1516
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1519
 msgid "&Run script"
 msgstr ""
 
@@ -1276,62 +1279,62 @@ msgid "select all"
 msgstr ""
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:345
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:344
 msgid " one selected object"
 msgstr ""
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:348
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:347
 #, python-format
 msgid "%s selected objects"
 msgstr ""
 
 #. Translators: message to user to report keys remanence is on.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:140
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:149
 msgid "Keys's remanence activation on"
 msgstr ""
 
 #. Translators: message to user to report keys remanence is off.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:146
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:155
 msgid "Keys's remanence activation off"
 msgstr ""
 
 #. Translators: message to user to report numpad navigation mode change.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:278
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:288
 msgid "Standard use of the numeric keypad enabled"
 msgstr ""
 
 #. Translators: message to user to report numpad navigation mode change.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:281
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:291
 msgid "Standard use of the numeric keypad disabled"
 msgstr ""
 
 #. Translators: title for the Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:448
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:447
 msgid "Command keys selective Announcement"
 msgstr ""
 
 #. the keyboard key list box
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:522
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:527
 msgid "Check &excluded keys:"
 msgstr ""
 
 #. the modifiers keys list box
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:537
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:542
 msgid "W&ith key combination:"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:582
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:587
 msgid "Do not speak command &keys"
 msgstr ""
 
 #. Translators: the text of a message box dialog
 #. in Command keys selective announcement dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:586
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:591
 #, python-format
 msgid "Do you want save changes made in \"%s\" mode"
 msgstr ""
@@ -1340,7 +1343,7 @@ msgstr ""
 #. in command keys selective announcement dialog.
 #. noqa:E501
 #. Translators: the title of a message box dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:589
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:594
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:486
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:494
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:562
@@ -1353,8 +1356,8 @@ msgstr ""
 
 #. Translators: message to user when there is no more checked command key.
 #. Translators: message to user when there is no more checked command key .
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:700
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:719
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:705
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:724
 msgid "No more checked command key"
 msgstr ""
 
@@ -2395,7 +2398,7 @@ msgstr ""
 
 #. Translators: This is the label for the Advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:593
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:105
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:107
 msgid "Update"
 msgstr ""
 
@@ -2414,8 +2417,13 @@ msgstr ""
 msgid "&Check for update"
 msgstr ""
 
+#. translators: this is a label for a button in update settings panel.
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:615
+msgid "View &history"
+msgstr ""
+
 #. Translators: title of add-on parameters dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:662
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:677
 msgid "Parameters"
 msgstr ""
 
@@ -2737,8 +2745,8 @@ msgstr ""
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:353
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:420
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:462
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:809
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:858
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:810
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:859
 msgid "Error: buildVars.py file is not found"
 msgstr ""
 
@@ -2935,52 +2943,52 @@ msgstr ""
 
 #. the addons list
 #. Translators: This is a label appearing on Convert to HTML dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:663
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:664
 msgid "&Add-ons:"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:671
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:672
 msgid "Update add-on &version"
 msgstr ""
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:676
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:677
 msgid "&Update manifest.ini file"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:677
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:678
 msgid "Create P&OT file"
 msgstr ""
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:679
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:680
 msgid "&Prepare addon"
 msgstr ""
 
 #. Translators: This is a label appearing on Convert to HTML dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:682
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:683
 msgid "&Languages:"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:690
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:691
 msgid "Create &localization manifest.ini file"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:693
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:694
 msgid "Create &HTML documentation files"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:696
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:697
 msgid "Create &buildVars file"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:699
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:700
 msgid "&Explore add-on folder"
 msgstr ""
 
 #. Translators: The label of a list item to select the type of object
 #. in the Element List Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:736
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:737
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:68
 msgid "All"
 msgstr ""
@@ -2988,33 +2996,33 @@ msgstr ""
 #. Translators: title of dialog
 #. Translators: This is a title of text control
 #. in dialog box in Manage Symbols Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:804
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:847
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:869
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:805
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:848
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:870
 msgid "Update add-on version"
 msgstr ""
 
 #. Translators: message to user add-on version line not found
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:826
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:827
 msgid "Error: buildVars.py file has no add-on version line"
 msgstr ""
 
 #. Translators: message to user  updating add-on's version
 #. of buildVars.py file.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:839
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:840
 msgid "Version of buildVars.py file has been updated"
 msgstr ""
 
 #. Translators: Message to show on the dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:866
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:867
 msgid "Entry add-on version:"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:883
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:884
 msgid "No add-on installed"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:58
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:60
 msgid ""
 "The update is not compatible with this version of NVDA. Minimum NVDA "
 "version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}."
@@ -3022,80 +3030,80 @@ msgstr ""
 
 #. Translators: The progress message
 #. indicating the name of the add-on being downloaded.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:108
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:110
 msgid "Downloading {name}"
 msgstr ""
 
 #. Translators: A message indicating that an error occurred
 #. while downloading an update to NVDA.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:123
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:125
 msgid "Error downloading update for {name}."
 msgstr ""
 
 #. Translators: message to user
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:182
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:184
 msgid "Cannot update {name} - missing file or invalid file format"
 msgstr ""
 
 #. Translators: The title of the dialog
 #. presented while an Addon is being updated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:218
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:220
 msgid "Updating"
 msgstr ""
 
 #. Translators: The message displayed while an addon is being updated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:220
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:222
 msgid "Please wait while the add-on is being updated."
 msgstr ""
 
 #. Translators: The message displayed when an error occurs
 #. when installing an add-on package.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:231
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:233
 msgid "Failed to update {name} add-on"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:289
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:291
 msgid "{summary} - update"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:299
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:301
 msgid "The service is temporarily under maintenance. Please, try again later."
 msgstr ""
 
 #. Translators: message to user to report a new version.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:347
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:348
 #, python-format
 msgid "New version available, version %s. Do you want download it now?"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:364
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:365
 #, python-format
 msgid "You are up-to-date. %s is the latest version."
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:371
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:372
 msgid "Oops! There was a problem checking for updates. Please retry later"
 msgstr ""
 
 #. Translators: This is a label of a button appearing
 #. on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:547
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:550
 msgid "&Yes"
 msgstr ""
 
 #. Translators: This is a label of a button appearing
 #. on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:552
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:555
 msgid "&No"
 msgstr ""
 
 #. Translators: The label of a button to remind the user later
 #. about performing some action.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:557
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:560
 msgid "&Later"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:561
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:564
 msgid "Wha&t's new"
 msgstr ""
 

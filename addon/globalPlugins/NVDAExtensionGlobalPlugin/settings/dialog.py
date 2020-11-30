@@ -611,13 +611,28 @@ class UpdateSettingsPanel(SettingsPanel):
 		checkForUpdateButton = wx.Button(self, label=labelText)
 		sHelper.addItem(checkForUpdateButton)
 		checkForUpdateButton.Bind(wx.EVT_BUTTON, self.onCheckForUpdate)
-
+		# translators: this is a label for a button in update settings panel.
+		labelText = _("View &history")
+		seeHistoryButton = wx.Button(self, label=labelText)
+		sHelper.addItem(seeHistoryButton)
+		seeHistoryButton.Bind(wx.EVT_BUTTON, self.onSeeHistory)
 	def onCheckForUpdate(self, evt):
 		from ..updateHandler import addonUpdateCheck
 		releaseToDevVersion = self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked()
 		wx.CallAfter(addonUpdateCheck, auto=False, releaseToDev=releaseToDevVersion)
 
 		self.Close()
+	def onSeeHistory(self, evt):
+		addon = addonHandler.getCodeAddon()
+		from languageHandler import curLang
+		lang = curLang
+		theFile = os.path.join(addon.path, "doc", lang, "changes.html")
+		print ("file: %s"%theFile)
+		if not os.path.exists(theFile):
+			lang = "en"
+			theFile = os.path.join(userConfigPath , "doc", lang, "changes.html")
+		os.startfile(theFile)
+
 
 	def saveSettingChanges(self):
 		self.restartNVDA = False

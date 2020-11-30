@@ -1,8 +1,7 @@
 # Extension des commandes de base de NVDA #
 
-* Auteur : PaulBer19 avec la participation de Daniel Poiraud.
-* URL : paulber19@laposte.net
-* Dépot GitHub: [https://github.com/paulber19/NVDAExtensionGlobalPlugin.git][3]
+* Auteur: PaulBer19 avec la participation de Daniel Poiraud.
+* URL: paulber19@laposte.net
 * Télécharger:
 	* [version stable][1]
 	* [version de développement][2]
@@ -85,6 +84,6 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * script pour redémarrer rapidement NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.3.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.4.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
 [3]: https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

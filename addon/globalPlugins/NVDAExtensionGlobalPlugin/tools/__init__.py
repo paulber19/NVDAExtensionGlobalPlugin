@@ -653,7 +653,8 @@ class ToolsForAddonDialog(wx.Dialog):
 
 	@classmethod
 	def getAddonsList(self):
-		return [addon for addon in addonHandler.getAvailableAddons()]
+		from locale import strxfrm
+		return sorted(addonHandler.getAvailableAddons(), key=lambda a: strxfrm(a.manifest['summary']))
 
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)

@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin 9.3-dev21\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
 "POT-Creation-Date: 2020-10-11 13:03+0200\n"
-"PO-Revision-Date: 2020-10-27 12:24+0100\n"
+"PO-Revision-Date: 2020-11-26 15:01+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 2.4.2\n"
 "Last-Translator: Daniel Gartmann <lists@danielgartmann.dk>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: da\n"
@@ -232,7 +232,7 @@ msgstr ""
 #. for display systray icons list dialog command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:212
 msgid "Shows the list of buttons on the System Tray"
-msgstr "Viser listen med knapper på Systembakken"
+msgstr "Viser listen med knapper i Systembakken"
 
 #. Translators: Input help mode message
 #. for display shut down , reboot or hibernate computer dialog command.
@@ -276,12 +276,13 @@ msgstr "Vis en liste med senest anvendte symboler"
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:234
 msgid "Display the list's visible items making up current foreground object"
 msgstr ""
+"Viser en liste over de synlige objekter, som objektet i forgrunden består af "
 
 #. Translators: Input help mode message
 #. for read or list foreground object command (usually the foreground window).
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:237
 msgid "If pressed twice: display the list's visible items making up it"
-msgstr ""
+msgstr "Tryk to gange for at vise listen over synlige elementer, det består af"
 
 #. Translators: Input help mode message
 #. for display systray icons list or active windows list dialog command.
@@ -293,7 +294,7 @@ msgstr "{systrayIconsDoc}. To gange, {activeWindowsDoc}"
 #. for report current application name and version command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:245
 msgid "Report the application 's name and version"
-msgstr ""
+msgstr "Oplyser navn og version på applikationen"
 
 #. Translators: Input help mode message
 #. for report current program name and app module name or current configuration profile name command.
@@ -303,6 +304,9 @@ msgid ""
 "currently loaded appModule python file. Pressing this key twice,speak the "
 "name and state of the current configuration profile"
 msgstr ""
+"Oplæser filnavnet på den aktive applikation samt navnet på det aktuelt "
+"indlæste tilføjelsesprograms Python-fil. To tryk på denne tast giver "
+"oplæsning af navn og tilstand for den aktive indstillingsprofil"
 
 #. Translators: Input help mode message
 #. for report current addon's name and version command.
@@ -311,12 +315,14 @@ msgid ""
 "Report the name and version number of add-on activated for focused "
 "application"
 msgstr ""
+"Giver navn og versionsnummer på det aktive tilføjelsesprogram for programmet "
+"i fokus"
 
 #. Translators: Input help mode message
 #. for displayt current program informations dialog command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:254
 msgid "Display informations about the focused application"
-msgstr ""
+msgstr "Vis oplysninger om det program, der er i fokus"
 
 #. Translators: Input help mode message
 #. for display minute timer dialog command.
@@ -325,24 +331,26 @@ msgid ""
 "Display dialog to start the minute timer.If minute timer already started, "
 "display dialog to report duration "
 msgstr ""
+"Vis dialogen til start af minuturet. Hvis minuturet allerede kører, vis "
+"dialogen med oplysninger om varighed "
 
 #. Translators: Input help mode message
 #. for display addon user guide command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:260
 msgid "Display add-on user's guide"
-msgstr ""
+msgstr "Vis brugervejledningen for tilføjelsesprogrammet "
 
 #. Translators: Input help mode message
 #. for display shell command help dialog command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:263
 msgid "Display commands shell's list"
-msgstr ""
+msgstr "Vis kommandofortolkerens liste"
 
 #. Translators: Input help mode message
 #. for display log management dialog command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:266
 msgid "Open a dialog to manage NVDA logs"
-msgstr ""
+msgstr "Åbn dialogen til styring af NVDA-logfiler"
 
 #. Translators: Input help mode message
 #. for open current or old log command.
@@ -351,6 +359,9 @@ msgid ""
 "Open current NVDA log file. Pressing this key twice, open the old NVDA log "
 "file. Pressing third, copy current log path to the clipboard"
 msgstr ""
+"Åbn den aktuelle NVDA log-fil. Tryk denne tast 2 gange for at åbne den "
+"forrige NVDA log- fil. Tryk 3 gange for at kopiere stien til den aktuelle "
+"logfil til Udklipsholderen"
 
 #. Translators: Input help mode message
 #. for report current folder command in open or save dialog box.
@@ -359,6 +370,8 @@ msgid ""
 "report the name of current selected folder in the open or Save dialog box. "
 "Twice: report full path"
 msgstr ""
+"Oplyser navnet på den aktuelt valgte mappe i dialogboksen Åbn eller Gem. To "
+"tryk: Oplys den fuldstændige sti"
 
 #. Translators: Input help mode message
 #. for report current folder name command in open or save dialog box.
@@ -366,6 +379,7 @@ msgstr ""
 msgid ""
 "report the name of current selected folder in the open or Save dialog box"
 msgstr ""
+"Oplyser navnet på den aktuelt valgte mappe i dialogboksen Åbn eller Gem"
 
 #. Translators: Input help mode message
 #. for report current folder path command in open or save dialog box.
@@ -374,30 +388,33 @@ msgid ""
 "report the full path of current selected folder in the open or Save dialog "
 "box"
 msgstr ""
+"Oplyser den fuldstændige sti til den aktuelt valgte mappe iin dialogboksen "
+"Åbn eller Gem"
 
 #. Translators: Input help mode message
 #. for open user config folder command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:281
 msgid "Explor my user configuration's folder"
-msgstr ""
+msgstr "Udforsk mappen med egne brugerindstillinger"
 
 #. Translators: Input help mode message
 #. for open NVDA program files folder command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:284
 msgid "Explore NVDA programs's folder"
-msgstr ""
+msgstr "Udforsk NVDA programmappen"
 
 #. Translators: Input help mode message
 #. for display speech history records list dialog command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:287
 msgid "display speech history records"
-msgstr ""
+msgstr "Viser emnerne fra talehistorikken"
 
 #. Translators: Input help mode message
 #. for report previous speech history record command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:290
 msgid "Report previous record of the speech history and copy it to clipboard"
 msgstr ""
+"Oplyser forrige element i Talehistorikken og kopierer det til udklipsholderen"
 
 #. Translators: Input help mode message
 #. for report current speech history record command.
@@ -406,18 +423,23 @@ msgid ""
 "Report current record of the speech history and copy it to clipboard. Twice: "
 "display speech history"
 msgstr ""
+"Oplyser aktuelle element i Talehistorikken og kopierer det til "
+"udklipsholderen. To tryk: Viser talehistorikken"
 
 #. Translators: Input help mode  message
 #. for report next speech history record command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:296
 msgid "Report next record of the speech history and copy it to clipboard"
 msgstr ""
+"Oplyser næste element i Talehistorikken og kopierer det til udklipsholderen"
 
 #. Translators: Input help mode message
 #. for restart NVDA in default or debug log level command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:299
 msgid "Restart NVDA. Twice: restart with log levelset to debug"
 msgstr ""
+"Genstart NVDA. To tryk: Genstart med logningsniveau indstillet til "
+"fejlfinding"
 
 #. Translators: Input help mode message
 #. for toggle switch voice profile mode command.
@@ -2582,12 +2604,12 @@ msgstr ""
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:311
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:587
 msgid "yes"
-msgstr ""
+msgstr "ja"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:311
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:587
 msgid "no"
-msgstr ""
+msgstr "nej"
 
 #. Translators: message to user to report the association
 #. between selector and voice profile.
@@ -3138,7 +3160,7 @@ msgstr ""
 #: Copie.py:218
 #: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:218
 msgid "Updating"
-msgstr ""
+msgstr "Opdaterer"
 
 #. Translators: The message displayed while an addon is being updated.
 #: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check -
@@ -3159,7 +3181,7 @@ msgstr ""
 #: Copie.py:289
 #: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:289
 msgid "{summary} - update"
-msgstr ""
+msgstr "{summary} - opdatering"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check -
 #: Copie.py:299
@@ -3226,14 +3248,14 @@ msgstr ""
 #. in the user Input Gestures dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\__init__.py:54
 msgid "Remove &all"
-msgstr ""
+msgstr "Fjern &alle"
 
 #. Translators: Describes a gesture in the Input Gestures dialog.
 #. {main} is replaced with the main part of the gesture; e.g. alt+tab.
 #. {source} is replaced with the gesture's source; e.g. laptop keyboard.
 #: globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\__init__.py:82
 msgid "{main} ({source})"
-msgstr ""
+msgstr "{main} ({source})"
 
 #. Translators: the label of a message box dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\__init__.py:113
@@ -3353,12 +3375,12 @@ msgstr ""
 #. Translators: This is the label for a listBox  in the ElementListDialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:132
 msgid "&Type: "
-msgstr ""
+msgstr "&Type: "
 
 #. Translators: This is the label for a listBox in the ElementListDialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:139
 msgid "Elements:"
-msgstr ""
+msgstr "Elementer:"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:159
 msgid "Move &navigator object to it"

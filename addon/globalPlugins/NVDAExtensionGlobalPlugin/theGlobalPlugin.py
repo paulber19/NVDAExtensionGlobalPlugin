@@ -1388,20 +1388,28 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		else:
 			callback(True)
 	enableNumpadNnavigationKeys = False
+		
+		
+		
+	def checkInstallationForNumpadFunctionnality(self):
+		print ("selective: %s"%isInstall(ID_CommandKeysSelectiveAnnouncement))
+		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
+			isInstall(ID_KeyRemanence):
+			return True
+		speech.speakMessage(
+			# Translators: message to user the fonctionnality is not available.
+			_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))  # noqa:E501
+		returnFalse
+
 
 	def script_toggleNumpadStandardUse(self, gesture):
-		if not isInstall(ID_CommandKeysSelectiveAnnouncement) and\
-			not isInstall(ID_KeyRemanence):
-			speech.speakMessage(
-				# Translators: message to user the fonctionnality is not available.
-				_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))  # noqa:E501
+		if not self.checkInstallationForNumpadFunctionnality():
 			return
 		from .settings import toggleEnableNumpadNavigationModeToggleAdvancedOption
 		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
-
 			speech.speakMessage(
 				# Translators: message to user the fonctionnality is not available.
-				_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))  # noqa:E501
+				_("The standard use of the numeric keypad  is is not allowed"))  # noqa:E501
 			return
 		from .commandKeysSelectiveAnnouncementAndRemanence import _myInputManager
 		_myInputManager .toggleNavigationNumpadMode()
@@ -1419,21 +1427,16 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			gesture.send()
 			callback(gesture)
 			return
-		count = scriptHandler.getLastScriptRepeatCount()
 		gesture.send()
-		if count == 0:
+		if scriptHandler.getLastScriptRepeatCount() == 0:
 			delayScriptTask(callback, gesture)
 		else:
-			if not isInstall(ID_CommandKeysSelectiveAnnouncement) and\
-				not isInstall(ID_KeyRemanence):
-				speech.speakMessage(
-					# Translators: message to user the fonctionnality is not available.
-					_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))  # noqa:E501
+			if not self.checkInstallationForNumpadFunctionnality():
 				return
 			self.script_toggleNumpadStandardUse(gesture)
 
 	def checkUpdateWithLocalMyAddonsFile(self, auto=False):
-		path = "F:\\nvdaprojet\\paulber007Repositories\\AllMyNVDAAddons\\myAddons.latest"  # noqa:E501
+		path = "F:\\nvdaprojet\\paulber007Repositories\\myAddons.latest"  # noqa:E501
 		from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
 		from .updateHandler.update_check import CheckForAddonUpdate
 		wx.CallAfter(
