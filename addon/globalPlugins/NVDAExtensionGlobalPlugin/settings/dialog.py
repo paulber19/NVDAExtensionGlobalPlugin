@@ -237,16 +237,14 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 		sHelper.addItem(group)
 		# bug fix in nvda 2020.3
 		# so hide it for nvda version higher or equal  to this version
-		
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Report next word on deletion")
 		self.ReportNextWordOnDeletionOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.ReportNextWordOnDeletionOptionBox.SetValue(toggleReportNextWordOnDeletionOption(False))
 		import versionInfo
-		NVDAVersion= [versionInfo.version_year, versionInfo.version_major]
-		
+		NVDAVersion = [versionInfo.version_year, versionInfo.version_major]
 		if globalVars.appArgs.secure\
-			or NVDAVersion >= [2020,3]:
+			or NVDAVersion >= [2020, 3]:
 			self.ReportNextWordOnDeletionOptionBox .Hide()
 		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
 		labelText = _("maximum number of last &used symbols recorded:")
@@ -294,7 +292,7 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-		labelText = _("Na&vigate in loop")
+		labelText = _("&Browse in loop")
 		self.loopInNavigationModeOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.loopInNavigationModeOptionBox.SetValue(toggleLoopInNavigationModeOption(False))
 		if getInstallFeatureOption(ID_ExtendedVirtualBuffer) == C_DoNotInstall:
@@ -314,7 +312,8 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 			toggleSpeechRecordWithNumberOption()
 		if self.speechRecordInAscendingOrderOptionBox.IsChecked() != toggleSpeechRecordInAscendingOrderOption(False):
 			toggleSpeechRecordInAscendingOrderOption()
-		toggleLoopInNavigationModeOption()
+		if self.loopInNavigationModeOptionBox.IsChecked() != toggleLoopInNavigationModeOption(False):
+			toggleLoopInNavigationModeOption()
 		maximumOfLastUsedSymbols = int(self.maximumOfLastUsedSymbolsBox.GetString(self.maximumOfLastUsedSymbolsBox.GetSelection()))
 		_addonConfigManager.setMaximumOfLastUsedSymbols(maximumOfLastUsedSymbols)
 
@@ -449,7 +448,6 @@ class AdvancedSettingsPanel(SettingsPanel):
 		# Translators: This is a label for a choice item in Advanced options settings dialog.
 		_("For all NVDA's versions"),  # PSOE_AllVersions
 		]
-	_repeatBeepOnAudioDevicesDelayLimits = (1, 60)
 
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
@@ -616,23 +614,25 @@ class UpdateSettingsPanel(SettingsPanel):
 		seeHistoryButton = wx.Button(self, label=labelText)
 		sHelper.addItem(seeHistoryButton)
 		seeHistoryButton.Bind(wx.EVT_BUTTON, self.onSeeHistory)
+
 	def onCheckForUpdate(self, evt):
 		from ..updateHandler import addonUpdateCheck
 		releaseToDevVersion = self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked()
 		wx.CallAfter(addonUpdateCheck, auto=False, releaseToDev=releaseToDevVersion)
 
 		self.Close()
+
 	def onSeeHistory(self, evt):
 		addon = addonHandler.getCodeAddon()
 		from languageHandler import curLang
-		lang = curLang
-		theFile = os.path.join(addon.path, "doc", lang, "changes.html")
-		print ("file: %s"%theFile)
+		theFile = os.path.join(addon.path, "doc", curLang, "changes.html")
 		if not os.path.exists(theFile):
-			lang = "en"
-			theFile = os.path.join(userConfigPath , "doc", lang, "changes.html")
+			lang = curLang
+			theFile = os.path.join(addon.path, "doc", lang, "changes.html")
+			if not os.path.exists(theFile):
+				lang = "en"
+				theFile = os.path.join(addon.path, "doc", lang, "changes.html")
 		os.startfile(theFile)
-
 
 	def saveSettingChanges(self):
 		self.restartNVDA = False
@@ -644,18 +644,15 @@ class UpdateSettingsPanel(SettingsPanel):
 	def onSave(self):
 		self.saveSettingChanges()
 
+
 class MultiCategorySettingsDialogEx(MultiCategorySettingsDialog):
 	def _doSave(self):
 		askForRestart = False
 		super(MultiCategorySettingsDialogEx, self)._doSave()
 		for panel in self.catIdToInstanceMap.values():
 			askForRestart = askForRestart or panel.restartNVDA
-		
 		if askForRestart:
 			askForNVDARestart()
-
-
-
 
 
 class AddonSettingsDialog(MultiCategorySettingsDialogEx):
@@ -681,5 +678,4 @@ class AddonSettingsDialog(MultiCategorySettingsDialogEx):
 		if globalVars.appArgs.secure:
 			self.categoryClasses.remove(FeaturesInstallationSettingsPanel)
 			self.categoryClasses .remove(UpdateSettingsPanel)
-		
 		super(AddonSettingsDialog, self).__init__(parent, initialCategory)

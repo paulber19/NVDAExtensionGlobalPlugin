@@ -26,7 +26,8 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(UserInputGesturesDialog, self).__init__(parent)
-
+		from gui.inputGestures import _InputGesturesViewModel, _GesturesTree
+					
 	def makeSettings(self, settingsSizer):
 		tree = self.tree = wx.TreeCtrl(
 			self,
@@ -89,8 +90,14 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 		except RuntimeError:
 			return
 		data = self.tree.GetItemData(item)
+		print("data: %s"%data)
 		isGesture = isinstance(data, baseString)
-		self.removeButton.Enabled = isGesture
+		if isGesture:
+			self.removeButton.Enable()
+		else:
+			self.removeButton.Disable()
+			
+		#self.removeButton.Enabled = isGesture
 
 	def onRemove(self, evt):
 		treeGes = self.tree.Selection
@@ -106,6 +113,7 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 		self.tree.Delete(treeGes)
 		scriptInfo.gestures.remove(gesture)
 		self.tree.SetFocus()
+		self.onTreeSelect(evt)
 
 	def onRemoveAll(self, evt):
 		if gui.messageBox(
@@ -191,13 +199,19 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		scriptName,
 		script):
 		info = AllGesturesScriptInfo(cls, moduleName, className, scriptName)
+		print ("%s, %s, %s, %s"%(cls, moduleName, className, scriptName))
+		print ("script: %s"%script)
 		category = self.getScriptCategory(cls, script)
 		if category is None:
 			category = "%s.%s" % (moduleName, className)
 		info.category = category
 		if script is None:
 			if scriptName:
-				info.displayName = scriptName
+				if scriptName.startswith("kb:"):
+					info.category = NVDAString("%s")%inputCore.SCRCAT_KBEMU
+					info.displayName = NVDAString("Emulate key press: {emulateGesture}").format(emulateGesture=scriptName[3:])
+				else:
+					info.displayName = scriptName
 			else:
 				info.displayName = _("Deleted gestures")
 		else:
@@ -207,6 +221,7 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		return info
 
 	def getScriptCategory(self, cls, script):
+		print ("cls: %s, script: %s"%(cls, script))
 		try:
 			return script.category
 		except AttributeError:

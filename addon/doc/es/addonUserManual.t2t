@@ -7,11 +7,11 @@ Autor: ADDON_AUTHOR_NAME con la participación de Daniel Poiraud
 %!includeconf: addon_keys.t2tconf
 URL: ADDON_AUTHOR_URL
 
-Repositorio en GitHub: [ADDON_REPOSITORY ADDON_REPOSITORY]
+[Repositorio en GitHub: ADDON_REPOSITORY ADDON_REPOSITORY]
 
 
 Descargar:
-- Versión estable: [ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
+- [Versión estable: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
 - [Versiones de desarrollo ADDON_DEV_URL]
 
 
@@ -74,6 +74,10 @@ Este complemento añade a las órdenes globales de NVDA:
  - Copia de la fecha y hora al portapapeles,
   - Anunciar la hora del reloj de Windows con los segundos,
   - Anuncio de la hora independiente del nivel de puntuación.
+- [script para emular la tecla "Aplicaciones" #hdr25],
+ - [script para cerrar todas las ventanas abiertas #hdr26],
+ - [script para mostrar la lista de complementos en funcionamiento #hdr27].
+
 
 - Las opciones:
  - [Eliminar el anuncio de la descripción de los objetos en las cintas de Windows #hdr100],
@@ -270,9 +274,10 @@ No se le asigna ningún gesto de entrada por defecto.
 
 Muestra un cuadro de diálogo que contiene:
 - La lista de todas las aplicaciones lanzadas,
-- El botón "Destruir" para cerrar la ventana seleccionada,
 - El botón "Cambiar a" para poner al primer plano la ventana seleccionada,
-- El botón "Cancelar" para cerrar el cuadro de diálogo y terminar el script.
+- El botón "Destruir" para cerrar la ventana seleccionada,
+- El botón "Destruir todo" para cerrar todas las ventanas,
+- El botón "Cerrar" para cerrar el cuadro de diálogo y terminar el script.
 
 
 La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Mayúscula+Tab" y en la lista con las flechas de dirección arriba y abajo.
@@ -280,9 +285,12 @@ Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de d
 
 En la lista, las aplicaciones son indicadas como Maximizado o Minimizado.
 
+Pulsando el botón "Cambiar a" o la tecla "Intro" cuando estás en la lista de las aplicaciones, cierra el cuadro de diálogo y nos trae al primer plano la ventana de la aplicación seleccionada dándole el foco.
+
+
 Al pulsar el botón "Destruir" se cerrará la ventana de la aplicación seleccionada y el retorno del foco en la lista actualizada de las ventanas de las aplicaciones.
 
-Pulsando el botón "Cambiar a" o la tecla "Intro" cuando estás en la lista de las aplicaciones, cierra el cuadro de diálogo y nos trae al primer plano la ventana de la aplicación seleccionada dándole el foco.
+Al pulsar el botón "Destruir todo" se cerrará todas las ventanas y la del cuadro de diálogo.
 
 +++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas +++
 La descripción de este script es: "Mostrar la lista de iconos en la bandeja del sistema. Pulsando dos veces: Mostrar la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla".
@@ -1117,6 +1125,38 @@ Esta funcionalidad ofrece la posibilidad de anunciar la hora con los segundos.
 Solo marca la casilla de verificación "Anunciar la hora del reloj de Windows con los segundos" ubicado en la categoría "Ordenador" del diálogo "Opciones" del complemento. Esta opción no está marcada por defecto.
 
 
+++ Emulación de la tecla "Aplicaciones" ++[hdr25]
+Para paliar a la ausencia de la tecla "Aplicaciones" en algunos ordenadores y sin saber si el atajo "mayúscula+f10" llena la misma función, el Complemento instala un script sin un gesto de entrada en la categoría "Teclas de sistema del teclado emuladas" con la descripción "Emular pulsación de tecla: Applications".
+
+Para usarlo, será suficiente asignarle un gesto de entrada o una tecla del teclado muy poco utilizado, como por ejemplo la tecla "imprimir pantalla"", la tecla "pausa".
+
+++ Cierre de todas las ventanas ++[hdr26]
+El complemento instala un script para cerrar todas las ventanas abiertas.
+
+Este script se almacena en la categoría de scripts del complemento y bajo la descripción "Cerrar todas las ventanas abiertas".
+
+Este se lanza mediante la órden "KEY_CLOSE_ALL_WINDOWS" del intérprete de órden. No se le asigna ningún gesto de entrada por defecto.
+
+
+++ Listar los complementos en funcionamiento ++[hdr27]
+El administrador de complementos presenta la lista de los complementos instalados y su estado: habilitado o deshabilitado.
+
+Pero aunque habilitado, un complemento no puede ser cargado por NVDA. En principio, el registro de NVDA informa este hecho, pero nada en el  administrador de complementos.
+
+Puede ser interesante en algún momento conocer los complementos que realmente están en funcionamiento.
+
+Para esto, el complemento instala un script bajo la descripción "Mostrar lista de complementos en funcionamiento" en la categoría  del complemento del diálogo "Gestos de Entrada".
+
+El se lanza mediante la órden "KEY_RUNNING_ADDONS" del intérprete de órden. No se le asigna ningún gesto de entrada.
+
+Los complementos se enumeran por tipo:
+- complemento de tipo global: este es un complemento que proporciona accesibilidad adicional, independientemente de la aplicación bajo el foco.
+- complemento de tipo aplicativo: este es un complemento que proporciona accesibilidad adicional para una aplicación bien específica.
+- complemento de tipo sintetizador de voz: este es un complemento que instala un sintetizador de voz.
+- complemento de tipo controlador de pantalla braille: este es un complemento que instala un controlador para una pantalla braille.
+- complemento de tipo mixto: es un complemento que mezcla los diferentes tipos de complementos anteriores.
+
+
 ++ Herramientas de desarrollo ++[hdr22]
 Esta funcionalidad no está instalada por defecto.
 
@@ -1385,6 +1425,7 @@ El complemento pone en su lugar la opción "No tomar en cuenta la opción Anunci
 | KEY_APPLICATION_INFORMATIONS | Mostrar información acerca de la aplicación enfocada |
 | KEY_OBJECTS_LIST | Mostrar los elementos visibles que componen el objeto en primer plano |
 | KEY_COPY_DATETIME | Copiar fecha y hora al portapapeles |
+| KEY_RUNNING_ADDONS | Mostrar lista de complementos en funcionamiento |
 | KEY_REPORT_FORMATTING | Mostrar información de formato para la posición actual del cursor de revisión dentro de un documento en el cuadro de diálogo |
 | KEY_ADDON_SETTINGS | Mostrar el diálogo de configuración del complemento |
 | KEY_RENAMING | Mostrar el diálogo Renombrar teclas del teclado |
@@ -1396,6 +1437,7 @@ El complemento pone en su lugar la opción "No tomar en cuenta la opción Anunci
 | KEY_WINDOWS_LIST | Mostrar la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla |
 | KEY_ICONS_List | Mostrar la lista de iconos en la bandeja del sistema |
 | KEY_MINUTE_TIMER | Mostrar el diálogo que permite, si se detuvo el temporizador de minutos, ya sea para iniciarlo o si no para consultar la duración restante o para detenerlo |
+| KEY_CLOSE_ALL_WINDOWS | Cerrar todas las ventanas abiertas |
 | KEY_MODULE_GUIDE | Mostrar la guía del usuario del complemento |
 | KEY_HELP_SHELL | Mostrar la lista de órdenes del intérprete del complemento |
 | KEY_LOG_VIEW | Mostrar el diálogo para administrar los registros de NVDA |

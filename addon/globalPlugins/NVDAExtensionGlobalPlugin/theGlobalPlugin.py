@@ -115,7 +115,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures = {}
 	_mainScriptToGestureAndfeatureOption = {
-		# "test": (("kb:nvda+control+shift+f11",) , None),
+#		"test" : (("kb:nvda+control+shift+f11",) , None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), ID_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), ID_FocusedApplicationInformations),
@@ -171,6 +171,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"DisplayAppModuleInfo": ("kb:a", None),
 		"foregroundWindowObjectsList": ("kb:b", ID_ForegroundWindowObjectsList),
 		"copyDateAndTimeToClip": ("kb:c", ID_DateAndTime),
+		"displayRunningAddonsList": ("kb:e", None),
 		"displayFormatting": ("kb:f", None),
 		"addonSettingsDialog": ("kb:f1", None),
 		"keyboardKeyRenaming": ("kb:f2", ID_KeyboardKeyRenaming),
@@ -185,6 +186,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"displayModuleUserGuide": ("kb:g", None),
 		"displayHelp": ("kb:h", None),
 		"NVDALogsManagement": ("kb:j", ID_OpenCurrentOrOldNVDALogFile),
+		"closeAllWindows": ("kb:k", None),
 		"reportCurrentFolderName": ("kb:o", ID_CurrentFolderReport),
 		"reportCurrentFolderFullPath": ("kb:control+o", ID_CurrentFolderReport),
 		"toggleSwitchVoiceProfileMode": ("kb:p", ID_VoiceProfileSwitching),
@@ -400,6 +402,10 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Input help mode message
 		# for toggle standard use of nunumeric keypad.
 		"toggleNumpadStandardUse": (_("Enable or disable the standard use of numeric keypad"), None),
+		# Translators: Input help mode message
+		# for CloseAllWindows script.
+		"closeAllWindows": (_("Close all opened windows"), None),
+		"displayRunningAddonsList": (_("Display running add-ons list"), None),
 		}
 
 	def __init__(self, *args, **kwargs):
@@ -1048,7 +1054,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			"reportBorderStyle",
 			"reportBorderColor",
 		)
-	
+
 		# Create a dictionary to replace the config section that would normally be
 		# passed to getFormatFieldsSpeech / getFormatFieldsBraille
 		formatConfig = dict()
@@ -1388,11 +1394,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		else:
 			callback(True)
 	enableNumpadNnavigationKeys = False
-		
-		
-		
+
 	def checkInstallationForNumpadFunctionnality(self):
-		print ("selective: %s"%isInstall(ID_CommandKeysSelectiveAnnouncement))
 		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
 			isInstall(ID_KeyRemanence):
 			return True
@@ -1400,7 +1403,6 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			# Translators: message to user the fonctionnality is not available.
 			_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))  # noqa:E501
 		returnFalse
-
 
 	def script_toggleNumpadStandardUse(self, gesture):
 		if not self.checkInstallationForNumpadFunctionnality():
@@ -1435,6 +1437,115 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 				return
 			self.script_toggleNumpadStandardUse(gesture)
 
+	def script_closeAllWindows(self, gesture):
+		def closeAll():
+			if gui.messageBox(
+				# Translators: message to confirm closing all windows
+				_("Are you sure you want to close all windows?"),
+				# Translators: dialog title.
+				_("Confirmation"),
+				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+				return
+			from .activeWindowsListReport import getactiveWindows, closeAllWindows
+			windowsList = getactiveWindows()
+			closeAllWindows(windowsList)
+		wx.CallAfter(closeAll)
+
+	def script_EmulateApplicationsKey(self, gesture):
+		from keyboardHandler import KeyboardInputGesture
+		KeyboardInputGesture.fromName("Applications").send()
+		# Translators: Input help mode message for a keyboard command.
+	script_EmulateApplicationsKey.__doc__ = NVDAString("Emulate key press: {emulateGesture}").format(
+		emulateGesture="Applications")
+	script_EmulateApplicationsKey.category = inputCore.SCRCAT_KBEMU
+
+	def script_displayRunningAddonsList(self, gesture):
+		from locale import strxfrm
+		# Translators: extension type tag.
+		globalTag = _("global")
+		# Translators: extension type tag.
+		appModuleTag = _("applicatif")
+		# Translators: extension type tag.
+		synthetizerTag = _("vocal synthetezer")
+		# Translators: extension type tag.
+		brailleDisplayDriverTag = _("braille displaydriver")
+		# Translators: extension type tag.
+		mixeTag = _("mixte")
+		# Translators: add-on type.
+		addonTypeLabel = _("add-on type - %s:")
+		# Translators: no add-on
+		noAddonText = _("any")
+		
+		addons = []
+		globalPlugins = []
+		mixes = []
+		appModules= []
+		synthetizers = []
+		brailles = []
+		runningAddons = sorted(addonHandler.getRunningAddons(), key=lambda a: strxfrm(a.manifest['summary']))
+		#for addon in addonHandler.getRunningAddons():
+		for addon in runningAddons:
+			addonName = "%s %s"%(addon.manifest["summary"], addon.manifest["version"])
+			globalPlugin = os.path.exists(os.path.join(addon.path, "globalPlugins"))
+			tag = globalTag if globalPlugin else ""
+			appModule = os.path.exists(os.path.join(addon.path, "appModules"))
+			tag = "%s, %s" % (tag, appModuleTag) if appModule else tag
+			synthDriver = os.path.exists(os.path.join(addon.path, "synthDrivers"))
+			tag = "%s, %s" % (tag, synthetizerTag) if synthDriver else tag
+			brailleDisplayDriver = os.path.exists(os.path.join(addon.path, "brailleDisplayDrivers"))
+			tag = "%s, %s" % (tag, brailleDisplayDriverTag) if brailleDisplayDriver else tag
+			if globalPlugin:
+				if appModule or synthDriver or brailleDisplayDriver:
+					mixes.append("%s (%s)" % (addonName, tag))
+				else:
+					globalPlugins.append(addonName)
+			elif appModule:
+				if synthDriver or brailleDisplayDriver:
+					mixes.append("%s (%s)" % (addonName, tag))
+				else:
+					appModules.append(addonName)
+			elif synthDriver:
+				if brailleDisplayDriver:
+					mixes.append("%s (%s)" % (addonName, tag))
+				else:
+					synthetizers.append(addonName)
+			elif brailleDisplayDriver:
+				brailles.append(addonName)
+
+		textList = [addonTypeLabel % globalTag,]
+		if len(globalPlugins):
+			#textList.extend([x.manifest["summary"] + " " + x.manifest["version"] for x in sorted(globalPlugins, key=lambda a: strxfrm(a.manifest['summary']))])
+			textList.extend(globalPlugins)
+		else:
+			textList.append(noAddonText)
+		textList.append("")
+		textList.append(addonTypeLabel % appModuleTag)
+		if len(appModules):
+			textList.extend(appModules)
+		else:
+			textList.append(noAddonText)
+		textList.append("")
+		textList.append(addonTypeLabel % synthetizerTag)
+		if len(synthetizers):
+			textList.extend(synthetizers)
+		else:
+			textList.append(noAddonText)
+		textList.append("")
+		textList.append(addonTypeLabel % brailleDisplayDriverTag)
+		if len(brailles):
+			textList.extend(brailles)
+		else:
+			textList.append(noAddonText)
+		textList.append(addonTypeLabel % mixeTag)
+		if len(mixes):
+			textList.extend(mixes)
+		else:
+			textList.append(noAddonText)
+		textList.append("")
+		# Translators: title of informationdialog box to show active add-ons.
+		dialogTitle = _("Running add-ons")
+		InformationDialog.run(None, dialogTitle, "", "\r\n".join(textList))
+
 	def checkUpdateWithLocalMyAddonsFile(self, auto=False):
 		path = "F:\\nvdaprojet\\paulber007Repositories\\myAddons.latest"  # noqa:E501
 		from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
@@ -1449,7 +1560,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def script_test(self, gesture):
 		print("test")
 		ui.message("NVDAExtensionGlobalPlugin test")
-		self.checkUpdateWithLocalMyAddonsFile()
+#		self.checkUpdateWithLocalMyAddonsFile()
 
 
 class HelperDialog(wx.Dialog):

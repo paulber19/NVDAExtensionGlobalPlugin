@@ -19,7 +19,7 @@ import characterProcessing
 from synthDriverHandler import getSynth, setSynth, getSynthList
 from ..utils.informationDialog import InformationDialog, makeAddonWindowTitle
 from ..utils.NVDAStrings import NVDAString
-from ..utils.py3Compatibility import rangeGen, _unicode
+from ..utils.py3Compatibility import rangeGen, _unicode, py3
 
 addonHandler.initTranslation()
 
@@ -200,10 +200,18 @@ class SwitchVoiceProfilesManager(object):
 			setSynth(None)
 			config.conf[SCT_Speech] = synthSpeechConfig.copy()
 			setSynth(synthName)
+			# Reinitialize the tones module to update the audio device
+			if py3:
+				import tones
+				tones.terminate()
+				tones.initialize()
+			else:
+				import tones
+				reload(tones)
+
 			getSynth().saveSettings()
 			if msg:
 				speech.speakMessage(msg)
-
 		newProfile = self.getVoiceProfile(selector)
 		synthName = None
 		for s, val in getSynthList():

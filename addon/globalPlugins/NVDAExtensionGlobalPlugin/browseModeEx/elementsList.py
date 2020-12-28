@@ -90,8 +90,9 @@ class ElementsListDialogEx(wx.Dialog):
 	def __init__(self, document):
 		self.document = document
 		# Translators: The title of the browse mode Elements List dialog.
+		self.dialogTitle = NVDAString("Elements List")
 		super(ElementsListDialogEx, self).__init__(
-			gui.mainFrame, wx.ID_ANY, NVDAString("Elements List"))
+			gui.mainFrame, wx.ID_ANY, title=self.dialogTitle)
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		contentsSizer = wx.BoxSizer(wx.VERTICAL)
 		childSizer = wx.BoxSizer(wx.VERTICAL)
@@ -112,6 +113,7 @@ class ElementsListDialogEx(wx.Dialog):
 			size=(596, 130))
 		if self.childListBox.GetCount():
 			self.childListBox.SetSelection(self.lastSelectedElementType)
+
 		self.childListBox.Bind(wx.EVT_LISTBOX, self.onElementTypeChange)
 		self.childListBox.Bind(wx.EVT_SET_FOCUS, self.onChildBoxFocus)
 		childSizer.Add(self.childListBox)
@@ -166,6 +168,13 @@ class ElementsListDialogEx(wx.Dialog):
 			self.initElementType,
 			self.ELEMENT_TYPES[self.lastSelectedElementType][0])
 		self.CentreOnScreen()
+		self.refreshDialogTitle()
+
+	def refreshDialogTitle(self):
+		if self.childListBox.GetCount():
+			type = self.childListBox.GetStringSelection()
+			title = "%s - %s" % (self.dialogTitle, type)
+			self.SetTitle(title)
 
 	def onElementTypeChange(self, evt):
 		if self._timer:
@@ -175,6 +184,7 @@ class ElementsListDialogEx(wx.Dialog):
 		# Otherwise, NVDA doesn't seem to get the event.
 		wx.CallLater(200, self.initElementType, self.ELEMENT_TYPES[elementType][0])
 		self.lastSelectedElementType = elementType
+		self.refreshDialogTitle()
 
 	def initElementType(self, elType):
 		if elType in ("link", "button", "radioButton", "checkBox"):

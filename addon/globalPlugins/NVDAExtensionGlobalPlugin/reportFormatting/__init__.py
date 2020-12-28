@@ -322,6 +322,7 @@ def getFormatFieldText(attrs):
 		textList.append(borderStyle)
 	return textList
 
+
 def displayFormattingInformations(indentation, formatField):
 	text = None
 	if indentation:

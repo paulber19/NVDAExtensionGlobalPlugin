@@ -1,12 +1,12 @@
 ADDON_SUMMARY - History
-Author: ADDON_AUTHOR_NAME with the participation of Daniel Poiraud
+Author: ADDON_AUTHOR_NAME
 
 
 %!includeconf: ../addon_global.t2tconf
 %!includeconf: addon_informations.t2tconf
 URL: ADDON_AUTHOR_URL
 
-GitHub repository: [ADDON_REPOSITORY ADDON_REPOSITORY]
+[GitHub repository: ADDON_REPOSITORY ADDON_REPOSITORY]
 
 Download:
 - [Current version: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
@@ -15,6 +15,20 @@ Download:
 
 
 Sorry, but this document is an automatic translation from french language.
+
+
++ v9.5 (28/12/2020) +
+- compatibility with NVDA 2020.4
+- inclusion of the "Emulated system keyboard keys" category in the "User input gestures" dialog.
+- addition of the type of elements selected in the title of the dialog opened by "NVDA + f7".
+- addition of the script to emulate the "Applications" key.
+- new script to display the list of running add-ons.
+- addition of the "Destroy all" button in the "List of active windows" dialog box to destroy all the launched applications.
+
+
+Bug fixes:
+- the "Browse in loop" option will no longer toggle each time the add-on  configuration is modified.
+
 
 + v9.4 (29/11/2020) +
 - correction of the problem concerning:

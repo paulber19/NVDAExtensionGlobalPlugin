@@ -55,7 +55,9 @@ _availableModifierKeysCombination = [
 	["control", "shift"],
 	["shift", ],
 	]
-def myExecuteGesture(gesture): 
+
+
+def myExecuteGesture(gesture):
 	try:
 		if isinstance(gesture, KeyboardInputGesture):
 			_myInputManager.executeKeyboardGesture(gesture)
@@ -63,7 +65,6 @@ def myExecuteGesture(gesture):
 			_NVDA_ExecuteGesture(gesture)
 	except NoInputGestureAction:
 		raise NoInputGestureAction
-
 
 
 class MyInputManager (object):
@@ -386,7 +387,7 @@ class MyInputManager (object):
 			scriptHandler.queueScript(script, gesture)
 			return
 		raise NoInputGestureAction
-	
+
 	def speakGesture(self, gesture):
 		if not gesture.shouldReportAsCommand:
 			return
@@ -514,7 +515,7 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		if NVDAVersion >= [2020, 1]:
 			labelText = NVDAString("Speak c&ommand keys")
 		else:
-			labelText=NVDAString("Speak command &keys")
+			labelText = NVDAString("Speak command &keys")
 		self.commandKeysCheckBox = sHelper.addItem(wx.CheckBox(
 			self,
 			wx.ID_ANY,

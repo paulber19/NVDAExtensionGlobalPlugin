@@ -389,7 +389,8 @@ class ClipboardCommandAnnouncement(object):
 		speech.speakMessage(msg)
 		gesture.send()
 
-_classNamesToCheck =[
+
+_classNamesToCheck = [
 	"Edit", "RichEdit", "RichEdit20", "REComboBox20W", "RICHEDIT50W",
 	"Scintilla", "TScintilla", "AkelEditW", "AkelEditA", "_WwG", "_WwN", "_WwO",
 	"SALFRAME"]

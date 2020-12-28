@@ -6,6 +6,7 @@
 
 from . import theGlobalPlugin
 
+
 class GlobalPlugin (theGlobalPlugin.NVDAExtensionGlobalPlugin):
 	# ??? this definition is necessary.
 	# if not, the method of the NVDAExtensionGlobalPlugin class is never called.

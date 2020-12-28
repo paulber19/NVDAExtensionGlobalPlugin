@@ -17,6 +17,19 @@ else:
 	import txt2tags25 as txt2tags
 import markdown2 as markdown
 
+
+def getTranslatedAddonSummary(buildVars, localeLang):
+	try:
+		# No ugettext in Python 3.
+		if sys.version_info.major == 2:
+			_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).ugettext
+		else:
+			_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).gettext
+		summary = _(buildVars.addon_info["addon_summary"])
+	except:
+		summary = buildVars.addon_info["addon_summary"]
+	return summary
+
 def writeHTMLFile(dest, htmlText, lang, title, cssFileName):
 	cssFile =cssFileName if cssFileName is not None else "style.css"
 	#lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
@@ -63,66 +76,30 @@ def t2t2html(source, dest):
 	htmlText = getHTMLBody(dest)
 	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
 	localeLang = os.path.basename(os.path.dirname(source))
-	try:
-	
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).ugettext
-		title=u"{0} {1}".format(_(buildVars.addon_info["addon_summary"]), buildVars.addon_info["addon_version"])
-	except:
-		title=u"{0} {1}".format(buildVars.addon_info["addon_summary"], buildVars.addon_info["addon_version"])
+	summary = getTranslatedAddonSummary(buildVars, localeLang)
+	title=u"{0} {1}".format(summary, buildVars.addon_info["addon_version"])
 	writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style_t2t.css")
-	return
-	"""
-	with codecs.open(dest, "w", "utf-8") as f:
-		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
-			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
-			"<head>\n" +
-			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
-			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../style_t2t.css\" media=\"screen\"/>\n" +
-			"<title>%s</title>\n" % title +
-			"</head>\n<body>\n"
-		)
-		f.write(htmlText)
-		f.write("\n</body>\n</html>")
-	"""
-
-
-def md2html(source, dest):
 	
+def md2html(source, dest):
 	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
 	localeLang = os.path.basename(os.path.dirname(source))
-	try:
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).ugettext
-		title=u"{0} {1}".format(_(buildVars.addon_info["addon_summary"]), buildVars.addon_info["addon_version"])
-	except:
-		title=u"{0} {1}".format(buildVars.addon_info["addon_summary"], buildVars.addon_info["addon_version"])
+	summary = getTranslatedAddonSummary(buildVars, localeLang)
+	title=u"{0} {1}".format(summary, buildVars.addon_info["addon_version"])
 	headerDic = {
 		"[[!meta title=\"": "# ",
 		"\"]]": " #",
 	}
 	with codecs.open(source, "r", "utf-8") as f:
 		mdText = f.read()
-		for k, v in headerDic.iteritems():
-			mdText = mdText.replace(k, v, 1)
+		if sys.version_info.major == 2:
+			for k, v in headerDic.iteritems():
+				mdText = mdText.replace(k, v, 1)
+		else:
+			for k, v in headerDic.items():
+				mdText = mdText.replace(k, v, 1)
 		htmlText = "<body>\n" +markdown.markdown(mdText) +"\n</body>"
 		writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style.css")
-		return
-	"""
-	with codecs.open(dest, "w", "utf-8") as f:
-		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
-			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
-			"<head>\n" +
-			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
-			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../style.css\" media=\"screen\"/>\n" +
-			"<title>%s</title>\n" % title +
-			"</head>\n<body>\n"
-		)
-		f.write(htmlText)
-		f.write("\n</body>\n</html>\n")
-	"""
+
 def generateT2tHelpFiles (source, target, env, for_signature):
 	action = env.Action(lambda target, source, env : t2t2html(source[0].abspath, target[0].abspath) and None,
 	lambda target, source, env : "Generating %s" % target[0])
@@ -217,7 +194,11 @@ def generateManifest(source, dest):
 		f.write(manifest)
 
 def generateTranslatedManifest(source, language, out):
-	_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).ugettext
+	# No ugettext in Python 3.
+	if sys.version_info.major == 2:
+		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).ugettext
+	else:
+		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).gettext
 	vars = {}
 	for var in ("addon_summary", "addon_description"):
 		vars[var] = _(buildVars.addon_info[var])

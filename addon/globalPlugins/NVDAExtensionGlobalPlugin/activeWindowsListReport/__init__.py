@@ -62,6 +62,23 @@ def getactiveWindows():
 		callback(hwnd, windowsList)
 	return windowsList
 
+def closeAllWindows(windowsList):
+		for f in windowsList:
+			if f[0] == api.getDesktopObject().name:
+				# it is desktop window, destroy is not possible
+				continue
+			# window handle to destroy
+			hwnd = f[1]
+			obj = NVDAObjects.window.Window(windowHandle=hwnd)
+			if obj.appModule.appName == "nvda":
+				# we cannot destroy nvda windows
+				continue
+			# we destroy it
+			oleacc.AccessibleObjectFromWindow(hwnd, -2).accDoDefaultAction(5)
+
+
+
+
 
 class ActiveWindowsListDisplay(wx.Dialog):
 	_instance = None
@@ -88,6 +105,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 	def windowsListInit(self):
 		windowsList = getactiveWindows()
 		windowsList.sort()
+		self.windowsList = windowsList
 		self.activeWindows = []
 		self.windowNamesList = []
 		for f in windowsList:
@@ -133,18 +151,21 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		# Buttons
 		bHelper = guiHelper.ButtonHelper(wx.HORIZONTAL)
 		switchToButton = bHelper.addButton(
-			self,
-			id=wx.ID_ANY,
+			parent=self,
 			# Translators: This is a label of a button appearing
 			# on active windows list display dialog.
 			label=_("&Switch to"))
 		switchToButton.SetDefault()
 		destroyButton = bHelper.addButton(
-			self,
-			id=wx.ID_ANY,
+			parent=self,
 			# Translators: This is a label of a button appearing
 			# on active windows list display dialog.
 			label=_("&Destroy"))
+		destroyAllButton = bHelper.addButton(
+			parent=self,
+			# Translators: This is a label of a button appearing
+			# on active windows list display dialog.
+			label=_("Destro&y all"))
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
 			guiHelper.ButtonHelper(wx.HORIZONTAL))
@@ -159,6 +180,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		# Events
 		switchToButton.Bind(wx.EVT_BUTTON, self.onSwitchToButton)
 		destroyButton.Bind(wx.EVT_BUTTON, self.onDestroyButton)
+		destroyAllButton.Bind(wx.EVT_BUTTON, self.onDestroyAllButton)
 		closeButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
 		self.windowsListBox.Bind(wx.EVT_KEY_DOWN, self.onKeydown)
 		self.Bind(wx.EVT_ACTIVATE, self.onActivate)
@@ -255,6 +277,18 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		winUser.setFocus(hwnd)
 		from ..utils import maximizeWindow
 		maximizeWindow(hwnd)
+
+	def onDestroyAllButton(self, evt):
+		from gui import messageBox
+		if messageBox(
+			# Translators: message to confirm closing all windows
+			_("Are you sure you want to close all windows?"),
+			# Translators: dialog title.
+			_("Warning"),
+			wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+			return
+		closeAllWindows(self.windowsList)
+		self.Close()
 
 	@classmethod
 	def run(cls):

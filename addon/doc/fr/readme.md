@@ -1,13 +1,13 @@
 # Extension des commandes de base de NVDA #
 
-* Auteur: PaulBer19 avec la participation de Daniel Poiraud.
+* Auteur: PaulBer19
 * URL: paulber19@laposte.net
 * Télécharger:
 	* [version stable][1]
 	* [version de développement][2]
 * Compatibilité:
 	* version minimum de NVDAsupportée: 2019.1
-	* dernière version de NVDA testée: 2020.3
+	* dernière version de NVDA testée: 2020.4
 
 
 Traducteur (s): texte original par l'auteur de l'extension
@@ -84,6 +84,5 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * script pour redémarrer rapidement NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.4.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.5.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
-[3]: https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

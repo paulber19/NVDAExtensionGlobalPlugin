@@ -30,19 +30,19 @@ def getInstallFeatureOption(featureID):
 	if globalVars.appArgs.secure:
 		noInstallList = [
 			ID_SystrayIconsAndActiveWindowsList,
-			ID_OpenCurrentOrOldNVDALogFile ,
-			ID_Tools ,
+			ID_OpenCurrentOrOldNVDALogFile,
+			ID_Tools,
 			ID_ExploreNVDA,
 		]
 		if featureID in noInstallList:
-			return C_DoNotInstall 
-
+			return C_DoNotInstall
 	conf = _addonConfigManager.addonConfig
 	state = conf[SCT_InstallFeatureOptions].get(featureID)
 	if state is None:
 		# by default, fonctionnality is installed
-		state = C_Install 
+		state = C_Install
 	return state
+
 
 def setInstallFeatureOption(featureID, option):
 	global _addonConfigManager
@@ -95,8 +95,8 @@ def toggleReportNextWordOnDeletionOption(toggle=True):
 	# bug fix in nvda 2020.3
 	# so return always False if nvda version is equal or higher to this version
 	import versionInfo
-	NVDAVersion= [versionInfo.version_year, versionInfo.version_major]
-	if  NVDAVersion >= [2020,3]:
+	NVDAVersion = [versionInfo.version_year, versionInfo.version_major]
+	if NVDAVersion >= [2020, 3]:
 		return False
 	return toggleOption(ID_ReportNextWordOnDeletion, toggle)
 

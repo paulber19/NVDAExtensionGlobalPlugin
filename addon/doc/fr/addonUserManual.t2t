@@ -1,5 +1,5 @@
 ADDON_SUMMARY - manuel utilisateur
-Auteur: ADDON_AUTHOR_NAME avec la participation de Daniel Poiraud
+Auteur: ADDON_AUTHOR_NAME
 
 
 %!includeconf: ../addon_userManual.t2tconf
@@ -70,6 +70,10 @@ Cette extension ajoute aux commandes globales de NVDA:
   - copie de la date et l'heure dans le presse-papier,
   - Annoncer l'heure de l'horloge Windows avec les secondes,
   - annonce  de l'heure  indépendante du niveau de ponctuation.
+ - [script pour émuler la touche "Applications" #hdr25],
+ - [script pour fermer toutes les fenêtres ouvertes #hdr26],
+ - [script pour afficher la liste des extensions en fonctionnement #hdr27].
+ 
 
 
 - Les options:
@@ -148,14 +152,14 @@ Une version de développement est mise à jour:
 
 Le bouton "Rechercher une mise à jour" placé dans la catégorie "Mise à jour" vous permet de rechercher immédiatement une mise à jour.
 
-Le bouton "Voir l'historique", placé dans cette même catégorie,  vous permet d'afficher l'historique  de la version actuelle dans le navigateur.
+Le bouton "Voir l'historique", placé dans cette même catégorie, vous permet d'afficher l'historique de la version actuelle dans le navigateur.
 
 Dans le cas d'une mise à jour automatique et si une nouvelle version est détectée, la boite de dialogue "Mise à jour" s'affiche pour proposer:
 - soit l'installation immédiate de la nouvelle version,
 - soit de reporter la mise à jour à plus tard. Dans ce cas, la recherche se relancera au minimum une heure plus tard.
 
 
-Dans le cas d'une mise à jour vers une  version stable, Le bouton "Quoi de neuf" offre la possibilité d'ouvrir, dans le navigateur, l'historique de l'extension et ainsi pouvoir connaitre les nouveautés de la version proposée.
+Dans le cas d'une mise à jour vers une version stable, Le bouton "Quoi de neuf" offre la possibilité d'ouvrir, dans le navigateur, l'historique de l'extension et ainsi pouvoir connaitre les nouveautés de la version proposée.
 
 
 ++ Fonctionnement en Mode sécurisé ++
@@ -268,9 +272,10 @@ Aucun geste de commande ne lui est affecté par défaut.
 
 Il affiche une boite de dialogue qui contient:
 - la liste de toutes les fenêtres des applications lancées,
-- le bouton "Détruire" pour fermer la fenêtre sélectionnée,
 - le bouton "Basculer vers" pour mettre au premier plan la fenêtre sélectionnée,
-- le bouton "Annuler" pour fermer la boite de dialogue et terminer le script.
+- le bouton "Détruire" pour fermer la fenêtre sélectionnée,
+- le bouton "Détruire tout" pour fermer toutes les fenêtres,
+- le bouton "Fermer" pour fermer la boite de dialogue et terminer le script.
 
 
 La navigation dans la boite de dialogue se fait par "Tab" ou majuscule + Tab" et dans la liste avec les flèches de direction haut et bas.
@@ -278,9 +283,12 @@ L'appui sur la touche "Echap" permet de refermer la boite de dialogue.
 
 Dans la liste, les fenêtres sont signalées comme agrandies ou réduites.
 
-L'appui sur le bouton "Détruire" provoque la fermeture de la fenêtre de l'application sélectionnée et le retour du focus dans la liste réactualisée des fenêtres des applications.
 
 L'appui sur le bouton "Basculer vers" ou la touche "Entrée" quand on est dans la liste des fenêtres , ferme la boite de dialogue et amène au premier plan la fenêtre de l'application sélectionnée en lui donnant le focus.
+
+L'appui sur le bouton "Détruire" provoque la fermeture de la fenêtre de l'application sélectionnée et le retour du focus dans la liste réactualisée des fenêtres des applications.
+
+L'appui sur le bouton "Détruire tout" provoque la fermeture de toutes les fenêtres et celle de la boite de dialogue.
 
 +++ Affichage de la liste des icônes de la zone de notification ou des fenêtres des applications lancées +++
 La description de ce script est: - "Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des application en cours d'exécution lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire".
@@ -454,7 +462,8 @@ Sauf les quatre premières, ces commandes ne sont pas implémentées dans le nav
 
 +++ Nouveaux types d'élément pour le script "NVDA + f7" +++
 De base, le script intégré à NVDA et déclenché par le geste de commande "NVDA + f7", permet d'afficher la boite de dialogue "Liste d'éléments" présentant la liste de certains éléments présents dans une page Web.
-Cette extension augmente le nombre de types d'éléments pouvant être choisis.
+Cette extension augmente le nombre de types d'éléments pouvant être choisis et affiche dans le titre dudialogue, le type sélectionné.
+
 La liste de ces types devient:
 
 Types de base:
@@ -1114,6 +1123,39 @@ Cette fonctionnalité offre la possibilité de faire annoncer l'heure avec les s
 
 Il suffit de cocher la case à cocher "Dire l'heure avec les secondes" se trouvant dans la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension. Cette option n'est pas cochée par défaut.
 
+
+++ Émulation de la touche "Applications" ++[hdr25]
+Pour palier à l'absence de la touche "Applications" sur certains ordinateurs et ne sachant pas si le raccourci "majuscule+f10" remplit la même fonction, l'extension installe un script sans geste de commande dans la catégorie "Touches émulées du clavier du système" avec la description "Émuler l'appui de touche: Applications".
+
+Pour l'utiliser, il suffira de lui affecter un geste de commande ou une touche du clavier très peu utilisée, comme par exemple la touche "impression écran", la touche "Pause".
+
+++ Fermeture de toutes les fenêtres ++[hdr26]
+L'extension installe un script pour fermer toutes les fenêtres ouvertes.
+
+Ce script est rangé dans la catégorie des scripts de l'extension et sous la description "Fermer toutes les fenêtres ouvertes".
+
+Il se lance avec la commande "KEY_CLOSE_ALL_WINDOWS" de l'interpréteur de commande . Aucun geste de commande ne lui est affecté par défaut.
+
+
+++ Lister les extensions en fonctionnement ++[hdr27]
+Le gestionnaire d'extensions présente la liste des extensions installées et leur état: activée ou désactivée.
+
+Mais bien qu'étant activée, une extension peut ne pas être chargée par NVDA. En principe, le journal de NVDA signale ce fait, mais rien dans le gestionnaire d'extensions.
+
+Il peut être intéressant à un moment donné de connaitre les extensions qui sont réellement en fonctionnement.
+
+Pour cela, l'extension installe un script sous la description "Afficher la liste des extensions en fonctionnement" dans la catégorie de l'extensions dans le dialogue "Gestes de commande".
+
+Ce script se lance avec la commande "KEY_RUNNING_ADDONS" de l'interpréteur de commande. Aucun geste de commande ne lui est affecté.
+
+Les extensions sont listées par type:
+- extension de type global: c'est une extension qui apporte un complément d'accessibilité quelque soit l'application sous le focus.
+- extension de type applicatif: c'est une extension qui apporte un complément d'accessibilité pour une application bien précise.
+- extensions de type synthèse vocale: c'est une extension qui installe une synthèse vocale.
+- extension de type pilote d'afficheur braille: c'est une extension qui installe un pilote pour un afficheur braille.
+- extension de type mixte: c'est une extension qui mélange les différents types d'extension précédents.
+
+
 ++ Outils de développement ++[hdr22]
 Cette fonctionnalité n'est pas installée par défaut. 
 
@@ -1383,6 +1425,7 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 | KEY_APPLICATION_INFORMATIONS | Afficher les informations sur l'application sous le focus |
 | KEY_OBJECTS_LIST | Afficher les éléments visibles composant l'objet en avant plan |
 | KEY_COPY_DATETIME | Copier la date et l'heure dans le presse-papier |
+| KEY_RUNNING_ADDONS | Afficher la liste des extensions en fonctionnement |
 | KEY_REPORT_FORMATTING | Afficher, dans une boite de dialogue, les informations de mise en forme à la position actuelle du curseur de revue dans un document |
 | KEY_ADDON_SETTINGS | Afficher le dialogue de paramétrage de l'extension |
 | KEY_RENAMING | Afficher le dialogue Renommage des touches clavier |
@@ -1394,6 +1437,7 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 | KEY_WINDOWS_LIST | Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 | KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
 | KEY_MINUTE_TIMER | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
+| KEY_CLOSE_ALL_WINDOWS | Fermer toutes les fenêtres ouvertes |
 | KEY_MODULE_GUIDE | Ouvrir le manuel utilisateur de l'extension |
 | KEY_HELP_SHELL | Lister les commandes de l'interpréteur de l'extension |
 | KEY_LOG_VIEW | Afficher le dialogue de gestion des journaux de NVDA |
@@ -1405,6 +1449,7 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 | KEY_TOOLSFORADDON | Afficher le dialogue qui présente les outils pour le développement d'extensions |
 | KEY_USER_INPUT_GESTURE | Afficher le dialogue Gestes de commande utilisateur |
 | KEY_MANAGE_VOICE_PROFIL | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
+
 ++ Gestes de commande installés par les fonctionnalités ++
 
 +++ Affichage de la liste des icones de la zone de notification et des fenêtres des applications lancées +++

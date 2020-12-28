@@ -6,12 +6,27 @@ Auteur: ADDON_AUTHOR_NAME avec la participation de Daniel Poiraud
 %!includeconf: addon_informations.t2tconf
 URL: ADDON_AUTHOR_URL
 
-Dépot GitHub: [ADDON_REPOSITORY ADDON_REPOSITORY]
+[Dépot GitHub: ADDON_REPOSITORY ADDON_REPOSITORY]
 
 Téléchargement:
 - [Version actuelle: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
 - [Version précédente: ADDON_PREV_VERSION ADDON_DOWNLOAD_PREVIOUS]
 - [versions de développement ADDON_DEV_URL]
+
+
++ v9.5 (28/12/2020) +
+Nouvelles fonctionnalités:
+- compatibilité avec NVDA 2020.4
+- prise en compte de la catégorie "Touches émulées du clavier du système" dans le dialogue "Gestes de commande utilisateur".
+- ajout du type d'éléments sélectionné dans le titre du dialogue ouvert par "NVDA+f7".
+- nouveau script pour émuler la touche "Applications".
+- nouveau script "Fermer toutes les fenêtres ouvertes".
+- nouveau script pour afficher la liste des extensions en fonctionnement.
+- ajout du bouton "Détruire tout" dans la boite de dialogue "Liste des fenêtres actives" pour détruire toutes les applications lancées.
+
+
+Corrections de bogues:
+- l'option "Naviguer en boucle" ne basculera plus à chaque modification de la configuration de l'extension.
 
 
 + v9.4 (29/11/2020) +

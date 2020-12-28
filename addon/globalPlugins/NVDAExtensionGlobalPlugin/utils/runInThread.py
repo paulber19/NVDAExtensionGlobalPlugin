@@ -61,26 +61,3 @@ class RepeatBeep(RepeatTask):
 			return
 		(frequence, length) = self.beep
 		tones.beep(frequence, length)
-
-
-class RepeatbeepOnAudioDevices(RepeatTask):
-	def __init__(self):
-		self._delay = float(
-			60*settings._addonConfigManager.getRepeatBeepOnAudioDevicesDelay())
-		super(RepeatbeepOnAudioDevices, self).__init__()
-
-	def task(self):
-		from . import mytones
-		from .__init__ import setAudioOutputDevice
-		devices = nvwave.getOutputDeviceNames()
-		if len(devices) == 0:
-			return
-		try:
-			for dev in devices[1:]:
-				setAudioOutputDevice(dev)
-				reLoad(mytones)
-				mytones.beep(200, 40)
-		except:  # noqa:E722
-			pass
-		setAudioOutputDevice = None
-		reLoad(mytones)

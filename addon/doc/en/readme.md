@@ -1,13 +1,13 @@
 # NVDA global commands extension #
 
-* Author: PaulBer19 with the participation of Daniel Poiraud
+* Author: PaulBer19
 * URL: paulber19@laposte.net
 * Download:
 	* [stable version][1]
 	* [developpement version][2]
 * Compatibility:
 	* minimum supported NVDA version: 2019.1
-	* last tested NVDA version: 2020.3
+	* last tested NVDA version: 2020.4
 
 
 Traductor (s): automatic translation from french language
@@ -87,6 +87,5 @@ some features can be enabled or disabled individually.
 * script to quickly restart NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.4.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.5.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
-[3]: https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

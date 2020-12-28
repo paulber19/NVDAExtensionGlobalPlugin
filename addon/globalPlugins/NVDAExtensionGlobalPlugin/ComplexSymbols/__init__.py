@@ -277,13 +277,12 @@ class complexSymbolsDialog(wx.Dialog):
 			return
 		symbolsManager = symbols.SymbolsManager()
 		if not symbolsManager.isReady():
-			if gui.messageBox(
+			gui.messageBox(
 				# Translators: the label of a message box dialog.
 				_("Error: no basic symbols installed"),
 				# Translators: the title of a message box dialog.
 				_("Warning"),
-				wx.OK | wx.ICON_WARNING):
-				pass
+				wx.OK | wx.ICON_WARNING)
 			return
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame, symbolsManager)
