@@ -91,28 +91,6 @@ class SymbolsManager(object):
 				return file
 		return None
 
-	def getSymbolCategoriesDicPath1(self):
-		userFile = self.getUserSymbolCategoriesFile(curLang)
-		if userFile is not None:
-			return userFile
-		localeList = [curLang]
-		if '_' in curLang:
-			localeList.append(curLang.split('_')[0])
-		localeList.append("en")
-		addonFolderPath = addonHandler.getCodeAddon().path
-		for locale in localeList:
-			file = ".".join(symbolCategoriesFile)
-			if py3:
-				# for python 3
-				fileName = os.path.join(addonFolderPath, "locale", locale, file)
-			else:
-				# for python 2
-				fileName = os.path.join(
-					addonFolderPath, "locale", locale.encode("utf-8"), file)
-			if os.path.isfile(fileName):
-				return fileName
-		return None
-
 	def getSymbolCategoriesDicPath(self):
 		userFile = self.getUserSymbolCategoriesFile(curLang)
 		if userFile is not None:
@@ -120,7 +98,7 @@ class SymbolsManager(object):
 		localeList = [curLang]
 		if '_' in curLang:
 			localeList.append(curLang.split('_')[0])
-		localeList.append("eng")
+		localeList.append("en")
 		addonFolderPath = addonHandler.getCodeAddon().path
 		fileName = ".".join(symbolCategoriesFile)
 		for locale in localeList:
