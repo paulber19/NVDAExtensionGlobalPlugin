@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\symbols.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -98,7 +98,7 @@ class SymbolsManager(object):
 		localeList = [curLang]
 		if '_' in curLang:
 			localeList.append(curLang.split('_')[0])
-		localeList.append("eng")
+		localeList.append("en")
 		addonFolderPath = addonHandler.getCodeAddon().path
 		for locale in localeList:
 			file = ".".join(symbolCategoriesFile)

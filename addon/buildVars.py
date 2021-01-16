@@ -92,7 +92,7 @@ some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version": "9.5",
+	"addon_version": "9.5.1",
 	# Author(s)
 	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support

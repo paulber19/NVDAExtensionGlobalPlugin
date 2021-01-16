@@ -550,7 +550,7 @@ class AddonConfigurationManager():
 		d = {}
 		i = 1
 		for (desc, symb) in symbolsList:
-			d[str(i)] = " % s %s" % (symb, desc)
+			d[str(i)] = "%s %s" % (symb, desc)
 			i = i+1
 		conf[addonName][sct] = d.copy()
 		conf[addonName][sct]._cache.clear()
@@ -566,16 +566,22 @@ class AddonConfigurationManager():
 		if len(d) == 0:
 			return []
 		symbols = []
+		skip = False
 		for i in range(1, len(d)+1):
 			s = d[str(i)]
 			sym = s[0]
+			# cause of bug , we clean all symbol equal to space
+			if sym == " ":
+				skip = True
+				continue
 			desc = s[2:]
 			symbols.append((desc, sym))
 		maximumOfLastUsedSymbols = self.getMaximumOfLastUsedSymbols()
 		# check if number of symbols recorded is not higher than maximum
-		# because of config change
-		if len(symbols) > maximumOfLastUsedSymbols:
+		# because bug and of config change
+		if skip or len(symbols) > maximumOfLastUsedSymbols:
 			# adjust the list
+			log.warning("getLastUsedSymbols: last user symbols list adjusted")
 			symbols = symbols[len(symbols) - maximumOfLastUsedSymbols:]
 			self.saveLastUsedSymbols(symbols)
 		return symbols
