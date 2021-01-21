@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -27,6 +27,27 @@ from ..utils.py3Compatibility import baseString
 from ..utils.keyboard import getEditionKeyCommands
 
 addonHandler.initTranslation()
+
+# Translators: message to the user on cut command activation.
+_msgCut = _("Cut")
+# Translators: message to the user on paste command activation.
+_msgPaste = _("Paste")
+# Translators: message to the user on copy command activation.
+_msgCopy = _("Copy")
+# Translators: message to the user on undo command activation.
+_msgUnDo = _("UnDo")
+# Translators: message to the user on select all command activation.
+_msgSelectAll = _("select all")
+
+_clipboardCommands = {
+	"undo": (_msgUnDo, False),
+	"cut": (_msgCut, True),
+	"copy": (_msgCopy, True),
+	"paste": (_msgPaste, False)
+	}
+
+# task timer
+_GB_taskTimer = None
 
 
 def getWExplorerStatusBarText(foreground):
@@ -69,18 +90,6 @@ def getStatusBarText():
 		text += " "
 	return text + " ".join(
 		chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, baseString) and not chunk.isspace())  # noqa:E501
-
-
-# Translators: message to the user on cut command activation.
-_msgCut = _("Cut")
-# Translators: message to the user on paste command activation.
-_msgPaste = _("Paste")
-# Translators: message to the user on copy command activation.
-_msgCopy = _("Copy")
-# Translators: message to the user on undo command activation.
-_msgUnDo = _("UnDo")
-# Translators: message to the user on select all command activation.
-_msgSelectAll = _("select all")
 
 
 class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
@@ -163,7 +172,7 @@ class EditableTextEx(EditableText):
 			gesture.send()
 			return
 		# Translators: Message presented when text has been copied to clipboard.
-		speech.speakMessage(NVDAString("Copied to clipboard"))
+		speech.speakMessage(_msgCopy )
 		gesture.send()
 
 	def script_cutAndCopyToClipboard(self, gesture):
@@ -173,7 +182,6 @@ class EditableTextEx(EditableText):
 			gesture.send()
 			return
 		info = self.getSelectionInfo()
-
 		if not info:
 			# Translators: Reported when there is no text selected (for copying).
 			speech.speakMessage(NVDAString("No selection"))
@@ -216,7 +224,6 @@ class EditableTextEx(EditableText):
 		except:  # noqa:E722
 			log.warning("not makeTextInfo")
 			return
-
 		self._caretScriptPostMovedHelper(textInfos.UNIT_WORD, gesture, info)
 		braille.handler.handleCaretMove(self)
 
@@ -229,16 +236,6 @@ class EditableTextEx(EditableText):
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
 		super(EditableTextEx, self)._caretMovementScriptHelper(gesture, unit)
 		config.conf["speech"]["symbolLevel"] = curLevel
-
-
-_clipboardCommands = {
-	"undo": (_msgUnDo, False),
-	"cut": (_msgCut, True),
-	"copy": (_msgCopy, True),
-	"paste": (_msgPaste, False)
-	}
-# task timer
-_GB_taskTimer = None
 
 
 class ClipboardCommandAnnouncement(object):

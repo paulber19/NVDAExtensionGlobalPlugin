@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -646,14 +646,27 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def exploreFolder(self, path):
 		import subprocess
-		cmd = "explorer \"{path}\"" .format(path=path)
+		windir = os.environ["WINDIR"]
+		cmd = """{windir}\explorer.exe \"{path}\"""" .format(windir = windir, path=path)
 		subprocess.call(cmd, shell=True)
 
 	def onExploreUserConfigFolderMenu(self, evt):
-		path = globalVars.appArgs.configPath
+		"""Opens directory containing config files for the current user"""
+		import globalVars
+		try:
+			# configPath is guaranteed to be correct for NVDA, however it will not exist for NVDA_slave.
+			path = globalVars.appArgs.configPath
+		except AttributeError:
+			#import config
+			path = config.getUserDefaultConfigPath()
+			if not path:
+				log.error("openUserConfigurationDirectory: no user default config path")
+				return
+			config.initConfigPath(path)
 		wx.CallAfter(self.exploreFolder, path)
 
 	def script_exploreUserConfigFolder(self, gesture):
+		speech.speakMessage(_("Please wait"))
 		self.onExploreUserConfigFolderMenu(None)
 
 	def onExploreProgramFilesMenu(self, evt):
@@ -661,6 +674,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		wx.CallAfter(self.exploreFolder, path)
 
 	def script_exploreProgramFiles(self, gesture):
+		speech.speakMessage(_("Please wait"))
 		self.onExploreProgramFilesMenu(None)
 
 	def onCommandKeysSelectiveAnnouncementMenu(self, evt):
