@@ -134,19 +134,22 @@ class complexSymbolsDialog(wx.Dialog):
 		# Buttons
 		# Buttons are in a horizontal row
 		bHelper = guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators: This is a label of a button appearing
-		# on complex symbols dialog.
-		copyButton = bHelper.addButton(self, label=_("&Copy to clipboard"))
-		# Translators: This is a label of a button appearing
-		# on complex symbols dialog.
-		pasteButton = bHelper.addButton(self, label=_("&Past"))
-		# Translators: This is a label of a button appearing
-		# on complex symbols dialog.
+		copyButton = bHelper.addButton(
+			self,
+			# Translators: This is a label of a button appearing
+			# on complex symbols dialog.
+			label=_("&Copy to clipboard"))
+		pasteButton = bHelper.addButton(
+			self,
+			# Translators: This is a label of a button appearing
+			# on complex symbols dialog.
+			label=_("&Paste"))
 		pasteButton.SetDefault()
-		# Translators: This is a label of a button appearing
-		# on complex symbols dialog.
 		manageSymbolsButton = bHelper.addButton(
-			self, label=_("&Manage yours symbols"))
+			self,
+			# Translators: This is a label of a button appearing
+			# on complex symbols dialog.
+			label=_("&Manage your symbols"))
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
 			gui.guiHelper.ButtonHelper(wx.HORIZONTAL))

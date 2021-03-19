@@ -59,7 +59,10 @@ def getCommonUtilitiesPath():
 def getUtilitiesPath():
 	curAddonPath = getAddonPath()
 	if py3:
-		utilities = "utilitiesPy3"
+		if sys.version .startswith("3.8"):
+			utilities = "utilitiesPy38"
+		else:
+			utilities = "utilitiesPy3"
 	else:
 		utilities = "utilitiesPy2"
 	return os.path.join(curAddonPath, utilities)

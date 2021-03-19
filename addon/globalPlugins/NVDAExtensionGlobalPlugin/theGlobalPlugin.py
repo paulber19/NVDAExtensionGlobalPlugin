@@ -1,4 +1,4 @@
-# globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py
+# globalPlugins\NVDAExtensionGlobalPlugin\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
 # Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
@@ -37,24 +37,22 @@ from .settings import *  # noqa:F403
 from .settings.dialog import AddonSettingsDialog
 from . import commandKeysSelectiveAnnouncementAndRemanence
 from . import speechHistory
-from .computerTools import volumeControl as volumeControl
 from .utils.NVDAStrings import NVDAString
 from .utils import maximizeWindow, makeAddonWindowTitle, isOpened
 from .utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
 from .utils import special
 from .utils.informationDialog import InformationDialog
 from .utils.py3Compatibility import py3, _unicode
+from .computerTools.volumeControlScripts import ScriptsForVolume
 
 addonHandler.initTranslation()
 
 _curAddon = addonHandler.getCodeAddon()
 _addonSummary = _curAddon.manifest['summary']
-# module script categories
+# add-on script categories
 SCRCAT_MODULE = _unicode(_addonSummary)
 # Translators: The name of a category of NVDA commands.
-SCRCAT_SWITCH_VOICE_PROFILE = _("Switch voice profile")
-# Translators: The name of a category of NVDA commands.
-SCRCAT_VOLUME_CONTROL = _("Volume control")
+SCRCAT_SWITCH_VOICE_PROFILE = _("Voice profile switching")
 
 
 def finally_(func, final):
@@ -107,15 +105,16 @@ def fetchAddon(processID, appName):
 		return None
 
 
-class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
+#class GlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlugin):
+class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlugin):
 	_remanenceCharacter = None
 	_trapNextGainFocus = False
 	_repeatBeepOnAudio = None
-	criptCategory = SCRCAT_MODULE
+	scriptCategory = SCRCAT_MODULE
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures = {}
 	_mainScriptToGestureAndfeatureOption = {
-#		"test" : (("kb:nvda+control+shift+f11",) , None),
+		"test" : (("kb:nvda+control+shift+f11",) , None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), ID_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), ID_FocusedApplicationInformations),
@@ -148,22 +147,13 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"setVoiceProfileSelector7": (("kb:nvda+shift+control+7",), ID_VoiceProfileSwitching),
 		"setVoiceProfileSelector8": (("kb:nvda+shift+control+8",), ID_VoiceProfileSwitching),
 		"openCurrentOrOldNVDALogFile": (("kb:nvda+shift+j",), ID_OpenCurrentOrOldNVDALogFile),
-		"setMainAndNVDAVolume": (("kb:nvda+escape",), ID_VolumeControl),
-		"toggleCurrentAppVolumeMute": (("kb:nvda+pause",), ID_VolumeControl),
-		"increaseFocusedAppVolume": (None, ID_VolumeControl),
-		"decreaseFocusedAppVolume": (None, ID_VolumeControl),
-		"maximizeFocusedAppVolume": (None, ID_VolumeControl),
-		"minimizeFocusedAppVolume": (None, ID_VolumeControl),
-		"increaseSpeakersVolume": (None, ID_VolumeControl),
-		"decreaseSpeakersVolume": (None, ID_VolumeControl),
-		"maximizeSpeakersVolume": (None, ID_VolumeControl),
-		"minimizeSpeakersVolume": (None, ID_VolumeControl),
 		"toolsForAddon": (None, ID_Tools),
 		"leftClickAtNavigatorObjectPosition": (("kb:nvda+,",), None),
 		"rightClickAtNavigatorObjectPosition": (("kb:nvda+shift+,",), None),
 		"addonSettingsDialog": (None, None),
 		"toggleNumpadStandardUse": (None, None),
 		"toggleNumpadStandardUseWithNumlockKey": (("kb:numlock",), None),
+		"reportOrDisplayCurrentSpeechSettings": (None, None),
 		}
 
 	# a dictionnary to map shell script to gesture and installation check function
@@ -192,18 +182,12 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"toggleSwitchVoiceProfileMode": ("kb:p", ID_VoiceProfileSwitching),
 		"shutdownComputerDialog": ("kb:r", None),
 		"toggleCurrentAppVolumeMute": ("kb:s", ID_VolumeControl),
-		"setMainAndNVDAVolume": ("kb:control+s", ID_VolumeControl),
-		"increaseFocusedAppVolume": ("kb:upArrow", ID_VolumeControl),
-		"decreaseFocusedAppVolume": ("kb:downArrow", ID_VolumeControl),
-		"maximizeFocusedAppVolume": ("kb:pageUp", ID_VolumeControl),
-		"minimizeFocusedAppVolume": ("kb:pageDown", ID_VolumeControl),
-		"increaseSpeakersVolume": ("kb:control+upArrow", ID_VolumeControl),
-		"decreaseSpeakersVolume": ("kb:control+downArrow", ID_VolumeControl),
-		"maximizeSpeakersVolume": ("kb:control+pageUp", ID_VolumeControl),
-		"minimizeSpeakersVolume": ("kb:control+pageDown", ID_VolumeControl),
 		"toolsForAddon": ("kb:t", ID_Tools),
 		"activateUserInputGesturesDialog": ("kb:u", None),
 		"manageVoiceProfileSelectors": ("kb:v", ID_VoiceProfileSwitching),
+		"reportCurrentSpeechSettings": ("kb:z", None),
+		"displayCurrentSpeechSettings": ("kb:control+z", None),
+
 		}
 
 	# Translators: Input help mode message
@@ -262,7 +246,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"displayModuleUserGuide": (_("Display add-on user's guide"), None),
 		# Translators: Input help mode message
 		# for display shell command help dialog command.
-		"displayHelp": (_("Display commands shell's list"), None),
+		"displayHelp": (_("Display  the list of commands of the commands interpreter "), None),
 		# Translators: Input help mode message
 		# for display log management dialog command.
 		"NVDALogsManagement": (_("Open a dialog to manage NVDA logs"), globalCommands.SCRCAT_TOOLS),
@@ -286,7 +270,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"exploreProgramFiles": (_("Explore NVDA programs's folder"), None),
 		# Translators: Input help mode message
 		# for display speech history records list dialog command.
-		"displaySpeechHistoryRecords": (_("display speech history records"), globalCommands.SCRCAT_SPEECH),
+		"displaySpeechHistoryRecords": (_("Display speech history records"), globalCommands.SCRCAT_SPEECH),
 		# Translators: Input help mode message
 		# for report previous speech history record command.
 		"reportPreviousSpeechHistoryRecord": (_("Report previous record of the speech history and copy it to clipboard"), globalCommands.SCRCAT_SPEECH),
@@ -328,7 +312,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"displayFormatting": (_("Display formatting info for the current review cursor position within a document in dialog box"), None),
 		# Translators: Input help mode message
 		# for launch module layer command.
-		"moduleLayer": (_("Launch %s commands's shell") % _addonSummary, None),
+		"moduleLayer": (_("Launch commands's interpreter of add-on"), None),
 		# Translators: Input help mode message
 		# for set VoiceProfile Selector 1 command.
 		"setVoiceProfileSelector1": (_("Set selector 1 as current selector and Sets , if possible, it associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
@@ -357,39 +341,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# for activate user input gesture dialog command.
 		"activateUserInputGesturesDialog": (_("Displays the dialog to manage the input gestures configured by user"), None),
 		# Translators: Input help mode message
-		# for set on main and NVDA volume command.
-		"setMainAndNVDAVolume": (_("Set on main and NVDA volume"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for toggle current focused application's volume command.
-		"toggleCurrentAppVolumeMute": (_("Toggle current focused application volume mute"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for increase volume of current focused application command.
-		"increaseFocusedAppVolume": (_("Increase volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for decrease volume of current focused application command.
-		"decreaseFocusedAppVolume": (_("Decrease volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for maximize volume of current focused application command.
-		"maximizeFocusedAppVolume": (_("Maximize volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for minimize volume of current focused application command.
-		"minimizeFocusedAppVolume": (_("Minimize volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message for tools for add-on developpement dialog command.
-		# Translators: Input help mode message
-		# for increase volume of speakers command.
-		"increaseSpeakersVolume": (_("Increase volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for decrease volume of speakers command.
-		"decreaseSpeakersVolume": (_("Decrease volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for maximize volume of speakers command.
-		"maximizeSpeakersVolume": (_("Maximize volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for minimize volume of speakers command.
-		"minimizeSpeakersVolume": (_("Minimize volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
 		# for tools for add-on command.
-		"toolsForAddon": (_("Display tools for add-on developpement dialog "), globalCommands.SCRCAT_TOOLS),
+		"toolsForAddon": (_("Display tools for add-on development dialog "), globalCommands.SCRCAT_TOOLS),
 		# Translators: Input help mode message
 		# for leftclick mouse button at navigator cursor position script command.
 		"leftClickAtNavigatorObjectPosition": (_("Click the left mouse button at navigator object position. Twice: click twice this button at this position"), globalCommands.SCRCAT_MOUSE),
@@ -400,12 +353,23 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# for addon settings dialog script command.
 		"addonSettingsDialog": (_("Display add-on settings dialog"), None),
 		# Translators: Input help mode message
-		# for toggle standard use of nunumeric keypad.
+		# for toggle standard use of nunumeric keypad script.
 		"toggleNumpadStandardUse": (_("Enable or disable the standard use of numeric keypad"), None),
 		# Translators: Input help mode message
-		# for CloseAllWindows script.
+		# for CloseAllWindows script command.
 		"closeAllWindows": (_("Close all opened windows"), None),
+		# Translators: Input help mode message
+		# for displayRunningAddonsList script command.
 		"displayRunningAddonsList": (_("Display running add-ons list"), None),
+		# Translators: Input help mode message
+		# for reportOrDisplayCurrentSpeechSettings script commands.
+		"reportOrDisplayCurrentSpeechSettings": (_("Report current speech settings. Twice: display them"), globalCommands.SCRCAT_SPEECH),
+		# Translators: Input help mode message
+		# for reportCurrentSpeechSettings script commands.
+		"reportCurrentSpeechSettings": (_("Report current speech settings"), globalCommands.SCRCAT_SPEECH),
+		# Translators: Input help mode message
+		# for displayCurrentSpeechSettings script commands.
+		"displayCurrentSpeechSettings": (_("Display current speech settings"), globalCommands.SCRCAT_SPEECH),
 		}
 
 	def __init__(self, *args, **kwargs):
@@ -413,8 +377,12 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.curAddon = _curAddon
 		addonName = self.curAddon.manifest['name']
 		addonVersion = self.curAddon.manifest["version"]
-		self.maximizeWindowTimer = None
 		log.info("Loaded %s version %s" % (addonName, addonVersion))
+		# update dictionaries for volume control scripts
+		self._mainScriptToGestureAndfeatureOption .update(self._volumeControlMainScriptToGestureAndfeatureOption )
+		self._shellScriptToGestureAndFeatureOption .update(self._volumeControlShellScriptToGestureAndFeatureOption )
+		self._scriptsToDocsAndCategory .update(self._volumeControlScriptsToDocsAndCategory )
+		self.maximizeWindowTimer = None
 		self.installSettingsMenu()
 		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
 			isInstall(ID_KeyRemanence):
@@ -436,7 +404,8 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self._setShellGestures()
 		core.callLater(200, self.installShellScriptDocs)
 		self.switchVoiceProfileMode = "off"
-		if toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
+		if isInstall(ID_VolumeControl) and toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
+			from .computerTools import volumeControl
 			volumeControl.setNVDAVolume(withMin=True)
 			volumeControl.setSpeakerVolume(withMin=True)
 		if toggleByPassNoDescriptionAdvancedOption(False):
@@ -479,9 +448,11 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			commandText = None
 			if script in self._shellScriptToGestureAndFeatureOption:
 				(gesture, featureID) = self._shellScriptToGestureAndFeatureOption[script]
+				from keyboardHandler import KeyboardInputGesture
 				key = gesture.split(":")[-1]
+				g = KeyboardInputGesture.fromName(key)
 				# Translators: message for indicate shell command in input help mode.
-				commandText = _("(command: %s)") % key
+				commandText = _("(command: %s)") % g.displayName
 			elif script in self._mainScriptToGestureAndfeatureOption:
 				(gesture, featureID) = self._mainScriptToGestureAndfeatureOption[script]
 			else:
@@ -647,7 +618,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def exploreFolder(self, path):
 		import subprocess
 		windir = os.environ["WINDIR"]
-		cmd = """{windir}\explorer.exe \"{path}\"""" .format(windir = windir, path=path)
+		cmd = "{windir}\\explorer.exe \"{path}\"" .format(windir = windir, path=path)
 		subprocess.call(cmd, shell=True)
 
 	def onExploreUserConfigFolderMenu(self, evt):
@@ -655,7 +626,10 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		import globalVars
 		try:
 			# configPath is guaranteed to be correct for NVDA, however it will not exist for NVDA_slave.
-			path = globalVars.appArgs.configPath
+			if py3:
+				path = os.path.abspath(globalVars.appArgs.configPath)
+			else:
+				path = globalVars.appArgs.configPath
 		except AttributeError:
 			#import config
 			path = config.getUserDefaultConfigPath()
@@ -688,7 +662,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if hasattr(self, "browseModeExChooseNVDAObjectOverlayClasses"):
 			self.browseModeExChooseNVDAObjectOverlayClasses(obj, clsList)
 
-	def maximizeForegroundWindow(self, windowHandle):
+	def maximizeForegroundWindow(self):
 		self.maximizeWindowTimer = None
 		oForeground = api.getForegroundObject()
 		maximizeWindow(oForeground.windowHandle)
@@ -698,7 +672,7 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			if self.maximizeWindowTimer is not None:
 				self.maximizeWindowTimer.Stop()
 			self.maximizeWindowTimer = core.callLater(
-				2000, self.maximizeForegroundWindow, obj.windowHandle)
+				100, self.maximizeForegroundWindow)
 		nextHandler()
 
 	def event_gainFocus(self, obj, nextHandler):
@@ -708,14 +682,29 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		nextHandler()
 
 	def script_copyDateAndTimeToClip(self, gesture):
-		dateText = winKernel.GetDateFormat(
-			winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
+		try:
+			# for NVDA version >= 2021.1
+			dateText = winKernel.GetDateFormatEx(
+				winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
+		except AttributeError:
+			dateText = winKernel.GetDateFormat(
+				winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
 		if toggleReportTimeWithSecondsOption(False):
-			timeText = winKernel.GetTimeFormat(
-				winKernel.LOCALE_USER_DEFAULT, None, None, None)
+			try:
+				# for NVDA version >=  2021.1
+				timeText = winKernel.GetTimeFormatEx(
+					winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
+			except AttributeError:
+				timeText = winKernel.GetTimeFormat(
+					winKernel.LOCALE_USER_DEFAULT, None, None, None)
 		else:
-			timeText = winKernel.GetTimeFormat(
-				winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
+			try:
+				# for NVDA version >= 2021.1
+				timeText = winKernel.GetTimeFormatEx(
+					winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
+			except AttributeError:
+				timeText = winKernel.GetTimeFormat(
+					winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
 		msg = "%s %s" % (dateText, timeText)
 		api.copyToClip(msg)
 		# Translators: message to report date and time copy to clipboard.
@@ -729,18 +718,32 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 				self.script_copyDateAndTimeToClip(gesture)
 				return
 			if action == "date":
-				text = winKernel.GetDateFormat(
-					winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
+				try:
+					# for NVDA version >= 2021.1
+					text=winKernel.GetDateFormatEx(winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
+				except AttributeError:
+					text = winKernel.GetDateFormat(
+						winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
 				ui.message(text)
 				return
 			curLevel = config.conf["speech"]["symbolLevel"]
 			config.conf["speech"]["symbolLevel"] = SYMLVL_SOME
 			if toggleReportTimeWithSecondsOption(False):
-				text = winKernel.GetTimeFormat(
-					winKernel.LOCALE_USER_DEFAULT, None, None, None)
+				try:
+					# for NVDA version >= 2021.1
+					text=winKernel.GetTimeFormatEx(
+						winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
+				except AttributeError:
+					text = winKernel.GetTimeFormat(
+						winKernel.LOCALE_USER_DEFAULT, None, None, None)
 			else:
-				text = winKernel.GetTimeFormat(
-					winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
+				try:
+					# for NVDA version >= 2021.1
+					text=winKernel.GetTimeFormatEx(
+						winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
+				except AttributeError:
+					text = winKernel.GetTimeFormat(
+						winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
 			ui.message(text)
 			config.conf["speech"]["symbolLevel"] = curLevel
 		count = scriptHandler.getLastScriptRepeatCount()
@@ -1166,56 +1169,33 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		from .computerTools.shutdown_util import suspend as suspend
 		suspend(hibernate=True)
 
-	def script_toggleCurrentAppVolumeMute(self, gesture):
-		focus = api.getFocusObject()
-		appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
-		if appName == "nvda.exe":
-			speech.speakMessage(_("Unavailable for NVDA"))
-			return
-		try:
-			volumeControl.toggleProcessVolume(appName)
-		except:  # noqa:E722
-			speech.speakMessage(_("Not available on this operating's system"))
-
-	def script_setMainAndNVDAVolume(self, gesture):
-		if volumeControl.setSpeakerVolume() and volumeControl.setNVDAVolume():
-			speech.speakMessage(
-				# Translators: message to user  nvda and main volume  are established .
-				_("The main volume and that of NVDA are established and their level sets to the one in the configuration"))  # noqa:E501
+	def _ReportOrDisplayCurrentSpeechSettings(self,  display=False):
+		from . import switchVoiceProfile
+		textList = switchVoiceProfile.SwitchVoiceProfilesManager().getSynthInformations()
+		if not display:
+			for item in textList:
+				ui.message(item)
 		else:
-			speech.speakMessage(_("Not available on this operating's system"))
+			text = "\r\n".join(textList)
+			# Translators: this is the title <of informationdialog box
+			# to show current speech settings.
+			dialogTitle = _("Current speech settings")
+			InformationDialog.run(None, dialogTitle, "", text)
 
-	def script_increaseFocusedAppVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="increase")
-	script_increaseFocusedAppVolume .noFinish = True
+	def script_reportOrDisplayCurrentSpeechSettings(self, gesture):
+		stopDelayScriptTask()
+		if scriptHandler.getLastScriptRepeatCount() == 0:
+			delayScriptTask(self._ReportOrDisplayCurrentSpeechSettings)
+		else:
+			wx.CallAfter(self._ReportOrDisplayCurrentSpeechSettings, True)
 
-	def script_decreaseFocusedAppVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="decrease")
-	script_decreaseFocusedAppVolume .noFinish = True
+	def script_reportCurrentSpeechSettings(self, gesture):
+		stopDelayScriptTask()
+		wx.CallAfter(self._ReportOrDisplayCurrentSpeechSettings)
 
-	def script_maximizeFocusedAppVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="max")
-	script_maximizeFocusedAppVolume .noFinish = True
-
-	def script_minimizeFocusedAppVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="min")
-	script_minimizeFocusedAppVolume .noFinish = True
-
-	def script_increaseSpeakersVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeSpeakersVolume, action="increase")
-	script_increaseSpeakersVolume .noFinish = True
-
-	def script_decreaseSpeakersVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeSpeakersVolume, action="decrease")
-	script_decreaseSpeakersVolume .noFinish = True
-
-	def script_maximizeSpeakersVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeSpeakersVolume, action="max")
-	script_maximizeSpeakersVolume .noFinish = True
-
-	def script_minimizeSpeakersVolume(self, gesture):
-		wx.CallAfter(volumeControl.changeSpeakersVolume, action="min")
-	script_minimizeSpeakersVolume .noFinish = True
+	def script_displayCurrentSpeechSettings(self, gesture):
+		stopDelayScriptTask()
+		wx.CallAfter(self._ReportOrDisplayCurrentSpeechSettings, True)
 
 	def script_manageVoiceProfileSelectors(self, gesture):
 		from . import switchVoiceProfile
@@ -1478,15 +1458,15 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: extension type tag.
 		globalTag = _("global")
 		# Translators: extension type tag.
-		appModuleTag = _("applicatif")
+		appModuleTag = _("application")
 		# Translators: extension type tag.
-		synthetizerTag = _("vocal synthetezer")
+		synthetizerTag = _("speech synthesizer driver")
 		# Translators: extension type tag.
-		brailleDisplayDriverTag = _("braille displaydriver")
+		brailleDisplayDriverTag = _("braille display driver")
 		# Translators: extension type tag.
-		mixeTag = _("mixte")
+		mixedTag= _("mixed")
 		# Translators: add-on type.
-		addonTypeLabel = _("add-on type - %s:")
+		addonTypeLabel = _("%s add-on type:")
 		# Translators: no add-on
 		noAddonText = _("any")
 		
@@ -1526,14 +1506,14 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			elif brailleDisplayDriver:
 				brailles.append(addonName)
 
-		textList = [addonTypeLabel % globalTag,]
+		textList = [(addonTypeLabel % globalTag).capitalize(),]
 		if len(globalPlugins):
 			#textList.extend([x.manifest["summary"] + " " + x.manifest["version"] for x in sorted(globalPlugins, key=lambda a: strxfrm(a.manifest['summary']))])
 			textList.extend(globalPlugins)
 		else:
 			textList.append(noAddonText)
 		textList.append("")
-		textList.append(addonTypeLabel % appModuleTag)
+		textList.append((addonTypeLabel % appModuleTag).capitalize())
 		if len(appModules):
 			textList.extend(appModules)
 		else:
@@ -1545,12 +1525,12 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 		else:
 			textList.append(noAddonText)
 		textList.append("")
-		textList.append(addonTypeLabel % brailleDisplayDriverTag)
+		textList.append((addonTypeLabel % brailleDisplayDriverTag).capitalize())
 		if len(brailles):
 			textList.extend(brailles)
 		else:
 			textList.append(noAddonText)
-		textList.append(addonTypeLabel % mixeTag)
+		textList.append((addonTypeLabel % mixedTag).capitalize())
 		if len(mixes):
 			textList.extend(mixes)
 		else:
@@ -1572,9 +1552,11 @@ class NVDAExtensionGlobalPlugin(globalPluginHandler.GlobalPlugin):
 			releaseToDev=toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 
 	def script_test(self, gesture):
-		print("test")
+		log.info("test")
 		ui.message("NVDAExtensionGlobalPlugin test")
 #		self.checkUpdateWithLocalMyAddonsFile()
+
+
 
 
 class HelperDialog(wx.Dialog):
@@ -1608,6 +1590,8 @@ class HelperDialog(wx.Dialog):
 			if gest in self.globalPlugin._shellGestures:
 				(doc, category) = self.globalPlugin._scriptsToDocsAndCategory[script]
 				key = ":".join(gest.split(":")[1:])
+				from keyboardHandler import KeyboardInputGesture
+				keyName = KeyboardInputGesture.fromName(key).displayName
 				self.scriptToKey[script] = key
 				self.docToScript[doc] = script
 
@@ -1618,7 +1602,9 @@ class HelperDialog(wx.Dialog):
 		for doc in self.docList:
 			script = self.docToScript[doc]
 			key = self.scriptToKey[script]
-			choice.append("%s: %s" % (doc, key))
+			from keyboardHandler import KeyboardInputGesture
+			keyName = KeyboardInputGesture.fromName(key).displayName
+			choice.append("%s: %s" % (doc, keyName))
 
 		from gui import guiHelper
 		mainSizer = wx.BoxSizer(wx.VERTICAL)

@@ -18,14 +18,19 @@ from ..utils.py3Compatibility import getUtilitiesPath, getCommonUtilitiesPath
 commonUtilitiesPath = getCommonUtilitiesPath()
 utilitiesPath = getUtilitiesPath()
 pycawPath = os.path.join(utilitiesPath, "pycaw")
+sysPath = sys.path
 sys.path.append(commonUtilitiesPath)
 sys.path.append(utilitiesPath)
 sys.path.append(pycawPath)
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  # noqa:E402
-del sys.path[-1]
-del sys.path[-1]
-del sys.path[-1]
+sys.path = sysPath
+
+_previousAppVolumeLevel = {}
+_previousSpeakersVolumeLevel = None
 addonHandler.initTranslation()
+# Translators: part of message for announcement of volume level.
+volumeMsg = _("Volume")
+
 try:
 	devices = AudioUtilities.GetSpeakers()
 	interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -139,14 +144,35 @@ def setNVDAVolume(withMin=False):
 			return True
 	return False
 
+def announceAppVolumeLevel(appVolumeLevel):
+	from ..settings import toggleReportVolumeChangeAdvancedOption, toggleAppVolumeLevelAnnouncementInPercentAdvancedOption
+	if not toggleReportVolumeChangeAdvancedOption(False):
+		return
+	if _volume is None:
+		speakersVolume =  1.0
+	else:
+		volume = _volume
+		speakersVolume = volume.GetMasterVolumeLevelScalar()
+	if toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False):
+		level = int(appVolumeLevel*100)
+		# Translators: part of message  for announcement of volume level in percent.
+		percentMsg = _("percent")
+		msg = "%s %s %s" % (volumeMsg, level, percentMsg)
+	else:
+		level = int(round((appVolumeLevel*100)*speakersVolume))
+		msg = "%s %s" % (volumeMsg, level)
+	speech.speakMessage(msg)
 
-def changeFocusedAppVolume(action="increase"):
-	focus = api.getFocusObject()
-	appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
+
+def changeFocusedAppVolume(appName=None, action="increase", value=None):
+	global _previousAppVolumeLevel
+	if appName is None:
+		focus = api.getFocusObject()
+		appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
 	if appName == "nvda.exe":
 		speech.speakMessage(_("Unavailable for NVDA"))
 		return
-	from ..settings import _addonConfigManager, toggleReportVolumeChangeAdvancedOption  # noqa:E501
+	from ..settings import _addonConfigManager
 	try:
 		sessions = AudioUtilities.GetAllSessions()
 	except:  # noqa:E722
@@ -163,36 +189,33 @@ def changeFocusedAppVolume(action="increase"):
 			mute = volume.GetMute()
 			if mute:
 				volume.SetMute(not mute, None)
-			offset = 0.015*_addonConfigManager.getVolumeChangeStepLevel()
-			level = volume.GetMasterVolume()
+			offset = 0.01*_addonConfigManager.getVolumeChangeStepLevel()
+			curLevel = volume.GetMasterVolume()
 			if action == "increase":
-				level = min(1, level+offset)
-				# Translators: message to user to report volume change.
-				msg = _("stronger")
+				level = min(1, curLevel+offset)
 			elif action == "decrease":
-				level = max(0, level-offset)
-				# Translators: message to user to report volume change.
-				msg = _("strongest")
+				level = max(0, curLevel-offset)
 			elif action == "max":
 				level = 1.0
-				# Translators: message to user to report volume change.
-				msg = _("max")
 			elif action == "min":
 				level = 0.0
-				# Translators: message to user to report volume change.
-				msg = _("min")
+			elif action == "set":
+				level = float(value)/100
+				print ("value: %s, level: %s"%(value,level))
 			else:
 				# no action
 				log.warning("changeFocusedAppVolume: %s action is not known" % action)
 				return
+			_previousAppVolumeLevel [appName.lower()] = curLevel
 			volume.SetMasterVolume(level, None)
-			if toggleReportVolumeChangeAdvancedOption(False):
-				speech.speakMessage(msg)
+			level = volume.GetMasterVolume()
+			announceAppVolumeLevel(level)
 			log.warning("%s volume is set to %s" % (appName, level))
 			return
 
 
-def changeSpeakersVolume(action="increase"):
+def changeSpeakersVolume(action="increase", value=None):
+	global _previousSpeakersVolumeLevel
 	from ..settings import _addonConfigManager, toggleReportVolumeChangeAdvancedOption  # noqa:E501
 	if _volume is None:
 		return False
@@ -201,40 +224,48 @@ def changeSpeakersVolume(action="increase"):
 	if mute:
 		volume.SetMute(not mute, None)
 		log.warning(" Unmute master volume")
-	offset = 0.010*_addonConfigManager.getVolumeChangeStepLevel()
-
+	offset = 0.01*_addonConfigManager.getVolumeChangeStepLevel()
 	minLevel = float(_addonConfigManager .getMinMasterVolumeLevel())/100
 	speakersVolume = volume.GetMasterVolumeLevelScalar()
 	if action == "increase":
 		level = min(1, speakersVolume + offset)
-		# Translators: message to user to report volume change.
-		msg = _("stronger")
 	elif action == "decrease":
 		level = max(minLevel, speakersVolume - offset)
-		# Translators: message to user to report volume change.
-		msg = _("strongest")
 	elif action == "max":
 		level = 1.0
-		# Translators: message to user to report volume change.
-		msg = _("max")
 	elif action == "min":
-		level = float(_addonConfigManager .getMasterVolumeLevel())/100
-		# Translators: message to user to report volume change.
-		msg = _("min")
+		level = loat(_addonConfigManager .getMinMasterVolumeLevel())/100
+	elif action == "set":
+		minimumLevel = _addonConfigManager .getMinMasterVolumeLevel()
+		if value <  minimumLevel:
+			# Translators: message to user  to indicate command reject.
+			speech.speakMessage(_("Impossible, the volume level cannot be lower than the configured recovery threshold equal to %s")%minimumLevel)
+			return
+		level = float(value)/100
 	else:
 		log.warning("changeSpeakerVolume: %s action is not known" % action)
 		return
+	_previousSpeakersVolumeLevel = speakersVolume
+	msg = "%s %s" % (volumeMsg, int(round(level*100)))
 	volume.SetMasterVolumeLevelScalar(level, None)
-	newSpeakersVolume = volume.GetMasterVolumeLevelScalar()
-	if newSpeakersVolume == speakersVolume:
-		if newSpeakersVolume == 1:
-			# Translators: message to user whenthe maximum limit is reached.
-			msg = _("At maximum")
-		else:
-			# Translators: message to user when minimum level is reached.
-			msg = _("At minimum")
 
+	newSpeakersVolume = volume.GetMasterVolumeLevelScalar()
 	if toggleReportVolumeChangeAdvancedOption(False):
 		speech.speakMessage(msg)
 		log.warning("Master volume is set to %s" % level)
 	return True
+def setFocusedAppVolumeToPreviousLevel():
+	focus = api.getFocusObject()
+	appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
+	level = _previousAppVolumeLevel.get(appName.lower())
+	if level is None:
+		return
+	level = int(level*100)
+	changeFocusedAppVolume(appName=appName, action="set", value=level)
+
+def setSpeakersVolumeLevelToPreviousLevel():
+	level = _previousSpeakersVolumeLevel
+	if level is None:
+		return
+	level = int(level*100)
+	changeSpeakersVolume(action="set", value=level)

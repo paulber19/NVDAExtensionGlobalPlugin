@@ -58,6 +58,7 @@ Cette extension ajoute aux commandes globales de NVDA:
   - couper ou établir  le son pour le flux audio de l'application sous le focus,
   - établir manuellement ou automatiquement le son principal et celui du flux audio de NVDA ,
   - modifier le niveau du volume principal ou celui du flux audio de l'application sous le focus,
+  - rétablissement automatique du volume principal et de NVDA au chargement de l'extension,
  - [Outils pour le  développement d'extensions #hdr22]:
   - création du fichier buildVars.py à partir du fichier manifest.ini de l'extension,
   - mise à jour du fichier manifest.ini à partir des informations du fichier buildVars.py,
@@ -83,8 +84,7 @@ Cette extension ajoute aux commandes globales de NVDA:
  - [annonce systématique des ponctuations lors de déplacement par mot #hdr103],
 - les options avancées:
  - [Signalement par un son de l'inscription d'une erreur dans le journal de NVDA #hdr300],
- - [Rétablissement automatique du volume principal et de NVDA au chargement de l'extension #hdr301],
- - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
+  - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
  - [configuration de la temporisation d'attente de répétition du même geste de commande #hdr303],
  - [utilisation possible des touches du pavé numérique de manière standard #hdr304].
 - et les autres améliorations:
@@ -98,9 +98,9 @@ Dans le sous-menu "Préférences" de NVDA est ajouté le sous-menu "ADDON_SUMMAR
 - systématiquement "Paramètres" qui ouvre un dialogue ressemblant au dialogue "paramètres" de NVDA et qui présente les catégories suivantes:
  - "Installation des fonctionnalités": permet de voir l'état d'installation de chaque fonctionnalité apportée par l'extension et éventuellement le modifier.
  - "Compléments à NVDA": pour configurer les options liées à NVDA apportées par l'extension,
- - "Ordinateur": pour configurer les options liées aux fonctionnalités relatives à l'ordinateur (système d'exploitation Windows, controle du son),
+ - "Ordinateur": pour configurer les options liées aux fonctionnalités relatives à l'ordinateur (système d'exploitation Windows, contrôle du son),
  - "Clavier": pour configurer les options liées au clavier (rémanence des touches, utilisation du pavé numérique),
-  - "Avancés":   options pour les utilisateurs expérimentés,
+ - "Avancés":   options pour les utilisateurs expérimentés,
  - "mise à jour": paramètres contrôlant la mise à jour de l'extension.
 
 
@@ -181,8 +181,9 @@ La configuration de la fonctionnalité "Commutation de profil vocal" ayant chang
 ++ Historique ++
 L'historique des versions de cette extension est dans le fichier ["changes.html" changes.html]
 
-+Fonctionnalités +
-++ Installation d'une fonctionnalité ++
++ Fonctionnalités +
+++ Préambule ++
++++ Installation d'une fonctionnalité +++
 Cette extension permet d'installer ou ne pas installer telle ou telle fonctionnalité.
 L'état d'installation de chaque fonctionnalité de l'extension est présenté dans la catégorie "Installation des fonctionnalités" du dialogue "Paramètres.
 
@@ -194,7 +195,7 @@ Cet état peut être:
 
 Par défaut, cette extension n'installe pas toutes les fonctionnalités.
 
-++ Activation des scripts ++
++++ Activation des scripts +++
 En général, chaque script peut être activé de deux manières:
 - soit à l'aide d'un geste de commande classique,
 - soit en utilisant l'interpréteur de commandes de l'extension (voir chapitre suivant).
@@ -279,10 +280,12 @@ Il affiche une boite de dialogue qui contient:
 
 
 La navigation dans la boite de dialogue se fait par "Tab" ou majuscule + Tab" et dans la liste avec les flèches de direction haut et bas.
+
+Dans la liste, il est possible de sélectionner en tapant le début du titre de la fenêtre désirée.
+
 L'appui sur la touche "Echap" permet de refermer la boite de dialogue.
 
 Dans la liste, les fenêtres sont signalées comme agrandies ou réduites.
-
 
 L'appui sur le bouton "Basculer vers" ou la touche "Entrée" quand on est dans la liste des fenêtres , ferme la boite de dialogue et amène au premier plan la fenêtre de l'application sélectionnée en lui donnant le focus.
 
@@ -402,7 +405,7 @@ Ces scripts sont rangés dans la rubrique "Outils" du dialogue "Gestes de comman
 
 
 +++ Annonce du nom du fichier de l'application, du nom de l'extension activée et du nom et de l'état du profil de configuration +++
-La description de ce script est: "Annoncer le nom du fichier de l'application en cours ainsi que le nom du fichier de l’extension. Deux appuis: annoncer le nom et l'état du profil de configuration".
+La description de ce script est: "Annoncer le nom de fichier de l'application en cours ainsi que le nom du module python  chargé. Deux appuis: annoncer le nom et l'état du profil de configuration".
 
 Par défaut, le geste de commande "MAIN_KEY_CONFIGURATION_PROFILE " lui est affecté.
 
@@ -529,10 +532,10 @@ Pour les navigateurs Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefo
 Tous ces scripts sont rangés dans la catégorie "Tableau" dans l'arborescence du dialogue "Gestes de commandes" de NVDA.
 
 Cette extension déplace aussi dans cette catégorie les scripts de base de NVDA qui étaient rangés dans la catégorie "Divers". Ce sont:
-- aller à la colonne précédente: "NVDA + control + flèche gauche",
-- aller à la colonne suivante: "NVDA + control + flèche droite",
-- aller à la ligne: précédente "NVDA + control + flèche haut",
-- aller à la ligne suivante: "NVDA + control + flèche bas",
+- aller à la colonne précédente: "NVDA + contrôle + flèche gauche",
+- aller à la colonne suivante: "NVDA + contrôle + flèche droite",
+- aller à la ligne: précédente "NVDA + contrôle + flèche haut",
+- aller à la ligne suivante: "NVDA + contrôle + flèche bas",
 
 
 +++ Annonce de l'adresse du document +++
@@ -560,10 +563,10 @@ Par défaut, cette option n'est pas cochée. Le fonctionnement de base de NVDA e
 ++ Annonce de la fonction associée aux commandes d'édition du style "copier", "Coller" ++[hdr7]
 Cette fonctionnalité est installée par défaut.
 
-Les fonctions déclenchées par les raccourcis "control + v", "control + c", "control + x", "control + z" n'étant pas vocalisées par NVDA, cette extension s'en charge.
+Les fonctions déclenchées par les raccourcis "contrôle + v", "contrpôle + c", "contrôle + x", "contrôle + z" n'étant pas vocalisées par NVDA, cette extension s'en charge.
 
 Aucun contrôle sur le résultat de la fonction n'est fait.
-Mais pour les raccourcis "control + c", "control + x", l'absence de sélection de texte est signalée dans les arborescences et les listes.
+Mais pour les raccourcis "contrôle + c", "contrôle + x", l'absence de sélection de texte est signalée dans les arborescences et les listes.
 
 Si l'extension fakeClipboardAnnouncement est installée (qui réalise la même fonction), il faut le désinstaller. 
 
@@ -693,9 +696,10 @@ Cette fonctionnalité est installée par défaut.
 
 NVDA permet de faire annoncer vocalement les touches de commandes à l'aide de l'option "Dire les touches de commandes" située dans la catégorie "clavier" du dialogue "Paramètres" de NVDA ou par la commande clavier "NVDA+4".
 
-Cette fonctionnalité apporte, à l'aide d'une boite de dialogue, la possibilité de :
+Cette fonctionnalité apporte, par configuration et à l'aide d'une boite de dialogue, la possibilité de :
 - ne pas annoncer certaines touches de commandes quand l'option "Dire les touches de commandes" est cochée,
 - d'annoncer certaines touches de commandes quand l'option "Dire les touches de commandes" n'est pas cochée.
+
 
 Pour afficher ce dialogue, trois possibilités:
 - en sélectionnant et activant l'élément "Annonce sélective des touches de commandes" du sous-menu "ADDON_SUMMARY",
@@ -704,23 +708,36 @@ Pour afficher ce dialogue, trois possibilités:
 
 
 Le dialogue présente:
-- une case à cocher pour choisir pour quel mode les touches de commandes sélectionnées seront utilisées,
-- la liste des touches de commandes possibles,
-- la liste des combinaisons possibles avec les touches complémentaires "NVDA", "Alt", "Contrôle", "Majuscule".
+- une case à cocher pour choisir pour quel mode, la configuration des touches est faite,
+- la liste des touches possibles,
+- la liste des combinaisons de touches de modification possibles avec les touches complémentaires "NVDA", "Alt", "Contrôle", "Majuscule", "Windows".
 
 
 Un appui sur la barre d'espace coche ou décoche la touche ou la combinaison sélectionnée.
 
-Si la case "Dire les touches de commandes" de la boite de dialogue n'est pas cochée, le fait de cocher une touche permettra de faire annoncer quand même cette touche. La liste des combinaisons est alors accessible et toutes les combinaisons de la liste sont cochées. 
+Si la case "Dire les touches de commandes" de la boite de dialogue n'est pas cochée, le fait de cocher une touche permet de faire annoncer quand même cette touche lorsque NVDA est configuré à ne pas les annoncer.
 
-Pour ne pas que la touche de commande tapée avec la combinaison soit annoncer, il suffit de décocher cette combinaison.
+La liste des combinaisons de touches de modification est alors accessible et tous les éléments de cette liste sont cochés par défaut. 
 
-Par contre, si la case à cocher "Dire les touches de commande" est cochée, le fait de cocher une touche de commande permettra de ne pas faire annoncer cette touche. La liste des combinaisons est alors accessible et toutes les combinaisons de la liste sont cochées par défaut. Cela signifie que la touche tapée avec n'importe quelle combinaison ne sera pas annoncée. En décochant une combinaison permet alors de faire annoncer la touche avec cette combinaison.
+Pour ne pas que la touche tapée avec une combinaison particulière soit annoncer, il suffit de décocher cette combinaison.
 
-Le bouton "OK" enregistre les choix faits tandis que le bouton "Annuler" les oublie.
+Si l'élément "aucune" de la liste des combinaisons est coché, la touche sera annoncée  même frappée sans combinaison de touche de modification.
 
-Dans les listes, les touches "F1" et"F2" permettent de se déplacer respectivement à l'élément coché suivant ou à l'élément coché précédent.
+Par contre, si la case à cocher "Dire les touches de commande" est cochée, le fait de cocher une touche permet de ne pas faire annoncer cette touche lorsque NVDA est configuré à les annoncer.
 
+La liste des combinaisons de touches de modification est alors accessible et tous les éléments de cette liste sont cochées par défaut. Cela signifie que la touche tapée avec ou sans  combinaison ne sera pas annoncée.
+
+L'action de décocher une combinaison permet alors de faire annoncer la touche avec cette combinaison.
+
+L'élément "aucune" de la liste des combinaisons permet de   ne pas faire annoncer la touche même frappée sans combinaison de touches de modification.
+
+Les boutons "Décocher tout" et "Cocher tout" permettent de décocher ou cocher la totalité des éléments de la liste des combinaisons de touche de modification.
+
+Le premier élément "toute touche avec combinaison de touches de modification" de la liste des touches permet,  sans désigner une touche  particulière, de sélectionner un ensemble de combinaisons de touches de modification. Toute touche tapée avec une de ces combinaisons sera, suivant le mode  de configuration choisi, annoncée ou non.
+
+Le bouton "OK" enregistre les choix faits pour le profil de configuration courant, tandis que le bouton "Annuler" les oublie.
+
+Dans les listes,  la touche "F2" et la combinaison de touche "majuscule+F2"  permettent de se déplacer respectivement à l'élément coché suivant ou  précédent.
 
 Il est possible de ne pas installer cette fonctionnalité en sélectionnant, dans la catégorie "Fonctionnalités installées" et pour la fonctionnalité "Annonce sélective des touches de commande", l'état "Ne pas Installer».
 
@@ -801,7 +818,14 @@ Cette boite de dialogue présente :
 
 Dans la liste des éléments, il est possible de changer le type des objets à lister sans quitter la liste:
 - soit en utilisant les flèches de direction gauche ou droite,
-- soit en tapant la première lettre du type d'objet désiré.
+- soit en tapant "contrôle+majuscule+la première lettre du type d'objet désiré".
+
+
+Toujours dans cette liste, il est possible d'atteindre un élément en tapant les premières lettres de son étiquette.
+
+Pour un élément de type:
+- bouton ou case à cocher: l'état de l'élément est indiqué.
+- zone d'édition: létat en lecture seule est indiqué.
 
 
 +++ Annonce ou affichage des éléments visibles de l'objet sous le focus +++
@@ -863,10 +887,15 @@ Lorsqu'un sélecteur est déjà associé à un profil vocal il est alors possibl
 
 Si le sélecteur sélectionné est un sélecteur associé sous le profil de configuration normal, il n'est alors pas possible de le libérer, mais il peut être associé au profil courant.
 Seuls les sélecteurs associés sous le profil de configuration courant peuvent être libérés.
++++ Mode "Commutation de profil vocal" +++
+Pour changer rapidement de profil vocal, le mode "Commutation de profil vocal" est mis en place et un  script permet de l'activer ou le désactiver.
 
-Pour changer rapidement de profil vocal, le mode "Commutation de profil vocal" est mis en place.
+La description de ce script est:  "Activer ou désactiver le Mode commutation de profil vocal".
 
-Pour activer ou désactiver ce mode, la commande "KEY_VOICE_PROFIL_SWITCHING" de l'interpréteur doit être tapé.
+Pour lancer ce script, deux possibilités:
+- soit en tapant la commande "KEY_VOICE_PROFIL_SWITCHING" de l'interpréteur ,
+- soit à l'aide du geste de commande "MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING" (non installé par défaut).
+
 
 Ce mode activé, les flèches droite ou gauche permettent de se déplacer au premier sélecteur suivant ou précédent associé à un profil vocal et ainsi définir le profil vocal associé à ce sélecteur comme profil vocal courant.
 
@@ -895,18 +924,32 @@ Chaque script se lance à l'aide du geste de commande "MAIN_KEY_VOICEPROFILE_SEL
 
 Le script sélectionne le sélecteur x et s'il est associé à un profil vocal, positionne ce profil vocal comme profil vocal courant.
 
+
++++ Annonce ou affichage des paramètres vocaux courants +++
+Les 3 scripts suivants permettent de connaitre les paramètres vocaux actuels sans avoir besoin d'utiliser le menu "Parole" de NVDA.
+
+Ils sont rangés dans la catégorie "Parole" du dialogue "Gestes de commandes" de NVDA et sont installés même si la fonctionnalité "Commutation de profil vocal" n'est pas installée.
+
+Aucun geste de commande ne leur sont associé, mais il est possible de leur en attribuer un à chacun.
+
+Leurs descriptions  sont:
+- "Annoncer les paramètres vocaux actuels":  se lance avec la commande"KEY_REPORT_SPEECH_SETTINGS" de l'interpréteur de commande.
+- "Afficher les paramètres vocaux actuels": se lance avec la commande "KEY_DISPLAY_SPEECH_SETTINGS" de l'interpréteur de commande.
+- "Annoncer les paramètres vocaux actuels. Deux appuis: les afficher": aucune commande de l'interpréteur ne lui est associée.
+
+
 ++ Rémanence des touches NVDA et de modification ++[hdr18]
 Cette fonctionnalité n'est pas installée par défaut.
 
-Elle permet de rendre rémanente les touches NVDA ("Insert" du pavé numérique normal ou étendu, la touche "Verrouillage majuscule") et les touches de modification ("majuscule", "control", "Alt gauche", "Control Alt droit", "Windows"). 
+Elle permet de rendre rémanente les touches NVDA ("Insert" du pavé numérique normal ou étendu, la touche "Verrouillage majuscule") et les touches de modification ("majuscule", "contrôle", "Alt gauche", "Contrôle Alt droit", "Windows"). 
 
 L'objectif étant de pouvoir n'utiliser qu'un seul doigt par exemple pour composer un geste de commande nécessitant l'appui sur plusieurs touches.
 
 Elle place un groupe "Rémanence des touches" dans la catégorie "Clavier" du dialogue "Paramètres" de l'extension.
 
 Pour activer ou désactiver la rémanence des touches, il suffit de composer l'une des séquences de touches clavier suivante:
-- "Majuscule droit", "Control droit", "majuscule droit",
-- "majuscule gauche", "control gauche", "majuscule gauche".
+- "Majuscule droit", "Contrôle droit", "majuscule droit",
+- "majuscule gauche", "contrôle gauche", "majuscule gauche".
 
 La rémanence des touches peut être activée automatiquement au démarrage de NVDA en cochant la case à cocher "Activer la rémanence des touches au démarrage de NVDA" du groupe "Rémanence des touches".
 
@@ -1015,7 +1058,7 @@ Elle ne peut fonctionner que sous le système d'exploitation Windows 10.
 
 Si elle est installée avec ou sans geste de commande, Elle place le groupe "Contrôle du son" dans la catégorie "Ordinateur" du dialogue "Paramètres".
 
-Elle installe les scripts suivants rangés sous la catégorie "Contrôle du son" dans le dialogue "Gestes de commandes":
+Elle installe la gestion du rétablissement du son au démarrage de l'extension et les scripts suivants rangés sous la catégorie "Contrôle du son" dans le dialogue "Gestes de commandes":
 
 +++ Établir manuellement le son principal et du flux audio de NVDA +++
 Ce script se lance:
@@ -1023,7 +1066,7 @@ Ce script se lance:
 - soit à l'aide du geste de commande "MAIN_KEY_VOLUME_ON" affecté par défaut.
 
 
-Il établit le son pour le volume principal et pour le flux audio de NVDA et force les niveaux de chacun aux valeurs configurées dans le sous-menu "Contrôle du son" du sous-menu "Paramètres".
+Il établit le son pour le volume principal et pour le flux audio de NVDA et force les niveaux de chacun aux valeurs des niveaux de rétablissement configurées dans le groupe "Contrôle du son" de la catégorie "Ordinateur" des paramètres de l'extension.
 
 +++ Couper ou établir le son du flux audio de l'application placée sous le focus +++
 Ce script se lance:
@@ -1034,40 +1077,96 @@ Ce script se lance:
 Cette commande coupe le son du flux audio de l'application placée sous le focus s'il est établi ou le rétablit s'il est coupé.
 
 +++ Modifier le volume du flux audio de l'application sous le focus +++
-Ces scripts permettent d'augmenter, diminuer, maximiser ou minimiser le volume du flux de l'application présente sous le focus.
+Ces scripts permettent d'augmenter, diminuer ou fixer le volume du flux de l'application présente sous le focus.
 
 Ils sont installés sans gestes de commandes. Mais il est toujours possible de leur en attribuer avec le dialogue "Gestes de commandes".
 
 Ils se lancent à l'aide des commandes suivantes de l'interpréteur:
 - "KEY_APP_VOLUME_UP" ou "KEY_APP_VOLUME_DOWN" pour augmenter ou diminuer le volume,
 - "KEY_APP_VOLUME_MAX" ou "KEY_APP_VOLUME_MIN" pour maximiser ou minimiser le volume.
+- un chiffre de 1 à 9 pour fixer le niveau du volume à 10%, 20%, 30%,..., 90% du volume principal.
 
 
 Ces commandes, contrairement aux autres commandes de l'interpréteur, peuvent être répéter sans être obliger de relancer celui-ci. L'interpréteur reste toujours actif.
- Une fois le niveau de volume fixé, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
- 
-L'augmentation ou la diminution du volume se fait par pas. Il est possible de régler la taille de ces pas dans les paramètres de l'extension sous la catégorie "Ordinateur", groupe "Contrôle du son", en choisissant la taille du pas.
-La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. La taille est réglée sur 5, ce qui correspond à environ 3% de variation du volume dans le contrôle du volume de Windows.
+Une fois le niveau de volume atteint, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
 
-La modification du volume est signalée vocalement par des messages comme: "Plus fort, moins fort, "Au maximum", "Au minimum". Mais ceci peut être empêché à l'aide de l'option "Annoncer les modifications de volume" située dans la même catégorie. Cette option est sélectionnée par défaut.
+L'augmentation ou la diminution du volume se fait par pas. Il est possible de régler la taille de ces pas dans les paramètres de l'extension sous la catégorie "Ordinateur", groupe "Contrôle du son", en choisissant la taille du pas.
+
+La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. La taille est réglée par défaut sur 5,.
+
+Cependant il faut comprendre que ce pas correspond à un pourcentage d'augmentation ou de diminution par rapport au volume principal.
+
+Ainsi si le volume principal est de 100, l'augmentation du volume de l'application avec un pas de 5 sera de 5 échelons dans le niveau du mélangeur de Windows.
+
+Tandis que si le volume du volume principal est de 60, un pas de 5 augmentera le volume de l'application de 3 échelons.
+
+Le niveau du volume de l'application ne peut pas dépasser le niveau du volume principal.
 
 +++ Modifier le volume principal +++
-Ces scripts permettent d'augmenter, diminuer, maximiser ou minimiser le volume principal.
+Ces scripts permettent d'augmenter, diminuer, ou fixer le volume principal.
 
 Ils sont installés sans gestes de commandes. Mais il est toujours possible de leur en attribuer avec le dialogue "Gestes de commandes".
 
 Ils se lancent à l'aide des commandes suivantes de l'interpréteur:
 - "KEY_MAIN_VOLUME_UP" ou "KEY_MAIN_VOLUME_DOWN" pour augmenter ou diminuer le volume,
-- "KEY_MAIN_VOLUME_MAX" ou "KEY_MAIN_VOLUME_MIN" pour maximiser ou minimiser le volume.
+- "KEY_MAIN_VOLUME_MAX" ou "KEY_MAIN_VOLUME_MIN" pour maximiser ou minimiser le volume,
+- "contrôle+ un chiffre de 1 à 9" pour fixer le niveau du volume principal à 10, 20, 30, ..., 90,
 
 
 Ces commandes, contrairement aux autres commandes de l'interpréteur, peuvent être répéter sans être obliger de relancer celui-ci. L'interpréteur reste toujours actif.
- Une fois le niveau de volume fixé, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
- 
-L'augmentation ou la diminution du volume se fait par pas. Il est possible de régler la taille de ces pas dans les paramètres de l'extension sous la catégorie "Ordinateur", groupe "Contrôle du son", en choisissant la taille du pas.
-La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. Par défaut, la taille est réglée sur 5, ce qui correspond à environ 3% de variation du volume dans le contrôle du volume de Windows.
 
-La modification du volume est signalée vocalement par des messages comme: "Plus fort, moins fort, "Au maximum", "Au minimum". Mais ceci peut être empêché à l'aide de l'option "Annoncer les modifications de volume" située dans la même catégorie. Cette option est sélectionnée par défaut.
+Une fois le niveau de volume atteint, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
+
+L'augmentation ou la diminution du volume se fait par pas. Il est possible de régler la taille de ces pas dans les paramètres de l'extension sous la catégorie "Ordinateur", groupe "Contrôle du son", en choisissant la taille du pas.
+La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. Par défaut, la taille est réglée sur 5, ce qui correspond à 5 échelons de variation du volume dans le mélangeur de Windows.
+
+Le volume principal ne peut pas devenir inférieur au seuil de rétablissement configuré.
+
+
++++ Retour au précédent niveau +++
+Lors de l'utilisation des commandes précédents, le niveau du volume est enregistré avant l'exécution de chaque commande, pour le volume principal et pour chaque application.
+
+Pour revenir à ce niveau, les commandes suivantes sont disponibles:
+- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume principal au précédent niveau.
+- "KEY_APP_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume de l'application sous le focus à son précédent niveau.
+
+
+Le niveau précédent est également enregistré à l'exécution de ces commandes.
+
+
+Ces enregistrements ne sont pas conservés lors d'un redémarage de NVDA.
+
++++ Annonce des changements de niveau +++
+
+Les changements de niveau du volume sont annoncés par défaut.
+
+Mais il est possible de désactiver cette annonce à l'aide de l'option "Annoncer les modifications de volume" du groupe "Modification du volume" de la catégorie "Ordinateur".
+
+Pour le volume des applications, celui-ci peut être dit:
+- soit en pourcentage du volume principal,
+- soit en valeur absolue (comme dans le mélangeur de Windows).
+
+
+Le choix se fait à l'aide de l'option "Annoncer le niveau du volume des applications en pourcentage" du groupe "Modification du volume" de la catégorie "Ordinateur".
+
++++ Rétablissement automatique du son principal et de NVDA au chargement de l'extension +++
+Cette fonction permet de rétablir, au chargement de cette extension, le volume principal et celui de NVDA et de positionner le niveau de chaque volume à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil minimum défini par configuration.
+
+Pour cela, le groupe "Contrôle du son" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension, présente les éléments de configuration suivants:
+- la case à coché "Établir automatiquement le son principal et de NVDA au chargement de l'extension" qui permet d'activer ou désactiver cette option,
+- le seuil de rétablissement du volume principal en dessous duquel son niveau sera automatiquement rétabli,
+- le niveau du volume principal à rétablir,
+- le seuil de rétablissement du volume de NVDA en dessous duquel son niveau sera rétabli,
+- le niveau du volume de NVDA à rétablir.
+
+
+À son lancement, cette extension vérifie que le volume principal et celui de NVDA sont au-dessus du seuil de rétablissement configuré pour chacun. 
+
+Si ce n'est pas le cas, cette extension fixe alors le niveau du volume à la valeur du niveau à rétablir configurée.
+
+Lors de l'installation de cette extension, les niveaux courants du volume principal et de NVDA sont pris en compte pour définir les valeurs des niveaux à rétablir.
+
+
 
 ++ Scripts pour Cliquer à la position courante de l'objet navigateur ++[hdr23]
 Ces scripts permettent de faire, avec le bouton droit ou gauche de la souris, un simple ou un double clic à la position courante de l'objet navigateur.
@@ -1149,11 +1248,11 @@ Pour cela, l'extension installe un script sous la description "Afficher la liste
 Ce script se lance avec la commande "KEY_RUNNING_ADDONS" de l'interpréteur de commande. Aucun geste de commande ne lui est affecté.
 
 Les extensions sont listées par type:
-- extension de type global: c'est une extension qui apporte un complément d'accessibilité quelque soit l'application sous le focus.
-- extension de type applicatif: c'est une extension qui apporte un complément d'accessibilité pour une application bien précise.
-- extensions de type synthèse vocale: c'est une extension qui installe une synthèse vocale.
-- extension de type pilote d'afficheur braille: c'est une extension qui installe un pilote pour un afficheur braille.
-- extension de type mixte: c'est une extension qui mélange les différents types d'extension précédents.
+- extension  globale: c'est une extension qui apporte un complément d'accessibilité quelque soit l'application sous le focus.
+- extension  application: c'est une extension qui apporte un complément d'accessibilité pour une application bien précise.
+- extension pilote de synthèse vocale: c'est une extension qui installe un pilote pour une synthèse vocale.
+- extension pilote d'afficheur braille: c'est une extension qui installe un pilote pour un afficheur braille.
+- extension mixte: c'est une extension qui mélange les différents types d'extension précédents.
 
 
 ++ Outils de développement ++[hdr22]
@@ -1266,11 +1365,11 @@ Un redémarrage de NVDA sera alors nécessaire pour la prise en compte de l'opti
 
 
 ++ Annonce du mot focalisé après une suppression de mot ++[hdr101]
-Dans certaines application telle que WordPad , microsoft Word, il est possible d'effacer le mot suivant avec la commande "control + Suppr", mais les versions de NVDA antérieure à la 2020.3 ne prononcent pas le mot qui suit la position du curseur après la suppression.
+Dans certaines application telle que WordPad , microsoft Word, il est possible d'effacer le mot suivant avec la commande "contrôle + Suppr", mais les versions de NVDA antérieure à la 2020.3 ne prononcent pas le mot qui suit la position du curseur après la suppression.
 
-Par défaut, cette extension permet à ces versions de NVDA de prononcer ce mot.
+Par défaut, cette extension permet à ces versions  de NVDA de prononcer ce mot.
 
-Ceci peut être empêché en décochant l'option "Annoncer le mot focalisé après une suppression de mot" de la catégorie "Compléments à NVDA" du dialogue "Paramètres" de l'extension.
+, ceci peut être empêché en décochant l'option "Annoncer le mot focalisé après une suppression de mot" de la catégorie "Compléments à NVDA" du dialogue "Paramètres" de l'extension.
 
 ++ Agrandissement automatique des fenêtres ++[hdr102]
 Cette option permet d'agrandir automatiquement les fenêtres qui sont mises au premier plan.
@@ -1281,7 +1380,7 @@ Vous pouvez la désactivée en décochant l'option "Agrandir automatiquement les
 
 
 ++ Annonce des ponctuations lors de déplacement par mot ++[hdr103]
-NVDA permet, dans les documents, de se déplacer mot par mot à l'aide des commandes clavier "control+ flèche droite" et "control + flèche gauche". 
+NVDA permet, dans les documents, de se déplacer mot par mot à l'aide des commandes clavier "contrôle+ flèche droite" et "contrôle + flèche gauche". 
 
 Les symboles et ponctuations sont alors dites suivant le niveau de ponctuations et symboles configuré pour le profil de configuration courant.
 
@@ -1311,27 +1410,6 @@ Cette option offre le choix entre:
 
 Pour faire ce choix, il suffit de sélectionner l'option dans la liste déroulante nommée "Jouer un son lors de l'inscription d'une erreur dans le journal" de la catégorie "Avancés" du dialogue "Paramètres" de l'extension. Par défaut, l'option "Seulement pour les versions de développement" est sélectionnée.
 
-++ Rétablissement automatique du son principal et de NVDA au chargement de l'extension ++[hdr301]
-Cette option, si la fonctionnalité "Contrôle du son" est installée, permet de rétablir, au chargement de cette extension, le volume principal et celui de NVDA et de positionner le niveau de chaque volume à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil minimum défini par configuration.
-
-Pour cela, le groupe "Contrôle du son" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension, présente les éléments de configuration suivants:
-- la case à coché "Établir automatiquement le son principal et de NVDA au chargement de l'extension" qui permet d'activer ou désactiver cette option,
-- le seuil de rétablissement du volume principal en dessous duquel son niveau sera automatiquement rétabli,
-- le niveau du volume principal à rétablir,
-- le seuil de rétablissement du volume de NVDA en dessous duquel son niveau sera rétabli,
-- le niveau du volume de NVDA à rétablir.
-
-
-À son lancement, cette extension vérifie que le volume principal et celui de NVDA sont au-dessus du seuil de rétablissement configuré pour chacun. 
-
-Si ce n'est pas le cas, cette extension fixe alors le niveau du volume à la valeur du niveau à rétablir configurée.
-
-Une impossibilité technique empêche de pouvoir positionner le niveau du volume de NVDA au-dessus de 50%.
-
-Lors de l'installation de cette extension, les niveaux courants du volume principal et de NVDA sont pris en compte pour définir les valeurs des niveaux à rétablir.
-
-
-
 ++ Titrage des boites de dialogue avec le nom de l'extension ++[hdr302]
 Cette option permet de titrer ou non les boites de dialogue de cette extension avec son nom.
 Elle se trouve dans la catégorie "Avancées" du dialogue "Paramètres de l'extension.
@@ -1356,7 +1434,7 @@ L'option intitulée "Temporisation d'attente de répétition du même geste de c
 ++ Utilisation standard du pavé numérique ++[hdr304]
 Par défaut, NVDA utilise certaines touches du pavé numérique, comme les touches de direction, les touches "multiplier", "diviser" et la touche "plus", pour activer des scripts.
 
-L'objectif est de rendre à chaque touche du pavé numérique, de manière temporaire ou permanente, son fonctionnement normal, composé seule ou avec une touche de modification comme "control", "Alt","majuscule" (La touche "NVDA" est exclue).
+L'objectif est de rendre à chaque touche du pavé numérique, de manière temporaire ou permanente, son fonctionnement normal, composé seule ou avec une touche de modification comme "contrôle", "Alt","majuscule" (La touche "NVDA" est exclue).
 
 Ces touches sont:
 - les touches "flèches droite et gauche",
@@ -1422,48 +1500,62 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 ++ Commandes de l'interpréteur ++
 
 | Commande | Description |
-| KEY_APPLICATION_INFORMATIONS | Afficher les informations sur l'application sous le focus |
+| KEY_APPLICATION_INFORMATIONS | Afficher les informations sur  l'application sous le focus |
 | KEY_OBJECTS_LIST | Afficher les éléments visibles composant l'objet en avant plan |
 | KEY_COPY_DATETIME | Copier la date et l'heure dans le presse-papier |
-| KEY_RUNNING_ADDONS | Afficher la liste des extensions en fonctionnement |
+| KEY_RUNNING_ADDONS | Afficher les Extensions en fonctionnement |
 | KEY_REPORT_FORMATTING | Afficher, dans une boite de dialogue, les informations de mise en forme à la position actuelle du curseur de revue dans un document |
 | KEY_ADDON_SETTINGS | Afficher le dialogue de paramétrage de l'extension |
 | KEY_RENAMING | Afficher le dialogue Renommage des touches clavier |
 | KEY_SELECTIVE_ANNOUNCEMENT | Afficher le dialogue pour configurer les annonces sélectives des touches de commandes |
-| KEY_COMPLEX_SYMBOL | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
+| KEY_COMPLEX_SYMBOL | Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique |
 | KEY_LAST_USED_COMPLEX_SYMBOL | Afficher la liste des derniers symboles complexes composés |
-| KEY_TOGGLE_NUMPAD_NAVIGATION | Activer ou désactiver les touches de direction du pavé numérique |
+| KEY_TOGGLE_NUMPAD_NAVIGATION | Activer ou désactiver l'utilisation standard du pavé numérique |
 | KEY_DISPLAY_SPEECH_HISTORY | Afficher les enregistrements de l'historique vocal |
-| KEY_WINDOWS_LIST | Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
+| KEY_WINDOWS_LIST | Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 | KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
-| KEY_MINUTE_TIMER | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
+| KEY_MINUTE_TIMER | Afficher le dialogue permettant, sila minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
 | KEY_CLOSE_ALL_WINDOWS | Fermer toutes les fenêtres ouvertes |
-| KEY_MODULE_GUIDE | Ouvrir le manuel utilisateur de l'extension |
-| KEY_HELP_SHELL | Lister les commandes de l'interpréteur de l'extension |
-| KEY_LOG_VIEW | Afficher le dialogue de gestion des journaux de NVDA |
-| KEY_SAY_CURRENT_FOLDERNAME | Annoncer le dossier présélectionné dans les boites de dialogue du style "ouvrir", "Enregistrer", enregistrer sous», etc. |
-| KEY_VOICE_PROFIL_SWITCHING | Activer / désactiver le mode "Commutation de profil vocal" |
-| KEY_SHUTDOWN | Afficher le dialogue pour Arrêter, redémarrer ou mettre en veille l'ordinateur |
-| KEY_TOGGLE_MUTE | Couper ou établir le son pour l'application courante |
+| KEY_MODULE_GUIDE | Afficher le manuel utilisateur de l'extension |
+| KEY_HELP_SHELL | Afficher la liste des commandes de l'interpréteur de commandes |
+| KEY_LOG_VIEW | Afficher le dialogue pour gérer les journaux de NVDA |
+| KEY_SAY_CURRENT_FOLDERNAME | Annoncer le nom du  dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer |
+| KEY_SAY_CURRENT_FOLDERPATH | Annoncer le chemin complet du dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer |
+| KEY_VOICE_PROFIL_SWITCHING | Activer ou désactiver le Mode commutation de profil vocal |
+| KEY_SHUTDOWN | Afficher le dialogue pour arrêter, redémarrer ou mettre en veille prolongée l'ordinateur |
+| KEY_TOGGLE_MUTE | Couper ou établir le son pour l'application sous le focus |
 | KEY_VOLUME_ON | Établir le son principal et de NVDA |
-| KEY_TOOLSFORADDON | Afficher le dialogue qui présente les outils pour le développement d'extensions |
-| KEY_USER_INPUT_GESTURE | Afficher le dialogue Gestes de commande utilisateur |
+| KEY_TOOLSFORADDON | Afficher le dialogue présentant les outils pour le développement d'extensions |
+| KEY_USER_INPUT_GESTURE | Afficher le dialogue pour gérer les gestes de commande configurés par l'utilisateur |
 | KEY_MANAGE_VOICE_PROFIL | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
+| KEY_REPORT_SPEECH_SETTINGS | Annoncer les paramètres vocaux acctuels |
+| KEY_DISPLAY_SPEECH_SETTINGS | Afficher les paramètres vocaux acctuels |
+| KEY_APP_VOLUME_UP | Augmenter le volume de l'application sous le focus |
+| KEY_MAIN_VOLUME_UP | Augmenter le volume principal |
+| KEY_APP_VOLUME_DOWN | Diminuer le volume de l'application sous le focus |
+| KEY_MAIN_VOLUME_DOWN | Diminuer le volume principal |
+| KEY_APP_VOLUME_MAX | Maximiser le volume de l'application sous le focus |
+| KEY_MAIN_VOLUME_MAX | Maximiser le volume principal |
+| KEY_APP_VOLUME_MIN | Minimiser le volume de l'application sous le focus |
+| KEY_MAIN_VOLUME_MIN |  Minimiser le volume principal |
+| KEY_APP_VOLUME_PREVIOUS_LEVEL | Établir  le volume de l'application sous le focus au précédent niveau |
+| KEY_MAIN_VOLUME_PREVIOUS_LEVEL | Établir  le volume principal au précédent niveau |
+| chiffre de 1 à 9 | Établir  le volume de l'application sous le focus à x pourcent du volume principal ( x égal à 10 multiplié par le chiffre) |
+| contrôle+chiffre de 1 à 9 | Établir à x le volume principal  (x égal à 10 multiplié par le chiffre) |
 
 ++ Gestes de commande installés par les fonctionnalités ++
-
 +++ Affichage de la liste des icones de la zone de notification et des fenêtres des applications lancées +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Liste des icônes et fenêtres actives | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des applications lancées |
+| Liste des icônes et fenêtres actives | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 
-+++Aide à la composition de symboles complexes +++
++++ Aide à la composition de symboles complexes +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Aide à la composition de Symboles complexes | MAIN_KEY_COMPLEX_SYMBOL | MAIN_KEY_COMPLEX_SYMBOL | Aucune | Aide à la composition de symboles complexes comme un "Œ", "‰", etc |
+| Aide à la composition de Symboles complexes | MAIN_KEY_COMPLEX_SYMBOL | MAIN_KEY_COMPLEX_SYMBOL | Aucune | Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique |
 
 +++ Informations sur l'application sous le focus +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Annoncer le Nom et la Version de l'application focalisée | MAIN_KEY_REPORT_NAME_VERSION | MAIN_KEY_REPORT_NAME_VERSION | Aucune | Annoncer le nom et la version de l'application focalisée |
-| Annoncer le Profil de configuration | MAIN_KEY_CONFIGURATION_PROFILE | MAIN_KEY_CONFIGURATION_PROFILE | Aucune | Taper deux fois, annoncer le profil de configuration courant |
+| Annoncer le nom et le numéro de version de l'application sous le focus | MAIN_KEY_REPORT_NAME_VERSION | MAIN_KEY_REPORT_NAME_VERSION | Aucune | Annoncer le nom et la version de l'application sous le focus |
+| Annoncer le Profil de configuration | MAIN_KEY_CONFIGURATION_PROFILE | MAIN_KEY_CONFIGURATION_PROFILE | Aucune | Annoncer le nom de fichier de l'application en cours ainsi que le nom du module python  chargé. Deux appuis: annoncer le nom et l'état du profil de configuration |
 
 
 
@@ -1471,20 +1563,20 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | KEY_CURRENT_ROW_REPORT | KEY_CURRENT_ROW_REPORT | aucun | annoncer les cellules de la ligne courante du tableau |
 | KEY_CURRENT_COLUMN_REPORT | KEY_CURRENT_COLUMN_REPORT | aucun | annoncer les cellules de la colonne courante du tableau |
-| KEY_NEXT_ROW_REPORT | KEY_NEXT_ROW_REPORT | aucun | Aller à la ligne suivante et annoncer les cellules de celle-ci |
-| KEY_PREVIOUS_ROW_REPORT | KEY_PREVIOUS_ROW_REPORT | aucun | Aller à la ligne précédente et annoncer les cellules de celle-ci |
-| KEY_NEXT_COLUMN_REPORT | KEY_NEXT_COLUMN_REPORT | aucun | Aller à la colonne suivante et annoncer les cellules de celle-ci |
-| KEY_PREVIOUS_COLUMN_REPORT | KEY_PREVIOUS_COLUMN_REPORT | aucun | Aller à la colonne précédente et annoncer les cellules de celle-ci |
-| KEY1_CELL_POSITION_REPORT | KEY2_CELL_POSITION_REPORT | aucun | annoncer la position de la cellule dans le tableau |
-| KEY_MOVE_FIRST_CELL_ROW | KEY_MOVE_FIRST_CELL_ROW | aucun | Aller à la première cellule de la ligne |
-| KEY_MOVE_LAST_CELL_ROW | KEY_MOVE_LAST_CELL_ROW | aucun | Aller à la dernière cellule de la ligne |
-| KEY_MOVE_FIRST_CELL_COLUMN | KEY_MOVE_FIRST_CELL_COLUMN | aucun | Aller à la première cellule de la colonne |
-| KEY_MOVE_LAST_CELL_COLUMN | KEY_MOVE_LAST_CELL_COLUMN | aucun | Aller à la dernière cellule de la colonne |
-| KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | aucun | Annoncer l'adresse (URL) du document. Deux appuis: copier cette adresse dans le presse-papier | 
+| KEY_NEXT_ROW_REPORT | KEY_NEXT_ROW_REPORT | aucun | Aller à la ligne suivante du tableau et annoncer les cellules de celle-ci |
+| KEY_PREVIOUS_ROW_REPORT | KEY_PREVIOUS_ROW_REPORT | aucun | Aller à la ligne précédente du tableau et annoncer les cellules de celle-ci |
+| KEY_NEXT_COLUMN_REPORT | KEY_NEXT_COLUMN_REPORT | aucun | Aller à la colonne suivante du tableau et annoncer les cellules de celle-ci |
+| KEY_PREVIOUS_COLUMN_REPORT | KEY_PREVIOUS_COLUMN_REPORT | aucun | Aller à la colonne précédente du tableau et annoncer les cellules de celle-ci |
+| KEY1_CELL_POSITION_REPORT | KEY2_CELL_POSITION_REPORT | aucun | annoncer la position de la cellule courante du tableau |
+| KEY_MOVE_FIRST_CELL_ROW | KEY_MOVE_FIRST_CELL_ROW | aucun | Aller à la première cellule de la ligne du tableau |
+| KEY_MOVE_LAST_CELL_ROW | KEY_MOVE_LAST_CELL_ROW | aucun | Aller à la dernière cellule de la ligne du tableau |
+| KEY_MOVE_FIRST_CELL_COLUMN | KEY_MOVE_FIRST_CELL_COLUMN | aucun | Aller à la première cellule de la colonne du tableau |
+| KEY_MOVE_LAST_CELL_COLUMN | KEY_MOVE_LAST_CELL_COLUMN | aucun | Aller à la dernière cellule de la colonne du tableau |
+| KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | aucun | Annoncer l'adresse (URL) du document. Deux appuis: l'enregistrer dans le presse-papier | 
 
 +++ Annonce du dossier présélectionner des boites de dialogue du style Ouvrir, enregistrer, enregistrer sous +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Annoncer le Dossier présélectionné | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Aucune | Annoncer le dossier présélectionné dans les boites de dialogue du style "ouvrir", "Enregistrer", enregistrer sous», etc. |
+| Annoncer le Dossier présélectionné | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Aucune | Annoncer le nom du dossier  sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer. Deux appuis: annoncer son chemin complet |
 
 +++ Journaux de NVDA +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
@@ -1493,12 +1585,12 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 +++ Historique des annonces vocales +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | Annoncer l'enregistrement précédent | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent enregistrement de l'historique vocal et le copier dans le presse-papier |
-| Annoncer l'enregistrement suivant | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l'enregistrement suivant de l'historique vocal et le copier dans le presse-papier |
-| Annoncer l'enregistrement courant | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique vocal et le copier dans le presse-papier. Second appui: afficher tout l'historique |
+| Annoncer l'enregistrement suivant | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l' enregistrement  suivant de l'historique des  annonces vocales et le copier dans le presse-papier |
+| Annoncer l'enregistrement courant | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant  de l'historique des  annonces vocales et le copier dans le presse-papier. Deux appui: afficher tout l'historique |
 
 +++ Minuterie +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Minuterie | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Aucune | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de l'arrêter ou de consulter la durée restante |
+| Minuterie | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Aucune | Afficher le dialogue permettant, sila minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
 
 +++ Redémarrage de NVDA +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
@@ -1506,27 +1598,15 @@ Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer 
 
 +++ Affichage des éléments visibles composant l'objet en avant plan +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Affichage des objets | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Aucune | Dire l'objet en avant-plan. Deux appuis: afficher les éléments visibles le composant |
+| Affichage des objets | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Aucune | Annoncer tous les contrôles dans la fenêtre active. Deux appuis: afficher les éléments visibles composant l'objet en avant plan |
 
 +++ Commutation de profil vocal +++
 | Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Choix du sélecteur | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur (1 à 8) comme sélecteur courant et définir, si possible, son profil vocal associé comme profil vocal courant |
-| Profil vocal suivant | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Aucune | Aller au premier sélecteur suivant associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
+| Choix du sélecteur | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur x comme sélecteur courant et définir , si possible, son profil vocal associé comme profil vocal courant(x égal chiffre 1 à 8) |
+| Profil vocal suivant | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Aucune | Aller au premier sélecteur  suivant  associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
 | Profil vocal précédent | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Aucune | Aller au premier sélecteur précédent associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
-| Association du profil vocal | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Associer le profil vocal courant au sélecteur courant. Deux appuis: libérer le sélecteur de son profil vocal associé. Trois appuis: libérer tous les sélecteurs de leur profil vocal associé |
-
-+++ Contrôle du son +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Établir son | MAIN_KEY_VOLUME_ON | MAIN_KEY_VOLUME_ON | Aucune | Établir le son principal et de NVDA |
-| Couper volume | MAIN_KEY_TOGGLE_MUTE | MAIN_KEY_TOGGLE_MUTE | aucune | Couper ou établir le son pour l'application sous le focus |
-| Augmenter volume principal | KEY_MAIN_VOLUME_UP | KEY_MAIN_VOLUME_UP | Aucune | Augmenter le volume principal |
-| Diminuer volume principal | KEY_MAIN_VOLUME_DOWN | KEY_MAIN_VOLUME_DOWN | Aucune | Diminuer le volume principal |
-| Maximiser volume principal | KEY_MAIN_VOLUME_MAX | KEY_MAIN_VOLUME_MAX | Aucune | Maximiser le volume principal |
-| Minimiser volume principal | KEY_MAIN_VOLUME_MIN | KEY_MAIN_VOLUME_MIN | Aucune | Minimiser le volume principal |
-| Augmenter volume application | KEY_APP_VOLUME_UP | KEY_APP_VOLUME_UP | Aucune | Augmenter le volume de l'application sous le focus |
-| Diminuer volume application | KEY_APP_VOLUME_DOWN | KEY_APP_VOLUME_DOWN | Aucune | Diminuer le volume de l'application sous le focus |
-| Maximiser volume application | KEY_APP_VOLUME_MAX | KEY_APP_VOLUME_MAX | Aucune | Maximiser le volume de l'application sous le focus |
-| Minimiser volume application | KEY_APP_VOLUME_MIN | KEY_APP_VOLUME_MIN | Aucune | Minimiser le volume de l'application sous le focus |
+| Association du profil vocal | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
+| Activation/désactivation du mode  commutation de profil vocal | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | aucune | Activer ou désactiver le Mode commutation de profil vocal |
 
 +++ Date et heure- compléments +++
 

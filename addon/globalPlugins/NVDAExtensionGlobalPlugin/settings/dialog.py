@@ -349,7 +349,7 @@ class ComputerSettingsPanel(SettingsPanel):
 		labelText = _("Report &windows clock's time with seconds")
 		self.reportTimeWithSecondsOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.reportTimeWithSecondsOptionBox.SetValue(toggleReportTimeWithSecondsOption(False))
-		if not getInstallFeatureOption(ID_DateAndTime) == C_Install:
+		if getInstallFeatureOption(ID_DateAndTime) == C_DoNotInstall:
 			self.reportTimeWithSecondsOptionBox.Disable()
 
 		# Translators: This is the label for a group in computer settings panel.
@@ -374,7 +374,7 @@ class ComputerSettingsPanel(SettingsPanel):
 		self.minMasterVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
 		self.minMasterVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getMinMasterVolumeLevel()))
 		# Translators: This is a label for a choice box in computer settings panel.
-		labelText = _("&Recovery level:")
+		labelText = _("Recovery &level:")
 		self.masterVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice])
 		self.masterVolumeLevelBox.SetSelection(choice.index(_addonConfigManager.getMasterVolumeLevel()))
 		# Translators: This is the label for a group of NVDA volume options in the computer settings panel.
@@ -382,11 +382,11 @@ class ComputerSettingsPanel(SettingsPanel):
 		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
-		labelText = _("Th&reshold of recovery of the volume:")
+		labelText = _("T&hreshold of recovery of the volume:")
 		self.minNVDAVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
 		self.minNVDAVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getMinNVDAVolumeLevel()))
 		# Translators: This is a label for a choice box in computer settings panel.
-		labelText = _("R&ecovery level:")
+		labelText = _("&Recovery level:")
 		self.NVDAVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
 		self.NVDAVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getNVDAVolumeLevel()))
 		# Translators: This is the label for a group in computer settings panel.
@@ -402,6 +402,10 @@ class ComputerSettingsPanel(SettingsPanel):
 		labelText = _("R&eport volume changes")
 		self.reportVolumeChangeOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.reportVolumeChangeOptionCheckBox.SetValue(toggleReportVolumeChangeAdvancedOption(False))
+		# Translators: This is the label for a checkbox in the computer settings panel.
+		labelText = _("&Announce application volume level in percent")
+		self.appVolumeLevelAnnouncementInPercentOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.appVolumeLevelAnnouncementInPercentOptionCheckBox .SetValue(toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False))
 		if not getInstallFeatureOption(ID_VolumeControl):
 			for item in range(0, volumeGroup.sizer.GetItemCount()):
 				volumeGroup.sizer.Hide(item)
@@ -413,7 +417,7 @@ class ComputerSettingsPanel(SettingsPanel):
 			self.restartNVDA = True
 		if self.AutomaticWindowMaximizationOptionBox.IsChecked() != toggleAutomaticWindowMaximizationOption(False):
 			toggleAutomaticWindowMaximizationOption()
-		if getInstallFeatureOption(ID_DateAndTime) == C_Install:
+		if getInstallFeatureOption(ID_DateAndTime) != C_DoNotInstall:
 			if self.reportTimeWithSecondsOptionBox.IsChecked() != toggleReportTimeWithSecondsOption(False):
 				toggleReportTimeWithSecondsOption()
 		if self.setOnMainAndNVDAVolumeOptionCheckBox.IsChecked() != toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
@@ -430,6 +434,8 @@ class ComputerSettingsPanel(SettingsPanel):
 		_addonConfigManager.setVolumeChangeStepLevel(int(levelString))
 		if self.reportVolumeChangeOptionCheckBox.IsChecked() != toggleReportVolumeChangeAdvancedOption(False):
 			toggleReportVolumeChangeAdvancedOption()
+		if self.appVolumeLevelAnnouncementInPercentOptionCheckBox.IsChecked() !=toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False):
+			toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(True)
 
 	def onSave(self):
 		self.saveSettingChanges()
@@ -670,8 +676,8 @@ class AddonSettingsDialog(MultiCategorySettingsDialogEx):
 
 	def __init__(self, parent, initialCategory=None):
 		curAddon = addonHandler.getCodeAddon()
-		# Translators: title of add-on parameters dialog.
-		dialogTitle = _("Parameters")
+		# Translators: title of add-on settings dialog.
+		dialogTitle = _("Settings")
 		self.title = "%s - %s" % (curAddon.manifest["summary"], dialogTitle)
 		self.categoryClasses = self.baseCategoryClasses[:]
 		# if in secur mode, some panels must be disabled

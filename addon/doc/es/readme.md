@@ -6,7 +6,7 @@
 	* [versión estable][1]
 	* [versión de desarrollo][2]
 * Compatibilidad:
-	* mínima de NVDA requerida: 2019.1
+	* mínima de NVDA requerida: 2019.2.1
 	* última versión de NVDA probada: 2020.4
 
 
@@ -81,6 +81,6 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Script para reiniciar rápidamente NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.5.3.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.6.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
 

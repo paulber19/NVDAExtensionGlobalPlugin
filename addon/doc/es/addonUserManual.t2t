@@ -9,7 +9,6 @@ URL: ADDON_AUTHOR_URL
 
 [Repositorio en GitHub: ADDON_REPOSITORY ADDON_REPOSITORY]
 
-
 Descargar:
 - [Versión estable: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
 - [Versiones de desarrollo ADDON_DEV_URL]
@@ -20,13 +19,9 @@ Compatibilidad:
 - última versión de NVDA probada: LAST_TESTED_NVDA_VERSION
 
 
-
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
-
 = Índice =[toc]
 %%toc
-
-
 
 + Introducción +
 ++ Generalidades ++
@@ -53,7 +48,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Anuncio selectivo de teclas de órdenes #hdr13],
  - [Temporizador de minutos simple #hdr14],
  - [Reiniciar NVDA con el nivel de registro en modo "depuración" con un simple gesto de entrada #hdr15],
- - [Mostrar la lista de 	elementos visibles que componen el objeto en primer plano #hdr16],
+ - [Mostrar la lista de elementos visibles que componen el objeto en primer plano #hdr16],
  - [Cambio rápido de perfil de voz #hdr17],
  - [Remanencia de las teclas (NVDA y modificadoras) y remanencia específica para el sitio gmail.com #hdr18],
  - [Apagar, reiniciar o hibernar el ordenador #hdr19],
@@ -62,6 +57,7 @@ Este complemento añade a las órdenes globales de NVDA:
   - Silenciar o reestablecer el sonido  del flujo audio para la aplicación enfocada,
   - Establecer  manualmente o automáticamente el sonido principal y el flujo audio de NVDA,
   - Cambiar el nivel del volumen principal o del flujo audio para la aplicación enfocada,
+  - Restablecimiento automático del volumen principal y de NVDA al cargar el complemento,
  - [Herramientas de desarrollo de complementos #hdr22]:
  - Creación del archivo buildVars.py a partir del archivo manifest.ini del complemento,
  - Actualizar el archivo manifest.ini a partir de la información  del archivo buildVars.py,
@@ -79,15 +75,15 @@ Este complemento añade a las órdenes globales de NVDA:
  - [script para mostrar la lista de complementos en funcionamiento #hdr27].
 
 
+
 - Las opciones:
  - [Eliminar el anuncio de la descripción de los objetos en las cintas de Windows #hdr100],
  - [Anuncio de la palabra enfocada después de eliminar la palabra (para las versiones de NVDA anteriores a la 2020.3) #hdr101],
  - [Maximizar automáticamente las ventanas #hdr102],
  - [Anunciar sistemáticamente la puntuación al moverse por palabras #hdr103],
- - Las opciones avanzadas:
+- Las opciones avanzadas:
  - [Advertir con un sonido la escritura de un error en el registro de NVDA #hdr300],
- - [Restablecimiento automático del volumen principal y de NVDA al cargar el complemento #hdr301],
- - [Titular los cuadros de diálogos del complemento con el nombre del complemento #hdr302],
+  - [Titular los cuadros de diálogos del complemento con el nombre del complemento #hdr302],
  - [Configuración del retardo de espera de repetición para el mismo gesto de entrada #hdr303],
  - [Posibilidad de usar las teclas del teclado numérico de manera estándar #hdr304].
 - Y otras mejoras:
@@ -105,6 +101,8 @@ En el menú "Preferencias" de NVDA, se añade el submenú "ADDON_SUMMARY" que pr
    - "Teclado": para configurar las opciones  relacionadas con el teclado (Remanencia de las teclas,   Uso del teclado numérico),
   - Avanzadas:   opciones para usuarios experimentados,
  - Actualización: opciones que controlan la actualización del complemento.
+ 
+ 
 - "Renombrar teclas del teclado" (si la funcionalidad está instalada): te permite modificar, según sea necesario, los nombres de las teclas del teclado que NVDA proporciona de forma predeterminada,
 - "Anuncio selectivo de teclas de órdenes" (si la funcionalidad está instalada): anuncia de forma selectiva el nombre de las teclas del teclado según sea necesario,
 - "Reinicialización de la configuración" para restablecer la configuración en su estado inicial durante la primera instalación del complemento.
@@ -127,6 +125,7 @@ Cuando se desinstala el complemento, su archivo de configuración se elimina y l
 Cuando se desinstala una funcionalidad, su configuración, si la hay, se elimina por completo.
 
 En el caso de una actualización, la instalación del complemento ofrece la posibilidad de conservar (en la medida de lo posible) o no la configuración anterior.
+
 
 Mediante el submenú "Reinicialización de la configuración ", es posible restablecer la configuración en el mismo estado que cuando se instalo primero el complemento, incluyendo la registrada en los perfiles de configuración.
 
@@ -174,9 +173,7 @@ Algunas características no están disponibles, tales como:
 - Actualización del complemento.
 
 
-
 ++ Compatibilidad ++
-
 Dado que la configuración de la funcionalidad "Cambio de perfil de voz" ha cambiado desde la versión 9.0 del complemento esta se eliminará al actualizar desde una versión anterior del complemento. Se liberan todos los selectores y se eliminan los perfiles de voz asociados.
 
 
@@ -184,7 +181,8 @@ Dado que la configuración de la funcionalidad "Cambio de perfil de voz" ha camb
 El historial de las versiones del complemento está en el archivo ["changes.html" changes.html]
 
 + Funcionalidades +
-++ Instalación de una funcionalidad ++
+++ Preámbulo ++
++++ Instalación de una funcionalidad +++
 El complemento permite instalar o no instalar tal o cual funcionalidad.
 El estado de instalación de cada funcionalidad del complemento es presentado en la categoría "Instalación de las funcionalidades" en el diálogo "ADDON_SUMMARY - Opciones".
 
@@ -281,6 +279,8 @@ Muestra un cuadro de diálogo que contiene:
 
 
 La navegación en el cuadro de diálogo se realiza mediante "Tab" o "Mayúscula+Tab" y en la lista con las flechas de dirección arriba y abajo.
+En la lista, es posible seleccionar escribiendo el comienzo del título de la ventana deseada.
+
 Una pulsación en la tecla "Escape" te permite de volver a cerrar el cuadro de diálogo.
 
 En la lista, las aplicaciones son indicadas como Maximizado o Minimizado.
@@ -436,7 +436,6 @@ Muestra el cuadro de diálogo "ADDON_SUMMARY - Información" que presenta la sig
 - El nombre del módulo python cargado si hay uno.
 
 
-
 +++ Mostrar el nombre y número de versión del complemento +++
 La descripción de este script es: "Anunciar el nombre y el número de versión del complemento activado para la aplicación enfocada".
 
@@ -461,11 +460,13 @@ Este complemento añade las siguientes órdenes para el modo de navegación:
 - "Mayúscula+:" para ir al elemento cliqueable anterior.
 
 
+
 A excepción de los primeros cuatro, estas órdenes no se implementan en el navegador Microsoft Edge.
 
 +++ Nuevos tipos de elementos para el script "NVDA + f7" +++
 Básicamente, el script integrado en NVDA y activado por el gesto de entrada "NVDA + f7", muestra el cuadro de diálogo "Lista de elementos" con la lista de algunos elementos presentes en una página web.
 Este complemento aumenta el número de tipos de elementos que se pueden seleccionar.
+
 La lista de estos tipos se convierte en:
 
 Tipos básicos:
@@ -555,6 +556,7 @@ La opción "Navegar en bucle" en la categoría "Suplementos a NVDA" del cuadro d
 Esta opción solo se muestra si la funcionalidad "Extensión de la funcionalidad del modo exploración" está instalada.
 
 Por defecto, esta opción no está marcada. El funcionamiento básico de NVDA se conserva.
+
 
 
 
@@ -651,7 +653,6 @@ Una simple pulsación activa El anuncio del último registro anunciado y cópiar
 
 Una doble pulsación, para mostrar todo el historial de los anuncios del habla.
 
-
 +++ Mostrar el historial del habla +++
 La descripción de este script es: "Mostrar los registros del historial de los anuncios del habla".
 
@@ -710,21 +711,34 @@ Para visualizar este diálogo, tres posibilidades:
 El diálogo presenta:
 - Una casilla de verificación para elegir en qué modo las teclas de órdenes seleccionadas serán utilizadas,
 - La lista de posibles teclas de órdenes,
-- La lista de combinaciones posibles con las teclas adicionales "NVDA", "Alt", "Control", "Mayúscula".
+- La lista de combinaciones de teclas modificadoras posibles con las teclas adicionales "NVDA", "Alt", "Control", "Mayúscula", "Windows".
 
 
 Una pulsación sobre la barra espaciadora se marcará o se desmarcará la tecla o la combinación seleccionada.
 
-Si la casilla "Verbalizar teclas de órdenes" del cuadro de diálogo no está marcada, el hecho de marcar una tecla todavía se anunciará esta tecla. La lista de combinaciones es accesible y todas las combinaciones de la lista están marcadas. 
+Si la casilla "Verbalizar teclas de órdenes" del cuadro de diálogo no está marcada, el hecho de marcar una tecla todavía se anunciará esta tecla cuando NVDA está configurado para no anunciarlas.
 
-Para evitar que la tecla de órden tecleada con la combinación sea anunciada, simplemente desmarca esta combinación.
+La lista de combinaciones de teclas modificadoras es accesible y todos los elementos de esta lista están marcadas de forma predeterminada. 
 
-Por otro lado, si la casilla de verificación "Verbalizar teclas de órdenes" está marcada, el hecho de marcar una tecla de órden permitirá no anunciar esta tecla. La lista de combinaciones es accesible y todas las combinaciones de la lista están marcadas de forma predeterminada. Esto significa que la tecla tecleada con cualquier combinación no será anunciada. Al desmarcar una combinación permite anunciar la tecla con esta combinación.
+Para evitar que la tecla de órden tecleada con una combinación en particular sea anunciada, simplemente desmarca esta combinación.
 
-El botón "Aceptar" guarda las elecciones realizadas, mientras que el botón "Cancelar" las olvida.
+Si el elemento "Ninguno" De la lista de combinaciones está marcada, la tecla se anunciará incluso tecleada sin una combinación de tecla modificadora.
 
-En las listas, las teclas "F1" y "F2" te permite desplazarte respectivamente al siguiente elemento marcado  o al elemento anterior marcado.
+Por otro lado, si la casilla de verificación "Verbalizar teclas de órdenes" está marcada, el hecho de marcar una tecla de órden permitirá no anunciar esta tecla cuando NVDA está configurado para anunciarlas. 
 
+La lista de combinaciones de teclas modificadoras es accesible y todos los elementos de esta lista están marcadas de forma predeterminada. Esto significa que la tecla tecleada con o sin combinación no será anunciada.
+
+La acción de desmarcar una combinación permite anunciar la tecla con esta combinación.
+
+El elemento "Ninguno" De la lista de combinaciones hace posible que no se anuncie la tecla incluso tecleada sin una combinación de tecla modificadora.
+
+Los botones "Marcar todo" y "Desmarcar todo" permiten desmarcar o marcar todos los elementos de la lista de combinaciones de teclas modificadoras.
+
+El primer elemento "Cualquier tecla con combinación de teclas modificadoras" en la lista de teclas permite, sin designar una tecla en particular de seleccionar un conjunto de combinaciones de teclas modificadoras. Cualquier tecla tecleada con una de estas combinaciones será, dependiendo del modo de configuración seleccionado, anunciado o no.
+
+El botón "Aceptar" guarda las elecciones realizadas para el perfil de configuración actual, mientras que el botón "Cancelar" las olvida.
+
+En las listas, las teclas "F2" y la combinación de teclas  "Mayúscula+F2" te permite desplazarte respectivamente al siguiente elemento marcado  o al elemento anterior marcado.
 
 Es posible no instalar Esta funcionalidad seleccionando, en la categoría "Funcionalidades instaladas" y para la funcionalidad "Anuncio selectivo de teclas de órdenes", el estado "No instalar".
 
@@ -804,7 +818,14 @@ Este cuadro de diálogo presenta:
 
 En la lista de elementos, es posible cambiar el tipo de objetos a listar sin salir de la lista:
 - Ya sea utilizando las flechas izquierda o derecha,
-- Ya sea escribiendo la primera letra del tipo de objeto deseado.
+- Ya sea pulsando "control+mayúscula+  la primera letra del tipo de objeto deseado".
+
+
+Siempre en esta lista, es posible alcanzar un elemento escribiendo las primeras letras de su etiqueta.
+
+Para un elemento de tipo:
+- botón o casilla de verificación: Se indica el estado del elemento.
+- cuadro de edición: Se indica el estado de solo lectura.
 
 
 +++  Anunciar o mostrar los elementos visibles del objeto bajo el foco +++
@@ -865,10 +886,15 @@ Cuando un selector ya está asociado con un perfil de voz entonces es posible:
 
 Si el selector seleccionado es un selector asociado en el perfil de configuración normal, no se puede liberar, pero se puede asociar con el perfil actual.
 Solo se pueden liberar los selectores asociados en el perfil de configuración actual.
++++ Modo "Cambiar el perfil de voz" +++
+Para cambiar rápidamente  de perfil de voz,  el modo "Cambiar el perfil de voz" está configurado y un script permite activarlo o desactivarlo.
 
-Para cambiar rápidamente  de perfil de voz,  el modo "Cambiar el perfil de voz" está configurado.
+La descripción de este script es: "Alternar el modo de cambio de perfil de voz".
 
-Para habilitar o deshabilitar este modo, la órden "KEY_VOICE_PROFIL_SWITCHING" del intérprete debe ser tecleado.
+Para lanzar este script, dos posibilidades:
+- ya sea tecleando la órden "KEY_VOICE_PROFIL_SWITCHING" del intérprete,
+- ya sea mediante  el gesto de entrada "MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING" (No instalado por defecto).
+
 
 Este modo habilitado, las flechas derecha o izquierda permite desplazarte al primer selector siguiente o anterior asociado con un perfil de voz y, por lo tanto, definir el perfil de voz asociado con este selector como un perfil de voz actual.
 
@@ -897,6 +923,20 @@ Cada script se lanza mediante el gesto de entrada "MAIN_KEY_VOICEPROFILE_SELECTO
 
 El script selecciona el selector x y si está asociado a un perfil de voz, establece este perfil de voz como un perfil de voz actual.
 
+
++++ Anunciar o mostrar las opciones de voz actuales +++
+Los siguientes 3 scripts permiten conocer  las opciones de voz actuales sin la necesidad de usar el menú  "Voz" de NVDA.
+
+Estos scripts están almacenados en la categoría  "Voz" del diálogo "Gestos de Entrada" de NVDA y se instalan incluso si la funcionalidad "Cambiar el perfil de voz" no está instalado.
+
+Ningún gesto de entrada está asociado con ellos, pero es posible asignarles uno a cada uno.
+
+Sus descripciones son:
+- "Anunciar las opciones de voz actuales":  el se lanza mediante la órden "KEY_REPORT_SPEECH_SETTINGS" del intérprete de órden.
+- "Mostrar las opciones de voz actuales": el se lanza mediante la órden "KEY_DISPLAY_SPEECH_SETTINGS" del intérprete de órden.
+- "Anunciar las opciones de voz actuales. Pulsando dos veces: los muestra": ninguna orden del intérprete está asociado con él.
+
+
 ++ Remanencia de las teclas NVDA y modificadoras ++[hdr18]
 Esta funcionalidad no está instalada por defecto.
 
@@ -906,7 +946,7 @@ El objetivo es usar solo un dedo, por ejemplo, para componer un gesto de entrada
 
 Esta coloca un grupo "Remanencia de las teclas" en la categoría "Teclado" en el diálogo "Opciones" del complemento.
 
-Para activar o desactivar el modo de remanencia, simplemente componga una de las siguientes secuencias de teclas:		
+Para activar o desactivar el modo de remanencia, simplemente componga una de las siguientes secuencias de teclas:
 - "mayúscula derecha", "Control derecha", "mayúscula derecha",
 - "mayúscula izquierda", "control izquierda", "mayúscula izquierda".
 
@@ -1035,13 +1075,14 @@ Este script se lanza:
 Esta órden silencia el sonido del flujo audio de la aplicación  enfocada si se establece o reestablece el sonido si se silencia.
 
 +++ Cambiar el volumen del flujo de audio de la aplicación enfocada +++
-Estos scripts hacen posible aumentar, disminuir, maximizar o minimizar el volumen del flujo de la aplicación presente bajo el foco.
+Estos scripts hacen posible aumentar, disminuir o fijar el volumen del flujo de la aplicación presente bajo el foco.
 
 Estos se instalan sin gestos de entrada. Pero siempre es posible atribuirles con el diálogo "Gestos de Entrada".
 
 Se lanzan con las siguientes órdenes del intérprete:
 - "KEY_APP_VOLUME_UP" o "KEY_APP_VOLUME_DOWN" para aumentar o disminuir el volumen,
 - "KEY_APP_VOLUME_MAX" o "KEY_APP_VOLUME_MIN" para maximizar o minimizar el volumen.
+- un número de 1 a 9 para fijar el nivel de volumen a 10%, 20%, 30%, ..., 90% del volumen principal.
 
 
 Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repetirse sin tener que reiniciarlo. El intérprete permanece activo.
@@ -1050,16 +1091,23 @@ Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repet
 El aumento ou la disminución del volumen se realiza en pasos. Es posible ajustar el tamaño de estos pasos en las opciones del complemento en la categoría "Ordenador" del grupo "Control de sonido", seleccionando el tamaño del paso.
 El tamaño 1 es el paso más pequeño, el tamaño 20 es el paso más grande. el tamaño se establece en 5, que corresponde a aproximadamente el 3% del cambio de volumen en el control de volumen de Windows.
 
-El cambio de volumen se indica verbalmente mediante mensajes como: "más fuerte", "menos fuerte", "al máximo", "al mínimo". pero esto se puede evitar con la opción "Anunciar los cambios de volumen" situado en la misma categoría. Esta opción está seleccionada por defecto.
+Sin embargo, debe entenderse que este paso corresponde a un porcentaje de aumento o disminución en relación con el volumen principal.
+
+Entonces, si el volumen principal es 100, el aumento en el volumen de la aplicación con un paso de 5 serán 5 escalones en el nivel del mezclador de Windows.
+
+Mientras que si el volumen del volumen principal es de 60, un paso de 5 aumentará el volumen de la aplicación de 3 escalones.
+
+El nivel del volumen de la aplicación no puede exceder el nivel del volumen principal.
 
 +++ Cambiar el volumen principal +++
-Estos scripts hacen posible aumentar, disminuir, maximizar o minimizar el volumen principal.
+Estos scripts hacen posible aumentar, disminuir o fijar el volumen principal.
 
 Estos se instalan sin gestos de entrada. Pero siempre es posible atribuirles con el diálogo "Gestos de Entrada".
 
 Se lanzan con las siguientes órdenes del intérprete:
 - "KEY_MAIN_VOLUME_UP" o "KEY_MAIN_VOLUME_DOWN" para aumentar o disminuir el volumen,
 - "KEY_MAIN_VOLUME_MAX" o "KEY_MAIN_VOLUME_MIN" para maximizar o minimizar el volumen.
+- "control+un número de 1 a 9" para fijar el nivel del volumen principal a 10, 20, 30, ..., 90,
 
 
 Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repetirse sin tener que reiniciarlo. El intérprete permanece activo.
@@ -1068,7 +1116,53 @@ Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repet
 El aumento ou la disminución del volumen se realiza en pasos. Es posible ajustar el tamaño de estos pasos en las opciones del complemento en la categoría "Ordenador" del grupo "Control de sonido", seleccionando el tamaño del paso.
 El tamaño 1 es el paso más pequeño, el tamaño 20 es el paso más grande. el tamaño se establece en 5, que corresponde a aproximadamente el 3% del cambio de volumen en el control de volumen de Windows.
 
-El cambio de volumen se indica verbalmente mediante mensajes como: "más fuerte", "menos fuerte", "al máximo", "al mínimo". pero esto se puede evitar con la opción "Anunciar los cambios de volumen" situado en la misma categoría. Esta opción está seleccionada por defecto.
+El volumen principal no puede ser menor que el umbral de restablecimiento configurado.
+
+
+++ Volver al nivel anterior ++
+Cuando se utiliza las órdenes anteriores, el nivel de volumen se registra antes de realizar cada órden, para el volumen principal y para cada aplicación.
+
+Para volver a este nivel, las siguientes órdenes están disponibles:
+- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL":  para restablecer el nivel de volumen principal al nivel anterior.
+- "KEY_APP_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel del volumen de la aplicación enfocada a su nivel anterior.
+
+
+El nivel anterior también se registra con la ejecución de estas órdenes.
+
+
+Estas salvaguardas no se conservan durante un reinicio de NVDA.
+
++++ Anuncio de cambios de nivel +++
+
+Los cambios de nivel de volumen se anuncian por defecto.
+
+ Pero es posible deshabilitar este anuncio usando la opción: "Anunciar los cambios de volumen" del grupo "Cambio de volumen" en la categoría "Ordenador".
+
+Para el volumen de aplicaciones, se puede decir:
+- ya sea  en porcentaje del volumen principal,
+- ya sea en valor absoluto (como en el mezclador de Windows).
+
+
+La elección se realiza utilizando la opción "Anunciar el nivel de volumen de la aplicación en porcentaje" del grupo "Cambio de volumen" en la categoría "Ordenador".
+
++++ Restablecimiento automático del volumen principal y de NVDA al cargar el complemento +++
+Esta opción, si está instalada la funcionalidad "Control de sonido", permite restablecer, al cargar este complemento, el volumen principal y el de NVDA y configurar el nivel de cada volumen a un valor definido por la configuración en caso de que Esto es menor que el umbral máximo definido por la configuración.
+
+Para ello, el grupo "Control de sonido" en la categoría "Ordenador" del diálogo "ADDON_SUMMARY - Opciones" del complemento presenta los siguientes elementos de configuración:
+- La casilla de verificación "Ajustar automáticamente el sonido principal y de NVDA al cargar el complemento" que permite habilitar o deshabilitar esta opción,
+- El humbral de restablecimiento del volumen principal debajo de que nivel será restablecido,
+- El nivel del volumen principal a restablecer,
+- El humbral de restablecimiento del volumen de NVDA debajo de que nivel será restablecido,
+- El nivel del volumen de NVDA a restablecer.
+
+
+Cuando se inicia, este complemento comprueba que tanto el volumen principal como el de NVDA están por encima del umbral de restablecimiento configurado para cada uno.
+
+Si este no es el caso, este complemento luego ajusta el nivel de volumen al valor del nivel a restablecer configurado.
+
+Al instalar el complemento, los niveles actuales del volumen principal y de NVDA se tienen en cuenta para definir los niveles a restablecer.
+
+
 
 ++ Scripts para hacer clic en la posición actual del navegador de objetos ++[hdr23]
 Estos scripts permiten hacer, con el botón derecho o izquierdo del ratón, un simple o un doble clic en la posición actual del navegador de objetos.
@@ -1151,8 +1245,8 @@ El se lanza mediante la órden "KEY_RUNNING_ADDONS" del intérprete de órden. N
 
 Los complementos se enumeran por tipo:
 - complemento de tipo global: este es un complemento que proporciona accesibilidad adicional, independientemente de la aplicación bajo el foco.
-- complemento de tipo aplicativo: este es un complemento que proporciona accesibilidad adicional para una aplicación bien específica.
-- complemento de tipo sintetizador de voz: este es un complemento que instala un sintetizador de voz.
+- complemento de tipo aplicación: este es un complemento que proporciona accesibilidad adicional para una aplicación bien específica.
+- complemento de tipo controlador de sintetizador de voz: este es un complemento que instala un controlador para un sintetizador de voz.
 - complemento de tipo controlador de pantalla braille: este es un complemento que instala un controlador para una pantalla braille.
 - complemento de tipo mixto: es un complemento que mezcla los diferentes tipos de complementos anteriores.
 
@@ -1273,7 +1367,6 @@ Por defecto, el complemento permite que estas versiones de NVDA pronuncien esta 
 
 Esto se puede evitar desmarcando la opción "Anunciar la palabra enfocada después de una eliminación de palabras" que está en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
 
-
 ++ Maximizar automáticamente las ventanas ++[hdr102]
 Esta opción   permite maximizar automáticamente las ventanas que están en primer plano.
 
@@ -1311,30 +1404,7 @@ Esta opción ofrece la opción entre:
 - Emitir la señal solo para versiones de desarrollo de NVDA.
 
 
-Para hacer  esta elección, simplemente selecciona la opción en el cuadro combinado llamado  "Reproducir un sonido al escribir un error en el registro" de la categoría "Avanzadas" del diálogo "ADDON_SUMMARY - Opciones" del complemento.
-
-Por defecto, la opción "Solo para versiones de desarrollo de NVDA" está seleccionada.
-
-++ Restablecimiento automático del volumen principal y de NVDA al cargar el complemento ++[hdr301]
-Esta opción, si está instalada la funcionalidad "Control de sonido", permite restablecer, al cargar este complemento, el volumen principal y el de NVDA y configurar el nivel de cada volumen a un valor definido por la configuración en caso de que Esto es menor que el umbral máximo definido por la configuración.
-
-Para ello, el grupo "Control de sonido" en la categoría "Ordenador" del diálogo "ADDON_SUMMARY - Opciones" del complemento presenta los siguientes elementos de configuración:
-- La casilla de verificación "Ajustar automáticamente el sonido principal y de NVDA al cargar el complemento" que permite habilitar o deshabilitar esta opción,
-- El humbral de restablecimiento del volumen principal debajo de que nivel será restablecido,
-- El nivel del volumen principal a restablecer,
-- El humbral de restablecimiento del volumen de NVDA debajo de que nivel será restablecido,
-- El nivel del volumen de NVDA a restablecer.
-
-
-Cuando se inicia, este complemento comprueba que tanto el volumen principal como el de NVDA están por encima del umbral de restablecimiento configurado para cada uno.
-
-Si este no es el caso, este complemento luego ajusta el nivel de volumen al valor del nivel a restablecer configurado.
-
-Una imposibilidad técnica imposibilita para que se pueda ajustar el nivel del volumen de NVDA por encima del 50%.
-
-Al instalar el complemento, los niveles actuales del volumen principal y de NVDA se tienen en cuenta para definir los niveles a restablecer.
-
-
+Para hacer  esta elección, simplemente selecciona la opción en el cuadro combinado llamado  "Reproducir un sonido al escribir un error en el registro" de la categoría "Avanzadas" del diálogo "ADDON_SUMMARY - Opciones" del complemento. Por defecto, la opción "Solo para versiones de desarrollo de NVDA" está seleccionada.
 
 ++ Titular los cuadros de diálogos con el nombre del complemento ++[hdr302]
 Esta opción permite titular o no los diálogos del complemento con el nombre del complemento.
@@ -1354,6 +1424,7 @@ Para un script que realiza tres acciones diferentes, el mecanismo es:
 
 Dependiendo de la destreza del usuario o de la configuración del hardware, esta duración puede ser demasiado larga o demasiado corta.
 La opción titulada "Duración  de repetición del mismo gesto de entrada" en la categoría "Avanzadas" del diálogo "Opciones" del complemento permite ajustar esta Duración según sea necesario.
+
 ++ Utilización estándar del teclado numérico ++[hdr304]
 De forma predeterminada, NVDA usa algunas teclas del teclado numérico como las teclas de flecha, las teclas "multiplicar", "dividir" y la tecla "más" para habilitar los scripts.
 
@@ -1449,8 +1520,22 @@ El complemento pone en su lugar la opción "No tomar en cuenta la opción Anunci
 | KEY_TOOLSFORADDON | Mostrar el diálogo que presenta las herramientas para el desarrollo de complementos |
 | KEY_USER_INPUT_GESTURE  | Mostrar el diálogo para administrar los gestos de entrada configurados por el usuario |
 | KEY_MANAGE_VOICE_PROFIL | Mostrar el diálogo para administrar los selectores de perfil de voz |
-++ Gestos de entrada instaladas por las funcionalidades ++
+| KEY_REPORT_SPEECH_SETTINGS | Anunciar las opciones de voz actuales |
+| KEY_DISPLAY_SPEECH_SETTINGS | Mostrar las opciones de voz actuales |
+| KEY_APP_VOLUME_UP | Aumentar el volumen de la aplicación enfocada |
+| KEY_MAIN_VOLUME_UP | Aumentar el volumen principal |
+| KEY_APP_VOLUME_DOWN | Disminuir el volumen de la aplicación enfocada |
+| KEY_MAIN_VOLUME_DOWN | Disminuir el volumen principal |
+| KEY_APP_VOLUME_MAX | Maximizar el volumen de la aplicación enfocada |
+| KEY_MAIN_VOLUME_MAX | Maximizar el volumen principal |
+| KEY_APP_VOLUME_MIN | Minimizar el volumen de la aplicación enfocada |
+| KEY_MAIN_VOLUME_MIN | Minimizar el volumen principal |
+| KEY_APP_VOLUME_PREVIOUS_LEVEL | Ajustar el volumen de la aplicación enfocada al nivel anterior |
+| KEY_MAIN_VOLUME_PREVIOUS_LEVEL | Ajustar el nivel de volumen principal al nivel anterior |
+| número de 1 a 9 | Ajustar el volumen de la aplicación enfocada a x por ciento del volumen principal ( x igual a 10 multiplicado por el número) |
+| control+número de 1 a 9 | Ajustar a x el volumen principal  (x igual a 10 multiplicado por el número) |
 
+++ Gestos de entrada instaladas por las funcionalidades ++
 +++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas +++
 | Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
 | Lista de iconos y ventanas activas | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Ninguno | Mostrar la lista de iconos en la bandeja del sistema. Pulsando dos veces: Mostrar la lista de ventanas de las aplicaciones lanzadas |
@@ -1513,19 +1598,7 @@ El complemento pone en su lugar la opción "No tomar en cuenta la opción Anunci
 | Ir al primer selector siguiente | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Ninguno | Ir al primer selector siguiente asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
 | Ir al primer selector anterior | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Ninguno | Ir al primer selector anterior asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
 | Asociación de perfil de voz | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Ninguno | Asociar el perfil de voz actual con el selector actual. Pulsando dos veces: liberar el selector de su perfil de voz asociado. Pulsando tres veces: liberar todos los selectores de su perfil de voz asociado |
-
-+++ Control de sonido +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Ajustar sonido | MAIN_KEY_VOLUME_ON | MAIN_KEY_VOLUME_ON | Ninguno | Ajustar el sonido principal y de NVDA |
-| Silenciar volumen | MAIN_KEY_TOGGLE_MUTE | MAIN_KEY_TOGGLE_MUTE | Ninguno | Silenciar o reestablecer el sonido para la aplicación enfocada |
-| Aumentar volumen principal | KEY_MAIN_VOLUME_UP | KEY_MAIN_VOLUME_UP | Ninguno | Aumentar el volumen principal |
-| Disminuir volumen principal | KEY_MAIN_VOLUME_DOWN | KEY_MAIN_VOLUME_DOWN | Ninguno | Disminuir el volumen principal |
-| Maximizar  volumen principal | KEY_MAIN_VOLUME_MAX | KEY_MAIN_VOLUME_MAX | Ninguno | Maximizar el volumen principal |
-| Minimizar volumen principal | KEY_MAIN_VOLUME_MIN | KEY_MAIN_VOLUME_MIN | Ninguno | Minimizar el volumen principal |
-| Aumentar volumen aplicación | KEY_APP_VOLUME_UP | KEY_APP_VOLUME_UP | Ninguno | Aumentar el volumen de la aplicación enfocada |
-| Disminuir volumen aplicación | KEY_APP_VOLUME_DOWN | KEY_APP_VOLUME_DOWN | Ninguno | Disminuir el volumen de la aplicación enfocada |
-| Maximizar volumen aplicación | KEY_APP_VOLUME_MAX | KEY_APP_VOLUME_MAX | Ninguno | Maximizar el volumen de la aplicación enfocada |
-|  Minimizar volumen aplicación | KEY_APP_VOLUME_MIN | KEY_APP_VOLUME_MIN | Ninguno | Minimizar el volumen de la aplicación enfocada |
+| Alternar el modo de cambio de perfil de voz | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | Ninguno | Habilitar o deshabilitar el modo de cambio de perfil de voz |
 
 +++ Fecha y hora - suplementos +++
 

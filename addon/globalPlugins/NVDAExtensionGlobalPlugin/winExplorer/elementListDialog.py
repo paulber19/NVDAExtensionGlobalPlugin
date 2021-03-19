@@ -1,12 +1,13 @@
-# NVDAExtensionGlobalPlugin/winExplorer/sayAllHandler.py
+# NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2018 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 import queueHandler
 import speech
+import time
 import api
 import wx
 import controlTypes
@@ -23,6 +24,8 @@ class ElementListDialog(wx.Dialog):
 	_instance = None
 	_timer = None
 	title = None
+	delayTimer = None
+	lastTypedKeys = ""
 	elementTypes = (
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
@@ -145,8 +148,9 @@ class ElementListDialog(wx.Dialog):
 		elementType = self.elementTypes[0][0]
 		self.elementsForType = self.getElementsForType(elementType)
 		if len(self.elementsForType):
-			self.objectListBox.SetItems(
-				[_unicode(obj[0]) for obj in self.elementsForType])
+			items = [_unicode(obj[0]) for obj in self.elementsForType]
+			self.objectListBox.SetItems(items)
+				#[_unicode(obj[0]) for obj in self.elementsForType])
 		# the buttons
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: The label for a button in elements list dialog .
@@ -195,8 +199,99 @@ class ElementListDialog(wx.Dialog):
 			queueHandler.eventQueue, self.onElementTypeChange, None)
 		wx.CallLater(1000, self._onObjectListBoxFocus)
 
+	def selectElementType(self, keyCode):
+		keyCodes = [x[1][0].lower() for x in self.elementTypes]
+		key = chr(keyCode).lower()
+		if key not in keyCodes:
+			return False
+		curIndex = self.objectTypesListBox.GetSelection()
+		index = None
+		for i in range(curIndex+1, len(keyCodes)):
+			k = keyCodes[i]
+			if k == key:
+				index = i
+				break
+
+		if index is None:
+			for i in range(0, curIndex):
+				k = keyCodes[i]
+				if k == key:
+					index = i
+					break
+
+		if index is not None:
+			self.objectTypesListBox.SetSelection(index)
+			self.objectTypeHasChanged = True
+			self.updateObjectsListBox()
+			return True
+		return False
+
+	def selectNextObject(self):
+		if self.objectListBox .Count <= 1:
+			return False
+		curIndex = self.objectListBox .GetSelection()
+		index = None
+		for i in  range(curIndex+1, self.objectListBox .Count):
+			name = self.objectListBox .GetString(i)
+			if name.lower().startswith(self.lastTypedKeys):
+				index = i
+				break
+		if index is None:
+			for i in range(0, curIndex):
+				name = self.objectListBox .GetString(i)
+				if name.lower().startswith(self.lastTypedKeys):
+					index = i
+					break
+		if index is not None:
+			self.objectListBox .SetSelection(index)
+			return True
+		return False
+
+	def manageKeyInput(self, keyCode):
+		curTime = time.time_ns() // 1_000_000 
+		if not hasattr(self, "lastKeyDownTime"):
+			self.lastKeyDownTime = 0
+			self.lastTypedKeys = ""
+		if not (30 <= keyCode <= 255):
+			# no alphanumeric character, so  ignore it
+			self.lastTypedKeys = ""
+			return False
+		key = chr(keyCode).lower()
+		delayBetweenKeys = curTime - self.lastKeyDownTime
+		self.lastKeyDownTime = curTime
+		if delayBetweenKeys > 500:
+			self.lastTypedKeys = key
+			return False
+		self.lastTypedKeys += key
+		if len(self.lastTypedKeys) >1:
+			# check if we are already on object name starting with typed keys
+			curIndex = self.objectListBox .GetSelection()
+			if self.objectListBox .GetStringSelection().lower().startswith(self.lastTypedKeys):
+				# nothing to do. We are on the good item, just speak it
+				wx.CallLater(50, queueHandler.queueFunction, 
+					queueHandler.eventQueue, speech.speakMessage, self.objectListBox .GetStringSelection())
+				return True
+			# set selection on next object  with name starting with lastTypedKeys
+			if self.selectNextObject():
+				wx.CallLater(50, queueHandler.queueFunction, 
+					queueHandler.eventQueue, speech.speakMessage, self.objectListBox .GetStringSelection())
+			return True
+		return False
+
 	def onKeydown(self, evt):
 		keyCode = evt.GetKeyCode()
+		controlDown = evt.ControlDown()
+		shiftDown = evt.ShiftDown()
+		if self.delayTimer is not None:
+			self.delayTimer.Stop()
+			self.delayTimer = None
+		if keyCode == wx.WXK_TAB:
+			if shiftDown:
+				wx.Window.Navigate(self.objectListBox, wx.NavigationKeyEvent.IsBackward)
+			else:
+				wx.Window.Navigate(self.objectListBox, wx.NavigationKeyEvent.IsForward)
+			return
+		
 		if keyCode == 13:
 			if self.leftClickButton.Enable:
 				self.onLeftClickButton(None)
@@ -213,23 +308,12 @@ class ElementListDialog(wx.Dialog):
 			self.updateObjectsListBox()
 			return
 		keyCodes = [ord(x[1][0]) for x in self.elementTypes]
-		if keyCode in keyCodes:
-			curIndex = self.objectTypesListBox.GetSelection()
-			index = curIndex
-			index = curIndex+1 if curIndex < len(keyCodes)-1 else 0
-			while index != curIndex:
-				if keyCodes[index] == keyCode:
-					self.objectTypesListBox.SetSelection(index)
-					self.objectTypeHasChanged = True
-					self.updateObjectsListBox()
-					return
-				index = index+1 if index < len(keyCodes)-1 else 0
-		if keyCode == wx.WXK_TAB:
-			shiftDown = evt.ShiftDown()
-			if shiftDown:
-				wx.Window.Navigate(self.objectListBox, wx.NavigationKeyEvent.IsBackward)
-			else:
-				wx.Window.Navigate(self.objectListBox, wx.NavigationKeyEvent.IsForward)
+		if shiftDown and controlDown :
+			if self.selectElementType(keyCode):
+				return
+			evt.Skip()
+			return
+		if self.manageKeyInput(keyCode):
 			return
 		evt.Skip()
 
@@ -244,7 +328,7 @@ class ElementListDialog(wx.Dialog):
 		taggedObjectsFilter = self.taggedObjectsCheckBox.GetValue()
 		try:
 			name = obj.name
-		except:  # noqa:E722
+		except AttributeError:
 			name = None
 		if name is None and hasattr(obj, "IAccessibleObject"):
 			try:
@@ -277,18 +361,22 @@ class ElementListDialog(wx.Dialog):
 			name = "%s, %s" % (
 				name,
 				controlTypes.roleLabels.get(obj.role))
-		if controlTypes.STATE_EDITABLE in obj.states:
-			name = "%s, %s" % (
-				name,
-				controlTypes.stateLabels.get(controlTypes.STATE_EDITABLE))
-		if controlTypes.STATE_READONLY in obj.states:
-			name = "%s, %s" % (
-				name,
-				controlTypes.stateLabels.get(controlTypes.STATE_READONLY))
 		return name
+	def getStateLabel(self, obj):
+		states = obj.states
+		if controlTypes.STATE_PRESSED in states:
+			return controlTypes.stateLabels.get(controlTypes.STATE_PRESSED)
+		if controlTypes.STATE_CHECKED in states:
+			return controlTypes.stateLabels.get(controlTypes.STATE_CHECKED)
+		if controlTypes.STATE_HALFCHECKED in states:
+			return controlTypes.stateLabels.get(controlTypes.STATE_HALFCHECKED)
+		if obj.role in [controlTypes.ROLE_EDITABLETEXT, ]:
+			if controlTypes.STATE_READONLY in states:
+				return controlTypes.stateLabels.get(controlTypes.STATE_READONLY )
 
 	def getElementsForType(self, elementType):
 		labelAndObjList = []
+
 		for obj in self.allObjects:
 			role = obj.role
 			if elementType != "all":
@@ -298,8 +386,12 @@ class ElementListDialog(wx.Dialog):
 			withRole = (elementType == "all") or (len(roles) > 1)
 			label = self.getLabel(obj, withRole)
 			if label is not None:
+				stateLabel = self.getStateLabel(obj)
+				if stateLabel:
+					label = "%s %s" % (label, stateLabel)
 				labelAndObjList.append((label, obj))
-		return labelAndObjList
+		#return sorted(labelAndObjList, key=lambda a: a[0].encode("mbcs"))
+		return sorted(labelAndObjList, key=lambda a: a[0])
 
 	def sayNumberOfElements(self):
 

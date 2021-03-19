@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py
 # a part of NVDAExtensionGlobalPLugin add-on
-# Copyright (C) 2018 - 2020 paulber19
+# Copyright (C) 2018 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -13,6 +13,17 @@ import ui
 import config
 import controlTypes
 from ..utils.py3Compatibility import py3
+try:
+	# fornvda version >=  2020.1
+	from controlTypes import OutputReason
+	REASON_MESSAGE = OutputReason.MESSAGE
+	REASON_CARET = OutputReason.CARET
+	REASON_QUERY = OutputReason.QUERY
+except ImportError:
+	REASON_MESSAGE = controlTypes.REASON_MESSAGE
+	REASON_CARET = controlTypes.REASON_CARET
+	REASON_QUERY = controlTypes.REASON_QUERY
+
 addonHandler.initTranslation()
 
 SCRCAT_TABLE = _("Table")
@@ -77,7 +88,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 				pass
 			else:
 				speech.speakTextInfo(
-					info, formatConfig=formatConfig, reason=controlTypes.REASON_MESSAGE)
+					info, formatConfig=formatConfig, reason=REASON_MESSAGE)
 			try:
 				if axis == "row":
 					info = self._getNearestTableCell(
@@ -144,7 +155,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			info = self._getTableCellAt(tableID, self.selection, origRow, origCol)
 
 		speech.speakTextInfo(
-			info, formatConfig=formatConfig, reason=controlTypes.REASON_CARET)
+			info, formatConfig=formatConfig, reason=REASON_CARET)
 		info.collapse()
 		self.selection = info
 		return True
@@ -203,7 +214,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			info,
 			useCache=False,
 			formatConfig=formatConfig,
-			reason=controlTypes.REASON_QUERY, onlyInitialFields=False)
+			reason=REASON_QUERY, onlyInitialFields=False)
 	# Translators: Input help mode message
 		# to report current cell position command.
 	script_reportCurrentCellPosition.__doc__ = _("Report current table cell position")  # noqa:E501
@@ -269,7 +280,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			# Retrieve the cell on which we started.
 			info = self._getTableCellAt(tableID, self.selection, origRow, origCol)
 			speech.speakTextInfo(
-				info, formatConfig=formatConfig, reason=controlTypes.REASON_CARET)
+				info, formatConfig=formatConfig, reason=REASON_CARET)
 			info.collapse()
 			self.selection = info
 			return
@@ -292,6 +303,6 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			# Retrieve the previous cell
 			info = self._getTableCellAt(tableID1, self.selection, origRow1, origCol1)
 		speech.speakTextInfo(
-			info, formatConfig=formatConfig, reason=controlTypes.REASON_CARET)
+			info, formatConfig=formatConfig, reason=REASON_CARET)
 		info.collapse()
 		self.selection = info

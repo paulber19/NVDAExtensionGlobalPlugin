@@ -46,6 +46,7 @@ class RepeatTask(threading.Thread):
 				break
 			self.task()
 
+
 	def stop(self):
 		self._stopevent.set()
 

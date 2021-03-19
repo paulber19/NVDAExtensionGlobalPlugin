@@ -642,7 +642,7 @@ class ToolsForAddonDialog(wx.Dialog):
 			return
 		ToolsForAddonDialog._instance = self
 		# Translators: This is the title of the dialog
-		dialogTitle = _("Tools for add-on developpement")
+		dialogTitle = _("Tools for add-on development")
 		title = ToolsForAddonDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(ToolsForAddonDialog, self).__init__(
 			parent, -1, title, style=wx.CAPTION | wx.CLOSE_BOX | wx.TAB_TRAVERSAL)

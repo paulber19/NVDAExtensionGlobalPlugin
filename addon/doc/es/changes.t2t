@@ -18,6 +18,44 @@ Descarga:
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
 
 
++ v9.6 (10/03/2021) +
+Nuevas características: 
+- en el diálogo "Lista de ventanas activas" (abierto  con "nvda+j" seguido de "f10":
+ - en la lista de ventanas, posibilidad de seleccionar una ventana escribiendo el comienzo de su nombre.
+ - ahora se muestran las ventanas activas de segundo nivel.
+- en el diálogo "Lista de los elementos visibles que componen el objeto en primer plano" abierto con "NVDA+b":
+ - se añadió el estado de los botones y casillas de verificación en la lista de elementos encontrados.
+ - posibilidad de seleccionar  un elemento escribiendo el comienzo de su etiqueta.
+- Con respecto a la funcionalidad "Control de sonido":
+ - scripts para ajustar el volumen de la aplicación enfocada a un cierto porcentaje del volumen principal.
+ - scripts para ajustar a un nivel fijado el volumen principal.
+ - scripts para restablecer el volumen principal o el de la aplicación enfocada al nivel anterior.
+ - anunciar el cambio del nivel de volumen de la aplicación enfocada en valor absoluto o en porcentaje del volumen principal.
+- mejora de la funcionalidad "Anuncio selectivo de teclas de órdenes":
+ - se tiene en cuenta de la tecla modificadora "windows",
+ - se añadió los botones "Marcar todo" y "Desmarcar todo"  para seleccionar o deseleccionar todas las combinaciones de teclas modificadoras,
+ - se añadió la posibilidad de excluir cualquier  tecla con o sin una combinación de teclas modificadoras,
+ - posibilidad de excluir  una  tecla sin una combinación de teclas modificadoras,
+ - uso de la tecla "F2" para buscar el elemento marcado siguiente o anterior en las listas   (abandono de la tecla "F1" utilizada por  NVDA a partir de la versión 2020.4).
+- se añadió los scripts para anunciar o mostrar las opciones de voz actuales.
+- traducción del manual del usuario en inglés.
+
+
+Corección de fallo:
+- se ha correjido el problema del mal anuncio al abrir un archivo con el Bloc de notas seguido de  "control+n" y algunas flechas hacia abajo.
+
+
+Cambios:
+- en el diálogo "Lista de los elementos visibles que componen el objeto en primer plano" (abierto con "NVDA+b") y cuando el foco está en la lista de elementos, la selección del tipo de elementos ahora se hace con "control+ la primera letra del tipo y no solo con su primera letra.
+- en las listas del diálogo "Anuncio selectivo de teclas de órdenes", la tecla "f1"  no tiene ninguna acción.
+- la maximización automática de las ventanas ahora es de 100 ms después del evento de la puesta en primer plano, en lugar de 2 segundos (vinculado al problema del mal anuncio).
+
+
+Para la compatibilidad con NVDA 2021.1
+- actualización del paquete psutil  compatible con python 3.8.7
+- reemplazo de GetDateFormat y GetTimeFormat eliminado  por GetDateFormatEx y GetTimeFormatEx en el script "dateTime".
+
+
 + v9.5.3 (20/01/2021) +
 Se corrigió el problema de traducción del mensaje "Copied to clipboard" (reemplazado por "copy").
 

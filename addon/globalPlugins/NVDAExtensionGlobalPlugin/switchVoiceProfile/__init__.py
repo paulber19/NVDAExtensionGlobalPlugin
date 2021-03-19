@@ -300,9 +300,15 @@ class SwitchVoiceProfilesManager(object):
 				booleanSynthSetting = [
 					synthDriverHandler.BooleanSynthSetting,
 					driverHandler.BooleanDriverSetting]
-			except:  # noqa:E722
-				numericSynthSetting = [driverHandler.NumericDriverSetting, ]
-				booleanSynthSetting = [driverHandler.BooleanDriverSetting, ]
+			except AttributeError:
+				try:
+					# for nvda< 2021.1
+					numericSynthSetting = [driverHandler.NumericDriverSetting, ]
+					booleanSynthSetting = [driverHandler.BooleanDriverSetting, ]
+				except AttributeError:
+					import autoSettingsUtils.driverSetting
+					numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
+					booleanSynthSetting = [autoSettingsUtils.driverSetting.BooleanDriverSetting, ]
 		except ImportError:
 			# for nvda version lower 2019.2
 			import synthDriverHandler
@@ -337,6 +343,19 @@ class SwitchVoiceProfilesManager(object):
 			item = infos[i]
 			d[str(i+1)] = [item[0], item[1]]
 		return d
+	def getCurrentSynthDatas(self):
+		synth = self.curSynth
+		synthDatas = {}
+		synthDatas[KEY_SynthName] = synth.name
+		d = deepCopy(config.conf[SCT_Speech])
+		for key in config.conf[SCT_Speech]:
+			val = config.conf[SCT_Speech][key]
+			if type(val) == config.AggregatedSection\
+				and key not in [SCT_Many, synth.name]:
+				del d[key]
+		synthDatas[SCT_Speech] = d
+		synthDatas[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name])
+		return synthDatas
 
 	def associateProfileToSelector(
 		self, selector, voiceProfileName, defaultVoiceProfileName):
@@ -351,6 +370,10 @@ class SwitchVoiceProfilesManager(object):
 		conf[KEY_Activate] = True
 		conf[KEY_VoiceProfileName] = voiceProfileName
 		conf[KEY_DefaultVoiceProfileName] = defaultVoiceProfileName
+		synthDatas = self.getCurrentSynthDatas()
+		for key in synthDatas.keys():
+			conf[key] = synthDatas[key]
+		"""
 		synth = self.curSynth
 		conf[KEY_SynthName] = synth.name
 		# save only current synth config
@@ -362,6 +385,7 @@ class SwitchVoiceProfilesManager(object):
 				del d[key]
 		conf[SCT_Speech] = d
 		conf[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name])
+		"""
 		conf._cache.clear()
 		self.setLastSelector(selector)
 		# Translators: message to user to report the association
@@ -415,6 +439,72 @@ class SwitchVoiceProfilesManager(object):
 	def getVoiceProfileName(self, selector):
 		conf = deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
 		return conf[selector][KEY_VoiceProfileName]
+
+	def getSynthInformations(self, selector=None):
+		def boolToText(val):
+			return _("yes") if val else _("no")
+
+		def punctuationLevelToText(level):
+			return characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS[int(level)]
+		NVDASpeechSettingsInfos = [
+			(_("Automatic language switching (when supported)"), boolToText),
+			(_("Automatic dialect switching (when supported)"), boolToText),
+			(_("Punctuation/symbol level"), punctuationLevelToText),
+			(_("Trust voice's language when processing characters and symbols"), boolToText),  # noqa:E501
+			(_("Include Unicode Consortium data (including emoji) when processing characters and symbols"), boolToText),  # noqa: E501
+			]
+		NVDASpeechManySettingsInfos = [
+			(_("Capital pitch change percentage"), None),
+			(_("Say cap before capitals"), boolToText),
+			(_("Beep for capitals"), boolToText),
+			(_("Use spelling functionality if supported"), boolToText),
+			]
+		textList = []
+		if selector is None:
+			# get infos for current synth
+			selectorConfig  = self.getCurrentSynthDatas()
+		else:
+			selectorConfig = self.getConfig()[selector].copy()
+			textList.append(_("selector: %s") % selector)
+			textList.append(
+				# Translators: text to report voice profile name.
+				_("Voice profile name: %s") % selectorConfig[KEY_VoiceProfileName])
+			updatedConf = self.getUpdatedConfig()
+			if selector not in updatedConf:
+				textList.append(
+					# Translators:text to report that it is normal configuration.
+					_("Associated under %s configuration profile") % NVDAString("(normal configuration)"))  # noqa:E501
+		synthName = selectorConfig[KEY_SynthName]
+		textList.append(
+			# Translators: text to report synthetizer name.
+			_("Synthetizer: %s") % synthName)
+		synthSettings = selectorConfig[SCT_Speech][synthName].copy()
+		textList.append(
+			# Translators:  label to report synthetizer output device .
+			_("Output device: %s") % selectorConfig[SCT_Speech][KEY_OutputDevice])
+		synthDisplayInfos = selectorConfig[KEY_SynthDisplayInfos]
+		for i in synthDisplayInfos:
+			item = synthDisplayInfos[i]
+			textList.append("%s: %s" % (item[0], item[1]))
+		for setting in SwitchVoiceProfilesManager.NVDASpeechSettings:
+			val = selectorConfig[SCT_Speech][setting]
+			index = SwitchVoiceProfilesManager.NVDASpeechSettings.index(setting)
+			(name, f) = NVDASpeechSettingsInfos[index]
+			if f is not None:
+				val = f(val)
+			textList.append("%s: %s" % (name, val))
+		for setting in SwitchVoiceProfilesManager.NVDASpeechManySettings:
+			val = selectorConfig[SCT_Speech][SCT_Many][setting]
+			if setting in synthSettings:
+				val = synthSettings[setting]
+			else:
+				val = selectorConfig[SCT_Speech][SCT_Many][setting]
+			index = SwitchVoiceProfilesManager.NVDASpeechManySettings.index(setting)
+			(name, f) = NVDASpeechManySettingsInfos[index]
+			if f is not None:
+				val = f(val)
+			textList.append("%s: %s" % (name, val))
+		return textList
 
 
 class SelectorsManagementDialog (wx.Dialog):
@@ -591,73 +681,15 @@ class SelectorsManagementDialog (wx.Dialog):
 		self.updateSelectorsList()
 
 	def onInformationButton(self, evt):
-		def boolToText(val):
-			return _("yes") if val else _("no")
-
-		def punctuationLevelToText(level):
-			return characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS[int(level)]
-		NVDASpeechSettingsInfos = [
-			(_("Automatic language switching (when supported)"), boolToText),
-			(_("Automatic dialect switching (when supported)"), boolToText),
-			(_("Punctuation/symbol level"), punctuationLevelToText),
-			(_("Trust voice's language when processing characters and symbols"), boolToText),  # noqa:E501
-			(_("Include Unicode Consortium data (including emoji) when processing characters and symbols"), boolToText),  # noqa: E501
-			]
-		NVDASpeechManySettingsInfos = [
-			(_("Capital pitch change percentage"), None),
-			(_("Say cap before capitals"), boolToText),
-			(_("Beep for capitals"), boolToText),
-			(_("Use spelling functionality if supported"), boolToText),
-			]
 		index = self.selectorListBox.GetSelection()
 		selector = str(index+1)
-		selectorConfig = self.switchManager.getConfig()[selector].copy()
-		text = []
-		text.append(_("selector: %s") % selector)
-		text.append(
-			# Translators: text to report voice profile name.
-			_("Voice profile name: %s") % selectorConfig[KEY_VoiceProfileName])
-		updatedConf = self.switchManager.getUpdatedConfig()
-		if selector not in updatedConf:
-			text.append(
-				# Translators:text to report that it is normal configuration.
-				_("Associated under %s configuration profile") % NVDAString("(normal configuration)"))  # noqa:E501
-		synthName = selectorConfig[KEY_SynthName]
-		text.append(
-			# Translators: text to report synthetizer name.
-			_("Synthetizer: %s") % synthName)
-		synthSettings = selectorConfig[SCT_Speech][synthName].copy()
-		text.append(
-			# Translators:  label to report synthetizer output device .
-			_("Output device: %s") % selectorConfig[SCT_Speech][KEY_OutputDevice])
-
-		synthDisplayInfos = selectorConfig[KEY_SynthDisplayInfos]
-		for i in synthDisplayInfos:
-			item = synthDisplayInfos[i]
-			text.append("%s: %s" % (item[0], item[1]))
-		for setting in SwitchVoiceProfilesManager.NVDASpeechSettings:
-			val = selectorConfig[SCT_Speech][setting]
-			index = SwitchVoiceProfilesManager.NVDASpeechSettings.index(setting)
-			(name, f) = NVDASpeechSettingsInfos[index]
-			if f is not None:
-				val = f(val)
-			text.append("%s: %s" % (name, val))
-		for setting in SwitchVoiceProfilesManager.NVDASpeechManySettings:
-			val = selectorConfig[SCT_Speech][SCT_Many][setting]
-			if setting in synthSettings:
-				val = synthSettings[setting]
-			else:
-				val = selectorConfig[SCT_Speech][SCT_Many][setting]
-			index = SwitchVoiceProfilesManager.NVDASpeechManySettings.index(setting)
-			(name, f) = NVDASpeechManySettingsInfos[index]
-			if f is not None:
-				val = f(val)
-			text.append("%s: %s" % (name, val))
-
+		textList = self.switchManager.getSynthInformations(selector)
+		text = "\r\n".join(textList)
 		# Translators: this is the title of informationdialog box
-# to show voice profile informations.
+		# to show voice profile informations.
 		dialogTitle = _("Voice profile 's informations")
-		InformationDialog.run(None, dialogTitle, "", "\r\n".join(text))
+		InformationDialog.run(None, dialogTitle, "", text)
+
 
 	def onActivateButton(self, evt):
 		# no action if focus is on check box

@@ -16,6 +16,42 @@ Download:
 
 Sorry, but this document is an automatic translation from french language.
 
++ v9.6 (03/10/2021) +
+News:
+- in the "List of active windows" dialog (opened by "nvda + j" followed by "f10":
+ - in the list of windows, possibility to select a window by typing the beginning of its name.
+ - the active second level windows are now displayed.
+- in the dialog "List of visible elements composing the object in foreground" opened by "NVDA + b":
+ - addition of the state of the buttons and check boxes in the list of elements found.
+ - possibility to select an element by typing the beginning of its label.
+- Concerning the "volume control" functionality:
+ - scripts to set the volume of the application under focus to a certain percentage of the main volume.
+ - scripts to set the main volume to a fixed level.
+ - scripts to restore the main volume or that of the application under focus to the previous level.
+ - announce the change of the volume level of the application under focus in absolute value or in percentage of the main volume.
+- improvement of the "Command keys selective announcement" functionnality:
+ - taking into account of the "windows" modification key,
+ - addition of the "Check all" and "Uncheck all" buttons to select or deselect all of the modifier key combinations,
+ - addition of the possibility of excluding any key with or without combination of modifier keys,
+ - possibility to exclude a key without a combination of modifier keys,
+ - use of the "F2" key to search for the next or previous checked item in the lists (abandonment of the "F1" key used by NVDA since version 2020.4).
+- addition of scripts to announce or display the current speech settings.
+- translation of the user manual into English.
+
+
+Bug fixes:
+- fixed the problem of bad announcement when opening a file with the notepad followed by "control + n" and some down arrows.
+
+
+Changes:
+- in the dialog "List of visible elements composing the foreground object" (opened by "NVDA + b") and when the focus is in the list of elements, the selection of the type of elements is now done by "control + the first letter of the type and no longer only with its first letter.
+- in the lists of the "Selective announcement of command keys" dialog, the "f1" key has no further action.
+- the automatic windows enlargement is now done 100 ms after the foreground event, instead of 2 seconds (linked to the problem of the bad announcement).
+
+
+For compatibility with NVDA 2021.1
+- update of the psutil package compatible with python 3.8.7
+- replacement of GetDateFormat and GetTimeFormat deleted by GetDateFormatEx and GetTimeFormatEx in the "dateTime" script.
 
 
 + v9.5.3 (20/01/2021) +

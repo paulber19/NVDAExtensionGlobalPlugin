@@ -146,6 +146,10 @@ def toggleReportVolumeChangeAdvancedOption(toggle=True):
 	return toggleAdvancedOption(ID_ReportVolumeChange, toggle)
 
 
+def toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(toggle=True):
+	return toggleAdvancedOption(ID_AppVolumeLevelAnnouncementInPercent, toggle)
+
+
 def toggleDialogTitleWithAddonSummaryAdvancedOption(toggle=True):
 	return toggleAdvancedOption(ID_DialogTitleWithAddonSummary, toggle)
 
@@ -179,7 +183,7 @@ def toggleActivateNumpadStandardUseWithNumLockAdvancedOption(toggle=True):
 
 
 class AddonConfigurationManager():
-	_currentConfigVersion = "2.5"
+	_currentConfigVersion = "2.6"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
 		"2.0": AddonConfiguration20,
@@ -188,6 +192,7 @@ class AddonConfigurationManager():
 		"2.3": AddonConfiguration23,
 		"2.4": AddonConfiguration24,
 		"2.5": AddonConfiguration25,
+		"2.6": AddonConfiguration26,
 		}
 
 	def __init__(self):
@@ -442,6 +447,13 @@ class AddonConfigurationManager():
 		conf[addonName][SCT_CommandKeysAnnouncement][sectName] = keysDic.copy()
 
 	def getCommandKeysSelectiveAnnouncement(self, speakCommandKeysOption):
+		def getPositionOfLeftMostBit(n):
+			i = 0
+			while n:
+				i += 1
+				n = int(n/2)
+			return i-1
+	
 		conf = config.conf
 		if self.addonName not in conf:
 			return {}
@@ -450,7 +462,33 @@ class AddonConfigurationManager():
 			if speakCommandKeysOption else ID_DoNotSpeakCommandKeysMode
 		if SCT_CommandKeysAnnouncement in conf[addonName]\
 			and sectName in conf[addonName][SCT_CommandKeysAnnouncement]:
-			return conf[addonName][SCT_CommandKeysAnnouncement][sectName].copy()
+			d = conf[addonName][SCT_CommandKeysAnnouncement][sectName].copy()
+			# the introduction of the "windows" modifier key has changed the structure of the key configuration, a conversion is necessary if the key mask is smaller than 2 power 63.
+			# the bit indicating that the key is checked is moved to bit63 instead of being the leftmost bit of the mask.
+			# we must also delete "numlock" and "capslock" key because shouldReportAsCommand is false.
+			keys = list(d.keys())
+			change = False
+			for key in keys:
+				if key in ["numlock", "capslock"]:
+					del d[key]
+					change = True
+					continue
+				mask = abs(int(d[key]))
+				if type(d[key]) == str:
+					d[key] = mask
+					change = True
+				if mask and mask < 2**63:
+					# reset left most  bit and set bit 63
+					pos = getPositionOfLeftMostBit(mask)
+					mask = mask & ~(2**pos)
+					mask = mask | 2**63
+					d[key] = mask
+					change = True
+			if change:
+				# update config
+				self.saveCommandKeysSelectiveAnnouncement(
+					d, speakCommandKeysOption)
+			return d
 		return {}
 
 	def deleceCommandKeyAnnouncementConfiguration(self):

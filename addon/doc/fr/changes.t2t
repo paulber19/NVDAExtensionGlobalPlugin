@@ -15,8 +15,47 @@ Téléchargement:
 
 
 
+
++ v9.6 (10/03/2021) +
+Nouveautés: 
+- dans le dialogue "Liste des fenêtres actives" (ouvert par "nvda+j" suivi par "f10":
+ - dans la liste des fenêtres, possibilité de sélectionner une fenêtre en tapant le début de son nom.
+ - les fenêtres actives de second niveau sont maintenant affichées.
+- dans le dialogue "List des éléments visibles composant l'objet en avant plan" ouvert par "NVDA+b":
+ - ajout de l'état des boutons et cases à cocher dans la liste des éléments trouvés.
+ - possibilité de sélectionner un élément en tapant le début de son étiquette.
+- Concernant la fonctionnalité "Controle du son":
+ - scripts pour établir le volume de l'application sous le focus à un certain pourcentage du volume principal.
+ - scripts pour établir à un niveau fixé le volume principal.
+ - scripts pour remettre le volume principal ou celui de l'application sous le focus au niveau précédent.
+ - annoncer le changement du niveau du volume de l'application sous le focus en valeur absolu ou en pourcentage du volume principal.
+- amélioration de la fonctionnalité "Annonce sélective des touches de commande:
+ - prise en compte de la touche de modification "windows",
+ - ajout des boutons "Cocher tout" et "décocher tout"  pour sélectionner ou désélectionner  la totalité des combinaisons de touche de modification,
+ - ajout de la possibilité d'exclure toute touche avec ou sans combinaison de touches de modification,
+ - possibilité d'exclure une touche sans combinaison de touches de modification,
+ - utilisation de la touche  "F2" pour rechercher l'élément coché suivant ou précédent dans les listes  (abandon de la touche "F1" utilisée par NVDA depuis la version 2020.4).
+- ajout de scripts pour annoncer ou afficher les paramètres vocaux courants.
+- traduction du manuel utilisateur en Anglais.
+
+
+Correction de bogues:
+- correction du problème de mauvaise annonce lors de l'ouverture d'un fichier avec le bloc-notes suivi par "control+n" et quelques flèches bas.
+
+
+Changements:
+- dans le dialogue "List des éléments visibles composant l'objet en avant plan" (ouvert par "NVDA+b") et quand le focus est dans la liste des éléments, la sélection du type d'éléments se fait maintenant par "contrôle+ la première lettre du type et non plus seulement avec sa première lettre.
+- dans les listes du dialogue "Annonce sélective des touches de commandes", la touche "f1"  n'a plus d'action.
+- l'agrandissement automatique des fenêtres se fait maintenant 100 ms après l'évenement de mise au premier plan, au lieu de 2 secondes (lié au problème de la mauvaise annonce).
+
+
+Pour la compatibilité avec NVDA 2021.1
+- mise à jour du package psutil  compatible avec python 3.8.7
+- remplacement de GetDateFormat et GetTimeFormat  supprimées par GetDateFormatEx et GetTimeFormatEx dans le script "dateTime".
+
+
 + v9.5.3 (20/01/2021) +
-Correction du problème de traduction  du message "Copied to clipboard" (remplacé par "copy").
+Correction du problème de traduction du message "Copied to clipboard" (remplacé par "copy").
 
 + v9.5.2 (16/01/2021) +
 Correction du mmauvais enregistrement des symboles complexes copiés ou collés.

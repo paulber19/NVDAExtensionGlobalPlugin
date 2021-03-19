@@ -36,25 +36,46 @@ addonHandler.initTranslation()
 _NVDA_InputManager = None
 _myInputManager = None
 _NVDA_ExecuteGesture = None
+WITHOUT_MODIFIER_BIT_POSITION = 63
 
-
-_availableModifierKeysCombination = [
-	["NVDA", ],
-	["NVDA", "alt"],
-	["NVDA", "alt", "control"],
-	["NVDA", "alt", "control", "shift"],
-	["NVDA", "alt", "shift"],
-	["NVDA", "control"],
-	["NVDA", "control", "shift"],
-	["NVDA", "shift"],
-	["alt", ],
-	["alt", "control"],
-	["alt", "control", "shift"],
-	["alt", "shift"],
-	["control", ],
-	["control", "shift"],
-	["shift", ],
-	]
+_availableModifierKeysCombination = {
+	# bit position: modifier keys list of combination
+	0: ["NVDA", ],
+	1: ["NVDA", "alt"],
+	2: ["NVDA", "alt", "control"],
+	3: ["NVDA", "alt", "control", "shift"],
+	4: ["NVDA", "alt", "shift"],
+	5: ["NVDA", "control"],
+	6: ["NVDA", "control", "shift"],
+	7: ["NVDA", "shift"],
+	8: ["alt", ],
+	9: ["alt", "control"],
+	10: ["alt", "control", "shift"],
+	11: ["alt", "shift"],
+	12: ["control", ],
+	13: ["control", "shift"],
+	14: ["shift", ],
+	15: ["windows", ],
+	16: ["windows", "NVDA", ],
+	17: ["windows", "alt"],
+	18: ["windows", "NVDA", "alt"],
+	19: ["windows", "alt", "control"], 
+	20: ["windows", "NVDA", "alt", "control"],
+	21: ["windows", "alt", "control", "shift"],
+	22: ["windows", "NVDA", "alt", "control", "shift"],
+	23: ["windows", "alt", "shift"],
+	24: ["windows", "NVDA", "alt", "shift"],
+	25:["windows", "control"],
+	26:["windows", "NVDA", "control"],
+	27: ["windows", "control", "shift"],
+	28: ["windows", "NVDA", "control", "shift"],
+	29: ["windows", "shift"],
+	30: ["windows", "NVDA", "shift"],
+	WITHOUT_MODIFIER_BIT_POSITION: [],
+	}
+CHECKED_KEY_BIT_POSITION = 63
+# Translators: label of anyKey item in the excluded keys list.
+ANYKEY_LABEL = _("Any key with modifier key combination")
 
 
 def myExecuteGesture(gesture):
@@ -391,7 +412,8 @@ class MyInputManager (object):
 	def speakGesture(self, gesture):
 		if not gesture.shouldReportAsCommand:
 			return
-		if self.commandKeysFilter.canSpeakGesture(gesture):
+		if self.commandKeysFilter.forceSpeakGesture(gesture):
+			log.warning("Gesture display name spoken: %s"%gesture.displayName)
 			queueHandler.queueFunction(
 				queueHandler.eventQueue, speech.speakMessage, gesture.displayName)
 
@@ -399,43 +421,63 @@ class MyInputManager (object):
 class CommandKeysFilter(object):
 	def __init__(self):
 		pass
-
-	def checkModifiers(self, modifiers, keyLabel):
-		index = -1
-		for item in _availableModifierKeysCombination:
-			if set(modifiers) == set(item):
-				index = _availableModifierKeysCombination.index(item)
+	def modifiersInAllKeysModifierCombinations(self, modifiers):
+		if "anykey" not in self.keysDic:
+			return False
+		if len(modifiers)== 0 and self.keysDic["anykey"] == 0:
+			return True
+		index = None
+		for (bitPosition, modifierKeys) in _availableModifierKeysCombination.items():
+			if set(modifiers) == set(modifierKeys):
+				index = bitPosition
 				break
-		if index >= 0:
-			mask = int(self.keysDic[keyLabel.lower()])
+		if index is not None:
+			mask = abs(int(self.keysDic["anykey"]))
+			if  mask & int(2 ** index):
+				return True
+		return False
+	
+	def modifiersInKeyModifierCombinations(self, modifiers, keyLabel):
+		if keyLabel not in self.keysDic :
+			return False
+		if keyLabel in self.keysDic and self.keysDic[keyLabel] == 0:
+			return False
+		index = None
+		for (bitPosition, modifierKeys) in _availableModifierKeysCombination.items():
+			if set(modifiers) == set(modifierKeys):
+				index = bitPosition
+				break
+		if index is not None:
+			mask = abs(int(self.keysDic[keyLabel.lower()]))
+			if  mask & (2 ** index):
+				return True
+		return False
 
-			if not mask & (2 ** index):
-				return False
-		return True
-
-	def canSpeakGesture(self, gesture):
-		speakCommandKeysOption = config.conf["keyboard"]["speakCommandKeys"]
+	def forceSpeakGesture(self, gesture):
+		NVDASpeakCommandKeysOption = config.conf["keyboard"]["speakCommandKeys"]
 		self.keysDic = _addonConfigManager.getCommandKeysSelectiveAnnouncement(
-			speakCommandKeysOption)
+			NVDASpeakCommandKeysOption)
 		self.keys = []
-		for key in self.keysDic:
-			if int(self.keysDic[key]):
-				self.keys.append(key)
 		try:
 			modifiers = gesture._get_modifierNames()
 			keyLabel = gesture._get_mainKeyName()
 		except:  # noqa:E722
 			return True
-
-		if not speakCommandKeysOption:
-			if keyLabel.lower() in self.keys:
-				return self.checkModifiers(modifiers, keyLabel)
-			else:
-				return False
+		if not NVDASpeakCommandKeysOption:
+			# we must speak gesture, check if we must exclude this gesture
+			if self.modifiersInAllKeysModifierCombinations(modifiers):
+				return True
+			if keyLabel.lower() in self.keysDic:
+				force = self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
+				return force
+			return False
 		else:
+			# we speak gesture, find if we exclude this gesture
+			if self.modifiersInAllKeysModifierCombinations(modifiers):
+				return False
 			if keyLabel.lower() in self.keys:
-				return not self.checkModifiers(modifiers, keyLabel)
-		return True
+				return not self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
+			return True
 
 	def updateCommandKeysSelectiveAnnouncement(
 		self, keys, speakCommandKeysOption):
@@ -446,7 +488,7 @@ class CommandKeysFilter(object):
 class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 	# Translators: title for the Command Keys Selective Announcement Dialog.
 	title = _("Command keys selective Announcement")
-
+	speakTimer = None
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(CommandKeysSelectiveAnnouncementDialog, self).__init__(parent)
@@ -456,9 +498,17 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			self.speakCommandKeysOption)
 		self.NVDAKeys = [x for x in byName]
 		from keyLabels import localizedKeyLabels
+		
 		self.localizedKeyboardKeyNames = []
 		self.keyboardKeys = {}
+		# label of the first item in the key list
+		#  if this item is checked, the modifiers key combinations are available for all keys.
+		self.localizedKeyboardKeyNames.append(ANYKEY_LABEL )
+		self.keyboardKeys[ANYKEY_LABEL ] = "anykey"
 		for key in self.NVDAKeys:
+			#we must exclude some key because shouldReportAsCommand is False
+			if key in ["numlock", "capslock"]:
+				continue
 			if self.isModifier(key):
 				continue
 			if key in localizedKeyLabels:
@@ -473,31 +523,43 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 
 	def modifierKeysCombinationListInit(self):
 		from keyLabels import localizedKeyLabels
-		self.modifierKeys = []
-		for item in _availableModifierKeysCombination:
-			modifiers = ""
-			for key in item:
+		self.modifierKeys = [_("any"), ]
+		self.modifierKeyBitPositions = [WITHOUT_MODIFIER_BIT_POSITION , ]
+		for (bitPosition, modifierKeys) in _availableModifierKeysCombination.items():
+			if bitPosition == WITHOUT_MODIFIER_BIT_POSITION :
+				# already treated
+				continue
+			modifiersList = []
+			for key in modifierKeys:
 				label = localizedKeyLabels[key] if key in localizedKeyLabels else key
-				modifiers = modifiers + " + " + label
-			modifiers = modifiers[1:]
+				modifiersList.append(label)
+			modifiers = " + ".join(modifiersList)
 			self.modifierKeys.append(modifiers)
+			self.modifierKeyBitPositions.append(bitPosition)
 
 	def updateCheckedKeys(self):
-		keys = [x for x in self.keysDic]
+#		keys = [x for x in self.keysDic]
+		keys = []
+		for key in self.keysDic:
+			if self.keysDic[key]:
+				keys.append(key)
 		for index in range(0, self.keyboardKeysListBox.GetCount()):
 			label = self.keyboardKeysListBox.GetString(index)
 			key = label
 			if label in self.keyboardKeys:
 				key = self.keyboardKeys[label]
-			if key in keys and int(self.keysDic[key]):
+			if key in keys :
 				self.keyboardKeysListBox.Check(index)
 
 	def updateModifierKeysList(self, key):
-		modifierKeys = int(self.keysDic[key])
-		for i in range(0, len(_availableModifierKeysCombination)):
-			mask = 2 ** i
-			if modifierKeys & mask:
-				self.modifierKeysListBox.Check(i)
+		modifierKeysMask = abs(int(self.keysDic[key]))
+		for bitPosition in self.modifierKeyBitPositions :
+			mask = 2 ** bitPosition
+			index = self.modifierKeyBitPositions .index(bitPosition)
+			if modifierKeysMask & mask:
+				self.modifierKeysListBox.Check(index)
+			else:
+				self.modifierKeysListBox.Check(index, False)
 		self.modifierKeysListBox.SetSelection(0)
 
 	def makeSettings(self, settingsSizer):
@@ -540,7 +602,7 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		# the modifiers keys list box
 		# Translators: This is a label appearing
 		# on Command Keys Selective Announcement Dialog.
-		modifierKeysListLabelText = _("W&ith key combination:")
+		modifierKeysListLabelText = _("Pressed W&ith modifier key combination:")
 		try:
 			self.modifierKeysListBox_ID = wx.NewIdRef()
 		except:  # noqa:E722
@@ -554,6 +616,21 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			style=wx.LB_SINGLE | wx.WANTS_CHARS)
 		if self.modifierKeysListBox.GetCount():
 			self.modifierKeysListBox.SetSelection(0)
+		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
+		self.checkAllButton = bHelper.addButton(
+			parent=self,
+			# Translators: This is a label of a button appearing
+			# on Command Keys Selective Announcement Dialog.
+			label=_("&Check all modifier combinations"))
+		self.checkAllButton.Disable()
+		self.unCheckAllButton = bHelper.addButton(
+			parent=self,
+			# Translators: This is a label of a button appearing
+			# on Command Keys Selective Announcement Dialog.
+			label=_("&Uncheck all modifier combinations"))
+		self.unCheckAllButton.Disable()
+		sHelper.addItem(bHelper)
+		
 		# Events
 		self.commandKeysCheckBox.Bind(
 			wx.EVT_CHECKBOX, self.onCheckCommandKeysCheckBox)
@@ -567,44 +644,49 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		self.modifierKeysListBox.Bind(wx.EVT_KEY_DOWN, self.onKeydown)
 		self.modifierKeysListBox.Bind(
 			wx.EVT_SET_FOCUS, self.focusOnModifierKeysCombination)
+		self.checkAllButton.Bind(wx.EVT_BUTTON, self.onCheckAllButton)
+		self.unCheckAllButton.Bind(wx.EVT_BUTTON, self.onUnCheckAllButton)
 		self.updateCheckedKeys()
 
 	def postInit(self):
 		self.commandKeysCheckBox.SetFocus()
 
 	def reportCheckedState(self, checked=True):
+		def callback(stateText):
+			self.speakTimer = None
+			queueHandler.queueFunction(
+				queueHandler.eventQueue,
+				speech.speakMessage,
+				stateText)
 		stateText = controlTypes.stateLabels[controlTypes.STATE_CHECKED] if checked\
 			else controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
-		wx.CallLater(
-			300,
-			queueHandler.queueFunction,
-			queueHandler.eventQueue,
-			speech.speakMessage,
-			stateText)
+		if self.speakTimer is not None:
+			self.speakTimer.Stop()
+		self.speakTimer = wx.CallLater(300, callback, stateText)
 
 	def onCheckCommandKeysCheckBox(self, evt):
 		self.speakCommandKeysOption = self.commandKeysCheckBox.GetValue()
 		modeText = NVDAString("Speak command &keys")\
 			if not self.speakCommandKeysOption else _("Do not speak command &keys")
-		res = not self.noChange and gui.messageBox(
-			# Translators: the text of a message box dialog
-			# in Command keys selective announcement dialog.
-			_("""Do you want save changes made in "%s" mode""") % modeText,
-			# Translators: the title of a message box dialog
-			# in command keys selective announcement dialog.
-			_("Confirmation"),
-			wx.OK | wx.NO | wx.CANCEL | wx.ICON_WARNING)
-		if res == wx.CANCEL:
-			return
-		elif res == wx.OK:
-			_myInputManager.commandKeysFilter.updateCommandKeysSelectiveAnnouncement(
-				self.keysDic, not speakCommandKeysOption)
+		if not self.noChange :
+			res = gui.messageBox(
+				# Translators: the text of a message box dialog
+				# in Command keys selective announcement dialog.
+				_("""Do you want save changes made in "%s" mode""") % modeText,
+				# Translators: the title of a message box dialog
+				# in command keys selective announcement dialog.
+				_("Confirmation"),
+				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING)
+			if res == wx.YES:
+				_myInputManager.commandKeysFilter.updateCommandKeysSelectiveAnnouncement(
+					self.keysDic, not self.speakCommandKeysOption)
 		self.listInit()
 		self.keyboardKeysListBox.SetItems(self.localizedKeyboardKeyNames)
 		self.keyboardKeysListBox.SetSelection(0)
 		self.updateCheckedKeys()
 		self.noChange = True
 		evt.Skip()
+
 
 	def onSelectKey(self, evt):
 		index = self.keyboardKeysListBox.GetSelection()
@@ -616,10 +698,14 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 				key = self.keyboardKeys[label]
 			self.updateModifierKeysList(key)
 			self.modifierKeysListBox.Enable()
+			self.checkAllButton.Enable()
+			self.unCheckAllButton.Enable()
 		elif index >= 0:
 			speakLater()
 			self.modifierKeysListBox.SetItems(self.modifierKeys)
 			self.modifierKeysListBox.Disable()
+			self.checkAllButton.Disable()
+			self.unCheckAllButton.Disable()
 
 	def onSelectModifierKeysCombination(self, evt):
 		index = self.modifierKeysListBox.GetSelection()
@@ -639,31 +725,38 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			"nvda",
 			"alt", "rightalt", "leftalt",
 			"control", "rightcontrol", "leftcontrol",
-			"shift", "rightshift", "leftshift"]
+			"shift", "rightshift", "leftshift",
+			"windows", "leftwindows", "rightwindows",
+			]
+			
 		if key.lower() in modifierKeys:
 			return True
 		return False
 
 	def onCheckListBox(self, evt):
 		index = self.keyboardKeysListBox.GetSelection()
-		label = self.keyboardKeysListBox.GetStringSelection()
-		key = label
-		if label in self.keyboardKeys:
-			key = self.keyboardKeys[label]
+		keyLabel = self.keyboardKeysListBox.GetStringSelection()
+		if keyLabel in self.keyboardKeys:
+			keyLabel = self.keyboardKeys[keyLabel]
 		if self.keyboardKeysListBox.IsChecked(index):
 			self.reportCheckedState()
-			mask = int()
-			for i in range(0, len(_availableModifierKeysCombination)):
-				mask = mask + (2 ** i)
-			mask = mask + (2 ** len(_availableModifierKeysCombination))
-			self.keysDic[key] = mask
-			self.updateModifierKeysList(key)
+			mask = int(0)
+			for (bitPosition, modifierKeys) in _availableModifierKeysCombination.items():
+				mask = mask | int(2 ** bitPosition)
+			mask = mask | 2**CHECKED_KEY_BIT_POSITION 
+			self.keysDic[keyLabel] = mask
+			self.updateModifierKeysList(keyLabel)
 			self.modifierKeysListBox.Enable()
+			self.checkAllButton.Enable()
+			self.unCheckAllButton.Enable()
 		else:
-			self.keysDic[key] = int(0)
+			mask = int(0)
+			self.keysDic[keyLabel] = mask
 			self.reportCheckedState(False)
 			self.modifierKeysListBox.SetItems(self.modifierKeys)
 			self.modifierKeysListBox.Disable()
+			self.checkAllButton.Disable()
+			self.unCheckAllButton.Disable()
 		self.noChange = False
 		evt.Skip()
 
@@ -673,20 +766,23 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		key = label
 		if label in self.keyboardKeys:
 			key = self.keyboardKeys[label]
+		bitPosition = self.modifierKeyBitPositions [index]
 		if self.modifierKeysListBox.IsChecked(index):
-			self.keysDic[key] = int(self.keysDic[key]) | (int(2 ** index))
-			self.reportCheckedState()
+			mask = abs(int(2 ** bitPosition))
+			self.keysDic[key] = int(self.keysDic[key]) | mask
+			self.reportCheckedState(True)
 		else:
-			mask = ~(2 ** index)
-			self.keysDic[key] = int(self.keysDic[key]) & mask
+			mask = ~(2 ** bitPosition)
+			self.keysDic[key] = abs(int(self.keysDic[key]) & mask)
 			self.reportCheckedState(False)
 		self.noChange = False
 		evt.Skip()
 
 	def onKeydown(self, evt):
 		keyCode = evt.GetKeyCode()
+		shiftDown = evt.ShiftDown()
 		id = evt.GetId()
-		if keyCode == wx.WXK_F1:  # 340
+		if keyCode == wx.WXK_F2 and not shiftDown:  # 340
 			# go to next checked key
 			if id == self.keyboardKeysListBox_ID:
 				tempList = self.keyboardKeysListBox
@@ -705,7 +801,7 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			# Translators: message to user when there is no more checked command key.
 			speakLater(300, _("No more checked command key"))
 			return
-		if keyCode == wx.WXK_F2:  # 341
+		if keyCode == wx.WXK_F2 and shiftDown:  # 341
 			# go to previous checked key
 			if id == self.keyboardKeysListBox_ID:
 				tempList = self.keyboardKeysListBox
@@ -740,7 +836,53 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			return
 		evt.Skip()
 
+	def CheckOrUnCheckAllModifierCombinationList(self, check=False):
+		for index in range(0, self.modifierKeysListBox.Count):
+			self.modifierKeysListBox.Check(index, check)
+		label = self.keyboardKeysListBox.GetStringSelection()
+		key = label
+		if label in self.keyboardKeys:
+			key = self.keyboardKeys[label]
+		mask = int(0)
+		for bitPosition in self.modifierKeyBitPositions:
+			mask = mask | int(2  ** bitPosition)
+		if not check:
+			mask = ~mask & mask
+		self.keysDic[key] = mask
+		self.noChange = False
+
+	def onCheckAllButton(self, evt):
+		self.CheckOrUnCheckAllModifierCombinationList(True)
+	def onUnCheckAllButton(self, evt):
+		self.CheckOrUnCheckAllModifierCombinationList(False)
+
+
 	def onOk(self, evt):
+		# when a key is checked, at least one combination must be checked
+		keysOnError = []
+		# search for error
+		for key in self.keysDic:
+			if  self.keysDic[key] == 2**CHECKED_KEY_BIT_POSITION:
+				# key in error
+				from keyLabels import localizedKeyLabels
+				if key in localizedKeyLabels:
+					label = localizedKeyLabels[key]
+				elif key == "anykey":
+					label = ANYKEY_LABEL 
+				else:
+					label = key
+				keysOnError.append(label)
+		if len(keysOnError):
+			gui.messageBox(
+				# Translators: the text of a message box dialog
+				# in Command keys selective announcement dialog.
+				_("""For these keys, you must check at least one item of the modifier key combinations list:\n%s""") % ", ".join(keysOnError),
+				# Translators: the title of a message box dialog"),
+				# in command keys selective announcement dialog.
+				_("Warning"),
+				wx.OK | wx.CANCEL | wx.ICON_WARNING)
+			return
+			
 		speakCommandKeysOption = self.commandKeysCheckBox.GetValue()
 		_myInputManager.commandKeysFilter.updateCommandKeysSelectiveAnnouncement(
 			self.keysDic, speakCommandKeysOption)

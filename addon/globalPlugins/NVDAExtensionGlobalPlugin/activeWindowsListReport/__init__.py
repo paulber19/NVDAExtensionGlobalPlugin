@@ -26,17 +26,25 @@ _windowsToIgnore = _("Start menu|Charm Bar")
 
 
 def isRealWindow(hWnd):
+	name = winUser.getWindowText(hWnd)
+	#print ("name: %s"%name)
+	visible = winUser.isWindowVisible(hWnd)
+	lExStyle = getExtendedWindowStyle(hWnd)
+	#print ("lExStyle : %s"%lExStyle )
+	isToolWindow = (lExStyle & WS_EX_TOOLWINDOW) == 0
+	isAppWindow = (lExStyle & WS_EX_APPWINDOW) == 0
+	#print("visible= %s, isAppWindow = %s, isToolWindow= %s"%(visible,isToolWindow, isAppWindow))
+	hasOwner = winUser.getWindow(hWnd, winUser.GW_OWNER)
+	#print ("hasOner: %s"%hasOwner)
 	if not winUser.isWindowVisible(hWnd):
 		return False
 	if getParent(hWnd):
 		return False
-	hasNoOwner = winUser.getWindow(hWnd, winUser.GW_OWNER) == 0
-	lExStyle = getExtendedWindowStyle(hWnd)
-	if (((lExStyle & WS_EX_TOOLWINDOW) == 0 and hasNoOwner) or (
-		(lExStyle & WS_EX_APPWINDOW != 0) and not hasNoOwner)):
+	if (isToolWindow and not hasOwner) or (
+		(isAppWindow and hasOwner)):
 		if winUser.getWindowText(hWnd):
 			return True
-
+	return False
 
 def getactiveWindows():
 	def callback(hWnd, windows):
@@ -45,8 +53,7 @@ def getactiveWindows():
 			return True
 		title = winUser.getWindowText(hWnd)
 		placement = getWindowPlacement(hwnd)
-		flags = placement.flags
-		if not flags or title in _windowsToIgnore.split("|"):
+		if not placement or title in _windowsToIgnore.split("|"):
 			return True
 		windows.append((title, hWnd))
 		return True
@@ -83,7 +90,8 @@ def closeAllWindows(windowsList):
 class ActiveWindowsListDisplay(wx.Dialog):
 	_instance = None
 	title = None
-
+	delayTimer = None
+	lastTypedKeys = ""
 	def __new__(cls, *args, **kwargs):
 		if ActiveWindowsListDisplay._instance is None:
 			return wx.Dialog.__new__(cls)
@@ -116,7 +124,6 @@ class ActiveWindowsListDisplay(wx.Dialog):
 				continue
 			# we fill the list
 			placement = getWindowPlacement(hwnd)
-			# flags = placement.flags
 			showCmd = placement.showCmd
 			self.activeWindows.append(f)
 			# normal state, restored state is not signaled
@@ -200,13 +207,63 @@ class ActiveWindowsListDisplay(wx.Dialog):
 				self.windowsListBox.SetSelection(0)
 			self.windowsListBox.SetFocus()
 		evt.Skip()
+	def selectNextWindow(self, keys):
+		curIndex = self.windowsListBox .GetSelection()
+		for windowName in  self.windowNamesList[curIndex+1:]:
+			if windowName.lower().startswith(self.lastTypedKeys):
+				index = self.windowNamesList.index(windowName)
+				self.windowsListBox .SetSelection(index)
+				return True
+		for windowName in  self.windowNamesList[:curIndex:]:
+			if windowName.lower().startswith(self.lastTypedKeys):
+				index = self.windowNamesList.index(windowName)
+				self.windowsListBox .SetSelection(index)
+			
+				return True
+		return False
 
 	def onKeydown(self, evt):
+		from ..settings import _addonConfigManager
 		keyCode = evt.GetKeyCode()
+		if self.delayTimer is not None:
+			self.delayTimer.Stop()
+			self.delayTimer = None
 		if keyCode in [wx.WXK_NUMPAD_DELETE, wx.WXK_DELETE]:  # touche delete
 			self.onDestroyButton(0)
 			return
+		if not (30 <= keyCode <= 255):
+			# no alphanumeric character, so  ignore it
+			self.lastTypedKeys = ""
+			evt.Skip()
+			return
+		curTime = time.time()*1000
+		if not hasattr(self, "lastKeyDownTime"):
+			self.lastKeyDownTime = 0
+			self.lastTypedKeys = ""
+		delayBetweenKeys = curTime - self.lastKeyDownTime
+		self.lastKeyDownTime = curTime
+		if delayBetweenKeys > _addonConfigManager.getMaximumDelayBetweenSameScript():
+			self.lastTypedKeys = chr(keyCode).lower()
+			evt.Skip()
+			return
+		self.lastTypedKeys += chr(keyCode).lower()
+		if len(self.lastTypedKeys) >1:
+			# check if we are already on windowName starting with typed keys
+			curIndex = self.windowsListBox .GetSelection()
+			if self.windowsListBox .GetStringSelection().lower().startswith(self.lastTypedKeys):
+				# nothing to do. We are on the good item, just speak it
+				wx.CallLater(50, queueHandler.queueFunction, 
+					queueHandler.eventQueue, speech.speakMessage, self.windowsListBox .GetStringSelection())
+				return
+			# set selection on next window  with name starting with lastTypedKeys
+			if not self.selectNextWindow(self.lastTypedKeys):
+				wx.CallLater(50, queueHandler.queueFunction, 
+					queueHandler.eventQueue, speech.speakMessage, self.windowsListBox .GetStringSelection())
+			return
 		evt.Skip()
+
+
+
 
 	def onDestroyButton(self, evt):
 		index = self.windowsListBox.GetSelection()

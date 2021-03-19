@@ -6,7 +6,12 @@
 
 import addonHandler
 from cursorManager import CursorManager
-import NVDAObjects.UIA.edge
+try:
+	# for nvda version less than 2020.1
+	import NVDAObjects.UIA.edge as EDGE
+except ImportError:
+	import NVDAObjects.UIA.spartanEdge as EDGE
+	
 import NVDAObjects.IAccessible.MSHTML
 import NVDAObjects.IAccessible.mozilla
 import NVDAObjects.IAccessible.chromium
@@ -199,9 +204,9 @@ class BrowseModeDocumentTreeInterceptorEx(
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
 	# print "clsList: %s" % clsList
-	if NVDAObjects.UIA.edge.EdgeHTMLRoot in clsList:
+	if EDGE.EdgeHTMLRoot in clsList:
 		from .NVDAObjectsUIA import EdgeHTMLRootEx
-		clsList[clsList.index(NVDAObjects.UIA.edge.EdgeHTMLRoot)] = EdgeHTMLRootEx
+		clsList[clsList.index(EDGE.EdgeHTMLRoot)] = EdgeHTMLRootEx
 	elif NVDAObjects.IAccessible.MSHTML.MSHTML in clsList:
 		from . import NVDAObjectsIAccessible
 		clsList[clsList.index(NVDAObjects.IAccessible.MSHTML.MSHTML)] = NVDAObjectsIAccessible.NVDAObjectMSHTMLEx  # noqa:E501
