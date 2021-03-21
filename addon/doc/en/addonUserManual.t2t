@@ -1202,22 +1202,39 @@ No input gesture is attributed to it.
 
 As its description indicates, it allows you to copy the date and time to the clipboard.
 
-+++ Modification of the basic script "NVDA + f12" +++
-The basic control gesture "NVDA + f12" gives the time on a single tap and the date on a double tap.
 
-This feature adds the copy of the date and time to the clipboard on a triple tap of this gesture.
++++ Script to replace the base script "NVDA + f12" +++
+The extension installs a script whose description is: "Reports the current time. Twice, reports the current date. Third: copy date and time to the clipboard".
 
-+++ Announcement of the hour independent of the punctuation level +++
-The basic input gesture "NVDA + f12" gives the time with a single tap, but the time is not announced in the same way depending on the Level of punctuation and symbols selected in the voice parameters.
+This script is stored in the "System status" category of the "input gestures" NVDA dialog.
 
-This functionality corrects this small defect by announcing the time with the Level of punctuation and symbols forced to "None" without modifying the level defined in the voice parameters.
+No interpreter command is associated with it.
 
-+++ Announcement of the time with seconds +++
-By default, NVDA's input gesture announces the time without the seconds.
+If the extension's install status is "Install", this script replaces the NVDA script and is started using the "NVDA + f12" command gesture.
 
-This feature offers the possibility of announcing the time in seconds.
+Otherwise no command gesture is assigned to it, but it is still possible to assign it using the NVDA "Command gestures" dialog.
 
-All you have to do is check the "Report windows clock's time with seconds" checkbox in the "Computer" category of the add-on's "Settings" dialog. This option is not checked by default.
+This script allows:
+- at the first press of the gesture: the announcement of the current time.
+- the second press: the announcement of the current date.
+- on the third press: copy of the current date and time to the clipboard.
+
+
+It also brings:
+
+++++ Announcement of the hour independent of the punctuation level ++++
+The basic command gesture "NVDA + f12" gives the time with a simple press, but the time is not announced in the same way depending on the Level of punctuation and symbols selected in the voice parameters.
+
+This script corrects this small flaw by announcing the time with the Level of punctuation and symbols forced to "None" without modifying the level defined in the "Speech" category's parameters.
+
+++++ Announcement of the time with seconds ++++
+By default, NVDA's command gesture "nvda + f12" announces the time without the seconds.
+
+This script offers the possibility of announcing the time in seconds.
+
+All you have to do is check the "Report windows clock's time with seconds" checkbox in the "Computer" category of the add-on's Settings dialog. This option is not checked by default.
+
+This option is not present if the installation status of the feature is "Do not install".
 
 
 ++ Emulation of the "Applications" key ++[hdr25]

@@ -1200,23 +1200,38 @@ No se le asigna ningún gesto de entrada.
 
 Permite como dice su descripción copiar la fecha y la hora al portapapeles.
 
-+++ Cambio en el script básico "NVDA+f12" +++
-El gesto de entrada básico "NVDA+f12" pulsándola una vez anuncia la hora y pulsándola dos veces anuncia la fecha.
++++ Script para reemplazar el script básico "NVDA+f12" +++
+El complemento instala un script cuya descripción es: "Anunciar la hora actual. Pulsando dos veces, anunciar la fecha actual. Pulsando tres veces: copiar la fecha y hora al portapapeles".
 
-Esta funcionalidad añade la copia de la fecha y la hora al portapapeles pulsándola tres veces con este gesto.
+Este script está almacenado en la categoría "Estado del sistema" del diálogo "Gestos de Entrada" de NVDA.
 
-+++ Anuncio de la hora independientemente del nivel de puntuación +++
+Ninguna orden del intérprete está asociado con él.
 
+Si el estado de instalación del complemento está en "Instalar", este script reemplaza el script de NVDA y se lanza con la ayuda del gesto de entrada "NVDA+f12".
+
+Si no ningún gesto de entrada no se le asigna, pero siempre es posible asignarle uno mediante el diálogo "Gesto de Entrada" de NVDA.
+
+Este script permite:
+- una primera pulsación del gesto de entrada: anuncia la hora actual.
+- una segunda pulsación: anuncia la fecha actual.
+- una tercera pulsación: copia de la fecha y la hora al portapapeles.
+
+
+Este script también trae:
+
+++++ Anuncio de la hora independientemente del nivel de puntuación ++++
 El gesto de entrada básico "NVDA+f12" da la hora pulsándola una vez, pero la hora no se anuncia de la misma manera según el Nivel de Puntuación y símbolos seleccionados en la categoría Opciones de voz.
 
-Esta funcionalidad corrige este pequeño defecto al anunciar la hora con el Nivel de Puntuación y símbolos forzado a "ninguna" sin cambiar el nivel definido en la categoría Opciones de voz.
+Este script corrige este pequeño defecto al anunciar la hora con el Nivel de Puntuación y símbolos forzado a "ninguna" sin cambiar el nivel definido en la categoría Opciones de voz.
 
-+++ Anuncio de la hora con los segundos +++
-Por defecto, el gesto de entrada de NVDA anuncia la hora sin los segundos.
+++++ Anuncio de la hora con los segundos ++++
+Por defecto, el gesto de entrada de NVDA "nvda+f12" anuncia la hora sin los segundos.
 
-Esta funcionalidad ofrece la posibilidad de anunciar la hora con los segundos.
+Este script ofrece la posibilidad de anunciar la hora con los segundos.
 
 Solo marca la casilla de verificación "Anunciar la hora del reloj de Windows con los segundos" ubicado en la categoría "Ordenador" del diálogo "Opciones" del complemento. Esta opción no está marcada por defecto.
+
+Esta opción no está presente si el estado de la instalación de la funcionalidad está en "No instalar".
 
 
 ++ Emulación de la tecla "Aplicaciones" ++[hdr25]

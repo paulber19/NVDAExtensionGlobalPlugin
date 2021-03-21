@@ -27,15 +27,11 @@ _windowsToIgnore = _("Start menu|Charm Bar")
 
 def isRealWindow(hWnd):
 	name = winUser.getWindowText(hWnd)
-	#print ("name: %s"%name)
 	visible = winUser.isWindowVisible(hWnd)
 	lExStyle = getExtendedWindowStyle(hWnd)
-	#print ("lExStyle : %s"%lExStyle )
 	isToolWindow = (lExStyle & WS_EX_TOOLWINDOW) == 0
 	isAppWindow = (lExStyle & WS_EX_APPWINDOW) == 0
-	#print("visible= %s, isAppWindow = %s, isToolWindow= %s"%(visible,isToolWindow, isAppWindow))
 	hasOwner = winUser.getWindow(hWnd, winUser.GW_OWNER)
-	#print ("hasOner: %s"%hasOwner)
 	if not winUser.isWindowVisible(hWnd):
 		return False
 	if getParent(hWnd):

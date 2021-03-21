@@ -276,6 +276,5 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	script_setSpeakersVolumeLevelTo90.noFinish = True
 
 	def script_setSpeakersVolumeLevelToPreviousLevel(self, gesture):
-		print ("passe")
 		wx.CallAfter(volumeControl.setSpeakersVolumeLevelToPreviousLevel)
 		

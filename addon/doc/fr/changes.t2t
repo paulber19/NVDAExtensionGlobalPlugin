@@ -16,6 +16,11 @@ Téléchargement:
 
 
 
++ v9.6.1 (21/03/2021) +
+- Correction de la documentation.
+- nettoyage du code.
+
+
 + v9.6 (10/03/2021) +
 Nouveautés: 
 - dans le dialogue "Liste des fenêtres actives" (ouvert par "nvda+j" suivi par "f10":
@@ -50,8 +55,11 @@ Changements:
 
 
 Pour la compatibilité avec NVDA 2021.1
-- mise à jour du package psutil  compatible avec python 3.8.7
+- ajout du dossier "utilitiesPy38" pour les librairies spécifique à python 3.8.
+- mise à jour du package psutil compatible avec python 3.8.
+- mise à jour des fichiers du dossier "win32" de la librairie "pywin32" compatible avec python 3.8.
 - remplacement de GetDateFormat et GetTimeFormat  supprimées par GetDateFormatEx et GetTimeFormatEx dans le script "dateTime".
+- prise en compte du nouveau package "autoSettingsUtils" de NVDA.
 
 
 + v9.5.3 (20/01/2021) +

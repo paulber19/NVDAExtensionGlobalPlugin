@@ -90,7 +90,6 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 		except RuntimeError:
 			return
 		data = self.tree.GetItemData(item)
-		print("data: %s"%data)
 		isGesture = isinstance(data, baseString)
 		if isGesture:
 			self.removeButton.Enable()
@@ -199,8 +198,6 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		scriptName,
 		script):
 		info = AllGesturesScriptInfo(cls, moduleName, className, scriptName)
-		print ("%s, %s, %s, %s"%(cls, moduleName, className, scriptName))
-		print ("script: %s"%script)
 		category = self.getScriptCategory(cls, script)
 		if category is None:
 			category = "%s.%s" % (moduleName, className)
@@ -221,7 +218,6 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		return info
 
 	def getScriptCategory(self, cls, script):
-		print ("cls: %s, script: %s"%(cls, script))
 		try:
 			return script.category
 		except AttributeError:

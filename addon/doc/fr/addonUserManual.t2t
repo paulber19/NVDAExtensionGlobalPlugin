@@ -1196,31 +1196,46 @@ Cette fonctionnalité apporte:
 
 +++ Copie de la date et de l'heure dans le presse-papier +++
 La description de ce script est: "Copier la date et l'heure dans le presse-papier".
+
 Ce script est rangés dans la catégorie "État système" du dialogue "Gestes de commande" de NVDA.
 
 Il se lance à l'aide de la commande "KEY_COPY_DATETIME" de l'interpréteur.
 Aucun geste de commande ne lui est attribué.
 
-
 Il permet comme sa description l'indique de copier la date et l'heure dans le presse-papier.
 
-+++ Modification du script de base "NVDA+f12" +++
-Le geste de commande de base "NVDA + f12" donne l'heure sur un simple appui et la date sur un double appui.
++++ Script pour remplacer  le script de base "NVDA+f12" +++
+L'extension installe un script dont la description est: "Annoncer l'heure. Deux appuis: annoncer la date. Trois appuis: copier la date et l'heure dans le presse-papier".
 
-Cette fonctionnalité ajoute la copie de la date et de l'heure dans le presse-papier sur un triple appui de ce geste.
+Ce script est rangés dans la catégorie "État système" du dialogue "Gestes de commande" de NVDA.
 
-+++ Annonce de l'heure indépendante du niveau de ponctuation +++
+Aucune commande de l'interpréteur ne lui est associée.
 
+Si l'état d'installation de l'extension est "Installer", ce script remplace le script de NVDA et se lance à l'aide du geste de commande "NVDA+f12".
+
+Sinon aucun geste de commande ne lui est affecté, mais il est toujours possible de lui en attribuer un à l'aide du dialogue "Gestes de commandes" de NVDA.
+
+Ce script  permet:
+- au premier appui du geste: l'annonce de l'heure actuelle.
+- au second appui: l’annonce de la date actuelle.
+- au troisième appui: la copie de la date et de l'heure dans le presse-papier.
+
+
+Il apporte aussi:
+
+++++ Annonce de l'heure indépendante du niveau de ponctuation ++++
 Le geste de commande de base "NVDA + f12" donne l'heure sur un simple appui, mais l'heure n'est pas annoncée de la même façon suivant le Niveau de ponctuations et symboles sélectionné dans les paramètres vocaux.
 
-Cette fonctionnalité corrige ce petit défaut en annonçant l'heure avec le Niveau de ponctuations et symboles forcé à "Aucun" sans modifier le niveau défini dans les paramètres vocaux.
+Ce script corrige ce petit défaut en annonçant l'heure avec le Niveau de ponctuations et symboles forcé à "Aucun" sans modifier le niveau défini dans les paramètres vocaux.
 
-+++ Annonce de l'heure avec les secondes +++
-Par défaut, le geste de commande de NVDA annonce l'heure sans les secondes. 
+++++ Annonce de l'heure avec les secondes ++++
+Par défaut, le geste de commande de NVDA "nvda+f12" annonce l'heure sans les secondes. 
 
-Cette fonctionnalité offre la possibilité de faire annoncer l'heure avec les secondes.
+Ce script offre la possibilité de faire annoncer l'heure avec les secondes.
 
 Il suffit de cocher la case à cocher "Dire l'heure avec les secondes" se trouvant dans la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension. Cette option n'est pas cochée par défaut.
+
+Cette option n'est pas présente si l'état d'installation de la fonctionnalité est "Ne pas installer".
 
 
 ++ Émulation de la touche "Applications" ++[hdr25]

@@ -201,7 +201,6 @@ def changeFocusedAppVolume(appName=None, action="increase", value=None):
 				level = 0.0
 			elif action == "set":
 				level = float(value)/100
-				print ("value: %s, level: %s"%(value,level))
 			else:
 				# no action
 				log.warning("changeFocusedAppVolume: %s action is not known" % action)

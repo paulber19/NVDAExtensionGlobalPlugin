@@ -203,7 +203,6 @@ class BrowseModeDocumentTreeInterceptorEx(
 
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
-	# print "clsList: %s" % clsList
 	if EDGE.EdgeHTMLRoot in clsList:
 		from .NVDAObjectsUIA import EdgeHTMLRootEx
 		clsList[clsList.index(EDGE.EdgeHTMLRoot)] = EdgeHTMLRootEx
