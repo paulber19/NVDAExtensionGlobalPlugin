@@ -10,6 +10,7 @@ import tones
 import threading
 from .. import settings
 import nvwave
+import ui
 import speech
 from .py3Compatibility import reLoad
 addonHandler.initTranslation()
@@ -42,7 +43,7 @@ class RepeatTask(threading.Thread):
 			if self.isRunning is not None and not self.isRunning():
 				# interrupted before stop
 				# Translators: message to user to report an interuption before stop.
-				speech.speakMessage(_("interrupted"))
+				ui.message(_("interrupted"))
 				break
 			self.task()
 

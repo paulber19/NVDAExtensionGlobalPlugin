@@ -15,6 +15,7 @@ import config
 import gui
 import wx
 import buildVersion
+import ui
 import speech
 # ConfigObj 5.1.0 and later integrates validate module.
 try:
@@ -255,7 +256,7 @@ class AddonConfigurationManager():
 				# Translators: A message informing the user that there are errors
 				# in the configuration file.
 				msg = _("The configuration file of %s addon contains errors. The addon configuration has been reset to default configuration") % self.curAddon.manifest["summary"]  # noqa:E501
-				core.callLater(2000, speech.speakMessage, msg)
+				core.callLater(2000, ui.message, msg)
 				# reset configuration to default
 				self.addonConfig =\
 					self._versionToConfiguration[self._currentConfigVersion](None)
@@ -320,7 +321,7 @@ class AddonConfigurationManager():
 			log.warning("Old Addon configuration file error: merge aborted")
 			core.callLater(
 				1000,
-				speech.speakMessage,
+				ui.message,
 				# Translators: message to inform the user
 				# than it's not possible to merge with old configuration because of error.
 				_("The old configuration file of %s addon contains errors. It's not possible to keep previous configuration") % self.curAddon.manifest["summary"])  # noqa:E501

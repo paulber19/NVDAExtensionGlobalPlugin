@@ -63,7 +63,7 @@ def reportCurrentFolder(sayPath=False):
 	msgFolderNotFound = _("Selected folder name not found")
 	currentFolder = getCurrentFolder()
 	if currentFolder is None:
-		speech.speakMessage(msgFolderNotFound)
+		ui.message(msgFolderNotFound)
 		return
 	(path, folder) = currentFolder
 	if not sayPath:

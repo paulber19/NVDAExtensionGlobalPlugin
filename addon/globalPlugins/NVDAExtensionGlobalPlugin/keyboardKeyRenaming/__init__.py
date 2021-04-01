@@ -5,6 +5,7 @@
 # See the file COPYING for more details.
 
 import addonHandler
+import ui
 import speech
 import wx
 from gui import guiHelper, SettingsDialog
@@ -105,7 +106,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 		def callback(text):
 			self.taskTimer = None
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, text)
+				queueHandler.eventQueue, ui.message, text)
 		keyName = self.localizedLabel2KeyName[label]
 		if keyName in self.modifiedKeyLabels:
 			self.modifiedLabelBox.SetValue(self.modifiedKeyLabels[keyName])

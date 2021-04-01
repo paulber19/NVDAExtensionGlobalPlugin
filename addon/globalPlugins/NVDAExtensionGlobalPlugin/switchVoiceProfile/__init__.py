@@ -211,7 +211,7 @@ class SwitchVoiceProfilesManager(object):
 
 			getSynth().saveSettings()
 			if msg:
-				speech.speakMessage(msg)
+				ui.message(msg)
 		newProfile = self.getVoiceProfile(selector)
 		synthName = None
 		for s, val in getSynthList():
@@ -392,7 +392,7 @@ class SwitchVoiceProfilesManager(object):
 		# between selector and voice profile.
 		msg = _("{name} voice profile set to selector {selector}").format(
 			name=voiceProfileName, selector=selector)
-		speech.speakMessage(msg)
+		ui.message(msg)
 
 	def freeSelector(self, selector):
 		if self.isSet(selector):
@@ -830,7 +830,7 @@ class SelectorsManagementDialog (wx.Dialog):
 			# Translators: message to user: dialog  already open.
 			msg = _("%s dialog is allready open") % cls.title
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, msg)
+				queueHandler.eventQueue, ui.message, msg)
 			return
 
 		gui.mainFrame.prePopup()

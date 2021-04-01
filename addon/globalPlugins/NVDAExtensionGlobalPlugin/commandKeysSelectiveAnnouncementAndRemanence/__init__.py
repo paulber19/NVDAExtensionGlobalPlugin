@@ -7,6 +7,7 @@
 import addonHandler
 from logHandler import log
 import scriptHandler
+import ui
 import speech
 import gui
 import controlTypes
@@ -19,7 +20,6 @@ import config
 import sayAllHandler
 import time
 from vkCodes import byName
-import ui
 import tones
 import core
 from inputCore import NoInputGestureAction
@@ -183,7 +183,7 @@ class MyInputManager (object):
 				queueHandler.eventQueue,
 				ui.message,
 				"%s - %s" % (addonSummary, msg))
-			core.callLater(30, speech.speakMessage, "%s - %s" % (addonSummary, msg))
+			core.callLater(30, ui.message, "%s - %s" % (addonSummary, msg))
 
 	def manageRemanenceActivation(self, gesture):
 		if not gesture.isModifier:
@@ -311,7 +311,7 @@ class MyInputManager (object):
 		else:
 			# Translators: message to user to report numpad navigation mode change.
 			msg = _("Standard use of the numeric keypad disabled")
-		queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, msg)
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, msg)
 
 	def getNumpadKeyReplacement(self, gesture):
 		if not self.enableNumpadNnavigationKeys:

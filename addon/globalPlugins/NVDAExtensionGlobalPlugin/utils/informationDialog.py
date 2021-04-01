@@ -6,6 +6,7 @@
 
 import addonHandler
 import api
+import ui
 import speech
 import wx
 import time
@@ -95,14 +96,14 @@ class InformationDialog(wx.Dialog):
 			# Translators: message to the user when the information has been copied
 			# to clipboard.
 			text = _("Copied")
-			speech.speakMessage(text)
+			ui.message(text)
 			time.sleep(0.8)
 			self.Close()
 		else:
 			# Translators: message to the user when the information
 			# cannot be copied to clipboard.
 			text = _("Error, the information cannot be copied to the clipboard")
-			speech.speakMessage(text)
+			ui.message(text)
 
 	@classmethod
 	def run(

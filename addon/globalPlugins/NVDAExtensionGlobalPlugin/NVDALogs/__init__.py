@@ -8,6 +8,7 @@
 import addonHandler
 import wx
 import api
+import ui
 import speech
 import gui
 import queueHandler
@@ -112,7 +113,7 @@ class NVDALogsManagementDialog (wx.Dialog):
 		if cls._instance is not None:
 			msg = _("%s dialog is allready open") % cls.title
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, msg)
+				queueHandler.eventQueue, ui.message, msg)
 			return
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame)

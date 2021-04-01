@@ -1281,7 +1281,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_activateUserInputGesturesDialog(self, gesture):
 		from .userInputGestures import UserInputGesturesDialog
 		if inputCore.manager.userGestureMap._map == {}:
-			speech.speakMessage(
+			ui.message(
 				# Translators: message to user no configuration change made.
 				_("There has been no change of gesture made by the user"))
 			return
@@ -1393,7 +1393,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
 			isInstall(ID_KeyRemanence):
 			return True
-		speech.speakMessage(
+		ui.message(
 			# Translators: message to user the fonctionnality is not available.
 			_("""This functionnality is only available if "command key selective announcement" or "keys's remanence functionnality" is installed"""))  # noqa:E501
 		returnFalse
@@ -1403,7 +1403,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			return
 		from .settings import toggleEnableNumpadNavigationModeToggleAdvancedOption
 		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
-			speech.speakMessage(
+			ui.message(
 				# Translators: message to user the fonctionnality is not available.
 				_("The standard use of the numeric keypad  is is not allowed"))  # noqa:E501
 			return

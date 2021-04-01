@@ -7,6 +7,7 @@
 import addonHandler
 import wx
 import api
+import ui
 import speech
 import winUser
 import time
@@ -121,7 +122,7 @@ def speakLater(delay=0, msg=""):
 
 	def callback(msg):
 		speech.cancelSpeech()
-		queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, msg)
+		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, msg)
 	if _speakTimer:
 		_speakTimer.Stop()
 	if delay == 0 or msg == "":
@@ -134,7 +135,7 @@ def isOpened(dialog, putOnForeground=True):
 		return False
 	# Translators: the label of a message box dialog.
 	msg = _("%s dialog is allready open") % dialog.title
-	queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, msg)
+	queueHandler.queueFunction(queueHandler.eventQueue, ui.message, msg)
 	return True
 
 

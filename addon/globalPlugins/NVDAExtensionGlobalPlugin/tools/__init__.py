@@ -6,6 +6,7 @@
 
 import addonHandler
 from logHandler import log
+import ui
 import speech
 import codecs
 import os
@@ -463,7 +464,7 @@ def _prepareAddon(addon):
 			dialogTitle, wx.OK)
 		return
 	# start
-	speech.speakMessage(_("Prepare add-on start"))
+	ui.message(_("Prepare add-on start"))
 	th = runInThread.RepeatBeep(delay=2.0, beep=(200, 200), isRunning=None)
 	th.start()
 	# update of main manifest.ini file
@@ -884,7 +885,7 @@ class ToolsForAddonDialog(wx.Dialog):
 			return
 		addonsList = cls.getAddonsList()
 		if len(addonsList) == 0:
-			speech.speakMessage(_("No add-on installed"))
+			ui.message(_("No add-on installed"))
 			return
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame, addonsList)

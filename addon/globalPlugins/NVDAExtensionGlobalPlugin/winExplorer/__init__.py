@@ -5,6 +5,7 @@
 # See the file COPYING for more details.
 
 import addonHandler
+import ui
 import speech
 import controlTypes
 import api
@@ -116,7 +117,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 def getObjectsHelper_generator(oParent):
 	global _running
 	global objectList
-	speech.speakMessage(_("Elements's searching"))
+	ui.message(_("Elements's searching"))
 	objectList = []
 	lastSentIndex = 0
 	th = runInThread.RepeatBeep(
@@ -149,6 +150,6 @@ def findAllNVDAObjects(oParent):
 	if ElementListDialog.isRunning():
 		# Translators: the text of a message box dialog.
 		msg = _("%s dialog is allready open") % ElementListDialog.title
-		speech.speakMessage(msg)
+		ui.message(msg)
 		return
 	_startGenerator(getObjectsHelper_generator(oParent))

@@ -7,6 +7,7 @@
 import addonHandler
 import globalPluginHandler
 import baseObject
+import ui
 import speech
 import wx
 import api
@@ -157,20 +158,20 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		focus = api.getFocusObject()
 		appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
 		if appName == "nvda.exe":
-			speech.speakMessage(_("Unavailable for NVDA"))
+			ui.message(_("Unavailable for NVDA"))
 			return
 		try:
 			volumeControl.toggleProcessVolume(appName)
 		except:  # noqa:E722
-			speech.speakMessage(_("Not available on this operating's system"))
+			ui.message(_("Not available on this operating's system"))
 
 	def script_setMainAndNVDAVolume(self, gesture):
 		if volumeControl.setSpeakerVolume() and volumeControl.setNVDAVolume():
-			speech.speakMessage(
+			ui.message(
 				# Translators: message to user  nvda and main volume  are established .
 				_("The main volume and that of NVDA are established and their level sets to the one in the configuration"))  # noqa:E501
 		else:
-			speech.speakMessage(_("Not available on this operating's system"))
+			ui.message(_("Not available on this operating's system"))
 
 	def script_increaseFocusedAppVolume(self, gesture):
 		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="increase")

@@ -10,7 +10,7 @@ import winUser
 import time
 import wx
 from keyboardHandler import KeyboardInputGesture
-import speech
+import ui
 import oleacc
 from gui import guiHelper, mainFrame
 import NVDAObjects.window
@@ -249,12 +249,12 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			if self.windowsListBox .GetStringSelection().lower().startswith(self.lastTypedKeys):
 				# nothing to do. We are on the good item, just speak it
 				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, speech.speakMessage, self.windowsListBox .GetStringSelection())
+					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection())
 				return
 			# set selection on next window  with name starting with lastTypedKeys
 			if not self.selectNextWindow(self.lastTypedKeys):
 				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, speech.speakMessage, self.windowsListBox .GetStringSelection())
+					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection())
 			return
 		evt.Skip()
 
@@ -270,7 +270,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			# Translators: a message announced in active windows list display dialog.
 			msg = _("Impossible to destroy desktop window")
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, msg)
+				queueHandler.eventQueue, ui.message, msg)
 			self.windowsListBox.SetSelection(index)
 			if not self.windowsListBox.HasFocus():
 				self.windowsListBox.SetFocus()
@@ -283,7 +283,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			# Translators: message to user to announce the window cannot be destroyed.
 			msg = _("Impossible to destroy the window")
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, msg)
+				queueHandler.eventQueue, ui.message, msg)
 			self.windowsListBox.SetFocus()
 			return
 		# we destroy it
@@ -300,7 +300,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			# Translators: message to user to announce the window cannot be destroyed.
 			msg = _("Impossible to destroy the window")
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, msg)
+				queueHandler.eventQueue, ui.message, msg)
 			self.windowsListBox.SetSelection(index)
 			if not self.windowsListBox.HasFocus():
 				self.windowsListBox.SetFocus()

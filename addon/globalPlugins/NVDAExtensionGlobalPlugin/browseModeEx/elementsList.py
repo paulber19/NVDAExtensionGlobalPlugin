@@ -11,6 +11,7 @@ import wx
 import collections
 import gui
 import queueHandler
+import ui
 import speech
 import itertools
 from ..utils.NVDAStrings import NVDAString
@@ -264,11 +265,11 @@ class ElementsListDialogEx(wx.Dialog):
 				# Translators: message to the user to report number of elements.
 				msg = _("%s elements") % str(count) if count > 1 else _("One element")
 				queueHandler.queueFunction(
-					queueHandler.eventQueue, speech.speakMessage, msg)
+					queueHandler.eventQueue, ui.message, msg)
 			else:
 				# Translators: message to the user when there is no element.
 				queueHandler.queueFunction(
-					queueHandler.eventQueue, speech.speakMessage, _("no element"))
+					queueHandler.eventQueue, ui.message, _("no element"))
 		if self._timer:
 			self._timer.Stop()
 		self._timer = wx.CallLater(600, callback, self.tree.Count)

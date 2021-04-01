@@ -8,6 +8,7 @@
 import addonHandler
 from logHandler import log
 import os
+import ui
 import speech
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
@@ -59,11 +60,11 @@ def toggleProcessVolume(processName):
 			mute = volume.GetMute()
 			volume.SetMute(not mute, None)
 			if not volume.GetMute():
-				speech.speakMessage(_("Volume on"))
+				ui.message(_("Volume on"))
 			else:
-				speech.speakMessage(_("volume off"))
+				ui.message(_("volume off"))
 			return
-	speech.speakMessage(_("No audio controller for this application"))
+	ui.message(_("No audio controller for this application"))
 
 
 def getSpeakerVolume():
@@ -161,7 +162,7 @@ def announceAppVolumeLevel(appVolumeLevel):
 	else:
 		level = int(round((appVolumeLevel*100)*speakersVolume))
 		msg = "%s %s" % (volumeMsg, level)
-	speech.speakMessage(msg)
+	ui.message(msg)
 
 
 def changeFocusedAppVolume(appName=None, action="increase", value=None):
@@ -170,7 +171,7 @@ def changeFocusedAppVolume(appName=None, action="increase", value=None):
 		focus = api.getFocusObject()
 		appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
 	if appName == "nvda.exe":
-		speech.speakMessage(_("Unavailable for NVDA"))
+		ui.message(_("Unavailable for NVDA"))
 		return
 	from ..settings import _addonConfigManager
 	try:
@@ -238,7 +239,7 @@ def changeSpeakersVolume(action="increase", value=None):
 		minimumLevel = _addonConfigManager .getMinMasterVolumeLevel()
 		if value <  minimumLevel:
 			# Translators: message to user  to indicate command reject.
-			speech.speakMessage(_("Impossible, the volume level cannot be lower than the configured recovery threshold equal to %s")%minimumLevel)
+			ui.message(_("Impossible, the volume level cannot be lower than the configured recovery threshold equal to %s")%minimumLevel)
 			return
 		level = float(value)/100
 	else:
@@ -250,7 +251,7 @@ def changeSpeakersVolume(action="increase", value=None):
 
 	newSpeakersVolume = volume.GetMasterVolumeLevelScalar()
 	if toggleReportVolumeChangeAdvancedOption(False):
-		speech.speakMessage(msg)
+		ui.message(msg)
 		log.warning("Master volume is set to %s" % level)
 	return True
 def setFocusedAppVolumeToPreviousLevel():

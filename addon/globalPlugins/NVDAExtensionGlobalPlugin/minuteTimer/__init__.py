@@ -7,6 +7,7 @@
 import addonHandler
 import os
 import time
+import ui
 import speech
 import gui
 from gui import guiHelper
@@ -64,7 +65,7 @@ class MinuteTimer(object):
 	def speakAnnounceBeforeEnd(self):
 		msg = _("End duration in %s minutes") % self.delayBeforeEndDuration\
 			if self.delayBeforeEndDuration > 1 else _("End duration inone minute")
-		speech.speakMessage(msg)
+		ui.message(msg)
 		self.speakAnnounceTimer = wx.CallLater(
 			int(1000*60*self.delayBeforeEndDuration), self.speakAnnounce)
 

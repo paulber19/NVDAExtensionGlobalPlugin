@@ -192,7 +192,7 @@ class complexSymbolsDialog(wx.Dialog):
 				return
 			symbol = self.complexSymbolsList[index]
 			c = ord(symbol)
-			core.callLater(400, speech.speakMessage, "%d," % c)
+			core.callLater(400, ui.message, "%d," % c)
 			core.callLater(450, speech.speakSpelling, hex(c))
 			return
 		if keyCode == wx.WXK_TAB:
@@ -227,7 +227,7 @@ class complexSymbolsDialog(wx.Dialog):
 		else:
 			# Translators: This is a message announced in complex symbols dialog.
 			msg = _("{0} pasted").format(self.symbolDescriptionList[index])
-			speech.speakMessage(msg)
+			ui.message(msg)
 			time.sleep(2.0)
 			core.callLater(200, SendKey, "Control+v")
 		from ..settings import _addonConfigManager
@@ -251,7 +251,7 @@ class complexSymbolsDialog(wx.Dialog):
 		else:
 			# Translators: This is a message announced in complex symbols dialog.
 			msg = _("{0} copied").format(self.symbolDescriptionList[index])
-		speech.speakMessage(msg)
+		ui.message(msg)
 		time.sleep(2.0)
 		from ..settings import _addonConfigManager
 		_addonConfigManager .updateLastSymbolsList(symbolDescription, symbol)
@@ -438,7 +438,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		if index == -1:
 			core.callLater(
 				300,
-				speech.speakMessage,
+				ui.message,
 				# Translators: This is a message announced in Manage Symbols Dialog.
 				_("No symbol selected"))
 			return
@@ -450,7 +450,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		self.onSelect(evt)
 		core.callLater(
 			300,
-			speech.speakMessage,
+			ui.message,
 			# Translators: This is a message announced in Manage Symbols Dialog.
 			_("%s symbol deleted") % description)
 		evt.Skip()
@@ -460,19 +460,19 @@ class ManageSymbolsDialog(wx.Dialog):
 			return False
 		if len(symbol) == 0:
 			# Translators: This is a message announced in Manage Symbols Dialog.
-			core.callLater(300, speech.speakMessage, _("No symbol entered"))
+			core.callLater(300, ui.message, _("No symbol entered"))
 			return False
 		if len(symbol) > 1:
 			core.callLater(
 				300,
-				speech.speakMessage,
+				ui.message,
 				# Translators: This is a message announced in Manage Symbols Dialog.
 				_("Symbol is not valid"))
 			return False
 		if len(description) == 0:
 			core.callLater(
 				300,
-				speech.speakMessage,
+				ui.message,
 				# Translators: This is a message announced in Manage Symbols Dialog.
 				_("There is no description for the symbol"))
 			return False
@@ -513,7 +513,7 @@ class ManageSymbolsDialog(wx.Dialog):
 			self.onSelect(evt)
 			core.callLater(
 				300,
-				speech.speakMessage,
+				ui.message,
 				# Translators: This is a message announced in Manage Symbols Dialog.
 				_("%s symbol has been added") % description)
 		evt.Skip()
@@ -552,7 +552,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		if categoryName in self.parent.basicCategoryNamesList:
 			core.callLater(
 				300,
-				speech.speakMessage,
+				ui.message,
 				# Translators: This is a message announced in Manage Symbols Dialog.
 				_("You cannot delete this basic category."))
 			return
@@ -574,7 +574,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		self.symbolCategoryListBox.SetSelection(index)
 		core.callLater(
 			300,
-			speech.speakMessage,
+			ui.message,
 			# Translators: This is a message announced in Manage Symbols Dialog.
 			_("%s category has been deleted") % categoryName)
 		self.onSelect(evt)
@@ -707,7 +707,7 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		else:
 			# Translators: This is a message announced in complex symbols dialog.
 			msg = _("{0} pasted").format(description)
-			speech.speakMessage(msg)
+			ui.message(msg)
 			time.sleep(2.0)
 			core.callLater(200, SendKey, "Control+v")
 		self.Close()
@@ -726,7 +726,7 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		else:
 			# Translators: a message announced in Last Used Complex Symbols Dialog.
 			text = _("{0} copied").format(description)
-			speech.speakMessage(text)
+			ui.message(text)
 			time.sleep(2.0)
 		self.Close()
 
@@ -749,7 +749,7 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 		lastUsedSymbols = _addonConfigManager.getLastUsedSymbols()
 		if len(lastUsedSymbols) == 0:
 			# Translators: message to the user when there is no used symbol recorded.
-			speech.speakMessage(_("There is no symbol recorded"))
+			ui.message(_("There is no symbol recorded"))
 			return
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame, lastUsedSymbols)

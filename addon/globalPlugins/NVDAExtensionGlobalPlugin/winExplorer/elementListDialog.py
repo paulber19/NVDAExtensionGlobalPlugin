@@ -6,6 +6,7 @@
 
 import addonHandler
 import queueHandler
+import ui
 import speech
 import time
 import api
@@ -13,7 +14,6 @@ import wx
 import controlTypes
 import gui
 import core
-import ui
 from ..utils import PutWindowOnForeground,  mouseClick, makeAddonWindowTitle
 from ..utils.NVDAStrings import NVDAString
 from ..utils.py3Compatibility import _unicode
@@ -194,7 +194,7 @@ class ElementListDialog(wx.Dialog):
 		index = self.objectTypesListBox.GetSelection()
 		elementType = self.elementTypes[index][1]
 		queueHandler.queueFunction(
-			queueHandler.eventQueue, speech.speakMessage, _(elementType))
+			queueHandler.eventQueue, ui.message, _(elementType))
 		queueHandler.queueFunction(
 			queueHandler.eventQueue, self.onElementTypeChange, None)
 		wx.CallLater(1000, self._onObjectListBoxFocus)
@@ -269,12 +269,12 @@ class ElementListDialog(wx.Dialog):
 			if self.objectListBox .GetStringSelection().lower().startswith(self.lastTypedKeys):
 				# nothing to do. We are on the good item, just speak it
 				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, speech.speakMessage, self.objectListBox .GetStringSelection())
+					queueHandler.eventQueue, ui.message, self.objectListBox .GetStringSelection())
 				return True
 			# set selection on next object  with name starting with lastTypedKeys
 			if self.selectNextObject():
 				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, speech.speakMessage, self.objectListBox .GetStringSelection())
+					queueHandler.eventQueue, ui.message, self.objectListBox .GetStringSelection())
 			return True
 		return False
 
