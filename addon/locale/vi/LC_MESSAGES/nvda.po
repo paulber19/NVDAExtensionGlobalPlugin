@@ -2,11 +2,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@freelists.org'\n"
-"POT-Creation-Date: 2021-04-17 16:30+0700\n"
+"POT-Creation-Date: 2021-04-20 15:11+0700\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dang Manh Cuong <dangmanhcuong@gmail.com>\n"
-"Language-Team: paulber19 <paulber19@laposte.net>\n"
-"Language: fr_FR\n"
+"Language-Team: Vietnamese <dangmanhcuong@gmail.com>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,6 +14,7 @@ msgstr ""
 "X-Poedit-Basepath: ../../..\n"
 "X-Generator: Poedit 1.6.11\n"
 "X-Poedit-Bookmarks: 77,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: utilities\n"
 "X-Poedit-SearchPathExcluded-1: utilitiesPy2\n"
@@ -368,12 +369,11 @@ msgstr ""
 #. Translators: Input help mode message
 #. for report current folder path command in open or save dialog box.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:264
-#, fuzzy
 msgid ""
 "report the full path of current selected folder in the open or Save dialog "
 "box"
 msgstr ""
-"thông báo đường dẫn đầy đủ của thư mục được chọn hiện tại trong hộp thoại mở "
+"thông báo đường dẫn đầy đủ của thư mục đang được chọn trong hộp thoại mở "
 "hoặc Lưu"
 
 #. Translators: Input help mode message
@@ -391,9 +391,8 @@ msgstr "Khám phá thư mục của chương trình NVDA"
 #. Translators: Input help mode message
 #. for display speech history records list dialog command.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:273
-#, fuzzy
 msgid "Display speech history records"
-msgstr "hiển thị lịch sử giọng nói"
+msgstr "Hiển thị lịch sử tiếng nói"
 
 #. Translators: Input help mode message
 #. for report previous speech history record command.
@@ -406,23 +405,19 @@ msgstr ""
 #. Translators: Input help mode message
 #. for report current speech history record command.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:279
-#, fuzzy
 msgid ""
 "Report current record of the speech history and copy it to clipboard. Twice: "
 "display speech history"
 msgstr ""
-"Báo cáo bản ghi hiện tại của lịch sử giọng nói và sao chép nó vào clipboard."
-"Twice: hiển thị lịch sử giọng nóithông báo lời nói hiện tại và chép nó vào "
-"bộ nhớ tạm"
+"Báo cáo bản ghi hiện tại của lịch sử tiếng nói và sao chép nó vào bộ nhớ "
+"tạm. Bấm hai lần: hiển thị lịch sử tiếng nói"
 
 #. Translators: Input help mode  message
 #. for report next speech history record command.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:282
-#, fuzzy
 msgid "Report next record of the speech history and copy it to clipboard"
 msgstr ""
-"Báo cáo bản ghi tiếp theo của lịch sử bài phát biểu và sao chép nó vào "
-"clipboard"
+"Báo cáo bản ghi tiếp theo của lịch sử tiếng nói và sao chép nó vào bộ nhớ tạm"
 
 #. Translators: Input help mode message
 #. for restart NVDA in default or debug log level command.
@@ -597,31 +592,28 @@ msgstr ""
 #. Translators: Input help mode message
 #. for tools for add-on command.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:345
-#, fuzzy
 msgid "Display tools for add-on development dialog "
-msgstr "Hiển thị công cụ cho hộp thoại phát triển bổ trợ "
+msgstr "Hiển thị các công cụ cho hộp thoại phát triển add-on"
 
 #. Translators: Input help mode message
 #. for leftclick mouse button at navigator cursor position script command.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:348
-#, fuzzy
 msgid ""
 "Click the left mouse button at navigator object position. Twice: click twice "
 "this button at this position"
 msgstr ""
-"Nhấp vào nút chuột trái ở vị trí đối tượng điều hướng. Hai lần: nhấp hai lần "
-"nút này ở vị trí này"
+"Bấm nút chuột trái ở vị trí đối tượng điều hướng. Bấm hai lần: nhấp hai lần "
+"ở vị trí này"
 
 #. Translators: Input help mode message
 #. for right click mouse button at navigator cursor position script command.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:351
-#, fuzzy
 msgid ""
 "Click the right mouse button at naviHgator object position. Twice: click "
 "twice this button at this position"
 msgstr ""
-"Nhấp chuột phải vào vị trí đối tượng naviHgator. Hai lần: nhấp hai lần nút "
-"này ở vị trí này"
+"Bấm nút chuột phải ở vị trí đối tượng điều hướng. Bấm hai lần: nhấp hai lần "
+"ở vị trí này"
 
 #. Translators: Input help mode message
 #. for addon settings dialog script command.
@@ -749,7 +741,7 @@ msgstr "Tên và phiên bản phần mềm đã được sao chép vào clipboar
 #. for current focused application.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:875
 msgid "addon: {name}, version: {version}"
-msgstr "addon: {name}, phiên bản: {phiên bản}"
+msgstr "addon: {name}, phiên bản: {version}"
 
 #. Translators: indicates that there is no active addon
 #. for current focused application.
@@ -771,7 +763,7 @@ msgstr "Ứng dụng: {appName} {appVersion}"
 #. Translators: indicates name and version of current add-on.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:951
 msgid "{summary}, version: {version}"
-msgstr "{tóm tắt}, phiên bản: {phiên bản}"
+msgstr "{summary}, phiên bản: {version}"
 
 #. Translators: indicates summary of current add-on.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:956
@@ -881,13 +873,12 @@ msgstr "Nhấp đúp chuột phải"
 
 #. Translators: message to user the fonctionnality is not available.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1398
-#, fuzzy
 msgid ""
 "This functionnality is only available if \"command key selective announcement"
 "\" or \"keys's remanence functionnality\" is installed"
 msgstr ""
-"This functionnality is only available if \"command key selective announcement"
-"\" or \"speech's remanence functionnality\" is installed"
+"Chức năng này chỉ hoạt động khi \"command key selective announcement\" hoặc "
+"\"keys's remanence functionnality\" được cài đặt"
 
 #. Translators: message to user the fonctionnality is not available.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1408
@@ -982,8 +973,8 @@ msgstr "Menu bắt đầu | Charm Bar"
 
 #. Translators: this is the title of active windows list display dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:101
-msgid "Windows'list"
-msgstr "Danh sách Windows"
+msgid "Windows' list"
+msgstr "Danh sách cửa sổ"
 
 #. minimized window
 #. Translators: no comment.
@@ -1440,8 +1431,8 @@ msgstr "Sao chép"
 
 #. Translators: message to the user on undo command activation.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:38
-msgid "UnDo"
-msgstr "Hoàn tác"
+msgid "Undo"
+msgstr "Phục hồi"
 
 #. Translators: message to the user on select all command activation.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:40
@@ -1500,9 +1491,8 @@ msgstr "Kiểm tra và loại trừ các khóa:"
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:605
-#, fuzzy
 msgid "Pressed W&ith modifier key combination:"
-msgstr "Tổ hợp phím W & ith:"
+msgstr "Được bấm &với tổ họp phím bổ trợ:"
 
 #. Translators: This is a label of a button appearing
 #. on Command Keys Selective Announcement Dialog.
@@ -1524,8 +1514,8 @@ msgstr "Không nói lệnh & phím"
 #. in Command keys selective announcement dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:675
 #, python-format
-msgid "Do you want save changes made in \"%s\" mode"
-msgstr "Bạn có muốn lưu các thay đổi được thực hiện trong \"%s\" mode"
+msgid "Do you want to save changes made in \"%s\" mode"
+msgstr "Bạn có muốn lưu các thay đổi được thực hiện trong chế độ \"%s\""
 
 #. Translators: message to user when there is no more checked command key.
 #. Translators: message to user when there is no more checked command key .
@@ -1766,7 +1756,7 @@ msgstr "Biểu tượng phức tạp được sử dụng lần cuối"
 #. Translators: a label appearing on Last used complex symbols dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:651
 msgid "&Symbols:"
-msgstr "& Biểu tượng:"
+msgstr "& Kí hiệu"
 
 #. Translators: This is a label of a button appearing
 #. on Last Used Complex Symbols Dialog.
@@ -1845,7 +1835,7 @@ msgstr "&Khởi động lại"
 #. on the Computer shutdowndialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_gui.py:53
 msgid "F&orce running programs to close without warning"
-msgstr " &  đóng chương chình và không có cảnh báo"
+msgstr "&Buộc đóng chương trình đang chạy mà không có cảnh báo"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_gui.py:59
 msgid "&Delay befor shutdown or reboot between {min} and {max} seconds"
@@ -2043,7 +2033,7 @@ msgstr "&gỡ cài đặt "
 #. Translators: the button to remove all the labels of replacement.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\keyboardKeyRenaming\__init__.py:66
 msgid "R&emove al"
-msgstr "& chuyển đến"
+msgstr "&Gỡ tất cả"
 
 #. Translators: message to the user when key label is redefined.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\keyboardKeyRenaming\__init__.py:115
@@ -2111,9 +2101,8 @@ msgstr "Nhập & annonce sẽ được nói vào cuối thời lượng:"
 
 #. Translators: This is a label for a setting in MinuteTimer dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:139
-#, fuzzy
 msgid "Delay to be alerted before ending (in minutes):"
-msgstr "Trì hoãn để được cảnh báo trước khi kết thúc (tính bằng phút):"
+msgstr "Chờ để cảnh báo trước khi kết thúc (tính bằng phút):"
 
 #. Translators: The label for a button
 #. in Minute Timer Launch dialog to display ring options dialog.
@@ -2155,7 +2144,7 @@ msgstr "& Số lượng nhẫn:"
 #. in the ring options dialog to define duration between rings.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:253
 msgid "&Delay between rings (in miliseconds):"
-msgstr "& Độ trễ giữa các vòng (tính bằng milisecond):"
+msgstr "&Chờ giữa các vòng (tính bằng mi li giây):"
 
 #. Translators: this is the title of Current minute timer dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:293
@@ -2188,7 +2177,7 @@ msgstr "% s giây"
 #. Translators: this is a message to the user.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:363
 msgid "{minutes} minutes {seconds}"
-msgstr "{phút} phút {giây}"
+msgstr "{minutes} phút {seconds}"
 
 #. Translators: This is the title of the NVDA Logs Management Dialog .
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:38
@@ -2212,9 +2201,8 @@ msgid "Copy log &path to clipboard"
 msgstr "Sao chép nhật ký và đường dẫn vào clipboard"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:109
-#, fuzzy
 msgid "Current log file path   cannot be copied to clipboard"
-msgstr "Đường dẫn tệp nhật ký hiện tại không thể được sao chép vào clipboard"
+msgstr "Không thể sao chép đường dẫn tập tin log hiện tại vào bộ nhớ tạm"
 
 #. Translators: message to user: dialog  already open.
 #. Translators: the label of a message box dialog.
@@ -2329,12 +2317,11 @@ msgstr "Tệp cấu hình cũ của addon% s chứa lỗi. Không thể giữ c�
 
 #. Translators: A message asking the user to confirm reset of configuration.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:399
-#, fuzzy
 msgid ""
 "The add-on configuration will be reset to factory values and NVDA will be "
 "restarted. Would you like to continue ?"
 msgstr ""
-"Cấu hình bổ trợ sẽ được đặt lại về giá trị gốc và NVDA sẽ được khởi động "
+"Cấu hình của add-on sẽ được đặt lại về giá trị gốc và NVDA sẽ được khởi động "
 "lại. Bạn có muốn tiếp tục không ?"
 
 #. noqa:E501
@@ -2386,7 +2373,7 @@ msgstr "Hiển thị & biểu tượng hệ thống và danh sách cửa sổ �
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:61
 msgid "&complex symbols edition help:"
-msgstr "& hướng dẫn biểu tượng phức tạp "
+msgstr "&trợ giúp thêm cho các kí hiệu phức tạp:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:65
@@ -2421,7 +2408,7 @@ msgstr "lịch sử & giọng nói :"
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:89
 msgid "&Keyboard Key renaming:"
-msgstr "& Đổi tên phím bàn phím:"
+msgstr "Đổi &tên phím bấm:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:93
@@ -2446,7 +2433,7 @@ msgstr "HIỂN THỊ CÁC ĐỐI TƯỢNG ĐƯỢC NHÌN THAAYS"
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:109
 msgid "&Voice profil switching:"
-msgstr "& Chuyển đổi CẤU HÌNH GIỌNG NÓI "
+msgstr "&Chuyển đổi hồ sơ going đọc:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:113
@@ -2461,7 +2448,7 @@ msgstr "Kiểm soát âm lượng "
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:121
 msgid "&Developpement's tools"
-msgstr "& Công cụ CHO nhà phát triển"
+msgstr "&Công cụ CHO nhà phát triển"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:125
@@ -2500,7 +2487,7 @@ msgstr "Di chuyển con trỏ"
 #. Translators: This is the label for a combobox in the NVDAEnhancement settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:263
 msgid "&Punctuation/symbol level on word movement:"
-msgstr "& đọc dấu câu khi di chuyển từng từ "
+msgstr "&Cấp độ đọc dấu câu khi di chuyển từng từ:"
 
 #. Translators: This is the label for an item in combobox in the
 #. NVDAEnhancement settings panel.
@@ -2518,12 +2505,12 @@ msgstr "Lịch sử giọng nói "
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:280
 msgid "&Number the records "
-msgstr "& đánh số lịch sử giọng nói"
+msgstr "&Đánh số cho bản ghi"
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:284
 msgid "&Display records in ascending order"
-msgstr "& hiển thị lịch sử giọng nói theo thứ tự tăng dần"
+msgstr "&Hiển thị các bản ghi theo thứ tự tăng dần"
 
 #. Translators: This is the label for a group NVDAEnhancement settings panel
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:291
@@ -2548,7 +2535,7 @@ msgstr "cửa sổ"
 #. Translators: This is the label for a checkbox in the Computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:339
 msgid "&No object description inWindows ribbons"
-msgstr "& Không mô tả đối tượng trong ruy băng"
+msgstr "&Không có mô tả đối tượng trong Windows ribbons"
 
 #. Translators: This is the label for a checkbox in the Computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:345
@@ -2582,9 +2569,8 @@ msgstr "& phục hồi ngưỡng âm lượng"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:377
-#, fuzzy
 msgid "Recovery &level:"
-msgstr "& Cấp độ phục hồi:"
+msgstr "&Cấp độ phục hồi:"
 
 #. Translators: This is the label for a group of NVDA volume options in the computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:381
@@ -2593,9 +2579,8 @@ msgstr "âm lượng NVDA"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:385
-#, fuzzy
 msgid "T&hreshold of recovery of the volume:"
-msgstr "& phục hồi ngưỡng âm lượng"
+msgstr "&Ngưỡng phục hồi âm lượng:"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:389
@@ -2664,7 +2649,7 @@ msgstr "& tiêu đề hộp thoại là tên của phần mở rộng"
 #. Translators: This is the label for a comboBox in the advanced settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:473
 msgid "&Delay between repeat of same gesture:"
-msgstr "& độ chễ để lập lại cử chỉ"
+msgstr "&Chờ giữa các lần lặp lại các thao tác trùng nhau:"
 
 #. Translators: This is the label for a checkbox in the Advanced settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:479
@@ -2688,7 +2673,7 @@ msgstr "phím tắt còn lại"
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:519
 msgid "&Only NVDA key in remanence"
-msgstr "& Chỉ có khóa NVDA còn lại"
+msgstr "&Chỉ còn phím NVDA"
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:523
@@ -2723,7 +2708,7 @@ msgstr "Bàn phím số"
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:553
 msgid "&allow the standard use of the numeric keypad"
-msgstr "& cho phép sử dụng bàn phím số"
+msgstr "&cho phép sử dụng bàn phím số chuẫn"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:557
@@ -2732,9 +2717,8 @@ msgstr "& sử dụng bàn phím số khi khởi động nvda"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:561
-#, fuzzy
 msgid "&Enable / disable numeric keypad's standard use with num lock key"
-msgstr "& Bật / tắt sử dụng tiêu chuẩn của bàn phím số với phím khóa num"
+msgstr "Bật / tắt việc dùng bàn phím số chuẩn với phím khóa số"
 
 #. Translators: This is the label for the Advanced settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:597
@@ -2759,9 +2743,8 @@ msgstr "&Kiểm tra cập nhật"
 
 #. translators: this is a label for a button in update settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:619
-#, fuzzy
 msgid "View &history"
-msgstr "lịch sử & giọng nói :"
+msgstr "Xem &lịch sử"
 
 #. Translators: title of add-on settings dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:680
@@ -2790,6 +2773,7 @@ msgstr "cảnh báo"
 
 #. Translators: the label of a message box dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:225
+#, fuzzy
 msgid ""
 "Impossible, the synthetizer of voice profile {voiceProfileName} associated "
 "to selector {selector} is not available. Do you want to free this selector ?"
@@ -2803,6 +2787,7 @@ msgstr "bộ đọc  bị lỗi"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:234
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:273
+#, fuzzy
 msgid "Selector {selector}: {name}"
 msgstr "tên bộ đọc"
 
@@ -2829,6 +2814,7 @@ msgstr "Không"
 #. Translators: message to user to report the association
 #. between selector and voice profile.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:393
+#, fuzzy
 msgid "{name} voice profile set to selector {selector}"
 msgstr "tên cấu hình giọng nói được đặt thành"
 
@@ -2909,14 +2895,14 @@ msgstr "Thiết bị đầu ra: %s"
 
 #. Translators: This is the title of the Selectors Management dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:534
-#, fuzzy, python-format
+#, python-format
 msgid "Voice profile selectors's Management of profile %s"
-msgstr "Quản lý hồ sơ giọng nói Quản lý hồ sơ% s"
+msgstr "Chọn và quản lý hồ sợ going đọc cho hồ sơ %s"
 
 #. Translators: part of label of selectors list.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:543
 msgid "&Selectors"
-msgstr "& bộ đọc"
+msgstr "&Bộ chọn"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:567
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:781
@@ -2947,7 +2933,7 @@ msgstr "& Sửa đổi hồ sơ giọng nói"
 #. on Selectors Management dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:633
 msgid "&Free selector"
-msgstr "& Bộ đọc miễn phí"
+msgstr "&Bộ chọn miễn phí"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
@@ -2967,6 +2953,7 @@ msgstr "Thông tin hồ sơ giọng nói"
 
 #. Translators: the label of a message box dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:713
+#, fuzzy
 msgid ""
 "Selector {selector} is already set to {voiceProfileName} voice profile. Do "
 "you want to replace this voice profile?"
@@ -2976,6 +2963,7 @@ msgstr ""
 
 #. Translators: the label of a message box dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:752
+#, fuzzy
 msgid ""
 "Do you want realy free selector {selector} associated to voice profile "
 "{voiceProfileName}"
@@ -3074,9 +3062,9 @@ msgstr "lỗi"
 
 #. Translators: message to the user on getting addon manifest.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:135
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot get add-on translated manifest of %s language"
-msgstr "Không thể nhận bản kê khai dịch bổ trợ của ngôn ngữ% s"
+msgstr "Không thể lấy thông tin add-on manifest đã phiên dịch cho ngôn ngữ %s"
 
 #. Translators: title of dialog
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:256
@@ -3106,7 +3094,6 @@ msgstr "% s tập tin được chuyển đổi"
 
 #. Translators: title of dialog
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:309
-#, fuzzy
 msgid "Creation of manifest.ini file"
 msgstr "Tạo tập tin manifest.ini"
 
@@ -3150,9 +3137,9 @@ msgstr "Thiếu vài chuỗi để phiên dịch cho  ngôn ngữ \"%s\""
 #. Translators: message to user
 #. to report number of translated manifest.ini files.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:398
-#, fuzzy, python-format
+#, python-format
 msgid "%s localization manifest.ini files created"
-msgstr "% s tệp tin bản địa hóa được tạo"
+msgstr "Đã tạo %s tập tin bản đĩa hóa manifest.ini"
 
 #. Translators: message to user to report no translated manifest.ini file .
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:401
@@ -3207,9 +3194,9 @@ msgstr "% s tệp tin bản địa hóa được tạo hoặc cập nhật"
 #. noqa:E501
 #. Translators: message to user to report missing translated strings.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:512
-#, fuzzy, python-format
+#, python-format
 msgid "But for this languages translated string are missing: %s"
-msgstr "Nhưng đối với ngôn ngữ này, chuỗi dịch bị thiếu:% s"
+msgstr "nhưng với ngôn ngữ này đã thiếu các chuỗi phiên dịch: %s"
 
 #. Translators: message to user to report only one document converted to html
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:530
@@ -3274,7 +3261,7 @@ msgstr "Cập nhật add-on &phiên bản"
 #. Translators: this is a label appearing on tools for add-on dialog
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:681
 msgid "&Update manifest.ini file"
-msgstr "& Cập nhật tập tin manifest.ini"
+msgstr "&Cập nhật tập tin manifest.ini"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:682
 msgid "Create P&OT file"
@@ -3283,7 +3270,7 @@ msgstr "Tạo tập tin P & OT"
 #. Translators: this is a label appearing on tools for add-on dialog
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:684
 msgid "&Prepare addon"
-msgstr "& Chuẩn bị addon"
+msgstr "&Chuẩn bị addon"
 
 #. Translators: This is a label appearing on Convert to HTML dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:687
@@ -3304,7 +3291,7 @@ msgstr "Tạo tập tin &buildVars"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:704
 msgid "&Explore add-on folder"
-msgstr "& Khám phá thư mục add-on"
+msgstr "&Khám phá thư mục add-on"
 
 #. Translators: The label of a list item to select the type of object
 #. in the Element List Dialog.
@@ -3347,9 +3334,9 @@ msgid ""
 "The update is not compatible with this version of NVDA. Minimum NVDA "
 "version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}."
 msgstr ""
-"Bản cập nhật không tương thích với phiên bản NVDA này. Phiên bản NVDA tối "
-"thiểu: {minYear} {minMajor}, được thử nghiệm lần cuối: {testsYear}. {Đã kiểm "
-"traMajor}."
+"Bản cập nhật không tương thích với phiên bản NVDA này. Phiên bản NVDA thấp "
+"nhấ: {minYear}{minMajor}, được bản thử nghiệm sau cùng: {testsYear}."
+"{testedMajor}."
 
 #. Translators: The progress message
 #. indicating the name of the add-on being downloaded.
@@ -3435,9 +3422,8 @@ msgstr "Tính năng &mới"
 #. Translators: The title of the user Input Gestures dialog
 #. where the user can remap user input gestures for commands.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\__init__.py:24
-#, fuzzy
 msgid "User input Gestures"
-msgstr "Cử chỉ đầu vào của người dùng"
+msgstr "Thao tác đầu vào của người dùng"
 
 #. Translators: The label of a button to remove all gesture
 #. in the user Input Gestures dialog.
@@ -3579,6 +3565,41 @@ msgstr "Các thành phần "
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:163
 msgid "Move &navigator object to it"
 msgstr "Di chuyển và điều hướng đến nó"
+
+#, fuzzy
+#~ msgid "Turn OFF options:"
+#~ msgstr "Tùy chọn nhẫn "
+
+#, fuzzy
+#~ msgid "command line"
+#~ msgstr "(lệnh:% s)"
+
+#, fuzzy
+#~ msgid "%s: %s converted to %s"
+#~ msgstr "% s tập tin được chuyển đổi"
+
+#, fuzzy
+#~ msgid "Enter the source file location:"
+#~ msgstr "Nhập mô tả:"
+
+#, fuzzy
+#~ msgid "Browse"
+#~ msgstr "Trình duyệt"
+
+#, fuzzy
+#~ msgid "Output: "
+#~ msgstr "Thiết bị đầu ra: %s"
+
+#, fuzzy
+#~ msgid "Ignoring user configuration file"
+#~ msgstr "Khám phá thư mục cấu hình người dùng của tôi"
+
+#, fuzzy
+#~ msgid "Loading user configuration file"
+#~ msgstr "Liên kết theo cấu hình% s"
+
+#~ msgid "UnDo"
+#~ msgstr "Hoàn tác"
 
 #~ msgid "Current log file  path  copied to clipboard"
 #~ msgstr "Đường dẫn tệp nhật ký hiện tại được sao chép vào clipboard"

@@ -35,7 +35,7 @@ _msgPaste = _("Paste")
 # Translators: message to the user on copy command activation.
 _msgCopy = _("Copy")
 # Translators: message to the user on undo command activation.
-_msgUnDo = _("UnDo")
+_msgUnDo = _("Undo")
 # Translators: message to the user on select all command activation.
 _msgSelectAll = _("select all")
 
