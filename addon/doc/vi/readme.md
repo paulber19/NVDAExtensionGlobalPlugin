@@ -1,4 +1,4 @@
-# Lệnh mở rộng toàn cục cho #
+# Lệnh mở rộng toàn cục cho NVDA #
 
 * Tác giả: PaulBer19
 * Trang web: paulber19@laposte.net
