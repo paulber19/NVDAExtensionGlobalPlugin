@@ -18,21 +18,21 @@ Add-on này sẽ thêm vào NVDA:
 
 một số tính năng có thể được bật hoặc tắt một cách độc lập.
 
-* Display of the list of icons in the notification area ,
-* Display of the windows list of running applications,
-* Help in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2 and possibility to add its own categories and symbols,
-* Extension of the functionality of the virtual buffer for browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, and Google Chrome:
+* Hiển thị danh sách các biểu tượng trong vùng thông báo .
+* Hiển thị danh sách các của sổ ứng dụng đang chạy.
+* Hỗ trợ cho các kết hợp của một kí hiệu phức tạp. Chẳng hạn như a a e lien quan, một kí hiệu năng lượng của 2 và khả năng thêm phân loại và kí hiệu riêng.
+* Mở rộng chức năng của của sổ ảo bốn trình duyệt Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, và Google Chrome:
 
-	* new commands for navigation mode (paragraph, division, anchor, main landmark),
-	* new types of elements for the dialog box opened by "NVDA+F7" (radio button, paragraph, frame, checkBox, etc) with the announcement of the number of items found,
-	* commands for the tables:
-		* announce the cells of a row /column , go to first/last cell in the row/current column, move the column/row preceding or following with announcement possible of the cells in that row/column,
-		* announcement of the URL of the document,
-		* navigate in loop,
+	* các lệnh mới để cho chế độ điều hướng (đoạn, phân chia, anchor, cột mốc chính.
+	* các loại thành phần mới cho hộp thoại được mở bằng \"NVDA+F7\" (nút radio, đoạn, khung, hộp kiểm, v...v...) với việc thông báo số lượng thành phần được tìm thấy.
+	* các lệnh cho bảng biểu:
+		* thông báo vị trí ô của cột / dòng, đi đến ô đầu / cuối trong cột / dòng hiện tại, di chuyển cột / dòng kết hợp thông báo các ô trong cột / dòng đó.
+		* thông báo đường dẫn của tài liệu
+		* đều hướng vòng lặp.
 
 
-* Announcement of the function associated with editing commands style Copy, Paste, etc.,
-* Announcement of the name of the folder pre-selected in the dialog boxes like "Open","Save", "Save as",etc.,
+* Thông báo chức năng được tích hợp với lệnh chỉnh sửa - kiểu dáng sao chép, dán, v...v....
+* Thông báo tên của thư mục đã chọn trước trong các hộp thoại như \"Mở\",\"Lưu\", \"Lưu mới\",v...v....
 * display of information on the focused application:
 
 	* the current profile configuration,
