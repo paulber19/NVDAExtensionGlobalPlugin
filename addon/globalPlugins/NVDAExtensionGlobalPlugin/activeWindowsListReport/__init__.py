@@ -98,7 +98,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			return
 		ActiveWindowsListDisplay._instance = self
 		# Translators: this is the title of active windows list display dialog.
-		dialogTitle = _("Windows'list")
+		dialogTitle = _("Windows' list")
 		ActiveWindowsListDisplay.title = makeAddonWindowTitle(dialogTitle)
 		super(ActiveWindowsListDisplay, self).__init__(
 			parent, wx.ID_ANY, ActiveWindowsListDisplay.title)

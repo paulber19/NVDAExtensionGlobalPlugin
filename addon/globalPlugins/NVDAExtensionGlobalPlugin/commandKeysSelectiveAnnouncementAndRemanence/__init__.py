@@ -672,7 +672,7 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			res = gui.messageBox(
 				# Translators: the text of a message box dialog
 				# in Command keys selective announcement dialog.
-				_("""Do you want save changes made in "%s" mode""") % modeText,
+				_("""Do you want to save changes made in "%s" mode""") % modeText,
 				# Translators: the title of a message box dialog
 				# in command keys selective announcement dialog.
 				_("Confirmation"),
