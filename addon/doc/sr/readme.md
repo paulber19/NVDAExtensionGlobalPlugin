@@ -13,78 +13,78 @@
 Preveo: Nikola Jović
 
 
-The add-on adds to NVDA:
-## The features ##
+Dodatak dodaje u NVDA:
+## Karakteristike ##
 
-some features can be enabled or disabled individually.
+Neke karakteristike se posebno mogu omogućiti ili onemogućiti.
 
-* Display of the list of icons in the notification area ,
-* Display of the windows list of running applications,
-* Help in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2 and possibility to add its own categories and symbols,
-* Extension of the functionality of the virtual buffer for browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, and Google Chrome:
+* Prikazivanje liste ikonica na sistemskoj traci,
+* Prikazivanje liste pokrenutih aplikacija,
+* Pomoć u upisivanju kompleksnih simbola kao što su, na primer, a a e i slično, a kao i mogućnost definisanja vaših simbola i kategorija,
+* Dodaci za funkcije pretraživača Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, i Google Chrome:
 
-	* new commands for navigation mode (paragraph, division, anchor, main landmark),
-	* new types of elements for the dialog box opened by "NVDA+F7" (radio button, paragraph, frame, checkBox, etc) with the announcement of the number of items found,
-	* commands for the tables:
-		* announce the cells of a row /column , go to first/last cell in the row/current column, move the column/row preceding or following with announcement possible of the cells in that row/column,
-		* announcement of the URL of the document,
-		* navigate in loop,
-
-
-* Announcement of the function associated with editing commands style Copy, Paste, etc.,
-* Announcement of the name of the folder pre-selected in the dialog boxes like "Open","Save", "Save as",etc.,
-* display of information on the focused application:
-
-	* the current profile configuration,
-	* the name and version number of the application,
-	* the add-on loaded for the application,
+	* Nove komande za navigaciju (pasusi, odeljci, anchor, glavni orjentir),
+	* Nove vrste elemenata za dijalog koji se otvara komandom "NVDA+F7" (radio dugme, pasus, okvir, izborno polje, i slično) uz izgovor broja pronađenih stavki,
+	* Komande za tabele:
+		* Izgovori ćelije reda i kolone, prebaci se na poslednju ili prvu ćeliju reda ili kolone, mogućost prebacivanja na prethodnu i sledeću kolonu ili red uz izgovor prethodnih ćelija/i kolona,
+		* Izgovor adrese dokumenta,
+		* Navigacija sa vrha na dno i obrnuto,
 
 
-*	NVDA logs tools:
-	* Opening the previous or current log,
-	* copy of current Log path to the clipboard,
+* Izgovor komandi za uređivanje kao što su kopiranje, lepljenje i slično.,
+* Izgovor imena izabranog foldera u dijalozima "Otvori","Sačuvaj", "Sačuvaj kao",i  slično.,
+* Prikazivanje informacija za fokusiranu aplikaciju:
+
+	* Trenutni profil podešavanja,
+	* Ime i broj verzije aplikacije,
+	* Dodatak učitan za aplikaciju,
 
 
-* history of voice speechs,
-* renaming keyboard keys,
-* selective announcement of command keyboard keys ,
-* simple countdown timer,
-* display of visible elements making up the object in the foreground,
-* fast switching of voice profile,
-* remanence of the modifier keys,
-* shutdown, reboot or Hibernate the computer,
-* control the main or NVDA volume:
-
-	* mute or unmute volume for the focused application,
-	* establishment of the main Windows or NVDA volume at the start of the add-on,
-	* modification of main volume or audio stream's volume of focused application.
+*	Alati za NVDA dnevnike:
+	* Otvaranje prethodnog ili trenutnog dnevnika,
+	* Kopiranje adrese trenutnog dnevnika u privremenu memoriju,
 
 
-* Tools for development of add-on.
-* supplements regarding the date and time: copy date and time to clipboard, report time with seconds
+* Istorija govora,
+* Preimenovanje tastera na tastaturi,
+* Selektivan izgovor komandnih tastera tastature,
+* Jednostavan tajmer,
+* Prikazivanje vidljivih elemenata koji čine objekat,
+* Brzo menjanje glasovnih profila,
+* Odlaganje modifikatorskih tastera,
+* Gašenje, ponovno pokretanje ili hibernacija računara,
+* Kontrola glavne ili NVDA jačine:
+
+	* Isključi ili uključi zvuk za trenutno fokusiranu aplikaciju,
+	* Podešavanje glavne ili NVDA jačine nakon pokretanja dodatka,
+	* Menjanje jačine zvuka trenutno fokusirane aplikacije.
 
 
-## The options ##
-
-* remove the announcement from the description of the objects in the Windows ribbons,
-* proclaim the word focused when deleting a word (for NVDA versions lower than 2020.3),
-* automatically maximize the foreground window,
-* announce punctuations and symbols when moving by word in a document.
+* Alati za programiranje dodataka.
+* Dodaci za datum i vreme: Kopiraj datum i vreme  u privremenu memoriju, prijavi sekunde u prijavljivanju vremena
 
 
-## The advanced options ##
+## Opcije ##
 
-* report, with a sound, the registration of an error in the NVDA log also for the final versions and release candidate of NVDA,
-* Caption dialog title with the name of the addon,
-* Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation,
-* use the numeric keypad's keys conventionally.
+* Uklanjanje opisa objekata u Windows ribbonima,
+* Izgovori fokusiranu reč kada  se brišu reči  (za NVDA starije od 2020.3),
+* Automatski maksimizuj aktivan prozor,
+* Izgovaraj interpunkciju kada se krećete reč po reč u dokumentu.
 
 
-## Various other elements ##
+## Napredne opcije ##
 
-* presentation formatting of the text in a dialog box,
-* sub-menus to explore the program folders or configuration,
-* script to quickly restart NVDA.
+* Prijavi greške uz zvuk čak i za stabilne i RC NVDA verzije,
+* Ime dijaloga sa naslovom trenutnog dodatka,
+* Ne uzimaj u obzir opciju prijavljivanja opisa objekata kada se pojave dijalozi za potvrdu,
+* Standardno korišćenje tastera numeričke tastature.
+
+
+## Razni drugi elementi##
+
+* Predstavljanje formatiranja teksta u dijalogu,
+* Podmeniji za istraživanje foldera programa ili foldera sa podešavanjima,
+* Skripta za ponovno pokretanje programa NVDA.
 
 
 [1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.7.nvda-addon
