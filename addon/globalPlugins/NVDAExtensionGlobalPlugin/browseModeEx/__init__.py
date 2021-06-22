@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -11,7 +11,6 @@ try:
 	import NVDAObjects.UIA.edge as EDGE
 except ImportError:
 	import NVDAObjects.UIA.spartanEdge as EDGE
-	
 import NVDAObjects.IAccessible.MSHTML
 import NVDAObjects.IAccessible.mozilla
 import NVDAObjects.IAccessible.chromium

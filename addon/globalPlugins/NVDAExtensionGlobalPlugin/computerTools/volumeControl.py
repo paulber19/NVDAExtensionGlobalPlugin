@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\volumeControl\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2017 - 2020 paulber19
+# Copyright (C) 2017 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,7 +9,6 @@ import addonHandler
 from logHandler import log
 import os
 import ui
-import speech
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 import sys
@@ -145,12 +144,13 @@ def setNVDAVolume(withMin=False):
 			return True
 	return False
 
+
 def announceAppVolumeLevel(appVolumeLevel):
 	from ..settings import toggleReportVolumeChangeAdvancedOption, toggleAppVolumeLevelAnnouncementInPercentAdvancedOption
 	if not toggleReportVolumeChangeAdvancedOption(False):
 		return
 	if _volume is None:
-		speakersVolume =  1.0
+		speakersVolume = 1.0
 	else:
 		volume = _volume
 		speakersVolume = volume.GetMasterVolumeLevelScalar()
@@ -206,7 +206,7 @@ def changeFocusedAppVolume(appName=None, action="increase", value=None):
 				# no action
 				log.warning("changeFocusedAppVolume: %s action is not known" % action)
 				return
-			_previousAppVolumeLevel [appName.lower()] = curLevel
+			_previousAppVolumeLevel[appName.lower()] = curLevel
 			volume.SetMasterVolume(level, None)
 			level = volume.GetMasterVolume()
 			announceAppVolumeLevel(level)
@@ -237,9 +237,9 @@ def changeSpeakersVolume(action="increase", value=None):
 		level = loat(_addonConfigManager .getMinMasterVolumeLevel())/100
 	elif action == "set":
 		minimumLevel = _addonConfigManager .getMinMasterVolumeLevel()
-		if value <  minimumLevel:
+		if value < minimumLevel:
 			# Translators: message to user  to indicate command reject.
-			ui.message(_("Impossible, the volume level cannot be lower than the configured recovery threshold equal to %s")%minimumLevel)
+			ui.message(_("Impossible, the volume level cannot be lower than the configured recovery threshold equal to %s") % minimumLevel)
 			return
 		level = float(value)/100
 	else:
@@ -248,12 +248,12 @@ def changeSpeakersVolume(action="increase", value=None):
 	_previousSpeakersVolumeLevel = speakersVolume
 	msg = "%s %s" % (volumeMsg, int(round(level*100)))
 	volume.SetMasterVolumeLevelScalar(level, None)
-
-	newSpeakersVolume = volume.GetMasterVolumeLevelScalar()
 	if toggleReportVolumeChangeAdvancedOption(False):
 		ui.message(msg)
 		log.warning("Master volume is set to %s" % level)
 	return True
+
+
 def setFocusedAppVolumeToPreviousLevel():
 	focus = api.getFocusObject()
 	appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
@@ -262,6 +262,7 @@ def setFocusedAppVolumeToPreviousLevel():
 		return
 	level = int(level*100)
 	changeFocusedAppVolume(appName=appName, action="set", value=level)
+
 
 def setSpeakersVolumeLevelToPreviousLevel():
 	level = _previousSpeakersVolumeLevel

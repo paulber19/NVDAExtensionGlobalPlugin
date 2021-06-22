@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,7 +14,6 @@ import gui
 import inputCore
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle
-from ..utils.py3Compatibility import baseString
 addonHandler.initTranslation()
 
 
@@ -26,8 +25,7 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(UserInputGesturesDialog, self).__init__(parent)
-		from gui.inputGestures import _InputGesturesViewModel, _GesturesTree
-					
+
 	def makeSettings(self, settingsSizer):
 		tree = self.tree = wx.TreeCtrl(
 			self,
@@ -90,13 +88,11 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 		except RuntimeError:
 			return
 		data = self.tree.GetItemData(item)
-		isGesture = isinstance(data, baseString)
+		isGesture = isinstance(data, str)
 		if isGesture:
 			self.removeButton.Enable()
 		else:
 			self.removeButton.Disable()
-			
-		#self.removeButton.Enabled = isGesture
 
 	def onRemove(self, evt):
 		treeGes = self.tree.Selection
@@ -117,13 +113,14 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 	def onRemoveAll(self, evt):
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you really want to erase all the modification of gesture control that have been made ?"),  # noqa:E501
+			_("Do you really want to erase all the modifications of input gesture that have been made?"),  # noqa:E501
 			# Translators: the title of a message box dialog.
-			_("NVDAExtensionGlobalPlugin add-on - warning"),
+			_("Warning"),
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
 			return
 		inputCore.manager.userGestureMap.clear()
 		inputCore.manager.userGestureMap.save()
+		self.Close()
 
 	def onOk(self, evt):
 		for gesture, module, className, scriptName in self.pendingRemoves:
@@ -205,7 +202,7 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		if script is None:
 			if scriptName:
 				if scriptName.startswith("kb:"):
-					info.category = NVDAString("%s")%inputCore.SCRCAT_KBEMU
+					info.category = NVDAString("%s") % inputCore.SCRCAT_KBEMU
 					info.displayName = NVDAString("Emulate key press: {emulateGesture}").format(emulateGesture=scriptName[3:])
 				else:
 					info.displayName = scriptName

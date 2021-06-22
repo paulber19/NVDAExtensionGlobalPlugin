@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\elementsListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -16,7 +16,6 @@ import speech
 import itertools
 from ..utils.NVDAStrings import NVDAString
 from ..utils import runInThread
-from ..utils.py3Compatibility import uniCHR
 
 addonHandler.initTranslation()
 
@@ -25,64 +24,64 @@ class ElementsListDialogEx(wx.Dialog):
 	ELEMENT_TYPES = (
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("link", _("Link")),
+		("link", NVDAString("link").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("heading", _("Heading")),
+		("heading", NVDAString("heading").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("formField", _("Form field")),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("button", _("Button")),
+		("button", NVDAString("button").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("landmark", _("Landmark")),
+		("landmark", NVDAString("landmark").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("radioButton", _("Radio button")),
+		("radioButton", NVDAString("radio button".capitalize())),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("paragraph", _("Paragraph")),
+		("paragraph", NVDAString("paragraph").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("frame", _("Frame")),
+		("frame", NVDAString("frame").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("division", _("Division")),
+		("division", NVDAString("division").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("checkBox", _("Check box")),
+		("checkBox", NVDAString("check box").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("comboBox", _("Combo box")),
+		("comboBox", NVDAString("combo box").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("table", _("Table")),
+		("table", NVDAString("table").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("blockQuote", _("Blocquote")),
+		("blockQuote", NVDAString("block quote").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("edit", _("Edit")),
+		("edit", NVDAString("edit").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("list", _("List")),
+		("list", NVDAString("list").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("listItem", _("List item")),
+		("listItem", NVDAString("list item").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("anchor", _("Anchor")),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("graphic", _("Graphic")),
+		("graphic", NVDAString("graphic").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("embeddedObject", _("Embedded object")),
+		("embeddedObject", NVDAString("embedded object").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("separator", _("Separator")),
+		("separator", NVDAString("separator").capitalize()),
 		)
 	Element = collections.namedtuple("Element", ("item", "parent"))
 	lastSelectedElementType = 0
@@ -365,7 +364,7 @@ class ElementsListDialogEx(wx.Dialog):
 			# Search the list.
 			# We have to implement this ourselves,
 			# as tree views don't accept space as a search character.
-			char = uniCHR(evt.UnicodeKey).lower()
+			char = chr(evt.UnicodeKey).lower()
 			# IF the same character is typed twice, do the same search.
 			if self._searchText != char:
 				self._searchText += char
@@ -461,67 +460,67 @@ class GeckoElementsListDialog(ElementsListDialogEx):
 	ELEMENT_TYPES = (
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("link", _("Link")),
+		("link", NVDAString("link").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("heading", _("Heading")),
+		("heading", NVDAString("heading").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("formField", _("Form field")),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("button", _("Button")),
+		("button", NVDAString("button").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("landmark", _("Landmark")),
+		("landmark", NVDAString("landmark").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("radioButton", _("Radio button")),
+		("radioButton", NVDAString("radio button").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("paragraph", _("Paragraph")),
+		("paragraph", NVDAString("paragraph").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("frame", _("Frame")),
+		("frame", NVDAString("frame").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("division", _("Division")),
+		("division", NVDAString("division").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("checkBox", _("Check box")),
+		("checkBox", NVDAString("check box").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("comboBox", _("Combo box")),
+		("comboBox", NVDAString("combo box").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("table", _("Table")),
+		("table", NVDAString("table").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("blockQuote", _("Blocquote")),
+		("blocQuote", NVDAString("block quote").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("edit", _("Edit")),
+		("edit", NVDAString("edit").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("list", _("List")),
+		("list", NVDAString("list").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("listItem", _("List item")),
+		("listItem", NVDAString("list item").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("anchor", _("Anchor")),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("graphic", _("Graphic")),
+		("graphic", NVDAString("graphic").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("embeddedObject", _("Embedded object")),
+		("embeddedObject", NVDAString("embedded object").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("separator", _("Separator")),
+		("separator", NVDAString("separator").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("clickable", _("Clickable")),
+		("clickable", NVDAString("clickable").capitalize()),
 		)
 	Element = collections.namedtuple("Element", ("item", "parent"))
 	lastSelectedElementType = 0

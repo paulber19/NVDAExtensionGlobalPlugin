@@ -15,8 +15,8 @@ import controlTypes
 import gui
 import core
 from ..utils import PutWindowOnForeground,  mouseClick, makeAddonWindowTitle
+from ..utils import getSpeechMode, setSpeechMode, setSpeechMode_off
 from ..utils.NVDAStrings import NVDAString
-from ..utils.py3Compatibility import _unicode
 addonHandler.initTranslation()
 
 
@@ -29,43 +29,43 @@ class ElementListDialog(wx.Dialog):
 	elementTypes = (
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("button", _("Button")),
+		("button", NVDAString("button").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("checkBox", _("Check box")),
+		("checkBox", NVDAString("check box").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("edit", _("Edit")),
+		("edit", NVDAString("edit").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
 		("list", _("List, list's item")),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("treeView", _("Tree view, treeview's item")),
+		("treeView", "%s, %s" % (NVDAString("tree view").capitalize(), NVDAString("tree view item"))),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("comboBox", _("ComboBox")),
+		("comboBox", NVDAString("combo box").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("tab", _("Tab")),
+		("tab", _("Tab").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("slider", _("Slider")),
+		("slider", NVDAString("slider").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("link", _("Link")),
+		("link", NVDAString("link").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("table", _("Table, table's item")),
+		("table", "%s, %s" % (NVDAString("table").capitalize(), _("table item"))),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("menu", _("Menu, menu's item")),
+		("menu", "%s, %s" % (NVDAString("menu").capitalize(), _("menu item"))),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("container", _("Container (Tools bar, panel, application, ...)")),
+		("container", "%s (%s, %s, %s, ...)" % (NVDAString("container").capitalize(), NVDAString("tool bar"), NVDAString("panel"), NVDAString("application"))),
 		# Translators: The label of a list item to select the type of object in
 		# the Element List Dialog.
-		("text", _("Text")),
+		("text", NVDAString("text").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
 		("all", _("All"))
@@ -104,7 +104,6 @@ class ElementListDialog(wx.Dialog):
 		}
 
 	def __new__(cls, *args, **kwargs):
-
 		if ElementListDialog._instance is not None:
 			return ElementListDialog._instance
 		return wx.Dialog.__new__(cls)
@@ -115,8 +114,8 @@ class ElementListDialog(wx.Dialog):
 		ElementListDialog._instance = self
 		self.oParent = oParent
 		# Translators: title of dialog box.
-		dialogTitle = _("list of visible items making up the object in the foreground")  # noqa:E501
-		title = ElementListDialog.title = makeAddonWindowTitle(dialogTitle)
+		dlgTitle = _("list of visible items making up the object in the foreground")
+		title = ElementListDialog.title = makeAddonWindowTitle(dlgTitle)
 		super(ElementListDialog, self).__init__(parent, wx.ID_ANY, title)
 		self.allObjects = objects
 		self.objectTypeHasChanged = True
@@ -125,20 +124,22 @@ class ElementListDialog(wx.Dialog):
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
-		# Translators: This is the label for a checkBox  in
-		# the ElementListDialog dialog.
-		labelText = _("Ignore untaggeditems")  # noqa:E501
+		# Translators: This is the label for a checkBox in
+		# the "list of visible items making up the object in the foreground" dialog.
+		labelText = _("Ignore untagged items")
 		self.taggedObjectsCheckBox = sHelper.addItem(wx.CheckBox(
 			self, wx.ID_ANY, label=labelText))
 		self.taggedObjectsCheckBox.SetValue(True)
-		# Translators: This is the label for a listBox  in the ElementListDialog.
+		# Translators: This is the label for a listBox in
+		# the "list of visible items making up the object in the foreground" dialog.
 		typeLabelText = _("&Type: ")
 		self.objectTypesListBox = sHelper.addLabeledControl(
 			typeLabelText, wx.ListBox,
 			id=wx.ID_ANY,
 			choices=tuple(et[1] for et in self.elementTypes))
 		self.objectTypesListBox.Select(0)
-		# Translators: This is the label for a listBox in the ElementListDialog.
+		# Translators: This is the label for a listBox in
+		# the "list of visible items making up the object in the foreground" dialog.
 		labelText = _("Elements:")
 		self.objectListBox = sHelper.addLabeledControl(
 			labelText,  wx.ListBox,
@@ -148,17 +149,19 @@ class ElementListDialog(wx.Dialog):
 		elementType = self.elementTypes[0][0]
 		self.elementsForType = self.getElementsForType(elementType)
 		if len(self.elementsForType):
-			items = [_unicode(obj[0]) for obj in self.elementsForType]
+			items = [str(obj[0]) for obj in self.elementsForType]
 			self.objectListBox.SetItems(items)
-				#[_unicode(obj[0]) for obj in self.elementsForType])
 		# the buttons
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators: The label for a button in elements list dialog .
+		# Translators: The label for a button in
+		# the "list of visible items making up the object in the foreground" dialog.
 		self.leftClickButton = bHelper.addButton(self, label=_("&Left click"))
 		self.leftClickButton.SetDefault()
-		# Translators: The label for a button in elements list dialog .
+		# Translators: The label for a button in
+		# the "list of visible items making up the object in the foreground" dialog.
 		self.rightClickButton = bHelper.addButton(self, label=_("&Right click"))
-		# Translators: The label for a button in elements list dialog .
+		# Translators: The label for a button in
+		# the "list of visible items making up the object in the foreground" dialog.
 		self.navigatorObjectButton = bHelper.addButton(
 			self, label=_("Move &navigator object to it"))
 		sHelper.addItem(bHelper)
@@ -450,49 +453,42 @@ class ElementListDialog(wx.Dialog):
 		def callback(obj, oldSpeechMode):
 			api.processPendingEvents()
 			speech.cancelSpeech()
-			speech.speechMode = oldSpeechMode
+			setSpeechMode(oldSpeechMode)
 			mouseClick(obj)
-		oldSpeechMode = speech.speechMode
-		speech.speechMode = speech.speechMode_off
+		oldSpeechMode = getSpeechMode()
+		setSpeechMode_off()
 		itemSelected = self.objectListBox.GetSelection()
 		obj = self.elementsForType[itemSelected][1]
 		core.callLater(400, callback, obj, oldSpeechMode)
 		self.Close()
 
 	def onRightMouseButton(self, event):
-
 		def callback(obj, oldSpeechMode):
 			api.processPendingEvents()
 			speech.cancelSpeech()
-			speech.speechMode = oldSpeechMode
+			setSpeechMode(oldSpeechMode)
 			mouseClick(obj, True)
-		oldSpeechMode = speech.speechMode
-		speech.speechMode = speech.speechMode_off
-
+		oldSpeechMode = getSpeechMode()
+		setSpeechMode_off()
 		itemSelected = self.objectListBox.GetSelection()
 		obj = self.elementsForType[itemSelected][1]
 		core.callLater(400, callback, obj, oldSpeechMode)
 		self.Close()
 
 	def onNavigatorObjectButton(self,  event):
-
 		def callback(obj, oldspeechMode):
 			api.processPendingEvents()
 			speech.cancelSpeech()
-			speech.speechMode = oldSpeechMode
+			setSpeechMode(oldSpeechMode)
 			api.setNavigatorObject(obj)
 			api.moveMouseToNVDAObject(obj)
 			speech.speakObject(obj)
 		itemSelected = self.objectListBox.GetSelection()
 		obj = self.elementsForType[itemSelected][1]
 		self.Close()
-		oldSpeechMode = speech.speechMode
-		speech.speechMode = speech.speechMode_off
+		oldSpeechMode = getSpeechMode()
+		setSpeechMode_off()
 		core.callLater(400, callback, obj, oldSpeechMode)
-
-	@classmethod
-	def isRunning(cls):
-		return cls._instance is not None
 
 	@classmethod
 	def run(cls, oParent, objects):

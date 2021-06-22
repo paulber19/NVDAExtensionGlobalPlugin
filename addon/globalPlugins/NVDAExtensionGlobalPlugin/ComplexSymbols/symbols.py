@@ -10,7 +10,6 @@ from languageHandler import curLang
 import os
 import globalVars
 import codecs
-from ..utils.py3Compatibility import py3
 symbolCategoriesFile = ("symbolCategories", "dic")
 userConfigPath = os.path.abspath(
 	os.path.join(globalVars.appArgs.configPath, ""))
@@ -102,13 +101,7 @@ class SymbolsManager(object):
 		addonFolderPath = addonHandler.getCodeAddon().path
 		fileName = ".".join(symbolCategoriesFile)
 		for locale in localeList:
-			if py3:
-				# for python 3
-				file = os.path.join(addonFolderPath, "locale", locale, fileName)
-			else:
-				# for python 2
-				file = os.path.join(
-					addonFolderPath, "locale", locale.encode("utf-8"), fileName)
+			file = os.path.join(addonFolderPath, "locale", locale, fileName)
 			if os.path.isfile(file):
 				return file
 		return None

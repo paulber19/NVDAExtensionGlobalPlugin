@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/winExplorer/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2018 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -12,8 +12,7 @@ import api
 import queueHandler
 import itertools
 from .elementListDialog import ElementListDialog
-from ..utils.py3Compatibility import rangeGen
-from ..utils import runInThread
+from ..utils import runInThread, isOpened
 addonHandler.initTranslation()
 
 _generatorID = None
@@ -40,7 +39,6 @@ def isRunning():
 	_running = False
 	return ret
 
-
 def generateObjectSubtreeGetObject(obj, indexGen, th):
 	global _running
 	index = next(indexGen)
@@ -53,7 +51,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 		childCount = obj.childCount
 	except:  # noqa:E722
 		childCount = 0
-	for i in rangeGen(childCount):
+	for i in range(childCount):
 		_running = True
 		try:
 			child = obj.getChild(i)
@@ -147,9 +145,6 @@ def getObjectsHelper_generator(oParent):
 
 
 def findAllNVDAObjects(oParent):
-	if ElementListDialog.isRunning():
-		# Translators: the text of a message box dialog.
-		msg = _("%s dialog is allready open") % ElementListDialog.title
-		ui.message(msg)
+	if isOpened(ElementListDialog):
 		return
 	_startGenerator(getObjectsHelper_generator(oParent))

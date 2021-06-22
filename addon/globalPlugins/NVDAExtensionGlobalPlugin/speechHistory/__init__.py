@@ -1,18 +1,21 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
-import speech
+try:
+	# for nvda version >= 2021.1
+	from speech import speech as speech
+except ImportError:
+	import speech
 import tones
 import ui
 import api
 from ..utils.informationDialog import InformationDialog
 from ..settings import toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption  # noqa:E501
-from ..utils.py3Compatibility import baseString, _unicode
 
 addonHandler.initTranslation()
 
@@ -26,7 +29,7 @@ _oldSpeakSpelling = None
 
 def mySpeak(sequence, *args, **kwargs):
 	_oldSpeak(sequence, *args, **kwargs)
-	text = " ".join([x for x in sequence if isinstance(x, baseString)])
+	text = " ".join([x for x in sequence if isinstance(x, str)])
 	_speechRecorder.record(text)
 
 
@@ -61,6 +64,7 @@ def getSpeechRecorder():
 
 
 def isActive():
+
 	return _speechRecorder is not None
 
 
@@ -85,6 +89,11 @@ class SpeechRecorderManager(object):
 	def reportSpeechHistory(self, position, toClip=False):
 		oldOnMonitoring = self._onMonitoring
 		self._onMonitoring = False
+		if len(self._speechHistory) == 0:
+			# Translators: message to user to report no speech history record.
+			ui.message(_("There is No speech announcement recorded"))
+			self._onMonitoring = oldOnMonitoring
+			return
 		index = self._lastSpeechHistoryReportIndex
 		if position == "previous" and index > 0:
 			index -= 1
@@ -103,10 +112,10 @@ class SpeechRecorderManager(object):
 		for index in range(0, len(self._speechHistory)):
 			s = self._speechHistory[index]
 			if toggleSpeechRecordWithNumberOption(False):
-				text.append(_unicode(" {index}: {annonce}").format(
+				text.append(str(" {index}: {annonce}").format(
 					index=index + 1, annonce=s))
 			else:
-				text .append(_unicode(s))
+				text .append(str(s))
 		if not toggleSpeechRecordInAscendingOrderOption(False):
 			text.reverse()
 		text = "\r\n".join(text)

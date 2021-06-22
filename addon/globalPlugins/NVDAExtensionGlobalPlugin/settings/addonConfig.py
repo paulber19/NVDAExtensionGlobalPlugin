@@ -1,19 +1,14 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from configobj import ConfigObj
-# ConfigObj 5.1.0 and later integrates validate module.
-try:
-	from configobj.validate import Validator
-except ImportError:
-	from validate import Validator
-from ..utils.py3Compatibility import importStringIO
+from configobj.validate import Validator
+from io import StringIO
 
-StringIO = importStringIO()
 addonHandler.initTranslation()
 # NVDA config sections for addon
 SCT_CommandKeysAnnouncement = "CommandKeysAnnouncement"
@@ -984,6 +979,8 @@ class AddonConfiguration25(BaseAddonConfiguration):
 			advancedOptions=_AdvancedOptionsConfSpec,
 			shutdown=_ShutdownComputerConfSpec)
 		), list_values=False, encoding="UTF-8")
+
+
 class AddonConfiguration26(BaseAddonConfiguration):
 	_version = "2.6"
 	_GeneralConfSpec = """[{section}]
@@ -1117,7 +1114,7 @@ class AddonConfiguration26(BaseAddonConfiguration):
 			volumeChangeStepLevel=ID_VolumeChangeStepLevel,
 			reportVolumeChange=ID_ReportVolumeChange,
 			defaultVolumeChangeStepLevel=C_VolumeChangeStepLevel,
-			appVolumeLevelAnnouncementInPercent= ID_AppVolumeLevelAnnouncementInPercent,
+			appVolumeLevelAnnouncementInPercent = ID_AppVolumeLevelAnnouncementInPercent,
 			dialogTitleWithAddonSummary=ID_DialogTitleWithAddonSummary,
 			maximumDelayBetweenSameScript=ID_MaximumDelayBetweenSameScript,
 			maximumOfLastUsedSymbols=ID_MaximumOfLastUsedSymbols,
@@ -1151,4 +1148,3 @@ class AddonConfiguration26(BaseAddonConfiguration):
 			advancedOptions=_AdvancedOptionsConfSpec,
 			shutdown=_ShutdownComputerConfSpec)
 		), list_values=False, encoding="UTF-8")
-

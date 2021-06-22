@@ -1,6 +1,6 @@
 # updateCheck.py
 # common Part of all of my add-on
-# Copyright 2019-2020 Paulber19
+# Copyright 2019-2021 Paulber19
 # some parts of code comes from others add-ons:
 # add-on Updater (author Joseph Lee)
 # brailleExtender (author Andre-Abush )
@@ -24,7 +24,7 @@ from updateCheck import UpdateDownloader
 import tempfile
 import threading
 import addonAPIVersion
-py3 = sys.version.startswith("3")
+
 addonHandler.initTranslation()
 
 
@@ -57,7 +57,7 @@ def checkCompatibility(addonName, minimumNVDAVersion=None, lastTestedVersion=Non
 			# Translators: The message displayed  when trying to update an add-on
 			# that is not going to be compatible with the current version of NVDA.
 			gui.messageBox(
-				_("The update is not compatible with this version of NVDA. Minimum NVDA version: {minYear}{minMajor}, last tested: {testedYear}.{testedMajor}.").forma(  # noqa:E501
+				_("The update is not compatible with this version of NVDA. Minimum NVDA version: {minYear}.{minMajor}, last tested: {testedYear}.{testedMajor}.").format(  # noqa:E501
 					minYear=minimumYear, minMajor=minimumMajor, testedYear=lastTestedYear, testedMajor=lastTestedMajor),  # noqa:E501
 				makeAddonWindowTitle(NVDAString("Error")),
 				wx.OK | wx.ICON_ERROR)
@@ -351,9 +351,9 @@ class CheckForAddonUpdate(object):
 
 	def availableUpdateDialog(self, version, url):
 		# Translators: message to user to report a new version.
-		message = _("New version available, version %s. Do you want download it now?") % version  # noqa:E501
+		msg = _("New version%s is available. Do you want to download it now?") % version  # noqa:E501
 		with UpdateCheckResultDialog(
-				gui.mainFrame, self.title, message, auto=self.auto, releaseNoteURL=self.releaseNoteURL) as d:
+				gui.mainFrame, self.title, msg, auto=self.auto, releaseNoteURL=self.releaseNoteURL) as d:
 			res = d.ShowModal()
 			if res == wx.ID_NO:
 				return
@@ -380,25 +380,7 @@ class CheckForAddonUpdate(object):
 			wx.OK | wx.ICON_ERROR)
 
 	def getLatestUpdateInfos(self, updateInfosFile=None):
-		def importCodePy2(code, moduleName, add_to_sys_modules=0):
-			""" code can be any object containing code -- string, file object, or
-			compiled code object. Returns a new module object initialized
-			by dynamically importing the given code and optionally adds it
-			to sys.modules under the given name.
-			"""
-			import imp
-			try:
-				mod = imp.new_module(moduleName)
-				if add_to_sys_modules:
-					import sys
-					sys.modules[moduleName] = mod
-				exec(code) in mod.__dict__
-			except:  # noqa:E722
-				log.warning("Error importing myAddons.latest")
-				mod = None
-			return mod
-
-		def importCodePy3(fileName, moduleName):
+		def importCode(fileName, moduleName):
 			import importlib.machinery
 			import importlib.util
 			loader = importlib.machinery.SourceFileLoader(moduleName, fileName)
@@ -438,11 +420,7 @@ class CheckForAddonUpdate(object):
 			if not self.auto:
 				self.errorUpdateDialog()
 			return None
-		if py3:
-			mod = importCodePy3(res.name, "myAddonsLatest")
-		else:
-			code = res.read()
-			mod = importCodePy2(code, "myAddonsLatest")
+		mod = importCode(res.name, "myAddonsLatest")
 		res.close()
 		if updateInfosFile is None:
 			try:

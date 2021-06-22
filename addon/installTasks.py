@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # installTasks.py
 # a part of NVDAExtensionGlobalPLugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -66,10 +66,7 @@ def onInstall():
 	import os
 	import globalVars
 	import sys
-	if sys.version.startswith("3"):
-		curPath = os.path.dirname(__file__)
-	else:
-		curPath = os.path.dirname(__file__).decode("mbcs")
+	curPath = os.path.dirname(__file__)
 	sys.path.append(curPath)
 	from onInstall import checkWindowListAddonInstalled, installNewSymbols
 	del sys.path[-1]
@@ -86,7 +83,7 @@ def onInstall():
 		# existing previous addon config
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you want to keep previous add-on configuration settings ?"),
+			_("Do you want to keep previous add-on configuration settings?"),
 			# Translators: the title of a message box dialog.
 			_("%s - installation") % addonSummary,
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
@@ -109,12 +106,7 @@ def onUninstall():
 	import globalVars
 	import sys
 	# include the module directory to the path
-	if sys.version.startswith("3"):
-		# for ppython 3
-		curPath = os.path.dirname(__file__)
-	else:
-		# for python 2
-		curPath = os.path.dirname(__file__).decode("mbcs")
+	curPath = os.path.dirname(__file__)
 	sys.path.append(curPath)
 	import buildVars
 	addonName = buildVars.addon_info["addon_name"]

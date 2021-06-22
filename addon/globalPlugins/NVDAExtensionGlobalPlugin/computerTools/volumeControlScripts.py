@@ -5,10 +5,8 @@
 
 
 import addonHandler
-import globalPluginHandler
 import baseObject
 import ui
-import speech
 import wx
 import api
 import appModuleHandler
@@ -21,10 +19,10 @@ addonHandler.initTranslation()
 SCRCAT_VOLUME_CONTROL = _("Volume control")
 # Translators: Input help mode message
 # for setting to 90% the volume of current focused application command.
-_setFocusedAppVolumeToMsg = _("Set the  volume of current focused application to %s percent")
+_setFocusedAppVolumeToMsg = _("Set the volume of current focused application to %s percent")
 # Translators: Input help mode message
 # for setting to x the main volume.
-_setSpeakersVolumeToMsg = _("Set the  main volume to %s")
+_setSpeakersVolumeToMsg = _("Set the main volume to %s")
 
 
 class ScriptsForVolume(baseObject.ScriptableObject):
@@ -93,9 +91,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setSpeakersVolumeLevelTo90": ("kb:control+9", ID_VolumeControl),
 		"setSpeakersVolumeLevelToPreviousLevel": ("kb:control+backspace", ID_VolumeControl),
 	}
-	
-	
-	
+
 	_volumeControlScriptsToDocsAndCategory = {
 		# Translators: Input help mode message
 		# for set on main and NVDA volume command.
@@ -128,30 +124,30 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		# Translators: Input help mode message
 		# for minimize volume of speakers command.
 		"minimizeSpeakersVolume": (_("Minimize volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo10Percent": (_setFocusedAppVolumeToMsg  % 10, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo20Percent": (_setFocusedAppVolumeToMsg  % 20, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo30Percent": (_setFocusedAppVolumeToMsg  % 30, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo40Percent": (_setFocusedAppVolumeToMsg  % 40, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo50Percent": (_setFocusedAppVolumeToMsg  % 50, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo60Percent": (_setFocusedAppVolumeToMsg  % 60, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo70Percent": (_setFocusedAppVolumeToMsg  % 70, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo80Percent": (_setFocusedAppVolumeToMsg  % 80, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo90Percent": (_setFocusedAppVolumeToMsg  % 90, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo10Percent": (_setFocusedAppVolumeToMsg % 10, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo20Percent": (_setFocusedAppVolumeToMsg % 20, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo30Percent": (_setFocusedAppVolumeToMsg % 30, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo40Percent": (_setFocusedAppVolumeToMsg % 40, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo50Percent": (_setFocusedAppVolumeToMsg % 50, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo60Percent": (_setFocusedAppVolumeToMsg % 60, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo70Percent": (_setFocusedAppVolumeToMsg % 70, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo80Percent": (_setFocusedAppVolumeToMsg % 80, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeTo90Percent": (_setFocusedAppVolumeToMsg % 90, SCRCAT_VOLUME_CONTROL),
 		# Translators: Input help mode message
 		# for setting back to previous level the volume of current focused application command.
-		"setFocusedAppVolumeToPreviousLevel": (_("Set the  volume of current focused application to previous level"), SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo10": (_setSpeakersVolumeToMsg  % 10, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo20": (_setSpeakersVolumeToMsg  % 20, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo30": (_setSpeakersVolumeToMsg  % 30, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo40": (_setSpeakersVolumeToMsg  % 40, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo50": (_setSpeakersVolumeToMsg  % 50, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo60": (_setSpeakersVolumeToMsg  % 60, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo70": (_setSpeakersVolumeToMsg  % 70, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo80": (_setSpeakersVolumeToMsg  % 80, SCRCAT_VOLUME_CONTROL),
+		"setFocusedAppVolumeToPreviousLevel": (_("Set the volume of current focused application to previous level"), SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo10": (_setSpeakersVolumeToMsg % 10, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo20": (_setSpeakersVolumeToMsg % 20, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo30": (_setSpeakersVolumeToMsg % 30, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo40": (_setSpeakersVolumeToMsg % 40, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo50": (_setSpeakersVolumeToMsg % 50, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo60": (_setSpeakersVolumeToMsg % 60, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo70": (_setSpeakersVolumeToMsg % 70, SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelTo80": (_setSpeakersVolumeToMsg % 80, SCRCAT_VOLUME_CONTROL),
 		"setSpeakersVolumeLevelTo90": (_setSpeakersVolumeToMsg % 90, SCRCAT_VOLUME_CONTROL),
 		# Translators: Input help mode message
 		# for setting back to previous level the volume of speakers command.
-		"setSpeakersVolumeLevelToPreviousLevel": (_("Set the  main volume to previous level"), SCRCAT_VOLUME_CONTROL),
+		"setSpeakersVolumeLevelToPreviousLevel": (_("Set the main volume to previous level"), SCRCAT_VOLUME_CONTROL),
 	}
 
 	def script_toggleCurrentAppVolumeMute(self, gesture):
@@ -168,7 +164,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	def script_setMainAndNVDAVolume(self, gesture):
 		if volumeControl.setSpeakerVolume() and volumeControl.setNVDAVolume():
 			ui.message(
-				# Translators: message to user  nvda and main volume  are established .
+				# Translators: message to user nvda and main volume are established .
 				_("The main volume and that of NVDA are established and their level sets to the one in the configuration"))  # noqa:E501
 		else:
 			ui.message(_("Not available on this operating's system"))
@@ -208,15 +204,19 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	def script_setFocusedAppVolumeTo10Percent(self, gesture):
 		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="set", value=10)
 	script_setFocusedAppVolumeTo10Percent.noFinish = True
+
 	def script_setFocusedAppVolumeTo20Percent(self, gesture):
 		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="set", value=20)
 	script_setFocusedAppVolumeTo20Percent.noFinish = True
+
 	def script_setFocusedAppVolumeTo30Percent(self, gesture):
 		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="set", value=30)
 	script_setFocusedAppVolumeTo30Percent.noFinish = True
+
 	def script_setFocusedAppVolumeTo40Percent(self, gesture):
 		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="set", value=40)
 	script_setFocusedAppVolumeTo40Percent.noFinish = True
+
 	def script_setFocusedAppVolumeTo50Percent(self, gesture):
 		wx.CallAfter(volumeControl.changeFocusedAppVolume, action="set", value=50)
 	script_setFocusedAppVolumeTo50Percent.noFinish = True
@@ -278,4 +278,3 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 
 	def script_setSpeakersVolumeLevelToPreviousLevel(self, gesture):
 		wx.CallAfter(volumeControl.setSpeakersVolumeLevelToPreviousLevel)
-		

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-pon
-# Copyright (C) 2016 -2020 paulber19
+# Copyright (C) 2016 -2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,7 +8,6 @@ import addonHandler
 import os
 import time
 import ui
-import speech
 import gui
 from gui import guiHelper
 import wx
@@ -17,7 +16,6 @@ import threading
 from ..settings import _addonConfigManager
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isInteger, speakLater, isOpened, makeAddonWindowTitle
-from ..utils.py3Compatibility import rangeGen
 
 addonHandler.initTranslation()
 
@@ -64,7 +62,7 @@ class MinuteTimer(object):
 
 	def speakAnnounceBeforeEnd(self):
 		msg = _("End duration in %s minutes") % self.delayBeforeEndDuration\
-			if self.delayBeforeEndDuration > 1 else _("End duration inone minute")
+			if self.delayBeforeEndDuration > 1 else _("End duration in one minute")
 		ui.message(msg)
 		self.speakAnnounceTimer = wx.CallLater(
 			int(1000*60*self.delayBeforeEndDuration), self.speakAnnounce)
@@ -81,7 +79,7 @@ class MinuteTimer(object):
 			gui.messageBox,
 			self.announce,
 			# Translators: the title of a message box dialog.
-			_("End ofduration"),
+			_("End of minutetimer"),
 			wx.OK)
 
 	def getRemainingTime(self):
@@ -130,10 +128,10 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 		self.minuteTimerDurationEdit.Value = str(lastDuration)
 		# Translators: This is a label for a setting in MinuteTimer
 		# (an edit box to define the text to be spoken at then end of duration).
-		announceLabel = _("Enter the &annonce to be spoken at the end of duration:")
+		announceLabel = _("Enter the &announce to be spoken at the end of duration:")
 		self.announceEdit = sHelper.addLabeledControl(announceLabel, wx.TextCtrl)
 		self.announceEdit.Value = lastAnnounce
-		self.delayBeforeEndDurationList = [str(x) for x in rangeGen(11)]
+		self.delayBeforeEndDurationList = [str(x) for x in range(11)]
 		self.delayBeforeEndDurationLB = sHelper.addLabeledControl(
 			# Translators: This is a label for a setting in MinuteTimer dialog.
 			_("Delay to be alerted before ending (in minutes):"),
@@ -225,7 +223,7 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 
 class RingOptionsDialog(wx.Dialog):
 	# Translators: this i the title of ring Options dialog.
-	title = _("Ring options ")
+	title = _("Ring options")
 
 	def __init__(self, parent):
 		super(RingOptionsDialog, self).__init__(parent, title=self.title)
@@ -250,7 +248,7 @@ class RingOptionsDialog(wx.Dialog):
 		self.delayBetweenRingsBox = sHelper.addLabeledControl(
 			# Translators: This is the label for the edit field
 			# in the ring options dialog to define duration between rings.
-			_("&Delay between rings (in miliseconds):"),
+			_("&Delay between rings (in milliseconds):"),
 			wx.Choice,
 			choices=[str(x*500) for x in range(1, 11)])
 		self.delayBetweenRingsBox.SetStringSelection(str(delayBetweenRings))

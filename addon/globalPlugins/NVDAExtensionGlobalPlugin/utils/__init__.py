@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/utils/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016  paulber19
+# Copyright (C) 2016-2021  paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -16,7 +16,6 @@ from logHandler import log
 import queueHandler
 import config
 import core
-from .py3Compatibility import longint
 from ..settings import toggleDialogTitleWithAddonSummaryAdvancedOption
 
 addonHandler.initTranslation()
@@ -27,18 +26,18 @@ WS_MAXIMIZE = 0x01000000
 WM_SYSCOMMAND = 0x112
 # window style
 # WS_MAXIMIZE:The window is initially maximized
-WS_MAXIMIZE = longint(0x01000000)
+WS_MAXIMIZE = 0x01000000
 #  WS_MAXIMIZEBOX: The window has a maximize button.
 # Cannot be combined with the WS_EX_CONTEXTHELP style.
 # The WS_SYSMENU style must also be specif
-WS_MAXIMIZEBOX = longint(0x00010000)
+WS_MAXIMIZEBOX = 0x00010000
 # WS_MINIMIZE : The window is initially minimized.
 # ame as the WS_ICONIC style.
-WS_MINIMIZE = longint(0x20000000)
+WS_MINIMIZE = 0x20000000
 # WS_MINIMIZEBOX: The window has a minimize button.
 # Cannot be combined with the WS_EX_CONTEXTHELP style.
 # The WS_SYSMENU style must also be specif
-WS_MINIMIZEBOX = longint(0x00020000)
+WS_MINIMIZEBOX = 0x00020000
 # global timer
 _speakTimer = None
 
@@ -130,11 +129,11 @@ def speakLater(delay=0, msg=""):
 	_speakTimer = core.callLater(delay, callback, msg)
 
 
-def isOpened(dialog, putOnForeground=True):
+def isOpened(dialog):
 	if dialog._instance is None:
 		return False
 	# Translators: the label of a message box dialog.
-	msg = _("%s dialog is allready open") % dialog.title
+	msg = _(""""%s" dialog is already open""") % dialog.title
 	queueHandler.queueFunction(queueHandler.eventQueue, ui.message, msg)
 	return True
 
@@ -172,3 +171,27 @@ def mouseClick(obj, rightButton=False, twice=False):
 			time.sleep(0.1)
 			winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0, None, None)
 			winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTUP, 0, 0, None, None)
+
+
+def getSpeechMode():
+	try:
+		# for nvda  version >= 2021.1
+		return speech.getState().speechMode
+	except AttributeError:
+		return speech.speechMode
+
+
+def setSpeechMode(mode):
+	try:
+		# for nvda version >= 2021.1
+		speech.setSpeechMode(mode)
+	except AttributeError:
+		speech.speechMode = mode
+
+
+def setSpeechMode_off():
+	try:
+		# for nvda version >= 2021.1
+		speech.setSpeechMode(speech.SpeechMode.off)
+	except AttributeError:
+		speech.speechMode = speech.speechMode_off

@@ -76,7 +76,7 @@ def suspend(hibernate=False):
 	if (not win32api.GetPwrCapabilities()['HiberFilePresent'] and hibernate):
 		import warnings
 		# Translators: message to user to report hibernate mode is not available.
-		warnings.warn(_("Hibernate isn't available. Sleep mode is activated."))
+		warnings.warn(_("Hibernate isn't available. So, sleep mode is activated."))
 	try:
 		ctypes.windll.powrprof.SetSuspendState(not hibernate, True, False)
 	except:  # noqa:E722

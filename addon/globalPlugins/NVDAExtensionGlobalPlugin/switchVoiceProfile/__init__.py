@@ -1,6 +1,6 @@
-# globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__
+# globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2020 paulber19
+# Copyright (C) 2018 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,7 +9,6 @@
 import addonHandler
 from logHandler import log
 import config
-import speech
 import ui
 import wx
 import gui
@@ -19,7 +18,7 @@ import characterProcessing
 from synthDriverHandler import getSynth, setSynth, getSynthList
 from ..utils.informationDialog import InformationDialog, makeAddonWindowTitle
 from ..utils.NVDAStrings import NVDAString
-from ..utils.py3Compatibility import rangeGen, _unicode, py3
+from ..utils import isOpened
 
 addonHandler.initTranslation()
 
@@ -201,14 +200,9 @@ class SwitchVoiceProfilesManager(object):
 			config.conf[SCT_Speech] = synthSpeechConfig.copy()
 			setSynth(synthName)
 			# Reinitialize the tones module to update the audio device
-			if py3:
-				import tones
-				tones.terminate()
-				tones.initialize()
-			else:
-				import tones
-				reload(tones)
-
+			import tones
+			tones.terminate()
+			tones.initialize()
 			getSynth().saveSettings()
 			if msg:
 				ui.message(msg)
@@ -222,9 +216,9 @@ class SwitchVoiceProfilesManager(object):
 		if synthName is None:
 			if gui.messageBox(
 				# Translators: the label of a message box dialog.
-				_("Impossible, the synthetizer of voice profile {voiceProfileName} associated to selector {selector} is not available. Do you want to free this selector ?").format(selector=selector, voiceProfileName=voiceProfileName),  # noqa:E501
+				_("Impossible, the synthesizer of voice profile {voiceProfileName} associated to selector {selector} is not available. Do you want to free this selector?").format(selector=selector, voiceProfileName=voiceProfileName),  # noqa:E501
 				# Translators: the title of a message box dialog.
-				_("Synthetizer error"),
+				_("Synthesizer error"),
 				wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
 				core.callLater(200, self.freeSelector, selector)
 			return
@@ -343,6 +337,7 @@ class SwitchVoiceProfilesManager(object):
 			item = infos[i]
 			d[str(i+1)] = [item[0], item[1]]
 		return d
+
 	def getCurrentSynthDatas(self):
 		synth = self.curSynth
 		synthDatas = {}
@@ -427,7 +422,7 @@ class SwitchVoiceProfilesManager(object):
 	def getUseNormalConfigurationSelectorsFlag(self):
 		conf = deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
 		if KEY_UseNormalConfigurationSelectors in conf:
-			return conf[KEY_UseNormalConfigurationSelectors] in [True, _unicode(True)]
+			return conf[KEY_UseNormalConfigurationSelectors] in [True, str(True)]
 		# by default
 		return True
 
@@ -462,7 +457,7 @@ class SwitchVoiceProfilesManager(object):
 		textList = []
 		if selector is None:
 			# get infos for current synth
-			selectorConfig  = self.getCurrentSynthDatas()
+			selectorConfig = self.getCurrentSynthDatas()
 		else:
 			selectorConfig = self.getConfig()[selector].copy()
 			textList.append(_("selector: %s") % selector)
@@ -476,11 +471,11 @@ class SwitchVoiceProfilesManager(object):
 					_("Associated under %s configuration profile") % NVDAString("(normal configuration)"))  # noqa:E501
 		synthName = selectorConfig[KEY_SynthName]
 		textList.append(
-			# Translators: text to report synthetizer name.
-			_("Synthetizer: %s") % synthName)
+			# Translators: text to report synthesizer name.
+			_("Synthesizer: %s") % synthName)
 		synthSettings = selectorConfig[SCT_Speech][synthName].copy()
 		textList.append(
-			# Translators:  label to report synthetizer output device .
+			# Translators:  label to report synthesizer output device .
 			_("Output device: %s") % selectorConfig[SCT_Speech][KEY_OutputDevice])
 		synthDisplayInfos = selectorConfig[KEY_SynthDisplayInfos]
 		for i in synthDisplayInfos:
@@ -690,7 +685,6 @@ class SelectorsManagementDialog (wx.Dialog):
 		dialogTitle = _("Voice profile 's informations")
 		InformationDialog.run(None, dialogTitle, "", text)
 
-
 	def onActivateButton(self, evt):
 		# no action if focus is on check box
 		if self.useNormalConfigurationSelectorsCheckBox.HasFocus():
@@ -749,7 +743,7 @@ class SelectorsManagementDialog (wx.Dialog):
 		voiceProfileName = conf[selector][KEY_VoiceProfileName]
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you want realy free selector {selector} associated to voice profile {voiceProfileName}").format(selector=selector, voiceProfileName=voiceProfileName),  # noqa:E501
+			_("""Do you really want to free selector {selector} associated to the voice profile "{voiceProfileName}"?""").format(selector=selector, voiceProfileName=voiceProfileName),  # noqa:E501
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -762,7 +756,7 @@ class SelectorsManagementDialog (wx.Dialog):
 	def onFreeAllButton(self, evt):
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you want realy free all selectors set to this configuration profile ?"),  # noqa:E501
+			_("Do you really want to free all selectors set to this configuration profile?"),  # noqa:E501
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -805,7 +799,7 @@ class SelectorsManagementDialog (wx.Dialog):
 			self.freeButton.Disable()
 			self.informationButton.Disable()
 		enable = False
-		for index in rangeGen(self.selectorListBox.Count):
+		for index in range(self.selectorListBox.Count):
 			selector = str(index+1)
 			if (
 				isSet(selector)
@@ -826,13 +820,8 @@ class SelectorsManagementDialog (wx.Dialog):
 
 	@classmethod
 	def run(cls, obj):
-		if cls._instance is not None:
-			# Translators: message to user: dialog  already open.
-			msg = _("%s dialog is allready open") % cls.title
-			queueHandler.queueFunction(
-				queueHandler.eventQueue, ui.message, msg)
+		if isOpened(cls):
 			return
-
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame)
 		d.CentreOnScreen()

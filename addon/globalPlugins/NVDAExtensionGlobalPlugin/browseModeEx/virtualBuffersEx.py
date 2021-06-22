@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\virtualBuffersEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -17,7 +17,6 @@ from comtypes import COMError
 from ..utils.NVDAStrings import NVDAString
 from . import elementsList
 from .__init__ import BrowseModeDocumentTreeInterceptorEx
-from ..utils.py3Compatibility import _unicode
 
 addonHandler.initTranslation()
 
@@ -172,21 +171,21 @@ class VirtualBufferQuickNavItemEx(virtualBuffers.VirtualBufferQuickNavItem):
 		role = attrs.get("role", "")
 		if (self.itemType == "edit"):
 			name = attrs.get("name", "")
-			return _unicode("{name} {role} {value}").format(
+			return str("{name} {role} {value}").format(
 				name=self.getLabel(name), role=controlTypes.roleLabels[role], value=value)
 		if self.itemType == "checkBox":
 			states = attrs.get("states", "")
 			state = NVDAString("checked") if controlTypes.STATE_CHECKED in states\
 				else NVDAString("not checked")
 			name = attrs.get("name", "")
-			return _unicode("%s %s") % (self.getLabel(name), state)
+			return str("%s %s") % (self.getLabel(name), state)
 		if self.itemType in ["formField"]:
 			if role == controlTypes.ROLE_CHECKBOX:
 				states = attrs.get("states", "")
 				state = NVDAString("checked") if controlTypes.STATE_CHECKED in states\
 					else NVDAString("not checked")
 				name = attrs.get("name", "")
-				return _unicode("{name} {role} {state}") .format(
+				return str("{name} {role} {state}") .format(
 					name=name, role=controlTypes.roleLabels[role], state=state)
 			return value
 		return self.getLabel(value)

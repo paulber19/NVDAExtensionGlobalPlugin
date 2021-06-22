@@ -12,7 +12,6 @@ import speech
 import ui
 import config
 import controlTypes
-from ..utils.py3Compatibility import py3
 try:
 	# fornvda version >=  2020.1
 	from controlTypes import OutputReason
@@ -26,7 +25,7 @@ except ImportError:
 
 addonHandler.initTranslation()
 
-SCRCAT_TABLE = _("Table")
+SCRCAT_TABLE = NVDAString("table").capitalize()
 
 
 class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
@@ -45,18 +44,10 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		"kb:control+alt+shift+downArrow": "moveToLastCellOfColumn",
 		}
 	# set category of base NVDA scripts
-	if py3:
-		# for python 3
-		documentBase.DocumentWithTableNavigation.script_nextRow.category = SCRCAT_TABLE  # noqa:E501
-		documentBase.DocumentWithTableNavigation.script_previousRow.category = SCRCAT_TABLE  # noqa:E501
-		documentBase.DocumentWithTableNavigation.script_nextColumn.category = SCRCAT_TABLE  # noqa:E501
-		documentBase.DocumentWithTableNavigation.script_previousColumn.category = SCRCAT_TABLE  # noqa:E501
-	else:
-		# for python 2
-		documentBase.DocumentWithTableNavigation.script_nextRow.__func__.category = SCRCAT_TABLE  # noqa:E501
-		documentBase.DocumentWithTableNavigation.script_previousRow.__func__.category = SCRCAT_TABLE  # noqa:E501
-		documentBase.DocumentWithTableNavigation.script_nextColumn.__func__.category = SCRCAT_TABLE  # noqa:E501
-		documentBase.DocumentWithTableNavigation.script_previousColumn.__func__.category = SCRCAT_TABLE  # noqa:E501
+	documentBase.DocumentWithTableNavigation.script_nextRow.category = SCRCAT_TABLE  # noqa:E501
+	documentBase.DocumentWithTableNavigation.script_previousRow.category = SCRCAT_TABLE  # noqa:E501
+	documentBase.DocumentWithTableNavigation.script_nextColumn.category = SCRCAT_TABLE  # noqa:E501
+	documentBase.DocumentWithTableNavigation.script_previousColumn.category = SCRCAT_TABLE  # noqa:E501
 
 	def __init__(self, rootNVDAObject):
 		super(DocumentWithTableNavigationEx, self).__init__(rootNVDAObject)

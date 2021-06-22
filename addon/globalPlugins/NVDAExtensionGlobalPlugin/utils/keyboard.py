@@ -13,8 +13,7 @@ try:
 	from configobj.validate import Validator
 except ImportError:
 	from validate import Validator
-from ..utils.py3Compatibility import py3, importStringIO
-StringIO = importStringIO()
+from io import StringIO
 
 _configSpec = """
 [KeyboardKeys]
@@ -38,12 +37,7 @@ def getKeyboardKeysIniFilePath():
 		langs.append(lang.split("_")[0])
 	langs.append("en")
 	for lang in langs:
-		if py3:
-			# for python 3
-			langDir = os.path.join(addonFolderPath, "locale", lang)
-		else:
-			# for python 2
-			langDir = os.path.join(addonFolderPath, "locale", lang.encode("utf-8"))
+		langDir = os.path.join(addonFolderPath, "locale", lang)
 		if os.path.exists(langDir):
 			file = os.path.join(langDir, "keyboard.ini")
 			if os.path.isfile(file):

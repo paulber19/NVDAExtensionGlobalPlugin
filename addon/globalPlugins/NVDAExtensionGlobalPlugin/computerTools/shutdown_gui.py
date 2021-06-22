@@ -29,7 +29,7 @@ class ComputerShutdownDialog(wx.Dialog):
 			return
 		ComputerShutdownDialog._instance = self
 		# Translators: This is the title of Computer shutdown dialog window.
-		dialogTitle = _("Computer's shut down")
+		dialogTitle = _("Computer shutdown")
 		title = ComputerShutdownDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(ComputerShutdownDialog, self).__init__(parent, -1, title)
 		self.doGui()
@@ -56,7 +56,7 @@ class ComputerShutdownDialog(wx.Dialog):
 		self.forceOptionBox.SetValue(_addonConfigManager.getForceCloseOption())
 		# Translators: This is a label for a edit box in Computer shutdown dialog.
 		(min, max) = self._delayBeforeShutdownOrRestartLimits
-		labelText = _("&Delay befor shutdown or reboot between {min} and {max} seconds").format(min=min, max=max)  # noqa:E501
+		labelText = _("&Delay before shutdown or reboot between {min} and {max} seconds").format(min=min, max=max)  # noqa:E501
 		self.delayBeforeShutdownOrRestartBox = sHelper1.addLabeledControl(
 			labelText, nvdaControls.SelectOnFocusSpinCtrl,
 			min=int(0),
