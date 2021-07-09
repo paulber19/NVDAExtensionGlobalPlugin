@@ -14,6 +14,12 @@ from virtualBuffers import *  # noqa:F403
 from virtualBuffers import _prepareForFindByAttributes
 from NVDAObjects.IAccessible import ia2Web
 from comtypes import COMError
+try:
+	# for nvda version >= 2021.1
+	from comInterfaces import IAccessible2Lib as IA2
+except ImportError:
+	import IAccessibleHandler as IA2
+
 from ..utils.NVDAStrings import NVDAString
 from . import elementsList
 from .__init__ import BrowseModeDocumentTreeInterceptorEx
@@ -99,7 +105,7 @@ class Gecko_ia2_Ex(VirtualBufferEx, virtualBuffers.gecko_ia2 .Gecko_ia2):
 
 	def _searchableNewAttribsForNodeType(self, nodeType):
 		if nodeType == "paragraph":
-			attrs = {"IAccessible::role": [IAccessibleHandler.IA2_ROLE_PARAGRAPH]}
+			attrs = {"IAccessible::role": [IA2.IA2_ROLE_PARAGRAPH]}
 		elif nodeType == "division":
 			attrs = {"IAccessible2::attribute_tag": self._searchableTagValues(["DIV"])}
 		elif nodeType == "anchor":

@@ -633,7 +633,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		wx.CallAfter(self.exploreFolder, path)
 
 	def script_exploreUserConfigFolder(self, gesture):
-		speech.speakMessage(_("Please wait"))
+		ui.message(_("Please wait"))
 		self.onExploreUserConfigFolderMenu(None)
 
 	def onExploreProgramFilesMenu(self, evt):
@@ -641,7 +641,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		wx.CallAfter(self.exploreFolder, path)
 
 	def script_exploreProgramFiles(self, gesture):
-		speech.speakMessage(_("Please wait"))
+		ui.message(_("Please wait"))
 		self.onExploreProgramFilesMenu(None)
 
 	def onCommandKeysSelectiveAnnouncementMenu(self, evt):
@@ -1139,7 +1139,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def script_displayModuleUserGuide(self, gesture):
 		path = self.curAddon.getDocFilePath()
-		speech.speakMessage(_("Please wait"))
+		ui.message(_("Please wait"))
 		os.startfile(path)
 
 	def script_shutdownComputerDialog(self, gesture):
