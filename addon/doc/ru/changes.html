@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="../style_t2t.css" media="screen"/>
+<title>Расширение глобальных команд NVDA 9.8.1</title>
+</head>
+<BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>NVDA global commands extension - история изменений</H1>
+<FONT SIZE="4">
+<I>Auteur : paulber19</I><BR>
+</FONT></CENTER>
+
+<P>
+URL : <A HREF="mailto:paulber19@laposte.net">paulber19@laposte.net</A>
+</P>
+<P>
+<A HREF="https://github.com/paulber19/NVDAExtensionGlobalPlugin.git">GitHub : https://github.com/paulber19/NVDAExtensionGlobalPlugin.git</A>
+</P>
+<P>
+скачать :
+</P>
+<UL>
+<LI><A HREF="https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.1.nvda-addon">стабильная версия : 9.8.1</A>
+<LI><A HREF="https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.7.nvda-addon">предыдущая версия : 9.7</A>
+<LI><A HREF="https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev">версия в разработке</A>
+</UL>
+
+<H2>1. v9.8.1 (07.08.2021)</H2>
+<P>
+Исправление де бога:
+</P>
+<UL>
+<LI>en mode navigation et NVDA 2021.1, le déplacement par paragraphe ne génère plus d'erreur.
+</UL>
+
+<H2>2. v9.8 (22.06.2021)</H2>
+<UL>
+<LI>Совместимость с NVDA 2021.1. Предыдущие версии NVDA на 2019.3 не имеют дополнительной поддержки.
+<LI>подавление кода, относящегося к Python 2.7.
+<LI>исправление орфографических и грамматических цепочек английских знаков.
+<LI>перевод слов по системе Брайля с голосовыми сообщениями в стиле «копировальный аппарат», «коллер» и т. д.
+</UL>
+
+<H2>3. v9.7 (04.01.2021)</H2>
+<UL>
+<LI>повторение всех функций для посланника австралийского текстового сообщения на языке Брайля.
+</UL>
+
+<H2>4. v9.6.1 (21.03.2021)</H2>
+<UL>
+<LI>Исправление документации.
+<LI>код nettoyage du.
+</UL>
+
+<H2>5. v9.6 (03.10.2021)</H2>
+<P>
+Модерн:
+</P>
+<UL>
+<LI>в диалоге «Список активных объектов» (верхний номинал «nvda + j» suivi par «f10»):
+ <UL>
+ <LI>dans la liste des fenêtres, possible de sélectionner une fenêtre en tapant le début de son nom.
+ <LI>les fenêtres actives de second niveau sont maintenant affichées.
+ </UL>
+<LI>в диалоге "Список видимых элементов составного объекта в авангарде" превосходит "NVDA + b":
+ <UL>
+ <LI>ajout de l'etat des boutons et case à cocher dans la liste des éléments Trouvés.
+ <LI>возможность выбора и выбора в отношении дебюта сына этикета.
+ </UL>
+<LI>Concernant la fonctionnalité "Controle du son":
+ <UL>
+ <LI>Скрипты для создания таблицы объема приложения, чтобы сфокусироваться на определенном процентном содержании основного объема.
+ <LI>сценарии для создания таблицы с исправлением основного тома.
+ <LI>сценарии для изменения основного тома или приложения в соответствии с текущим фокусом.
+ <LI>Уведомление об изменении объема приложения в фокусе на абсолютном объеме или в процентном соотношении основного объема.
+ </UL>
+<LI>amélioration de la fonctionnalité "Annonce sélective des touch de commande":
+ <UL>
+ <LI>приз en compte de la touche de модификация "Окна",
+ <LI>набор бутонов "Cocher tout" и "décocher tout" для выбора или удаления всех комбинаций модификаций,
+ <LI>возможность исключить все предметы без комбинации прикосновений и модификаций,
+ <LI>возможность исключить прикосновение без комбинации прикосновений к модификации,
+ <LI>использование прикосновения "F2" для поиска нового или предшествующего материала в списках (отказ от использования "F1" в соответствии с NVDA для версии 2020.4).
+ </UL>
+<LI>несколько сценариев для оповещения или описания вокальных параметров.
+<LI>traduction du manuel utilisateur en Anglais.
+</UL>
+
+<P>
+Исправление ошибок:
+</P>
+<UL>
+<LI>исправление пробле мовез аннонс лор де л'увертюр д'ун фишье с блок-нотами suivi par "control + n" et quelques flèches bas.
+</UL>
+
+<P>
+Изменения:
+</P>
+<UL>
+<LI>в диалоге «Список видимых элементов составного объекта в авангарде» («NVDA + b») и quand le focus est dans la liste des elements, la sélection du type d'éléments se fait maintenant par «contrôle + la première lettre du type et non plus seulement avec première lettre.
+<LI>в списках диалогов "Annonce sélective des touch de commandes", la touche "f1" n'a plus d'action.
+<LI>Автоматическое выделение объектов для обслуживания 100 мс после первого плана, после 2 секунд (lié au problème de la mauvaise annonce).
+</UL>
+
+<P>
+Залейте совместимость по NVDA 2021.1
+</P>
+<UL>
+<LI>досье "utilitiesPy38" для специальных библиотек для Python 3.8.
+<LI>mise à jour du package psutil-совместимый avec python 3.8.
+<LI>Mise à jour des fichiers du dossier "win32" de la librairie "pywin32", совместимый с python 3.8.
+<LI>замена GetDateFormat и GetTimeFormat, поддерживаемых GetDateFormatEx и GetTimeFormatEx в скрипте dateTime.
+<LI>награда за новый пакет autoSettingsUtils от NVDA.
+</UL>
+
+<H2>6. v9.5.3 (20.01.2021)</H2>
+<P>
+Исправление проблемы перевода сообщения «Скопировано в буфер обмена» (remplacé par «copy»).
+</P>
+<H2>7. v9.5.2 (16.01.2021)</H2>
+<P>
+Correction du mmauvais enregistrement des Symboles complex copiés ou collés.
+</P>
+<H2>8. v9.5 (28.12.2020)</H2>
+<P>
+Nouvelles fonctionnalités:
+</P>
+<UL>
+<LI>Совместимость с NVDA 2020.4
+<LI>приз в категории "Прикосновения к клавишам системы" в диалоге "Утилизация команд".
+<LI>Выберите выбранный тип диалога в открытом диалоге на «NVDA + f7».
+<LI>Новый сценарий для написания «Приложения».
+<LI>сценарий в стиле модерн "Fermer toutes les fenêtres ouvertes".
+<LI>новый скрипт для объявления списка расширений в функциональности.
+<LI>Бутон "Détruire tout" в диалоге "Liste des fenêtres actives" для détruire toutes les application lancées.
+</UL>
+
+<P>
+Исправления ошибок:
+</P>
+<UL>
+<LI>Вариант "Naviguer en Boucle" в стиле Basculera плюс изменение конфигурации расширения.
+</UL>
+
+<OL>
+<LI>v9.4 (29.11.2020) +
+</OL>
+
+<UL>
+<LI>исправление, касающееся проблемы:
+ <UL>
+ <LI>l'impossibilité d'affecter un geste de commande braille в диалоге "geste de commande",
+ <LI>l'impossibilité d'avoir l'aide des gestes de commande braille quand l'aide à la saisie est activée.
+ </UL>
+<LI>ajout des leges de téléchargements dans l'historique de l'extension.
+<LI>ajout du bouton "Voir l'historique" в категории "Mise à jour" с параметрами расширения.
+<LI>исправление блока NVDA для копирования коллера по сравнению с изображением Thunderbird.
+</UL>
+
+<H2>9. v9.3 (27.10.2020)</H2>
+<UL>
+<LI>Совместимость с NVDA 2020.3
+<LI>Исправление использования сценария повторения мемов.
+<LI>Усиление предела высокой продолжительности жизни.
+<LI>Расширение предела высокой выдержки при репетиции même geste de commande.
+<LI>Исправление касаний "большого размера" и "управления" в зависимости от направления в стандарте использования цифрового указателя.
+<LI>подавление, для всех версий NVDA supérieures à la 2020.3, de l'annonce du mot focalisé après подавления по принципу "контроль + поддержка" (плата за обслуживание по стандарту NVDA).
+<LI>часть функции расширения в безопасном режиме.
+<LI>Подавление специального кода для wxPython 3.
+<LI>gros nettoyage du code (исправление ошибок при анализе Flake8).
+<LI>исправление ошибок в документации.
+<LI>ajout du bouton "Quoi de neuf" в диалоге, предлагающем l'installation d'une nouvelle mise à jour.
+</UL>
+
+<H2>10. v9.2.2 (15.08.2020)</H2>
+<P>
+Исправление ошибок в сценарии "Afficher le dialog pour gérer les gestes de commande configurés par l'utilisateur" (с учетом версии 2020.3, альфа)
+</P>
+<H2>11. v9.2.1 (08.10.2020)</H2>
+<P>
+Ajout de la traduction espagnole.
+</P>
+<UL>
+<LI>исправление ошибок в журнале со сценарием "форматирование отчета" и новым сценарием.
+<LI>исправление ошибок в исходном коде в альфа-версиях NVDA.
+</UL>
+
+<H2>12. v9.2 (28.07.2020)</H2>
+<P>
+Совместимость с NVDA 2020.2
+</P>
+<H2>13. v9.1.3 (28.05.2020)</H2>
+<P>
+Ajout de la traduction vietnamienne.
+</P>
+<H2>14. v9.1.2 (21.05.2020)</H2>
+<P>
+Исправление документации
+</P>
+<H2>15. v9.1.1 (21.05.2020)</H2>
+<P>
+Ajout traduction turque.
+</P>
+<H2>16. v9.1 (05.01.2020)</H2>
+<UL>
+<LI>Совместимость с NVDA 2020.1
+<LI>повторение сценариев для объявления имен и завершенных досье, выбранных для диалогов в стиле «Ouvrir», «Enregistrer sous».
+<LI>повторение сценариев для анонсов записей исторической анонсы вокалов для прямой копии на бумаге.
+</UL>
+
+<H2>17. v9.0.8 (04.10.2020)</H2>
+<P>
+Исправление ошибок, произведенных при помощи бутона «Копировальный аппарат» диалога «Gestion des journaux de NVDA».
+</P>
+<H2>18. v9.0.7 (04.09.2020)</H2>
+<P>
+Ajout de la traduction arabe.
+</P>
+<H2>19. v9.0.6 (04.08.2020)</H2>
+<P>
+Ajout de la traduction portugaise.
+</P>
+<H2>20. v9.0.5 (04.02.2020)</H2>
+<UL>
+<LI>Подготовка к совместимости с NVDA 2020.2.
+<LI>Mise en Complité для проверки совместимости с расширением NVDA.
+</UL>
+
+<H2>21. v9.0.4 (23.03.2020)</H2>
+<P>
+Подготовка к совместимости с NVDA 2020.1.
+</P>
+<H2>22. v9.0.3 (03.05.2020)</H2>
+<P>
+Исправление ошибок в скрипте "nvda + f7" в Microsoft Edge.
+</P>
+<H2>23. v9.0.2 (22.02.2020)</H2>
+<UL>
+<LI>Исправления ошибок: ошибка сценария для копировального аппарата журнала на бумаге.
+<LI>meilleure gestion d'une erreur d'importation du fichier myAddons.latest.
+</UL>
+
+<H2>24. v9.0.1 (02.06.2020)</H2>
+<UL>
+<LI>Исправление ошибки в скрипте "nvda + pause".
+<LI>исправление даты вылета версии 9.0.
+</UL>
+
+<H2>25. v9.0 (02.06.2020)</H2>
+<P>
+Совместимость с NVDA 2019.3
+</P>
+<P>
+Nouvelles fonctionnalités:
+</P>
+<UL>
+<LI>возможность повторной инициализации дополнения конфигурации расширения.
+<LI>поиск и установка в автоматическом режиме.
+<LI>Возможно использование de la touche verrouillage numérique pour basculer en pavé numérique standard.
+<LI>ajout des touch "множитель", "делитель" и "плюс" в стандарте использования цифрового pavé numérique.
+<LI>реорганизация категорий параметров расширения.
+<LI>предотвращение несовместимых расширений.
+</UL>
+
+<OL>
+<LI>v8.1 (05.05.2019) +
+Совместимость с NVDA 2019.2
+<P></P>
+Функции:
+</OL>
+
+<UL>
+<LI>возможность ограничить временное пространство как seule touche "NVDA".
+<LI>комплименты к функции "Contrôle du son":
+ <UL>
+ <LI>увеличение, уменьшение, увеличение или уменьшение объема приложения в фокусе,
+ <LI>увеличитель, уменьшитель, максимизатор или минимизатор основного объема,
+ <LI>regroupement de ses gestes de commandes sous la catégorie "contrôle du son",
+ </UL>
+<LI>возможность использования элементов управления по числовому значению в соответствии с направлением (нормальная функция Windows).
+</UL>
+
+<P>
+Исправление ошибок:
+</P>
+<UL>
+<LI>Non sauvegarde de specifics paramètres lors de l'enregistrement manuelle et quand l'option "ne pas enregistrer la configuration" était cochée.
+<LI>fonctionnalité "Outils de développement": поправка к mauvaise Prize en compte des sous-langages для создания расширения документации.
+</UL>
+
+<H2>26. v8.0 (13.02.2019)</H2>
+<P>
+Функции:
+</P>
+<UL>
+<LI>в диалоге «Список видимых элементов составного объекта в авангарде», возможность изменения типа объекта без выхода из списка объектов.
+<LI>Предоставление возможности активировать остаточное действие прикосновений к демаржу NVDA.
+<LI>Специальное обновление для сайта gmail.com.
+<LI>Реорганизация су-меню "Paramètres".
+<LI>ajout de la fonctionnalité "date et heure - дополнение" qui regroupe la copy de la date et heure dans le press-papier (avec "nvda + f12"), l'annonce de l'heure avec les seconddes et l'annonce de la date et heure sans ponctuation.
+<LI>модернистский сценарий "Копировальный аппарат для свидания и отдыха" в командном предприятии.
+<LI>реприза функциональной «Коммутации профильного вокала» для выбора выбора по профилю конфигурации. Предварительная конфигурация этой функциональной возможности не совместима с предыдущим использованием этой функциональной возможности.
+<LI>возможность регистрации исторического вокала в круассане или декруассане.
+<LI>lors de la désinstallation d'une fonctionnalité, полная конфигурация подавления,
+<LI>представить полную документацию по использованию термина "расширение" на место "дополнения модуля" (imposée par les traducteurs de NVDA),
+<LI>подавление требований к приложению для всех сценариев базовых модификаций NVDA для расширения.
+</UL>
+
+<P>
+Исправления ошибок:
+</P>
+<UL>
+<LI>non affichage de tous les gestes de commandes ajoutés ou supprimés par l'utilisateur (Диалог "Gestes de commandes utilisateurs").
+</UL>
+
+<P>
+Развитие:
+</P>
+<UL>
+<LI>Подготовка к совместимости с python 3.
+<LI>Новые разработки для разработки расширений, основанные на особенностях buildVars.py:
+ <UL>
+ <LI>mise à jour de la version de l'extension dans le fichier buildVars.py,
+ <LI>mise à jour du fichier manifest.ini,
+ <LI>création du fichier manifest.ini de localization,
+ <LI>создание документации HTML,
+ <LI>création du fichier .pot,
+ <LI>création du fichier buildVars.py,
+ <LI>подготовка к расширению,
+ <LI>исследование досье расширения.
+ </UL>
+</UL>
+
+<H2>27. v7.4.3 (01.07.2019)</H2>
+<UL>
+<LI>Исправление на испанской клавиатуре.ini, которая провокационна на английском языке на испанском языке.
+<LI>перевод на арабском языке интерфейса модуля
+</UL>
+
+<H2>28. v7.4.2 (22.12.2018)</H2>
+<UL>
+<LI>Исправление документации
+<LI>исправление мове размещения бутонов в диалоге "Derniers Symboles composés".
+</UL>
+
+<H2>29. v7.4.1 (21.12.2018)</H2>
+<P>
+Correction du problème de l'annonce en anglais des commandes issues d'un clavier braille.
+</P>
+<H2>30. v7.4 (16.12.2018)</H2>
+<P>
+1- Новые функции:
+</P>
+<UL>
+<LI>выберите, для навигаторов "Firefox" и "Google Chrome", введите "кликабельный" для режима навигации и диалог "Список элементов",
+<LI>Для навигаторов "Firefox", Internet Explorer, Microsoft Edge и Google Chrome "введите" paragraphe "для режима навигации и диалогового окна" Список элементов ",
+<LI>Создайте сценарий для простого и двойного нажатия на кнопку навигации по положению объекта.
+<LI>Создайте сценарий для простого и двойного щелчка мышью на позиции courante de l'objet navigateur.
+</UL>
+
+<P>
+2- дайверы:
+</P>
+<UL>
+<LI>возможность выбора сценария в диалоге, представляющем сценарии предпринимателя,
+<LI>возможность, для переводчиков, конфигурирования команд управления типом "control + c, control + a" для изменения языка и для определенных приложений, которые не требуются,
+<LI>использование CentreOnScreen "на площади" Center.
+</UL>
+
+<H2>31. v7.3 (25.09.2018)</H2>
+<P>
+Завершение работы над совместимостью с NVDA 2018.3 и wxPython 4.
+</P>
+<UL>
+<LI>nouvelles fonctionnalité:
+ <UL>
+ <LI>Воспроизведение символов композиторов и диалогов для афиши и компоновщика,
+ <LI>новый диалог Outils de développement qui permet la возможность преобразования документации для дополнительных модулей,
+ <LI>выберите тип "региональный принцип" для навигации в режиме (навигатор Firefox, Internet Explorer, Google Chrome и Microsoft Edge),
+ <LI>дополнительная возможность для настройки временного выдерживания репутации même geste de commande,
+ <LI>вариант дезактивации
+ </UL>
+<LI>v7.2 (20 июн 2018) +
+<LI>совместимость с версиями разработки NVDA, подготовленными для перехода к wxPython 4 (NVDA 2018.3),
+<LI>Исправление ошибки в разрушении де ла dernière fenêtre de la liste des fenêtres.
+<LI>дополнительная возможность для дезактивации нумерации записей исторического вокала,
+<LI>дополнительная опция для титратора или не из диалогового окна с именным модулем,
+<LI>дезактивация параметра "Annoncer la description de l'objet" pendant l'affichage des boites de dialog du module, du style gui.messageBox, для добавления содержимого сообщения в сообщениях.
+</UL>
+
+<H2>32. v7.1.2 (6 июн 2018)</H2>
+<P>
+Исправление непризнанной конфигурации модуля для функциональности "Touches rémanentes".
+</P>
+<H2>33. v7.1.1 (5 июн 2018)</H2>
+<P>
+Исправление проблемы проверки результатов оптической разведки.
+</P>
+<H2>34. v7.1 (1 июн 2018)</H2>
+<P>
+Совместимость с NVDA 2018.2
+</P>
+<H2>35. v7.0 (8 марта 2018 г.)</H2>
+<P>
+Эта версия модуля не совместима с предыдущими версиями для версии 2018.1 от NVDA
+</P>
+<H3>35.1. Новые функции</H3>
+<UL>
+<LI>поддержка навигатора Google Chrome с функцией "Расширение функций виртуального тампона",
+<LI>mise en place de l'interpréteur de commandes permettant de lancer les scripts à l'aide d'une simple touch,
+<LI>установка номинальной конфигурации для функций без ограничений,
+<LI>новая функция "Rémanence des touch" постоянный композитор для работы с утилитами управления прикосновениями NVDA, Control, Alt, Majuscule ou Windows, avec un seul doigt,
+<LI>сообщить об объявлении номера и номере версии дополнительного модуля, активированного для приложения, размещенного в фокусе,
+<LI>arrêt, redémarrage ou mise en veille longée de l'ordinateur,
+<LI>gestion des gestes de commande configurés par l'utilisateur.
+<LI>Control du son de l'ordinateur (Windows 10) для:
+ <UL>
+ <LI>couper or rétablir le son du flux audio de l'application sous le focus,
+ <LI>Таблицы, сценарии и инструменты для модуля, основные звуковые потоки и параметры NVDA.
+ </UL>
+</UL>
+
+<H3>35.2. Изменения</H3>
+<UL>
+<LI>la plupart des fonctionnalités sont maintenant installées par défaut sans geste de commande. Il est cependant possible d'installer ces gestes en modifiant l'état d'installation de la fonctionnalité ou d'affecter manuellement ces gestes,
+<LI>командование "nvda + f12" для оповещения о служебных обязанностях Windows и вторые (настраиваемая опция),
+<LI>le geste de commande "NVDA + f12" peut copier la date et l'heure dans le press-papier (тройное приложение),
+<LI>le geste de commande "NVDA + alt + k" ("Annoncer les cellules de la colonne courante") est remplacé par "NVDA + alt + l" (соответствует дополнительному модулю avec d'autre),
+<LI>le geste de commande "NVDA + majuscule + 4" ("Вспомогательный элемент композиции символьных комплексов") est remplacé par "NVDA + majuscule + f4" (дополнение к дополнительному модулю avec d'autre),
+<LI>Обновленная документация: глава "Historique" размещена в главе "Généralités" и "Исторический модуль" размещен в одной части (change.html).
+</UL>
+
+<H3>35.3. Исправления ошибок</H3>
+<UL>
+<LI>исправление моветальных описаний дескрипторов команд дескриптов, перекомпонованных базовых скриптов,
+<LI>при повреждении конфигурации, повторная инициализация конфигурации по умолчанию.
+</UL>
+
+<H2>36. v6.5 (28 августа 2017 г.)</H2>
+<UL>
+<LI>Совместимость с NVDA 2017.3,
+<LI>command "w" modifiée en "y",
+<LI>исправление ошибки в функции "Селективная команда приказов",
+<LI>исправление документации определенных скриптов.
+</UL>
+
+<H2>37. v6.4 (9 июля 2017 г.)</H2>
+<UL>
+<LI>ajout des raccourcis pour changer de profil vocal en ordinateur Portable,
+<LI>исправление de la perte des noms de touche modifiée lors d'une mise à jour,
+<LI>исправление ошибок при замене на странице html.
+</UL>
+
+<H2>38. v6.3 (2 июля 2017 г.)</H2>
+<UL>
+<LI>быстрое переключение вокала.
+</UL>
+
+<H2>39. v6.2.1 (7 апреля 2017 г.)</H2>
+<P>
+Исправление проблемы, связанной с контролем в Excel с "control + c" ou "control + v"
+</P>
+<H2>40. v6.2 (13 марта 2017 г.)</H2>
+<P>
+Совместимость с AVEC NVDA 2017.1
+</P>
+<P>
+Функции:
+</P>
+<UL>
+<LI>возможность рекламы в миниатюре,
+<LI>команда размещения в таблице для Microsoft Edge,
+<LI>обновление NVDA с активным журналом в режиме дебага,
+<LI>сигнал от имени пользователя об ошибке в журнале.
+</UL>
+
+<P>
+Исправление ошибки:
+</P>
+<UL>
+<LI>double annonce de l'élément sous focus (диалог Annonce sélective des touch de commandes),
+<LI>бездействие бутона "Gérer vos symbols" du dialog "aide à la композиция из символьных комплексов",
+<LI>Невозможность создания новой категории диалога "gestion des Symboles utilisateur",
+<LI>без приза en compte immédiate des traductions lors d'une mise à jour (двойное повторное освобождение от NVDA nécessaire),
+<LI>"control + c" в окне исследователя Windows fait sauter au premier fichier commençant par "c",
+<LI>mauvaise annonce du nombre d'éléments sélectionnés (Explorateur Windows W10).
+</UL>
+
+<OL>
+<LI>v6.1 (10 января 2017 г.) +
+</OL>
+
+<UL>
+<LI>конфигурация символов и объектов для номинальных перемещений.
+<LI>nouveau changement de la commande clavier pour la minuterie,
+<LI>исправление отсутствия копирования адреса документа на пресс-бумаге ("NVDA + a")
+</UL>
+
+<H2>41. v6.0.3 (5 января 2017 г.) (не распространяется)</H2>
+<UL>
+<LI>nouveau changement du raccourci pour la minuterie,
+<LI>исправление документации
+</UL>
+
+<H2>42. v6.0.1 (26 декабря 2016 г.)</H2>
+<P>
+Исправление ошибок в анонсе устройств при замене на одно место
+</P>
+<H2>43. v6.0 (23 декабря 2016 г.)</H2>
+<UL>
+<LI>возможность копировального аппарата le chemin du journal courant dans le press-papier,
+<LI>возможность предоставления исторической информации о вокальных сообщениях и расширение регистрационного номера на 200 евро,
+<LI>часть функции «Расширение виртуального тампона» для навигатора Microsoft Edge,
+<LI>скрипт для обновления NVDA,
+<LI>сценарий pour afficher les éléments visibles composant l'objet en avant plan,
+<LI>изменение команды clavier pour lancer la minuterie,
+<LI>annonce des ponctuations lors de déplacement par mot,
+<LI>обновить все диалоги для использования сервисов GuiHelper,
+<LI>Совместимость с NVDA 2016.4.
+</UL>
+
+<H2>44. v5.0.2 (30 сентября 2016 г.)</H2>
+<UL>
+<LI>исправление проблем с блокировкой W10 для максимизации возможностей,
+<LI>указание в документации, манере выбора в соответствии с исходным кодом, элементы в списках диалогов, «анонсируйте выбор клавишных команд».
+</UL>
+
+<H2>45. v5.0.1 (13 сентября 2016 г.)</H2>
+<P>
+Исправление ошибок:
+</P>
+<UL>
+<LI>проблема суперпозиции листов в диалоге "Annonce sélective des touch de commandes",
+<LI>Меню "Renommage des touch clavier" безупречное,
+<LI>команда "nvda + Majuscule + 4" inopérante.
+</UL>
+
+<H2>46. v5.0 (23 августа 2016 г.)</H2>
+<UL>
+<LI>функция renommage des touch clavier
+<LI>функции управления символами комплексов utilisateur
+<LI>fonctionnalité d'annonce sélective des touch de commandes,
+<LI>fonctionnalité de minuterie,
+<LI>несколько сценариев для картинок с заменой на премьеру / переднюю клетку линии / колонны,
+<LI>опция максимизации automatique des fenêtres,
+<LI>меню для поиска конфигурационного досье проводника или программы NVDA,
+<LI>ajout de la catégorie "Греческий алфавит",
+<LI>Список комплексов символов suivant ordre du fichier "symbolCategories.dic",
+<LI>Reprise du Manuel.
+</UL>
+
+<H2>47. v4.3 (6 июля 2016 г.)</H2>
+<UL>
+<LI>исправление mauvaise traduction des annonces "copier dans le press-papier" et "aucune sélection",
+<LI>презентация в диалоге текстового формата (command clavier nvda + f).
+</UL>
+
+<H2>48. v4.2 (18 апреля 2016 г.)</H2>
+<UL>
+<LI>сценарии для повторного прослушивания вокальных сообщений
+<LI>скрипты для оповещения о клетках колонн / картинных линий,
+<LI>скрипт для оповещения об адресе документа (Firefox и Internet Explorer),
+<LI>модификация сценария NVDA "nvda + f12" для оповещения без привязки к текущему состоянию.
+</UL>
+
+<H2>49. v4.1.3 (14 марта 2016 г.)</H2>
+<UL>
+<LI>использование переводов NVDA для диалога "NVDA + f7",
+<LI>объявление команд без контроля выбора для всех приложений.
+<LI>реприза описания определенных сценариев,
+<LI>Подавление де фишеров изменений. * и включение истории в утилизацию.
+</UL>
+
+<H2>50. v4.1.2 (6 марта 2016 г.)</H2>
+<UL>
+<LI>исправление ошибки: изменение скрипта "управление + удаление"
+</UL>
+
+<H2>51. v4.1.1 (5 марта 2016 г.)</H2>
+<UL>
+<LI>исправление ошибки: не объявлено о выборе в Libre office Writer
+</UL>
+
+<H2>52. v4.1 (25 февраля 2016 г.)</H2>
+<UL>
+<LI>Mise en Complité avec NVDA 2016.1
+<LI>дополнение к определению элементов в диалоге NVDA + f7.
+<LI>конкурсный приз за отбор командования.
+<LI>подавление описания в окнах "Рубан"
+<LI>Agrandissement de la hauteur de la fenêtre des Symboles complex.
+</UL>
+
+<OL>
+<LI>v4.0.2 (16 декабря 2015 г.) (без распространения) +
+</OL>
+
+<UL>
+<LI>изменение текста письма в анкре (с учетом аннотации)
+<LI>исправление документации клавишных команд (подавление финальной точки)
+<LI>поправка к аррету букле на предмет удержания на волоске (диалог NVDA + f7)
+</UL>
+
+<H2>53. v4.0.1 (27 ноября 2015 г.)</H2>
+<UL>
+<LI>Исправление ошибки: отказ от выбора элемента в зародыше (диалог NVDA + f7),
+<LI>исправление неположенного фокуса в списке типов элементов.
+</UL>
+
+<H2>54. v4.0 (23 ноября 2015 г.)</H2>
+<UL>
+<LI>Активация / деактивация установки функционального модуля,
+<LI>Аттестация этикета чемпионов по добыче природных ресурсов (диалог NVDA + f7),
+<LI>annonce du nombre d'éléments Trouvés dans la liste de choix du type de l'élément (диалог NVDA + f7),
+<LI>Создайте сценарий для официального журнала или старого журнала NVDA.
+<LI>Подавление функции "control + y" (проблема с MS Word).
+<LI>Модификация для Prize en compte des nouvelles Возможности NVDA 2015.3, в частности:
+<LI>подавление скрипта "nvda + h"
+<LI>подавление сценария для Basculer l'annonce du numéro de ligne
+</UL>
+
+<H2>55. v3.6.1 (11 марта 2015 г.)</H2>
+<UL>
+<LI>коррекция внешнего вида фенетра по номиналу nvda + f7 (модификация Даниэля Пуро)
+</UL>
+
+<H2>56. v3.6 (28 февраля 2015 г.)</H2>
+<UL>
+<LI>сценарий в стиле модерн "nvda + alt + l" для активизации или дезактивации аннонс дю numéro de ligne,
+<LI>annonce du mot suivant le mot supprimé par la command «control + Suppr»,
+<LI>изменение размеров "списка активных объектов" и "списка значков зоны уведомления".
+</UL>
+
+<H2>57. v3.5 (20 февраля 2015 г.)</H2>
+<UL>
+<LI>интеграция модуля fakeClipboardAnnouncement
+<LI>интеграция модуля DitDossierOuvrirEnregistrer (Daniel Poiraud)
+<LI>Совместимость с NVDA 2015.1
+<LI>traduction en Espagnol par Rémy Ruiz
+</UL>
+
+<H2>58. v3.4 (28 ноября 2014 г.)</H2>
+<UL>
+<LI>модификация клавиатурной команды "nvda + control + v" déjà utilisé en "nvda + majuscule + f1"
+<LI>код nettoyage du
+</UL>
+
+<H2>59. v3.3 (9 октября 2014 г.)</H2>
+<UL>
+<LI>Добавить сценарий для оповещения о названии и версии приложения для проклятия,
+<LI>Соответствует версии NVDA 2014.3:
+<LI>доступ к модулю по управлению модулями,
+<LI>NVDA + предоставляет диалог обслуживания команд NVDA.
+</UL>
+
+<H2>60. v3.2 (22 июля 2014 г.)</H2>
+<UL>
+<LI>В списке элементов (nvda + f7) невозможно выбрать один из первых писем.
+</UL>
+
+<H2>61. v3.1 (27 мая 2014 г.)</H2>
+<UL>
+<LI>замена радио бутонов по списку в диалоге "Список элементов" ("nvda + f7")
+<LI>«nvda + h» вместо «nvda + 1» в документации
+<LI>подавление дублирования клавишных команд "nvda + control + f1" в жестах команд.
+</UL>
+
+<H2>62. v3.0 (29 ноября 2013 г.)</H2>
+<UL>
+<LI>Использование категорий приложений сценариев для NVDA 2013.3
+<LI>Совместимость с версией 2014.1 NVDA,
+<LI>скрипт для извещения о профиле конфигурации на курсах
+<LI>подавление сценария для афиши списка феноменов (nvda + majuscule + f11)
+<LI>Добавить сценарий для сообщения списка изображений зоны уведомлений и списка изображений (nvda + f11)
+<LI>униформа визуальной атмосферы диалога,
+<LI>ajout de nouvelle commande de navigation pour le buffer virtuel (параграф, деление, анкр)
+<LI>Новые элементы для команды "NVDA + F7".
+<LI>Композиция символов: символ "espace insécable est maintenant correctement copier dans le press-papier".
+</UL>
+
+<H2>63. v2.4.3 (11 апреля 2013 г.)</H2>
+<UL>
+<LI>определение клавишных команд в классе оверлея. (Аддон Perky Duck)
+<LI>problème du bouton "командует globales / retour aux commandes du module Complémentaire")
+</UL>
+
+<H2>64. v2.4.2 (1 апреля 2013 г.)</H2>
+<UL>
+<LI>ошибка с Firefox et thunderbird
+<LI>erreur avec жест "плюс"
+</UL>
+
+<H2>65. v2.4.1 (26 марта 2013 г.)</H2>
+<UL>
+<LI>добавление команд клавишного виртуального буфера к скрипту "NVDA + h"
+<LI>ajout de nouvelles commandes deplacement pour le buffer virtuel: paragraphe, Division, ancre.
+</UL>
+
+<H2>66. v2.3.8 (25 марта 2013 г.)</H2>
+<UL>
+<LI>корректирующий символ ФишьеCategories.dic fr et es.
+<LI>исправление проблем с акцентом на досье и использованием его на основе os.path.join
+<LI>данс onDestroyButton (activeWindowReport)
+</UL>
+
+<H2>67. v2.3.7 (23 марта 2013 г.)</H2>
+<UL>
+<LI>перевод на испанском языке
+<LI>коррекция текста и орфографии
+<LI>исправления в символе "Фишье" в разделе "Категории.dic" и "Символы-xx.dic".
+</UL>
+
+<H2>68. v2.3.6 (4 Феврие, 2013 г.)</H2>
+<UL>
+<LI>водолазные ошибки.
+</UL>
+
+<H2>69. v2.3.4 (11 января 2013 г.)</H2>
+<UL>
+<LI>fenêtre sans titre
+<LI>liste des Symboles tronquée
+<LI>fautes d'orthographe и т. д.
+</UL>
+
+<H2>70. v2.3.3 (8 января 2013 г.)</H2>
+<UL>
+<LI>Ошибка списка категорий.
+</UL>
+
+<H2>71. v2.3.2 (8 января 2013 г.)</H2>
+<UL>
+<LI>скрипт в стиле модерн для помощника по композиции из комплекса символов (NVDA + majuscule + 4)
+</UL>
+
+<H2>72. v2.2.1 (27 октября 2012 г.)</H2>
+<UL>
+<LI>изменение размеров в 1200X700,
+<LI>Mise en majuscule de la première lettre du nom des touch,
+<LI>переназначение бутонов "global" et "application" en "comandes globales" et "retour aux command du module complementaire",
+<LI>модификация помощника для сигнализации, а также возможное использование "t" et "s".
+</UL>
+
+<H2>73. v2.2.0 (6 октября 2012 г.)</H2>
+<UL>
+<LI>регро
+</UL>
+
+
+</body>
+</html>
