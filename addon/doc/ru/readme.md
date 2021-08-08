@@ -1,87 +1,90 @@
-# Расширение базовых команд NVDA #
+# Расширение глобальных команд NVDA #
 
 * Автор: PaulBer19
 * URL: paulber19@laposte.net
 * Скачать:
 * [стабильная версия] [1]
-* [версия разработки] [2]
+* [версия в разработке] [2]
 * Совместимость:
-* Минимальная версия с поддержкой NVDA: 2019.3
-* последняя версия теста NVDA: 2021.1
+* минимальная поддерживаемая версия NVDA: 2019.3
+* последняя протестированная версия NVDA: 2021.1
 
 
-Переводчик: Денис Рыбин
+перевод Денис Рыбин: на основе автоматического перевода с французского языка
 
-Дополнительное расширение для NVDA:
+
+Дополнение добавляет к NVDA:
 ## Особенности ##
 
-Определенные функции, связанные с индивидуальными действиями или активными действиями.
+некоторые функции могут быть включены или отключены по отдельности.
 
-* Affichage de la liste des icônes de la zone de notification,
-* Affichage de la liste des fenêtres des application lancées,
-* Вспомогательная композиция комплекса символов, в частности, un a e lié, un Symbole puissance 2 et possible d'ajouter ses propres catégories et symbols,
-* Расширение функций виртуального тампона для браузеров Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge и Google Chrome:
+* Отображение списка значков в области уведомлений,
+* Отображение списка окон запущенных приложений,
+* Помощь в составлении сложного символа, такого как, например, связанный с a a e, степень символа 2 и возможность добавления собственных категорий и символов,
+* Расширение функциональности виртуального буфера для браузеров Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge и Google Chrome:
 
-* командует режимом навигации (параграф, разделение, указание, основная область),
-* новые типы элементов для открытой беседы по принципу "NVDA + F7" (радио, параграф, кадры, случай в одежде и т. д.) avec annonce du nombre d'éléments Trouvés,
-* команды для просмотра таблиц:
-* annoncer les cellules d'une ligne / colne, Aller à la première / dernière cellule de la ligne / colne courante, se déplacer à la colonne / ligne précédente ou suivante avec annonce possible des cellules de la ligne / colne,
-* annonce de l'adresse URL-адрес документа,
-* навигация в букле,
-
-
-* Annonce de la fonction associée aux commandes d'édition du style Copier, Coller,…,
-* Annonce du nom du dossier presélectionné dans les boites de dialog du style "Ouvrir", "Enregistrer", "Enregistrer sous",…,
-* Информация о приложении в фокусе:
-* имя и номер версии приложения,
-* профиль конфигурации куранта,
-* l'extension active associée à l'application,
+* новые команды для режима навигации (абзац, раздел, якорь, главный ориентир),
+* новые типы элементов для диалогового окна, открываемого "NVDA + F7" (радио-кнопка, абзац, рамка, флажок и т. д.) с объявлением количества найденных элементов,
+* команды для таблиц:
+* объявить ячейки строки / столбца, перейти к первой / последней ячейке в строке / текущем столбце, переместить столбец / строку до или после возможного объявления ячеек в этой строке / столбце,
+* объявление URL документа,
+* перемещаться по циклу,
 
 
-* outils pour les journaux de NVDA:
-* ouverture du journal ancien ou courant,
-* copy du chemin du journal courant dans le press-papier,
+* Анонс функции, связанной с редактированием команд стиля Копировать, Вставить и т. Д.,
+* Объявление имени папки, предварительно выбранной в диалоговых окнах, таких как "Открыть", "Сохранить", "Сохранить как" и т. Д.,
+* отображение информации о сфокусированном приложении:
+
+* текущая конфигурация профиля,
+* название и номер версии приложения,
+* дополнение, загруженная для приложения,
 
 
-* Historique des Annonces Vocalales,
-* renommage des touch clavier,
-* annonce sélective des touch de commandes,
-* простая минута,
-* affichage des éléments visibles composant l'objet en avant plan,
-* коммутация Rapide de profil вокал,
-* rémanence des touches de модификации,
-* arrêter, redémarrer ou mettre en veille longé l'ordinateur,
-* Контроль основного объема и NVDA:
-* coupure ou remise du son pour l'application focalisée,
-* établissement du volume primary ou de NVDA au démarrage de l'extension,
-* модификатор основного звука или потока звука приложения в фокусе,
+* Инструменты журналов NVDA:
+* Открытие предыдущего или текущего журнала,
+* копия пути текущего журнала в буфер обмена,
 
 
-* Outils pour le développement d'extensions,
-* Комплименты касательно даты и даты: копия даты и даты на пресс-папье, annonce de l'heure avec les Second.
+* история голосовых речей,
+* переименование клавиш клавиатуры,
+* выборочное озвучивание командных клавиш клавиатуры,
+* простой таймер обратного отсчета,
+* отображение видимых элементов, составляющих объект на переднем плане,
+* быстрое переключение голосового профиля,
+* остаточность клавиш-модификаторов,
+* выключение, перезагрузка или перевод компьютера в спящий режим,
+* управлять основной громкостью или громкостью NVDA:
+
+* отключение или включение звука для выбранного приложения,
+* установка основной громкости Windows или NVDA при запуске дополнения,
+* изменение основной громкости или громкости аудиопотока целевого приложения.
 
 
-## Les options ##
-
-* дополнительная информация об описании объектов в рубрике Windows,
-* уведомление о фокусировке на подавление движений (для версий NVDA antérieures à la 2020.3),
-* agrandir automatiquement les fenêtres au premier plan,
-* Annoncer des ponctuations et symbols lors de déplacement par mot.
+* Инструменты для разработки дополнений.
+* дополнения относительно даты и времени: копировать дату и время в буфер обмена, сообщать время с секундами
 
 
-## Les options avancées ##
+## Варианты ##
 
-* связист, по совместительству, l'inscription d'une erreur dans le journal aussi для финальных версий и кандидата на выпуск NVDA,
-* Заголовки диалогов с расширением,
-* Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boites de dialog du style confirm,
-* Утилизатор pouvoir le pavé numérique de manière classique.
+* убрать объявление из описания объектов в лентах Windows,
+* объявлять слово сфокусированным при удалении слова (для версий NVDA ниже 2020.3),
+* автоматически развернуть окно переднего плана,
+* объявлять знаки препинания и символы при перемещении по слову в документе.
 
 
-## Divers autres éléments ##
+## Дополнительные параметры ##
 
-* présentation de la mise en form du texte dans une boite de dialog,
-* sous-menus pour explorer les dossiers, программа или конфигурация,
-* Скрипт для обновления Rapidement NVDA.
+* отчет, со звуком, регистрация ошибки в журнале NVDA также для финальных версий и релиз-кандидата NVDA,
+* Заголовок диалога с названием дополнения,
+* Не учитывать опцию Report object descriptions при отображении подтверждения стиля диалогового окна,
+* обычно используйте клавиши цифровой клавиатуры.
+
+
+## Различные другие элементы ##
+
+* форматирование представления текста в диалоговом окне,
+* подменю для изучения программных папок или конфигурации,
+* скрипт для быстрого перезапуска NVDA.
 
 
 [1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.1.nvda-addon
