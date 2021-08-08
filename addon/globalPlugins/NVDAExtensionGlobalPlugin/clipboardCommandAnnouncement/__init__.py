@@ -8,6 +8,7 @@ import addonHandler
 import api
 import textInfos
 import speech
+import ui
 import time
 import controlTypes
 from editableText import EditableText
@@ -23,7 +24,6 @@ import core
 import contentRecog.recogUi
 from ..utils.NVDAStrings import NVDAString
 from ..settings import *  # noqa:F403
-from ..utils.py3Compatibility import baseString
 from ..utils.keyboard import getEditionKeyCommands
 
 addonHandler.initTranslation()
@@ -35,7 +35,7 @@ _msgPaste = _("Paste")
 # Translators: message to the user on copy command activation.
 _msgCopy = _("Copy")
 # Translators: message to the user on undo command activation.
-_msgUnDo = _("UnDo")
+_msgUnDo = _("Undo")
 # Translators: message to the user on select all command activation.
 _msgSelectAll = _("select all")
 
@@ -89,7 +89,7 @@ def getStatusBarText():
 	if text:
 		text += " "
 	return text + " ".join(
-		chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, baseString) and not chunk.isspace())  # noqa:E501
+		chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, str) and not chunk.isspace())  # noqa:E501
 
 
 class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
@@ -168,11 +168,11 @@ class EditableTextEx(EditableText):
 		info = self.getSelectionInfo()
 		if not info:
 			# Translators: Reported when there is no text selected (for copying).
-			speech.speakMessage(NVDAString("No selection"))
+			ui.message(NVDAString("No selection"))
 			gesture.send()
 			return
 		# Translators: Message presented when text has been copied to clipboard.
-		speech.speakMessage(_msgCopy )
+		ui.message(_msgCopy)
 		gesture.send()
 
 	def script_cutAndCopyToClipboard(self, gesture):
@@ -184,10 +184,10 @@ class EditableTextEx(EditableText):
 		info = self.getSelectionInfo()
 		if not info:
 			# Translators: Reported when there is no text selected (for copying).
-			speech.speakMessage(NVDAString("No selection"))
+			ui.message(NVDAString("No selection"))
 			gesture.send()
 			return
-		speech.speakMessage(_msgCut)
+		ui.message(_msgCut)
 		gesture.send()
 
 	def script_pasteFromClipboard(self, gesture):
@@ -197,7 +197,7 @@ class EditableTextEx(EditableText):
 			and not controlTypes.STATE_MULTILINE)):
 			gesture.send()
 			return
-		speech.speakMessage(_msgPaste)
+		ui.message(_msgPaste)
 		gesture.send()
 		from globalCommands import commands
 		wx.CallLater(100, commands.script_reportCurrentLine, None)
@@ -209,7 +209,7 @@ class EditableTextEx(EditableText):
 			and not controlTypes.STATE_MULTILINE)):
 			gesture.send()
 			return
-		speech.speakMessage(_msgUnDo)
+		ui.message(_msgUnDo)
 		gesture.send()
 
 	def script_controlDelete(self, gesture):
@@ -366,7 +366,7 @@ class ClipboardCommandAnnouncement(object):
 		except:  # noqa:E722
 			msg = None
 		if msg:
-			speech.speakMessage(msg)
+			ui.message(msg)
 		_GB_taskTimer = core.callLater(800, callback)
 
 	def script_clipboardCommandAnnouncement(self, gesture):
@@ -377,13 +377,13 @@ class ClipboardCommandAnnouncement(object):
 		(msg, checkSelection) = d["+".join(gesture.modifierNames)+"+"+gesture.mainKeyName]  # noqa:E501
 		if self.checkSelection and checkSelection:
 			if not self.isThereASelection():
-				speech.speakMessage(NVDAString("No selection"))
+				ui.message(NVDAString("No selection"))
 			else:
-				speech.speakMessage(msg)
+				ui.message(msg)
 				# we send always command key
 				gesture.send()
 			return
-		speech.speakMessage(msg)
+		ui.message(msg)
 		gesture.send()
 
 

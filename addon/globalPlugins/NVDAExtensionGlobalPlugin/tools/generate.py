@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\generate.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,7 +9,6 @@ import codecs
 import os
 
 import gettext
-from ..utils.py3Compatibility import py3
 addonHandler.initTranslation()
 
 
@@ -36,12 +35,7 @@ def getVariablesBetweenBrass(stringToFormat):
 
 
 def generateTranslatedManifest(addon, addonInfos, language, template):
-	if py3:
-		# for python 3
-		_ = getTranslationsInstance(addon, language).gettext
-	else:
-		# for python 2
-		_ = getTranslationsInstance(addon, language).ugettext
+	_ = getTranslationsInstance(addon, language).gettext
 	vars = {}
 	translatedVars = {}
 	allTranslated = True

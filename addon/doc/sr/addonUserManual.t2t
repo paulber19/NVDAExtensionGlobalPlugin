@@ -59,22 +59,22 @@ Ovaj dodatak dodaje globalne funkcije u NVDA:
  - [Gašenje, ponovno pokretanje ili hibernacija računara #hdr19],
  - [Upravljanje korisnički definisanim komandama #hdr20],
  - [Kontrola zvuka #hdr21] (samo Windows 10):
-  - cut or set the sound for the audio stream of the application under focus,
-  - manually or automatically establish the main sound and that of the NVDA audio stream,
-  - modify the level of the main volume or that of the audio stream of the application under focus,
-  - automatic recovery of the main volume and NVDA when loading the extension,
+  - Isključi ili uključi zvuk za trenutno fokusiranu aplikaciju,
+  - Ručno ili automatsko podešavanje jačine zvuka ili programa NVDA,
+  - Menjanje glavne jačine ili jačine fokusirane aplikacije,
+  - Automatsko podešavanje glavne jačine ili NVDA jačine nakon učitavanja dodatka,
  - [Alati za programiranje dodataka #hdr22]:
-  - creation of the buildVars.py file from the manifest.ini file of the add-on,
-  - update of the manifest file.ini from the information in the buildVars.py file,
-  - creation of the localization manifest.ini file for one or all of the languages ​​supported by the add-on,
-  - creation of HTML documentation for the add-on for one or all languages,
-  - preparation of the add-on,
-  - exploration of the add-on file,
+  - Pravljenje datoteke buildVars.py iz datoteke manifest.ini dodatka,
+  - Ažuriranje datoteke manifest.ini na osnovu informacija iz datoteke buildVars.py,
+  - Pravljenje prevedenih manifest.ini datoteka za jedan ili sve jezike podržane od strane dodatka,
+  - Pravljenje HTML dokumentacije dodatka za jedan ili sve jezike,
+  - Priprema dodatka,
+  - Istraživanje datoteka dodatka,
  - [Skripte za klik na trenutnoj poziciji objekta pretraživača #hdr23],
  - [Dodaci za datum i  vreme #hdr24]:
-  - copy of the date and time to the clipboard,
-  - Announce the time on the Windows clock with seconds,
-  - announcement of the time independent of the punctuation level.
+  - Kopiranje datuma i vremena u privremenu memoriju,
+  - Izgovori vreme na Windows satu u sekundama,
+  - Izgovor vremena tako što će se zanemariti podešen nivo interpunkcije.
  - [Skripta za emulaciju aplikacionog tastera #hdr25],
  - [Skripta za zatvaranje svih otvorenih prozora #hdr26],
  - [Skripta za prikazivanje liste pokrenutih dodataka #hdr27].
@@ -97,72 +97,72 @@ Ovaj dodatak dodaje globalne funkcije u NVDA:
  - [Izgovor dijaloga za potvrdu čak iako je izgovor opisa objekata  onemogućen #hdr204].
 
 
-++ Add-on configuration menu ++
-In NVDA's "Preferences" sub-menu, the "ADDON_SUMMARY" sub-menu has been added which offers the following choices, depending on the case:
-- systematically "Settings" which opens a dialog resembling the "parameters" dialog of NVDA and which presents the following categories:
- - "Feature installation": allows you to see the installation status of each feature provided by the add-on and possibly modify it.
- - "Complements to NVDA": to configure the options related to NVDA provided by the add-on,
- - "Computer": to configure the options related to the functions relating to the computer (Windows operating system, volume control),
- - "Keyboard": to configure the options linked to the keyboard (key remanence, use of the numeric keypad),
- - "Advanced":options for experienced users,
- - "update": settings controlling the update of the add-on.
-- "Keyboard keys renaming" (if the functionality is installed): allows you to modify the names of the keyboard keys given by default by NVDA as required,
-- "Selective announcement of the keyboard keys" (if the functionality is installed): allows the name of the keyboard keys to be announced selectively, as needed,
-- "Reset the configuration" to restore the configuration to its initial state when the add-on is first installed.
+++ Meni sa podešavanjima dodatka ++
+U NVDA meniju "Opcije", opcija "ADDON_SUMMARY" je dodata koja nudi sledeće opcije, u zavisnosti od mogućnosti:
+- Uvek dostupna opcija "Podešavanja" koja otvara dijalog sličan dijalogu "podešavanja" programa NVDA i koji nudi sledeće kategorije:
+ - "Instalacija karakteristika": dozvoljava vam da proverite status instalacije za sve karakteristike dodatka kao i da izmenite dostupne karakteristike.
+ - "NVDA poboljšanja": Da podesite opcije vezane uz NVDA koje vam dodatak nudi,
+ - "Računar": Da podesite opcije vezane uz sam računar (operativni sistem Windows, kontrola jačine),
+ - "Tastatura": Da podesite opcije vezane za tastaturu (preimenovanje tastera, korišćenje numeričke tastature),
+ - "Napredno":opcije za iskusne korisnike,
+ - "Ažuriranje": podešavanja koja kontrolišu ažuriranje dodatka.
+- "Preimenovanje tastera na tastaturi" (ako je funkcija instalirana): Dozvoljava vam da promenite imena tastera koje NVDA izgovara onako kako želite,
+- "Selektivan izgovor komandnih tastera" (ako je funkcija instalirana): Dozvoljava da se tasteri na tastaturi selektivno izgovaraju, po želji,
+- "Vrati podešavanja na fabričke vrednosti " vraća podešavanja u prvobitno stanje nakon što je dodatak instaliran.
 
 
-This configuration is saved in two ways depending on the functionality or option concerned:
-- in the "NVDAExtensionGlobalPluginAddon.ini" file placed in the user folder "userConfig" of NVDA for the configuration used regardless of the configuration profile,
-- in the NVDA.ini file or the configuration profile file of the profile triggered at the time of the modification for the configuration that will be used only when this profile is triggered.
+Ova podešavanja se čuvaju na 2 načina u zavisnosti od funkcije i opcije:
+- U datoteci "NVDAExtensionGlobalPluginAddon.ini" koji se nalazi u korisničkom folderu "userConfig" programa NVDA bez obzira koji profil podešavanja se koristi,
+- U datoteci NVDA.ini ili datoteci sa imenom profila ako se podešavanje promenilo kada je neki profil bio aktiviran i to podešavanje će se koristiti samo za taj profil.
 
 
-NVDA offers the option "Save configuration on exiting" (see NVDA user manual) which allows to automatically save NVDA configuration when exiting or restarting NVDA. If this option is not checked, the configuration is only saved upon user action or upon modification of a parameter that requires restarting NVDA.
+NVDA nudi podešavanje "Sačuvaj podešavanja pri izlazu " (pogledajte NVDA korisničko uputstvo) koja dozvoljava automatsko čuvanje podešavanja pri izlazu ili ponovnom pokretanju programa NVDA. Ako ova opcija nije označena, podešavanja se čuvaju samo kada korisnik to želi ili kada se izmeni podešavanje koje zahteva ponovno pokretanje programa NVDA.
 
-This add-on follows this mode of operation.
+Ovaj dodatak prati isti način rada.
 
-Some add-on setting changes require saving the configuration and restarting NVDA. In this case, the user is offered to save and immediately restart as NVDA does when there is a change of language.
-
-
-When uninstalling the add-on, its configuration file is deleted and the add-on's configuration is cleared from all configuration profiles.
-
-When uninstalling a feature, its configuration, if any, is completely deleted.
-
-In the case of an update, installing the add-on offers the possibility of keeping (as far as possible) or not the previous configuration.
+Neke promene podešavanja dodatka zahtevaju da se podešavanja sačuvaju i NVDA ponovo pokrene. U tom slučaju, korisniku se nudi mogućnost da se podešavanja sačuvaju i program ponovo pokrene kao što i sam NVDA radi kada se menjaju jezici.
 
 
-Using the "Reset configuration" submenu, it is possible to restore the configuration to the same state as when the add-on was first installed, including the one saved in the configuration profiles.
+Kada uklonite dodatak, njegova podešavanja se brišu kao i podešavanja za sve profile.
 
-This allows you to start from scratch without having to uninstall and reinstall the add-on in case of possible problems.
+Kada deinstalirate određenu opciju, njena podešavanja, ako ih ima brišu se u potpunosti.
 
-
-++ update ++
-The update of the add-on is, by default, automatically a short time after the start of NVDA (between 20 and 600 seconds) and a maximum of once per day.
-It is possible to disable this update by unchecking the option "automatically check for updates" of "Update" category in the add-on's settings.
-The version of the add-on can be:
-- a stable version: its version number is "1.0" for example.
-- either a development version: the version number is of the type "1.0-dev1", or "1.0-rc1", or "1.0-beta2".
+U slučaju ažuriranja, instalacija dodatka nudi mogućnost čuvanja (koliko je moguće) ili brisanja postojećih podešavanja.
 
 
-By default, the stable version is updated with a stable version more recent (higher version number).
-But it is possible to update the stable version running with a development version of the next stable version. Just check the option "Update also update the stable release to the versions of development" located in the "Update" category of add-on's settings.
+Korišćenjem menija "Vrati podešavanja na fabričke vrednosti", moguće je vratiti podešavanja u stanje u kojem su bila kada je dodatak prvi put instaliran, što uklljučuje ona sačuvana u profilima podešavanja.
 
-A development version is updated:
-- with a more recent development version,
-- with its stable version,
-- or with the latest stable version if the previous option is not checked.
+Ovo vam dozvoljava da ponovo počnete podešavanje bez potrebe da deinstalirate pa ponovo instalirate dodatak u slučaju problema.
 
 
-The button "Search for update" placed in the add-on's settings, menu item "Update", allows you to search immediately for an update.
+++ Ažuriranje ++
+Po podrazumevanim podešavanjima, ažuriranje dodatka će se izvršavati automatski, nekoliko trenutaka nakon pokretanja NVDA (između 20 i 600 sekundi) i najviše jednom dnevno.
+Moguće je onemogućiti ovo tako što ćete onemogućiti opciju "Automatska provera ažuriranja" kategorije "ažuriranje" u podešavanjima dodatka.
+Verzija dodatka može biti:
+- Stabilna verzija: Njen broj verzije je "1.0" na primer.
+- Neka od verzija u razvoju: Broj verzije može biti "1.0-dev1", ili "1.0-rc1", ili "1.0-beta2".
 
 
-The "View history" button, placed in this same category, allows you to display the history of the current version in the browser.
+Po podrazumevanim podešavanjima, stabilna verzija se ažurira novijom stabilnom verzijom (noviji broj verzije).
+Ali takođe je moguće ažuriranje stabilnih verzija na novije razvojne verzije. Označite opciju "Ažuriraj stabilne verzije na verzije u razvoju" koja se nalazi u kategoriji "Ažuriranje" podešavanja dodatka.
 
-In the case of an automatic update and if a new version is detected, the "Update" dialog box is displayed to suggest:
-- either the immediate installation of the new version,
-- or to postpone the update until later. In this case, the search will be restarted at least one hour later.
+Verzija u razvoju se ažurira:
+- Sa novijom verzijom u razvoju,
+- Sa njenom stabilnom verzijom,
+- Ili sa najnovijom stabilnom verzijom ako se prethodna opcija nije označila.
 
 
-In the case of an update to a stable version, the "What's new" button offers the possibility of opening, in the browser, the history of the add-on and thus being able to know the new features of the proposed version.
+Dugme "Proveri dostupna ažuriranja" koje se nalazi u dijalogu sa podešavanjima dodatka, kategorija "Ažuriranje", dozvoljava vam da odmah proverite da li postoji ažuriranje.
+
+
+Dugme "Prikaži istoriju", koje se nalazi u ovoj istoj kategoriji, dozvoljava prikazivanje istorije trenutne verzije u pretraživaču.
+
+U slučaju automatskog ažuriranja i ako je otkrivena nova verzija, dijalog  "ažuriranje" će se pojaviti i  ponuditi sledeće:
+- Instalaciju nove verzije odmah,
+- Odlaganje ažuriranja za kasnije. U tom slučaju, provera će ponovo biti pokrenuta nakon najmanje sat vremena.
+
+
+U slučaju ažuriranja na stabilnu verziju, dugme "šta je novo" nudi mogućnost otvaranja, u pretraživaču, istorije dodatka i mogućnost da saznate nove opcije u ponuđenoj verziji.
 
 ++ Safe mode operation ++
 In this mode, the operation of the add-on is degraded.

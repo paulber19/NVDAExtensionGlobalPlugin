@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2020 paulber19
+# Copyright (C) 2018 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -15,56 +15,14 @@ import gui
 from gui import guiHelper
 import core
 import config
+from api import copyToClip
 from . import symbols
-from ..utils.py3Compatibility import py3
 from ..utils.NVDAStrings import NVDAString
 from ..utils import speakLater, isOpened, makeAddonWindowTitle
 
 addonHandler.initTranslation()
 
 _lastUsedSymbols = []
-
-if py3:
-	from api import copyToClip
-else:
-	# NVDA copyToClip function modified to accept non breaking space symbols
-	def copyToClip(text):
-		"""Copies the given text to the windows clipboard.
-		@returns: True if it succeeds, False otherwise.
-		@rtype: boolean
-		@param text: the text which will be copied to the clipboard
-		@type text: string
-		"""
-		import win32con
-		import win32clipboard
-		if isinstance(text, basestring) and len(text) > 0:
-			if len(text) == 1 and ord(text) == 160:
-				goodToCopy = True
-			elif not text.isspace():
-				goodToCopy = True
-			else:
-				goodToCopy = False
-		# if isinstance(text,basestring) and len(text)>0 and not text.isspace():
-		if goodToCopy:
-			try:
-				win32clipboard.OpenClipboard()
-			except win32clipboard.error:
-				return False
-			try:
-				win32clipboard.EmptyClipboard()
-				win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, text)
-			finally:
-				win32clipboard.CloseClipboard()
-			# there seems to be a bug
-				# so to retrieve unicode text we have to reopen the clipboard
-			win32clipboard.OpenClipboard()
-			try:
-				got = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-			finally:
-				win32clipboard.CloseClipboard()
-			if got == text:
-				return True
-		return False
 
 
 def SendKey(keys):
@@ -86,7 +44,7 @@ class complexSymbolsDialog(wx.Dialog):
 			return
 		complexSymbolsDialog._instance = self
 		# Translators: This is the title of complex symbols dialog window.
-		dialogTitle = _("Help for Complex symbols edition")
+		dialogTitle = _("Help for complex symbols edition")
 		title = complexSymbolsDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(complexSymbolsDialog, self).__init__(
 			parent, -1, title, style=wx.CAPTION | wx.CLOSE_BOX | wx.TAB_TRAVERSAL)
@@ -483,7 +441,7 @@ class ManageSymbolsDialog(wx.Dialog):
 				if cat == categoryName:
 					if gui.messageBox(
 						# Translators: the label of a message box dialog.
-						_("""The symbol is allready in this category under "%s" description. Do you want to replace it ?""") % description,  # noqa:E501
+						_("""The symbol is already in this category under "%s" description. Do you want to replace it?""") % description,  # noqa:E501
 						# Translators: the title of a message box dialog.
 						_("Confirmation"),
 						wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -491,7 +449,7 @@ class ManageSymbolsDialog(wx.Dialog):
 				else:
 					if gui.messageBox(
 						# Translators: the label of a message box dialog.
-						_("The symbol is allready in {oldCat} category. Do you want to add this symbol also in {newCat} category?").format(oldCat=cat, newCat=categoryName),  # noqa:E501
+						_("""The symbol is allready in "{oldCat}" category. Do you want to add this symbol also in "{newCat}" category?""").format(oldCat=cat, newCat=categoryName),  # noqa:E501
 						# Translators: the title of a message box dialog.
 						_("Confirmation"),
 						wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -522,7 +480,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		with wx.TextEntryDialog(
 			self,
 			# Translators: Message to show on the dialog.
-			_("Entry category name:"),
+			_("Enter category name:"),
 			# Translators: This is a title of text control of dialog box
 			# in Manage Symbols Dialog.
 			_("Adding category"),
@@ -536,7 +494,7 @@ class ManageSymbolsDialog(wx.Dialog):
 					300,
 					ui.message,
 					# Translators:  message announced in Manage Symbols Dialog.
-					_("%s category allready exists") % categoryName)
+					_(""""%s" category already exists""") % categoryName)
 			else:
 				self.userComplexSymbols[categoryName] = {}
 				self.categoryNamesList.append(categoryName)
@@ -559,7 +517,7 @@ class ManageSymbolsDialog(wx.Dialog):
 		index = self.categoryNamesList.index(categoryName)
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you vwant realy delete this category and all its symbols ?"),
+			_("Do you really want to delete this category and all its symbols?"),
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -576,7 +534,7 @@ class ManageSymbolsDialog(wx.Dialog):
 			300,
 			ui.message,
 			# Translators: This is a message announced in Manage Symbols Dialog.
-			_("%s category has been deleted") % categoryName)
+			_(""""%s" category has been deleted""") % categoryName)
 		self.onSelect(evt)
 		evt.Skip()
 
@@ -733,7 +691,7 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 	def onCleanButton(self, event):
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you want really delete all symbols of the list"),
+			_("Do you really want to delete all symbols of the list?"),
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
 			wx.YES | wx.NO) == wx.YES:

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\reportFormating\__init__
 # A part of NvDAextensionGlobalPlugin
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,7 +8,7 @@ import addonHandler
 import colors
 from ..utils.NVDAStrings import NVDAString
 from ..utils.informationDialog import InformationDialog
-from ..utils.py3Compatibility import iterate_items, _unicode
+
 addonHandler.initTranslation()
 
 
@@ -240,17 +240,17 @@ def getParagraphIndentation(attrs):
 			NVDAString("no first line indent"), ),
 		}
 	text = None
-	for attr, (label, noVal) in iterate_items(indentLabels):
+	for attr, (label, noVal) in indentLabels.items():
 		newVal = attrs.get(attr)
 		if newVal:
-			text = _unicode("%s\r\n	%s %s") % (
-				text, label, newVal) if text else _unicode("\r\n	%s %s") % (label, newVal)
+			text = str("%s\r\n	%s %s") % (
+				text, label, newVal) if text else str("\r\n	%s %s") % (label, newVal)
 		else:
-			text = _unicode("%s\r\n	%s") % (
+			text = str("%s\r\n	%s") % (
 				text, noVal) if text else "\r\n	%s" % (noVal)
 	if text:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Paragraph's indentation:%s") % text
+		text = _("Paragraph's indentation: %s") % text
 	return text
 
 
@@ -327,7 +327,7 @@ def displayFormattingInformations(indentation, formatField):
 	text = None
 	if indentation:
 		# Translators: this is a element in report formatting dialog box.
-		text = _("Indentations: %s") % indentation
+		text = _("Indentation: %s") % ", ".join(indentation)
 	tempList = getFormatFieldText(formatField)
 	for t in tempList:
 		text = text + "\r\n" + t if text else t

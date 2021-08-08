@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\keyboardKeyRenaming\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,14 +14,13 @@ import queueHandler
 from ..settings import _addonConfigManager
 
 from ..utils import speakLater, makeAddonWindowTitle
-from ..utils.py3Compatibility import iterate_items
 
 addonHandler.initTranslation()
 
 
 class KeyboardKeyRenamingDialog(SettingsDialog):
 	# Translators: This is the label for the ModifyKeyLabels dialog.
-	title = _("Keyboard Key renaming")
+	title = _("Keyboard Keys's renaming")
 	taskTimer = None
 
 	def __init__(self, parent):
@@ -32,7 +31,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 		# init
 		self.modifiedKeyLabels = _addonConfigManager .getRedefinedKeyLabels()
 		self.basicLocalizedKeyLabels = _addonConfigManager.getBasicLocalizedKeyLabels()  # noqa:E501
-		self.localizedLabel2KeyName = dict((name, code) for code, name in iterate_items(self.basicLocalizedKeyLabels))  # noqa:E501
+		self.localizedLabel2KeyName = dict((name, code) for code, name in self.basicLocalizedKeyLabels.items())  # noqa:E501
 		self.localizedLabels = [x for x in self.localizedLabel2KeyName]
 		self.localizedLabels.sort()
 		# gui
@@ -63,7 +62,8 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 		# Translators: the button to remove the label of replacement.
 		self.removeButton = bHelper.addButton(self, label=_("&Remove"))
 		# Translators: the button to remove all the labels of replacement.
-		self.removeAllButton = bHelper.addButton(self, label=_("R&emove al"))
+		labelText = _("R&emove all")
+		self.removeAllButton = bHelper.addButton(self, label=labelText)
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
 			guiHelper.ButtonHelper(wx.HORIZONTAL))
@@ -136,7 +136,7 @@ class KeyboardKeyRenamingDialog(SettingsDialog):
 		with wx.TextEntryDialog(
 			self,
 			# Translators: Message to show on the dialog.
-			_("Entry new label:"),
+			_("Enter new label:"),
 			# Translators: caption of text box.
 			_("Key label redifinition"),
 			label) as d:

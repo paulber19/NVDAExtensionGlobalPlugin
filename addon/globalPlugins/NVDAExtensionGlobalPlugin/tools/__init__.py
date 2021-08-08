@@ -1,13 +1,12 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 -2020 Paulber19
+# Copyright (C) 2016 -2021 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
 import ui
-import speech
 import codecs
 import os
 from ctypes import *  # noqa:F403
@@ -18,19 +17,14 @@ import sys
 import languageHandler
 from ..utils import isOpened, makeAddonWindowTitle
 from ..utils import runInThread
-from ..utils.py3Compatibility import py3, iterate_items, reLoad, _unicode
 from .generate import generateManifest, generateTranslatedManifest
 from .gettextTools import generatePotFile, compilePoFiles
 import shutil
 
 addonHandler.initTranslation()
 
-if py3:
-	# for python 3
-	_curModuleFilePath = os.path.dirname(__file__)
-else:
-	# for python 2
-	_curModuleFilePath = os.path.dirname(__file__).decode("mbcs")
+_curModuleFilePath = os.path.dirname(__file__)
+
 
 # Translators: strings used to generate readme.md file
 _buildVarsStrings = {
@@ -62,7 +56,8 @@ def createAddonBundleFromPath(addon):
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad(buildVars)
+		from importlib import reload
+		reload(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
@@ -170,7 +165,7 @@ def md2html(source):
 	}
 	with codecs.open(source, "r", "utf-8") as f:
 		mdText = f.read()
-		for k, v in iterate_items(headerDic):
+		for k, v in headerDic.items():
 			mdText = mdText.replace(k, v, 1)
 		htmlText = markdown(mdText)
 	htmlText = "<body>\n" + htmlText + "\n</body>"
@@ -277,7 +272,7 @@ def _makeHTML(addon, lang):
 	if n == 0:
 		gui.messageBox(
 			# Translators: message to user no converted document
-			_("No html file converted"),
+			_("No file converted"),
 			dialogTitle, wx.OK)
 	else:
 		# copy css style file
@@ -310,7 +305,8 @@ def _makeMainManifestIni(addon):
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad(buildVars)
+		from importlib import reload
+		reload(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
@@ -323,7 +319,7 @@ def _makeMainManifestIni(addon):
 	if os.path.exists(dest):
 		if gui.messageBox(
 			# Translators: message to user to confirm the update of manifest.ini.
-			_(" the manifest.ini file already exists. Do you really want to update it ?"),  # noqa:E501
+			_("The manifest.ini file already exists. Do you really want to update it?"),  # noqa:E501
 			dialogTitle, wx.YES | wx.NO) == wx.NO:
 			return
 	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
@@ -345,7 +341,8 @@ def _makeLocaleManifestIni(addon, lang):
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad(buildVars)
+		from importlib import reload
+		reload(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
@@ -411,7 +408,8 @@ def _generatePOTFile(addon):
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad(buildVars)
+		from importlib import reload
+		reload(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
@@ -454,7 +452,8 @@ def _prepareAddon(addon):
 	sys.path.append(addon.path)
 	try:
 		import buildVars
-		reLoad(buildVars)
+		from importlib import reload
+		reload(buildVars)
 		del sys.path[-1]
 	except ImportError:
 		del sys.path[-1]
@@ -492,7 +491,6 @@ def _prepareAddon(addon):
 		if os.path.exists(localeDir):
 			langs = os.listdir(localeDir)
 			count = 0
-
 			noTranslations = []
 			for lang in langs:
 				moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
@@ -505,12 +503,14 @@ def _prepareAddon(addon):
 			if count:
 				# Translators: message to user to report number of created files.
 				msg = _("%s localization manifest.ini files created or updated") % count
+				textList.append(msg)
 				if len(noTranslations):
 					text = ", ".join(noTranslations)
-					log .warning("generateTranslatedManifest: no translation for language: %s" % text)  # noqa:E501
+					log .warning(
+						"generateTranslatedManifest: no translation for language: %s" % text)
 					# Translators: message to user to report missing translated strings.
-					msg = msg + _("But for this languages translated string are missing: %s") % text  # noqa:E501
-				textList.append(msg)
+					msg = _("But for these languages,  some strings are not translated: %s") % text
+					textList.append(msg)
 	# convert all doc files to html
 	if "doc" in os.listdir(addon.path):
 		docFolder = os.path.join(addon.path, "doc")
@@ -524,7 +524,7 @@ def _prepareAddon(addon):
 		cnt = mdCount + t2tCount
 		if cnt == 0:
 			# Translators: message to user to report no document converted
-			msg = _("No html file converted")
+			msg = _("No file converted")
 		elif cnt == 1:
 			# Translators: message to user to report only one document converted to html
 			msg = _("one file converted")
@@ -590,7 +590,7 @@ def _createBuildVarsFile(addon):
 	dest = os.path.join(addon.path, "buildVars.py")
 	if os.path.exists(dest):
 		# Translators: message to user.
-		msg = _("Warning: buildVars.py already exist. Do you want to replace it ?")
+		msg = _("Warning: buildVars.py already exists. Do you want to replace it?")
 		if gui.messageBox(msg, dialogTitle, wx.YES | wx.NO) == wx.NO:
 			return
 
@@ -599,7 +599,7 @@ def _createBuildVarsFile(addon):
 		"summary": "Add-on user visible name",
 		"description": """Description for the add-on. It can span multiple lines.""",  # noqa:E501
 		"version": "x.y",
-		"author": _unicode("name <name@domain.com>"),
+		"author": str("name <name@domain.com>"),
 		"url": None,
 		"docFileName": "readme.html",
 		"minimumNVDAVersion": None,
@@ -655,10 +655,7 @@ class ToolsForAddonDialog(wx.Dialog):
 	@classmethod
 	def getAddonsList(self):
 		from locale import strxfrm
-		if py3:
-			return sorted(addonHandler.getAvailableAddons(), key=lambda a: strxfrm(a.manifest['summary']))
-		else:
-			return sorted(addonHandler.getAvailableAddons(), key=lambda a: strxfrm(a.manifest['summary'].encode("mbcs")))
+		return sorted(addonHandler.getAvailableAddons(), key=lambda a: strxfrm(a.manifest['summary']))
 
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -794,12 +791,7 @@ class ToolsForAddonDialog(wx.Dialog):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
 		import subprocess
-		if py3:
-			# for python 3
-			path = addon.path
-		else:
-			# for python 2
-			path = addon.path.encode("mbcs")
+		path = addon.path
 		cmd = "explorer \"{path}\"" .format(path=path)
 		wx.CallLater(300, subprocess.call, cmd, shell=True)
 		self.Close()
@@ -853,7 +845,8 @@ class ToolsForAddonDialog(wx.Dialog):
 		sys.path.append(addon.path)
 		try:
 			import buildVars
-			reLoad(buildVars)
+			from importlib import reload
+			reload(buildVars)
 			del sys.path[-1]
 		except ImportError:
 			del sys.path[-1]

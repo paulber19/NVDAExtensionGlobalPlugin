@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2017 -2020 paulber19
+# Copyright (C) 2017 -2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,14 +9,11 @@ import addonHandler
 import wx
 import api
 import ui
-import speech
 import gui
 import queueHandler
 import os
 from logHandler import _getDefaultLogFilePath
-import ui
 from ..utils import makeAddonWindowTitle
-from ..utils.py3Compatibility import py3
 
 addonHandler.initTranslation()
 
@@ -49,7 +46,8 @@ class NVDALogsManagementDialog (wx.Dialog):
 		openCurrentLogButton = bHelper.addButton(self, label=_("Open current &log"))
 		# Translators: This is a label of a button appearing
 		# on NVDA Logs Management Dialog .
-		openOldLogButton = bHelper.addButton(self, label=_("Open &old log"))
+		labelText = _("Open &previous log")
+		openOldLogButton = bHelper.addButton(self, label=labelText)
 		# Translators: This is a label of a button appearing
 		# on NVDA Logs Management Dialog .
 		copyCurrentLogPathButton = bHelper.addButton(
@@ -87,7 +85,7 @@ class NVDALogsManagementDialog (wx.Dialog):
 
 	def onOpenCurrentLogButton(self, evt):
 		logFile = os.path.join(os.path.dirname(_getDefaultLogFilePath()), "nvda.log")
-		openErrorMsg = _("Current log file can not be opened")
+		openErrorMsg = _("Current log file cannot be opened")
 		self._openFile(logFile, openErrorMsg)
 		self.Close()
 
@@ -95,18 +93,16 @@ class NVDALogsManagementDialog (wx.Dialog):
 		logFile = os.path.join(
 			os.path.dirname(_getDefaultLogFilePath()),
 			"nvda-old.log")
-		openErrorMsg = _("Previous log file can not be opened")
+		openErrorMsg = _("Previous log file cannot be opened")
 		self._openFile(logFile, openErrorMsg)
 		self.Close()
 
 	def onCopyCurrentLogPathButton(self, evt):
 		logFile = os.path.join(os.path.dirname(_getDefaultLogFilePath()), "nvda.log")
-		if not py3:
-			logFile = logFile.decode("mbcs")
 		if api.copyToClip(logFile):
 			ui.message(_("Current log file path copied to clipboard"))
 		else:
-			ui.message(_("Current log file path   cannot be copied to clipboard"))
+			ui.message(_("Current log file path cannot be copied to clipboard"))
 
 	@classmethod
 	def run(cls):
@@ -117,6 +113,6 @@ class NVDALogsManagementDialog (wx.Dialog):
 			return
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame)
-		d.Center(wx.BOTH | wx.CENTER_ON_SCREEN)
+		d.CentreOnScreen()
 		d.ShowModal()
 		gui.mainFrame.postPopup()

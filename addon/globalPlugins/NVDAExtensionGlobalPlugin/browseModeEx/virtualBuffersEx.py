@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\virtualBuffersEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,10 +14,15 @@ from virtualBuffers import *  # noqa:F403
 from virtualBuffers import _prepareForFindByAttributes
 from NVDAObjects.IAccessible import ia2Web
 from comtypes import COMError
+try:
+	# for nvda version >= 2021.1
+	from comInterfaces import IAccessible2Lib as IA2
+except ImportError:
+	import IAccessibleHandler as IA2
+
 from ..utils.NVDAStrings import NVDAString
 from . import elementsList
 from .__init__ import BrowseModeDocumentTreeInterceptorEx
-from ..utils.py3Compatibility import _unicode
 
 addonHandler.initTranslation()
 
@@ -100,7 +105,7 @@ class Gecko_ia2_Ex(VirtualBufferEx, virtualBuffers.gecko_ia2 .Gecko_ia2):
 
 	def _searchableNewAttribsForNodeType(self, nodeType):
 		if nodeType == "paragraph":
-			attrs = {"IAccessible::role": [IAccessibleHandler.IA2_ROLE_PARAGRAPH]}
+			attrs = {"IAccessible::role": [IA2.IA2_ROLE_PARAGRAPH]}
 		elif nodeType == "division":
 			attrs = {"IAccessible2::attribute_tag": self._searchableTagValues(["DIV"])}
 		elif nodeType == "anchor":
@@ -172,21 +177,21 @@ class VirtualBufferQuickNavItemEx(virtualBuffers.VirtualBufferQuickNavItem):
 		role = attrs.get("role", "")
 		if (self.itemType == "edit"):
 			name = attrs.get("name", "")
-			return _unicode("{name} {role} {value}").format(
+			return str("{name} {role} {value}").format(
 				name=self.getLabel(name), role=controlTypes.roleLabels[role], value=value)
 		if self.itemType == "checkBox":
 			states = attrs.get("states", "")
 			state = NVDAString("checked") if controlTypes.STATE_CHECKED in states\
 				else NVDAString("not checked")
 			name = attrs.get("name", "")
-			return _unicode("%s %s") % (self.getLabel(name), state)
+			return str("%s %s") % (self.getLabel(name), state)
 		if self.itemType in ["formField"]:
 			if role == controlTypes.ROLE_CHECKBOX:
 				states = attrs.get("states", "")
 				state = NVDAString("checked") if controlTypes.STATE_CHECKED in states\
 					else NVDAString("not checked")
 				name = attrs.get("name", "")
-				return _unicode("{name} {role} {state}") .format(
+				return str("{name} {role} {state}") .format(
 					name=name, role=controlTypes.roleLabels[role], state=state)
 			return value
 		return self.getLabel(value)

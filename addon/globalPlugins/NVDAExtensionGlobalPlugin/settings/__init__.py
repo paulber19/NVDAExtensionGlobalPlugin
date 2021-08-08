@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -16,12 +16,7 @@ import gui
 import wx
 import buildVersion
 import ui
-import speech
-# ConfigObj 5.1.0 and later integrates validate module.
-try:
-	from configobj.validate import Validator, VdtTypeError
-except ImportError:
-	from validate import Validator, VdtTypeError
+from configobj.validate import Validator, VdtTypeError
 from .addonConfig import *  # noqa:F403
 
 addonHandler.initTranslation()
@@ -255,7 +250,7 @@ class AddonConfigurationManager():
 				os.remove(addonConfigFile)
 				# Translators: A message informing the user that there are errors
 				# in the configuration file.
-				msg = _("The configuration file of %s addon contains errors. The addon configuration has been reset to default configuration") % self.curAddon.manifest["summary"]  # noqa:E501
+				msg = _("""The configuration file of "%s" add-on contains errors. The add-on configuration has been reset to default configuration""") % self.curAddon.manifest["summary"]  # noqa:E501
 				core.callLater(2000, ui.message, msg)
 				# reset configuration to default
 				self.addonConfig =\
@@ -265,7 +260,7 @@ class AddonConfigurationManager():
 			# no add-on configuration file found
 			self.addonConfig =\
 				self._versionToConfiguration[self._currentConfigVersion](None)
-			# it's an addon installation, set volume control parameters
+			# it's an add-on installation, set volume control parameters
 			self.setDefaultVolumeControl()
 		self.addonConfig.filename = addonConfigFile
 		# merge step
@@ -318,13 +313,13 @@ class AddonConfigurationManager():
 			return
 		oldConfig = self._versionToConfiguration[version](oldConfigFile)
 		if oldConfig .errors != []:
-			log.warning("Old Addon configuration file error: merge aborted")
+			log.warning("Old Add-on configuration file error: merge aborted")
 			core.callLater(
 				1000,
 				ui.message,
 				# Translators: message to inform the user
 				# than it's not possible to merge with old configuration because of error.
-				_("The old configuration file of %s addon contains errors. It's not possible to keep previous configuration") % self.curAddon.manifest["summary"])  # noqa:E501
+				_("The old configuration file of %s add-on contains errors. It's not possible to keep previous configuration") % self.curAddon.manifest["summary"])  # noqa:E501
 			return
 		for sect in self.addonConfig.sections:
 			for k in self.addonConfig[sect]:
@@ -396,7 +391,7 @@ class AddonConfigurationManager():
 		from ..utils import makeAddonWindowTitle
 		if gui.messageBox(
 			# Translators: A message asking the user to confirm reset of configuration.
-			_("The add-on configuration will be reset to factory values and NVDA will be restarted. Would you like to continue ?"),  # noqa:E501
+			_("The add-on configuration will be reset to factory values and NVDA will be restarted. Would you like to continue?"),  # noqa:E501
 			makeAddonWindowTitle(_("Configuration reset")),
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
 			return
@@ -454,7 +449,6 @@ class AddonConfigurationManager():
 				i += 1
 				n = int(n/2)
 			return i-1
-	
 		conf = config.conf
 		if self.addonName not in conf:
 			return {}

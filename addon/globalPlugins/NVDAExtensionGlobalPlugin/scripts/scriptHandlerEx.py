@@ -12,7 +12,11 @@
 from logHandler import log
 import time
 import weakref
-import sayAllHandler
+try:
+	# for NVDA version >= 2021.1
+	from speech.sayAll import SayAllHandler as sayAllHandler
+except ImportError:
+	import sayAllHandler
 import scriptHandler
 from scriptHandler import _lastScriptTime, _lastScriptCount
 # flake8 finds an bad error

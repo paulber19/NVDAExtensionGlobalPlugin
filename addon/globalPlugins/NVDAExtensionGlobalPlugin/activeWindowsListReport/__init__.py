@@ -26,8 +26,6 @@ _windowsToIgnore = _("Start menu|Charm Bar")
 
 
 def isRealWindow(hWnd):
-	name = winUser.getWindowText(hWnd)
-	visible = winUser.isWindowVisible(hWnd)
 	lExStyle = getExtendedWindowStyle(hWnd)
 	isToolWindow = (lExStyle & WS_EX_TOOLWINDOW) == 0
 	isAppWindow = (lExStyle & WS_EX_APPWINDOW) == 0
@@ -41,6 +39,7 @@ def isRealWindow(hWnd):
 		if winUser.getWindowText(hWnd):
 			return True
 	return False
+
 
 def getactiveWindows():
 	def callback(hWnd, windows):
@@ -65,22 +64,20 @@ def getactiveWindows():
 		callback(hwnd, windowsList)
 	return windowsList
 
+
 def closeAllWindows(windowsList):
-		for f in windowsList:
-			if f[0] == api.getDesktopObject().name:
-				# it is desktop window, destroy is not possible
-				continue
-			# window handle to destroy
-			hwnd = f[1]
-			obj = NVDAObjects.window.Window(windowHandle=hwnd)
-			if obj.appModule.appName == "nvda":
-				# we cannot destroy nvda windows
-				continue
-			# we destroy it
-			oleacc.AccessibleObjectFromWindow(hwnd, -2).accDoDefaultAction(5)
-
-
-
+	for f in windowsList:
+		if f[0] == api.getDesktopObject().name:
+			# it is desktop window, destroy is not possible
+			continue
+		# window handle to destroy
+		hwnd = f[1]
+		obj = NVDAObjects.window.Window(windowHandle=hwnd)
+		if obj.appModule.appName == "nvda":
+			# we cannot destroy nvda windows
+			continue
+		# we destroy it
+		oleacc.AccessibleObjectFromWindow(hwnd, -2).accDoDefaultAction(5)
 
 
 class ActiveWindowsListDisplay(wx.Dialog):
@@ -88,6 +85,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 	title = None
 	delayTimer = None
 	lastTypedKeys = ""
+
 	def __new__(cls, *args, **kwargs):
 		if ActiveWindowsListDisplay._instance is None:
 			return wx.Dialog.__new__(cls)
@@ -98,7 +96,7 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			return
 		ActiveWindowsListDisplay._instance = self
 		# Translators: this is the title of active windows list display dialog.
-		dialogTitle = _("Windows'list")
+		dialogTitle = _("List of windows")
 		ActiveWindowsListDisplay.title = makeAddonWindowTitle(dialogTitle)
 		super(ActiveWindowsListDisplay, self).__init__(
 			parent, wx.ID_ANY, ActiveWindowsListDisplay.title)
@@ -203,18 +201,18 @@ class ActiveWindowsListDisplay(wx.Dialog):
 				self.windowsListBox.SetSelection(0)
 			self.windowsListBox.SetFocus()
 		evt.Skip()
+
 	def selectNextWindow(self, keys):
 		curIndex = self.windowsListBox .GetSelection()
-		for windowName in  self.windowNamesList[curIndex+1:]:
+		for windowName in self.windowNamesList[curIndex+1:]:
 			if windowName.lower().startswith(self.lastTypedKeys):
 				index = self.windowNamesList.index(windowName)
 				self.windowsListBox .SetSelection(index)
 				return True
-		for windowName in  self.windowNamesList[:curIndex:]:
+		for windowName in self.windowNamesList[:curIndex:]:
 			if windowName.lower().startswith(self.lastTypedKeys):
 				index = self.windowNamesList.index(windowName)
 				self.windowsListBox .SetSelection(index)
-			
 				return True
 		return False
 
@@ -243,23 +241,25 @@ class ActiveWindowsListDisplay(wx.Dialog):
 			evt.Skip()
 			return
 		self.lastTypedKeys += chr(keyCode).lower()
-		if len(self.lastTypedKeys) >1:
+		if len(self.lastTypedKeys) > 1:
 			# check if we are already on windowName starting with typed keys
-			curIndex = self.windowsListBox .GetSelection()
 			if self.windowsListBox .GetStringSelection().lower().startswith(self.lastTypedKeys):
 				# nothing to do. We are on the good item, just speak it
-				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection())
+				wx.CallLater(
+					50,
+					queueHandler.queueFunction,
+					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection()
+					)
 				return
 			# set selection on next window  with name starting with lastTypedKeys
 			if not self.selectNextWindow(self.lastTypedKeys):
-				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection())
+				wx.CallLater(
+					50,
+					queueHandler.queueFunction,
+					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection()
+					)
 			return
 		evt.Skip()
-
-
-
 
 	def onDestroyButton(self, evt):
 		index = self.windowsListBox.GetSelection()

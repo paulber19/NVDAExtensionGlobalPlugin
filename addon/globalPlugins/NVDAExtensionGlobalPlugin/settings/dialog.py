@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -24,7 +24,7 @@ addonHandler.initTranslation()
 def askForNVDARestart():
 	if gui.messageBox(
 		# Translators: A message asking the user if they wish to restart NVDA as NVDAExtensionGlobalPlugin addon settings changes have been made.
-		_("Some Changes have been made . You must save the configuration and restart NVDA for these changes to take effect. Would you like to do it now?"),
+		_("Some changes have been made. You must save the configuration and restart NVDA for these changes to take effect. Would you like to do it now?"),
 		makeAddonWindowTitle(NVDAString("Restart NVDA")),
 		wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
 		_addonConfigManager.saveSettings(True)
@@ -39,7 +39,7 @@ def askForNVDARestart():
 
 class FeaturesInstallationSettingsPanel(SettingsPanel):
 	# Translators: This is the label for the Installed features dialog.
-	title = _("features's installation")
+	title = _("Features's installation")
 
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
@@ -54,15 +54,15 @@ class FeaturesInstallationSettingsPanel(SettingsPanel):
 		installChoice = [installChoiceLabels[x] for x in [C_DoNotInstall, C_Install, C_InstallWithoutGesture]]
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("Display &systray icons and running application windows lists:")
+		labelText = _("Display &systray icons and running application windows list:")
 		self.installSystrayIconsListFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installSystrayIconsListFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_SystrayIconsAndActiveWindowsList))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("&complex symbols edition help:")
+		labelText = _("&Complex symbols edition help:")
 		self.installComplexSymbolsFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installComplexSymbolsFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_ComplexSymbols))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("&Focused Application's informations:")
+		labelText = _("&Focused application's informations:")
 		self.installFocusedApplicationInformationsFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installFocusedApplicationInformationsFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_FocusedApplicationInformations))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
@@ -70,11 +70,11 @@ class FeaturesInstallationSettingsPanel(SettingsPanel):
 		self.installExtendedVirtualBufferFeaturesOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
 		self.installExtendedVirtualBufferFeaturesOptionBox .SetSelection(getInstallFeatureOption(ID_ExtendedVirtualBuffer))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("c&lipboard command announcement:")
+		labelText = _("C&lipboard command announcement:")
 		self.installClipboardCommandAnnouncementFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
 		self.installClipboardCommandAnnouncementFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_ClipboardCommandAnnouncement))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("C&urrent folder report:")
+		labelText = _("""Anno&uncement of the preselected folder  in "Open", "Save", "Save as" dialog boxes:""")
 		self.installCurrentFolderReportFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installCurrentFolderReportFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_CurrentFolderReport))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
@@ -86,7 +86,7 @@ class FeaturesInstallationSettingsPanel(SettingsPanel):
 		self.installSpeechHistoryFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installSpeechHistoryFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_SpeechHistory))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("&Keyboard Key renaming:")
+		labelText = _("&Keyboard keys renaming:")
 		self.installKeyboardKeyRenamingFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
 		self.installKeyboardKeyRenamingFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_KeyboardKeyRenaming))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
@@ -106,7 +106,7 @@ class FeaturesInstallationSettingsPanel(SettingsPanel):
 		self.installForegroundWindowObjectsListFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installForegroundWindowObjectsListFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_ForegroundWindowObjectsList))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("&Voice profil switching:")
+		labelText = _("&Voice profile switching:")
 		self.installVoiceProfileSwitchingFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installVoiceProfileSwitchingFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_VoiceProfileSwitching))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
@@ -118,11 +118,11 @@ class FeaturesInstallationSettingsPanel(SettingsPanel):
 		self.installVolumeControlFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
 		self.installVolumeControlFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_VolumeControl))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("&Developpement's tools")
+		labelText = _("&Development's tools:")
 		self.installDevToolsFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
 		self.installDevToolsFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_Tools))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-		labelText = _("Date and time - supplements")
+		labelText = _("&Date and time - supplements:")
 		self.installDateAndTimeFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:])
 		self.installDateAndTimeFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_DateAndTime))
 
@@ -233,13 +233,15 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 		# Translators: This is the label for a group of editing options in the
 		# NVDAEnhancement settings panel
 		groupText = _("Editing")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# bug fix in nvda 2020.3
 		# so hide it for nvda version higher or equal  to this version
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Report next word on deletion")
-		self.ReportNextWordOnDeletionOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.ReportNextWordOnDeletionOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.ReportNextWordOnDeletionOptionBox.SetValue(toggleReportNextWordOnDeletionOption(False))
 		import versionInfo
 		NVDAVersion = [versionInfo.version_year, versionInfo.version_major]
@@ -257,7 +259,9 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 		# Translators: This is the label for a group of cursor's movement options in the
 		# NVDAEnhancement settings panel
 		groupText = _("Cursor's moving")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.VERTICAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a combobox in the NVDAEnhancement settings panel.
 		labelText = _("&Punctuation/symbol level on word movement:")
@@ -265,7 +269,7 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 		symbolLevelChoices = [symbolLevelLabels[level] for level in characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS]
 		# Translators: This is the label for an item in combobox in the
 		# NVDAEnhancement settings panel.
-		symbolLevelChoices = [_("Current configuration profil's level"), ] + symbolLevelChoices[:]
+		symbolLevelChoices = [_("Current configuration profile's level"), ] + symbolLevelChoices[:]
 		self.symbolLevelList = group.addLabeledControl(labelText, wx.Choice, choices=symbolLevelChoices)
 		symbolLevelOnWordCaretMovement = _addonConfigManager .getSymbolLevelOnWordCaretMovement()
 		if symbolLevelOnWordCaretMovement is None:
@@ -274,26 +278,30 @@ class NVDAEnhancementSettingsPanel(SettingsPanel):
 			self.symbolLevelList.SetSelection(1+characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS.index((symbolLevelOnWordCaretMovement)))
 		# Translators: This is the label for a group in NVDAEnhancement settings panel
 		groupText = _("Speech history")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.VERTICAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Number the records ")
-		self.speechRecordWithNumberOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.speechRecordWithNumberOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.speechRecordWithNumberOptionBox.SetValue(toggleSpeechRecordWithNumberOption(False))
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Display records in ascending order")
-		self.speechRecordInAscendingOrderOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.speechRecordInAscendingOrderOptionBox = group.addItem(wx.CheckBox(groupBox, wx.ID_ANY, label=labelText))
 		self.speechRecordInAscendingOrderOptionBox.SetValue(toggleSpeechRecordInAscendingOrderOption(False))
 		if getInstallFeatureOption(ID_SpeechHistory) == C_DoNotInstall:
 			for item in range(0, group.sizer.GetItemCount()):
 				group.sizer.Hide(item)
 		# Translators: This is the label for a group NVDAEnhancement settings panel
 		groupText = _("Browser")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.VERTICAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Browse in loop")
-		self.loopInNavigationModeOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.loopInNavigationModeOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.loopInNavigationModeOptionBox.SetValue(toggleLoopInNavigationModeOption(False))
 		if getInstallFeatureOption(ID_ExtendedVirtualBuffer) == C_DoNotInstall:
 			group.sizer.Hide(0)
@@ -333,21 +341,23 @@ class ComputerSettingsPanel(SettingsPanel):
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the computer settings panel.
 		groupText = _("Windows")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Computer settings panel.
-		labelText = _("&No object description inWindows ribbons")
-		self.noDescriptionReportInRibbonOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		labelText = _("&No object description in Windows ribbons")
+		self.noDescriptionReportInRibbonOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.noDescriptionReportInRibbonOptionBox.SetValue(toggleNoDescriptionReportInRibbonOption(False))
 		if globalVars.appArgs.secure:
 			self.noDescriptionReportInRibbonOptionBox .Hide()
 		# Translators: This is the label for a checkbox in the Computer settings panel.
 		labelText = _("Automatically &maximize windows")
-		self.AutomaticWindowMaximizationOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.AutomaticWindowMaximizationOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.AutomaticWindowMaximizationOptionBox.SetValue(toggleAutomaticWindowMaximizationOption(False))
 		# Translators: This is the label for a checkbox in the Computer settings panel.
 		labelText = _("Report &windows clock's time with seconds")
-		self.reportTimeWithSecondsOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.reportTimeWithSecondsOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.reportTimeWithSecondsOptionBox.SetValue(toggleReportTimeWithSecondsOption(False))
 		if getInstallFeatureOption(ID_DateAndTime) == C_DoNotInstall:
 			self.reportTimeWithSecondsOptionBox.Disable()
@@ -357,16 +367,20 @@ class ComputerSettingsPanel(SettingsPanel):
 		volumeGroup = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		sHelper.addItem(volumeGroup)
 		# Translators: This is the label for a group in computer settings panel.
-		groupText = _("Main and NVDA")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupText = _("Main and NVDA volume")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is the label for a checkbox in the computer settings panel.
 		labelText = _("Set on &volume at the loading of the add-on")
-		self.setOnMainAndNVDAVolumeOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.setOnMainAndNVDAVolumeOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.setOnMainAndNVDAVolumeOptionCheckBox.SetValue(toggleSetOnMainAndNVDAVolumeAdvancedOption(False))
 		# Translators: This is the label for a group of main volume options in the computer settings panel.
 		groupText = _("Main volume")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("&Threshold of recovery of the volume:")
@@ -379,7 +393,9 @@ class ComputerSettingsPanel(SettingsPanel):
 		self.masterVolumeLevelBox.SetSelection(choice.index(_addonConfigManager.getMasterVolumeLevel()))
 		# Translators: This is the label for a group of NVDA volume options in the computer settings panel.
 		groupText = _("NVDA volume")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("T&hreshold of recovery of the volume:")
@@ -391,7 +407,9 @@ class ComputerSettingsPanel(SettingsPanel):
 		self.NVDAVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getNVDAVolumeLevel()))
 		# Translators: This is the label for a group in computer settings panel.
 		groupText = _("Volume c&hange")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("Ste&ps's size:")
@@ -400,11 +418,11 @@ class ComputerSettingsPanel(SettingsPanel):
 		self.volumeChangeStepLevelBox.SetStringSelection(str(_addonConfigManager.getVolumeChangeStepLevel())	)
 		# Translators: This is the label for a checkbox in the computer settings panel.
 		labelText = _("R&eport volume changes")
-		self.reportVolumeChangeOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.reportVolumeChangeOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.reportVolumeChangeOptionCheckBox.SetValue(toggleReportVolumeChangeAdvancedOption(False))
 		# Translators: This is the label for a checkbox in the computer settings panel.
 		labelText = _("&Announce application volume level in percent")
-		self.appVolumeLevelAnnouncementInPercentOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.appVolumeLevelAnnouncementInPercentOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.appVolumeLevelAnnouncementInPercentOptionCheckBox .SetValue(toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False))
 		if not getInstallFeatureOption(ID_VolumeControl):
 			for item in range(0, volumeGroup.sizer.GetItemCount()):
@@ -434,7 +452,7 @@ class ComputerSettingsPanel(SettingsPanel):
 		_addonConfigManager.setVolumeChangeStepLevel(int(levelString))
 		if self.reportVolumeChangeOptionCheckBox.IsChecked() != toggleReportVolumeChangeAdvancedOption(False):
 			toggleReportVolumeChangeAdvancedOption()
-		if self.appVolumeLevelAnnouncementInPercentOptionCheckBox.IsChecked() !=toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False):
+		if self.appVolumeLevelAnnouncementInPercentOptionCheckBox.IsChecked() != toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False):
 			toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(True)
 
 	def onSave(self):
@@ -476,7 +494,7 @@ class AdvancedSettingsPanel(SettingsPanel):
 		self.MaximumDelayBetweenSameScriptBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice])
 		self.MaximumDelayBetweenSameScriptBox.SetSelection(choice.index(_addonConfigManager.getMaximumDelayBetweenSameScript()))
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
-		labelText = _("&Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation")
+		labelText = _("""&Do not take account of the option called "Report object descriptions" during the display of the dialog box same as confirmation""")
 		self.byPassNoDescriptionOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.byPassNoDescriptionOptionBox.SetValue(toggleByPassNoDescriptionAdvancedOption(False))
 		if globalVars.appArgs.secure:
@@ -513,53 +531,56 @@ class KeyboardSettingsPanel(SettingsPanel):
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the Keyboard settings panel.
 		groupText = _("Keys's remanence")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Keyboard settings panel.
 		labelText = _("&Only NVDA key in remanence")
-		self.onlyNVDAKeyInRemanenceAdvancedOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.onlyNVDAKeyInRemanenceAdvancedOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.onlyNVDAKeyInRemanenceAdvancedOptionBox.SetValue(toggleOnlyNVDAKeyInRemanenceAdvancedOption(False))
 		# Translators: This is the label for a checkbox in the Keyboard settings panel.
 		labelText = _("Activate &remanence at NVDA's start")
-		self.remanenceAtNVDAStartAdvancedOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.remanenceAtNVDAStartAdvancedOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.remanenceAtNVDAStartAdvancedOptionBox.SetValue(toggleRemanenceAtNVDAStartAdvancedOption(False))
 		# Translators: This is the label for a combobox in the Keyboard settings panel.
 		labelText = _("&Remanence's delay (in milliseconds):")
-		# remanenceDelayChoice = [100*(10+5*(x-1)) for x in range(1, 10)]
 		remanenceDelayChoice = [x for x in range(1000, 10500, 500)]
 		self.remanenceDelayChoice = list(reversed(remanenceDelayChoice))
 		self.remanenceDelayBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in self.remanenceDelayChoice])
 		self.remanenceDelayBox.SetSelection(self.remanenceDelayChoice.index(_addonConfigManager.getRemanenceDelay()))
 		# Translators: This is the label for a check box in the Keyboard settings panel.
 		labelText = _("Play &sound at the start of remanence")
-		self.beepAtRemanenceStartOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.beepAtRemanenceStartOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.beepAtRemanenceStartOptionCheckBox .SetValue(toggleBeepAtRemanenceStartAdvancedOption(False))
 		# Translators: This is the label for a check box in the Keyboard settings panel.
 		labelText = _("Play sound at the &end of remanence")
-		self.beepAtRemanenceEndOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.beepAtRemanenceEndOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.beepAtRemanenceEndOptionCheckBox .SetValue(toggleBeepAtRemanenceEndAdvancedOption(False))
 		# Translators: This is the label for a check box in the Keyboard settings panel.
 		labelText = _("Special remanence for &Gmail.com")
-		self.remanenceForGmailOptionCheckBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.remanenceForGmailOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.remanenceForGmailOptionCheckBox .SetValue(toggleRemanenceForGmailAdvancedOption(False))
 		if not getInstallFeatureOption(ID_KeyRemanence):
 			for item in range(0, group.sizer.GetItemCount()):
 				group.sizer.Hide(item)
 		# Translators: This is the label for a group of editing options in the Keyboard settings panel.
 		groupText = _("Numeric keypad")
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the keyboard settings panel.
-		labelText = _("&allow the standard use of the numeric keypad")
-		self.enableNumpadNavigationModeToggleOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		labelText = _("&Allow the standard use of the numeric keypad")
+		self.enableNumpadNavigationModeToggleOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.enableNumpadNavigationModeToggleOptionBox.SetValue(toggleEnableNumpadNavigationModeToggleAdvancedOption(False))
 		# Translators: This is the label for a checkbox in the keyboard settings panel.
 		labelText = _("&Enable the standard use of the numeric keypad at NVDA's start")
-		self.activateNumpadNavigationModeAtStartOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.activateNumpadNavigationModeAtStartOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.activateNumpadNavigationModeAtStartOptionBox.SetValue(toggleActivateNumpadNavigationModeAtStartAdvancedOption(False))
 		# Translators: This is the label for a checkbox in the keyboard settings panel.
 		labelText = _("&Enable / disable numeric keypad's standard use with num lock key")
-		self.activateNumpadStandardUseWithNumLockOptionBox = group.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.activateNumpadStandardUseWithNumLockOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.activateNumpadStandardUseWithNumLockOptionBox.SetValue(toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False))
 
 	def saveSettingChanges(self):
@@ -603,11 +624,11 @@ class UpdateSettingsPanel(SettingsPanel):
 	def makeSettings(self, settingsSizer):
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a checkbox in the Update settings panel.
-		labelText = _("Automatically check for &updates ")
+		labelText = _("Automatically check for &updates")
 		self.autoCheckForUpdatesCheckBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.autoCheckForUpdatesCheckBox.SetValue(toggleAutoUpdateGeneralOptions(False))
 		# Translators: This is the label for a checkbox in the Update settings panel.
-		labelText = _("Update also release versions to &developpement versions")
+		labelText = _("Update also release versions to &development versions")
 		self.updateReleaseVersionsToDevVersionsCheckBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.updateReleaseVersionsToDevVersionsCheckBox.SetValue(toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 		# translators: this is a label for a button in update settings panel.
@@ -623,9 +644,9 @@ class UpdateSettingsPanel(SettingsPanel):
 
 	def onCheckForUpdate(self, evt):
 		from ..updateHandler import addonUpdateCheck
+		self.saveSettingChanges()
 		releaseToDevVersion = self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked()
 		wx.CallAfter(addonUpdateCheck, auto=False, releaseToDev=releaseToDevVersion)
-
 		self.Close()
 
 	def onSeeHistory(self, evt):

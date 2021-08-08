@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\browseModeUIAEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -15,8 +15,8 @@ from UIABrowseMode import UIABrowseModeDocument
 from UIAUtils import *  # noqa:F403
 from .__init__ import BrowseModeDocumentTreeInterceptorEx
 from . import elementsList
-from ..utils.py3Compatibility import rangeGen, _unicode
 from . import UIAParagraph
+from ..utils.NVDAStrings import NVDAString
 
 addonHandler.initTranslation()
 
@@ -29,21 +29,21 @@ class UIATextRangeQuickNavItemEx(UIABrowseMode .UIATextRangeQuickNavItem):
 		# Translators: label when object has no name.
 		name = obj.name if obj.name else _("No label")
 		if (self.itemType == "edit"):
-			value = _unicode("{name} {role} {value}") .format(
+			value = str("{name} {role} {value}") .format(
 				name=name, role=controlTypes.roleLabels[obj.role], value=value)
 		elif self.itemType == "checkBox":
 			if controlTypes.STATE_CHECKED in obj.states:
 				state = controlTypes.stateLabels[controlTypes.STATE_CHECKED]
 			else:
 				state = controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
-			value = _unicode("{name} {state}") .format(name=name, state=state)
+			value = str("{name} {state}") .format(name=name, state=state)
 		elif self.itemType == "formField":
 			if obj.role == controlTypes.ROLE_CHECKBOX:
 				if controlTypes.STATE_CHECKED in obj.states:
 					state = controlTypes.stateLabels[controlTypes.STATE_CHECKED]
 				else:
 					state = controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
-				value = _unicode("{name} {state}") .format(name=name, state=state)
+				value = str("{name} {state}") .format(name=name, state=state)
 		return value
 
 
@@ -68,7 +68,7 @@ def UIAControlQuicknavIteratorEx(
 		elements = document.rootNVDAObject.UIAElement.findAll(
 			UIAHandler.TreeScope_Descendants, UIACondition)
 		if elements:
-			for index in rangeGen(elements.length):
+			for index in range(elements.length):
 				element = elements.getElement(index)
 				try:
 					elementRange = document.rootNVDAObject.UIATextPattern.rangeFromChild(element)  # noqa:E501
@@ -305,46 +305,46 @@ class EdgeElementsListDialog(elementsList.ElementsListDialogEx):
 	ELEMENT_TYPES = (
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("link", _("Link")),
+		("link", NVDAString("link").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("heading", _("Heading")),
+		("heading", NVDAString("heading").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("formField", _("Form field")),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("button", _("Button")),
+		("button", NVDAString("button").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("landmark", _("Landmark")),
+		("landmark", NVDAString("landmark").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("radioButton", _("Radio button")),
+		("radioButton", NVDAString("radio button").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("paragraph", _("Paragraph")),
+		("paragraph", NVDAString("paragraph").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("checkBox", _("Check box")),
+		("checkBox", NVDAString("check box").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("comboBox", _("Combo box")),
+		("comboBox", NVDAString("combo box").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("table", _("Table")),
-		# ("blockQuote", _("Blocquote")),
+		("table", NVDAString("table").capitalize()),
+		# ("blockQuote", NVDAString("block quote").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("edit", _("Edit")),
+		("edit", NVDAString("edit").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("list", _("List")),
+		("list", NVDAString("list").capitalize()),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("graphic", _("Graphic")),
+		("graphic", NVDAString("graphic").capitalize()),
 		# ("embeddedObject", _("Embedded object")),
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
-		("separator", _("Separator"))
+		("separator", NVDAString("separator").capitalize())
 		)

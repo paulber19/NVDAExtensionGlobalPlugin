@@ -1,23 +1,33 @@
 ADDON_SUMMARY - Historique
-Auteur: ADDON_AUTHOR_NAME
+Auteur : ADDON_AUTHOR_NAME
 
 
 %!includeconf: ../addon_global.t2tconf
 %!includeconf: addon_informations.t2tconf
-URL: ADDON_AUTHOR_URL
+URL : ADDON_AUTHOR_URL
 
-[Dépot GitHub: ADDON_REPOSITORY ADDON_REPOSITORY]
+[Dépot GitHub : ADDON_REPOSITORY ADDON_REPOSITORY]
 
-Téléchargement:
-- [Version actuelle: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
-- [Version précédente: ADDON_PREV_VERSION ADDON_DOWNLOAD_PREVIOUS]
+Téléchargement :
+- [Version actuelle : ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
+- [Version précédente : ADDON_PREV_VERSION ADDON_DOWNLOAD_PREVIOUS]
 - [versions de développement ADDON_DEV_URL]
 
 
++ v9.8.1 (08/07/2021) +
+Correction de bogue:
+- en mode navigation et NVDA 2021.1, le déplacement  par paragraphe  ne génère  plus d'erreur.
+
+
++ v9.8 (22/06/2021) +
+- compatibilité avec nvda 2021.1. Les versions de NVDA antérieures à 2019.3 ne sont plus supportées.
+- suppression du code concernant Python 2.7.
+- correction orthographique et grammaticale de chaines de caractères  anglaise.
+- affichage braille des annonces vocales faites pour les commandes d'édition du style "copier", "coller", ...
 
 
 + v9.7 (01/04/2021) +
-- reprise de toutes les fonctionnalités pour envoyer  aussi le texte des annonces sonores à l'afficheur braille.
+- reprise de toutes les fonctionnalités pour envoyer  aussi le texte des annonces vocales à l'afficheur braille.
 
 
 + v9.6.1 (21/03/2021) +

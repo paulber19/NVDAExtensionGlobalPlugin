@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # onInstall.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -32,12 +32,7 @@ def getNewSymbolsFile(folder):
 	newSymbolsFileName = "symbols-" + lang + ".dic"
 	newSymbolsFileList = os.listdir(folder)
 	if newSymbolsFileName in newSymbolsFileList:
-		if sys.version.startswith("3"):
-			# for python 3
-			return newSymbolsFileName
-		else:
-			# for python 2
-			return newSymbolsFileName.encode("utf-8")
+		return newSymbolsFileName
 	return None
 
 
@@ -121,7 +116,7 @@ def checkWindowListAddonInstalled():
 	for addon in addonHandler.getRunningAddons():
 		if addon.manifest["name"] in addonCheckList:
 			# Translators: message of message box
-			msg = _("Attention, you must uninstall %s addon because it is now included in this addon.")  # noqa:E501
+			msg = _("""Attention, you must uninstall "%s" add-on because it is now included in this add-on""")  # noqa:E501
 			gui.messageBox(msg % addon.manifest["name"])
 			break
 	winUser.setForegroundWindow(h)

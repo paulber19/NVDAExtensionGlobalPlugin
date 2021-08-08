@@ -31,7 +31,7 @@ class ListeNotification(wx.Dialog):
 			return
 		ListeNotification._instance = self
 		# Translators: this is the title of NVDA - System tray icons 's list dialog.
-		dialogTitle = _("NVDA - System tray icons 's list")
+		dialogTitle = _("System tray icons 's list")
 		title = ListeNotification.title = makeAddonWindowTitle(dialogTitle)
 		super(ListeNotification, self).__init__(parent, wx.ID_ANY, title)
 		self.doGui()

@@ -9,7 +9,7 @@ import addonHandler
 import subprocess
 import os
 import glob
-from ..utils.py3Compatibility import py3, getAddonPath, getCommonUtilitiesPath
+from ..utils.py3Compatibility import getCommonUtilitiesPath
 
 addonHandler.initTranslation()
 
@@ -43,7 +43,7 @@ def generatePotFile(
 		'gettext_package_name': buildVarsAddonInfo['addon_name'],
 		'gettext_package_version': buildVarsAddonInfo['addon_version']
 	}
-	addonPath = getAddonPath(addon)
+	addonPath = addon.path
 	potFileDir = os.path.join(addonPath, "locale", "en")
 	files = glob.glob(os.path.join(potFileDir, "*.pot"))
 	for f in files:
@@ -73,12 +73,7 @@ def generatePotFile(
 
 def compilePoFiles(addon):
 	utilitiesPath = getCommonUtilitiesPath()
-	if py3:
-		# for python 3
-		msgfmtPath = os.path.join(utilitiesPath, "msgfmt.exe")
-	else:
-		# for python 2
-		msgfmtPath = os.path.join(utilitiesPath, "msgfmt.exe").decode("mbcs")
+	msgfmtPath = os.path.join(utilitiesPath, "msgfmt.exe")
 	prefixe = "nvda"
 	localeDir = os.path.join(addon.path, "locale")
 	poFiles = []
@@ -100,12 +95,7 @@ def compilePoFiles(addon):
 			"-o",
 			"\"%s\"" % moFile,
 			"\"%s\"" % poFile]
-		if py3:
-			# for python 3
-			commandLine = " ".join(commandLine)
-		else:
-			# for python 2
-			commandLine = " ".join(commandLine).encode("mbcs")
+		commandLine = " ".join(commandLine)
 		p = subprocess.Popen(commandLine)
 		retval = p.wait()
 		if retval == 0:

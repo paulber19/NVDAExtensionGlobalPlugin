@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/runInThread.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2017 - 2020 paulber19
+# Copyright (C) 2017 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,11 +8,8 @@ import addonHandler
 from logHandler import log
 import tones
 import threading
-from .. import settings
-import nvwave
 import ui
-import speech
-from .py3Compatibility import reLoad
+
 addonHandler.initTranslation()
 
 
@@ -46,7 +43,6 @@ class RepeatTask(threading.Thread):
 				ui.message(_("interrupted"))
 				break
 			self.task()
-
 
 	def stop(self):
 		self._stopevent.set()
