@@ -84,5 +84,5 @@ Traductor (s): ترجمة آلية من اللغة الفرنسية
 * البرنامج النصي لإعادة تشغيل NVDA بسرعة.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.7.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
