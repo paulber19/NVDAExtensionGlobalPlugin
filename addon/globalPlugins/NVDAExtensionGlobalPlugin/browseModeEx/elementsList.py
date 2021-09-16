@@ -147,7 +147,7 @@ class ElementsListDialogEx(wx.Dialog):
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: The label of a button to activate an element
 		# in the browse mode Elements List dialog.
-		self.activateButton = bHelper.addButton(self, label=NVDAString("&Activate"))
+		self.activateButton = bHelper.addButton(self, label=NVDAString("Activate"))
 		self.activateButton.Bind(wx.EVT_BUTTON, lambda evt: self.onAction(True))
 		# Translators: The label of a button to move to an element
 		# in the browse mode Elements List dialog.

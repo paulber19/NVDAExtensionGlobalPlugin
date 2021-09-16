@@ -87,5 +87,5 @@ Neke karakteristike se posebno mogu omogućiti ili onemogućiti.
 * Skripta za ponovno pokretanje programa NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
