@@ -7,7 +7,7 @@
 * [версия в разработке] [2]
 * Совместимость:
 * минимальная поддерживаемая версия NVDA: 2019.3
-* последняя протестированная версия NVDA: 2021.1
+* последняя протестированная версия NVDA: 2021.2
 
 
 перевод Денис Рыбин: на основе автоматического перевода с французского языка
@@ -87,5 +87,5 @@
 * скрипт для быстрого перезапуска NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.9.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

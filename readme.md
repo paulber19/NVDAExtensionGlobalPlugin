@@ -7,7 +7,7 @@
 	* [developpement version][2]
 * Compatibility:
 	* minimum supported NVDA version: 2019.3
-	* last tested NVDA version: 2021.1
+	* last tested NVDA version: 2021.2
 
 
 Traductor (s): automatic translation from french language
@@ -87,5 +87,5 @@ some features can be enabled or disabled individually.
 * script to quickly restart NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.9.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

@@ -7,7 +7,7 @@
 	* [version de développement][2]
 * Compatibilité:
 	* version minimum de NVDAsupportée: 2019.3
-	* dernière version de NVDA testée: 2021.1
+	* dernière version de NVDA testée: 2021.2
 
 
 Traducteur (s): texte original par l'auteur de l'extension
@@ -84,5 +84,5 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * script pour redémarrer rapidement NVDA.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.9.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

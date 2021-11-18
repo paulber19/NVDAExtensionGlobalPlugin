@@ -461,27 +461,23 @@ class CommandKeysFilter(object):
 		NVDASpeakCommandKeysOption = config.conf["keyboard"]["speakCommandKeys"]
 		self.keysDic = _addonConfigManager.getCommandKeysSelectiveAnnouncement(
 			NVDASpeakCommandKeysOption)
-		self.keys = []
 		try:
 			modifiers = gesture._get_modifierNames()
-			keyLabel = gesture._get_mainKeyName()
+			keyLabel = gesture._get_mainKeyName().lower()
 		except:  # noqa:E722
 			return True
 		if not NVDASpeakCommandKeysOption:
-			# we must speak gesture, check if we must exclude this gesture
+			# we don't speak gesture, check if we must exclude this gesture
 			if self.modifiersInAllKeysModifierCombinations(modifiers):
 				return True
-			if keyLabel.lower() in self.keysDic:
-				force = self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
-				return force
-			return False
+			force = self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
+			return force
 		else:
 			# we speak gesture, find if we exclude this gesture
 			if self.modifiersInAllKeysModifierCombinations(modifiers):
 				return False
-			if keyLabel.lower() in self.keys:
-				return not self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
-			return True
+			force = not self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
+			return force
 
 	def updateCommandKeysSelectiveAnnouncement(
 		self, keys, speakCommandKeysOption):
