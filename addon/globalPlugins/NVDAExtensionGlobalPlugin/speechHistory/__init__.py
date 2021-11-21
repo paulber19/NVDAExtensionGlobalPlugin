@@ -64,7 +64,6 @@ def getSpeechRecorder():
 
 
 def isActive():
-
 	return _speechRecorder is not None
 
 
@@ -89,11 +88,6 @@ class SpeechRecorderManager(object):
 	def reportSpeechHistory(self, position, toClip=False):
 		oldOnMonitoring = self._onMonitoring
 		self._onMonitoring = False
-		if len(self._speechHistory) == 0:
-			# Translators: message to user to report no speech history record.
-			ui.message(_("There is No speech announcement recorded"))
-			self._onMonitoring = oldOnMonitoring
-			return
 		index = self._lastSpeechHistoryReportIndex
 		if position == "previous" and index > 0:
 			index -= 1

@@ -7,13 +7,18 @@
 import addonHandler
 from cursorManager import CursorManager
 try:
-	# for nvda version less than 2020.1
+	# for nvda version < 2020.1
 	import NVDAObjects.UIA.edge as EDGE
 except ImportError:
 	import NVDAObjects.UIA.spartanEdge as EDGE
 import NVDAObjects.IAccessible.MSHTML
 import NVDAObjects.IAccessible.mozilla
-import NVDAObjects.IAccessible.chromium
+# for nvda version >= 2021.1
+try:
+	import NVDAObjects.IAccessible.chromium
+	import NVDAObjects.UIA.chromium
+except ImportError:
+	pass
 import browseMode
 from inputCore import SCRCAT_BROWSEMODE
 from scriptHandler import getLastScriptRepeatCount, willSayAllResume
@@ -99,8 +104,8 @@ class CursorManagerEx(CursorManager):
 		handleSymbols=False):
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
-			from ..settings import _addonConfigManager
-			symbolLevelOnWordCaretMovement = _addonConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
+			from ..settings.nvdaConfig import _NVDAConfigManager
+			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
 		super(CursorManagerEx, self)._caretMovementScriptHelper(
@@ -188,7 +193,7 @@ class BrowseModeDocumentTreeInterceptorEx(
 				msg = _("Return to top of page")
 			try:
 				item = next(iterFactory(direction, info))
-			except:  # noqa:E722
+			except Exception:
 				ui.message(errorMessage)
 				return
 			ui.message(msg)
@@ -205,12 +210,24 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	if EDGE.EdgeHTMLRoot in clsList:
 		from .NVDAObjectsUIA import EdgeHTMLRootEx
 		clsList[clsList.index(EDGE.EdgeHTMLRoot)] = EdgeHTMLRootEx
-	elif NVDAObjects.IAccessible.MSHTML.MSHTML in clsList:
+		return
+	if NVDAObjects.IAccessible.MSHTML.MSHTML in clsList:
 		from . import NVDAObjectsIAccessible
 		clsList[clsList.index(NVDAObjects.IAccessible.MSHTML.MSHTML)] = NVDAObjectsIAccessible.NVDAObjectMSHTMLEx  # noqa:E501
-	elif NVDAObjects.IAccessible.mozilla.Document in clsList:
+		return
+	if NVDAObjects.IAccessible.mozilla.Document in clsList:
 		from . import NVDAObjectsIAccessible
 		clsList[clsList.index(NVDAObjects.IAccessible.mozilla.Document)] = NVDAObjectsIAccessible.NVDAObjectMozillaDocumentEx  # noqa:E501
-	elif NVDAObjects.IAccessible.chromium.Document in clsList:
+		return
+	if NVDAObjects.IAccessible.chromium.Document in clsList:
 		from . import NVDAObjectsIAccessible
 		clsList[clsList.index(NVDAObjects.IAccessible.chromium.Document)] = NVDAObjectsIAccessible.ChromiumDocument  # noqa:E501
+		return
+	try:
+		# for nvda version>= 2021.1
+		if NVDAObjects.UIA.chromium.ChromiumUIADocument in clsList:
+			from . import NVDAObjectsUIAChromium
+			clsList[clsList.index(NVDAObjects.UIA.chromium.ChromiumUIADocument)] = NVDAObjectsUIAChromium.ChromiumUIADocumentEx
+			return
+	except Exception:
+		pass

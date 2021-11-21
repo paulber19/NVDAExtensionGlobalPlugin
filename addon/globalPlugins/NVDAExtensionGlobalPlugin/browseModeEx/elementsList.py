@@ -16,11 +16,17 @@ import speech
 import itertools
 from ..utils.NVDAStrings import NVDAString
 from ..utils import runInThread
+from ..utils import contextHelpEx
 
 addonHandler.initTranslation()
 
 
-class ElementsListDialogEx(wx.Dialog):
+class ElementsListDialogEx(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
+	# help id in the user manual.
+	helpId = "hdr5"
+
 	ELEMENT_TYPES = (
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
@@ -135,9 +141,6 @@ class ElementsListDialogEx(wx.Dialog):
 		# Translators: The label of an editable text field to filter the elements
 		# in the browse mode Elements List dialog.
 		filterText = NVDAString("Filter b&y:")
-		if filterText == "Filter b&y:":
-			# for nvda version lower nvda 2019.2
-			filterText = NVDAString("Filt&er by:")
 		labeledCtrl = gui.guiHelper.LabeledControlHelper(
 			self, filterText, wx.TextCtrl)
 		self.filterEdit = labeledCtrl.control
@@ -241,7 +244,7 @@ class ElementsListDialogEx(wx.Dialog):
 				# This could be the parent of a subsequent element,
 				# so add it to the parents stack.
 				parentElements.append(element)
-		except:  # noqa:E722
+		except Exception:
 			pass
 		# Start with no filtering.
 		self.filterEdit.ChangeValue("")
@@ -283,7 +286,7 @@ class ElementsListDialogEx(wx.Dialog):
 		# when the tree view is empty, so use initial element if appropriate.
 		try:
 			defaultElement = self._initialElement if newElementType else self.tree.GetItemData(self.tree.GetSelection())  # noqa:E501
-		except:  # noqa:E722
+		except Exception:
 			defaultElement = self._initialElement
 		# Clear the tree.
 		self.tree.DeleteChildren(self.treeRoot)
@@ -296,7 +299,10 @@ class ElementsListDialogEx(wx.Dialog):
 		# and each element's text.
 		filterText = filterText.lower()
 		for element in self._elements:
-			label = element.item.label
+			try:
+				label = element.item.label
+			except Exception:
+				label = ""
 			if filterText and filterText not in label.lower():
 				continue
 			matched = True

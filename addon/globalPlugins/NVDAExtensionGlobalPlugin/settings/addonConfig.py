@@ -10,9 +10,6 @@ from configobj.validate import Validator
 from io import StringIO
 
 addonHandler.initTranslation()
-# NVDA config sections for addon
-SCT_CommandKeysAnnouncement = "CommandKeysAnnouncement"
-SCT_LastUsedSymbols = "LastUsedSymbols"
 
 # addon config section
 SCT_General = "General"
@@ -24,6 +21,7 @@ SCT_MinuteTimer = "MinuteTimer"
 SCT_Options = "Options"
 SCT_AdvancedOptions = "Advanced options"
 SCT_ShutdownComputer = "ShutdownComputer"
+SCT_AudioDevicesForCycle = "AudioDevicesForCycle"
 
 # general section items
 ID_ConfigVersion = "ConfigVersion"
@@ -64,14 +62,16 @@ ID_VolumeControl = "VolumeControl"
 ID_Tools = "Tools"
 ID_DateAndTime = "DateAndTime"
 ID_ExploreNVDA = "ExploreNVDA"
+# functionality ids
+FCT_TextAnalysis = "TextAnalysis"
+FCT_TemporaryAudioDevice = "TemporaryAudioDevice"
+
+
 # constants for InstallFeatureOption section  items
 C_DoNotInstall = 0
 C_Install = 1
 C_InstallWithoutGesture = 2
 
-# for commandKeysAnnouncement section
-ID_SpeakCommandKeysMode = "SpeakCommandKeysMode"
-ID_DoNotSpeakCommandKeysMode = "DoNotSpeakCommandKeysMode"
 
 # MinuteTimer section items
 ID_RingCount = "RingCount"
@@ -81,7 +81,6 @@ ID_LastAnnounce = "LastAnnounce"
 ID_LastDelayBeforeEndDuration = "LastDelayBeforeEndDuration"
 
 # options section items
-ID_SymbolLevelOnWordCaretMovement = "SymbolLevelOnWordMovement"
 ID_SpeechRecordWithNumber = "SpeechRecordWithNumber"
 ID_SpeechRecordInAscendingOrder = "SpeechRecordInAscendingOrder"
 ID_LoopInNavigationMode = "LoopInNavigationMode"
@@ -100,7 +99,10 @@ ID_VolumeChangeStepLevel = "volumeChangeStepLevel"
 ID_ReportVolumeChange = "ReportVolumeChange"
 ID_AppVolumeLevelAnnouncementInPercent = "AppVolumeLevelAnnouncementInPercent"
 ID_DialogTitleWithAddonSummary = "DialogTitleWithAddonSummary"
-# for old configuration, , must be deleted in the future
+ID_ConfirmAudioDeviceChange = "ConfirmAudioDeviceChange"
+ID_ConfirmAudioDeviceChangeTimeOut = "ConfirmAudioDeviceChangeTimeOut"
+
+# for old configuration, must be deleted in the future
 ID_DelayBetweenSameGesture = "DelayBetweenSameGesture"
 ID_MaximumDelayBetweenSameScript = "MaximumDelayBetweenSameScript"
 ID_MaximumOfLastUsedSymbols = "MaximumOfLastUsedSymbols"
@@ -131,6 +133,12 @@ C_VolumeChangeStepLevel = 5
 
 # default values for complex symbols editing helper feature
 C_MaximumOfLastUsedSymbols = 20
+# default value for ConfirmAudioDeviceSwitchingTimeOut
+c_ConfirmAudioDeviceSwitchingTimeOut = 10
+
+
+_curAddon = addonHandler.getCodeAddon()
+addonName = _curAddon.manifest["name"]
 
 
 class BaseAddonConfiguration(ConfigObj):
@@ -1039,7 +1047,8 @@ class AddonConfiguration26(BaseAddonConfiguration):
 		installWithoutGesture=C_InstallWithoutGesture,
 		volumeControl=ID_VolumeControl,
 		tools=ID_Tools,
-		dateAndTime=ID_DateAndTime)
+		dateAndTime=ID_DateAndTime,
+		)
 
 	_OptionsConfSpec = """[{section}]
 		{reportNextWordOnDeletion}  = boolean(default=True)
@@ -1114,7 +1123,7 @@ class AddonConfiguration26(BaseAddonConfiguration):
 			volumeChangeStepLevel=ID_VolumeChangeStepLevel,
 			reportVolumeChange=ID_ReportVolumeChange,
 			defaultVolumeChangeStepLevel=C_VolumeChangeStepLevel,
-			appVolumeLevelAnnouncementInPercent = ID_AppVolumeLevelAnnouncementInPercent,
+			appVolumeLevelAnnouncementInPercent=ID_AppVolumeLevelAnnouncementInPercent,
 			dialogTitleWithAddonSummary=ID_DialogTitleWithAddonSummary,
 			maximumDelayBetweenSameScript=ID_MaximumDelayBetweenSameScript,
 			maximumOfLastUsedSymbols=ID_MaximumOfLastUsedSymbols,
@@ -1127,6 +1136,185 @@ class AddonConfiguration26(BaseAddonConfiguration):
 			enableNumpadNavigationModeToggle=ID_EnableNumpadNavigationModeToggle,
 			activateNumpadNavigationModeAtStart=ID_ActivateNumpadNavigationModeAtStart,
 			activateNumpadStandardUseWithNumLock=ID_ActivateNumpadStandardUseWithNumLock)  # noqa:E501
+
+	_ShutdownComputerConfSpec = """[{section}]
+	{forceClose}  = boolean(default=True),
+	{timeout} = integer(default = 1)
+""".format(
+		section=SCT_ShutdownComputer,
+		forceClose=ID_ForceClose,
+		timeout=ID_ShutdownTimeout)
+
+	#: The configuration specification
+	configspec = ConfigObj(StringIO(
+		"""# addon Configuration File
+{general}\r\n{features}\r\n{options}\r\n{minuteTimer}\r\n{advancedOptions}\r\n{shutdown}
+""".format(
+			general=_GeneralConfSpec,
+			features=_FeatureAuthorizationsConfSpec,
+			options=_OptionsConfSpec,
+			minuteTimer=_MinuteTimerConfSpec,
+			advancedOptions=_AdvancedOptionsConfSpec,
+			shutdown=_ShutdownComputerConfSpec)
+		), list_values=False, encoding="UTF-8")
+
+
+class AddonConfiguration27(BaseAddonConfiguration):
+	_version = "2.7"
+	_GeneralConfSpec = """[{section}]
+	{idConfigVersion} = string(default = {version})
+	{autoUpdate} = boolean(default=True)
+	{updateReleaseToDev} = boolean(default=False)
+	{lastChecked} = integer(default=0)
+	{remindUpdate} = boolean(default=False)
+		""".format(
+			section=SCT_General,
+			idConfigVersion=ID_ConfigVersion,
+			version=_version,
+			autoUpdate=ID_AutoUpdate,
+			updateReleaseToDev=ID_UpdateReleaseVersionsToDevVersions,
+			lastChecked=ID_LastChecked,
+			remindUpdate=ID_RemindUpdate)
+
+	_FeatureAuthorizationsConfSpec = """[{section}]
+		{SystrayIconsAndActiveWindowsList} = integer(default={install})
+		{complexSymbols} = integer(default= {installWithoutGesture})
+		{clipboardCommandAnnouncement} = integer(default={install})
+		{currentFolderReport} = integer(default={installWithoutGesture})
+		{virtualBuffer} = integer(default={install})
+		{focusedApplicationInformations}= integer(default={installWithoutGesture})
+		{openNVDALog}  = integer(default={installWithoutGesture})
+		{speechHistory}  = integer(default={installWithoutGesture})
+		{keyboardKeyRenaming}  = integer(default={install})
+		{commandKeysSelectiveAnnouncement}  = integer(default={install})
+		{minuteTimer}  = integer(default={installWithoutGesture})
+		{foregroundWindowObjectsList} = integer(default={install}),
+		{voiceProfileSwitching} = integer(default={installWithoutGesture}),
+		{keyRemanence} = integer(default={DoNotInstall}),
+		{restartInDebugMode} = integer(default={DoNotInstall}),
+		{volumeControl} = integer(default={installWithoutGesture}),
+		{tools} = integer(default={DoNotInstall}),
+		{dateAndTime} = integer(default={installWithoutGesture}),
+		{textAnalysis} = integer(default={installWithoutGesture}),
+		{temporaryAudioDevice} = integer(default={install}),
+	""".format(
+		section=SCT_InstallFeatureOptions,
+		SystrayIconsAndActiveWindowsList=ID_SystrayIconsAndActiveWindowsList,
+		currentFolderReport=ID_CurrentFolderReport,
+		virtualBuffer=ID_ExtendedVirtualBuffer,
+		complexSymbols=ID_ComplexSymbols,
+		clipboardCommandAnnouncement=ID_ClipboardCommandAnnouncement,
+		focusedApplicationInformations=ID_FocusedApplicationInformations,
+		openNVDALog=ID_OpenCurrentOrOldNVDALogFile,
+		speechHistory=ID_SpeechHistory,
+		keyboardKeyRenaming=ID_KeyboardKeyRenaming,
+		commandKeysSelectiveAnnouncement=ID_CommandKeysSelectiveAnnouncement,
+		minuteTimer=ID_MinuteTimer,
+		foregroundWindowObjectsList=ID_ForegroundWindowObjectsList,
+		voiceProfileSwitching=ID_VoiceProfileSwitching,
+		keyRemanence=ID_KeyRemanence,
+		restartInDebugMode=ID_RestartInDebugMode,
+		install=C_Install,
+		DoNotInstall=C_DoNotInstall,
+		installWithoutGesture=C_InstallWithoutGesture,
+		volumeControl=ID_VolumeControl,
+		tools=ID_Tools,
+		dateAndTime=ID_DateAndTime,
+		textAnalysis=FCT_TextAnalysis,
+		temporaryAudioDevice=FCT_TemporaryAudioDevice,
+		)
+
+	_OptionsConfSpec = """[{section}]
+		{reportNextWordOnDeletion}  = boolean(default=True)
+		{NoDescriptionReportInRibbon}  = boolean(default=True)
+		{automaticWindowMaximization}  = boolean(default=True)
+		{reportTimeWithSeconds}  = boolean(default=False),
+		{speechRecordWithNumber}  = boolean(default=True),
+		{speechRecordInascendingOrder}  = boolean(default=False),
+		{loopInNavigationMode}  = boolean(default=False),
+		""".format(
+			section=SCT_Options,
+			reportNextWordOnDeletion=ID_ReportNextWordOnDeletion,
+			NoDescriptionReportInRibbon=ID_NoDescriptionReportInRibbon,
+			automaticWindowMaximization=ID_AutomaticWindowMaximization,
+			reportTimeWithSeconds=ID_ReportTimeWithSeconds,
+			speechRecordWithNumber=ID_SpeechRecordWithNumber,
+			speechRecordInascendingOrder=ID_SpeechRecordInAscendingOrder,
+			loopInNavigationMode=ID_LoopInNavigationMode)
+
+	_MinuteTimerConfSpec = """[{section}]
+		{ringCount} = integer(default = 3)
+		{delayBetweenRings} = integer(default = 1500)
+		{lastDuration} = integer(default = 30)
+		{lastAnnounce} = string(default = "{ItIsTime}")
+		{lastDelayBeforeEndDuration} = integer(default = 5)
+		""".format(
+			section=SCT_MinuteTimer,
+			ringCount=ID_RingCount,
+			delayBetweenRings=ID_DelayBetweenRings,
+			lastDuration=ID_LastDuration,
+			lastAnnounce=ID_LastAnnounce,
+			lastDelayBeforeEndDuration=ID_LastDelayBeforeEndDuration,
+			ItIsTime=_ItIsTime)
+
+	_AdvancedOptionsConfSpec = """[{section}]
+		{playSoundOnErrors} = integer(default=1)
+		{onlyNVDAKeyInRemanence}= boolean(default=False)
+		{remanenceAtNVDAStart} = boolean(default=False)
+		{remanenceDelay} = integer(default=2000)
+		{beepAtRemanenceStart}  = boolean(default=True)
+		{beepAtRemanenceEnd}  = boolean(default=True)
+		{remanenceForGmail} = boolean(default=False)
+		{setOnMainAndNVDAVolume}= boolean(default=True)
+		{minMasterVolumeLevel} = integer(default={c_MinMasterVolumeLevel})
+		{masterVolumeLevel} = integer(default={c_MasterVolumeLevel})
+		{minNVDAVolumeLevel} = integer(default={c_MinNVDAVolumeLevel})
+		{NVDAVolumeLevel} = integer(default={c_NVDAVolumeLevel})
+		{volumeChangeStepLevel} = integer(default={defaultVolumeChangeStepLevel})
+		{reportVolumeChange}= boolean(default=True)
+		{appVolumeLevelAnnouncementInPercent}= boolean(default=True)
+		{dialogTitleWithAddonSummary}  = boolean(default=True)
+		{maximumDelayBetweenSameScript} = integer(default=500)
+		{maximumOfLastUsedSymbols} = integer(default={c_MaximumOfLastUsedSymbols} )
+		{byPassNoDescription}  = boolean(default=True)
+		{enableNumpadNavigationModeToggle}  = boolean(default=False)
+		{activateNumpadNavigationModeAtStart}  = boolean(default=False)
+		{activateNumpadStandardUseWithNumLock}  = boolean(default=False)
+		{confirmAudioDeviceChange}  = boolean(default=True)
+		{confirmAudioDeviceChangeTimeOut} = integer(default=10)
+		""".format(
+			section=SCT_AdvancedOptions,
+			playSoundOnErrors=ID_PlaySoundOnErrors,
+			onlyNVDAKeyInRemanence=ID_OnlyNVDAKeyInRemanence,
+			remanenceAtNVDAStart=ID_RemanenceAtNVDAStart,
+			remanenceDelay=ID_RemanenceDelay,
+			beepAtRemanenceStart=ID_BeepAtRemanenceStart,
+			beepAtRemanenceEnd=ID_BeepAtRemanenceEnd,
+			remanenceForGmail=ID_RemanenceForGmail,
+			setOnMainAndNVDAVolume=ID_SetOnMainAndNVDAVolume,
+			minMasterVolumeLevel=ID_MinMasterVolumeLevel,
+			masterVolumeLevel=ID_MasterVolumeLevel,
+			minNVDAVolumeLevel=ID_MinNVDAVolumeLevel,
+			NVDAVolumeLevel=ID_NVDAVolumeLevel,
+			volumeChangeStepLevel=ID_VolumeChangeStepLevel,
+			reportVolumeChange=ID_ReportVolumeChange,
+			defaultVolumeChangeStepLevel=C_VolumeChangeStepLevel,
+			appVolumeLevelAnnouncementInPercent=ID_AppVolumeLevelAnnouncementInPercent,
+			dialogTitleWithAddonSummary=ID_DialogTitleWithAddonSummary,
+			maximumDelayBetweenSameScript=ID_MaximumDelayBetweenSameScript,
+			maximumOfLastUsedSymbols=ID_MaximumOfLastUsedSymbols,
+			byPassNoDescription=ID_ByPassNoDescription,
+			c_MinMasterVolumeLevel=C_MinMasterVolumeLevel,
+			c_MasterVolumeLevel=C_MasterVolumeLevel,
+			c_MinNVDAVolumeLevel=C_MinNVDAVolumeLevel,
+			c_NVDAVolumeLevel=C_NVDAVolumeLevel,
+			c_MaximumOfLastUsedSymbols=C_MaximumOfLastUsedSymbols,
+			enableNumpadNavigationModeToggle=ID_EnableNumpadNavigationModeToggle,
+			activateNumpadNavigationModeAtStart=ID_ActivateNumpadNavigationModeAtStart,
+			activateNumpadStandardUseWithNumLock=ID_ActivateNumpadStandardUseWithNumLock,
+			confirmAudioDeviceChange=ID_ConfirmAudioDeviceChange,
+			confirmAudioDeviceChangeTimeOut=ID_ConfirmAudioDeviceChangeTimeOut
+			)
 
 	_ShutdownComputerConfSpec = """[{section}]
 	{forceClose}  = boolean(default=True),

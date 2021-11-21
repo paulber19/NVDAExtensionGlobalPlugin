@@ -16,7 +16,11 @@ import gui
 import wx
 import buildVersion
 import ui
-from configobj.validate import Validator, VdtTypeError
+# ConfigObj 5.1.0 and later integrates validate module.
+try:
+	from configobj.validate import Validator, VdtTypeError
+except ImportError:
+	from validate import Validator, VdtTypeError
 from .addonConfig import *  # noqa:F403
 
 addonHandler.initTranslation()
@@ -178,8 +182,12 @@ def toggleActivateNumpadStandardUseWithNumLockAdvancedOption(toggle=True):
 	return toggleAdvancedOption(ID_ActivateNumpadStandardUseWithNumLock, toggle)
 
 
+def toggleConfirmAudioDeviceChangeAdvancedOption(toggle=True):
+	return toggleAdvancedOption(ID_ConfirmAudioDeviceChange, toggle)
+
+
 class AddonConfigurationManager():
-	_currentConfigVersion = "2.6"
+	_currentConfigVersion = "2.7"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
 		"2.0": AddonConfiguration20,
@@ -189,6 +197,7 @@ class AddonConfigurationManager():
 		"2.4": AddonConfiguration24,
 		"2.5": AddonConfiguration25,
 		"2.6": AddonConfiguration26,
+		"2.7": AddonConfiguration27,
 		}
 
 	def __init__(self):
@@ -319,7 +328,7 @@ class AddonConfigurationManager():
 				ui.message,
 				# Translators: message to inform the user
 				# than it's not possible to merge with old configuration because of error.
-				_("The old configuration file of %s add-on contains errors. It's not possible to keep previous configuration") % self.curAddon.manifest["summary"])  # noqa:E501
+				_("""The old configuration file of "%s" add-on contains errors. It's not possible to keep previous configuration""") % self.curAddon.manifest["summary"])  # noqa:E501
 			return
 		for sect in self.addonConfig.sections:
 			for k in self.addonConfig[sect]:
@@ -361,31 +370,8 @@ class AddonConfigurationManager():
 		try:
 			self.addonConfig.write()
 			log.warning("add-on configuration saved")
-		except:  # noqa:E722
+		except Exception:
 			log.warning("Could not save add-on configuration - probably read only file system")  # noqa:E501
-
-	def deleteNVDAAddonConfiguration(self):
-		conf = config.conf
-		save = False
-		if self.addonName in conf.profiles[0]:
-			log.warning("%s section deleted from profile: %s" % (
-				self.addonName, "normal configuration"))
-			del conf.profiles[0][self.addonName]
-			save = True
-		profileNames = []
-		profileNames.extend(config.conf.listProfiles())
-		for name in profileNames:
-			profile = config.conf._getProfile(name)
-			if profile.get(self.addonName):
-				log.warning("%s section deleted from profile: %s" % (
-					self.addonName, profile.name))
-				del profile[self.addonName]
-				config.conf._dirtyProfiles.add(name)
-				save = True
-		if save:
-			config.conf.save()
-			return True
-		return False
 
 	def resetConfiguration(self):
 		from ..utils import makeAddonWindowTitle
@@ -400,7 +386,9 @@ class AddonConfigurationManager():
 		os.remove(addonConfigFile)
 		self.addonConfig = self._versionToConfiguration[self._currentConfigVersion](None)  # noqa:E501
 		self.saveSettings(True)
-		self.deleteNVDAAddonConfiguration()
+		from .nvdaConfig import _NVDAConfigManager
+
+		_NVDAConfigManager.deleteConfiguration()
 		queueHandler.queueFunction(queueHandler.eventQueue, core.restart)
 
 	def terminate(self):
@@ -429,77 +417,6 @@ class AddonConfigurationManager():
 			if len(labels):
 				return labels
 		return {}
-
-	def saveCommandKeysSelectiveAnnouncement(
-		self, keysDic, speakCommandKeysOption):
-		conf = config.conf
-		addonName = self.addonName
-		if addonName not in conf:
-			conf[addonName] = {}
-		sectName = ID_SpeakCommandKeysMode\
-			if speakCommandKeysOption else ID_DoNotSpeakCommandKeysMode
-		if SCT_CommandKeysAnnouncement not in conf[addonName]:
-			conf[addonName][SCT_CommandKeysAnnouncement] = {}
-		conf[addonName][SCT_CommandKeysAnnouncement][sectName] = keysDic.copy()
-
-	def getCommandKeysSelectiveAnnouncement(self, speakCommandKeysOption):
-		def getPositionOfLeftMostBit(n):
-			i = 0
-			while n:
-				i += 1
-				n = int(n/2)
-			return i-1
-		conf = config.conf
-		if self.addonName not in conf:
-			return {}
-		addonName = self.addonName
-		sectName = ID_SpeakCommandKeysMode\
-			if speakCommandKeysOption else ID_DoNotSpeakCommandKeysMode
-		if SCT_CommandKeysAnnouncement in conf[addonName]\
-			and sectName in conf[addonName][SCT_CommandKeysAnnouncement]:
-			d = conf[addonName][SCT_CommandKeysAnnouncement][sectName].copy()
-			# the introduction of the "windows" modifier key has changed the structure of the key configuration, a conversion is necessary if the key mask is smaller than 2 power 63.
-			# the bit indicating that the key is checked is moved to bit63 instead of being the leftmost bit of the mask.
-			# we must also delete "numlock" and "capslock" key because shouldReportAsCommand is false.
-			keys = list(d.keys())
-			change = False
-			for key in keys:
-				if key in ["numlock", "capslock"]:
-					del d[key]
-					change = True
-					continue
-				mask = abs(int(d[key]))
-				if type(d[key]) == str:
-					d[key] = mask
-					change = True
-				if mask and mask < 2**63:
-					# reset left most  bit and set bit 63
-					pos = getPositionOfLeftMostBit(mask)
-					mask = mask & ~(2**pos)
-					mask = mask | 2**63
-					d[key] = mask
-					change = True
-			if change:
-				# update config
-				self.saveCommandKeysSelectiveAnnouncement(
-					d, speakCommandKeysOption)
-			return d
-		return {}
-
-	def deleceCommandKeyAnnouncementConfiguration(self):
-		# delete configuration for all profils
-		conf = config.conf
-		if self.addonName in conf.profiles[0]\
-			and SCT_CommandKeysAnnouncement in conf.profiles[0][self.addonName]:
-			del conf.profiles[0][self.addonName][SCT_CommandKeysAnnouncement]
-		profileNames = []
-		profileNames.extend(config.conf.listProfiles())
-		for name in profileNames:
-			profile = config.conf._getProfile(name)
-			if profile.get(self.addonName)\
-				and SCT_CommandKeysAnnouncement in profile[self.addonName]:
-				del profile[self.addonName][SCT_CommandKeysAnnouncement]
-				config.conf._dirtyProfiles.add(name)
 
 	def reDefineKeyboardKeyLabels(self):
 		from keyLabels import localizedKeyLabels
@@ -545,102 +462,9 @@ class AddonConfigurationManager():
 	def deleceAllUserComplexSymbols(self):
 		conf = self.addonConfig
 		if SCT_CategoriesAndSymbols in conf:
-			delconf[SCT_CategoriesAndSymbols]
-		# delete all last recorded used symbols
-		conf = config.conf
-		if self.addonName in conf.profiles[0]\
-			and SCT_LastUsedSymbols in conf.profiles[0][self.addonName]:
-			del conf.profiles[0][self.addonName][SCT_LastUsedSymbols]
-		profileNames = []
-		profileNames.extend(config.conf.listProfiles())
-		sct = "%s-pro" % SCT_LastUsedSymbols
-		for name in profileNames:
-			profile = config.conf._getProfile(name)
-			if profile.get(self.addonName)\
-				and sct in profile[self.addonName]:
-				del profile[self.addonName][sct]
-				config.conf._dirtyProfiles.add(name)
-
-	def getLastUsedSymbolsSection(self, profileName):
-		if profileName is None:
-			sct = SCT_LastUsedSymbols
-		else:
-			sct = "%s-pro" % SCT_LastUsedSymbols
-		return sct
-
-	def saveLastUsedSymbols(self, symbolsList):
-		# We never want to save config if runing securely
-		if globalVars.appArgs.secure:
-			return
-		conf = config.conf
-		addonName = self.addonName
-		if addonName not in conf:
-			conf[addonName] = {}
-		profileName = config.conf.profiles[-1].name
-		sct = self.getLastUsedSymbolsSection(profileName)
-		if sct not in conf[addonName]:
-			conf[addonName][sct] = {}
-		d = {}
-		i = 1
-		for (desc, symb) in symbolsList:
-			d[str(i)] = "%s %s" % (symb, desc)
-			i = i+1
-		conf[addonName][sct] = d.copy()
-		conf[addonName][sct]._cache.clear()
-
-	def getLastUsedSymbols(self):
-		conf = config.conf
-		addonName = self.addonName
-		profileName = config.conf.profiles[-1].name
-		sct = self.getLastUsedSymbolsSection(profileName)
-		if addonName not in conf or sct not in conf[addonName]:
-			return []
-		d = conf[addonName][sct].copy()
-		if len(d) == 0:
-			return []
-		symbols = []
-		skip = False
-		for i in range(1, len(d)+1):
-			s = d[str(i)]
-			sym = s[0]
-			# cause of bug , we clean all symbol equal to space
-			if sym == " ":
-				skip = True
-				continue
-			desc = s[2:]
-			symbols.append((desc, sym))
-		maximumOfLastUsedSymbols = self.getMaximumOfLastUsedSymbols()
-		# check if number of symbols recorded is not higher than maximum
-		# because bug and of config change
-		if skip or len(symbols) > maximumOfLastUsedSymbols:
-			# adjust the list
-			log.warning("getLastUsedSymbols: last user symbols list adjusted")
-			symbols = symbols[len(symbols) - maximumOfLastUsedSymbols:]
-			self.saveLastUsedSymbols(symbols)
-		return symbols
-
-	def updateLastSymbolsList(self, symbolDescription, symbol):
-		symbols = self.getLastUsedSymbols()
-		for (desc, symb) in symbols:
-			if desc == symbolDescription:
-				if symbol == symb:
-					# already in list
-					return
-				else:
-					# replace description and symbol
-					index = symbols.index((desc, symb))
-					symbols[index] = (symbolDescription, symbol)
-					self.saveLastUsedSymbols(symbols)
-					return
-		maximumOfLastUsedSymbols = self.getMaximumOfLastUsedSymbols()
-		if len(symbols) > maximumOfLastUsedSymbols:
-			# pop the oldest
-			symbols.pop(0)
-		symbols.append((symbolDescription, symbol))
-		self.saveLastUsedSymbols(symbols)
-
-	def cleanLastUsedSymbolsList(self):
-		self.saveLastUsedSymbols([])
+			del conf[SCT_CategoriesAndSymbols]
+		from .nvdaConfig import _NVDAConfigManager
+		_NVDAConfigManager.deleceAllLastUserComplexSymbols()
 
 	def getMaximumOfLastUsedSymbols(self):
 		conf = self.addonConfig
@@ -676,28 +500,6 @@ class AddonConfigurationManager():
 		conf[SCT_MinuteTimer][ID_LastDuration] = lastDuration
 		conf[SCT_MinuteTimer][ID_LastAnnounce] = lastAnnounce
 		conf[SCT_MinuteTimer][ID_LastDelayBeforeEndDuration] = lastDelayBeforeEndDuration  # noqa:E501
-
-	def saveSymbolLevelOnWordCaretMovement(self, level):
-		# We never want to save config if runing securely
-		if globalVars.appArgs.secure:
-			return
-		conf = config.conf
-		if self.addonName not in conf:
-			conf[self.addonName] = {}
-		if SCT_Options not in conf[self.addonName]:
-			conf[self.addonName][SCT_Options] = {}
-		conf[self.addonName][SCT_Options][ID_SymbolLevelOnWordCaretMovement] =\
-			str(level) if level is not None else "None"
-
-	def getSymbolLevelOnWordCaretMovement(self):
-		conf = config.conf
-		if self.addonName in conf\
-			and SCT_Options in conf[self.addonName]\
-			and ID_SymbolLevelOnWordCaretMovement in conf[self.addonName][SCT_Options]:
-			level = conf[self.addonName][SCT_Options][ID_SymbolLevelOnWordCaretMovement]
-			if level != "None":
-				return int(level)
-		return None
 
 	def getPlaySoundOnErrorsOption(self):
 		conf = self.addonConfig
@@ -789,6 +591,14 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		conf[SCT_AdvancedOptions][ID_MaximumDelayBetweenSameScript] = str(delay)
 
+	def getConfirmAudioDeviceChangeTimeOut(self):
+		conf = self.addonConfig
+		return conf[SCT_AdvancedOptions][ID_ConfirmAudioDeviceChangeTimeOut]
+
+	def setConfirmAudioDeviceChangeTimeOut(self, delay):
+		conf = self.addonConfig
+		conf[SCT_AdvancedOptions][ID_ConfirmAudioDeviceChangeTimeOut] = delay
+
 	def getLastChecked(self):
 		conf = self.addonConfig
 		return conf[SCT_General][ID_LastChecked]
@@ -797,6 +607,31 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		conf[SCT_General][ID_LastChecked] = int(lastTime)
 
+	def getAudioDevicesForCycle(self):
+		conf = self.addonConfig
+		if SCT_AudioDevicesForCycle not in conf:
+			return []
+		devices = list(conf[SCT_AudioDevicesForCycle].values())
+		return devices
 
-# singleton for addon configuration manager
+	def saveAudioDevicesForCycle(self, devicesForCycle):
+		conf = self.addonConfig
+		d = {}
+		if SCT_AudioDevicesForCycle in conf:
+			d = conf[SCT_AudioDevicesForCycle]
+		devices = list(d.values())
+		for device, isChecked in devicesForCycle.items():
+			if device in devices:
+				if not isChecked:
+					del devices[devices.index(device)]
+				continue
+			if isChecked:
+				devices.append(device)
+		conf[SCT_AudioDevicesForCycle] = {}
+		for device in devices:
+			index = devices.index(device)+1
+			conf[SCT_AudioDevicesForCycle][str(index)] = device
+
+
+# singleton for add-on configuration manager
 _addonConfigManager = AddonConfigurationManager()

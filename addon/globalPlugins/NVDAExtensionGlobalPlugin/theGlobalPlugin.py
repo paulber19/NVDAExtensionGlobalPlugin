@@ -8,6 +8,7 @@ import addonHandler
 import globalPluginHandler
 from logHandler import log, _getDefaultLogFilePath
 import os
+import sys
 import globalVars
 import api
 import ui
@@ -28,22 +29,34 @@ import inputCore
 import tones
 from functools import wraps
 import config
-from characterProcessing import SYMLVL_SOME
+try:
+	# for nvda version >= 2021.2
+	from characterProcessing import SymbolLevel
+	SYMLVL_SOME = SymbolLevel.SOME
+except ImportError:
+	from characterProcessing import SYMLVL_SOME
 from .activeWindowsListReport import ActiveWindowsListDisplay
 from .systemTrayIconsList import ListeNotification
 # to load configuration
 from . import settings
 from .settings import *  # noqa:F403
-from .settings.dialog import AddonSettingsDialog
 from . import commandKeysSelectiveAnnouncementAndRemanence
 from . import speechHistory
 from .utils.NVDAStrings import NVDAString
-from .utils import maximizeWindow, makeAddonWindowTitle, isOpened
+from .utils import maximizeWindow, makeAddonWindowTitle, isOpened, getHelpObj
 from .utils import getSpeechMode, setSpeechMode, setSpeechMode_off
 from .utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
-from .utils import special
+from .utils import messageBox
 from .utils.informationDialog import InformationDialog
+from .utils import contextHelpEx
 from .computerTools.volumeControlScripts import ScriptsForVolume
+from .scripts.scriptInfos import scriptsToDocInformations
+try:
+	# form nvda version >= 2020.3
+	from .userInputGestures import inputGesturesEx  # noqa: F401
+except ImportError:
+	pass
+
 
 addonHandler.initTranslation()
 
@@ -51,8 +64,6 @@ _curAddon = addonHandler.getCodeAddon()
 _addonSummary = _curAddon.manifest['summary']
 # add-on script categories
 SCRCAT_MODULE = str(_addonSummary)
-# Translators: The name of a category of NVDA commands.
-SCRCAT_SWITCH_VOICE_PROFILE = _("Voice profile switching")
 
 
 def finally_(func, final):
@@ -97,7 +108,7 @@ def fetchAddon(processID, appName):
 				path = "\\".join(tempList)
 				addon = addonHandler.Addon(path)
 				return addon
-		except:  # noqa:E722
+		except Exception:
 			pass
 		return None
 
@@ -105,6 +116,8 @@ def fetchAddon(processID, appName):
 class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlugin):
 	_remanenceCharacter = None
 	_trapNextGainFocus = False
+	# timer to skip fast caret events
+	eventCaretTimer = None
 	_repeatBeepOnAudio = None
 	scriptCategory = SCRCAT_MODULE
 	# a dictionnary to map main script to gestures and install feature option
@@ -146,25 +159,48 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"toolsForAddon": (None, ID_Tools),
 		"leftClickAtNavigatorObjectPosition": (("kb:nvda+,",), None),
 		"rightClickAtNavigatorObjectPosition": (("kb:nvda+shift+,",), None),
-		"addonSettingsDialog": (None, None),
+		"globalSettingsDialog": (None, None),
+		"profileSettingsDialog": (None, None),
 		"toggleNumpadStandardUse": (None, None),
 		"toggleNumpadStandardUseWithNumlockKey": (("kb:numlock",), None),
 		"reportOrDisplayCurrentSpeechSettings": (None, None),
+		"toggleTextAnalyzer": (("kb:nvda+f8",), FCT_TextAnalysis),
+		"analyzeCurrentWord": (("kb:nvda+shift+f8",), FCT_TextAnalysis),
+		"analyzeCurrentLine": (("kb:nvda+control+f8",), FCT_TextAnalysis),
+		"analyzeCurrentSentence": (("kb:nvda+windows+f8",), FCT_TextAnalysis),
+		"analyzeCurrentParagraph": (("kb:nvda+shift+control+f8",), FCT_TextAnalysis),
+		"manageUserConfigurations": (None, None),
+		"toggleReportCurrentCaretPosition": (None, None),
+		"addToClip": (None, ID_ClipboardCommandAnnouncement),
+		"temporaryAudioOutputDeviceManager": (None, FCT_TemporaryAudioDevice),
+		"cancelTemporaryAudioOutputDevice": (None, FCT_TemporaryAudioDevice),
+		"setTemporaryAudioOutputDevice": (None, FCT_TemporaryAudioDevice),
+		"setOrCancelTemporaryAudioOutputDevice": (None, FCT_TemporaryAudioDevice),
 		}
 
-	# a dictionnary to map shell script to gesture and installation check function
+	# a dictionnary to map shell script to gesture and fonctionality IDs
 	_shellScriptToGestureAndFeatureOption = {
 		"DisplayAppModuleInfo": ("kb:a", None),
 		"foregroundWindowObjectsList": ("kb:b", ID_ForegroundWindowObjectsList),
-		"copyDateAndTimeToClip": ("kb:c", ID_DateAndTime),
+		"temporaryAudioOutputDeviceManager": ("kb:c", FCT_TemporaryAudioDevice),
+		"cancelTemporaryAudioOutputDevice": ("kb:control+c", FCT_TemporaryAudioDevice),
+		"setTemporaryAudioOutputDevice": ("kb:shift+c", FCT_TemporaryAudioDevice),
+		"copyDateAndTimeToClip": ("kb:d", ID_DateAndTime),
 		"displayRunningAddonsList": ("kb:e", None),
 		"displayFormatting": ("kb:f", None),
-		"addonSettingsDialog": ("kb:f1", None),
+		"globalSettingsDialog": ("kb:f1", None),
+		"profileSettingsDialog": ("kb:control+f1", None),
 		"keyboardKeyRenaming": ("kb:f2", ID_KeyboardKeyRenaming),
 		"commandKeySelectiveAnnouncement": ("kb:f3", ID_CommandKeysSelectiveAnnouncement),
 		"ComplexSymbolHelp": ("kb:f4", ID_ComplexSymbols,),
 		"lastUsedComplexSymbolsList": ("kb:control+f4", ID_ComplexSymbols,),
 		"toggleNumpadStandardUse": ("kb:f5", None),
+		"toggleReportCurrentCaretPosition": ("kb:f7", None),
+		"toggleTextAnalyzer": ("kb:f8", FCT_TextAnalysis),
+		"analyzeCurrentWord": ("kb:shift+f8", FCT_TextAnalysis),
+		"analyzeCurrentLine": ("kb:control+f8", FCT_TextAnalysis),
+		"analyzeCurrentSentence": ("kb:windows+f8", FCT_TextAnalysis),
+		"analyzeCurrentParagraph": ("kb:shift+control+f8", FCT_TextAnalysis),
 		"displaySpeechHistoryRecords": ("kb:f9", ID_SpeechHistory),
 		"report_WindowsList": ("kb:f10", ID_SystrayIconsAndActiveWindowsList),
 		"report_SystrayIcons": ("kb:f11", ID_SystrayIconsAndActiveWindowsList),
@@ -173,6 +209,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"displayHelp": ("kb:h", None),
 		"NVDALogsManagement": ("kb:j", ID_OpenCurrentOrOldNVDALogFile),
 		"closeAllWindows": ("kb:k", None),
+		"manageUserConfigurations": ("kb:n", None),
 		"reportCurrentFolderName": ("kb:o", ID_CurrentFolderReport),
 		"reportCurrentFolderFullPath": ("kb:control+o", ID_CurrentFolderReport),
 		"toggleSwitchVoiceProfileMode": ("kb:p", ID_VoiceProfileSwitching),
@@ -181,191 +218,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"toolsForAddon": ("kb:t", ID_Tools),
 		"activateUserInputGesturesDialog": ("kb:u", None),
 		"manageVoiceProfileSelectors": ("kb:v", ID_VoiceProfileSwitching),
+		"addToClip": ("kb:x", ID_ClipboardCommandAnnouncement),
 		"reportCurrentSpeechSettings": ("kb:z", None),
 		"displayCurrentSpeechSettings": ("kb:control+z", None),
-
-		}
-
-	# Translators: Input help mode message
-	# for display active windows 's list dialog command.
-	activeWindowsDoc = _("Display the running application windows's list with opportunity to put one of them on the foreground or destroy it")
-	# Translators: Input help mode message
-	# for display systray icons list dialog command.
-	systrayIconsDoc = _("Shows the list of buttons on the System Tray")
-	_scriptsToDocsAndCategory = {
-		# Translators: Input help mode message
-		# for display shutdown , reboot or hibernate computer dialog command.
-		"shutdownComputerDialog": (_("Display the dialog to shutdown, reboot or hibernate the computer"), None),
-		# Translators: Input help mode message
-		# for shutdown computer command.
-		"shutdownComputer": (_("Shutdown the computer"), None),
-		# Translators: Input help mode message
-		# for reboot computer command.
-		"rebootComputer": (_("Reboot the computer"), None),
-		# Translators: Input help mode message
-		# for hibernate computer command.
-		"hibernateComputer": (_("Hibernate the computer"), None),
-		# Translators: Input help mode message
-		# for display complex symbols help dialog command.
-		"ComplexSymbolHelp": (_("Allow you to copy or type complex symbol"), None),
-		# Translators: Input help mode message
-		# for lastUsedComplexSymbolsList.
-		"lastUsedComplexSymbolsList": (_("Display the list of last used complex symbols"), None),
-		# Translators: Input help mode message
-		# for list foreground object command (usually the foreground window).
-		"foregroundWindowObjectsList": (_("Display the list's visible items making up current foreground object"), globalCommands.SCRCAT_FOCUS),
-		# Translators: Input help mode message
-		# for read or list foreground object command (usually the foreground window).
-		"speakForegroundEx": ("%s. %s" % (globalCommands.commands.script_speakForeground.__func__.__doc__, _("If pressed twice: display the list's visible items making up it")), globalCommands.SCRCAT_FOCUS),
-		"report_WindowsList": (activeWindowsDoc, None),
-		"report_SystrayIcons": (systrayIconsDoc, None),
-		# Translators: Input help mode message
-		# for display systray icons list or active windows list dialog command.
-		"report_SystrayIconsOrWindowsList": (_("{systrayIconsDoc}. Twice, {activeWindowsDoc}").format(systrayIconsDoc=systrayIconsDoc, activeWindowsDoc=activeWindowsDoc), None),
-		# Translators: Input help mode message
-		# for report current application name and version command.
-		"reportAppProductNameAndVersion": (_("Report the application 's name and version"), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for report current program name and app module name or current configuration profile name command.
-		"reportAppModuleInfoEx": (_("Speaks the filename of the active application along with the name of the currently loaded appModule python file. Pressing this key twice,speak the name and state of the current configuration profile"), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for report current addon's name and version command.
-		"reportCurrentAddonNameAndVersion": (_("Report the name and version number of add-on activated for focused application"), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for displayt current program informations dialog command.
-		"DisplayAppModuleInfo": (_("Display informations about the focused application"), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for display minute timer dialog command.
-		"minuteTimer": (_("Display dialog to start the minute timer. If minute timer already started, display dialog to report duration"), None),
-		# Translators: Input help mode message
-		# for display addon user guide command.
-		"displayModuleUserGuide": (_("Display add-on user's guide"), None),
-		# Translators: Input help mode message
-		# for display shell command help dialog command.
-		"displayHelp": (_("Display the list of commands of the commands interpreter"), None),
-		# Translators: Input help mode message
-		# for display log management dialog command.
-		"NVDALogsManagement": (_("Open a dialog to manage NVDA logs"), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for open current or old log command.
-		"openCurrentOrOldNVDALogFile": (_("Open current NVDA log file. Pressing this key twice, open the old NVDA log file. Pressing third, copy current log path to the clipboard"), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for report current folder command in open or save dialog box.
-		"reportCurrentFolder": (_("report the name of current selected folder in the open or Save dialog box. Twice: report full path"), None),
-		# Translators: Input help mode message
-		# for report current folder name command in open or save dialog box.
-		"reportCurrentFolderName": (_("report the name of current selected folder in the open or Save dialog box"), None),
-		# Translators: Input help mode message
-		# for report current folder path command in open or save dialog box.
-		"reportCurrentFolderFullPath": (_("report the full path of current selected folder in the open or Save dialog box"), None),
-		# Translators: Input help mode message
-		# for open user config folder command.
-		"exploreUserConfigFolder": (_("Explore my user configuration's folder"), None),
-		# Translators: Input help mode message
-		# for open NVDA program files folder command.
-		"exploreProgramFiles": (_("Explore NVDA program's folder"), None),
-		# Translators: Input help mode message
-		# for display speech history records list dialog command.
-		"displaySpeechHistoryRecords": (_("Display speech history records"), globalCommands.SCRCAT_SPEECH),
-		# Translators: Input help mode message
-		# for report previous speech history record command.
-		"reportPreviousSpeechHistoryRecord": (_("Report previous record of the speech history and copy it to clipboard"), globalCommands.SCRCAT_SPEECH),
-		# Translators: Input help mode message
-		# for report current speech history record command.
-		"reportCurrentSpeechHistoryRecord": (_("Report current record of the speech history and copy it to clipboard. Twice: display speech history"), globalCommands.SCRCAT_SPEECH),
-		# Translators: Input help mode message
-		# for report next speech history record command.
-		"reportNextSpeechHistoryRecord": (_("Report next record of the speech history and copy it to clipboard"), globalCommands.SCRCAT_SPEECH),
-		# Translators: Input help mode message
-		# for restart NVDA in default or debug log level command.
-		"restartEx": (_("Restart NVDA. Twice: restart with log level set to debug"), inputCore.SCRCAT_MISC),
-		# Translators: Input help mode message
-		# for toggle switch voice profile mode command.
-		"toggleSwitchVoiceProfileMode": (_("Toggle voice profile switch mode"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for display voice profile management dialog command.
-		"manageVoiceProfileSelectors": (_("Display dialog to manage voice profile selectors"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for go to previous voice profile selector command.
-		"previousVoiceProfile": (_("Go backward to the first selector associated to a voice profile and set this voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for go to next voice profile selector command.
-		"nextVoiceProfile": (_("Go to forward to the first selector associated to a voice profile and set this voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for display keyboard keys renaming dialog command.
-		"keyboardKeyRenaming": (_("Display keyboard keys renaming dialog"), None),
-		# Translators: Input help mode message
-		# for command key selective announcement dialog command.
-		"commandKeySelectiveAnnouncement": (_("Display command key selective announcement dialog"), None),
-		# Translators: Input help mode message
-		# for report or copy to clipboard date and time command.
-		"dateTimeEx": (_("Report the current time. Twice: report the current date. Third: copy date and time to the clipboard"), globalCommands.SCRCAT_SYSTEM),
-		# Translators: Input help mode message
-		# for copy date and time to clipboard command.
-		"copyDateAndTimeToClip": (_("Copy date and time to the clipboard"), globalCommands.SCRCAT_SYSTEM),
-		# Translators: Input help mode message
-		# for display formatting dialog command.
-		"displayFormatting": (_("Display, in dialog box, formatting informations for the current review cursor position within a document"), None),
-		# Translators: Input help mode message
-		# for launch module layer command.
-		"moduleLayer": (_("Launch commands's interpreter of add-on"), None),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 1 command.
-		"setVoiceProfileSelector1": (_("Set selector 1 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 2 command.
-		"setVoiceProfileSelector2": (_("Set selector 2 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 3 command.
-		"setVoiceProfileSelector3": (_("Set selector 3 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 4 command.
-		"setVoiceProfileSelector4": (_("Set selector 4 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 5 command.
-		"setVoiceProfileSelector5": (_("Set selector 5 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 6 command.
-		"setVoiceProfileSelector6": (_("Set selector 6 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 7 command.
-		"setVoiceProfileSelector7": (_("Set selector 7 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for set VoiceProfile Selector 8 command.
-		"setVoiceProfileSelector8": (_("Set selector 8 as current selector and set, if possible, its associated voice profile as current voice profile"), SCRCAT_SWITCH_VOICE_PROFILE),
-		# Translators: Input help mode message
-		# for activate user input gesture dialog command.
-		"activateUserInputGesturesDialog": (_("Displays the dialog to manage the input gestures configured by user"), None),
-		# Translators: Input help mode message
-		# for tools for add-on command.
-		"toolsForAddon": (_("Display tools for add-on development dialog "), globalCommands.SCRCAT_TOOLS),
-		# Translators: Input help mode message
-		# for leftclick mouse button at navigator cursor position script command.
-		"leftClickAtNavigatorObjectPosition": (_("Click the left mouse button at navigator object position. Twice: click twice this button at this position"), globalCommands.SCRCAT_MOUSE),
-		# Translators: Input help mode message
-		# for right click mouse button at navigator cursor position script command.
-		"rightClickAtNavigatorObjectPosition": (_("Click the right mouse button at navigator object position. Twice: click twice this button at this position"), globalCommands.SCRCAT_MOUSE),
-		# Translators: Input help mode message
-		# for addon settings dialog script command.
-		"addonSettingsDialog": (_("Display add-on settings dialog"), None),
-		# Translators: Input help mode message
-		# for toggle standard use of nunumeric keypad script.
-		"toggleNumpadStandardUse": (_("Enable or disable the standard use of numeric keypad"), None),
-		# Translators: Input help mode message
-		# for CloseAllWindows script command.
-		"closeAllWindows": (_("Close all opened windows"), None),
-		# Translators: Input help mode message
-		# for displayRunningAddonsList script command.
-		"displayRunningAddonsList": (_("Display running add-ons list"), None),
-		# Translators: Input help mode message
-		# for reportOrDisplayCurrentSpeechSettings script commands.
-		"reportOrDisplayCurrentSpeechSettings": (_("Report current speech settings. Twice: display them"), globalCommands.SCRCAT_SPEECH),
-		# Translators: Input help mode message
-		# for reportCurrentSpeechSettings script commands.
-		"reportCurrentSpeechSettings": (_("Report current speech settings"), globalCommands.SCRCAT_SPEECH),
-		# Translators: Input help mode message
-		# for displayCurrentSpeechSettings script commands.
-		"displayCurrentSpeechSettings": (_("Display current speech settings"), globalCommands.SCRCAT_SPEECH),
 		}
 
 	def __init__(self, *args, **kwargs):
@@ -377,7 +232,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# update dictionaries for volume control scripts
 		self._mainScriptToGestureAndfeatureOption .update(self._volumeControlMainScriptToGestureAndfeatureOption)
 		self._shellScriptToGestureAndFeatureOption .update(self._volumeControlShellScriptToGestureAndFeatureOption)
-		self._scriptsToDocsAndCategory .update(self._volumeControlScriptsToDocsAndCategory)
 		self.maximizeWindowTimer = None
 		self.installSettingsMenu()
 		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
@@ -398,14 +252,16 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		self.toggling = False
 		self._bindGestures()
 		self._setShellGestures()
-		core.callLater(200, self.installShellScriptDocs)
+		core.callLater(200, self.installMainAndShellScriptDocs)
 		self.switchVoiceProfileMode = "off"
 		if isInstall(ID_VolumeControl) and toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
 			from .computerTools import volumeControl
 			volumeControl.setNVDAVolume(withMin=True)
 			volumeControl.setSpeakerVolume(withMin=True)
+		if isInstall(FCT_TemporaryAudioDevice):
+			from .computerTools import audioDevice  # noqa: F401
 		if toggleByPassNoDescriptionAdvancedOption(False):
-			special.initialize()
+			messageBox.initialize()
 		from .scripts import scriptHandlerEx
 		scriptHandlerEx.initialize()
 		# start update check if not in secur mode and option is set
@@ -416,6 +272,14 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				from . updateHandler import autoUpdateCheck
 				autoUpdateCheck(
 					toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
+		# activate text analyzer if option is checked
+		from .textAnalysis.textAnalyzer import updateProfileConfiguration
+		updateProfileConfiguration()
+		config.post_configProfileSwitch .register(self.handlePostConfigProfileSwitch)
+
+	def handlePostConfigProfileSwitch(self, prevConf):
+		from .textAnalysis.textAnalyzer import updateProfileConfiguration
+		updateProfileConfiguration()
 
 	def _bindGestures(self):
 		for script in self._mainScriptToGestureAndfeatureOption:
@@ -423,9 +287,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			if gestures is None:
 				continue
 			if featureID:
-				if not isInstall(featureID):
-					continue
-				elif isInstallWithoutGesture(featureID):
+				if not isInstall(featureID) or isInstallWithoutGesture(featureID):
 					continue
 			for gest in gestures:
 				self.bindGesture(gest, script)
@@ -438,9 +300,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 					continue
 			self._shellGestures[gesture] = script
 
-	def installShellScriptDocs(self):
-		for script in self._scriptsToDocsAndCategory:
-			(doc, category) = self._getScriptDocAndCategory(script)
+	def installMainAndShellScriptDocs(self):
+		for script in scriptsToDocInformations:
+			(doc, category, helpId) = self._getScriptDocAndCategory(script)
 			commandText = None
 			if script in self._shellScriptToGestureAndFeatureOption:
 				(gesture, featureID) = self._shellScriptToGestureAndFeatureOption[script]
@@ -470,10 +332,10 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				globalCommandsFunc.__func__.__doc__ = None
 
 	def _getScriptDocAndCategory(self, script):
-		(doc, category) = self._scriptsToDocsAndCategory[script]
+		(doc, category, helpId) = scriptsToDocInformations[script]
 		if category is None:
 			category = SCRCAT_MODULE
-		return (doc, category)
+		return (doc, category, helpId)
 
 	def installSettingsMenu(self):
 		self.prefsMenu = gui.mainFrame.sysTrayIcon.preferencesMenu
@@ -486,10 +348,18 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		settingsSubMenu = menu.Append(
 			wx.ID_ANY,
 			# Translators: name of the option in the menu.
-			_("Settings..."),
+			_("Global settings..."),
 			"")
 		gui.mainFrame.sysTrayIcon.Bind(
 			wx.EVT_MENU, self.onSettingsSubMenu, settingsSubMenu)
+		profileSettingsSubMenu = menu.Append(
+			wx.ID_ANY,
+			# Translators: name of the option in the menu.
+			_("Current configuration profile settings..."),
+			"")
+		gui.mainFrame.sysTrayIcon.Bind(
+			wx.EVT_MENU, self.onProfileSettingsSubMenu, profileSettingsSubMenu)
+
 		if isInstall(ID_KeyboardKeyRenaming):
 			self.keyboardKeysRenamingMenu = menu.Append(
 				wx.ID_ANY,
@@ -542,6 +412,21 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				"")
 			gui.mainFrame.sysTrayIcon.Bind(
 				wx.EVT_MENU, self.onExploreProgramFilesMenu, exploreProgramFilesMenu)
+		menu = wx.Menu()
+		item = self.toolsMenu .Append(
+			wx.ID_ANY,
+			# Translators: name of the option in the menu.
+			_("Manage user configurations"),
+			"")
+		gui.mainFrame.sysTrayIcon.Bind(
+			wx.EVT_MENU, self.onManageUserConfigurationsMenu, item)
+
+	def onManageUserConfigurationsMenu(self, evt):
+		from .settings.userConfigManager import UserConfigManagementDialog
+		wx.CallAfter(UserConfigManagementDialog.run)
+
+	def script_manageUserConfigurations(self, gesture):
+		self.onManageUserConfigurationsMenu(None)
 
 	def script_moduleLayer(self, gesture):
 		# A run-time binding will occur
@@ -595,14 +480,39 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				self.prefsMenu.Remove(getattr(self, item))
 		if hasattr(self, "exploreNVDAMenu"):
 			self.toolsMenu .Remove(getattr(self, "exploreNVDAMenu"))
-		special.terminate()
+		messageBox.terminate()
+		# if language has changed, we must update symbols files
+		from languageHandler import getLanguage, getWindowsLanguage
+		curLang = getLanguage()
+		lang = config.conf["general"]["language"]
+		if lang == "Windows":
+			lang = getWindowsLanguage()
+		if curLang != lang:
+			log.warning("Language change: update user symbols files")
+			# set new symbols file for new language
+			path = _curAddon.path
+			sys.path.append(path)
+			import onInstall
+			onInstall.installNewSymbols(lang)
+			del sys.path[-1]
+
 		super(NVDAExtensionGlobalPlugin, self).terminate()
 
 	def onSettingsSubMenu(self, evt):
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, AddonSettingsDialog)
+		from .settings.dialog import GlobalSettingsDialog
+		wx.CallAfter(gui.mainFrame._popupSettingsDialog, GlobalSettingsDialog)
 
-	def script_addonSettingsDialog(self, gesture):
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, AddonSettingsDialog)
+	def onProfileSettingsSubMenu(self, evt):
+		from .settings.dialog import ProfileSettingsDialog
+		wx.CallAfter(gui.mainFrame._popupSettingsDialog, ProfileSettingsDialog)
+
+	def script_globalSettingsDialog(self, gesture):
+		from .settings.dialog import GlobalSettingsDialog
+		wx.CallAfter(gui.mainFrame._popupSettingsDialog, GlobalSettingsDialog)
+
+	def script_profileSettingsDialog(self, gesture):
+		from .settings.dialog import ProfileSettingsDialog
+		wx.CallAfter(gui.mainFrame._popupSettingsDialog, ProfileSettingsDialog)
 
 	def onKeyboardKeysRenamingMenu(self, evt):
 		from .keyboardKeyRenaming import KeyboardKeyRenamingDialog
@@ -674,6 +584,13 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			return
 		nextHandler()
 
+	def event_caret(self, obj, nextHandler):
+
+		if self.eventCaretTimer is not None:
+			self.eventCaretTimer.Stop()
+			self.eventCaretTimer = None
+		nextHandler()
+
 	def script_copyDateAndTimeToClip(self, gesture):
 		try:
 			# for NVDA version >= 2021.1
@@ -684,7 +601,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
 		if toggleReportTimeWithSecondsOption(False):
 			try:
-				# for NVDA version >=  2021.1
+				# for NVDA version >= 2021.1
 				timeText = winKernel.GetTimeFormatEx(
 					winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
 			except AttributeError:
@@ -1007,7 +924,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				errorMsg = _("Current log file cannot be opened")
 			try:
 				os.startfile(logFile)
-			except:  # noqa:E722
+			except Exception:
 				wx.CallAfter(
 					gui.messageBox,
 					errorMsg,
@@ -1147,20 +1064,50 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		shutdown_gui.ComputerShutdownDialog.run()
 
 	def script_shutdownComputer(self, gesture):
-		from .computerTools.shutdown_util import shutdown as shutdown
-		forceClose = True
-		timeout = 0
-		shutdown(timeout, forceClose)
+		def callback():
+			if gui.messageBox(
+				# Translators: message to confirm computer shutdown.
+				_("Are you sure you want to shutdown immediately the computer ?"),
+				# Translators: dialog title.
+				_("Confirmation"),
+				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+				return
+			from .computerTools.shutdown_util import shutdown as shutdown
+			forceClose = True
+			timeout = 0
+			shutdown(timeout, forceClose)
+		# we must delay script execution cause messageBox
+		wx.CallAfter(callback)
 
 	def script_rebootComputer(self, gesture):
-		from .computerTools.shutdown_util import reboot as reboot
-		forceClose = True
-		timeout = 0
-		reboot(timeout, forceClose)
+		def callback():
+			if gui.messageBox(
+				# Translators: message to confirm computer reboot.
+				_("Are you sure you want to reboot immediately the computer ?"),
+				# Translators: dialog title.
+				_("Confirmation"),
+				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+				return
+			from .computerTools.shutdown_util import reboot as reboot
+			forceClose = True
+			timeout = 0
+			reboot(timeout, forceClose)
+		# we must delay script execution cause messageBox
+		wx.CallAfter(callback)
 
 	def script_hibernateComputer(self, gesture):
-		from .computerTools.shutdown_util import suspend as suspend
-		suspend(hibernate=True)
+		def callback():
+			if gui.messageBox(
+				# Translators: message to confirm computer hibernation.
+				_("Are you sure you want to hibernate immediately the computer ?"),
+				# Translators: dialog title.
+				_("Confirmation"),
+				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+				return
+			from .computerTools.shutdown_util import suspend as suspend
+			suspend(hibernate=True)
+		# we must delay script execution cause messageBox
+		wx.CallAfter(callback)
 
 	def _reportOrDisplayCurrentSpeechSettings(self, display=False):
 		from . import switchVoiceProfile
@@ -1311,7 +1258,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			else:
 				try:
 					(left, top, width, height) = api.getNavigatorObject().location
-				except:  # noqa:E722
+				except Exception:
 					# Translators: Reported when the object has no location
 					# for the mouse to move to it.
 					ui.message(_("Object has no location"))
@@ -1354,7 +1301,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			else:
 				try:
 					(left, top, width, height) = api.getNavigatorObject().location
-				except:  # noqa:E722
+				except Exception:
 					# Translators: Reported when the object has no location
 					# for the mouse to move to it.
 					ui.message(_("Object has no location"))
@@ -1539,14 +1486,105 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			auto=auto,
 			releaseToDev=toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 
+	def script_toggleTextAnalyzer(self, gesture):
+		from .settings.nvdaConfig import _NVDAConfigManager
+		_NVDAConfigManager.toggleTextAnalyzerActivationOption()
+
+	def analyzeText(self, unit):
+		focus = api.getFocusObject()
+		try:
+			info = focus.makeTextInfo(textInfos.POSITION_CARET)
+		except Exception:
+			return
+		from .textAnalysis.textAnalyzer import getAnalyze, reportAnalysis
+		textInfo = info.copy()
+		try:
+			textInfo.expand(unit)
+		except Exception:
+			# Translators: message to user when text analysis is not available (for example by sentence).
+			ui.message(_("Text analysis not available"))
+			return
+		if unit in [textInfos.UNIT_SENTENCE, textInfos.UNIT_PARAGRAPH] and len(textInfo.text) > 80:
+			ui.message(_("Please wait"))
+		(alertCount, textList) = getAnalyze(textInfo, unit)
+		if alertCount:
+			reportAnalysis(alertCount, textList, description=True)
+		else:
+			# Translators: message to user to report no analysis alert.
+			ui.message(_("Nothing to report"))
+
+	def script_analyzeCurrentWord(self, gesture):
+		wx.CallAfter(self.analyzeText, textInfos.UNIT_WORD)
+
+	def script_analyzeCurrentLine(self, gesture):
+		wx.CallAfter(self.analyzeText, textInfos.UNIT_LINE)
+
+	def script_analyzeCurrentSentence(self, gesture):
+		wx.CallAfter(self.analyzeText, textInfos.UNIT_SENTENCE)
+
+	def script_analyzeCurrentParagraph(self, gesture):
+		wx.CallAfter(self.analyzeText, textInfos.UNIT_PARAGRAPH)
+
+	def script_toggleReportCurrentCaretPosition(self, gesture):
+		from .settings.nvdaConfig import _NVDAConfigManager
+		state = _NVDAConfigManager.toggleReportCurrentCaretPositionOption()
+		if state:
+			# Translators: message to indicate then report current caret position is on.
+			msg = _("report current caret position on")
+		else:
+			# Translators: message to indicate then report current caret position is off.
+			msg = _("report current caret position off")
+		ui.message(msg)
+
+	def script_addToClip(self, gesture):
+		from .clipboardCommandAnnouncement .addToClip import addToClip
+		wx.CallAfter(addToClip)
+
+	def script_temporaryAudioOutputDeviceManager(self, gesture):
+		from .computerTools.audioDevice import TemporaryAudioDeviceManagerDialog
+		TemporaryAudioDeviceManagerDialog.run()
+
+	def script_cancelTemporaryAudioOutputDevice(self, gesture):
+		from .computerTools.audioDevice import cancelTemporaryAudioOutputDevice
+		wx.CallAfter(cancelTemporaryAudioOutputDevice)
+
+	def script_setOrCancelTemporaryAudioOutputDevice(self, gesture):
+		stopDelayScriptTask()
+		if scriptHandler.getLastScriptRepeatCount():
+			script_cancelTemporaryAudioDevice(None)
+		else:
+			delayScriptTask(script_setTemporaryAudioOutputDevice, None)
+
+	def script_setTemporaryAudioOutputDevice(self, gesture):
+		from .computerTools.audioDevice import setTemporaryAudioOutputDevice
+		from .settings import _addonConfigManager
+		deviceNames = _addonConfigManager.getAudioDevicesForCycle()
+		if not deviceNames or len(deviceNames) == 1:
+			# Translators: message to user when cycle is not possible
+			ui.message(_("cycle is not possible on audio output device"))
+			return
+		from synthDriverHandler import _audioOutputDevice
+		curOutputDevice = _audioOutputDevice
+		try:
+			selection = deviceNames.index(curOutputDevice)
+		except ValueError:
+			selection = 0
+		selection = (selection + 1) % len(deviceNames)
+		audioDevice = deviceNames[selection]
+		setTemporaryAudioOutputDevice(audioDevice)
+
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin  test")
 		ui.message("NVDAExtensionGlobalPlugin test")
 
 
-class HelperDialog(wx.Dialog):
+class HelperDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
 	title = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr0-2")
 
 	def __new__(cls, *args, **kwargs):
 		if HelperDialog._instance is None:
@@ -1568,12 +1606,12 @@ class HelperDialog(wx.Dialog):
 	def initList(self):
 		self.docToScript = {}
 		self.scriptToKey = {}
-		for script in self.globalPlugin._scriptsToDocsAndCategory:
+		for script in scriptsToDocInformations:
 			if script not in self.globalPlugin._shellScriptToGestureAndFeatureOption:
 				continue
 			gest = self.globalPlugin._shellScriptToGestureAndFeatureOption[script][0]
 			if gest in self.globalPlugin._shellGestures:
-				(doc, category) = self.globalPlugin._scriptsToDocsAndCategory[script]
+				(doc, category, helpId) = scriptsToDocInformations[script]
 				key = ":".join(gest.split(":")[1:])
 				self.scriptToKey[script] = key
 				self.docToScript[doc] = script
@@ -1588,18 +1626,16 @@ class HelperDialog(wx.Dialog):
 			from keyboardHandler import KeyboardInputGesture
 			keyName = KeyboardInputGesture.fromName(key).displayName
 			choice.append("%s: %s" % (doc, keyName))
-
 		from gui import guiHelper
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# the list box
 		# Translators: This is the label of the list appearing
-		# on Active Windows List Display dialog.
+		# on HelperDialog
 		labelText = _("Description: command")
 		self.scriptsListBox = sHelper.addLabeledControl(
 			labelText,
 			wx.ListBox,
-			id=wx.ID_ANY,
 			choices=choice,
 			style=wx.LB_SINGLE,
 			size=(700, 280))
@@ -1607,10 +1643,11 @@ class HelperDialog(wx.Dialog):
 			self.scriptsListBox.SetSelection(0)
 		# Buttons
 		bHelper = guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators: This is a label of a button appearing
-		# on active windows list display dialog.
 		runScriptButton = bHelper.addButton(
-			self, id=wx.ID_ANY, label=_("&Run script"))
+			self,
+			# Translators: This is a label of a button appearing
+			# on HelperDialog
+			label=_("&Execute the script"))
 		runScriptButton.SetDefault()
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
@@ -1624,6 +1661,7 @@ class HelperDialog(wx.Dialog):
 		# Events
 		runScriptButton.Bind(wx.EVT_BUTTON, self.onRunScriptButton)
 		closeButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
+		self.scriptsListBox.Bind(wx.EVT_LISTBOX, self.onSelectScript)
 		self.Bind(wx.EVT_ACTIVATE, self.onActivate)
 		self.SetEscapeId(wx.ID_CLOSE)
 
@@ -1632,6 +1670,14 @@ class HelperDialog(wx.Dialog):
 		super(HelperDialog, self).Destroy()
 
 	def onActivate(self, evt):
+		evt.Skip()
+
+	def onSelectScript(self, evt):
+		index = self.scriptsListBox.GetSelection()
+		doc = self.docList[index]
+		script = self.docToScript[doc]
+		(doc, category, helpId) = scriptsToDocInformations[script]
+		self.bindHelpEvent(getHelpObj(helpId), self)
 		evt.Skip()
 
 	def onRunScriptButton(self, evt):

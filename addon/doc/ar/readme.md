@@ -6,8 +6,8 @@
 * [نسخة مستقرة] [1]
 * [نسخة مطورة] [2]
 * التوافق:
-* الحد الأدنى من إصدار NVDA المدعوم: 2019.3
-* آخر إصدار تم اختباره من NVDA: 2021.2
+* الحد الأدنى من إصدار NVDA المدعوم: 2019.2.1
+* آخر إصدار تم اختباره من NVDA: 2020.4
 
 
 Traductor (s): ترجمة آلية من اللغة الفرنسية
@@ -84,5 +84,5 @@ Traductor (s): ترجمة آلية من اللغة الفرنسية
 * البرنامج النصي لإعادة تشغيل NVDA بسرعة.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.6.1.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

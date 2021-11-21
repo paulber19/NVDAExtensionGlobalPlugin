@@ -16,7 +16,8 @@ from gui import guiHelper, mainFrame
 import NVDAObjects.window
 import queueHandler
 from ..utils.NVDAStrings import NVDAString
-from ..utils import isOpened, makeAddonWindowTitle
+from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
+from ..utils import contextHelpEx
 from .user32 import *  # noqa:F403
 
 addonHandler.initTranslation()
@@ -42,6 +43,7 @@ def isRealWindow(hWnd):
 
 
 def getactiveWindows():
+
 	def callback(hWnd, windows):
 		# we exclude non real windows
 		if not isRealWindow(hWnd):
@@ -80,8 +82,12 @@ def closeAllWindows(windowsList):
 		oleacc.AccessibleObjectFromWindow(hwnd, -2).accDoDefaultAction(5)
 
 
-class ActiveWindowsListDisplay(wx.Dialog):
+class ActiveWindowsListDisplay(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
+	# help id in the user manual.
+	helpObj = getHelpObj("hdr1-2")
 	title = None
 	delayTimer = None
 	lastTypedKeys = ""
@@ -99,7 +105,9 @@ class ActiveWindowsListDisplay(wx.Dialog):
 		dialogTitle = _("List of windows")
 		ActiveWindowsListDisplay.title = makeAddonWindowTitle(dialogTitle)
 		super(ActiveWindowsListDisplay, self).__init__(
-			parent, wx.ID_ANY, ActiveWindowsListDisplay.title)
+			parent,
+			wx.ID_ANY,
+			ActiveWindowsListDisplay.title,)
 		self.activeWindows = []
 		self.windowNamesList = []
 		self.doGui()
@@ -248,16 +256,18 @@ class ActiveWindowsListDisplay(wx.Dialog):
 				wx.CallLater(
 					50,
 					queueHandler.queueFunction,
-					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection()
-					)
+					queueHandler.eventQueue,
+					ui.message,
+					self.windowsListBox .GetStringSelection())
 				return
 			# set selection on next window  with name starting with lastTypedKeys
 			if not self.selectNextWindow(self.lastTypedKeys):
 				wx.CallLater(
 					50,
 					queueHandler.queueFunction,
-					queueHandler.eventQueue, ui.message, self.windowsListBox .GetStringSelection()
-					)
+					queueHandler.eventQueue,
+					ui.message,
+					self.windowsListBox .GetStringSelection())
 			return
 		evt.Skip()
 

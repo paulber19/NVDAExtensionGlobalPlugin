@@ -1,4 +1,4 @@
-ADDON_SUMMARY - History
+ ADDON_SUMMARY - History
 Author: ADDON_AUTHOR_NAME
 
 
@@ -16,6 +16,45 @@ Download:
 
 Sorry, but this document is an automatic translation from french language.
 
+Only the versions of the type major.minor (for example v3.1) are listed in this history.
+
+Versions of type major.minor.x (for example v3.1.2) are translation updates.
+
++ v10.0 (11/21/2021) +
+New features:
+- addition of the "Text analyzer" functionality.
+- added functionality "manage user configurations and restart NVDA with a precise configuration".
+- temporary use of an audio output device without impacting NVDA configuration.
+- announcement of the cursor position in the edit boxes.
+- resumption of the "Computer shutdown" functionality for:
+ - allow canceling the request to put the computer on standby, shutdown or restart before the timeout expires.
+ - ask for confirmation during a request to put the computer on standby, shutdown or restart using a input gesture.
+- addition in the "NVDA Logs Management" dialog, of a button to copy the path of the previous log to the clipboard,
+- contextual help using the "f1" key in the extension's dialog boxes.
+- new script to add the selected text to the clipboard ("x" command).
+- possibility of executing scripts in the "Input gestures" dialog (for versions of NVDA greater than 2020.3).
+
+
+Changes:
+- the "Parameters" submenu of the extension has been split into two submenus:
+ - "Global settings" submenu ("f1" interpreter command),
+ - "current configuration profile settings" submenu (interpreter command "control + f1").
+- copying the date to the clipboard is now done using the "d" command of the interpreter instead of "c".
+- henceforth, only versions of the type major.minor will be noted in this history. Versions of type major.mineure.x will be translation updates.
+
+
+Compatibility:
+- Compatibility with nvda 2021.2:
+ - The characterProcessing.SYMLVL_ * constants have changed.
+ - controlTypes has been split into several submodules.
+- discontinuation of versions of NVDA prior to 2019.3 and removal of the code implemented for these versions.
+
+
+Others:
+- installation of the symbols-xx.dic file when stopping NVDA if a change of language takes place.
+
+
+
 + v9.9 (09/21/2021) +
 correction of the malfunction of the "Selective announcement of control keys" functionality.
 
@@ -24,15 +63,14 @@ Bug fix:
 - in avigation mode and NVDA 2021.1, moving by paragraph no longer generates an error.
 
 
-+ v9.8 (06/22/2021) +
++ v9.8 (05/18/2021) +
 - compatibility with nvda 2021.1. Versions of NVDA prior to 2019.3 are no longer supported.
-- removal of the code concerning Python 2.7.
 - spelling and grammar correction of English character strings.
 - Braille display of voice announcements made for editing commands such as "copy", "paste", ...
 
 
-+ v9.7 (04/01/2021) +
-- resumption of all the functions to also send the text of the speech announcements to the braille display.
++ v9.7 (03/25/2021) +
+- resumption of all the functions to also send the text of the audio announcements to the braille display.
 
 
 + v9.6 (03/10/2021) +

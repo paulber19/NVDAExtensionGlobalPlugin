@@ -20,6 +20,12 @@ from ..settings import toggleDialogTitleWithAddonSummaryAdvancedOption
 
 addonHandler.initTranslation()
 
+_curAddon = addonHandler.getCodeAddon()
+# addon informations
+_addonSummary = _curAddon.manifest['summary']
+_addonDocFile = _curAddon.getDocFilePath()
+
+
 # winuser.h constant
 SC_MAXIMIZE = 0xF030
 WS_MAXIMIZE = 0x01000000
@@ -90,7 +96,7 @@ def maximizeWindow(hWnd):
 		try:
 			winUser.PostMessage(hWnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0)
 			log.warning("Window maximized: %s" % winUser.getWindowText(hWnd))
-		except:  # noqa:E722
+		except Exception:
 			pass
 
 
@@ -112,7 +118,7 @@ def isInteger(stringToTest):
 	try:
 		int(stringToTest)
 		return True
-	except:  # noqa:E722
+	except Exception:
 		return False
 
 
@@ -141,9 +147,13 @@ def isOpened(dialog):
 def makeAddonWindowTitle(dialogTitle):
 	if not toggleDialogTitleWithAddonSummaryAdvancedOption(False):
 		return dialogTitle
-	curAddon = addonHandler.getCodeAddon()
-	addonSummary = curAddon.manifest['summary']
-	return "%s - %s" % (addonSummary, dialogTitle)
+	return "%s - %s" % (_addonSummary, dialogTitle)
+
+
+def getHelpObj(helpId):
+	if helpId is None:
+		return None
+	return (helpId, _addonDocFile)
 
 
 def getPositionXY(obj):

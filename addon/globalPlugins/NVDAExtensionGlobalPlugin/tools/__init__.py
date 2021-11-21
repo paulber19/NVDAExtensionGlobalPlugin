@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 -2021 Paulber19
+# Copyright (C) 2016 -2020 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -15,13 +15,14 @@ import gui
 import wx
 import sys
 import languageHandler
-from ..utils import isOpened, makeAddonWindowTitle
+from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import runInThread
 from .generate import generateManifest, generateTranslatedManifest
 from .gettextTools import generatePotFile, compilePoFiles
 import shutil
-
+from ..utils import contextHelpEx
 addonHandler.initTranslation()
+
 
 _curModuleFilePath = os.path.dirname(__file__)
 
@@ -122,7 +123,7 @@ def getMmanifestInfos(addon, lang):
 			translatedInput = open(p, 'rb')
 			try:
 				return addonHandler.AddonManifest(f, translatedInput)
-			except:  # noqa:E722
+			except Exception:
 				# Translators: dialog title on errorr.
 				dialogTitle = _("error")
 				gui.messageBox(
@@ -282,14 +283,14 @@ def _makeHTML(addon, lang):
 			dest = os.path.join(docFolder, "style_md.css")
 			try:
 				shutil.copy(source, dest)
-			except:  # noqa:E722
+			except Exception:
 				pass
 		elif t2tCount:
 			source = os.path.join(curAddon.path, "doc", "style_t2t.css")
 			dest = os.path.join(docFolder, "style_t2t.css")
 			try:
 				shutil.copy(source, dest)
-			except:  # noqa:E722
+			except Exception:
 				pass
 		gui.messageBox(
 			# Translators: message to user to report number of converted documents
@@ -629,9 +630,13 @@ def _createBuildVarsFile(addon):
 	clean(addon)
 
 
-class ToolsForAddonDialog(wx.Dialog):
+class ToolsForAddonDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
 	title = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr22")
 
 	def __new__(cls, *args, **kwargs):
 		if ToolsForAddonDialog._instance is not None:
@@ -667,18 +672,28 @@ class ToolsForAddonDialog(wx.Dialog):
 		self.addonsListBox = sHelper.addLabeledControl(
 			labelText, wx.ListBox, id=wx.ID_ANY, name="addons", choices=addonNamesList)
 		self.addonsListBox.SetSelection(0)
+		self.bindHelpEvent(getHelpObj("hdr22"), self.addonsListBox)
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: this is a label appearing on tools for add-on dialog
 		updateVersionButton = bHelper.addButton(
+			# Translators: this is a label appearing on tools for add-on dialog
 			self, label=_("Update add-on &version"))
-
+		self.bindHelpEvent(getHelpObj("hdr22-2"), updateVersionButton)
 		updateManifestIniButton = bHelper.addButton(
 			self,
 			# Translators: this is a label appearing on tools for add-on dialog
 			label=_("&Update manifest.ini file"))
-		createPOTFileButton = bHelper.addButton(self, label=_("Create P&OT file"))
-		# Translators: this is a label appearing on tools for add-on dialog
-		prepareAddonButton = bHelper.addButton(self, label=_("&Prepare addon"))
+		self.bindHelpEvent(getHelpObj("hdr22-3"), updateManifestIniButton)
+		createPOTFileButton = bHelper.addButton(
+			self,
+			# Translators: this is a label appearing on tools for add-on dialog
+			label=_("Create P&OT file"))
+		self.bindHelpEvent(getHelpObj("hdr22-6"), createPOTFileButton)
+		prepareAddonButton = bHelper.addButton(
+			self,
+			# Translators: this is a label appearing on tools for add-on dialog
+			label=_("&Prepare addon"))
+		self.bindHelpEvent(getHelpObj("hdr22-7"), prepareAddonButton)
 		sHelper.addItem(bHelper)
 		# Translators: This is a label appearing on Convert to HTML dialog.
 		labelText = _("&Languages:")
@@ -686,19 +701,25 @@ class ToolsForAddonDialog(wx.Dialog):
 		self.languagesListBox = sHelper.addLabeledControl(
 			labelText, wx.ListBox, id=wx.ID_ANY, name="languages", choices=langs)
 		self.updateLanguagesListBox()
+		self.bindHelpEvent(getHelpObj("hdr22-4"), self.languagesListBox)
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
-		# Translators: this is a label appearing on tools for add-on dialog
+
 		createLocaleManifestIniButton = bHelper.addButton(
+			# Translators: this is a label appearing on tools for add-on dialog
 			self, label=_("Create &localization manifest.ini file"))
-		# Translators: this is a label appearing on tools for add-on dialog
+		self.bindHelpEvent(getHelpObj("hdr22-4"), createLocaleManifestIniButton)
 		createHTMLDocumentationButton = bHelper.addButton(
+			# Translators: this is a label appearing on tools for add-on dialog
 			self, label=_("Create &HTML documentation files"))
-		# Translators: this is a label appearing on tools for add-on dialog
+		self.bindHelpEvent(getHelpObj("hdr22-5"), createHTMLDocumentationButton)
 		createBuildVarsFileButton = bHelper.addButton(
+			# Translators: this is a label appearing on tools for add-on dialog
 			self, label=_("Create &buildVars file"))
-		# Translators: this is a label appearing on tools for add-on dialog
+		self.bindHelpEvent(getHelpObj("hdr22-1"), createBuildVarsFileButton)
 		exploreAddonFolderButton = bHelper.addButton(
+			# Translators: this is a label appearing on tools for add-on dialog
 			self, label=_("&Explore add-on folder"))
+		self.bindHelpEvent(getHelpObj("hdr22-8"), exploreAddonFolderButton)
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
 			gui.gui.guiHelper.ButtonHelper(wx.HORIZONTAL))

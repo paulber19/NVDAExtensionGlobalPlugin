@@ -1,37 +1,75 @@
-ADDON_SUMMARY - Historique
-Auteur : ADDON_AUTHOR_NAME
+    ADDON_SUMMARY - Historique
+Auteur: ADDON_AUTHOR_NAME
 
 
 %!includeconf: ../addon_global.t2tconf
 %!includeconf: addon_informations.t2tconf
-URL : ADDON_AUTHOR_URL
+URL: ADDON_AUTHOR_URL
 
-[Dépot GitHub : ADDON_REPOSITORY ADDON_REPOSITORY]
+[Dépot GitHub: ADDON_REPOSITORY ADDON_REPOSITORY]
 
-Téléchargement :
-- [Version actuelle : ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
-- [Version précédente : ADDON_PREV_VERSION ADDON_DOWNLOAD_PREVIOUS]
+Téléchargement:
+- [Version actuelle: ADDON_CUR_VERSION ADDON_DOWNLOAD_SERVER1]
+- [Version précédente: ADDON_PREV_VERSION ADDON_DOWNLOAD_PREVIOUS]
 - [versions de développement ADDON_DEV_URL]
+
+
+
+Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées dans cet historique.
+
+Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
+
+
+
++ v10.0 (21/11/2021) +
+Nouveautés:
+- ajout  de la fonctionnalité "Analyseur de texte".
+- ajout de la fonctionnalité "gestion des configurations utilisateur et redémarage de NVDA avec une configuration précise".
+- utilisation temporaire d'un périphérique de sortie audio sans impacter la configuration de NVDA.
+- annonce de la position du curseur dans les zones d'édition.
+- reprise de la fonctionnalité "Arrêt de l'ordinateur" pour:
+ - permettre d'annuler la demande de mise en veille, arrêt ou redémarage de l'ordinateur avant l'échéance de  la temporisation.
+ - demander une confirmation lors d'une demande de mise en veille, arrêt ou redémarage de l'ordinateur par geste de commande.
+- ajout dans le dialogue "Gestion des journaux de NVDA", d'un bouton pour copier le chemin du précédent journal dans le presse-papier,
+- aide contextuelle à l'aide de la touche "f1" dans les boite de dialogue de l'extension.
+- nouveau script pour ajouter le texte sélectionné dans le presse-papier (commande "x").
+- possibilité d'exécution  des scripts dans le dialogue "Gestes de commandes" (pour les versions de NVDA supérieures à 2020.3).
+
+
+Changements:
+- le sous-menu "Paramètres" de l'extension a été scindé en deux sous-menus :
+ - sous-menu "Paramètres globaux" (commande interpréteur "f1"),
+ - sous-menu "Paramètres du profil de configuration courant" (commande interpréteur "control+f1").
+- la copie de la date dans le presse-papier se fait maintenant à l'aide de la commande "d" de l'interpréteur au lieu de "c". La commande "c" a été attribué à l'affichage du  "gestionnaire du périphérique de sortie audio temporaire".
+
+
+Compatibilité:
+- Compatibilité avec nvda 2021.2:
+ - Les constantes characterProcessing.SYMLVL_* ont changés.
+ - controlTypes a été divisé en plusieurs sous-modules.
+- abandon des versions de NVDA antérieures à la 2019.3 et suppression du code  mise en place pour ces versions.
+
+
+Autres:
+- installation du fichier symbols-xx.dic à l'arrêt de NVDA si un changement de langue a lieu.
 
 
 + v9.9 (21/09/2021) +
 correction du disfonctionnement de la fonctionnalité "Annonce sélective des touches de commandes".
-
 
 + v9.8.1 (08/07/2021) +
 Correction de bogue:
 - en mode navigation et NVDA 2021.1, le déplacement  par paragraphe  ne génère  plus d'erreur.
 
 
-+ v9.8 (22/06/2021) +
++ v9.8 (18/05/2021) +
 - compatibilité avec nvda 2021.1. Les versions de NVDA antérieures à 2019.3 ne sont plus supportées.
-- suppression du code concernant Python 2.7.
 - correction orthographique et grammaticale de chaines de caractères  anglaise.
 - affichage braille des annonces vocales faites pour les commandes d'édition du style "copier", "coller", ...
 
 
-+ v9.7 (01/04/2021) +
-- reprise de toutes les fonctionnalités pour envoyer  aussi le texte des annonces vocales à l'afficheur braille.
++ v9.7 (25/03/2021) +
+- reprise de toutes les fonctionnalités pour envoyer  aussi le texte des annonces sonores à l'afficheur braille.
 
 
 + v9.6.1 (21/03/2021) +

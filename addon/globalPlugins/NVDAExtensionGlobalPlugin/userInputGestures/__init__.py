@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2020 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -13,14 +13,19 @@ import sys
 import gui
 import inputCore
 from ..utils.NVDAStrings import NVDAString
-from ..utils import makeAddonWindowTitle
+from ..utils import makeAddonWindowTitle, getHelpObj
+from ..utils import contextHelpEx
 addonHandler.initTranslation()
 
 
-class UserInputGesturesDialog(gui.SettingsDialog):
+class UserInputGesturesDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	gui.SettingsDialog):
 	# Translators: The title of the user Input Gestures dialog
 	# where the user can remap user input gestures for commands.
 	title = _("User input Gestures")
+	# help in the user manual.
+	helpObj = getHelpObj("hdr20")
 
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
@@ -120,20 +125,18 @@ class UserInputGesturesDialog(gui.SettingsDialog):
 			return
 		inputCore.manager.userGestureMap.clear()
 		inputCore.manager.userGestureMap.save()
-		self.Close()
 
 	def onOk(self, evt):
 		for gesture, module, className, scriptName in self.pendingRemoves:
 			try:
 				self.userGestureMap.remove(gesture, module, className, scriptName)
 			except ValueError:
-				log.warning("passe")
 				pass
 		if self.pendingRemoves:
 			# Only save if there is something to save.
 			try:
 				self.userGestureMap.save()
-			except:  # noqa:E722
+			except Exception:
 				log.debugWarning("", exc_info=True)
 				# Translators: An error displayed
 				# when saving user defined input gestures fails.
@@ -254,7 +257,7 @@ class UserGestureMap(inputCore.GlobalGestureMap):
 			try:
 				module = sys.modules[moduleName]
 				cls = getattr(module, className)
-			except:  # noqa:E722
+			except Exception:
 				cls = None
 			yield cls, moduleName, className, scriptName
 

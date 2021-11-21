@@ -7,7 +7,7 @@
 	* [version de développement][2]
 * Compatibilité:
 	* version minimum de NVDAsupportée: 2019.3
-	* dernière version de NVDA testée: 2021.2
+	* dernière version de NVDA testée: 2021.3
 
 
 Traducteur (s): texte original par l'auteur de l'extension
@@ -40,7 +40,7 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 
 * outils pour les journaux de NVDA:
 	* ouverture du journal ancien ou courant,
-	* copie du chemin du journal courant dans le presse-papier,
+	* copie du chemin de ceux-ci dans le presse-papier.
 
 
 * historique des annonces vocales,
@@ -58,7 +58,11 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 
 
 * Outils pour le développement d'extensions,
-* Compléments concernant la date et l'heure: copie de la date et de l'heure dans le presse-papier, annonce de l'heure avec les secondes.
+* Compléments concernant la date et l'heure: copie de la date et de l'heure dans le presse-papier, annonce de l'heure avec les secondes,
+* gestion des configurations utilisateurs et redémarage de NVDA avec une configuration précise,
+* analyseur de texte,
+* annonce de la position du curseur dans les zones d'édition,
+* utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA.
 
 
 ## Les options ##
@@ -81,8 +85,11 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 
 * présentation de la mise en forme du texte dans une boite de dialogue,
 * sous-menus pour explorer les dossiers programme ou de configuration,
-* script pour redémarrer rapidement NVDA.
+* script pour redémarrer rapidement NVDA,
+* script pour émuler la touche "Applications",
+* script pour fermer toutes les fenêtres ouvertes,
+* possibilité d'exécuter des scripts dans le dialogue "Gestes de commandes" (pour les versions de NVDA supérieures à 2020.3).
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.9.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.0.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

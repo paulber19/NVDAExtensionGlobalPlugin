@@ -10,3 +10,7 @@ def NVDAString(s):
 	Based on implementation made by Alberto Buffolino
 	https://github.com/nvaccess/nvda/issues/4652 """
 	return _(s)
+
+
+def NVDAString_pgettext(c, s):
+	return pgettext(c, s)

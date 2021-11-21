@@ -16,9 +16,10 @@ import queueHandler
 import core
 import characterProcessing
 from synthDriverHandler import getSynth, setSynth, getSynthList
-from ..utils.informationDialog import InformationDialog, makeAddonWindowTitle
+from ..utils.informationDialog import InformationDialog
 from ..utils.NVDAStrings import NVDAString
-from ..utils import isOpened
+from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
+from ..utils import contextHelpEx
 
 addonHandler.initTranslation()
 
@@ -44,28 +45,6 @@ KEY_OutputDevice = "outputDevice"
 # switching profile configuration version
 
 _MAX_SELECTORS = 8
-
-
-# for compatibility with NVDA version below 2018.4
-def deepCopy(agregSection):
-	try:
-		return agregSection.dict()
-	except AttributeError:
-		"""Return a deepcopy of self as a dictionary.
-		Adapted from L{configobj.Section.dict}.
-		"""
-		newdict = {}
-		for key, value in agregSection.iteritems():
-			if isinstance(value, config.AggregatedSection):
-				value = deepCopy(value)
-			elif isinstance(value, list):
-				# create a copy rather than a reference
-				value = list(value)
-			elif isinstance(value, tuple):
-				# create a copy rather than a reference
-				value = tuple(value)
-			newdict[key] = value
-		return newdict
 
 
 # timer for switchTo method
@@ -165,7 +144,7 @@ class SwitchVoiceProfilesManager(object):
 		return False
 
 	def getConfig(self):
-		return deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
+		return config.conf[self.addonName][SCT_VoiceProfileSwitching].dict()
 
 	def isSet(self, selector, inUpdate=False):
 		if inUpdate:
@@ -196,14 +175,15 @@ class SwitchVoiceProfilesManager(object):
 	def switchToVoiceProfile(self, selector, silent=False):
 		def finish(synthName, synthspeechConfig, msg):
 			# stop previous synth because oneCore voice switch don't work without it
-			setSynth(None)
+			#setSynth(None)
 			config.conf[SCT_Speech] = synthSpeechConfig.copy()
 			setSynth(synthName)
+			config.conf[SCT_Speech] [synthName] = synthSpeechConfig[synthName].copy()
+			getSynth().loadSettings()	
 			# Reinitialize the tones module to update the audio device
 			import tones
 			tones.terminate()
 			tones.initialize()
-			getSynth().saveSettings()
 			if msg:
 				ui.message(msg)
 		newProfile = self.getVoiceProfile(selector)
@@ -222,7 +202,7 @@ class SwitchVoiceProfilesManager(object):
 				wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
 				core.callLater(200, self.freeSelector, selector)
 			return
-		synthSpeechConfig = deepCopy(config.conf[SCT_Speech])
+		synthSpeechConfig = config.conf[SCT_Speech].dict()
 		synthSpeechConfig.update(newProfile[SCT_Speech].copy())
 		self.setLastSelector(selector)
 		msg = None if silent else _("Selector {selector}: {name}").format(
@@ -281,34 +261,17 @@ class SwitchVoiceProfilesManager(object):
 
 	def getSynthDisplayInfos(self, synth, synthConf):
 		conf = synthConf
+		import driverHandler
+		id = "id"
 		try:
-			# for nvda version upper 2019.1.1
-			import driverHandler
-			import synthDriverHandler
-			id = "id"
-			try:
-				# for nvda version < 2019.3
-				numericSynthSetting = [
-					synthDriverHandler.NumericSynthSetting,
-					driverHandler.NumericDriverSetting]
-				booleanSynthSetting = [
-					synthDriverHandler.BooleanSynthSetting,
-					driverHandler.BooleanDriverSetting]
-			except AttributeError:
-				try:
-					# for nvda< 2021.1
-					numericSynthSetting = [driverHandler.NumericDriverSetting, ]
-					booleanSynthSetting = [driverHandler.BooleanDriverSetting, ]
-				except AttributeError:
-					import autoSettingsUtils.driverSetting
-					numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
-					booleanSynthSetting = [autoSettingsUtils.driverSetting.BooleanDriverSetting, ]
-		except ImportError:
-			# for nvda version lower 2019.2
-			import synthDriverHandler
-			id = "name"
-			numericSynthSetting = [synthDriverHandler.NumericSynthSetting, ]
-			booleanSynthSetting = [synthDriverHandler.BooleanSynthSetting, ]
+			# for nvda< 2021.1
+			numericSynthSetting = [driverHandler.NumericDriverSetting, ]
+			booleanSynthSetting = [driverHandler.BooleanDriverSetting, ]
+		except AttributeError:
+			import autoSettingsUtils.driverSetting
+			numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
+			booleanSynthSetting = [autoSettingsUtils.driverSetting.BooleanDriverSetting, ]
+
 		infos = []
 		for setting in synth.supportedSettings:
 			settingID = getattr(setting, id)
@@ -323,13 +286,9 @@ class SwitchVoiceProfilesManager(object):
 					tempList = list(getattr(
 						synth, "available%ss" % settingID.capitalize()).values())
 					cur = conf[settingID]
-					try:
-						# for nvda =>2019.3
-						i = [x.id for x in tempList].index(cur)
-						v = tempList[i].displayName
-					except:  # noqa:E722
-						i = [x.ID for x in tempList].index(cur)
-						v = tempList[i].name
+					# for nvda =>2019.3
+					i = [x.id for x in tempList].index(cur)
+					v = tempList[i].displayName
 					info = v
 					infos.append((setting.displayName, info))
 		d = {}
@@ -342,7 +301,7 @@ class SwitchVoiceProfilesManager(object):
 		synth = self.curSynth
 		synthDatas = {}
 		synthDatas[KEY_SynthName] = synth.name
-		d = deepCopy(config.conf[SCT_Speech])
+		d = config.conf[SCT_Speech].dict()
 		for key in config.conf[SCT_Speech]:
 			val = config.conf[SCT_Speech][key]
 			if type(val) == config.AggregatedSection\
@@ -372,7 +331,7 @@ class SwitchVoiceProfilesManager(object):
 		synth = self.curSynth
 		conf[KEY_SynthName] = synth.name
 		# save only current synth config
-		d = deepCopy(config.conf[SCT_Speech])
+		d = config.conf[SCT_Speech].dict()
 		for key in config.conf[SCT_Speech].copy():
 			val = config.conf[SCT_Speech][key]
 			if type(val) == config.AggregatedSection\
@@ -410,8 +369,7 @@ class SwitchVoiceProfilesManager(object):
 	def getVoiceProfile(self, selector):
 		if not self.isSet(selector):
 			return {}
-		return deepCopy(
-			config.conf[self.addonName][SCT_VoiceProfileSwitching][selector])
+		return config.conf[self.addonName][SCT_VoiceProfileSwitching][selector].dict()
 
 	def getUpdatedConfig(self):
 		conf = config.conf
@@ -420,7 +378,7 @@ class SwitchVoiceProfilesManager(object):
 			return conf[self.addonName][SCT_VoiceProfileSwitching]._getUpdateSection()
 
 	def getUseNormalConfigurationSelectorsFlag(self):
-		conf = deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
+		conf = config.conf[self.addonName][SCT_VoiceProfileSwitching].dict()
 		if KEY_UseNormalConfigurationSelectors in conf:
 			return conf[KEY_UseNormalConfigurationSelectors] in [True, str(True)]
 		# by default
@@ -432,7 +390,7 @@ class SwitchVoiceProfilesManager(object):
 		sct._cache.clear()
 
 	def getVoiceProfileName(self, selector):
-		conf = deepCopy(config.conf[self.addonName][SCT_VoiceProfileSwitching])
+		conf = config.conf[self.addonName][SCT_VoiceProfileSwitching].dict()
 		return conf[selector][KEY_VoiceProfileName]
 
 	def getSynthInformations(self, selector=None):
@@ -502,9 +460,13 @@ class SwitchVoiceProfilesManager(object):
 		return textList
 
 
-class SelectorsManagementDialog (wx.Dialog):
+class SelectorsManagementDialog (
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	shouldSuspendConfigProfileTriggers = True
 	_instance = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr17-1")
 	title = None
 
 	def __new__(cls, *args, **kwargs):
@@ -570,14 +532,9 @@ class SelectorsManagementDialog (wx.Dialog):
 				cur = getattr(synth, setting.name)
 				tempList = list(getattr(
 					synth, "available%ss" % setting.name.capitalize()).values())
-				try:
-					# for nvda >= 2019.3
-					i = [x.id for x in tempList].index(cur)
-					return tempList[i].displayName
-				except:  # noqa:E722
-					i = [x.ID for x in tempList].index(cur)
-					return tempList[i].name
-			except:  # noqa:E722
+				i = [x.id for x in tempList].index(cur)
+				return tempList[i].displayName
+			except Exception:
 				return ""
 		synth = getSynth()
 		voice = ""
@@ -829,7 +786,11 @@ class SelectorsManagementDialog (wx.Dialog):
 		gui.mainFrame.postPopup()
 
 
-class ModifyVoiceProfileDialog(wx.Dialog):
+class ModifyVoiceProfileDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
+	# help in the user manual.
+	helpObj = getHelpObj("hdr17-1")
 	# Translators: This is the title of the modify voice profile dialog.
 	title = _("Modify voice profile ")
 
@@ -881,9 +842,13 @@ class ModifyVoiceProfileDialog(wx.Dialog):
 		evt.Skip()
 
 
-class AssociateVoiceProfileDialog(wx.Dialog):
+class AssociateVoiceProfileDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	# Translators: This is the title of the Associate voice profile dialog.
 	title = _("Voice profile association")
+	# help in the user manual.
+	helpObj = getHelpObj("hdr17-1")
 
 	def __init__(self, parent, selector):
 		super(AssociateVoiceProfileDialog, self).__init__(parent, title=self.title)
@@ -925,24 +890,15 @@ class AssociateVoiceProfileDialog(wx.Dialog):
 			attr = "available%ss" % id.capitalize()
 			try:
 				tempList = list(getattr(synth, attr).values())
-				try:
-					# for nvda >= 2019.3
-					i = [x.id for x in tempList].index(getattr(synth, id))
-					return tempList[i].displayName
-				except:  # noqa:E722
-					i = [x.ID for x in tempList].index(getattr(synth, id))
-					return tempList[i].name
-			except:  # noqa:E722
+				i = [x.id for x in tempList].index(getattr(synth, id))
+				return tempList[i].displayName
+			except Exception:
 				return ""
 		synth = self.parent.switchManager.curSynth
 		voice = ""
 		variant = ""
 		for s in synth.supportedSettings:
-			try:
-				# for nvda version upper 2019.1.1
-				id = s.id
-			except:  # noqa:E722
-				id = s.name
+			id = s.id
 			if id == "voice":
 				voice = getCurrentSettingName(synth, id)
 			elif id == "variant":

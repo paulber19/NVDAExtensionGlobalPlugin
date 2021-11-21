@@ -15,12 +15,14 @@ import gui
 from gui import guiHelper
 import core
 import config
-from api import copyToClip
 from . import symbols
+from api import copyToClip
 from ..utils.NVDAStrings import NVDAString
-from ..utils import speakLater, isOpened, makeAddonWindowTitle
+from ..utils import speakLater, isOpened, makeAddonWindowTitle, getHelpObj
+from ..utils import contextHelpEx
 
 addonHandler.initTranslation()
+
 
 _lastUsedSymbols = []
 
@@ -29,10 +31,14 @@ def SendKey(keys):
 	KeyboardInputGesture.fromName(keys).send()
 
 
-class complexSymbolsDialog(wx.Dialog):
+class complexSymbolsDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	shouldSuspendConfigProfileTriggers = True
 	_instance = None
 	title = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr3-1")
 
 	def __new__(cls, *args, **kwargs):
 		if complexSymbolsDialog._instance is not None:
@@ -188,14 +194,14 @@ class complexSymbolsDialog(wx.Dialog):
 			ui.message(msg)
 			time.sleep(2.0)
 			core.callLater(200, SendKey, "Control+v")
-		from ..settings import _addonConfigManager
-		_addonConfigManager.updateLastSymbolsList(symbolDescription, symbol)
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		_NVDAConfigManager.updateLastSymbolsList(symbolDescription, symbol)
 		self.Close()
 
 	def onCopyButton(self, event):
 		index = self.symbolsListBox.GetSelection()
 		if index == -1:
-			# Translators: This is a message announced  in complex symbols dialog.
+			# Translators: This is a message announced in complex symbols dialog.
 			speakLater(300, _("No symbol selected"))
 			return
 		symbol = self.complexSymbolsList[index]
@@ -211,8 +217,8 @@ class complexSymbolsDialog(wx.Dialog):
 			msg = _("{0} copied").format(self.symbolDescriptionList[index])
 		ui.message(msg)
 		time.sleep(2.0)
-		from ..settings import _addonConfigManager
-		_addonConfigManager .updateLastSymbolsList(symbolDescription, symbol)
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		_NVDAConfigManager .updateLastSymbolsList(symbolDescription, symbol)
 		self.Close()
 
 	def onManageSymbolsButton(self, evt):
@@ -252,10 +258,14 @@ class complexSymbolsDialog(wx.Dialog):
 		gui.mainFrame.postPopup()
 
 
-class ManageSymbolsDialog(wx.Dialog):
+class ManageSymbolsDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	shouldSuspendConfigProfileTriggers = True
 	# Translators: This is the title of Manage Symbols Dialog window.
 	title = _("User symbols manager")
+	# help in the user manual.
+	helpObj = getHelpObj("hdr3-1")
 
 	def __init__(self, parent):
 		super(ManageSymbolsDialog, self).__init__(
@@ -493,7 +503,7 @@ class ManageSymbolsDialog(wx.Dialog):
 				core.callLater(
 					300,
 					ui.message,
-					# Translators:  message announced in Manage Symbols Dialog.
+					# Translators: message announced in Manage Symbols Dialog.
 					_(""""%s" category already exists""") % categoryName)
 			else:
 				self.userComplexSymbols[categoryName] = {}
@@ -544,10 +554,14 @@ class ManageSymbolsDialog(wx.Dialog):
 		self.Close()
 
 
-class AddSymbolDialog(wx.Dialog):
+class AddSymbolDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	shouldSuspendConfigProfileTriggers = True
 	# Translators: This is the title of the add symbol dialog.
 	title = _("Adding Symbol in %s category")
+	# help id in the user manual.
+	helpObj = getHelpObj("hdr3-1")
 
 	def __init__(self, parent, categoryName):
 		super(AddSymbolDialog, self).__init__(
@@ -572,10 +586,14 @@ class AddSymbolDialog(wx.Dialog):
 		self.CentreOnScreen()
 
 
-class LastUsedComplexSymbolsDialog(wx.Dialog):
+class LastUsedComplexSymbolsDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	shouldSuspendConfigProfileTriggers = True
 	_instance = None
 	title = None
+	# help id in the user manual.
+	helpObj = getHelpObj("hdr3-2")
 
 	def __new__(cls, *args, **kwargs):
 		if LastUsedComplexSymbolsDialog._instance is not None:
@@ -695,16 +713,16 @@ class LastUsedComplexSymbolsDialog(wx.Dialog):
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
 			wx.YES | wx.NO) == wx.YES:
-			from ..settings import _addonConfigManager
-			_addonConfigManager.cleanLastUsedSymbolsList()
+			from ..settings.nvdaConfig import _NVDAConfigManager
+			_NVDAConfigManager.cleanLastUsedSymbolsList()
 		self.Close()
 
 	@classmethod
 	def run(cls):
 		if isOpened(cls):
 			return
-		from ..settings import _addonConfigManager
-		lastUsedSymbols = _addonConfigManager.getLastUsedSymbols()
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		lastUsedSymbols = _NVDAConfigManager.getLastUsedSymbols()
 		if len(lastUsedSymbols) == 0:
 			# Translators: message to the user when there is no used symbol recorded.
 			ui.message(_("There is no symbol recorded"))

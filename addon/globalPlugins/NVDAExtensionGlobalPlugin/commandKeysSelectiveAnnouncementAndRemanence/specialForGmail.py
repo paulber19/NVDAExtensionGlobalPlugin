@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\specialForGmail.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2019 - 2020 paulber19
+# Copyright (C) 2019 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,7 +8,16 @@ import keyboardHandler
 import queueHandler
 import tones
 import wx
-import controlTypes
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import Role
+	ROLE_EDITABLETEXT = Role.EDITABLETEXT
+	from controlTypes.state import State
+	STATE_EDITABLE = State.EDITABLE
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import STATE_EDITABLE
+except AttributeError:
+	from controlTypes import ROLE_EDITABLETEXT
 import api
 import winInputHook
 from ..settings import toggleRemanenceForGmailAdvancedOption
@@ -63,11 +72,11 @@ def manageRemanenceForGmail(vkCode, scanCode, extended, injected):
 	try:
 		obj = api.getFocusObject()
 		ti = obj.treeInterceptor
-	except:  # noqa:E722
+	except Exception:
 		ti = None
 	if (
-		obj.role == controlTypes.ROLE_EDITABLETEXT
-		or controlTypes.STATE_EDITABLE in obj.states
+		obj.role == ROLE_EDITABLETEXT
+		or STATE_EDITABLE in obj.states
 		or ti is None
 		or not ti.passThrough):
 		return False

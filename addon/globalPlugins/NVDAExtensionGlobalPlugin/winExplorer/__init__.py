@@ -6,8 +6,24 @@
 
 import addonHandler
 import ui
-import speech
-import controlTypes
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import Role
+	ROLE_TABLEROW = Role.TABLEROW
+	ROLE_TREEVIEWITEM = Role.TREEVIEWITEM
+	ROLE_TREEVIEW = Role.TREEVIEW,
+	ROLE_LIST = Role.LIST
+	ROLE_LISTITEM = Role.LISTITEM
+	ROLE_DOCUMENT = Role.DOCUMENT
+	ROLE_UNKNOWN = Role.UNKNOWN
+	from controlTypes.state import State
+	STATE_INVISIBLE = State.INVISIBLE
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import (
+		ROLE_TABLEROW, ROLE_TREEVIEWITEM,
+		ROLE_TREEVIEW, ROLE_LIST, ROLE_LISTITEM,
+		ROLE_DOCUMENT, ROLE_UNKNOWN,
+		STATE_INVISIBLE)
 import api
 import queueHandler
 import itertools
@@ -39,6 +55,7 @@ def isRunning():
 	_running = False
 	return ret
 
+
 def generateObjectSubtreeGetObject(obj, indexGen, th):
 	global _running
 	index = next(indexGen)
@@ -49,7 +66,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 	try:
 		# childCount = len(obj.children)
 		childCount = obj.childCount
-	except:  # noqa:E722
+	except Exception:
 		childCount = 0
 	for i in range(childCount):
 		_running = True
@@ -57,20 +74,20 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			child = obj.getChild(i)
 			if child is None:
 				continue
-		except:  # noqa:E722
+		except Exception:
 			continue
 		role = child.role
-		invisible = controlTypes.STATE_INVISIBLE in child.states
+		invisible = STATE_INVISIBLE in child.states
 		try:
 			childParent = child.parent
 			try:
 				parentChildCount = childParent.childCount
-			except:  # noqa:E722
+			except Exception:
 				parentChildCount = 0
-		except:  # noqa:E722
+		except Exception:
 			childParent = None
 			parentChildCount = 0
-		if role == controlTypes.ROLE_TABLEROW:
+		if role == ROLE_TABLEROW:
 			if childParent and parentChildCount > 500:
 				break
 			if invisible:
@@ -80,10 +97,10 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			listCount = 0
 			if rowCount > 40:
 				break
-		if role == controlTypes.ROLE_TREEVIEWITEM:
+		if role == ROLE_TREEVIEWITEM:
 			if childParent and (
 				parentChildCount > 500
-				or childParent.role not in [controlTypes.ROLE_TREEVIEW, controlTypes.ROLE_LIST]  # noqa:E501
+				or childParent.role not in [ROLE_TREEVIEW, ROLE_LIST]  # noqa:E501
 				):
 				break
 			if invisible:
@@ -93,7 +110,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			listCount = 0
 			if treeCount > 40:
 				break
-		if role == controlTypes.ROLE_LISTITEM:
+		if role == ROLE_LISTITEM:
 			if childParent and parentChildCount > 500:
 				break
 			if invisible:
@@ -104,7 +121,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			if listCount > 40:
 				break
 
-		if role in [controlTypes.ROLE_DOCUMENT, ]:
+		if role in [ROLE_DOCUMENT, ]:
 			continue
 		childGetObject = generateObjectSubtreeGetObject(child, indexGen, th)
 		for r in childGetObject:
@@ -132,8 +149,8 @@ def getObjectsHelper_generator(oParent):
 		try:
 			o, lastSentIndex = next(getObjectGen)
 			# Consider only objects that are visible on screen and with known role
-			if o.role != controlTypes.ROLE_UNKNOWN\
-				and controlTypes.STATE_INVISIBLE not in o.states:
+			if o.role != ROLE_UNKNOWN\
+				and STATE_INVISIBLE not in o.states:
 				objectList.append(o)
 		except StopIteration:
 			break

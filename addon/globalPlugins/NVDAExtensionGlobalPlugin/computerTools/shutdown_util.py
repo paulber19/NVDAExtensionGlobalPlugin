@@ -79,7 +79,7 @@ def suspend(hibernate=False):
 		warnings.warn(_("Hibernate isn't available. So, sleep mode is activated."))
 	try:
 		ctypes.windll.powrprof.SetSuspendState(not hibernate, True, False)
-	except:  # noqa:E722
+	except Exception:
 		# True=> Standby; False=> Hibernate
 		# https://msdn.microsoft.com/pt-br/library/windows/desktop/aa373206(v=vs.85).aspx
 		# says the second parameter has no effect.

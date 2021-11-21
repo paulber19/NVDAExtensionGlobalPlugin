@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-pon
-# Copyright (C) 2016 -2021 paulber19
+# Copyright (C) 2016 -2020 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -15,7 +15,8 @@ import nvwave
 import threading
 from ..settings import _addonConfigManager
 from ..utils.NVDAStrings import NVDAString
-from ..utils import isInteger, speakLater, isOpened, makeAddonWindowTitle
+from ..utils import isInteger, speakLater, isOpened, makeAddonWindowTitle, getHelpObj
+from ..utils import contextHelpEx
 
 addonHandler.initTranslation()
 
@@ -96,9 +97,13 @@ class MinuteTimer(object):
 			self.speakAnnounceTimer = None
 
 
-class MinuteTimerLaunchDialog(wx.Dialog):
+class MinuteTimerLaunchDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
 	title = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr14")
 
 	def __new__(cls, *args, **kwargs):
 		if MinuteTimerLaunchDialog._instance is not None:
@@ -173,7 +178,7 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 		try:
 			with RingOptionsDialog(self) as d:
 				d.ShowModal()
-		except:  # noqa:E722
+		except Exception:
 			pass
 
 	def validate(self):
@@ -221,9 +226,13 @@ class MinuteTimerLaunchDialog(wx.Dialog):
 		gui.mainFrame.postPopup()
 
 
-class RingOptionsDialog(wx.Dialog):
+class RingOptionsDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	# Translators: this i the title of ring Options dialog.
 	title = _("Ring options")
+	# help in the user manual.
+	helpObj = getHelpObj("hdr14")
 
 	def __init__(self, parent):
 		super(RingOptionsDialog, self).__init__(parent, title=self.title)
@@ -274,9 +283,13 @@ class RingOptionsDialog(wx.Dialog):
 		evt.Skip()
 
 
-class CurrentMinuteTimerDialog(wx.Dialog):
+class CurrentMinuteTimerDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
 	title = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr14")
 
 	def __new__(cls, *args, **kwargs):
 		if CurrentMinuteTimerDialog._instance is not None:
