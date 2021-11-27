@@ -87,5 +87,9 @@
 * скрипт для быстрого перезапуска NVDA.
 
 
+<<<<<<< HEAD
 [1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.1.nvda-addon
+=======
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.2.nvda-addon
+>>>>>>> 138e3684811df853cbf4f66510f65ae77c5d3670
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

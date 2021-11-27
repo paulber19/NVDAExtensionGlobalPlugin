@@ -11,17 +11,106 @@ import speech
 import time
 import api
 import wx
-import controlTypes
 import gui
+from ..utils import contextHelpEx
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import _roleLabels as roleLabels
+	from controlTypes.role import Role
+	ROLE_EDITABLETEXT = Role.EDITABLETEXT
+	from controlTypes.state import _stateLabels as stateLabels
+	from controlTypes.state import State
+	STATE_PRESSED = State.PRESSED
+	STATE_CHECKED = State.CHECKED
+	STATE_HALFCHECKED = State.HALFCHECKED
+	STATE_READONLY = State.READONLY
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import (
+		roleLabels, stateLabels,
+		ROLE_EDITABLETEXT,
+		STATE_PRESSED, STATE_CHECKED, STATE_HALFCHECKED,
+		STATE_READONLY)
 import core
-from ..utils import PutWindowOnForeground,  mouseClick, makeAddonWindowTitle
+from ..utils import PutWindowOnForeground,  mouseClick, makeAddonWindowTitle, getHelpObj
 from ..utils import getSpeechMode, setSpeechMode, setSpeechMode_off
 from ..utils.NVDAStrings import NVDAString
 addonHandler.initTranslation()
 
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import Role
+	_rolesByType = {
+		"button":  (
+			Role.BUTTON, Role.SPINBUTTON,
+			Role.DROPDOWNBUTTON, Role.RADIOBUTTON,
+			Role.TOGGLEBUTTON, Role.MENUBUTTON,
+			Role.TREEVIEWBUTTON),
+		"checkBox":  (Role.CHECKBOX,),
+		"edit": (Role.EDITABLETEXT, Role.PASSWORDEDIT,),
+		"text": (Role.STATICTEXT, Role.TEXTFRAME,),
+		"list": (Role.LIST, Role.LISTITEM),
+		"comboBox": (Role.COMBOBOX,),
+		"slider":  (Role.SLIDER,),
+		"link": (Role.LINK,),
+		"table": (
+			Role.TABLE, Role.TABLECELL,
+			Role.TABLEROW),
+		"menu": (
+			Role.MENU, Role.MENUITEM,
+			Role.RADIOMENUITEM, Role.CHECKMENUITEM,
+			Role.MENUBAR, Role.POPUPMENU,
+			Role.TEAROFFMENU),
+		"container": (
+			Role.APPLICATION, Role.DESKTOPPANE,
+			Role.DIALOG, Role.DIRECTORYPANE,
+			Role.FRAME, Role.GLASSPANE,
+			Role.OPTIONPANE, Role.PANE,
+			Role.PANEL, Role.TOOLBAR,
+			Role.WINDOW),
+		"treeView": (Role.TREEVIEW, Role.TREEVIEWITEM),
+		"tab": (Role.TAB,)
+		}
+except (ModuleNotFoundError, AttributeError):
+	import controlTypes
+	_rolesByType = {
+		"button":  (
+			controlTypes.ROLE_BUTTON, controlTypes.ROLE_SPINBUTTON,
+			controlTypes.ROLE_DROPDOWNBUTTON, controlTypes.ROLE_RADIOBUTTON,
+			controlTypes.ROLE_TOGGLEBUTTON, controlTypes.ROLE_MENUBUTTON,
+			controlTypes.ROLE_TREEVIEWBUTTON),
+		"checkBox":  (controlTypes.ROLE_CHECKBOX,),
+		"edit": (controlTypes.ROLE_EDITABLETEXT, controlTypes.ROLE_PASSWORDEDIT,),
+		"text": (controlTypes.ROLE_STATICTEXT, controlTypes.ROLE_TEXTFRAME,),
+		"list": (controlTypes.ROLE_LIST, controlTypes.ROLE_LISTITEM),
+		"comboBox": (controlTypes.ROLE_COMBOBOX,),
+		"slider":  (controlTypes.ROLE_SLIDER,),
+		"link": (controlTypes.ROLE_LINK,),
+		"table": (
+			controlTypes.ROLE_TABLE, controlTypes.ROLE_TABLECELL,
+			controlTypes.ROLE_TABLEROW),
+		"menu": (
+			controlTypes.ROLE_MENU, controlTypes.ROLE_MENUITEM,
+			controlTypes.ROLE_RADIOMENUITEM, controlTypes.ROLE_CHECKMENUITEM,
+			controlTypes.ROLE_MENUBAR, controlTypes.ROLE_POPUPMENU,
+			controlTypes.ROLE_TEAROFFMENU),
+		"container": (
+			controlTypes.ROLE_APPLICATION, controlTypes.ROLE_DESKTOPPANE,
+			controlTypes.ROLE_DIALOG, controlTypes.ROLE_DIRECTORYPANE,
+			controlTypes.ROLE_FRAME, controlTypes.ROLE_GLASSPANE,
+			controlTypes.ROLE_OPTIONPANE, controlTypes.ROLE_PANE,
+			controlTypes.ROLE_PANEL, controlTypes.ROLE_TOOLBAR,
+			controlTypes.ROLE_WINDOW),
+		"treeView": (controlTypes.ROLE_TREEVIEW, controlTypes.ROLE_TREEVIEWITEM),
+		"tab": (controlTypes.ROLE_TAB,)
+		}
 
-class ElementListDialog(wx.Dialog):
+
+class ElementListDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr16")
 	_timer = None
 	title = None
 	delayTimer = None
@@ -70,38 +159,6 @@ class ElementListDialog(wx.Dialog):
 		# in the Element List Dialog.
 		("all", _("All"))
 		)
-
-	_rolesByType = {
-		"button":  (
-			controlTypes.ROLE_BUTTON, controlTypes.ROLE_SPINBUTTON,
-			controlTypes.ROLE_DROPDOWNBUTTON, controlTypes.ROLE_RADIOBUTTON,
-			controlTypes.ROLE_TOGGLEBUTTON, controlTypes.ROLE_MENUBUTTON,
-			controlTypes.ROLE_TREEVIEWBUTTON),
-		"checkBox":  (controlTypes.ROLE_CHECKBOX,),
-		"edit": (controlTypes.ROLE_EDITABLETEXT, controlTypes.ROLE_PASSWORDEDIT,),
-		"text": (controlTypes.ROLE_STATICTEXT, controlTypes.ROLE_TEXTFRAME,),
-		"list": (controlTypes.ROLE_LIST, controlTypes.ROLE_LISTITEM),
-		"comboBox": (controlTypes.ROLE_COMBOBOX,),
-		"slider":  (controlTypes.ROLE_SLIDER,),
-		"link": (controlTypes.ROLE_LINK,),
-		"table": (
-			controlTypes.ROLE_TABLE, controlTypes.ROLE_TABLECELL,
-			controlTypes.ROLE_TABLEROW),
-		"menu": (
-			controlTypes.ROLE_MENU, controlTypes.ROLE_MENUITEM,
-			controlTypes.ROLE_RADIOMENUITEM, controlTypes.ROLE_CHECKMENUITEM,
-			controlTypes.ROLE_MENUBAR, controlTypes.ROLE_POPUPMENU,
-			controlTypes.ROLE_TEAROFFMENU),
-		"container": (
-			controlTypes.ROLE_APPLICATION, controlTypes.ROLE_DESKTOPPANE,
-			controlTypes.ROLE_DIALOG, controlTypes.ROLE_DIRECTORYPANE,
-			controlTypes.ROLE_FRAME, controlTypes.ROLE_GLASSPANE,
-			controlTypes.ROLE_OPTIONPANE, controlTypes.ROLE_PANE,
-			controlTypes.ROLE_PANEL, controlTypes.ROLE_TOOLBAR,
-			controlTypes.ROLE_WINDOW),
-		"treeView": (controlTypes.ROLE_TREEVIEW, controlTypes.ROLE_TREEVIEWITEM),
-		"tab": (controlTypes.ROLE_TAB,)
-		}
 
 	def __new__(cls, *args, **kwargs):
 		if ElementListDialog._instance is not None:
@@ -234,7 +291,7 @@ class ElementListDialog(wx.Dialog):
 			return False
 		curIndex = self.objectListBox .GetSelection()
 		index = None
-		for i in  range(curIndex+1, self.objectListBox .Count):
+		for i in range(curIndex + 1, self.objectListBox .Count):
 			name = self.objectListBox .GetString(i)
 			if name.lower().startswith(self.lastTypedKeys):
 				index = i
@@ -251,7 +308,7 @@ class ElementListDialog(wx.Dialog):
 		return False
 
 	def manageKeyInput(self, keyCode):
-		curTime = time.time_ns() // 1_000_000 
+		curTime = time.time_ns() // 1_000_000
 		if not hasattr(self, "lastKeyDownTime"):
 			self.lastKeyDownTime = 0
 			self.lastTypedKeys = ""
@@ -266,18 +323,25 @@ class ElementListDialog(wx.Dialog):
 			self.lastTypedKeys = key
 			return False
 		self.lastTypedKeys += key
-		if len(self.lastTypedKeys) >1:
+		if len(self.lastTypedKeys) > 1:
 			# check if we are already on object name starting with typed keys
-			curIndex = self.objectListBox .GetSelection()
 			if self.objectListBox .GetStringSelection().lower().startswith(self.lastTypedKeys):
 				# nothing to do. We are on the good item, just speak it
-				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, ui.message, self.objectListBox .GetStringSelection())
+				wx.CallLater(
+					50,
+					queueHandler.queueFunction,
+					queueHandler.eventQueue,
+					ui.message,
+					self.objectListBox .GetStringSelection())
 				return True
 			# set selection on next object  with name starting with lastTypedKeys
 			if self.selectNextObject():
-				wx.CallLater(50, queueHandler.queueFunction, 
-					queueHandler.eventQueue, ui.message, self.objectListBox .GetStringSelection())
+				wx.CallLater(
+					50,
+					queueHandler.queueFunction,
+					queueHandler.eventQueue,
+					ui.message,
+					self.objectListBox .GetStringSelection())
 			return True
 		return False
 
@@ -294,7 +358,6 @@ class ElementListDialog(wx.Dialog):
 			else:
 				wx.Window.Navigate(self.objectListBox, wx.NavigationKeyEvent.IsForward)
 			return
-		
 		if keyCode == 13:
 			if self.leftClickButton.Enable:
 				self.onLeftClickButton(None)
@@ -310,8 +373,7 @@ class ElementListDialog(wx.Dialog):
 			self.objectTypeHasChanged = True
 			self.updateObjectsListBox()
 			return
-		keyCodes = [ord(x[1][0]) for x in self.elementTypes]
-		if shiftDown and controlDown :
+		if shiftDown and controlDown:
 			if self.selectElementType(keyCode):
 				return
 			evt.Skip()
@@ -336,11 +398,11 @@ class ElementListDialog(wx.Dialog):
 		if name is None and hasattr(obj, "IAccessibleObject"):
 			try:
 				name = obj.IAccessibleObject.accName(0).strip()
-			except:  # noqa:E722
+			except Exception:
 				pass
 		try:
 			description = obj.description
-		except:  # noqa:E722
+		except Exception:
 			description = None
 		if name is not None and name == description:
 			description = None
@@ -363,19 +425,20 @@ class ElementListDialog(wx.Dialog):
 		if withRole:
 			name = "%s, %s" % (
 				name,
-				controlTypes.roleLabels.get(obj.role))
+				roleLabels.get(obj.role))
 		return name
+
 	def getStateLabel(self, obj):
 		states = obj.states
-		if controlTypes.STATE_PRESSED in states:
-			return controlTypes.stateLabels.get(controlTypes.STATE_PRESSED)
-		if controlTypes.STATE_CHECKED in states:
-			return controlTypes.stateLabels.get(controlTypes.STATE_CHECKED)
-		if controlTypes.STATE_HALFCHECKED in states:
-			return controlTypes.stateLabels.get(controlTypes.STATE_HALFCHECKED)
-		if obj.role in [controlTypes.ROLE_EDITABLETEXT, ]:
-			if controlTypes.STATE_READONLY in states:
-				return controlTypes.stateLabels.get(controlTypes.STATE_READONLY )
+		if STATE_PRESSED in states:
+			return stateLabels.get(STATE_PRESSED)
+		if STATE_CHECKED in states:
+			return stateLabels.get(STATE_CHECKED)
+		if STATE_HALFCHECKED in states:
+			return stateLabels.get(STATE_HALFCHECKED)
+		if obj.role in [ROLE_EDITABLETEXT, ]:
+			if STATE_READONLY in states:
+				return stateLabels.get(STATE_READONLY)
 
 	def getElementsForType(self, elementType):
 		labelAndObjList = []
@@ -383,7 +446,7 @@ class ElementListDialog(wx.Dialog):
 		for obj in self.allObjects:
 			role = obj.role
 			if elementType != "all":
-				roles = self._rolesByType[elementType]
+				roles = _rolesByType[elementType]
 				if role not in roles:
 					continue
 			withRole = (elementType == "all") or (len(roles) > 1)
@@ -393,7 +456,6 @@ class ElementListDialog(wx.Dialog):
 				if stateLabel:
 					label = "%s %s" % (label, stateLabel)
 				labelAndObjList.append((label, obj))
-		#return sorted(labelAndObjList, key=lambda a: a[0].encode("mbcs"))
 		return sorted(labelAndObjList, key=lambda a: a[0])
 
 	def sayNumberOfElements(self):

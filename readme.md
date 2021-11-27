@@ -7,7 +7,7 @@
 	* [developpement version][2]
 * Compatibility:
 	* minimum supported NVDA version: 2019.3
-	* last tested NVDA version: 2021.1
+	* last tested NVDA version: 2021.3
 
 
 Traductor (s): automatic translation from french language
@@ -42,7 +42,7 @@ some features can be enabled or disabled individually.
 
 *	NVDA logs tools:
 	* Opening the previous or current log,
-	* copy of current Log path to the clipboard,
+	* copy of the path of these in the clipboard.
 
 
 * history of voice speechs,
@@ -62,6 +62,10 @@ some features can be enabled or disabled individually.
 
 * Tools for development of add-on.
 * supplements regarding the date and time: copy date and time to clipboard, report time with seconds
+* user configurations management and NVDA restarting  with precise configuration,
+* text analyser,
+* announcement of the cursor position in the edit boxes,
+* temporary use of an audio output device without impacting the NVDA configuration.
 
 
 ## The options ##
@@ -84,8 +88,11 @@ some features can be enabled or disabled individually.
 
 * presentation formatting of the text in a dialog box,
 * sub-menus to explore the program folders or configuration,
-* script to quickly restart NVDA.
+* script to quickly restart NVDA,
+* script to emulate the "Applications" key,
+* script to close all open windows,
+* possibility of executing scripts in the "Input gestures" dialog (for versions of NVDA greater than 2020.3).
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-9.8.1.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.0.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

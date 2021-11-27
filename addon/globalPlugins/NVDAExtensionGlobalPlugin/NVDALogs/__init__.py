@@ -12,15 +12,20 @@ import ui
 import gui
 import queueHandler
 import os
-from logHandler import _getDefaultLogFilePath
-from ..utils import makeAddonWindowTitle
-
+import globalVars
+from ..utils import makeAddonWindowTitle, getHelpObj
+from ..utils.NVDAStrings import NVDAString
+from ..utils import contextHelpEx
 addonHandler.initTranslation()
 
 
-class NVDALogsManagementDialog (wx.Dialog):
+class NVDALogsManagementDialog (
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
 	title = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr9")
 
 	def __new__(cls, *args, **kwargs):
 		if NVDALogsManagementDialog ._instance is not None:
@@ -34,7 +39,12 @@ class NVDALogsManagementDialog (wx.Dialog):
 		# Translators: This is the title of the NVDA Logs Management Dialog .
 		dialogTitle = _("NVDA logs management")
 		title = NVDALogsManagementDialog .title = makeAddonWindowTitle(dialogTitle)
-		super(NVDALogsManagementDialog, self).__init__(parent, -1, title)
+		super(NVDALogsManagementDialog, self).__init__(
+			parent,
+			-1,
+			title,
+			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
+			)
 		self.doGui()
 
 	def doGui(self):
@@ -43,15 +53,20 @@ class NVDALogsManagementDialog (wx.Dialog):
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# Translators: This is a label of a button appearing
 		# on NVDA Logs Management Dialog .
-		openCurrentLogButton = bHelper.addButton(self, label=_("Open current &log"))
+		labelText = _("Open &current log")
+		openCurrentLogButton = bHelper.addButton(self, label=labelText)
 		# Translators: This is a label of a button appearing
 		# on NVDA Logs Management Dialog .
 		labelText = _("Open &previous log")
 		openOldLogButton = bHelper.addButton(self, label=labelText)
 		# Translators: This is a label of a button appearing
 		# on NVDA Logs Management Dialog .
-		copyCurrentLogPathButton = bHelper.addButton(
-			self, label=_("Copy log &path to clipboard"))
+		labelText = _("Copy current log file &path to clipboard")
+		copyCurrentLogPathButton = bHelper.addButton(self, label=labelText)
+		# Translators: This is a label of a button appearing
+		# on NVDA Logs Management Dialog .
+		labelText = _("Copy &old log file path to clipboard")
+		copyOldLogPathButton = bHelper.addButton(self, label=labelText)
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
 			gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
@@ -66,6 +81,7 @@ class NVDALogsManagementDialog (wx.Dialog):
 		openCurrentLogButton.Bind(wx.EVT_BUTTON, self.onOpenCurrentLogButton)
 		openOldLogButton.Bind(wx.EVT_BUTTON, self.onOpenOldLogButton)
 		copyCurrentLogPathButton.Bind(wx.EVT_BUTTON, self.onCopyCurrentLogPathButton)
+		copyOldLogPathButton.Bind(wx.EVT_BUTTON, self.onCopyOldLogPathButton)
 		closeButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
 		self.SetEscapeId(wx.ID_CLOSE)
 
@@ -74,9 +90,19 @@ class NVDALogsManagementDialog (wx.Dialog):
 		super(NVDALogsManagementDialog, self).Destroy()
 
 	def _openFile(self, logFile, openErrorMsg=""):
+		if logFile is None or not os.path.exists(logFile):
+			wx.CallAfter(
+				gui.messageBox,
+				# Translators: A message indicating that log cannot be loaded to LogViewer.
+				NVDAString("Log is unavailable"),
+				# Translators: The title of an error message dialog.
+				NVDAString("Error"),
+				wx.OK | wx.ICON_ERROR
+				)
+			return
 		try:
 			os.startfile(logFile)
-		except:  # noqa:E722
+		except Exception:
 			wx.CallAfter(
 				gui.messageBox,
 				errorMsg,
@@ -84,25 +110,50 @@ class NVDALogsManagementDialog (wx.Dialog):
 				wx.OK | wx.ICON_ERROR)
 
 	def onOpenCurrentLogButton(self, evt):
-		logFile = os.path.join(os.path.dirname(_getDefaultLogFilePath()), "nvda.log")
+		logFile = globalVars.appArgs.logFileName
 		openErrorMsg = _("Current log file cannot be opened")
 		self._openFile(logFile, openErrorMsg)
 		self.Close()
 
 	def onOpenOldLogButton(self, evt):
-		logFile = os.path.join(
-			os.path.dirname(_getDefaultLogFilePath()),
-			"nvda-old.log")
+		logFile = os.path.join(os.path.dirname(globalVars.appArgs.logFileName), "nvda-old.log")
 		openErrorMsg = _("Previous log file cannot be opened")
 		self._openFile(logFile, openErrorMsg)
 		self.Close()
 
 	def onCopyCurrentLogPathButton(self, evt):
-		logFile = os.path.join(os.path.dirname(_getDefaultLogFilePath()), "nvda.log")
+		logFile = globalVars.appArgs.logFileName
+		if logFile is None or not os.path.exists(logFile):
+			wx.CallAfter(
+				gui.messageBox,
+				# Translators: A message indicating that log cannot be loaded to LogViewer.
+				NVDAString("Log is unavailable"),
+				# Translators: The title of an error message dialog.
+				NVDAString("Error"),
+				wx.OK | wx.ICON_ERROR
+				)
+			return
 		if api.copyToClip(logFile):
 			ui.message(_("Current log file path copied to clipboard"))
 		else:
 			ui.message(_("Current log file path cannot be copied to clipboard"))
+
+	def onCopyOldLogPathButton(self, evt):
+		logFile = os.path.join(os.path.dirname(globalVars.appArgs.logFileName), "nvda-old.log")
+		if logFile is None or not os.path.exists(logFile):
+			wx.CallAfter(
+				gui.messageBox,
+				# Translators: A message indicating that log cannot be loaded to LogViewer.
+				NVDAString("Log is unavailable"),
+				# Translators: The title of an error message dialog.
+				NVDAString("Error"),
+				wx.OK | wx.ICON_ERROR
+				)
+			return
+		if api.copyToClip(logFile):
+			ui.message(_("old log file path copied to clipboard"))
+		else:
+			ui.message(_("old log file path cannot be copied to clipboard"))
 
 	@classmethod
 	def run(cls):

@@ -13,15 +13,19 @@ import core
 import queueHandler
 from ..settings import _addonConfigManager
 
-from ..utils import speakLater, makeAddonWindowTitle
-
+from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
+from ..utils import contextHelpEx
 addonHandler.initTranslation()
 
 
-class KeyboardKeyRenamingDialog(SettingsDialog):
+class KeyboardKeyRenamingDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	SettingsDialog):
 	# Translators: This is the label for the ModifyKeyLabels dialog.
 	title = _("Keyboard Keys's renaming")
 	taskTimer = None
+	# help id in the user manual.
+	helpObj = getHelpObj("hdr12")
 
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)

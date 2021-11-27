@@ -8,7 +8,21 @@ import addonHandler
 from ctypes import byref
 from comtypes import COMError
 from comtypes.automation import VARIANT
-import controlTypes
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import _roleLabels as roleLabels
+	from controlTypes.role import Role
+	ROLE_CHECKBOX = Role.CHECKBOX
+	from controlTypes.state import _stateLabels as stateLabels
+	from controlTypes.state import _negativeStateLabels as negativeStateLabels
+	from controlTypes.state import State
+	STATE_CHECKED = State.CHECKED
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import roleLabels
+	from controlTypes import stateLabels
+	from controlTypes import ROLE_CHECKBOX
+	from controlTypes import STATE_CHECKED
+
 import UIABrowseMode
 import UIAHandler
 from UIABrowseMode import UIABrowseModeDocument
@@ -30,19 +44,19 @@ class UIATextRangeQuickNavItemEx(UIABrowseMode .UIATextRangeQuickNavItem):
 		name = obj.name if obj.name else _("No label")
 		if (self.itemType == "edit"):
 			value = str("{name} {role} {value}") .format(
-				name=name, role=controlTypes.roleLabels[obj.role], value=value)
+				name=name, role=roleLabels[obj.role], value=value)
 		elif self.itemType == "checkBox":
-			if controlTypes.STATE_CHECKED in obj.states:
-				state = controlTypes.stateLabels[controlTypes.STATE_CHECKED]
+			if STATE_CHECKED in obj.states:
+				state = stateLabels[STATE_CHECKED]
 			else:
-				state = controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
+				state = negativeStateLabels[STATE_CHECKED]
 			value = str("{name} {state}") .format(name=name, state=state)
 		elif self.itemType == "formField":
-			if obj.role == controlTypes.ROLE_CHECKBOX:
-				if controlTypes.STATE_CHECKED in obj.states:
-					state = controlTypes.stateLabels[controlTypes.STATE_CHECKED]
+			if obj.role == ROLE_CHECKBOX:
+				if STATE_CHECKED in obj.states:
+					state = stateLabels[STATE_CHECKED]
 				else:
-					state = controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
+					state = negativeStateLabels[STATE_CHECKED]
 				value = str("{name} {state}") .format(name=name, state=state)
 		return value
 

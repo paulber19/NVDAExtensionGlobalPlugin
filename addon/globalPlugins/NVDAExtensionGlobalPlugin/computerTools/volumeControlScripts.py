@@ -92,64 +92,6 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setSpeakersVolumeLevelToPreviousLevel": ("kb:control+backspace", ID_VolumeControl),
 	}
 
-	_volumeControlScriptsToDocsAndCategory = {
-		# Translators: Input help mode message
-		# for set on main and NVDA volume command.
-		"setMainAndNVDAVolume": (_("Set on main and NVDA volume"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for toggle current focused application's volume command.
-		"toggleCurrentAppVolumeMute": (_("Toggle current focused application volume mute"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for increase volume of current focused application command.
-		"increaseFocusedAppVolume": (_("Increase volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for decrease volume of current focused application command.
-		"decreaseFocusedAppVolume": (_("Decrease volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for maximize volume of current focused application command.
-		"maximizeFocusedAppVolume": (_("Maximize volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for minimize volume of current focused application command.
-		"minimizeFocusedAppVolume": (_("Minimize volume of current focused application"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message for tools for add-on developpement dialog command.
-		# Translators: Input help mode message
-		# for increase volume of speakers command.
-		"increaseSpeakersVolume": (_("Increase volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for decrease volume of speakers command.
-		"decreaseSpeakersVolume": (_("Decrease volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for maximize volume of speakers command.
-		"maximizeSpeakersVolume": (_("Maximize volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for minimize volume of speakers command.
-		"minimizeSpeakersVolume": (_("Minimize volume of speakers"), SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo10Percent": (_setFocusedAppVolumeToMsg % 10, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo20Percent": (_setFocusedAppVolumeToMsg % 20, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo30Percent": (_setFocusedAppVolumeToMsg % 30, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo40Percent": (_setFocusedAppVolumeToMsg % 40, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo50Percent": (_setFocusedAppVolumeToMsg % 50, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo60Percent": (_setFocusedAppVolumeToMsg % 60, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo70Percent": (_setFocusedAppVolumeToMsg % 70, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo80Percent": (_setFocusedAppVolumeToMsg % 80, SCRCAT_VOLUME_CONTROL),
-		"setFocusedAppVolumeTo90Percent": (_setFocusedAppVolumeToMsg % 90, SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for setting back to previous level the volume of current focused application command.
-		"setFocusedAppVolumeToPreviousLevel": (_("Set the volume of current focused application to previous level"), SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo10": (_setSpeakersVolumeToMsg % 10, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo20": (_setSpeakersVolumeToMsg % 20, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo30": (_setSpeakersVolumeToMsg % 30, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo40": (_setSpeakersVolumeToMsg % 40, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo50": (_setSpeakersVolumeToMsg % 50, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo60": (_setSpeakersVolumeToMsg % 60, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo70": (_setSpeakersVolumeToMsg % 70, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo80": (_setSpeakersVolumeToMsg % 80, SCRCAT_VOLUME_CONTROL),
-		"setSpeakersVolumeLevelTo90": (_setSpeakersVolumeToMsg % 90, SCRCAT_VOLUME_CONTROL),
-		# Translators: Input help mode message
-		# for setting back to previous level the volume of speakers command.
-		"setSpeakersVolumeLevelToPreviousLevel": (_("Set the main volume to previous level"), SCRCAT_VOLUME_CONTROL),
-	}
-
 	def script_toggleCurrentAppVolumeMute(self, gesture):
 		focus = api.getFocusObject()
 		appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
@@ -158,7 +100,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 			return
 		try:
 			volumeControl.toggleProcessVolume(appName)
-		except:  # noqa:E722
+		except Exception:
 			ui.message(_("Not available on this operating's system"))
 
 	def script_setMainAndNVDAVolume(self, gesture):

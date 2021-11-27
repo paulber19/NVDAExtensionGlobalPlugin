@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\currentFolder\__init__
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 Daniel Poiraud , Paulber19
+# Copyright (C) 2016 - 2020 Daniel Poiraud , Paulber19
 # This file is covered by the GNU General Public License.
 
 import addonHandler

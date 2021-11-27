@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -12,14 +12,19 @@ import time
 import winUser
 import ctypes
 from ..utils.NVDAStrings import NVDAString
-from ..utils import isOpened, makeAddonWindowTitle
+from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from gui import guiHelper, mainFrame
+from ..utils import contextHelpEx
 
 addonHandler.initTranslation()
 
 
-class ListeNotification(wx.Dialog):
+class ListeNotification(
+	contextHelpEx.ContextHelpMixinEx,
+	wx.Dialog):
 	_instance = None
+	# help in the user manual.
+	helpObj = getHelpObj("hdr1-1")
 
 	def __new__(cls, *args, **kwargs):
 		if ListeNotification._instance is None:

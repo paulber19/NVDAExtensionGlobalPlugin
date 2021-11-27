@@ -1,13 +1,15 @@
 # -*- coding: UTF-8 -*-
 # installTasks.py
 # a part of NVDAExtensionGlobalPLugin add-on
-# Copyright (C) 2016 - 2021 Paulber19
+# Copyright (C) 2016 - 2020 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 from logHandler import log
 
-curConfigFileName = "NVDAExtensionGlobalPluginAddon.ini"
+
+_addonName = "NVDAExtensionGlobalPlugin"
+curConfigFileName = "%sAddon.ini" % _addonName
 
 
 def saveCurAddonConfigurationProfiles(addonName):
@@ -62,8 +64,8 @@ def onInstall():
 	addonHandler.initTranslation()
 	import gui
 	import wx
-	import shutil
 	import os
+	import shutil
 	import globalVars
 	import sys
 	curPath = os.path.dirname(__file__)
@@ -96,9 +98,15 @@ def onInstall():
 
 		os.remove(addonConfigFile)
 		if os.path.exists(addonConfigFile):
-			log.error("Error on deletion of NVDAExtensionGlobalPlugin addon settings file: %s" % addonConfigFile)  # noqa:E501
+			log.error("Error on deletion of addon settings file: %s" % addonConfigFile)  # noqa:E501
 	# in all cases, clean up all add-on configuration
 	deleteAddonProfilesConfig(addonName)
+
+def getUserConfigParentFolder():
+	import os
+	import globalVars
+	userConfigPath = globalVars.appArgs.configPath 
+	return os.path.split(userConfigPath)[0]
 
 
 def onUninstall():
@@ -118,6 +126,13 @@ def onUninstall():
 	if os.path.exists(addonConfigFile):
 		os.remove(addonConfigFile)
 		if os.path.exists(addonConfigFile):
-			log.error("Error on deletion of NVDAExtensionGlobalPlugin addon settings file: %s" % addonConfigFile)  # noqa:E501
+			log.error("Error on deletion of  addon settings file: %s" % addonConfigFile)  # noqa:E501
 		else:
 			log.info("Addon configuration deleted: %s" % addonConfigFile)
+	path = os.path.join(getUserConfigParentFolder(), "%s-userConfigs.ini" % addonName)
+	if os.path.exists(path):
+		os.remove(path)
+		if os.path.exists(path):
+			log.error("%s Error: userConfigs file cannot be deleted: %s" % (_addonName,path))  # noqa:E501
+		else:
+			log.info("%s-userConfigs.ini  file has been deleted: %s" % (_addonName,path))

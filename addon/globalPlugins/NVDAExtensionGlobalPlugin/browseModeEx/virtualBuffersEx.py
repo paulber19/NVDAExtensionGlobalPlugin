@@ -5,7 +5,16 @@
 # See the file COPYING for more details.
 
 import addonHandler
-import controlTypes
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import _roleLabels as roleLabels
+	from controlTypes.role import Role
+	ROLE_CHECKBOX = Role.CHECKBOX
+	from controlTypes.state import State
+	STATE_CHECKED = State.CHECKED
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import roleLabels, ROLE_CHECKBOX
+	from controlTypes import STATE_CHECKED
 import IAccessibleHandler
 import virtualBuffers
 import virtualBuffers.MSHTML
@@ -47,7 +56,7 @@ def _iterNodesByAttribsEx(
 			NVDAHelper.localLib.VBuf_findNodeByAttributes(
 				obj.VBufHandle, offset, direction, reqAttrs, regexp,
 				ctypes.byref(startOffset), ctypes.byref(endOffset), ctypes.byref(node))
-		except:  # noqa:E722
+		except Exception:
 			return
 		if not node:
 			return
@@ -165,33 +174,33 @@ class VirtualBufferQuickNavItemEx(virtualBuffers.VirtualBufferQuickNavItem):
 	def label(self):
 		try:
 			value = super(VirtualBufferQuickNavItemEx, self).label
-		except:  # noqa:E722
+		except Exception:
 			# to catch lookuperror
 			value = None
 
 		try:
 			attrs = self.textInfo._getControlFieldAttribs(
 				self.vbufFieldIdentifier[0], self.vbufFieldIdentifier[1])
-		except:  # noqa:E722
+		except Exception:
 			return self.getLabel(value)
 		role = attrs.get("role", "")
 		if (self.itemType == "edit"):
 			name = attrs.get("name", "")
 			return str("{name} {role} {value}").format(
-				name=self.getLabel(name), role=controlTypes.roleLabels[role], value=value)
+				name=self.getLabel(name), role=roleLabels[role], value=value)
 		if self.itemType == "checkBox":
 			states = attrs.get("states", "")
-			state = NVDAString("checked") if controlTypes.STATE_CHECKED in states\
+			state = NVDAString("checked") if STATE_CHECKED in states\
 				else NVDAString("not checked")
 			name = attrs.get("name", "")
 			return str("%s %s") % (self.getLabel(name), state)
 		if self.itemType in ["formField"]:
-			if role == controlTypes.ROLE_CHECKBOX:
+			if role == ROLE_CHECKBOX:
 				states = attrs.get("states", "")
-				state = NVDAString("checked") if controlTypes.STATE_CHECKED in states\
+				state = NVDAString("checked") if STATE_CHECKED in states\
 					else NVDAString("not checked")
 				name = attrs.get("name", "")
 				return str("{name} {role} {state}") .format(
-					name=name, role=controlTypes.roleLabels[role], state=state)
+					name=name, role=roleLabels[role], state=state)
 			return value
 		return self.getLabel(value)

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\volumeControl\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2017 - 2021 paulber19
+# Copyright (C) 2017 - 2020 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -35,7 +35,7 @@ try:
 	devices = AudioUtilities.GetSpeakers()
 	interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 	_volume = cast(interface, POINTER(IAudioEndpointVolume))
-except:  # noqa:E722
+except Exception:
 	# no supported
 	_volume = None
 	log.warning("AudioUtilities getSpeaker not supported on this system")
@@ -45,14 +45,14 @@ def toggleProcessVolume(processName):
 	""" Mutes or unmute process volume """
 	try:
 		sessions = AudioUtilities.GetAllSessions()
-	except:  # noqa:E722
+	except Exception:
 		# no supported
 		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return
 	for session in sessions:
 		try:
 			name = session.Process.name()
-		except:  # noqa:E722
+		except Exception:
 			continue
 		if name == processName:
 			volume = session.SimpleAudioVolume
@@ -98,14 +98,14 @@ def setSpeakerVolume(withMin=False):
 def getNVDAVolume():
 	try:
 		sessions = AudioUtilities.GetAllSessions()
-	except:  # noqa:E722
+	except Exception:
 		# no supported
 		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return False
 	for session in sessions:
 		try:
 			name = session.Process.name()
-		except:  # noqa:E722
+		except Exception:
 			continue
 		if name.lower() == "nvda.exe":
 			volume = session.SimpleAudioVolume
@@ -118,14 +118,14 @@ def setNVDAVolume(withMin=False):
 	from ..settings import _addonConfigManager
 	try:
 		sessions = AudioUtilities.GetAllSessions()
-	except:  # noqa:E722
+	except Exception:
 		# no supported
 		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return False
 	for session in sessions:
 		try:
 			name = session.Process.name()
-		except:  # noqa:E722
+		except Exception:
 			continue
 		if name.lower() == "nvda.exe":
 			volume = session.SimpleAudioVolume
@@ -156,7 +156,7 @@ def announceAppVolumeLevel(appVolumeLevel):
 		speakersVolume = volume.GetMasterVolumeLevelScalar()
 	if toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False):
 		level = int(appVolumeLevel*100)
-		# Translators: part of message  for announcement of volume level in percent.
+		# Translators: part of message for announcement of volume level in percent.
 		percentMsg = _("percent")
 		msg = "%s %s %s" % (volumeMsg, level, percentMsg)
 	else:
@@ -176,14 +176,14 @@ def changeFocusedAppVolume(appName=None, action="increase", value=None):
 	from ..settings import _addonConfigManager
 	try:
 		sessions = AudioUtilities.GetAllSessions()
-	except:  # noqa:E722
+	except Exception:
 		# no supported
 		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return
 	for session in sessions:
 		try:
 			name = session.Process.name()
-		except:  # noqa:E722
+		except Exception:
 			continue
 		if name.lower() == appName.lower():
 			volume = session.SimpleAudioVolume
@@ -216,7 +216,9 @@ def changeFocusedAppVolume(appName=None, action="increase", value=None):
 
 def changeSpeakersVolume(action="increase", value=None):
 	global _previousSpeakersVolumeLevel
-	from ..settings import _addonConfigManager, toggleReportVolumeChangeAdvancedOption  # noqa:E501
+	from ..settings import (
+		_addonConfigManager,
+		toggleReportVolumeChangeAdvancedOption)
 	if _volume is None:
 		return False
 	volume = _volume
@@ -238,7 +240,7 @@ def changeSpeakersVolume(action="increase", value=None):
 	elif action == "set":
 		minimumLevel = _addonConfigManager .getMinMasterVolumeLevel()
 		if value < minimumLevel:
-			# Translators: message to user  to indicate command reject.
+			# Translators: message to user to indicate command reject.
 			ui.message(_("Impossible, the volume level cannot be lower than the configured recovery threshold equal to %s") % minimumLevel)
 			return
 		level = float(value)/100
@@ -248,6 +250,7 @@ def changeSpeakersVolume(action="increase", value=None):
 	_previousSpeakersVolumeLevel = speakersVolume
 	msg = "%s %s" % (volumeMsg, int(round(level*100)))
 	volume.SetMasterVolumeLevelScalar(level, None)
+
 	if toggleReportVolumeChangeAdvancedOption(False):
 		ui.message(msg)
 		log.warning("Master volume is set to %s" % level)

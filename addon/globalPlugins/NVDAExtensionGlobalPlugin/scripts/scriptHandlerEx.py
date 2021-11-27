@@ -64,7 +64,7 @@ def myExecuteScript(script, gesture):
 		_lastScriptRef = scriptRef
 		_lastScriptTime = scriptTime
 		script(gesture)
-	except:  # noqa:E722
+	except Exception:
 		log.exception("error executing script: %s with gesture %r" % (
 			script, gesture.displayName))
 	finally:

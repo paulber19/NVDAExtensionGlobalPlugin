@@ -18,7 +18,7 @@ from .NVDAStrings import NVDAString
 import core
 try:
 	from urllib import urlopen
-except:  # noqa:E722
+except Exception:
 	from urllib.request import urlopen
 from updateCheck import UpdateDownloader
 import tempfile
@@ -130,7 +130,7 @@ class AddonUpdateDownloader(UpdateDownloader):
 	def _download(self, url):
 		try:
 			remote = urlopen(url)
-		except:  # noqa:E722
+		except Exception:
 			log.warning("Download: cannot open url: %s" % url)
 			raise RuntimeError("URL Download failed: %s url cannot be opened" % url)
 		if remote.code != 200:
@@ -174,7 +174,7 @@ class AddonUpdateDownloader(UpdateDownloader):
 				bundle = addonHandler.AddonBundle(self.destPath.decode("mbcs"))
 			except AttributeError:
 				bundle = addonHandler.AddonBundle(self.destPath)
-			except:  # noqa:E722
+			except Exception:
 				log.error(
 					"Error opening addon bundle from %s" % self.destPath, exc_info=True)
 				# Translators: The message displayed when an error occurs
@@ -222,7 +222,7 @@ class AddonUpdateDownloader(UpdateDownloader):
 				_("Please wait while the add-on is being updated."))
 			try:
 				gui.ExecAndPump(addonHandler.installAddonBundle, bundle)
-			except:  # noqa:E722
+			except Exception:
 				log.error(
 					"Error installing addon bundle from %s" % self.destPath,
 					exc_info=True)
@@ -415,7 +415,7 @@ class CheckForAddonUpdate(object):
 			file = updateInfosFile
 		try:
 			res = open(file, "r")
-		except:  # noqa:E722
+		except Exception:
 			log.warning("%s file cannot be opened " % file)
 			if not self.auto:
 				self.errorUpdateDialog()
@@ -425,7 +425,7 @@ class CheckForAddonUpdate(object):
 		if updateInfosFile is None:
 			try:
 				os.remove(file)
-			except:  # noqa:E722
+			except Exception:
 				log.warning("error: cannot remove %s file" % file)
 		if mod is None:
 			self.errorUpdateDialog()

@@ -10,16 +10,39 @@ import textInfos
 import speech
 import ui
 import time
-import controlTypes
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.role import Role
+	ROLE_DOCUMENT = Role.DOCUMENT
+	ROLE_EDITABLETEXT = Role.EDITABLETEXT
+	ROLE_TREEVIEWITEM = Role.TREEVIEWITEM
+	ROLE_LISTITEM = Role.LISTITEM
+	from controlTypes.state import State
+	STATE_READONLY = State.READONLY
+	STATE_EDITABLE = State.EDITABLE
+	STATE_MULTILINE = State.MULTILINE
+	STATE_SELECTED = State.SELECTED
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import (
+		ROLE_DOCUMENT, ROLE_EDITABLETEXT,
+		ROLE_TREEVIEWITEM, ROLE_LISTITEM,
+		STATE_READONLY, STATE_EDITABLE,
+		STATE_MULTILINE, STATE_SELECTED)
 from editableText import EditableText
 import braille
 import config
-from characterProcessing import SYMLVL_SOME
+try:
+	# for nvda version >= 2021.2
+	from characterProcessing import SymbolLevel
+	SYMLVL_SOME = SymbolLevel.SOME
+except ImportError:
+	from characterProcessing import SYMLVL_SOME
 from IAccessibleHandler import accNavigate
 from oleacc import *  # noqa:F403
 import UIAHandler
 from NVDAObjects.UIA import UIA
 import queueHandler
+import eventHandler
 import core
 import contentRecog.recogUi
 from ..utils.NVDAStrings import NVDAString
@@ -92,6 +115,39 @@ def getStatusBarText():
 		chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, str) and not chunk.isspace())  # noqa:E501
 
 
+# for delaying the report of position
+_reportPositionTimer = None
+
+
+def reportPosition(pos):
+	global _reportPositionTimer
+	if _reportPositionTimer:
+		_reportPositionTimer.Stop()
+	from ..settings.nvdaConfig import _NVDAConfigManager
+	if not _NVDAConfigManager.toggleReportCurrentCaretPositionOption(False):
+		return
+	info = pos.copy()
+	try:
+		if hasattr(info.bookmark, "_start"):
+			start = info.bookmark._start._startOffset
+		else:
+			start = info.bookmark.startOffset
+	except AttributeError:
+		return
+	lineInfo = info.copy()
+	lineInfo.collapse()
+	lineInfo.expand(textInfos.UNIT_LINE)
+	if hasattr(lineInfo.bookmark, "_start"):
+		lineStart = lineInfo.bookmark._start._startOffset
+	else:
+		lineStart = lineInfo.bookmark.startOffset
+	index = start - lineStart
+
+	def callback(index):
+		speech.speakMessage(str(index + 1))
+	_reportPositionTimer = wx.CallLater(500, callback, index)
+
+
 class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 	def _caretMovementScriptHelper(
 		self,
@@ -115,8 +171,8 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 		return
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
-			from ..settings import _addonConfigManager
-			symbolLevelOnWordCaretMovement = _addonConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
+			from ..settings.nvdaConfig import _NVDAConfigManager
+			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
 		super(RecogResultNVDAObjectEx, self)._caretMovementScriptHelper(
@@ -128,6 +184,9 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 			extraDetail,
 			handleSymbols)
 		config.conf["speech"]["symbolLevel"] = curLevel
+
+
+_taskDelay = None
 
 
 class EditableTextEx(EditableText):
@@ -176,9 +235,9 @@ class EditableTextEx(EditableText):
 		gesture.send()
 
 	def script_cutAndCopyToClipboard(self, gesture):
-		if controlTypes.STATE_READONLY in self.states or (
-			controlTypes.STATE_EDITABLE not in self.states
-			and controlTypes.STATE_MULTILINE not in self.states):
+		if STATE_READONLY in self.states or (
+			STATE_EDITABLE not in self.states
+			and STATE_MULTILINE not in self.states):
 			gesture.send()
 			return
 		info = self.getSelectionInfo()
@@ -192,9 +251,9 @@ class EditableTextEx(EditableText):
 
 	def script_pasteFromClipboard(self, gesture):
 		if (
-			controlTypes.STATE_READONLY in self.states or (
-			controlTypes.STATE_EDITABLE not in self.states
-			and not controlTypes.STATE_MULTILINE)):
+			STATE_READONLY in self.states or (
+			STATE_EDITABLE not in self.states
+			and not STATE_MULTILINE)):
 			gesture.send()
 			return
 		ui.message(_msgPaste)
@@ -204,9 +263,9 @@ class EditableTextEx(EditableText):
 
 	def script_undo(self, gesture):
 		if (
-			controlTypes.STATE_READONLY in self.states or (
-			controlTypes.STATE_EDITABLE not in self.states
-			and not controlTypes.STATE_MULTILINE)):
+			STATE_READONLY in self.states or (
+			STATE_EDITABLE not in self.states
+			and not STATE_MULTILINE)):
 			gesture.send()
 			return
 		ui.message(_msgUnDo)
@@ -221,20 +280,44 @@ class EditableTextEx(EditableText):
 		time.sleep(0.3)
 		try:
 			info = self.makeTextInfo(textInfos.POSITION_CARET)
-		except:  # noqa:E722
+		except Exception:
 			log.warning("not makeTextInfo")
 			return
 		self._caretScriptPostMovedHelper(textInfos.UNIT_WORD, gesture, info)
 		braille.handler.handleCaretMove(self)
 
+	def _caretScriptPostMovedHelper(self, speakUnit, gesture, info=None):
+		super(EditableTextEx, self)._caretScriptPostMovedHelper(speakUnit, gesture, info)
+		try:
+			info = self.makeTextInfo(textInfos.POSITION_CARET)
+		except Exception:
+			return
+		global _taskDelay
+
+		if _taskDelay:
+			_taskDelay.Stop()
+		from ..textAnalysis.textAnalyzer import analyzeText
+		_taskDelay = wx.CallLater(400, analyzeText, info, speakUnit)
+
 	def _caretMovementScriptHelper(self, gesture, unit):
+		try:
+			info = self.makeTextInfo(textInfos.POSITION_CARET)
+		except Exception:
+			gesture.send()
+			return
+		bookmark = info.bookmark
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
-			from ..settings import _addonConfigManager
-			symbolLevelOnWordCaretMovement = _addonConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
+			from ..settings.nvdaConfig import _NVDAConfigManager
+			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
-		super(EditableTextEx, self)._caretMovementScriptHelper(gesture, unit)
+		gesture.send()
+		caretMoved, newInfo = self._hasCaretMoved(bookmark)
+		if not caretMoved and self.shouldFireCaretMovementFailedEvents:
+			eventHandler.executeEvent("caretMovementFailed", self, gesture=gesture)
+		reportPosition(newInfo)
+		self._caretScriptPostMovedHelper(unit, gesture, newInfo)
 		config.conf["speech"]["symbolLevel"] = curLevel
 
 
@@ -268,7 +351,7 @@ class ClipboardCommandAnnouncement(object):
 		try:
 			o = obj.IAccessibleObject
 			id = obj.IAccessibleChildID
-		except:  # noqa:E722
+		except Exception:
 			log.warning("getSelectionCountByIA: error")
 			return -1
 		while o:
@@ -276,7 +359,7 @@ class ClipboardCommandAnnouncement(object):
 				count += 1
 			try:
 				(o, id) = accNavigate(o, id, NAVDIR_NEXT)
-			except:  # noqa:E722
+			except Exception:
 				o = None
 
 		o = obj.IAccessibleObject
@@ -284,7 +367,7 @@ class ClipboardCommandAnnouncement(object):
 		while o:
 			try:
 				(o, id) = accNavigate(o, id, NAVDIR_PREVIOUS)
-			except:  # noqa:E722
+			except Exception:
 				o = None
 			if o and o.accState(id) & STATE_SYSTEM_SELECTED:
 				count += 1
@@ -298,20 +381,20 @@ class ClipboardCommandAnnouncement(object):
 		count = 0
 		o = obj
 		while o:
-			if controlTypes.STATE_SELECTED in o.states:
+			if STATE_SELECTED in o.states:
 				count += 1
 			try:
 				o = o._get_next()
-			except:  # noqa:E722
+			except Exception:
 				o = None
 
 		o = obj
 		while o:
 			try:
 				o = o.previous
-				if controlTypes.STATE_SELECTED in o.states:
+				if STATE_SELECTED in o.states:
 					count += 1
-			except:  # noqa:E722
+			except Exception:
 				o = None
 		return count
 
@@ -319,12 +402,12 @@ class ClipboardCommandAnnouncement(object):
 		obj = api.getFocusObject()
 		o = obj
 		while o:
-			if controlTypes.STATE_SELECTED in o.states:
+			if STATE_SELECTED in o.states:
 				return True
 			o = o._get_next()
 		o = obj.previous
 		while o:
-			if controlTypes.STATE_SELECTED in o.states:
+			if STATE_SELECTED in o.states:
 				return True
 			o = o.previous
 		return False
@@ -363,7 +446,7 @@ class ClipboardCommandAnnouncement(object):
 		try:
 			msg = self.__changeSelectionGestures["+".join(
 				gesture.modifierNames) + "+"+gesture.mainKeyName]
-		except:  # noqa:E722
+		except Exception:
 			msg = None
 		if msg:
 			ui.message(msg)
@@ -391,7 +474,7 @@ _classNamesToCheck = [
 	"Edit", "RichEdit", "RichEdit20", "REComboBox20W", "RICHEDIT50W",
 	"Scintilla", "TScintilla", "AkelEditW", "AkelEditA", "_WwG", "_WwN", "_WwO",
 	"SALFRAME"]
-_rolesToCheck = [controlTypes.ROLE_DOCUMENT, controlTypes.ROLE_EDITABLETEXT]
+_rolesToCheck = [ROLE_DOCUMENT, ROLE_EDITABLETEXT]
 
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
@@ -402,5 +485,5 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	elif isInstall(ID_ClipboardCommandAnnouncement):
 		clsList.insert(0, ClipboardCommandAnnouncement)
 		obj.checkSelection = False
-		if obj.role in (controlTypes.ROLE_TREEVIEWITEM, controlTypes.ROLE_LISTITEM):
+		if obj.role in (ROLE_TREEVIEWITEM, ROLE_LISTITEM):
 			obj.checkSelection = True

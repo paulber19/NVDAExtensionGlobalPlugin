@@ -1,4 +1,4 @@
-ADDON_SUMMARY- Historial
+ ADDON_SUMMARY- Historial
 Autor: ADDON_AUTHOR_NAME
 
 
@@ -18,19 +18,62 @@ Descarga:
 Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
 
 
+Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este historial.
+
+Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
+
+
+
++ v10.0 (21/11/2021) +
+Nuevas características:
+- se añadió la funcionalidad "Analizador de texto".
+- se añadió la funcionalidad "Gestión de configuraciones del usuario y reinicio de NVDA con una configuración precisa".
+- uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA.
+- anuncio de la posición del cursor en los campos de edición.
+- reanudación de la funcionalidad "Apagado del ordenador" para:
+ - permite cancelar la solicitud de hibernar, apagar o reiniciar el ordenador antes de la expiración del temporizador.
+ - solicitar una confirmación durante una solicitud de hibernar, apagar o reiniciar el ordenador mediante gesto de entrada.
+- se añadió en el diálogo "Gestión de los registros de NVDA", un nuevo botón para copiar la ruta del registro anterior al portapapeles,
+- ayuda sensible al contexto utilizando la tecla "f1" en los cuadros de diálogos del complemento.
+- nuevo script para añadir el texto seleccionado al portapapeles (órden "x").
+- posibilidad de ejecutar scripts en el cuadro de diálogo "Gestos de Entrada" (para las versiones de NVDA superiores a la 2020.3).
+
+
+Cambios:
+- el submenú "Opciones" del complemento se dividió en dos submenús:
+ - submenú  "Opciones globales" (órden del intérprete "f1"),
+ - submenú "Opciones de perfil de configuración actual" (órden del intérprete "control+f1").
+- la copia de la fecha al portapapeles ahora se realiza utilizando la órden "d" del intérprete en lugar de "c". La órden "c" se ha asignado a la visualización del "Administrador de dispositivos de salida de audio temporal".
+
+
+Compatibilidad:
+- Compatibilidad con nvda 2021.2:
+ - Las constantes characterProcessing.SYMLVL_* han cambiado.
+ - controlTypes se ha dividido en varios submódulos.
+- abandono de versiones anteriores de NVDA 2019.3 y la eliminación del código puesto en marcha para estas versiones.
+
+
+Otros:
+- instalación del archivo symbols-xx.dic al apagar NVDA si se lleva a cabo un cambio de idioma.
+
+
++ v9.9 (21/09/2021) +
+corrección del mal funcionamiento de la funcionalidad "Anuncio 
+selectivo de teclas de órdenes".
+
 + v9.8.1 (08/07/2021) +
 Corección de fallo:
 - en modo exploración y con NVDA 2021.1, el desplazamiento en el párrafo no genera ningún error.
 
 
-+ v9.8 (22/06/2021) +
++ v9.8 (18/05/2021) +
 - compatibilidad con nvda 2021.1. Las versiones de NVDA anteriores a la versión 2019.3 ya no son soportadas.
 - eliminado código relativo a Python 2.7.
 - corrección ortográfica y gramatical de cadenas de caracteres en inglés.
 - presentación en braille de los anuncios de voz hechos para las órdenes de edición de estilo "copiar", "pegar", ...
 
 
-+ v9.7 (01/04/2021) +
++ v9.7 (25/03/2021) +
 - reanudación de todas las funcionalidades para enviar también el texto de anuncios sonoros a la pantalla braille.
 
 

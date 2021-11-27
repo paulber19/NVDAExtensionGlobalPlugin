@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 # onInstall.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2020 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
-# from logHandler import log
+from logHandler import log
 import os
 import sys
 import globalVars
@@ -25,14 +25,20 @@ userPath = os.path.abspath(os.path.join(globalVars.appArgs.configPath, ""))
 addonNewSymbolsPath = os.path.join(addonPath, "newSymbols")
 
 
-def getNewSymbolsFile(folder):
-	lang = curLang
+def getNewSymbolsFile(folder, lang=None):
+	if lang is None:
+		lang = curLang
 	if "_" in curLang:
 		lang = curLang.split("_")[0]
 	newSymbolsFileName = "symbols-" + lang + ".dic"
 	newSymbolsFileList = os.listdir(folder)
 	if newSymbolsFileName in newSymbolsFileList:
-		return newSymbolsFileName
+		if sys.version.startswith("3"):
+			# for python 3
+			return newSymbolsFileName
+		else:
+			# for python 2
+			return newSymbolsFileName.encode("utf-8")
 	return None
 
 
@@ -90,21 +96,29 @@ def mergeNewSymbolsWithUserSymbols(symbolsFile):
 		dest.write(line)
 	dest.write("\n# End of adding")
 	dest.close()
+	log.warning("symbols file%s has been wwritten"%userSymbolsFile)
 
 
-def installNewSymbols():
-	newSymbolsFile = getNewSymbolsFile(addonNewSymbolsPath)
+def installNewSymbols(lang=None):
+	newSymbolsFile = getNewSymbolsFile(addonNewSymbolsPath, lang)
 	if newSymbolsFile is None:
 		return
 	userSymbolsFileList = getSymbolsFilesList(userPath)
+	fileName = os.path.join(userPath, newSymbolsFile)
 	if newSymbolsFile not in userSymbolsFileList:
 		# create new symbol file in user folder
-		fileName = os.path.join(userPath, newSymbolsFile)
 		f = codecs.open(fileName, "w", "utf_8", errors="replace")
 		f.write("symbols:")
 		f.close()
 	mergeNewSymbolsWithUserSymbols(newSymbolsFile)
-
+	dest = codecs.open(fileName, "r", "utf_8", errors="replace")
+	count = 0
+	for line in dest:
+		count +=1
+	dest.close()
+	if count == 1:
+		# no symbol has been added, delete file.
+		os.remove(fileName)
 
 def checkWindowListAddonInstalled():
 	h = winUser.getForegroundWindow()

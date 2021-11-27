@@ -10,7 +10,16 @@ import scriptHandler
 import ui
 import speech
 import gui
-import controlTypes
+try:
+	# for nvda version >= 2021.2
+	from controlTypes.state import _stateLabels as stateLabels
+	from controlTypes.state import _negativeStateLabels as negativeStateLabels
+	from controlTypes.state import State
+	STATE_CHECKED = State.CHECKED
+except (ModuleNotFoundError, AttributeError):
+	from controlTypes import (
+		stateLabels, negativeStateLabels,
+		STATE_CHECKED)
 import inputCore
 import watchdog
 import queueHandler
@@ -28,13 +37,15 @@ import tones
 import core
 from inputCore import NoInputGestureAction
 from ..utils.NVDAStrings import NVDAString
-from ..utils import speakLater, makeAddonWindowTitle
+from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
 from ..settings import _addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption, toggleBeepAtRemanenceEndAdvancedOption, isInstall  # noqa:E501
 from ..settings.addonConfig import ID_KeyRemanence
 from ..utils.keyboard import getKeyboardKeys
 from keyboardHandler import KeyboardInputGesture
 from . import specialForGmail
+from ..utils import contextHelpEx
 addonHandler.initTranslation()
+_curAddon = addonHandler.getCodeAddon()
 
 _NVDA_InputManager = None
 _myInputManager = None
@@ -179,8 +190,7 @@ class MyInputManager (object):
 			# Translators: message to user to report keys remanence is off.
 			msg = _("Keys's remanence activation off")
 			specialForGmail.terminate()
-		curAddon = addonHandler.getCodeAddon()
-		addonSummary = curAddon.manifest['summary']
+		addonSummary = _curAddon.manifest['summary']
 		if msg is not None:
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
@@ -284,7 +294,7 @@ class MyInputManager (object):
 			self.executeKeyboardGesture(gesture, bypassRemanence=True)
 		except inputCore.NoInputGestureAction:
 			gesture.send()
-		except:  # noqa:E722
+		except Exception:
 			log.error("internal_keyDownEvent", exc_info=True)
 
 	def setNumpadNavigationMode(self, state):
@@ -389,7 +399,7 @@ class MyInputManager (object):
 			try:
 				if _NVDA_InputManager._captureFunc(gesture) is False:
 					return
-			except:  # noqa:E722
+			except Exception:
 				log.error("Error in capture function, disabling", exc_info=True)
 				_NVDA_InputManager._captureFunc = None
 		if gesture.isModifier:
@@ -459,54 +469,58 @@ class CommandKeysFilter(object):
 
 	def forceSpeakGesture(self, gesture):
 		NVDASpeakCommandKeysOption = config.conf["keyboard"]["speakCommandKeys"]
-		self.keysDic = _addonConfigManager.getCommandKeysSelectiveAnnouncement(
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		self.keysDic = _NVDAConfigManager.getCommandKeysSelectiveAnnouncement(
 			NVDASpeakCommandKeysOption)
-		self.keys = []
 		try:
 			modifiers = gesture._get_modifierNames()
-			keyLabel = gesture._get_mainKeyName()
-		except:  # noqa:E722
+			keyLabel = gesture._get_mainKeyName().lower()
+		except Exception:
 			return True
 		if not NVDASpeakCommandKeysOption:
-			# we must speak gesture, check if we must exclude this gesture
+			# we don't speak gesture, check if we must exclude this gesture
 			if self.modifiersInAllKeysModifierCombinations(modifiers):
 				return True
-			if keyLabel.lower() in self.keysDic:
-				force = self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
-				return force
-			return False
+			force = self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
+			return force
 		else:
 			# we speak gesture, find if we exclude this gesture
 			if self.modifiersInAllKeysModifierCombinations(modifiers):
 				return False
-			if keyLabel.lower() in self.keys:
-				return not self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
-			return True
+			force = not self.modifiersInKeyModifierCombinations(modifiers, keyLabel)
+			return force
 
 	def updateCommandKeysSelectiveAnnouncement(
 		self, keys, speakCommandKeysOption):
-		_addonConfigManager.saveCommandKeysSelectiveAnnouncement(
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		_NVDAConfigManager.saveCommandKeysSelectiveAnnouncement(
 			keys, speakCommandKeysOption)
 
 
-class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
+class CommandKeysSelectiveAnnouncementDialog(
+	contextHelpEx.ContextHelpMixinEx,
+	gui.SettingsDialog):
 	# Translators: title for the Command Keys Selective Announcement Dialog.
 	title = _("Command keys selective Announcement")
 	speakTimer = None
+	# help in the addon user manual.
+	helpObj = getHelpObj("hdr13")
 
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(CommandKeysSelectiveAnnouncementDialog, self).__init__(parent)
 
 	def listInit(self):
-		self.keysDic = _addonConfigManager.getCommandKeysSelectiveAnnouncement(
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		self.keysDic = _NVDAConfigManager.getCommandKeysSelectiveAnnouncement(
 			self.speakCommandKeysOption)
 		self.NVDAKeys = [x for x in byName]
 		from keyLabels import localizedKeyLabels
+
 		self.localizedKeyboardKeyNames = []
 		self.keyboardKeys = {}
 		# label of the first item in the key list
-		#  if this item is checked, the modifiers key combinations are available for all keys.
+		# if this item is checked, the modifiers key combinations are available for all keys.
 		self.localizedKeyboardKeyNames.append(ANYKEY_LABEL)
 		self.keyboardKeys[ANYKEY_LABEL] = "anykey"
 		for key in self.NVDAKeys:
@@ -608,7 +622,7 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		modifierKeysListLabelText = _("Pressed W&ith modifier key combination:")
 		try:
 			self.modifierKeysListBox_ID = wx.NewIdRef()
-		except:  # noqa:E722
+		except Exception:
 			self.modifierKeysListBox_ID = wx.NewId()
 		self.modifierKeysListBox = sHelper.addLabeledControl(
 			modifierKeysListLabelText,
@@ -660,8 +674,8 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 				queueHandler.eventQueue,
 				speech.speakMessage,
 				stateText)
-		stateText = controlTypes.stateLabels[controlTypes.STATE_CHECKED] if checked\
-			else controlTypes.negativeStateLabels[controlTypes.STATE_CHECKED]
+		stateText = stateLabels[STATE_CHECKED] if checked\
+			else negativeStateLabels[STATE_CHECKED]
 		if self.speakTimer is not None:
 			self.speakTimer.Stop()
 		self.speakTimer = wx.CallLater(300, callback, stateText)
@@ -691,17 +705,24 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 
 	def onSelectKey(self, evt):
 		index = self.keyboardKeysListBox.GetSelection()
-		if index >= 0 and self.keyboardKeysListBox.IsChecked(index):
+		if index < 0:
+			return
+		label = self.keyboardKeysListBox.GetStringSelection()
+		key = label
+		if label in self.keyboardKeys:
+			key = self.keyboardKeys[label]
+		# to be checked, mask must be not 0
+		# possible after unchecking all modifier combination
+		mask = self.keysDic[key] if key in self.keysDic else None
+		if mask == 0:
+			self.keyboardKeysListBox.Check(index, False)
+		if self.keyboardKeysListBox.IsChecked(index):
 			self.reportCheckedState()
-			label = self.keyboardKeysListBox.GetStringSelection()
-			key = label
-			if label in self.keyboardKeys:
-				key = self.keyboardKeys[label]
 			self.updateModifierKeysList(key)
 			self.modifierKeysListBox.Enable()
 			self.checkAllButton.Enable()
 			self.unCheckAllButton.Enable()
-		elif index >= 0:
+		else:
 			speakLater()
 			self.modifierKeysListBox.SetItems(self.modifierKeys)
 			self.modifierKeysListBox.Disable()
@@ -729,6 +750,7 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 			"shift", "rightshift", "leftshift",
 			"windows", "leftwindows", "rightwindows",
 			]
+
 		if key.lower() in modifierKeys:
 			return True
 		return False
@@ -858,30 +880,6 @@ class CommandKeysSelectiveAnnouncementDialog(gui.SettingsDialog):
 		self.CheckOrUnCheckAllModifierCombinationList(False)
 
 	def onOk(self, evt):
-		# when a key is checked, at least one combination must be checked
-		keysOnError = []
-		# search for error
-		for key in self.keysDic:
-			if self.keysDic[key] == 2**CHECKED_KEY_BIT_POSITION:
-				# key in error
-				from keyLabels import localizedKeyLabels
-				if key in localizedKeyLabels:
-					label = localizedKeyLabels[key]
-				elif key == "anykey":
-					label = ANYKEY_LABEL
-				else:
-					label = key
-				keysOnError.append(label)
-		if len(keysOnError):
-			gui.messageBox(
-				# Translators: the text of a message box dialog
-				# in Command keys selective announcement dialog.
-				_("""For these keys, you must check at least one item of the modifier key combinations list:\n%s""") % ", ".join(keysOnError),
-				# Translators: the title of a message box dialog"),
-				# in command keys selective announcement dialog.
-				_("Warning"),
-				wx.OK | wx.CANCEL | wx.ICON_WARNING)
-			return
 		speakCommandKeysOption = self.commandKeysCheckBox.GetValue()
 		_myInputManager.commandKeysFilter.updateCommandKeysSelectiveAnnouncement(
 			self.keysDic, speakCommandKeysOption)
