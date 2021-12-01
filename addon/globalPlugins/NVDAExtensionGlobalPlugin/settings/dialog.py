@@ -14,6 +14,7 @@ from gui import nvdaControls
 import core
 import characterProcessing
 import queueHandler
+from languageHandler import getLanguage
 from ..settings import _addonConfigManager
 from ..settings import *  # noqa:F403
 from ..utils.NVDAStrings import NVDAString
@@ -496,7 +497,7 @@ class ComputerSettingsPanel(
 		_addonConfigManager.setMinMasterVolumeLevel(int(levelString))
 		levelString = self.masterVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMasterVolumeLevel(int(levelString))
-		levelString = self.NVDAVolumeLevelBox.GetStringSelection()
+		levelString = self.minNVDAVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMinNVDAVolumeLevel(int(levelString))
 		levelString = self.NVDAVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setNVDAVolumeLevel(int(levelString))
@@ -730,10 +731,10 @@ class UpdateSettingsPanel(
 
 	def onSeeHistory(self, evt):
 		addon = addonHandler.getCodeAddon()
-		from languageHandler import curLang
-		theFile = os.path.join(addon.path, "doc", curLang, "changes.html")
+
+		theFile = os.path.join(addon.path, "doc", getLanguage(), "changes.html")
 		if not os.path.exists(theFile):
-			lang = curLang
+			lang = getLanguage()
 			theFile = os.path.join(addon.path, "doc", lang, "changes.html")
 			if not os.path.exists(theFile):
 				lang = "en"
@@ -830,8 +831,9 @@ class NVDAEnhancementProfileSettingsPanel(SettingsPanel):
 		else:
 			index = self.symbolLevelList.GetSelection()
 			level = characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS[index-1]
+			print ("level: %s"%level)
 			from versionInfo import version_year, version_major
-			if version_year >= 2021 and version_major >= 2:
+			if version_year >= 2022  or (version_year == 2021 and version_major >= 2):
 				level = level.value
 			_NVDAConfigManager .saveSymbolLevelOnWordCaretMovement(level)
 

@@ -102,13 +102,6 @@ def onInstall():
 	# in all cases, clean up all add-on configuration
 	deleteAddonProfilesConfig(addonName)
 
-def getUserConfigParentFolder():
-	import os
-	import globalVars
-	userConfigPath = globalVars.appArgs.configPath 
-	return os.path.split(userConfigPath)[0]
-
-
 def onUninstall():
 	import os
 	import globalVars
@@ -129,10 +122,4 @@ def onUninstall():
 			log.error("Error on deletion of  addon settings file: %s" % addonConfigFile)  # noqa:E501
 		else:
 			log.info("Addon configuration deleted: %s" % addonConfigFile)
-	path = os.path.join(getUserConfigParentFolder(), "%s-userConfigs.ini" % addonName)
-	if os.path.exists(path):
-		os.remove(path)
-		if os.path.exists(path):
-			log.error("%s Error: userConfigs file cannot be deleted: %s" % (_addonName,path))  # noqa:E501
-		else:
-			log.info("%s-userConfigs.ini  file has been deleted: %s" % (_addonName,path))
+

@@ -21,6 +21,7 @@ try:
 	from configobj.validate import Validator, VdtTypeError
 except ImportError:
 	from validate import Validator, VdtTypeError
+from languageHandler import getLanguage
 from .addonConfig import *  # noqa:F403
 
 addonHandler.initTranslation()
@@ -397,8 +398,7 @@ class AddonConfigurationManager():
 		config.post_configSave.unregister(self.handlePostConfigSave)
 
 	def saveRedefinedKeyLabels(self, keyLabels):
-		from languageHandler import curLang
-		lang = curLang.split("-")[0]
+		lang = getLanguage().split("-")[0]
 		conf = self.addonConfig
 		if SCT_RedefinedKeyNames not in conf:
 			conf[SCT_RedefinedKeyLabels] = {}
@@ -409,8 +409,7 @@ class AddonConfigurationManager():
 			conf[SCT_RedefinedKeyLabels][lang][keyName] = keyLabels[keyName]
 
 	def getRedefinedKeyLabels(self):
-		from languageHandler import curLang
-		lang = curLang.split("-")[0]
+		lang = getLanguage().split("-")[0]
 		conf = self.addonConfig
 		if SCT_RedefinedKeyLabels in conf and lang in conf[SCT_RedefinedKeyLabels]:
 			labels = conf[SCT_RedefinedKeyLabels][lang].copy()
@@ -437,8 +436,7 @@ class AddonConfigurationManager():
 
 	# complex symbols editing feature
 	def getUserComplexSymbols(self):
-		from languageHandler import curLang
-		lang = curLang.split("-")[0]
+		lang = getLanguage().split("-")[0]
 		conf = self.addonConfig
 		if SCT_CategoriesAndSymbols in conf\
 			and lang in conf[SCT_CategoriesAndSymbols]:
@@ -446,8 +444,7 @@ class AddonConfigurationManager():
 		return {}
 
 	def saveUserComplexSymbols(self, userComplexSymbols):
-		from languageHandler import curLang
-		lang = curLang.split("-")[0]
+		lang = getLanguage().split("-")[0]
 		conf = self.addonConfig
 		if SCT_CategoriesAndSymbols not in conf:
 			conf[SCT_CategoriesAndSymbols] = {}

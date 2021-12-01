@@ -20,6 +20,18 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
+
++ v10.1 (12/01/2021) +
+Bugfix:
+- the configuration folders added using the "User Configuration Manager" dialog are kept when installing the add-on. The "NVDAExtensionGlobalPlugin-userConfigs.ini" file is no longer deleted.
+- the state of the "Symbol and punctuation level when moving by word" option is now preserved when it is used in an alpha version.
+- NVDA volume recovery threshold is now correctly recorded.
+
+
+Preparation for compatibility with NVDA 2022.1:
+-replacement of "curLang" by "getLanguage ()"
+
+
 + v10.0 (11/21/2021) +
 New features:
 - addition of the "Text analyzer" functionality.

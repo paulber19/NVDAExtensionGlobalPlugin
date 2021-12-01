@@ -6,7 +6,7 @@
 
 import addonHandler
 from logHandler import log
-from languageHandler import curLang
+from languageHandler import getLanguage
 import os
 import globalVars
 import codecs
@@ -91,12 +91,12 @@ class SymbolsManager(object):
 		return None
 
 	def getSymbolCategoriesDicPath(self):
-		userFile = self.getUserSymbolCategoriesFile(curLang)
+		userFile = self.getUserSymbolCategoriesFile(getLanguage())
 		if userFile is not None:
 			return userFile
-		localeList = [curLang]
-		if '_' in curLang:
-			localeList.append(curLang.split('_')[0])
+		localeList = [getLanguage()]
+		if '_' in getLanguage():
+			localeList.append(getLanguage().split('_')[0])
 		localeList.append("en")
 		addonFolderPath = addonHandler.getCodeAddon().path
 		fileName = ".".join(symbolCategoriesFile)

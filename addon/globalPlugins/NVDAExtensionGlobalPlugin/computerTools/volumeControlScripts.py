@@ -80,7 +80,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setFocusedAppVolumeTo90Percent": ("kb:9", ID_VolumeControl),
 		"setFocusedAppVolumeToPreviousLevel": ("kb:backspace", ID_VolumeControl),
 		# for speakers volume
-		"setSpeakersVolumeLevelTo10": ("kb:Control+1", ID_VolumeControl),
+		"setSpeakersVolumeLevelTo10": ("kb:control+1", ID_VolumeControl),
 		"setSpeakersVolumeLevelTo20": ("kb:control+2", ID_VolumeControl),
 		"setSpeakersVolumeLevelTo30": ("kb:control+3", ID_VolumeControl),
 		"setSpeakersVolumeLevelTo40": ("kb:control+4", ID_VolumeControl),

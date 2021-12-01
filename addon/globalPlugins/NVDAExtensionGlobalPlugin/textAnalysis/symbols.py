@@ -40,10 +40,10 @@ _configSpec = """
 
 
 def getTextAnalysisIniFilePath():
-	from languageHandler import curLang
-	langs = [curLang, ]
+	from languageHandler import getLanguage
+	lang = getLanguage()
+	langs = [lang, ]
 	addonFolderPath = addonHandler.getCodeAddon().path
-	lang = curLang
 	if '_' in lang:
 		langs.append(lang.split("_")[0])
 	langs.append("en")

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\utils\/keyboard.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016- 2020 paulber19
+# Copyright (C) 2016- 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -29,10 +29,10 @@ _configSpec = """
 
 
 def getKeyboardKeysIniFilePath():
-	from languageHandler import curLang
-	langs = [curLang, ]
+	from languageHandler import getLanguage
+	lang = getLanguage()
+	langs = [lang, ]
 	addonFolderPath = addonHandler.getCodeAddon().path
-	lang = curLang
 	if '_' in lang:
 		langs.append(lang.split("_")[0])
 	langs.append("en")

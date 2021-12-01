@@ -21,6 +21,18 @@ Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à j
 
 
 
+
++ v10.1 (01/12/2021) +
+Correction de bugs:
+- les dossiers  de configuration  ajoutés à l'aide du dialogue "Gestionnaire des configurations utilisateurs sont conservés lors de l'installation de l'extension. Le fichier "NVDAExtensionGlobalPlugin-userConfigs.ini" n'est plus effacé.
+- l'état de l'option "Niveau de symbole et ponctuation lors de déplacement par mot" est maintenant  conservé lors de son utilisation dans une version alpha.
+- le seuil de rétablissement du volume de NVDA est maintenant correctement enregistré.
+
+
+Préparation à la compatibilité avec NVDA 2022.1:
+- remplacement de "curLang" par "getLanguage()"
+
+
 + v10.0 (21/11/2021) +
 Nouveautés:
 - ajout  de la fonctionnalité "Analyseur de texte".

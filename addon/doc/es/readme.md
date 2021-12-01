@@ -90,5 +90,5 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Posibilidad de ejecutar scripts en el cuadro de diálogo "Gestos de Entrada" (para las versiones de NVDA superiores a la 2020.3).
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.0.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.1.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

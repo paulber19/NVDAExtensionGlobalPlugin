@@ -627,8 +627,8 @@ class NVDAConfigurationManager(object):
 
 	def getSymbolsAndSpaceDic(self):
 		conf = config.conf[self.addonName][SCT_TextAnalyzer][SCT_SymbolsAndSpace]
-		from languageHandler import curLang
-		lang = curLang.split("-")[0]
+		from languageHandler import getLanguage
+		lang = getLanguage().split("-")[0]
 		if conf[SAS_PreviousLanguage] == "" or conf[SAS_PreviousLanguage] != lang:
 			# initialize it
 			conf[SAS_PreviousLanguage] = lang

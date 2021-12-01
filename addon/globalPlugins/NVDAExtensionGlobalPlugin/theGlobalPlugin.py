@@ -483,11 +483,11 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		messageBox.terminate()
 		# if language has changed, we must update symbols files
 		from languageHandler import getLanguage, getWindowsLanguage
-		curLang = getLanguage()
+		NVDALang = getLanguage()
 		lang = config.conf["general"]["language"]
 		if lang == "Windows":
 			lang = getWindowsLanguage()
-		if curLang != lang:
+		if NVDALang != lang:
 			log.warning("Language change: update user symbols files")
 			# set new symbols file for new language
 			path = _curAddon.path
@@ -1573,9 +1573,57 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		audioDevice = deviceNames[selection]
 		setTemporaryAudioOutputDevice(audioDevice)
 
+	def fromName(self, name):
+		import keyboardHandler
+		import winUser
+		import vkCodes
+		VK_WIN = "windows"
+		VK_NVDA = "NVDA"
+		"""Create an instance given a key name.
+		@param name: The key name.
+		@type name: str
+		@return: A gesture for the specified key.
+		@rtype: L{KeyboardInputGesture}
+		"""
+		keyNames = name.split("+")
+		keys = []
+		for keyName in keyNames:
+			if keyName == "plus":
+				# A key name can't include "+" except as a separator.
+				keyName = "+"
+			if keyName == VK_WIN:
+				vk = winUser.VK_LWIN
+				ext = False
+			elif keyName.lower() == VK_NVDA.lower():
+				vk, ext = keyboardHandler.getNVDAModifierKeys()[0]
+			elif len(keyName) == 1:
+				ext = False
+				requiredMods, vk = winUser.VkKeyScanEx(keyName, keyboardHandler.getInputHkl())
+				print ("%s, %s"%(requiredMods, vk ))
+				if requiredMods & 1:
+					keys.append((winUser.VK_SHIFT, False))
+				if requiredMods & 2:
+					keys.append((winUser.VK_CONTROL, False))
+				if requiredMods & 4:
+					keys.append((winUser.VK_MENU, False))
+				# Not sure whether we need to support the Hankaku modifier (& 8).
+			else:
+				vk, ext = vkCodes.byName[keyName.lower()]
+				if ext is None:
+					ext = False
+			keys.append((vk, ext))
+		print ("keys: %s"%keys)
+		if not keys:
+			raise ValueError
+
+		g = keyboardHandler.KeyboardInputGesture(keys[:-1], vk, 0, ext)
+		print ("g: %s"%g.displayName)
+
+	
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin  test")
 		ui.message("NVDAExtensionGlobalPlugin test")
+		g = self.fromName("2")
 
 
 class HelperDialog(
@@ -1605,15 +1653,14 @@ class HelperDialog(
 
 	def initList(self):
 		self.docToScript = {}
-		self.scriptToKey = {}
+		self.scriptToIdentifier = {}
 		for script in scriptsToDocInformations:
 			if script not in self.globalPlugin._shellScriptToGestureAndFeatureOption:
 				continue
-			gest = self.globalPlugin._shellScriptToGestureAndFeatureOption[script][0]
-			if gest in self.globalPlugin._shellGestures:
+			identifier = self.globalPlugin._shellScriptToGestureAndFeatureOption[script][0]
+			if identifier in self.globalPlugin._shellGestures:
 				(doc, category, helpId) = scriptsToDocInformations[script]
-				key = ":".join(gest.split(":")[1:])
-				self.scriptToKey[script] = key
+				self.scriptToIdentifier[script] = identifier
 				self.docToScript[doc] = script
 
 	def doGui(self):
@@ -1622,10 +1669,9 @@ class HelperDialog(
 		choice = []
 		for doc in self.docList:
 			script = self.docToScript[doc]
-			key = self.scriptToKey[script]
-			from keyboardHandler import KeyboardInputGesture
-			keyName = KeyboardInputGesture.fromName(key).displayName
-			choice.append("%s: %s" % (doc, keyName))
+			identifier = self.scriptToIdentifier[script]
+			source, main = inputCore.getDisplayTextForGestureIdentifier(identifier.lower())
+			choice.append("%s: %s" % (doc, main))
 		from gui import guiHelper
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
@@ -1684,7 +1730,7 @@ class HelperDialog(
 		index = self.scriptsListBox.GetSelection()
 		doc = self.docList[index]
 		script = self.docToScript[doc]
-		key = self.scriptToKey[script]
+		key = self.scriptToIdentifier[script]
 		from keyboardHandler import KeyboardInputGesture
 		gesture = KeyboardInputGesture.fromName(key)
 		self.globalPlugin._trapNextGainFocus = True

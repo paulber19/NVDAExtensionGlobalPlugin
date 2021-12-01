@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # onInstall.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,7 +14,7 @@ from characterProcessing import SpeechSymbolProcessor
 import codecs
 import gui
 import winUser
-from languageHandler import curLang
+from languageHandler import getLanguage
 
 addonHandler.initTranslation()
 
@@ -27,18 +27,13 @@ addonNewSymbolsPath = os.path.join(addonPath, "newSymbols")
 
 def getNewSymbolsFile(folder, lang=None):
 	if lang is None:
-		lang = curLang
-	if "_" in curLang:
-		lang = curLang.split("_")[0]
+		lang = getLanguage()
+	if "_" in lang:
+		lang = lang.split("_")[0]
 	newSymbolsFileName = "symbols-" + lang + ".dic"
 	newSymbolsFileList = os.listdir(folder)
 	if newSymbolsFileName in newSymbolsFileList:
-		if sys.version.startswith("3"):
-			# for python 3
-			return newSymbolsFileName
-		else:
-			# for python 2
-			return newSymbolsFileName.encode("utf-8")
+		return newSymbolsFileName
 	return None
 
 

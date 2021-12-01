@@ -330,14 +330,14 @@ class CheckForAddonUpdate(object):
 			baseURL=baseURL,
 			addonName=self.addon.manifest["name"],
 			releaseNotes="releaseNotes")
-		from languageHandler import curLang
+		from languageHandler import getLanguage
 		url = "{url}/{language}/changes.html".format(
 			url=basereleaseNoteURL,
-			language=curLang)
+			language=getLanguage())
 		try:
 			urlopen(url)
 		except IOError:
-			lang = curLang.split("_")[0]
+			lang = getLanguage().split("_")[0]
 			url = "{url}/{language}/changes.html".format(
 				url=basereleaseNoteURL,
 				language=lang)
