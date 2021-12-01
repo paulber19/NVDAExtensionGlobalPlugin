@@ -305,16 +305,14 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			(doc, category, helpId) = self._getScriptDocAndCategory(script)
 			commandText = None
 			if script in self._shellScriptToGestureAndFeatureOption:
-				(gesture, featureID) = self._shellScriptToGestureAndFeatureOption[script]
-				from keyboardHandler import KeyboardInputGesture
-				key = gesture.split(":")[-1]
-				g = KeyboardInputGesture.fromName(key)
+				(identifier, featureID) = self._shellScriptToGestureAndFeatureOption[script]
+				source, main = inputCore.getDisplayTextForGestureIdentifier(identifier.lower())
 				# Translators: message for indicate shell command in input help mode.
-				commandText = _("(command: %s)") % g.displayName
+				commandText = _("(command: %s)") % main
 			elif script in self._mainScriptToGestureAndfeatureOption:
-				(gesture, featureID) = self._mainScriptToGestureAndfeatureOption[script]
+				(identifier, featureID) = self._mainScriptToGestureAndfeatureOption[script]
 			else:
-				(gesture, featureID) = (None, None)
+				(identifier, featureID) = (None, None)
 			if featureID:
 				if not isInstall(featureID):
 					continue

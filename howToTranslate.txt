@@ -1,0 +1,23 @@
+1 - Create  the  "xx" folder  of localization for the language in the  "doc" and "locale" folders. 
+2 - Translation of the source code: 
+You can use the "nvda.pot"  catalog file which is located in the  "locale/en" folder.
+Place the  "nvda.po" and" nvda.mo" files in the  "locale/xx/LC_MESSAGES" folder (to  create). 
+
+3Creation of locale manifest.ini
+From main manifest.ini, translate "summary" and "description" variables and put these variables in an manifest.ini file (utf-8 coding).
+place this file in "locale/xx" folder.
+
+4 - Translation of the documentation of the module: 
+This documentation is if french language.
+- translate the  "addon_informations.t2tconf", "addon_keys.t2tconf", "addonUserManual.t2t",  "change.t2t" files. These files are located in "doc\fr" folder.
+- Place the translated files into the  "doc/xx" folder,
+Translate the "readme.md" file located in "doc\en" folder and place it into "doc/xx" folder,
+- convert to html these files by using the add-on developpement tools dialog  of the module("NVDA+j" followed by "t").
+
+
+5- Adapte the "keyboard.ini" to your keyboard and "symbolCategories.dic" files of "locale/en" folder (encoding in utf-8).
+Place thise files  in the  "locale/xx" folder.
+Map these files depending on the language. 
+
+6 - Adapte the  "symbols-en.dic"file of the  "newSymbols"folder.and name the translated file "symbols-xx.dic".
+Add symbols which are added in the file "locale/xx/symbolCategories.dic" and not supported vocally by NVDA for your language. 
