@@ -159,19 +159,10 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 		posUnitEnd=False,
 		extraDetail=False,
 		handleSymbols=False):
-		super(RecogResultNVDAObjectEx, self)._caretMovementScriptHelper(
-			gesture,
-			unit,
-			direction,
-			posConstant,
-			posUnit,
-			posUnitEnd,
-			extraDetail,
-			handleSymbols)
-		return
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
 			from ..settings.nvdaConfig import _NVDAConfigManager
+			# save current symbol level
 			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
@@ -183,6 +174,7 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 			posUnit, posUnitEnd,
 			extraDetail,
 			handleSymbols)
+		# restore current symbol level
 		config.conf["speech"]["symbolLevel"] = curLevel
 
 
@@ -478,7 +470,11 @@ _rolesToCheck = [ROLE_DOCUMENT, ROLE_EDITABLETEXT]
 
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
-	if contentRecog.recogUi.RecogResultNVDAObject in clsList:
+	contentRecogClass = False
+	for cls in clsList:
+		if contentRecog.recogUi.RecogResultNVDAObject in cls.__mro__:
+			contentRecogClass = True
+	if contentRecogClass  : #or contentRecog.recogUi.RecogResultNVDAObject in clsList:
 		clsList.insert(0, RecogResultNVDAObjectEx)
 	elif obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck:
 		clsList.insert(0, EditableTextEx)

@@ -99,7 +99,7 @@ Some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version": "10.1",
+	"addon_version": "10.2",
 	# Author(s)
 	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support

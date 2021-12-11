@@ -91,5 +91,5 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * possibilité d'exécuter des scripts dans le dialogue "Gestes de commandes" (pour les versions de NVDA supérieures à 2020.3).
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.1.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.2.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

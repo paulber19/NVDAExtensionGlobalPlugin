@@ -1728,9 +1728,9 @@ class HelperDialog(
 		index = self.scriptsListBox.GetSelection()
 		doc = self.docList[index]
 		script = self.docToScript[doc]
-		key = self.scriptToIdentifier[script]
+		identifier = self.scriptToIdentifier[script]
 		from keyboardHandler import KeyboardInputGesture
-		gesture = KeyboardInputGesture.fromName(key)
+		gesture = KeyboardInputGesture.fromName(identifier[3:])
 		self.globalPlugin._trapNextGainFocus = True
 		wx.CallLater(1000, self.globalPlugin.runScript, gesture)
 		self.Close()
