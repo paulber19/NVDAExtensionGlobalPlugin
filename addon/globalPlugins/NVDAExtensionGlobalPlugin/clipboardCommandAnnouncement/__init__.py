@@ -72,6 +72,7 @@ _clipboardCommands = {
 # task timer
 _GB_taskTimer = None
 
+_taskDelay = None
 
 def getWExplorerStatusBarText(foreground):
 	clientObject = UIAHandler.handler.clientObject
@@ -153,12 +154,7 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 		self,
 		gesture,
 		unit,
-		direction=None,
-		posConstant=textInfos.POSITION_SELECTION,
-		posUnit=None,
-		posUnitEnd=False,
-		extraDetail=False,
-		handleSymbols=False):
+		*args, **kwargs):
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
 			from ..settings.nvdaConfig import _NVDAConfigManager
@@ -166,20 +162,17 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
-		super(RecogResultNVDAObjectEx, self)._caretMovementScriptHelper(
-			gesture,
-			unit,
-			direction,
-			posConstant,
-			posUnit, posUnitEnd,
-			extraDetail,
-			handleSymbols)
+		try:
+			# also patched by NAO add-on  which return error when unit is sentence.
+			super(RecogResultNVDAObjectEx, self)._caretMovementScriptHelper(
+				gesture, unit, *args, **kwargs)
+		except Exception:
+			pass
 		# restore current symbol level
 		config.conf["speech"]["symbolLevel"] = curLevel
 
-
-_taskDelay = None
-
+	
+	
 
 class EditableTextEx(EditableText):
 	_commandToScript = {
@@ -285,7 +278,6 @@ class EditableTextEx(EditableText):
 		except Exception:
 			return
 		global _taskDelay
-
 		if _taskDelay:
 			_taskDelay.Stop()
 		from ..textAnalysis.textAnalyzer import analyzeText
