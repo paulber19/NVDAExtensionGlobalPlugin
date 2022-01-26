@@ -6,8 +6,8 @@
 	* [versión estable][1]
 	* [versión de desarrollo][2]
 * Compatibilidad:
-	* mínima de NVDA requerida: 2019.3
-	* última versión de NVDA probada: 2021.3
+	* mínima de NVDA requerida: 2020.4
+	* última versión de NVDA probada: 2022.1
 
 
 * Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
@@ -35,7 +35,7 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Mostrar información sobre la aplicación enfocada:
 	* El nombre y número de versión de la aplicación,
 	* El perfil de configuración actual,
-	* El nombre del complemento activo asociado a la aplicación,
+	* El complemento activo asociado a la aplicación,
 
 
 * Herramientas para los registros de NVDA:
@@ -55,13 +55,16 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 	* Silenciar o reestablecer el sonido para la aplicación enfocada,
 	* Establecer el volumen principal o de NVDA al iniciar el complemento,
 	* Cambiar el volumen principal o el flujo de audio de la aplicación enfocada,
+	* Restablecimiento automático del volumen  principal o de NVDA al iniciar el complemento,
+	* Orientación de la salida de audio de NVDA,
 
 * Herramientas para el desarrollo de complementos,
 * Suplementos de fecha y hora: Copiar fecha y hora actual al portapapeles, anunciar hora del reloj de Windows con los segundos,
 * Gestión de configuraciones del usuario y reinicio de NVDA con una configuración precisa,
 * Analizador de texto,
 * Anuncio de la posición del cursor en los campos de edición,
-* Uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA.
+* Uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA,
+* Activación o desactivación rápida de los complementos.
 
 
 ## Las opciones: ##
@@ -69,7 +72,8 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Eliminar el anuncio de la descripción de los objetos en las cintas de Windows,
 * Anunciar la palabra enfocada durante la eliminación de palabras (para las versiones de NVDA anteriores a la 2020.3),
 * Maximizar automáticamente la ventana en primer plano,
-* Anunciar la puntuación y los símbolos al moverse por palabras.
+* Anunciar la puntuación y los símbolos al moverse por palabras,
+* Posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA.
 
 
 ## Las opciones avanzadas: ##
@@ -87,8 +91,11 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Script para reiniciar rápidamente NVDA,
 * Script para emular la tecla "Aplicaciones",
 * Script para cerrar todas las ventanas abiertas,
-* Posibilidad de ejecutar scripts en el cuadro de diálogo "Gestos de Entrada" (para las versiones de NVDA superiores a la 2020.3).
+* Posibilidad de ejecutar scripts en el cuadro de diálogo "Gestos de Entrada" (para las versiones de NVDA superiores a la 2020.3),
+* Selección automática de la categoría en el cuadro de diálogo "Gestos de Entrada",
+* Selección de la última opción utilizada en el Anillo de Opciones de Sintetizador.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.3.nvda-addon
+
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.0.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

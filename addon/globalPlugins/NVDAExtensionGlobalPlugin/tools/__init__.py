@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 -2020 Paulber19
+# Copyright (C) 2016 -2022 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,7 +9,7 @@ from logHandler import log
 import ui
 import codecs
 import os
-from ctypes import *  # noqa:F403
+# from ctypes import *
 import zipfile
 import gui
 import wx
@@ -21,6 +21,7 @@ from .generate import generateManifest, generateTranslatedManifest
 from .gettextTools import generatePotFile, compilePoFiles
 import shutil
 from ..utils import contextHelpEx
+
 addonHandler.initTranslation()
 
 
@@ -31,13 +32,13 @@ _curModuleFilePath = os.path.dirname(__file__)
 _buildVarsStrings = {
 	"addonInfoStart": "addon_info = {",
 	"addonInfoEnd": "}",
-	}
+}
 
 
 def get_all_file_paths(directory):
 	file_paths = []
 	for root, directories, files in os.walk(directory):
-		if root[len(directory)+1:] == "debugTools":
+		if root[len(directory) + 1:] == "debugTools":
 			continue
 		for filename in files:
 			if os.path.isdir(filename):
@@ -65,7 +66,9 @@ def createAddonBundleFromPath(addon):
 		gui.messageBox(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
-			dialogTitle, wx.OK)
+			# Translators: dialog title on errorr.
+			_("error"),
+			wx.OK)
 		return None
 	addonFileName = "%s-%s.nvda-addon" % (
 		buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
@@ -138,16 +141,16 @@ def writeHTMLFile(dest, htmlText, title, cssFileName):
 	lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
-			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +  # noqa:E501
-			"<head>\n" +
-			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +  # noqa:E501
-			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n" % cssFile +  # noqa:E501
-			"<title>%s</title>\n" % title +
-			"</head>\n"
-			)
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			+ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
+			+ "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
+			+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang)
+			+ "<head>\n"
+			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n"
+			+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n" % cssFile
+			+ "<title>%s</title>\n" % title
+			+ "</head>\n"
+		)
 		f.write(htmlText)
 		f.write("\n</html>\n")
 	f.close()
@@ -185,7 +188,7 @@ def getHTMLBody(dest):
 		endTagFound = line.find(endTag)
 		if startTagFound >= 0:
 			appendLine = True
-			sLine = sLine[startTagFound+len(startTag):]
+			sLine = sLine[startTagFound + len(startTag):]
 			text.append(sLine)
 			continue
 		elif endTagFound >= 0:
@@ -225,7 +228,7 @@ def generateHTMLFiles(addon, docDirs):
 			if ext not in ["md", "t2t"]:
 				continue
 			base = addon.path.join(f[:-1])
-			dest = os.path.join(d, base+".html")
+			dest = os.path.join(d, base + ".html")
 			manifest = getMmanifestInfos(addon, lang)
 			title = "%s %s" % (manifest["summary"], manifest["version"])
 			if ext == "t2t":
@@ -269,7 +272,7 @@ def _makeHTML(addon, lang):
 				theDir = os.path.join(docFolder, item)
 				docDirs.append(theDir)
 	(mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
-	n = mdCount+t2tCount
+	n = mdCount + t2tCount
 	if n == 0:
 		gui.messageBox(
 			# Translators: message to user no converted document
@@ -320,7 +323,7 @@ def _makeMainManifestIni(addon):
 	if os.path.exists(dest):
 		if gui.messageBox(
 			# Translators: message to user to confirm the update of manifest.ini.
-			_("The manifest.ini file already exists. Do you really want to update it?"),  # noqa:E501
+			_("The manifest.ini file already exists. Do you really want to update it?"),
 			dialogTitle, wx.YES | wx.NO) == wx.NO:
 			return
 	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
@@ -383,12 +386,12 @@ def _makeLocaleManifestIni(addon, lang):
 			continue
 		if not generateTranslatedManifest(addon, manifest, lang, manifest_template):
 			noTranslation.append(lang)
-		count = count+1
+		count = count + 1
 	if len(noTranslation):
 		# Translators: title of dialog
 		dialogTitle = _("Creation of localization manifest.ini file")
 		# Translators: message to user.
-		missingTranslationMsg = _("Some translation strings are missing for \"%s\" language") % lang  # noqa:E501
+		missingTranslationMsg = _("Some translation strings are missing for \"%s\" language") % lang
 		gui.messageBox(missingTranslationMsg, dialogTitle, wx.OK)
 	if count:
 		# Translators: message to user
@@ -429,7 +432,7 @@ def _generatePOTFile(addon):
 		msg = _("%s file created") % potFileName
 	else:
 		if retval == -1:
-			msg = _("Impossible to create POT file: no source file defined in buildVars.py")  # noqa:E501
+			msg = _("Impossible to create POT file: no source file defined in buildVars.py")
 		else:
 			msg = _("Impossible to create POT file")
 	gui.messageBox(msg, dialogTitle, wx.OK)
@@ -598,7 +601,7 @@ def _createBuildVarsFile(addon):
 	default_vars = {
 		"name": "addonTemplate",
 		"summary": "Add-on user visible name",
-		"description": """Description for the add-on. It can span multiple lines.""",  # noqa:E501
+		"description": """Description for the add-on. It can span multiple lines.""",
 		"version": "x.y",
 		"author": str("name <name@domain.com>"),
 		"url": None,
@@ -606,7 +609,7 @@ def _createBuildVarsFile(addon):
 		"minimumNVDAVersion": None,
 		"lastTestedNVDAVersion": None,
 		"updateChannel": None
-		}
+	}
 	vars = {}
 	vars.update(_buildVarsStrings)
 	vars.update(default_vars)
@@ -668,7 +671,8 @@ class ToolsForAddonDialog(
 		# the addons list
 		# Translators: This is a label appearing on Convert to HTML dialog.
 		labelText = _("&Add-ons:")
-		addonNamesList = ["%s %s" % (addon.manifest["summary"], addon.manifest["version"]) for addon in self.addonsList]  # noqa:E501
+		addonNamesList = [
+			"%s %s" % (addon.manifest["summary"], addon.manifest["version"]) for addon in self.addonsList]
 		self.addonsListBox = sHelper.addLabeledControl(
 			labelText, wx.ListBox, id=wx.ID_ANY, name="addons", choices=addonNamesList)
 		self.addonsListBox.SetSelection(0)

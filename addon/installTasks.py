@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 # installTasks.py
-# a part of NVDAExtensionGlobalPLugin add-on
+# a part of NVDAExtensionGlobalPlugin add-on
 # Copyright (C) 2016 - 2020 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
@@ -83,12 +83,19 @@ def onInstall():
 	addonConfigFile = os.path.join(userConfigPath, curConfigFileName)
 	if os.path.exists(addonConfigFile):
 		# existing previous addon config
-		if gui.messageBox(
+		extraAppArgs = globalVars.appArgsExtra if hasattr(globalVars, "appArgsExtra") else globalVars.unknownAppArgs
+		keep = True if "addon-auto-update" in extraAppArgs else False
+		if keep or gui.messageBox(
 			# Translators: the label of a message box dialog.
 			_("Do you want to keep previous add-on configuration settings?"),
 			# Translators: the title of a message box dialog.
 			_("%s - installation") % addonSummary,
-			wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
+			wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES or gui.messageBox(
+				# Translators: the label of a message box dialog.
+				_("Are you sure you don't want to keep the current add-on configuration settings?"),
+				# Translators: the title of a message box dialog.
+				_("%s - installation") % addonSummary,
+				wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
 			dest = os.path.join(curPath, curConfigFileName)
 			try:
 				shutil.copy(addonConfigFile, dest)
@@ -101,6 +108,7 @@ def onInstall():
 			log.error("Error on deletion of addon settings file: %s" % addonConfigFile)  # noqa:E501
 	# in all cases, clean up all add-on configuration
 	deleteAddonProfilesConfig(addonName)
+
 
 def onUninstall():
 	import os
@@ -122,4 +130,3 @@ def onUninstall():
 			log.error("Error on deletion of  addon settings file: %s" % addonConfigFile)  # noqa:E501
 		else:
 			log.info("Addon configuration deleted: %s" % addonConfigFile)
-

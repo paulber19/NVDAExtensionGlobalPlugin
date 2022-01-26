@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\userConfig\inputGestures.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021 Paulber19
+# Copyright (C) 2021-2022 Paulber19
 # This file is covered by the GNU General Public License.
 # from a Javi Dominguez's idea  and some code  of it "commandHelper" add-on
 
@@ -14,9 +14,12 @@ import gui
 import gui.guiHelper as guiHelper
 from logHandler import log
 import scriptHandler
+from keyboardHandler import KeyboardInputGesture
 import inputCore
 from gui.inputGestures import InputGesturesDialog, _InputGesturesViewModel, _GesturesTree
 from ..utils.NVDAStrings import NVDAString
+from ..utils import getHelpObj, contextHelpEx
+
 
 addonHandler.initTranslation()
 
@@ -25,21 +28,26 @@ def onInputGesturesCommandEx(evt):
 	gui.mainFrame._popupSettingsDialog(InputGesturesDialogEx)
 
 
-gui.mainFrame.onInputGesturesCommand = onInputGesturesCommandEx
-menus = gui.mainFrame.sysTrayIcon.preferencesMenu.GetMenuItems()
-item = None
-for menuItem in menus:
-	if menuItem.GetItemLabel() == NVDAString("I&nput gestures..."):
-		item = menuItem
-if item is not None:
-	gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, onInputGesturesCommandEx, item)
+def initialize():
+	gui.mainFrame.onInputGesturesCommand = onInputGesturesCommandEx
+	menus = gui.mainFrame.sysTrayIcon.preferencesMenu.GetMenuItems()
+	item = None
+	for menuItem in menus:
+		if menuItem.GetItemLabel() == NVDAString("I&nput gestures..."):
+			item = menuItem
+	if item is not None:
+		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, onInputGesturesCommandEx, item)
 
 
-class InputGesturesDialogEx(InputGesturesDialog):
+class InputGesturesDialogEx(
+	contextHelpEx.ContextHelpMixinEx,
+	InputGesturesDialog):
+
 	_executeScriptWaitingTimer = None
 	repeatCount = 0
 
 	def __init__(self, parent: "InputGesturesDialog"):
+		self.helpId = InputGesturesDialog.helpId
 		self.focus = gui.mainFrame.prevFocus
 		super(InputGesturesDialogEx, self).__init__(parent)
 
@@ -69,7 +77,7 @@ class InputGesturesDialogEx(InputGesturesDialog):
 		self.executeScriptButton = bHelper.addButton(self, label=_("&Execute the script"))
 		self.executeScriptButton.Bind(wx.EVT_BUTTON, self.onExecuteScriptButton)
 		self.executeScriptButton.Disable()
-
+		self.bindHelpEvent(getHelpObj("hdr205"), self.executeScriptButton)
 		# Translators: The label of a button to add a gesture in the Input Gestures dialog.
 		self.addButton = bHelper.addButton(self, label=NVDAString("&Add"))
 		self.addButton.Bind(wx.EVT_BUTTON, self.onAdd)
@@ -90,6 +98,33 @@ class InputGesturesDialogEx(InputGesturesDialog):
 		self.tree.Bind(wx.EVT_WINDOW_DESTROY, self._onDestroyTree)
 		self.tree.Bind(wx.EVT_TREE_KEY_DOWN, self.onKeyDown)
 
+	def postInit(self):
+		super(InputGesturesDialogEx, self).postInit()
+		mod = self.focus.appModule.__module__
+		allGestures = self.tree.gesturesVM.allGestures
+		catToSelect = None
+		for cat in allGestures:
+			for scr in cat.scripts:
+				scriptMod = scr.scriptInfo.moduleName
+				scriptMod = ".".join(scriptMod.split(".")[:2])
+				if scriptMod.startswith(mod):
+					catToSelect = cat.displayName
+					break
+		if not catToSelect:
+			return
+		count = self.tree.GetCount()
+		rootItem = self.tree.GetRootItem()
+		(item, cookie) = self.tree.GetFirstChild(rootItem)
+		for i in range(0, count):
+			if not item:
+				break
+			itemText = self.tree.GetItemText(item)
+			if itemText == catToSelect:
+				self.tree.SelectItem(item)
+				self.tree.Expand(item)
+				break
+			(item, cookie) = self.tree.GetNextChild(item, cookie)
+
 	def onKeyDown(self, evt):
 		keyCode = evt.GetKeyCode()
 		if keyCode == wx.WXK_SPACE and self.executeScriptButton.Enabled:
@@ -100,8 +135,9 @@ class InputGesturesDialogEx(InputGesturesDialog):
 	def getScript(self, item):
 
 		def smallBeep():
-			# from tones import beep
-			# beep(300, 30)
+			if False:
+				from tones import beep
+				beep(300, 30)
 			return
 
 		if not item or not hasattr(item, "scriptInfo"):
@@ -117,20 +153,20 @@ class InputGesturesDialogEx(InputGesturesDialog):
 				return script
 		if ti:
 			script = getattr(ti, "script_%s" % scriptInfo.scriptName, None)
-			if script and script.__module__ == scriptInfo.moduleName:
+			if script:
 				smallBeep()
 				return script
 
 		if scriptInfo.className == "GlobalCommands":
 			import globalCommands
-			script = getattr(globalCommands.commands, "script_"+scriptInfo.scriptName)
+			script = getattr(globalCommands.commands, "script_" + scriptInfo.scriptName)
 			if script:
 				smallBeep()
 				return script
 
 		if scriptInfo.className == "ConfigProfileActivationCommands":
 			import globalCommands
-			script = getattr(globalCommands.configProfileActivationCommands, "script_"+scriptInfo.scriptName)
+			script = getattr(globalCommands.configProfileActivationCommands, "script_" + scriptInfo.scriptName)
 			if script:
 				smallBeep()
 				return script
@@ -146,7 +182,7 @@ class InputGesturesDialogEx(InputGesturesDialog):
 						smallBeep()
 						return script
 		if scriptInfo.className == "AppModule":
-			script = getattr(self.focus.appModule, "script_"+scriptInfo.scriptName, None)
+			script = getattr(self.focus.appModule, "script_" + scriptInfo.scriptName, None)
 			if script:
 				smallBeep()
 				return script
@@ -156,7 +192,7 @@ class InputGesturesDialogEx(InputGesturesDialog):
 				smallBeep()
 				return script
 
-		script = getattr(self.focus, "script_"+scriptInfo.scriptName, None)
+		script = getattr(self.focus, "script_" + scriptInfo.scriptName, None)
 		if script:
 			smallBeep()
 			return script
@@ -179,14 +215,21 @@ class InputGesturesDialogEx(InputGesturesDialog):
 		if self.executeScriptButton.Enabled:
 			self.executeScriptButton.SetDefault()
 
-	def _executeScript(self, script, gestureCls, count):
+	def _executeScript(self, script, gestureOrgestureCls, count):
 		api.processPendingEvents()
 		speech.cancelSpeech()
 		for i in range(0, count + 1):
 			speech.cancelSpeech()
-			scriptHandler.executeScript(script, gestureCls)
+			scriptHandler.executeScript(script, gestureOrgestureCls)
 
 	def onExecuteScriptButton(self, evt):
+
+		def callback(script, gestureOrgestureCls):
+			self._executeScriptWaitingTimer = None
+			wx.CallLater(200, speech.cancelSpeech)
+			wx.CallLater(500, self._executeScript, script, gestureOrgestureCls, self.repeatCount)
+			self.Destroy()
+
 		self.repeatCount = self.repeatCount + 1 if self._executeScriptWaitingTimer is not None else 0
 		if self._executeScriptWaitingTimer is not None:
 			self._executeScriptWaitingTimer.Stop()
@@ -202,19 +245,19 @@ class InputGesturesDialogEx(InputGesturesDialog):
 		scriptInfo = item.scriptInfo
 		script = self.getScript(item)
 		if not script:
-			log.error("no script to run: %s, %s, %s" % (scriptInfo.scriptName, scriptInfo.className, scriptInfo.moduleName))
+			log.error("no script to run: %s, %s, %s" % (
+				scriptInfo.scriptName, scriptInfo.className, scriptInfo.moduleName))
 			return
 		try:
 			gestureCls = inputCore._getGestureClsForIdentifier(scriptInfo.gestures[0])
 		except Exception:
-			from keyboardHandler import KeyboardInputGesture
 			gestureCls = KeyboardInputGesture
-
-		def callback(script, gestureCls):
-			self._executeScriptWaitingTimer = None
-			wx.CallLater(200, speech.cancelSpeech)
-			wx.CallLater(500, self._executeScript, script, gestureCls, self.repeatCount)
-			self.Destroy()
+		gesture = None
+		if gestureCls == KeyboardInputGesture and len(scriptInfo.gestures):
+			identifier = scriptInfo.gestures[0]
+			key = identifier.split(":", 1)[1]
+			gesture = KeyboardInputGesture.fromName(key)
+		gestureOrGestureCls = gesture if gesture else gestureCls
 		from ..settings import _addonConfigManager
 		delay = _addonConfigManager.getMaximumDelayBetweenSameScript()
-		self._executeScriptWaitingTimer = wx.CallLater(delay, callback, script, gestureCls)
+		self._executeScriptWaitingTimer = wx.CallLater(delay, callback, script, gestureOrGestureCls)

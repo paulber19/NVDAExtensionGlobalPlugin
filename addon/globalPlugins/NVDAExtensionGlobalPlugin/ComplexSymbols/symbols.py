@@ -26,7 +26,7 @@ class SymbolsManager(object):
 			return
 		from ..settings import _addonConfigManager
 		self.addonConfigManager = _addonConfigManager
-		self.userSymbolCategoriesDic = self.addonConfigManager.getUserComplexSymbols()  # noqa:E501
+		self.userSymbolCategoriesDic = self.addonConfigManager.getUserComplexSymbols()
 		self.ready = True
 
 	def isReady(self):
@@ -78,13 +78,13 @@ class SymbolsManager(object):
 		self.addonConfigManager.saveUserComplexSymbols(symbolCategories)
 
 	def getUserSymbolCategoriesFile(self, locale):
-		file = symbolCategoriesFile[0]+"-"+locale+"."+symbolCategoriesFile[1]
+		file = symbolCategoriesFile[0] + "-" + locale + "." + symbolCategoriesFile[1]
 		file = os.path.join(userConfigPath, file)
 		if os.path.isfile(file):
 			return file
 		if "_" in locale:
 			file = symbolCategoriesFile[0] +\
-				"-" + locale.split("_")[0] + "."+symbolCategoriesFile[1]
+				"-" + locale.split("_")[0] + "." + symbolCategoriesFile[1]
 			file = os.path.join(userConfigPath, file)
 			if os.path.isfile(file):
 				return file
@@ -114,7 +114,7 @@ class SymbolsManager(object):
 		return False
 
 	def getUserSymbolAndDescriptionList(
-			self, categoryName, userComplexSymbols=None):
+		self, categoryName, userComplexSymbols=None):
 		if not userComplexSymbols:
 			userComplexSymbols = self.addonConfigManager.getUserComplexSymbols()
 		if categoryName not in userComplexSymbols:

@@ -1,4 +1,4 @@
- ADDON_SUMMARY - History
+ADDON_SUMMARY - History
 Author: ADDON_AUTHOR_NAME
 
 
@@ -20,9 +20,30 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ v11.0 (01/26/2022) +
+new features:
+- orientation of NVDA audio output.
+- added scripts to increase or decrease the volume of NVDA.
+- possible increase of the main volume if necessary when increasing the volume of NVDA or applications (option to be configured).
+- quick add-ons activation / desactivation.
+- when opening the "Input gesture" dialog, the category associated with the active add-on for the application under focus is automatically selected.
+- possibility of reporting spelling errors by a double beep or by a voice announcement instead of the sound emitted by NVDA.
+- the last setting used in the synthesizer settings ring is saved to find it selected after restarting NVDA.
+
+
+Changes:
+- the option "Announce the volume of applications in percentage" is removed. The volume is announced in level as in the Windows volume mixer.
+- during an automatic update of the add-on, it no longer asks the user if he wants to keep the current configuration parameters of the add-on.
+- during a manual installation of the add-on, a confirmation request is requested when the user has chosen not to keep the current settings of the add-on configuration.
+
+
+Compatibility with NVDA 22.1:
+- taking into account of the new UIAHandler package.
+
+
 + v10.3 (12/12/2021) +
 Bug fixes:
-- resolution of the problem encountered with the new "NAO" extension when presenting the optical recognition result and with page up and page down keys.
+- resolution of the problem encountered with the new extension "NAO" when presenting the result of optical recognition and the previous and next page keys.
 
 
 + v10.2 (12/10/2021) +
@@ -31,7 +52,7 @@ Bug fixes:
 - scripts can be started again in the "Shell scripts" dialog.
 
 
-+ v10.1 (12/01/2021) +
++ v10.1 (11/28/2021) +
 Bugfix:
 - the configuration folders added using the "User Configuration Manager" dialog are kept when installing the add-on. The "NVDAExtensionGlobalPlugin-userConfigs.ini" file is no longer deleted.
 - the state of the "Symbol and punctuation level when moving by word" option is now preserved when it is used in an alpha version.

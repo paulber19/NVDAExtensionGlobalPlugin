@@ -1,4 +1,4 @@
-    ADDON_SUMMARY - Historique
+ADDON_SUMMARY - Historique
 Auteur: ADDON_AUTHOR_NAME
 
 
@@ -21,9 +21,34 @@ Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à j
 
 
 
+
++ v11.0 (26/01/2022) +
+nouvelles fonctionnalités:
+- orientation de la sortie audio de NVDA.
+- ajout de scripts pour augmenter ou diminuer le volume de NVDA.
+- augmentation possible du volume principal  si nécessaire  lors de l'augmentation du volume de NVDA ou des applications  (option à configurer).
+- nouveau dialogue pour activer ou désactiver plus rapidement les extensions.
+- à l'ouverture du dialogue "Geste de commande", la catégorie associée  à l'extension active pour l'application sous le focus est automatiquement sélectionnée.
+- possibilité de signaler les fautes d'orthographe par un double bip sonore ou par une annonce vocale en lieu et place du son émis par NVDA.
+- le  dernier paramètre utilisé  dans la boucle des paramètres du synthétiseur est enregistré pour le retrouver  sélectionné après un redémarrage de NVDA.
+
+
+Changements:
+- l'option "Annoncer le volume des applications en pourcentage" est supprimée.  Le volume est annoncé en niveau comme dans le mélangeur de volume de Windows.
+- lors d'une mise à jour automatique de l'extension, il n'est plus demander à l'utilisateur s'il veut conserver les paramètres actuels de configuration de l'extension.
+- lors d'une installation manuelle de l'extension, une demande de confirmation est demandée quand l'utilisateur a choisi de ne pas garder les paramètres actuels de la configuration de l'extension.
+
+
+
+Compatibilité:
+- Compatibilité avec NVDA 2022.1
+ - prise en compte du nouveau package UIAHandler.
+- les versions de NVDA antérieures à la 2020.4 ne sont plus supportées.
+
+
 + v10.3 (12/12/2021) +
 Corrections de bogues :
-- résolution du problème rencontré avec la nouvelle extension "NAO" lors de la présentation du résultat de la reconnaissance optique  et avec les touches page précédente et suivante.
+- résolution du problème rencontré avec la nouvelle extension "NAO" lors de la présentation du résultat de la reconnaissance optique  et les touches page précédente et suivante.
 
 
 + v10.2 (10/12/2021) +
@@ -32,7 +57,7 @@ Corrections de bogues :
 - le lancement des scripts est de nouveau possible dans le dialogue "Scripts de l'interpréteur de commandes".
 
 
-+ v10.1 (01/12/2021) +
++ v10.1 (28/11/2021) +
 Correction de bugs:
 - les dossiers  de configuration  ajoutés à l'aide du dialogue "Gestionnaire des configurations utilisateurs sont conservés lors de l'installation de l'extension. Le fichier "NVDAExtensionGlobalPlugin-userConfigs.ini" n'est plus effacé.
 - l'état de l'option "Niveau de symbole et ponctuation lors de déplacement par mot" est maintenant  conservé lors de son utilisation dans une version alpha.

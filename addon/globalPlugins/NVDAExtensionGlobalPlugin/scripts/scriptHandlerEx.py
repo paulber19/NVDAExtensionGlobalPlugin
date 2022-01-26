@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptHandlerEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2020 paulber19
+# Copyright (C) 2022 paulber19
 
 
 # For patching executeScript and getLastRepeatCount methods
@@ -18,15 +18,12 @@ try:
 except ImportError:
 	import sayAllHandler
 import scriptHandler
-from scriptHandler import _lastScriptTime, _lastScriptCount
-# flake8 finds an bad error
-from scriptHandler import _lastScriptRef, _isScriptRunning  # noqa:F401
 
 
 def _getMaxTimeBetweenSameScript():
 	from ..settings import _addonConfigManager
 	delay = _addonConfigManager.getMaximumDelayBetweenSameScript()
-	return float(delay)/1000
+	return float(delay) / 1000
 
 
 def myExecuteScript(script, gesture):
@@ -42,33 +39,32 @@ def myExecuteScript(script, gesture):
 	@param gesture: the input gesture that activated this script
 	@type gesture: L{inputCore.InputGesture}
 	"""
-	global _lastScriptTime, _lastScriptCount, _lastScriptRef, _isScriptRunning
-	lastScriptRef = _lastScriptRef() if _lastScriptRef else None
+	lastScriptRef = scriptHandler._lastScriptRef() if scriptHandler._lastScriptRef else None
 	# We don't allow the same script to be executed from with in itself,
 	# but we still should pass the key through
 	scriptFunc = getattr(script, "__func__", script)
-	if _isScriptRunning and lastScriptRef == scriptFunc:
+	if scriptHandler._isScriptRunning and lastScriptRef == scriptFunc:
 		return gesture.send()
-	_isScriptRunning = True
+	scriptHandler._isScriptRunning = True
 	resumeSayAllMode = None
 	if scriptHandler.willSayAllResume(gesture):
 		resumeSayAllMode = sayAllHandler.lastSayAllMode
 	try:
 		scriptTime = time.time()
 		scriptRef = weakref.ref(scriptFunc)
-		if (scriptTime - _lastScriptTime) <= _getMaxTimeBetweenSameScript()\
+		if (scriptTime - scriptHandler._lastScriptTime) <= _getMaxTimeBetweenSameScript()\
 			and scriptFunc == lastScriptRef:
-			_lastScriptCount += 1
+			scriptHandler._lastScriptCount += 1
 		else:
-			_lastScriptCount = 0
-		_lastScriptRef = scriptRef
-		_lastScriptTime = scriptTime
+			scriptHandler._lastScriptCount = 0
+		scriptHandler._lastScriptRef = scriptRef
+		scriptHandler._lastScriptTime = scriptTime
 		script(gesture)
 	except Exception:
 		log.exception("error executing script: %s with gesture %r" % (
 			script, gesture.displayName))
 	finally:
-		_isScriptRunning = False
+		scriptHandler._isScriptRunning = False
 		if resumeSayAllMode is not None:
 			sayAllHandler.readText(resumeSayAllMode)
 
@@ -81,10 +77,10 @@ def myGetLastScriptRepeatCount():
 	if it has been repeated once its 1, and so forth.
 	@rtype: integer
 	"""
-	if (time.time()-_lastScriptTime) > _getMaxTimeBetweenSameScript():
+	if (time.time() - scriptHandler._lastScriptTime) > _getMaxTimeBetweenSameScript():
 		count = 0
 	else:
-		count = _lastScriptCount
+		count = scriptHandler._lastScriptCount
 	return count
 
 

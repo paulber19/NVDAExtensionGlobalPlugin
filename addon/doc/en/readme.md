@@ -6,8 +6,8 @@
 	* [stable version][1]
 	* [developpement version][2]
 * Compatibility:
-	* minimum supported NVDA version: 2019.3
-	* last tested NVDA version: 2021.3
+	* minimum supported NVDA version: 2020.4
+	* last tested NVDA version: 2022.1
 
 
 Traductor (s): automatic translation from french language
@@ -58,6 +58,8 @@ some features can be enabled or disabled individually.
 	* mute or unmute volume for the focused application,
 	* establishment of the main Windows or NVDA volume at the start of the add-on,
 	* modification of main volume or audio stream's volume of focused application.
+	* automatic recovery of the main volume and NVDA when the extension is loaded,
+	* orientation of NVDA audio output,
 
 
 * Tools for development of add-on.
@@ -65,7 +67,8 @@ some features can be enabled or disabled individually.
 * user configurations management and NVDA restarting  with precise configuration,
 * text analyser,
 * announcement of the cursor position in the edit boxes,
-* temporary use of an audio output device without impacting the NVDA configuration.
+* temporary use of an audio output device without impacting the NVDA configuration,
+* quick add-ons activation / desactivation.
 
 
 ## The options ##
@@ -91,8 +94,10 @@ some features can be enabled or disabled individually.
 * script to quickly restart NVDA,
 * script to emulate the "Applications" key,
 * script to close all open windows,
-* possibility of executing scripts in the "Input gestures" dialog (for versions of NVDA greater than 2020.3).
+* possibility of executing scripts in the "Input gestures" dialog (for versions of NVDA greater than 2020.3),
+* automatic selection of the category in the dialog "Command gestures",
+* Selection of the last parameter used in the synthesizer parameter loop.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.3.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.0.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

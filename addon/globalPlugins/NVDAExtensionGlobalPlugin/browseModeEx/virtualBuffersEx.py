@@ -16,10 +16,18 @@ except (ModuleNotFoundError, AttributeError):
 	from controlTypes import roleLabels, ROLE_CHECKBOX
 	from controlTypes import STATE_CHECKED
 import IAccessibleHandler
+import NVDAHelper
+import ctypes
+import aria
 import virtualBuffers
 import virtualBuffers.MSHTML
 import virtualBuffers.gecko_ia2
-from virtualBuffers import *  # noqa:F403
+# from virtualBuffers import *
+from virtualBuffers import (
+	VBufStorage_findMatch_notEmpty, VBufStorage_findMatch_word,
+	VBufStorage_findDirection_up, VBufStorage_findDirection_back, VBufStorage_findDirection_forward,
+	VBufRemote_nodeHandle_t
+)
 from virtualBuffers import _prepareForFindByAttributes
 from NVDAObjects.IAccessible import ia2Web
 from comtypes import COMError
@@ -87,8 +95,9 @@ class MSHTMLEx(VirtualBufferEx, virtualBuffers.MSHTML .MSHTML):
 				{"HTMLAttrib::role": [VBufStorage_findMatch_word("main")]},
 				{"HTMLAttrib::role": [VBufStorage_findMatch_word("main")],
 					"name": [VBufStorage_findMatch_notEmpty]},
-				{"IHTMLDOMNode::nodeName": [VBufStorage_findMatch_word(aria.htmlNodeNameToAriaLandmarkRoles["main"].upper())]}  # noqa:E501
-				]
+				{"IHTMLDOMNode::nodeName": [VBufStorage_findMatch_word(
+					aria.htmlNodeNameToAriaLandmarkRoles["main"].upper())]}
+			]
 
 		else:
 			attrs = None
@@ -118,13 +127,13 @@ class Gecko_ia2_Ex(VirtualBufferEx, virtualBuffers.gecko_ia2 .Gecko_ia2):
 		elif nodeType == "division":
 			attrs = {"IAccessible2::attribute_tag": self._searchableTagValues(["DIV"])}
 		elif nodeType == "anchor":
-			attrs = {"IAccessible2::attribute_tag": self._searchableTagValues(["ANCHOR"])}  # noqa:E501
+			attrs = {"IAccessible2::attribute_tag": self._searchableTagValues(["ANCHOR"])}
 		elif nodeType == "mainLandmark":
 			attrs = [
-				{"IAccessible2::attribute_xml-roles": [VBufStorage_findMatch_word("main")]},  # noqa:E501
+				{"IAccessible2::attribute_xml-roles": [VBufStorage_findMatch_word("main")]},
 				{"IAccessible2::attribute_xml-roles": [VBufStorage_findMatch_word("main")],
 					"name": [VBufStorage_findMatch_notEmpty]}
-				]
+			]
 		elif nodeType == "clickable":
 			attrs = {"IAccessibleAction_click": ["0"]}
 		else:

@@ -1,13 +1,18 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\UIAParagraph.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2020 paulber19
+# Copyright (C) 2018 - 2021 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import browseMode
-import UIAHandler
 import textInfos
-from UIAUtils import getUIATextAttributeValueFromRange
+try:
+	# for nvda version >= 22.1
+	from UIAHandler import UIA_StyleIdAttributeId, StyleId_Normal
+	from UIAHandler.utils import getUIATextAttributeValueFromRange
+except ImportError:
+	from UIAHandler import UIA_StyleIdAttributeId, StyleId_Normal
+	from UIAUtils import getUIATextAttributeValueFromRange
 
 
 def UIAParagraphQuicknavIterator(document, position, direction="next"):
@@ -23,8 +28,8 @@ def UIAParagraphQuicknavIterator(document, position, direction="next"):
 		tempInfo = curPosition.copy()
 		tempInfo.expand(textInfos.UNIT_CHARACTER)
 		styleIDValue = getUIATextAttributeValueFromRange(
-			tempInfo._rangeObj, UIAHandler.UIA_StyleIdAttributeId)
-		if styleIDValue == UIAHandler.StyleId_Normal:
+			tempInfo._rangeObj, UIA_StyleIdAttributeId)
+		if styleIDValue == StyleId_Normal:
 			if not firstLoop or not position:
 				tempInfo.expand(textInfos.UNIT_PARAGRAPH)
 				yield browseMode.TextInfoQuickNavItem("paragraph", document, tempInfo)

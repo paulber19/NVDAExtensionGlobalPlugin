@@ -1,12 +1,14 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 Paulber19
+# Copyright (C) 2016 - 2022 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 import globalVars
 import wx
+import os
+import config
 import nvwave
 from gui.settingsDialogs import MultiCategorySettingsDialog, SettingsPanel
 import gui
@@ -16,18 +18,29 @@ import characterProcessing
 import queueHandler
 from languageHandler import getLanguage
 from ..settings import _addonConfigManager
-from ..settings import *  # noqa:F403
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
+if NVDAVersion >= [2021, 1]:
+	from gui.guiHelper import BoxSizerHelper
+else:
+	# we need the 2021.1 guiHelper changes to maintain compatibility with nvda version < 2021.1
+	from ..utils.guiHelper import BoxSizerHelper
+
 
 addonHandler.initTranslation()
 
 
 def askForNVDARestart():
 	if gui.messageBox(
-		# Translators: A message asking the user if they wish to restart NVDA as NVDAExtensionGlobalPlugin addon settings changes have been made.
-		_("Some changes have been made. You must save the configuration and restart NVDA for these changes to take effect. Would you like to do it now?"),
+		# Translators: A message asking the user if they wish to restart NVDA
+		# as NVDAExtensionGlobalPlugin addon settings changes have been made.
+		_(
+			"Some changes have been made. "
+			"You must save the configuration and restart NVDA for these changes to take effect. "
+			"Would you like to do it now?"),
 		makeAddonWindowTitle(NVDAString("Restart NVDA")),
 		wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
 		_addonConfigManager.saveSettings(True)
@@ -51,187 +64,284 @@ class FeaturesInstallationSettingsPanel(
 		super(FeaturesInstallationSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
+		from .addonConfig import (
+			C_Install, C_DoNotInstall, C_InstallWithoutGesture,
+			FCT_ExtendedVirtualBuffer, FCT_SystrayIconsAndActiveWindowsList,
+			FCT_ComplexSymbols, FCT_ClipboardCommandAnnouncement,
+			FCT_CurrentFolderReport, FCT_FocusedApplicationInformations,
+			FCT_OpenCurrentOrOldNVDALogFile, FCT_SpeechHistory,
+			FCT_KeyboardKeyRenaming, FCT_CommandKeysSelectiveAnnouncement,
+			FCT_MinuteTimer, FCT_ForegroundWindowObjectsList,
+			FCT_VoiceProfileSwitching, FCT_KeyRemanence,
+			FCT_RestartInDebugMode, FCT_VolumeControl,
+			FCT_SplitAudio, FCT_Tools, FCT_DateAndTime,
+			FCT_TextAnalysis, FCT_TemporaryAudioDevice,
+		)
+		from ..settings import getInstallFeatureOption
+
 		installChoiceLabels = {
 			C_DoNotInstall: _("Do not install"),
 			C_Install: _("Install"),
 			C_InstallWithoutGesture: _("Install without gesture"),
-			}
+		}
 		installChoice = [installChoiceLabels[x] for x in [C_DoNotInstall, C_Install, C_InstallWithoutGesture]]
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Display &systray icons and running application windows list:")
-		self.installSystrayIconsListFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installSystrayIconsListFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_SystrayIconsAndActiveWindowsList))
+		self.installSystrayIconsListFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installSystrayIconsListFeatureOptionBox .SetSelection(
+			getInstallFeatureOption(FCT_SystrayIconsAndActiveWindowsList))
 		self.bindHelpEvent(getHelpObj("hdr1"), self.installSystrayIconsListFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Complex symbols edition help:")
-		self.installComplexSymbolsFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installComplexSymbolsFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_ComplexSymbols))
+		self.installComplexSymbolsFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installComplexSymbolsFeatureOptionBox .SetSelection(getInstallFeatureOption(FCT_ComplexSymbols))
 		self.bindHelpEvent(getHelpObj("hdr3"), self.installComplexSymbolsFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Focused application's informations:")
-		self.installFocusedApplicationInformationsFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installFocusedApplicationInformationsFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_FocusedApplicationInformations))
+		self.installFocusedApplicationInformationsFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installFocusedApplicationInformationsFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_FocusedApplicationInformations))
 		self.bindHelpEvent(getHelpObj("hdr4"), self.installFocusedApplicationInformationsFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Extended Virtual Buffer:")
-		self.installExtendedVirtualBufferFeaturesOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installExtendedVirtualBufferFeaturesOptionBox .SetSelection(getInstallFeatureOption(ID_ExtendedVirtualBuffer))
+		self.installExtendedVirtualBufferFeaturesOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installExtendedVirtualBufferFeaturesOptionBox .SetSelection(
+			getInstallFeatureOption(FCT_ExtendedVirtualBuffer))
 		self.bindHelpEvent(getHelpObj("hdr5"), self.installExtendedVirtualBufferFeaturesOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("C&lipboard command announcement:")
-		self.installClipboardCommandAnnouncementFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installClipboardCommandAnnouncementFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_ClipboardCommandAnnouncement))
+		self.installClipboardCommandAnnouncementFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installClipboardCommandAnnouncementFeatureOptionBox .SetSelection(
+			getInstallFeatureOption(FCT_ClipboardCommandAnnouncement))
 		self.bindHelpEvent(getHelpObj("hdr7"), self.installClipboardCommandAnnouncementFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("""Anno&uncement of the preselected folder in "Open", "Save", "Save as" dialog boxes:""")
-		self.installCurrentFolderReportFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
+		self.installCurrentFolderReportFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
 		self.bindHelpEvent(getHelpObj("hdr8"), self.installCurrentFolderReportFeatureOptionBox)
-		self.installCurrentFolderReportFeatureOptionBox .SetSelection(getInstallFeatureOption(ID_CurrentFolderReport))
+		self.installCurrentFolderReportFeatureOptionBox .SetSelection(
+			getInstallFeatureOption(FCT_CurrentFolderReport))
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&NVDA's log Files:")
-		self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_OpenCurrentOrOldNVDALogFile))
+		self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_OpenCurrentOrOldNVDALogFile))
 		self.bindHelpEvent(getHelpObj("hdr9"), self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Speech &history:")
-		self.installSpeechHistoryFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installSpeechHistoryFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_SpeechHistory))
+		self.installSpeechHistoryFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installSpeechHistoryFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_SpeechHistory))
 		self.bindHelpEvent(getHelpObj("hdr10"), self.installSpeechHistoryFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Keyboard keys renaming:")
-		self.installKeyboardKeyRenamingFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installKeyboardKeyRenamingFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_KeyboardKeyRenaming))
+		self.installKeyboardKeyRenamingFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installKeyboardKeyRenamingFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_KeyboardKeyRenaming))
 		self.bindHelpEvent(getHelpObj("hdr12"), self.installKeyboardKeyRenamingFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("C&ommand keys selective announcement:")
-		self.installCommandKeysSelectiveAnnouncementFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_CommandKeysSelectiveAnnouncement))
+		self.installCommandKeysSelectiveAnnouncementFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_CommandKeysSelectiveAnnouncement))
 		self.bindHelpEvent(getHelpObj("hdr13"), self.installCommandKeysSelectiveAnnouncementFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Minute &timer:")
-		self.installMinuteTimerFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installMinuteTimerFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_MinuteTimer))
+		self.installMinuteTimerFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installMinuteTimerFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_MinuteTimer))
 		self.bindHelpEvent(getHelpObj("hdr14"), self.installMinuteTimerFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("NVDA's &restart:")
-		self.installRestartInDebugModeFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installRestartInDebugModeFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_RestartInDebugMode))
+		self.installRestartInDebugModeFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installRestartInDebugModeFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_RestartInDebugMode))
 		self.bindHelpEvent(getHelpObj("hdr15"), self.installRestartInDebugModeFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Display visible items making up the foreground &object:")
-		self.installForegroundWindowObjectsListFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installForegroundWindowObjectsListFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_ForegroundWindowObjectsList))
+		self.installForegroundWindowObjectsListFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installForegroundWindowObjectsListFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_ForegroundWindowObjectsList))
 		self.bindHelpEvent(getHelpObj("hdr16"), self.installForegroundWindowObjectsListFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Voice profile switching:")
-		self.installVoiceProfileSwitchingFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installVoiceProfileSwitchingFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_VoiceProfileSwitching))
+		self.installVoiceProfileSwitchingFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installVoiceProfileSwitchingFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_VoiceProfileSwitching))
 		self.bindHelpEvent(getHelpObj("hdr17"), self.installVoiceProfileSwitchingFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Ke&ys's remanence:")
-		self.installKeyRemanenceFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installKeyRemanenceFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_KeyRemanence))
+		self.installKeyRemanenceFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installKeyRemanenceFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_KeyRemanence))
 		self.bindHelpEvent(getHelpObj("hdr18"), self.installKeyRemanenceFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Volu&me's control:")
-		self.installVolumeControlFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice)
-		self.installVolumeControlFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_VolumeControl))
+		self.installVolumeControlFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installVolumeControlFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_VolumeControl))
 		self.bindHelpEvent(getHelpObj("hdr21"), self.installVolumeControlFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
+		labelText = _("&audio split:")
+		self.installSplitAudioFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice)
+		self.installSplitAudioFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_SplitAudio))
+		self.bindHelpEvent(getHelpObj("hdr21-8"), self.installSplitAudioFeatureOptionBox)
+		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Development's tools:")
-		self.installDevToolsFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installDevToolsFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_Tools))
+		self.installDevToolsFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installDevToolsFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_Tools))
 		self.bindHelpEvent(getHelpObj("hdr22"), self.installDevToolsFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("&Date and time - supplements:")
-		self.installDateAndTimeFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:])
-		self.installDateAndTimeFeatureOptionBox.SetSelection(getInstallFeatureOption(ID_DateAndTime))
+		self.installDateAndTimeFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:])
+		self.installDateAndTimeFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_DateAndTime))
 		self.bindHelpEvent(getHelpObj("hdr24"), self.installDateAndTimeFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Text anal&ysis:")
-		self.installTextAnalysisFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:])
+		self.installTextAnalysisFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:])
 		self.installTextAnalysisFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_TextAnalysis))
 		self.bindHelpEvent(getHelpObj("hdr31"), self.installTextAnalysisFeatureOptionBox)
 		# Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
 		labelText = _("Temporar&y audio device:")
-		self.installTemporaryAudioDeviceFeatureOptionBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=installChoice[:-1])
-		self.installTemporaryAudioDeviceFeatureOptionBox.SetSelection(getInstallFeatureOption(FCT_TemporaryAudioDevice))
+		self.installTemporaryAudioDeviceFeatureOptionBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=installChoice[:-1])
+		self.installTemporaryAudioDeviceFeatureOptionBox.SetSelection(
+			getInstallFeatureOption(FCT_TemporaryAudioDevice))
 		self.bindHelpEvent(getHelpObj("hdr33"), self.installTemporaryAudioDeviceFeatureOptionBox)
 
 	def saveSettingChanges(self):
+		from .addonConfig import (
+			C_Install, C_DoNotInstall,
+			C_NVDAVolumeLevel, C_MinNVDAVolumeLevel,
+			C_MasterVolumeLevel, C_MinMasterVolumeLevel, C_MaximumOfLastUsedSymbols,
+			FCT_ExtendedVirtualBuffer, FCT_SystrayIconsAndActiveWindowsList,
+			FCT_ComplexSymbols, FCT_ClipboardCommandAnnouncement,
+			FCT_CurrentFolderReport, FCT_FocusedApplicationInformations,
+			FCT_OpenCurrentOrOldNVDALogFile, FCT_SpeechHistory,
+			FCT_KeyboardKeyRenaming, FCT_CommandKeysSelectiveAnnouncement,
+			FCT_MinuteTimer, FCT_ForegroundWindowObjectsList,
+			FCT_VoiceProfileSwitching, FCT_KeyRemanence,
+			FCT_RestartInDebugMode, FCT_VolumeControl,
+			FCT_SplitAudio, FCT_Tools, FCT_DateAndTime,
+			FCT_TextAnalysis, FCT_TemporaryAudioDevice,
+		)
+		from ..settings import (
+			getInstallFeatureOption, setInstallFeatureOption,
+			toggleLoopInNavigationModeOption,
+			toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption,
+			toggleSetOnMainAndNVDAVolumeAdvancedOption, toggleReportTimeWithSecondsOption,
+		)
 		self.restartNVDA = False
-		if self.installExtendedVirtualBufferFeaturesOptionBox.GetSelection() != getInstallFeatureOption(ID_ExtendedVirtualBuffer):
-			setInstallFeatureOption(ID_ExtendedVirtualBuffer, self.installExtendedVirtualBufferFeaturesOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_ExtendedVirtualBuffer)
+		if self.installExtendedVirtualBufferFeaturesOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_ExtendedVirtualBuffer, self.installExtendedVirtualBufferFeaturesOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(ID_ExtendedVirtualBuffer) == C_Install:
+			if getInstallFeatureOption(FCT_ExtendedVirtualBuffer) == C_Install:
 				# set LoopInNavigationModeOption to default state (False)
 				if toggleLoopInNavigationModeOption(False):
 					toggleLoopInNavigationModeOption(True)
-		if self.installSystrayIconsListFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_SystrayIconsAndActiveWindowsList):
-			setInstallFeatureOption(ID_SystrayIconsAndActiveWindowsList, self.installSystrayIconsListFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_SystrayIconsAndActiveWindowsList)
+		if self.installSystrayIconsListFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_SystrayIconsAndActiveWindowsList, self.installSystrayIconsListFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installComplexSymbolsFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_ComplexSymbols):
-			setInstallFeatureOption(ID_ComplexSymbols, self.installComplexSymbolsFeatureOptionBox.GetSelection())
+		if self.installComplexSymbolsFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_ComplexSymbols):
+			setInstallFeatureOption(FCT_ComplexSymbols, self.installComplexSymbolsFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(ID_ComplexSymbols) == C_DoNotInstall:
+			if getInstallFeatureOption(FCT_ComplexSymbols) == C_DoNotInstall:
 				# set parameters to default values
 				_addonConfigManager.setMaximumOfLastUsedSymbols(C_MaximumOfLastUsedSymbols)
 				_addonConfigManager.deleceAllUserComplexSymbols()
-		if self.installClipboardCommandAnnouncementFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_ClipboardCommandAnnouncement):
-			setInstallFeatureOption(ID_ClipboardCommandAnnouncement, self.installClipboardCommandAnnouncementFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_ClipboardCommandAnnouncement)
+		if self.installClipboardCommandAnnouncementFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_ClipboardCommandAnnouncement, self.installClipboardCommandAnnouncementFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installCurrentFolderReportFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_CurrentFolderReport):
-			setInstallFeatureOption(ID_CurrentFolderReport, self.installCurrentFolderReportFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_CurrentFolderReport)
+		if self.installCurrentFolderReportFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_CurrentFolderReport, self.installCurrentFolderReportFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installFocusedApplicationInformationsFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_FocusedApplicationInformations):
-			setInstallFeatureOption(ID_FocusedApplicationInformations, self.installFocusedApplicationInformationsFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_FocusedApplicationInformations)
+		if self.installFocusedApplicationInformationsFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_FocusedApplicationInformations,
+				self.installFocusedApplicationInformationsFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_OpenCurrentOrOldNVDALogFile):
-			setInstallFeatureOption(ID_OpenCurrentOrOldNVDALogFile, self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_OpenCurrentOrOldNVDALogFile)
+		if self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_OpenCurrentOrOldNVDALogFile, self.installOpenCurrentOrOldNVDALogFileFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installSpeechHistoryFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_SpeechHistory):
-			setInstallFeatureOption(ID_SpeechHistory, self.installSpeechHistoryFeatureOptionBox.GetSelection())
+		if self.installSpeechHistoryFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_SpeechHistory):
+			setInstallFeatureOption(FCT_SpeechHistory, self.installSpeechHistoryFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(ID_SpeechHistory) == C_DoNotInstall:
+			if getInstallFeatureOption(FCT_SpeechHistory) == C_DoNotInstall:
 				# set parameters to Default values
 				if not toggleSpeechRecordWithNumberOption(False):
 					toggleSpeechRecordWithNumberOption(True)
 				if toggleSpeechRecordInAscendingOrderOption(False):
 					toggleSpeechRecordInAscendingOrderOption(True)
-		if self.installKeyboardKeyRenamingFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_KeyboardKeyRenaming):
-			setInstallFeatureOption(ID_KeyboardKeyRenaming, self.installKeyboardKeyRenamingFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_KeyboardKeyRenaming)
+		if self.installKeyboardKeyRenamingFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_KeyboardKeyRenaming, self.installKeyboardKeyRenamingFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_CommandKeysSelectiveAnnouncement):
-			setInstallFeatureOption(ID_CommandKeysSelectiveAnnouncement, self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_CommandKeysSelectiveAnnouncement)
+		if self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_CommandKeysSelectiveAnnouncement,
+				self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(ID_CommandKeysSelectiveAnnouncement) == C_DoNotInstall:
+			if getInstallFeatureOption(FCT_CommandKeysSelectiveAnnouncement) == C_DoNotInstall:
 				# delete all command selective announcement feature configuration
 				from .nvdaConfig import _NVDAConfigManager
 				_NVDAConfigManager.deleceCommandKeyAnnouncementConfiguration()
-		if self.installMinuteTimerFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_MinuteTimer):
-			setInstallFeatureOption(ID_MinuteTimer, self.installMinuteTimerFeatureOptionBox.GetSelection())
+		if self.installMinuteTimerFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_MinuteTimer):
+			setInstallFeatureOption(FCT_MinuteTimer, self.installMinuteTimerFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installForegroundWindowObjectsListFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_ForegroundWindowObjectsList):
-			setInstallFeatureOption(ID_ForegroundWindowObjectsList, self.installForegroundWindowObjectsListFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_ForegroundWindowObjectsList)
+		if self.installForegroundWindowObjectsListFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_ForegroundWindowObjectsList, self.installForegroundWindowObjectsListFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installVoiceProfileSwitchingFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_VoiceProfileSwitching):
-			setInstallFeatureOption(ID_VoiceProfileSwitching, self.installVoiceProfileSwitchingFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_VoiceProfileSwitching)
+		if self.installVoiceProfileSwitchingFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_VoiceProfileSwitching, self.installVoiceProfileSwitchingFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(ID_VoiceProfileSwitching) == C_DoNotInstall:
+			if getInstallFeatureOption(FCT_VoiceProfileSwitching) == C_DoNotInstall:
 				from ..switchVoiceProfile import SwitchVoiceProfilesManager
 				SwitchVoiceProfilesManager().deleteAllProfiles()
 
-		if self.installKeyRemanenceFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_KeyRemanence):
-			setInstallFeatureOption(ID_KeyRemanence, self.installKeyRemanenceFeatureOptionBox.GetSelection())
+		if self.installKeyRemanenceFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_KeyRemanence):
+			setInstallFeatureOption(FCT_KeyRemanence, self.installKeyRemanenceFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installRestartInDebugModeFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_RestartInDebugMode):
-			setInstallFeatureOption(ID_RestartInDebugMode, self.installRestartInDebugModeFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_RestartInDebugMode)
+		if self.installRestartInDebugModeFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_RestartInDebugMode, self.installRestartInDebugModeFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installVolumeControlFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_VolumeControl):
-			setInstallFeatureOption(ID_VolumeControl, self.installVolumeControlFeatureOptionBox.GetSelection())
+		if self.installVolumeControlFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_VolumeControl):
+			setInstallFeatureOption(FCT_VolumeControl, self.installVolumeControlFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(ID_VolumeControl) != C_DoNotInstall:
+			if getInstallFeatureOption(FCT_VolumeControl) != C_DoNotInstall:
 				# set parameters to default values
 				if not toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
 					toggleSetOnMainAndNVDAVolumeAdvancedOption(True)
@@ -239,12 +349,16 @@ class FeaturesInstallationSettingsPanel(
 				_addonConfigManager.setMasterVolumeLevel(C_MasterVolumeLevel)
 				_addonConfigManager.setMinNVDAVolumeLevel(int(C_MinNVDAVolumeLevel))
 				_addonConfigManager.setNVDAVolumeLevel(int(C_NVDAVolumeLevel))
-		if self.installDevToolsFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_Tools):
-			setInstallFeatureOption(ID_Tools, self.installDevToolsFeatureOptionBox.GetSelection())
+		if self.installSplitAudioFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_SplitAudio):
+			setInstallFeatureOption(FCT_SplitAudio, self.installSplitAudioFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installDateAndTimeFeatureOptionBox.GetSelection() != getInstallFeatureOption(ID_DateAndTime):
-			setInstallFeatureOption(ID_DateAndTime, self.installDateAndTimeFeatureOptionBox.GetSelection())
-			if not getInstallFeatureOption(ID_DateAndTime) == C_Install:
+
+		if self.installDevToolsFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_Tools):
+			setInstallFeatureOption(FCT_Tools, self.installDevToolsFeatureOptionBox.GetSelection())
+			self.restartNVDA = True
+		if self.installDateAndTimeFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_DateAndTime):
+			setInstallFeatureOption(FCT_DateAndTime, self.installDateAndTimeFeatureOptionBox.GetSelection())
+			if not getInstallFeatureOption(FCT_DateAndTime) == C_Install:
 				# set report time with second to default value
 				if toggleReportTimeWithSecondsOption(False):
 					toggleReportTimeWithSecondsOption(True)
@@ -252,8 +366,10 @@ class FeaturesInstallationSettingsPanel(
 		if self.installTextAnalysisFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_TextAnalysis):
 			setInstallFeatureOption(FCT_TextAnalysis, self.installTextAnalysisFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-		if self.installTemporaryAudioDeviceFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_TemporaryAudioDevice):
-			setInstallFeatureOption(FCT_TemporaryAudioDevice, self.installTemporaryAudioDeviceFeatureOptionBox.GetSelection())
+		option = getInstallFeatureOption(FCT_TemporaryAudioDevice)
+		if self.installTemporaryAudioDeviceFeatureOptionBox.GetSelection() != option:
+			setInstallFeatureOption(
+				FCT_TemporaryAudioDevice, self.installTemporaryAudioDeviceFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
 
 	def onSave(self):
@@ -271,13 +387,25 @@ class NVDAEnhancementSettingsPanel(
 		super(NVDAEnhancementSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		from .addonConfig import (
+			FCT_ExtendedVirtualBuffer,
+			FCT_ComplexSymbols, FCT_SpeechHistory,
+			C_DoNotInstall
+		)
+		from ..settings import (
+			getInstallFeatureOption,
+			toggleReportNextWordOnDeletionOption,
+			toggleSpeechRecordWithNumberOption,
+			toggleSpeechRecordInAscendingOrderOption,
+			toggleLoopInNavigationModeOption
+		)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the
 		# NVDAEnhancement settings panel
 		groupText = _("Editing")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# bug fix in nvda 2020.3
 		# so hide it for nvda version higher or equal to this version
@@ -286,25 +414,25 @@ class NVDAEnhancementSettingsPanel(
 		self.ReportNextWordOnDeletionOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.ReportNextWordOnDeletionOptionBox.SetValue(toggleReportNextWordOnDeletionOption(False))
 		self.bindHelpEvent(getHelpObj("hdr101"), self.ReportNextWordOnDeletionOptionBox)
-		import versionInfo
-		NVDAVersion = [versionInfo.version_year, versionInfo.version_major]
 		if globalVars.appArgs.secure\
 			or NVDAVersion >= [2020, 3]:
 			self.ReportNextWordOnDeletionOptionBox .Hide()
 		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
 		labelText = _("maximum number of last &used symbols recorded:")
-		choice = [x*10 for x in range(1, 11)]
+		choice = [x * 10 for x in range(1, 11)]
 		choice = list(reversed(choice))
-		self.maximumOfLastUsedSymbolsBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice])
-		self.maximumOfLastUsedSymbolsBox.SetSelection(choice.index(_addonConfigManager.getMaximumOfLastUsedSymbols()))
+		self.maximumOfLastUsedSymbolsBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) for x in choice])
+		self.maximumOfLastUsedSymbolsBox.SetSelection(
+			choice.index(_addonConfigManager.getMaximumOfLastUsedSymbols()))
 		self.bindHelpEvent(getHelpObj("hdr3-1"), self.maximumOfLastUsedSymbolsBox)
-		if getInstallFeatureOption(ID_ComplexSymbols) == C_DoNotInstall:
+		if getInstallFeatureOption(FCT_ComplexSymbols) == C_DoNotInstall:
 			self.maximumOfLastUsedSymbolsBox.Disable()
 		# Translators: This is the label for a group in NVDAEnhancement settings panel
 		groupText = _("Speech history")
 		groupSizer = wx.StaticBoxSizer(wx.VERTICAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Number the records ")
@@ -313,27 +441,52 @@ class NVDAEnhancementSettingsPanel(
 		self.bindHelpEvent(getHelpObj("hdr10-1"), self.speechRecordWithNumberOptionBox)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Display records in ascending order")
-		self.speechRecordInAscendingOrderOptionBox = group.addItem(wx.CheckBox(groupBox, wx.ID_ANY, label=labelText))
+		self.speechRecordInAscendingOrderOptionBox = group.addItem(
+			wx.CheckBox(groupBox, wx.ID_ANY, label=labelText))
 		self.speechRecordInAscendingOrderOptionBox.SetValue(toggleSpeechRecordInAscendingOrderOption(False))
 		self.bindHelpEvent(getHelpObj("hdr10-1"), self.speechRecordInAscendingOrderOptionBox)
-		if getInstallFeatureOption(ID_SpeechHistory) == C_DoNotInstall:
+		if getInstallFeatureOption(FCT_SpeechHistory) == C_DoNotInstall:
 			for item in range(0, group.sizer.GetItemCount()):
 				group.sizer.Hide(item)
 		# Translators: This is the label for a group NVDAEnhancement settings panel
 		groupText = _("Browser")
 		groupSizer = wx.StaticBoxSizer(wx.VERTICAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 		labelText = _("&Browse in loop")
 		self.loopInNavigationModeOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.loopInNavigationModeOptionBox.SetValue(toggleLoopInNavigationModeOption(False))
 		self.bindHelpEvent(getHelpObj("hdr5-5"), self.loopInNavigationModeOptionBox)
-		if getInstallFeatureOption(ID_ExtendedVirtualBuffer) == C_DoNotInstall:
+		if getInstallFeatureOption(FCT_ExtendedVirtualBuffer) == C_DoNotInstall:
 			group.sizer.Hide(0)
+		# Translators: This is the label for a group of editing options in the NVDAEnhancement settings panel.
+		groupText = _("reporting spelling errors")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is the label for a choice box in the TextAnalyzer settings panel.
+		labelText = _("Report &by:")
+		from .addonConfig import reportingSpellingErrorsChoiceLabels
+		self.reportingSpellingErrorsByChoiceBox = group.addLabeledControl(
+			labelText,
+			wx.Choice,
+			choices=[label for option, label in reportingSpellingErrorsChoiceLabels .items()]
+		)
+		option = _addonConfigManager.getReportingSpellingErrorsByOption()
+		self.reportingSpellingErrorsByChoiceBox.SetSelection(
+			list(reportingSpellingErrorsChoiceLabels .keys()).index(option))
+		self.bindHelpEvent(getHelpObj("hdr104"), self.reportingSpellingErrorsByChoiceBox)
 
 	def saveSettingChanges(self):
+		from ..settings import (
+			toggleReportNextWordOnDeletionOption,
+			toggleSpeechRecordWithNumberOption,
+			toggleSpeechRecordInAscendingOrderOption,
+			toggleLoopInNavigationModeOption
+		)
 		from . import _addonConfigManager
 		self.restartNVDA = False
 		if self.ReportNextWordOnDeletionOptionBox.IsChecked() != toggleReportNextWordOnDeletionOption(False):
@@ -341,12 +494,18 @@ class NVDAEnhancementSettingsPanel(
 			self.restartNVDA = True
 		if self.speechRecordWithNumberOptionBox.IsChecked() != toggleSpeechRecordWithNumberOption(False):
 			toggleSpeechRecordWithNumberOption()
-		if self.speechRecordInAscendingOrderOptionBox.IsChecked() != toggleSpeechRecordInAscendingOrderOption(False):
+		option = toggleSpeechRecordInAscendingOrderOption(False)
+		if self.speechRecordInAscendingOrderOptionBox.IsChecked() != option:
 			toggleSpeechRecordInAscendingOrderOption()
 		if self.loopInNavigationModeOptionBox.IsChecked() != toggleLoopInNavigationModeOption(False):
 			toggleLoopInNavigationModeOption()
-		maximumOfLastUsedSymbols = int(self.maximumOfLastUsedSymbolsBox.GetString(self.maximumOfLastUsedSymbolsBox.GetSelection()))
+		maximumOfLastUsedSymbols = int(self.maximumOfLastUsedSymbolsBox.GetString(
+			self.maximumOfLastUsedSymbolsBox.GetSelection()))
 		_addonConfigManager.setMaximumOfLastUsedSymbols(maximumOfLastUsedSymbols)
+		from .addonConfig import reportingSpellingErrorsChoiceLabels
+		index = self.reportingSpellingErrorsByChoiceBox.GetSelection()
+		option = [x for x in reportingSpellingErrorsChoiceLabels .keys()][index]
+		_addonConfigManager.setReportingSpellingErrorsByOption(option)
 
 	def onSave(self):
 		self.saveSettingChanges()
@@ -363,12 +522,22 @@ class ComputerSettingsPanel(
 		super(ComputerSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		from ..settings import (
+			getInstallFeatureOption,
+			toggleNoDescriptionReportInRibbonOption,
+			toggleAutomaticWindowMaximizationOption,
+			toggleReportTimeWithSecondsOption,
+			toggleSetOnMainAndNVDAVolumeAdvancedOption,
+			toggleReportVolumeChangeAdvancedOption,
+			toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption,
+			toggleConfirmAudioDeviceChangeAdvancedOption
+		)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the computer settings panel.
 		groupText = _("Windows")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Computer settings panel.
 		labelText = _("&No object description in Windows ribbons")
@@ -388,18 +557,20 @@ class ComputerSettingsPanel(
 		self.reportTimeWithSecondsOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.reportTimeWithSecondsOptionBox.SetValue(toggleReportTimeWithSecondsOption(False))
 		self.bindHelpEvent(getHelpObj("hdr24-2"), self.reportTimeWithSecondsOptionBox)
-		if getInstallFeatureOption(ID_DateAndTime) == C_DoNotInstall:
+		from .addonConfig import FCT_DateAndTime, C_DoNotInstall
+		if getInstallFeatureOption(FCT_DateAndTime) == C_DoNotInstall:
 			self.reportTimeWithSecondsOptionBox.Disable()
 
 		# Translators: This is the label for a group in computer settings panel.
 		groupText = _("Volume control")
-		volumeGroup = gui.guiHelper.BoxSizerHelper(self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
+		volumeGroup = BoxSizerHelper(
+			self, sizer=wx.StaticBoxSizer(wx.StaticBox(self, label=groupText), wx.VERTICAL))
 		sHelper.addItem(volumeGroup)
 		# Translators: This is the label for a group in computer settings panel.
 		groupText = _("Main and NVDA volume")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is the label for a checkbox in the computer settings panel.
 		labelText = _("Set on &volume at the loading of the add-on")
@@ -410,12 +581,13 @@ class ComputerSettingsPanel(
 		groupText = _("Main volume")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("&Threshold of recovery of the volume:")
 		choice = [10 * x for x in reversed(list(range(0, 11)))]
-		self.minMasterVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
+		self.minMasterVolumeLevelBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
 		self.minMasterVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getMinMasterVolumeLevel()))
 		self.bindHelpEvent(getHelpObj("hdr21-7"), self.minMasterVolumeLevelBox)
 		# Translators: This is a label for a choice box in computer settings panel.
@@ -427,28 +599,31 @@ class ComputerSettingsPanel(
 		groupText = _("NVDA volume")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("T&hreshold of recovery of the volume:")
-		self.minNVDAVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
-		self.minNVDAVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getMinNVDAVolumeLevel()))
+		self.minNVDAVolumeLevelBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) + "%" for x in choice])
+		self.minNVDAVolumeLevelBox.SetSelection(choice.index(_addonConfigManager.getMinNVDAVolumeLevel()))
 		self.bindHelpEvent(getHelpObj("hdr21-7"), self.minNVDAVolumeLevelBox)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("&Recovery level:")
-		self.NVDAVolumeLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice[5:]])
-		self.NVDAVolumeLevelBox.SetSelection(choice[5:].index(_addonConfigManager.getNVDAVolumeLevel()))
+		self.NVDAVolumeLevelBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) + "%" for x in choice])
+		self.NVDAVolumeLevelBox.SetSelection(choice.index(_addonConfigManager.getNVDAVolumeLevel()))
 		self.bindHelpEvent(getHelpObj("hdr21-7"), self.NVDAVolumeLevelBox)
 		# Translators: This is the label for a group in computer settings panel.
 		groupText = _("Volume change")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		volumeGroup.addItem(group)
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("Ste&ps's size:")
 		choice = [str(x) for x in range(1, 21)]
-		self.volumeChangeStepLevelBox = group.addLabeledControl(labelText, wx.Choice, choices=list(reversed(choice)))
+		self.volumeChangeStepLevelBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=list(reversed(choice)))
 		self.volumeChangeStepLevelBox.SetStringSelection(str(_addonConfigManager.getVolumeChangeStepLevel())	)
 		self.bindHelpEvent(getHelpObj("hdr21-3"), self.volumeChangeStepLevelBox)
 		# Translators: This is the label for a checkbox in the computer settings panel.
@@ -457,17 +632,19 @@ class ComputerSettingsPanel(
 		self.reportVolumeChangeOptionCheckBox.SetValue(toggleReportVolumeChangeAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr21-6"), self.reportVolumeChangeOptionCheckBox)
 		# Translators: This is the label for a checkbox in the computer settings panel.
-		labelText = _("&Announce application volume level in percent")
-		self.appVolumeLevelAnnouncementInPercentOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
-		self.appVolumeLevelAnnouncementInPercentOptionCheckBox .SetValue(toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False))
-		self.bindHelpEvent(getHelpObj("hdr21-6"), self.appVolumeLevelAnnouncementInPercentOptionCheckBox)
-		if not getInstallFeatureOption(ID_VolumeControl):
+		labelText = _("&Increase speakers volume if necessary")
+		self.increaseSpeakersVolumeIfNecessaryOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
+		self.increaseSpeakersVolumeIfNecessaryOptionCheckBox .SetValue(
+			toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption(False))
+		self.bindHelpEvent(getHelpObj("hdr21-6"), self.reportVolumeChangeOptionCheckBox)
+		from .addonConfig import FCT_VolumeControl
+		if not getInstallFeatureOption(FCT_VolumeControl):
 			for item in range(0, volumeGroup.sizer.GetItemCount()):
 				volumeGroup.sizer.Hide(item)
 		groupText = _("Temporary audio device")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Computer settings panel.
 		labelText = _("Ask for confirmation")
@@ -477,37 +654,53 @@ class ComputerSettingsPanel(
 		# Translators: This is a label for a choice box in computer settings panel.
 		labelText = _("ma&ximum waiting time for confirmation (in seconds):")
 		choice = [str(x) for x in range(1, 31)]
-		self.confirmAudioDeviceChangeTimeOutChoiceBox = group.addLabeledControl(labelText, wx.Choice, choices=list(reversed(choice)))
-		self.confirmAudioDeviceChangeTimeOutChoiceBox.SetStringSelection(str(_addonConfigManager.getConfirmAudioDeviceChangeTimeOut())	)
+		self.confirmAudioDeviceChangeTimeOutChoiceBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=list(reversed(choice)))
+		self.confirmAudioDeviceChangeTimeOutChoiceBox.SetStringSelection(
+			str(_addonConfigManager.getConfirmAudioDeviceChangeTimeOut())	)
 		self.bindHelpEvent(getHelpObj("?dr33"), self.confirmAudioDeviceChangeTimeOutChoiceBox)
 
 	def saveSettingChanges(self):
+		from ..settings import (
+			getInstallFeatureOption,
+			toggleNoDescriptionReportInRibbonOption,
+			toggleAutomaticWindowMaximizationOption,
+			toggleReportTimeWithSecondsOption,
+			toggleSetOnMainAndNVDAVolumeAdvancedOption,
+			toggleReportVolumeChangeAdvancedOption,
+			toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption,
+			toggleConfirmAudioDeviceChangeAdvancedOption
+		)
 		self.restartNVDA = False
 		if self.noDescriptionReportInRibbonOptionBox.IsChecked() != toggleNoDescriptionReportInRibbonOption(False):
 			toggleNoDescriptionReportInRibbonOption()
 			self.restartNVDA = True
 		if self.AutomaticWindowMaximizationOptionBox.IsChecked() != toggleAutomaticWindowMaximizationOption(False):
 			toggleAutomaticWindowMaximizationOption()
-		if getInstallFeatureOption(ID_DateAndTime) != C_DoNotInstall:
+		from .addonConfig import FCT_DateAndTime, C_DoNotInstall
+		if getInstallFeatureOption(FCT_DateAndTime) != C_DoNotInstall:
 			if self.reportTimeWithSecondsOptionBox.IsChecked() != toggleReportTimeWithSecondsOption(False):
 				toggleReportTimeWithSecondsOption()
-		if self.setOnMainAndNVDAVolumeOptionCheckBox.IsChecked() != toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
+		option = toggleSetOnMainAndNVDAVolumeAdvancedOption(False)
+		if self.setOnMainAndNVDAVolumeOptionCheckBox.IsChecked() != option:
 			toggleSetOnMainAndNVDAVolumeAdvancedOption()
 		levelString = self.minMasterVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMinMasterVolumeLevel(int(levelString))
 		levelString = self.masterVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMasterVolumeLevel(int(levelString))
-		levelString = self.minNVDAVolumeLevelBox.GetStringSelection()
+		levelString = self.minNVDAVolumeLevelBox .GetStringSelection()[:-1]
 		_addonConfigManager.setMinNVDAVolumeLevel(int(levelString))
-		levelString = self.NVDAVolumeLevelBox.GetStringSelection()
+		levelString = self.NVDAVolumeLevelBox.GetStringSelection()[:-1]
 		_addonConfigManager.setNVDAVolumeLevel(int(levelString))
 		levelString = self.volumeChangeStepLevelBox.GetStringSelection()
 		_addonConfigManager.setVolumeChangeStepLevel(int(levelString))
 		if self.reportVolumeChangeOptionCheckBox.IsChecked() != toggleReportVolumeChangeAdvancedOption(False):
 			toggleReportVolumeChangeAdvancedOption()
-		if self.appVolumeLevelAnnouncementInPercentOptionCheckBox.IsChecked() != toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(False):
-			toggleAppVolumeLevelAnnouncementInPercentAdvancedOption(True)
-		if self.confirmAudioDeviceChangeCheckBox.IsChecked() != toggleConfirmAudioDeviceChangeAdvancedOption(False):
+		option = toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption(False)
+		if self.increaseSpeakersVolumeIfNecessaryOptionCheckBox.IsChecked() != option:
+			toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption()
+		option = toggleConfirmAudioDeviceChangeAdvancedOption(False)
+		if self.confirmAudioDeviceChangeCheckBox.IsChecked() != option:
 			toggleConfirmAudioDeviceChangeAdvancedOption(True)
 		timeOut = self.confirmAudioDeviceChangeTimeOutChoiceBox.GetStringSelection()
 		_addonConfigManager.setConfirmAudioDeviceChangeTimeOut(timeOut)
@@ -530,17 +723,22 @@ class AdvancedSettingsPanel(
 		_("Only until the next NVDA restart"),  # PSOE_UntilNVDARestart
 		# Translators: This is a label for a choice item in Advanced options settings dialog.
 		_("For all NVDA's versions"),  # PSOE_AllVersions
-		]
+	]
 
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super(AdvancedSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		from ..settings import (
+			toggleDialogTitleWithAddonSummaryAdvancedOption,
+			toggleByPassNoDescriptionAdvancedOption,
+		)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a choice box in the advanced settings panel.
 		labelText = _("&Play sound on logged errors:")
-		self.playSoundOnErrorsOptionChoiceBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=self._playSoundOnErrorsOptionLabels)
+		self.playSoundOnErrorsOptionChoiceBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=self._playSoundOnErrorsOptionLabels)
 		self.playSoundOnErrorsOptionChoiceBox.SetSelection(_addonConfigManager.getPlaySoundOnErrorsOption())
 		self.bindHelpEvent(getHelpObj("hdr300"), self.playSoundOnErrorsOptionChoiceBox)
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
@@ -552,11 +750,15 @@ class AdvancedSettingsPanel(
 		labelText = _("&Delay between repeat of same gesture:")
 		choice = [x for x in range(100, 3050, 50)]
 		choice = list(reversed(choice))
-		self.MaximumDelayBetweenSameScriptBox = sHelper.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in choice])
-		self.MaximumDelayBetweenSameScriptBox.SetSelection(choice.index(_addonConfigManager.getMaximumDelayBetweenSameScript()))
+		self.MaximumDelayBetweenSameScriptBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) for x in choice])
+		self.MaximumDelayBetweenSameScriptBox.SetSelection(
+			choice.index(_addonConfigManager.getMaximumDelayBetweenSameScript()))
 		self.bindHelpEvent(getHelpObj("hdr303"), self.MaximumDelayBetweenSameScriptBox)
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
-		labelText = _("""&Do not take account of the option called "Report object descriptions" during the display of the dialog box same as confirmation""")
+		labelText = _(
+			"""&Do not take account of the option called "Report object descriptions" """
+			"""during the display of the dialog box same as confirmation""")
 		self.byPassNoDescriptionOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.byPassNoDescriptionOptionBox.SetValue(toggleByPassNoDescriptionAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr204"), self.byPassNoDescriptionOptionBox)
@@ -565,12 +767,18 @@ class AdvancedSettingsPanel(
 			self.byPassNoDescriptionOptionBox.Hide()
 
 	def saveSettingChanges(self):
+		from ..settings import (
+			toggleDialogTitleWithAddonSummaryAdvancedOption,
+			toggleByPassNoDescriptionAdvancedOption,
+		)
 		self.restartNVDA = False
 		playSoundOnErrorsOption = self.playSoundOnErrorsOptionChoiceBox.GetSelection()
 		_addonConfigManager.setPlaySoundOnErrorsOption(playSoundOnErrorsOption)
-		if self.dialogTitleWithAddonSummaryOptionBox.IsChecked() != toggleDialogTitleWithAddonSummaryAdvancedOption(False):
+		option = toggleDialogTitleWithAddonSummaryAdvancedOption(False)
+		if self.dialogTitleWithAddonSummaryOptionBox.IsChecked() != option:
 			toggleDialogTitleWithAddonSummaryAdvancedOption()
-		maximumDelayBetweenSameScript = int(self.MaximumDelayBetweenSameScriptBox.GetString(self.MaximumDelayBetweenSameScriptBox.GetSelection()))
+		maximumDelayBetweenSameScript = int(
+			self.MaximumDelayBetweenSameScriptBox.GetString(self.MaximumDelayBetweenSameScriptBox.GetSelection()))
 		if maximumDelayBetweenSameScript != _addonConfigManager.getMaximumDelayBetweenSameScript():
 			_addonConfigManager.setMaximumDelayBetweenSameScript(maximumDelayBetweenSameScript)
 			self.restartNVDA = True
@@ -593,12 +801,23 @@ class KeyboardSettingsPanel(
 		super(KeyboardSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		from ..settings import (
+			getInstallFeatureOption,
+			toggleOnlyNVDAKeyInRemanenceAdvancedOption,
+			toggleRemanenceAtNVDAStartAdvancedOption,
+			toggleBeepAtRemanenceStartAdvancedOption,
+			toggleBeepAtRemanenceEndAdvancedOption,
+			toggleRemanenceForGmailAdvancedOption,
+			toggleEnableNumpadNavigationModeToggleAdvancedOption,
+			toggleActivateNumpadStandardUseWithNumLockAdvancedOption,
+			toggleActivateNumpadNavigationModeAtStartAdvancedOption,
+		)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the Keyboard settings panel.
 		groupText = _("Keys's remanence")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Keyboard settings panel.
 		labelText = _("&Only NVDA key in remanence")
@@ -614,8 +833,10 @@ class KeyboardSettingsPanel(
 		labelText = _("&Remanence's delay (in milliseconds):")
 		remanenceDelayChoice = [x for x in range(1000, 10500, 500)]
 		self.remanenceDelayChoice = list(reversed(remanenceDelayChoice))
-		self.remanenceDelayBox = group.addLabeledControl(labelText, wx.Choice, choices=[str(x) for x in self.remanenceDelayChoice])
-		self.remanenceDelayBox.SetSelection(self.remanenceDelayChoice.index(_addonConfigManager.getRemanenceDelay()))
+		self.remanenceDelayBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) for x in self.remanenceDelayChoice])
+		self.remanenceDelayBox.SetSelection(
+			self.remanenceDelayChoice.index(_addonConfigManager.getRemanenceDelay()))
 		self.bindHelpEvent(getHelpObj("hdr18"), self.remanenceDelayBox)
 		# Translators: This is the label for a check box in the Keyboard settings panel.
 		labelText = _("Play &sound at the start of remanence")
@@ -632,55 +853,79 @@ class KeyboardSettingsPanel(
 		self.remanenceForGmailOptionCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.remanenceForGmailOptionCheckBox .SetValue(toggleRemanenceForGmailAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr18-1"), self.remanenceForGmailOptionCheckBox)
-		if not getInstallFeatureOption(ID_KeyRemanence):
+		from .addonConfig import FCT_KeyRemanence
+		if not getInstallFeatureOption(FCT_KeyRemanence):
 			for item in range(0, group.sizer.GetItemCount()):
 				group.sizer.Hide(item)
 		# Translators: This is the label for a group of editing options in the Keyboard settings panel.
 		groupText = _("Numeric keypad")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the keyboard settings panel.
 		labelText = _("&Allow the standard use of the numeric keypad")
 		self.enableNumpadNavigationModeToggleOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
-		self.enableNumpadNavigationModeToggleOptionBox.SetValue(toggleEnableNumpadNavigationModeToggleAdvancedOption(False))
+		self.enableNumpadNavigationModeToggleOptionBox.SetValue(
+			toggleEnableNumpadNavigationModeToggleAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr304"), self.enableNumpadNavigationModeToggleOptionBox)
 		# Translators: This is the label for a checkbox in the keyboard settings panel.
 		labelText = _("&Enable the standard use of the numeric keypad at NVDA's start")
 		self.activateNumpadNavigationModeAtStartOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
-		self.activateNumpadNavigationModeAtStartOptionBox.SetValue(toggleActivateNumpadNavigationModeAtStartAdvancedOption(False))
+		self.activateNumpadNavigationModeAtStartOptionBox.SetValue(
+			toggleActivateNumpadNavigationModeAtStartAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr304"), self.activateNumpadNavigationModeAtStartOptionBox)
 		# Translators: This is the label for a checkbox in the keyboard settings panel.
 		labelText = _("&Enable / disable numeric keypad's standard use with num lock key")
 		self.activateNumpadStandardUseWithNumLockOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
-		self.activateNumpadStandardUseWithNumLockOptionBox.SetValue(toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False))
+		self.activateNumpadStandardUseWithNumLockOptionBox.SetValue(
+			toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr304"), self.activateNumpadStandardUseWithNumLockOptionBox)
 
 	def saveSettingChanges(self):
+		from ..settings import (
+			getInstallFeatureOption,
+			toggleOnlyNVDAKeyInRemanenceAdvancedOption,
+			toggleRemanenceAtNVDAStartAdvancedOption,
+			toggleBeepAtRemanenceStartAdvancedOption,
+			toggleBeepAtRemanenceEndAdvancedOption,
+			toggleRemanenceForGmailAdvancedOption,
+			toggleEnableNumpadNavigationModeToggleAdvancedOption,
+			toggleActivateNumpadStandardUseWithNumLockAdvancedOption,
+			toggleActivateNumpadNavigationModeAtStartAdvancedOption,
+		)
 		self.restartNVDA = False
-		if getInstallFeatureOption(ID_KeyRemanence):
-			if self.onlyNVDAKeyInRemanenceAdvancedOptionBox.IsChecked() != toggleOnlyNVDAKeyInRemanenceAdvancedOption(False):
+		from .addonConfig import FCT_KeyRemanence
+		if getInstallFeatureOption(FCT_KeyRemanence):
+			option = toggleOnlyNVDAKeyInRemanenceAdvancedOption(False)
+			if self.onlyNVDAKeyInRemanenceAdvancedOptionBox.IsChecked() != option:
 				toggleOnlyNVDAKeyInRemanenceAdvancedOption()
-			if self.remanenceAtNVDAStartAdvancedOptionBox.IsChecked() != toggleRemanenceAtNVDAStartAdvancedOption(False):
+			option = toggleRemanenceAtNVDAStartAdvancedOption(False)
+			if self.remanenceAtNVDAStartAdvancedOptionBox.IsChecked() != option:
 				toggleRemanenceAtNVDAStartAdvancedOption()
 			remanenceDelay = self.remanenceDelayBox.GetSelection()
 			_addonConfigManager.setRemanenceDelay(self.remanenceDelayChoice[remanenceDelay])
-			if self.beepAtRemanenceStartOptionCheckBox.IsChecked() != toggleBeepAtRemanenceStartAdvancedOption(False):
+			option = toggleBeepAtRemanenceStartAdvancedOption(False)
+			if self.beepAtRemanenceStartOptionCheckBox.IsChecked() != option:
 				toggleBeepAtRemanenceStartAdvancedOption()
-			if self.beepAtRemanenceEndOptionCheckBox.IsChecked() != toggleBeepAtRemanenceEndAdvancedOption(False):
+			option = toggleBeepAtRemanenceEndAdvancedOption(False)
+			if self.beepAtRemanenceEndOptionCheckBox.IsChecked() != option:
 				toggleBeepAtRemanenceEndAdvancedOption()
-			if self.remanenceForGmailOptionCheckBox.IsChecked() != toggleRemanenceForGmailAdvancedOption(False):
+			option = toggleRemanenceForGmailAdvancedOption(False)
+			if self.remanenceForGmailOptionCheckBox.IsChecked() != option:
 				toggleRemanenceForGmailAdvancedOption()
-		if self.enableNumpadNavigationModeToggleOptionBox.IsChecked() != toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
+		option = toggleEnableNumpadNavigationModeToggleAdvancedOption(False)
+		if self.enableNumpadNavigationModeToggleOptionBox.IsChecked() != option:
 			toggleEnableNumpadNavigationModeToggleAdvancedOption()
 			# in all cases, disable numpad navigation mode
 			from ..commandKeysSelectiveAnnouncementAndRemanence import _myInputManager
 			if _myInputManager is not None:
 				_myInputManager .setNumpadNavigationMode(False)
-		if self.activateNumpadNavigationModeAtStartOptionBox.IsChecked() != toggleActivateNumpadNavigationModeAtStartAdvancedOption(False):
+		option = toggleActivateNumpadNavigationModeAtStartAdvancedOption(False)
+		if self.activateNumpadNavigationModeAtStartOptionBox.IsChecked() != option:
 			toggleActivateNumpadNavigationModeAtStartAdvancedOption()
-		if self.activateNumpadStandardUseWithNumLockOptionBox.IsChecked() != toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False):
+		option = toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False)
+		if self.activateNumpadStandardUseWithNumLockOptionBox.IsChecked() != option:
 			toggleActivateNumpadStandardUseWithNumLockAdvancedOption()
 
 	def onSave(self):
@@ -698,7 +943,11 @@ class UpdateSettingsPanel(
 		super(UpdateSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		from ..settings import (
+			toggleUpdateReleaseVersionsToDevVersionsGeneralOptions,
+			toggleAutoUpdateGeneralOptions
+		)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a checkbox in the Update settings panel.
 		labelText = _("Automatically check for &updates")
 		self.autoCheckForUpdatesCheckBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
@@ -706,8 +955,10 @@ class UpdateSettingsPanel(
 		self.bindHelpEvent(getHelpObj("hdr-update"), self.autoCheckForUpdatesCheckBox)
 		# Translators: This is the label for a checkbox in the Update settings panel.
 		labelText = _("Update also release versions to &development versions")
-		self.updateReleaseVersionsToDevVersionsCheckBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
-		self.updateReleaseVersionsToDevVersionsCheckBox.SetValue(toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
+		self.updateReleaseVersionsToDevVersionsCheckBox = sHelper.addItem(
+			wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.updateReleaseVersionsToDevVersionsCheckBox.SetValue(
+			toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 		self.bindHelpEvent(getHelpObj("hdr-update"), self.updateReleaseVersionsToDevVersionsCheckBox)
 		# translators: this is a label for a button in update settings panel.
 		labelText = _("&Check for update")
@@ -726,15 +977,14 @@ class UpdateSettingsPanel(
 		from ..updateHandler import addonUpdateCheck
 		releaseToDevVersion = self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked()
 		wx.CallAfter(addonUpdateCheck, auto=False, releaseToDev=releaseToDevVersion)
-
 		self.Close()
 
 	def onSeeHistory(self, evt):
 		addon = addonHandler.getCodeAddon()
-
-		theFile = os.path.join(addon.path, "doc", getLanguage(), "changes.html")
+		lang = getLanguage()
+		theFile = os.path.join(addon.path, "doc", lang, "changes.html")
 		if not os.path.exists(theFile):
-			lang = getLanguage()
+			lang = lang.split("_")[0]
 			theFile = os.path.join(addon.path, "doc", lang, "changes.html")
 			if not os.path.exists(theFile):
 				lang = "en"
@@ -742,10 +992,15 @@ class UpdateSettingsPanel(
 		os.startfile(theFile)
 
 	def saveSettingChanges(self):
+		from ..settings import (
+			toggleUpdateReleaseVersionsToDevVersionsGeneralOptions,
+			toggleAutoUpdateGeneralOptions
+		)
 		self.restartNVDA = False
 		if self.autoCheckForUpdatesCheckBox.IsChecked() != toggleAutoUpdateGeneralOptions(False):
 			toggleAutoUpdateGeneralOptions()
-		if self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked() != toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False):
+		option = toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False)
+		if self.updateReleaseVersionsToDevVersionsCheckBox.IsChecked() != option:
 			toggleUpdateReleaseVersionsToDevVersionsGeneralOptions()
 
 	def onSave(self):
@@ -777,7 +1032,7 @@ class GlobalSettingsDialog(MultiCategorySettingsDialogEx):
 		KeyboardSettingsPanel,
 		AdvancedSettingsPanel,
 		UpdateSettingsPanel,
-		]
+	]
 
 	def __init__(self, parent, initialCategory=None):
 		curAddon = addonHandler.getCodeAddon()
@@ -801,17 +1056,18 @@ class NVDAEnhancementProfileSettingsPanel(SettingsPanel):
 		super(NVDAEnhancementProfileSettingsPanel, self).__init__(parent)
 
 	def makeSettings(self, settingsSizer):
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of cursor's movement options in the
 		# NVDAEnhancement profile settings panel
 		groupText = _("Cursor's moving")
 		groupSizer = wx.StaticBoxSizer(wx.VERTICAL, self, label=groupText)
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a combobox in the NVDAEnhancement settings panel.
 		labelText = _("&Punctuation/symbol level on word movement:")
 		symbolLevelLabels = characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS
-		symbolLevelChoices = [symbolLevelLabels[level] for level in characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS]
+		symbolLevelChoices = [
+			symbolLevelLabels[level] for level in characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS]
 		# Translators: This is the label for an item in combobox in the
 		# NVDAEnhancement settings panel.
 		symbolLevelChoices = [_("Current configuration profile's level"), ] + symbolLevelChoices[:]
@@ -821,7 +1077,8 @@ class NVDAEnhancementProfileSettingsPanel(SettingsPanel):
 		if symbolLevelOnWordCaretMovement is None:
 			self.symbolLevelList.SetSelection(0)
 		else:
-			self.symbolLevelList.SetSelection(1+characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS.index((symbolLevelOnWordCaretMovement)))
+			self.symbolLevelList.SetSelection(
+				1 + characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS.index((symbolLevelOnWordCaretMovement)))
 
 	def saveSettingChanges(self):
 		from .nvdaConfig import _NVDAConfigManager
@@ -830,10 +1087,9 @@ class NVDAEnhancementProfileSettingsPanel(SettingsPanel):
 			_NVDAConfigManager .saveSymbolLevelOnWordCaretMovement(None)
 		else:
 			index = self.symbolLevelList.GetSelection()
-			level = characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS[index-1]
-			print ("level: %s"%level)
-			from versionInfo import version_year, version_major
-			if version_year >= 2022  or (version_year == 2021 and version_major >= 2):
+			level = characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS[index - 1]
+
+			if version_year >= 2022 or (version_year == 2021 and version_major >= 2):
 				level = level.value
 			_NVDAConfigManager .saveSymbolLevelOnWordCaretMovement(level)
 
@@ -853,12 +1109,12 @@ class KeyboardProfileSettingsPanel(
 
 	def makeSettings(self, settingsSizer):
 		from .nvdaConfig import _NVDAConfigManager
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
 		groupText = _("Clipboard")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Keyboard profile settings panel.
 		labelText = _("Text used as a &separator between contents added to the clipboard.")
@@ -915,7 +1171,7 @@ class TextAnalyzerProfileSettingsPanel(
 
 	def makeSettings(self, settingsSizer):
 		from .nvdaConfig import _NVDAConfigManager
-		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
+		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
 		labelText = _("&Activate text analyzer")
 		self.textAnalyzerActivationCheckBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
@@ -924,18 +1180,20 @@ class TextAnalyzerProfileSettingsPanel(
 		# Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
 		labelText = _("Activate text analyzer at add-on's &start")
 		self.textAnalyzerActivationAtStartCheckBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
-		self.textAnalyzerActivationAtStartCheckBox.SetValue(_NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False))
+		self.textAnalyzerActivationAtStartCheckBox.SetValue(
+			_NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False))
 		self.bindHelpEvent(getHelpObj("hdr31-1"), self.textAnalyzerActivationAtStartCheckBox)
 		# Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
 		groupText = _("Symbols match")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
 		labelText = _("Report &discrepancies")
 		self.reportSymbolsDiscrepanciesCheckBox = group.addItem(wx.CheckBox(groupBox, wx.ID_ANY, label=labelText))
-		self.reportSymbolsDiscrepanciesCheckBox .SetValue(_NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False))
+		self.reportSymbolsDiscrepanciesCheckBox .SetValue(
+			_NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False))
 		self.bindHelpEvent(getHelpObj("hdr31-2-1"), self.reportSymbolsDiscrepanciesCheckBox)
 		# Translators: This is the label for a checkListBox in the TextAnalyzer settings panel.
 		labelText = _("S&ymbols:")
@@ -946,7 +1204,7 @@ class TextAnalyzerProfileSettingsPanel(
 			labelText,
 			nvdaControls.CustomCheckListBox,
 			choices=[self.symbolLabels[x] for x in list(self.symbolOptions.keys())],
-			)
+		)
 		if self.symbolsCheckListBox.GetCount():
 			self.symbolsCheckListBox.SetSelection(0)
 		self.bindHelpEvent(getHelpObj("hdr31-2-1"), self.symbolsCheckListBox)
@@ -960,7 +1218,7 @@ class TextAnalyzerProfileSettingsPanel(
 		groupText = _("Anomalies")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
 		labelText = _("Report a&nomalies")
@@ -974,7 +1232,7 @@ class TextAnalyzerProfileSettingsPanel(
 			labelText,
 			nvdaControls.CustomCheckListBox,
 			choices=[label for anomaly, label in anomalyLabels.items()]
-			)
+		)
 		self.anomaliesCheckListBox.SetSelection(0)
 		self.bindHelpEvent(getHelpObj("hdr31-2-2"), self.anomaliesCheckListBox)
 		self.anomaliesOptions = _NVDAConfigManager.getAnomaliesOptions()
@@ -991,7 +1249,7 @@ class TextAnalyzerProfileSettingsPanel(
 			labelText,
 			nvdaControls.CustomCheckListBox,
 			choices=[x for x in getSymbols_all()]
-			)
+		)
 		self.symbolsAndSpaceCheckListBox .Bind(
 			wx.EVT_CHECKLISTBOX, self.onCheckPunctuation)
 		self.bindHelpEvent(getHelpObj("hdr31-2-2"), self.symbolsAndSpaceCheckListBox)
@@ -1000,7 +1258,7 @@ class TextAnalyzerProfileSettingsPanel(
 		groupText = _("Formatting")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
 		labelText = _("Report &changes")
@@ -1014,7 +1272,7 @@ class TextAnalyzerProfileSettingsPanel(
 			labelText,
 			nvdaControls.CustomCheckListBox,
 			choices=[label for formattingChange, label in formattingChangeLabels.items()]
-			)
+		)
 		self.formattingChangesCheckListBox.SetSelection(0)
 		self.bindHelpEvent(getHelpObj("hdr31-2-3"), self.formattingChangesCheckListBox)
 		self.formattingChangesOptions = _NVDAConfigManager.getFormattingChangesOptions()
@@ -1026,7 +1284,7 @@ class TextAnalyzerProfileSettingsPanel(
 		groupText = _("Alert")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
-		group = gui.guiHelper.BoxSizerHelper(self, sizer=groupSizer)
+		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a choice box in the TextAnalyzer settings panel.
 		labelText = _("Report &by:")
@@ -1035,7 +1293,7 @@ class TextAnalyzerProfileSettingsPanel(
 			labelText,
 			wx.Choice,
 			choices=[label for option, label in reportByChoiceLabels.items()]
-			)
+		)
 		option = _NVDAConfigManager.getReportByOption()
 		self.reportByChoiceBox.SetSelection(list(reportByChoiceLabels.keys()).index(option))
 		self.reportByChoiceBox .Bind(
@@ -1145,11 +1403,14 @@ class TextAnalyzerProfileSettingsPanel(
 	def saveSettingChanges(self):
 		from .nvdaConfig import _NVDAConfigManager
 		self.restartNVDA = False
-		if self.textAnalyzerActivationCheckBox.IsChecked() != _NVDAConfigManager.toggleTextAnalyzerActivationOption(False):
+		option = _NVDAConfigManager.toggleTextAnalyzerActivationOption(False)
+		if self.textAnalyzerActivationCheckBox.IsChecked() != option:
 			_NVDAConfigManager.toggleTextAnalyzerActivationOption(True)
-		if self.textAnalyzerActivationAtStartCheckBox.IsChecked() != _NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False):
+		option = _NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False)
+		if self.textAnalyzerActivationAtStartCheckBox.IsChecked() != option:
 			_NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(True)
-		if self.reportSymbolsDiscrepanciesCheckBox .IsChecked() != _NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False):
+		option = _NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False)
+		if self.reportSymbolsDiscrepanciesCheckBox .IsChecked() != option:
 			_NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(True)
 		checkedStrings = self.symbolsCheckListBox.GetCheckedStrings()
 		for symbol in self.symbolOptions:
@@ -1169,7 +1430,8 @@ class TextAnalyzerProfileSettingsPanel(
 		if hasattr(self, "symbolsAndSpaceDic"):
 			_NVDAConfigManager.setSymbolsAndSpaceDic(self.symbolsAndSpaceDic)
 		# formatting changes group
-		if self.reportFormattingChangesCheckBox .IsChecked() != _NVDAConfigManager.toggleReportFormattingChangesOption(False):
+		option = _NVDAConfigManager.toggleReportFormattingChangesOption(False)
+		if self.reportFormattingChangesCheckBox .IsChecked() != option:
 			_NVDAConfigManager.toggleReportFormattingChangesOption(True)
 		for index in range(0, self.formattingChangesCheckListBox.Count):
 			isChecked = self.formattingChangesCheckListBox.IsChecked(index)
@@ -1200,7 +1462,7 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 		NVDAEnhancementProfileSettingsPanel,
 		KeyboardProfileSettingsPanel,
 		TextAnalyzerProfileSettingsPanel,
-		]
+	]
 
 	def __init__(self, parent, initialCategory=None):
 		curAddon = addonHandler.getCodeAddon()

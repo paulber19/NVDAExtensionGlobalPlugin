@@ -63,7 +63,7 @@ class complexSymbolsDialog(
 
 	def InitLists(self, index=0):
 		categoryName = self.categoryNamesList[index]
-		(symbolList, descriptionList) = self.symbolsManager.getSymbolAndDescriptionList(categoryName)  # noqa:E501
+		(symbolList, descriptionList) = self.symbolsManager.getSymbolAndDescriptionList(categoryName)
 		self.complexSymbolsList = symbolList[:]
 		self.symbolDescriptionList = descriptionList[:]
 
@@ -209,7 +209,7 @@ class complexSymbolsDialog(
 		result = copyToClip(symbol)
 		if not result:
 			c = ord(symbol)
-			log.warning("error copyToClip symbol:%s (%s) code = %d" % (self.symbolDescriptionList[index], symbol, c))  # noqa:E501
+			log.warning("error copyToClip symbol:%s (%s) code = %d" % (self.symbolDescriptionList[index], symbol, c))
 			# Translators: message to the user to report copy to clipboard error.
 			msg = _("Symbol cannot copied to the clipboard")
 		else:
@@ -283,7 +283,8 @@ class ManageSymbolsDialog(
 
 	def InitLists(self, index=0):
 		categoryName = self.categoryNamesList[index]
-		(symbolList, descriptionList) = self.symbolsManager.getUserSymbolAndDescriptionList(categoryName, self.userComplexSymbols)  # noqa:E501
+		(symbolList, descriptionList) = self.symbolsManager.getUserSymbolAndDescriptionList(
+			categoryName, self.userComplexSymbols)
 		self.symbolDescriptionList = descriptionList[:]
 		self.complexSymbolsList = symbolList[:]
 
@@ -445,13 +446,15 @@ class ManageSymbolsDialog(
 				_("There is no description for the symbol"))
 			return False
 		for cat in self.parent.categoryNamesList:
-			(symbolList, descriptionList) = self.symbolsManager.getSymbolAndDescriptionList(cat)  # noqa:E501
+			(symbolList, descriptionList) = self.symbolsManager.getSymbolAndDescriptionList(cat)
 			if symbol in symbolList:
 				description = descriptionList[symbolList.index(symbol)]
 				if cat == categoryName:
 					if gui.messageBox(
 						# Translators: the label of a message box dialog.
-						_("""The symbol is already in this category under "%s" description. Do you want to replace it?""") % description,  # noqa:E501
+						_(
+							"""The symbol is already in this category """
+							"""under "%s" description. Do you want to replace it?""") % description,
 						# Translators: the title of a message box dialog.
 						_("Confirmation"),
 						wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -459,7 +462,10 @@ class ManageSymbolsDialog(
 				else:
 					if gui.messageBox(
 						# Translators: the label of a message box dialog.
-						_("""The symbol is allready in "{oldCat}" category. Do you want to add this symbol also in "{newCat}" category?""").format(oldCat=cat, newCat=categoryName),  # noqa:E501
+						_(
+							"""The symbol is allready in "{oldCat}" category. """
+							"""Do you want to add this symbol also in "{newCat}" category?""").format(
+								oldCat=cat, newCat=categoryName),
 						# Translators: the title of a message box dialog.
 						_("Confirmation"),
 						wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -534,7 +540,7 @@ class ManageSymbolsDialog(
 			return
 
 		if index == len(self.categoryNamesList) - 1:
-			index = index-1 if index else index
+			index = index - 1 if index else index
 		del self.userComplexSymbols[categoryName]
 		self.categoryNamesList.remove(categoryName)
 		self.symbolCategoryListBox.Clear()
@@ -679,7 +685,8 @@ class LastUsedComplexSymbolsDialog(
 		result = copyToClip(symbol)
 		if not result:
 			c = ord(symbol)
-			log.error("error copyToClip symbol:%s (%s) code = %d" % (description, symbol, c))  # noqa:E501
+			log.error(
+				"error copyToClip symbol:%s (%s) code = %d" % (description, symbol, c))
 		else:
 			# Translators: This is a message announced in complex symbols dialog.
 			msg = _("{0} pasted").format(description)
@@ -698,7 +705,7 @@ class LastUsedComplexSymbolsDialog(
 		result = copyToClip(symbol)
 		if not result:
 			c = ord(symbol)
-			log.error("error copyToClip symbol:%s (%s) code = %d" % (description, symbol, c))  # noqa:E501
+			log.error("error copyToClip symbol:%s (%s) code = %d" % (description, symbol, c))
 		else:
 			# Translators: a message announced in Last Used Complex Symbols Dialog.
 			text = _("{0} copied").format(description)

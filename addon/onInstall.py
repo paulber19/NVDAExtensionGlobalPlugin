@@ -14,7 +14,6 @@ from characterProcessing import SpeechSymbolProcessor
 import codecs
 import gui
 import winUser
-from languageHandler import getLanguage
 
 addonHandler.initTranslation()
 
@@ -26,6 +25,7 @@ addonNewSymbolsPath = os.path.join(addonPath, "newSymbols")
 
 
 def getNewSymbolsFile(folder, lang=None):
+	from languageHandler import getLanguage
 	if lang is None:
 		lang = getLanguage()
 	if "_" in lang:
@@ -33,7 +33,12 @@ def getNewSymbolsFile(folder, lang=None):
 	newSymbolsFileName = "symbols-" + lang + ".dic"
 	newSymbolsFileList = os.listdir(folder)
 	if newSymbolsFileName in newSymbolsFileList:
-		return newSymbolsFileName
+		if sys.version.startswith("3"):
+			# for python 3
+			return newSymbolsFileName
+		else:
+			# for python 2
+			return newSymbolsFileName.encode("utf-8")
 	return None
 
 
@@ -91,7 +96,7 @@ def mergeNewSymbolsWithUserSymbols(symbolsFile):
 		dest.write(line)
 	dest.write("\n# End of adding")
 	dest.close()
-	log.warning("symbols file%s has been wwritten"%userSymbolsFile)
+	log.warning("symbols file%s has been wwritten" % userSymbolsFile)
 
 
 def installNewSymbols(lang=None):
@@ -109,11 +114,12 @@ def installNewSymbols(lang=None):
 	dest = codecs.open(fileName, "r", "utf_8", errors="replace")
 	count = 0
 	for line in dest:
-		count +=1
+		count += 1
 	dest.close()
 	if count == 1:
 		# no symbol has been added, delete file.
 		os.remove(fileName)
+
 
 def checkWindowListAddonInstalled():
 	h = winUser.getForegroundWindow()

@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/utils/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016-2021  paulber19
+# Copyright (C) 2016-2022  paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -102,7 +102,7 @@ def maximizeWindow(hWnd):
 
 def PutWindowOnForeground(hwnd, sleepNb, sleepTime):
 	winUser.setForegroundWindow(hwnd)
-	for i in [sleepTime]*(sleepNb-1):
+	for i in [sleepTime] * (sleepNb - 1):
 		time.sleep(i)
 		if winUser.getForegroundWindow() == hwnd:
 			return True

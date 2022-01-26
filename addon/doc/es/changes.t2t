@@ -1,4 +1,4 @@
- ADDON_SUMMARY- Historial
+ADDON_SUMMARY- Historial
 Autor: ADDON_AUTHOR_NAME
 
 
@@ -23,9 +23,35 @@ Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este h
 Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
 
 
+
+
++ v11.0 (26/01/2022) +
+Nuevas características:
+- orientación de la salida de audio de NVDA.
+- se añadió los scripts para aumentar o disminuir el volumen de NVDA.
+- aumento possible del volumen principal si es necesario al aumentar el volumen de NVDA o aplicaciones (opción para configurar).
+- nuevo diálogo para habilitar o deshabilitar los complementos más rápidamente.
+- en la apertura del diálogo "Gestos de Entrada", la categoría asociada al complemento activo para la aplicación enfocada se selecciona automáticamente.
+- posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA.
+- la última opción utilizada en el Anillo de Opciones de Sintetizador se guarda para encontrarlo seleccionado después de un reinicio deNVDA.
+
+
+Cambios:
+- la opción "Anunciar el nivel de volumen de la aplicación en porcentaje" es eliminado.  El volumen se anuncia como en el mezclador de volumen de Windows.
+- durante la actualización automática del complemento, ya no se le solicita al usuario si desea conservar las opciones de configuración actual del complemento.
+- durante una instalación manual del complemento, se solicita una solicitud de confirmación cuando el usuario ha elegido no conservar las opciones de configuración actual del complemento.
+
+
+
+Compatibilidad:
+- Compatibilidad con NVDA 2022.1
+ - se tiene en cuenta del nuevo paquete UIAHandler.
+- las versiones de NVDA anteriores a la versión 2020.4 ya no son soportadas.
+
+
 + v10.3 (12/12/2021) +
 Corección de Fallos:
-- resolución del problema con el nuevo complemento "NAO" al mostrar el resultado del reconocimiento óptico y con las teclas de página anterior y siguiente.
+- resolución del problema con el nuevo complemento "NAO" al mostrar el resultado del reconocimiento óptico y las teclas rePág y avPág.
 
 
 + v10.2 (10/12/2021) +
@@ -34,7 +60,7 @@ Corección de Fallos:
 - el lanzamiento de los scripts es posible nuevamente en el diálogo "Scripts del intérprete de órdenes".
 
 
-+ v10.1 (01/12/2021) +
++ v10.1 (28/11/2021) +
 Corección de fallo:
 - las carpetas de configuración añadidas mediante el diálogo "Gestión de configuraciones del usuario" son conservadas al instalar el complemento. El archivo "NVDAExtensionGlobalPlugin-userConfigs.ini" ya no se borra.
 - el estado de la opción "Nivel de símbolos y puntuación al moverse por palabra" ahora se conserva cuando se usa en una versión alfa.
@@ -45,7 +71,7 @@ Preparación para la compatibilidad con NVDA 2022.1:
 - reemplazo de "curLang" por "getLanguage()"
 
 
-+ v10.0 (21/11/2021) +
++ v10.0 (20/10/2021) +
 Nuevas características:
 - se añadió la funcionalidad "Analizador de texto".
 - se añadió la funcionalidad "Gestión de configuraciones del usuario y reinicio de NVDA con una configuración precisa".

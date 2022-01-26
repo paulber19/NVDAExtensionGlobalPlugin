@@ -6,6 +6,7 @@
 
 
 import addonHandler
+from logHandler import log
 import api
 import config
 import wave
@@ -28,7 +29,8 @@ addonHandler.initTranslation()
 _temporaryOutputDevice = None
 
 
-# we must patche nvwave.playWaveFile method tfor using current output audio device held by synthDriverHandler instead of config.conf["speech"]["outputDevice"]
+# we must patche nvwave.playWaveFile method tfor using current output audio device
+# held by synthDriverHandler instead of config.conf["speech"]["outputDevice"]
 def playWaveFileEx(fileName, asynchronous=True):
 	"""plays a specified wave file.
 	@param asynchronous: whether the wave file should be played asynchronously
@@ -61,14 +63,11 @@ def playWaveFileEx(fileName, asynchronous=True):
 		nvwave.fileWavePlayer.idle()
 
 
-# patche playWaveFile
-nvwave.playWaveFile = playWaveFileEx
-
-
 """
 	patch for OneCore synthetizer
 	this method use config.conf["speech"]["outputDevice"] to get the output device directly
-	so if we change config.conf["speech"]["outputDevice"] after synthetizer initialization, it takes it as output device.
+	so if we change config.conf["speech"]["outputDevice"] after synthetizer initialization,
+	it takes it as output device.
 	but we don't that.
 	we want change the output device of a synthetizer with no configuration change, like that:
 oldOutputDevice= config.conf["speech"]["outputDevice"]
@@ -101,9 +100,6 @@ def _maybeInitPlayerEx(self, wav):
 		# outputDevice=config.conf["speech"]["outputDevice"]
 		outputDevice=_audioOutputDevice
 	)
-
-
-synthDrivers.oneCore.SynthDriver._maybeInitPlayer = _maybeInitPlayerEx
 
 
 def getDeviceNames():
@@ -169,7 +165,6 @@ def setTemporaryAudioOutputDevice(outputDevice):
 		else:
 			# return to previous output device
 			setOutputDevice(synth, prevOutputDevice)
-
 	from ..settings import toggleConfirmAudioDeviceChangeAdvancedOption
 	if toggleConfirmAudioDeviceChangeAdvancedOption(False):
 		wx.CallLater(50, confirm, curSynth, prevOutputDevice)
@@ -211,11 +206,12 @@ class TemporaryAudioDeviceManagerDialog(
 		self.curOutputDevice = _audioOutputDevice
 		# Translators: temporary output device text
 		# on Temporary audio output device manager dialog.
-		labelText = _("Current temporary audio device: %s") % (_temporaryOutputDevice if _temporaryOutputDevice else _("None"))
+		labelText = _(
+			"Current temporary audio device: %s") % (_temporaryOutputDevice if _temporaryOutputDevice else _("None"))
 		self.currentTemporaryOutputDeviceTextCtrl = sHelper.addItem(wx.StaticText(
 			self,
 			label=labelText)
-			)
+		)
 		# Translators: This is the label for a listbox
 		# on Temporary audio device manager dialog.
 		labelText = _("Select a &device:")
@@ -336,7 +332,9 @@ class ConfirmOutputDevice(
 		super(ConfirmOutputDevice, self).__init__(parent, wx.ID_ANY, title)
 		self.timeToLive = timeToLive
 		# Translators: message to user to confirm the use of audio device
-		self.staticTextLabel = _("You have %s seconds to accept the use of this audio device for all configuration profiles regardless of the choice made in their voice settings")
+		self.staticTextLabel = _(
+			"You have %s seconds to accept the use of this audio device for all configuration profiles "
+			"regardless of the choice made in their voice settings")
 		self.doGui()
 		self.CentreOnScreen()
 		self.timer = wx.Timer(self)
@@ -349,7 +347,7 @@ class ConfirmOutputDevice(
 		self.messageTextCtrl = sHelper.addItem(wx.StaticText(
 			self,
 			label=self.staticTextLabel % self.timeToLive)
-			)
+		)
 		bHelper = sHelper.addDialogDismissButtons(
 			guiHelper.ButtonHelper(wx.HORIZONTAL))
 		okButton = bHelper.addButton(self, wx.ID_OK, label=_("&Accept"))
@@ -374,10 +372,15 @@ class ConfirmOutputDevice(
 		super(ConfirmOutputDevice, self).Destroy()
 
 
-def handlePostConfigProfileSwitch(resetSpeechIfNeeded=True):
+def handlePostConfigProfileSwitch():
 	if _temporaryOutputDevice:
 		synth = getSynth()
 		setOutputDevice(synth, _temporaryOutputDevice)
 
 
-config.post_configProfileSwitch.register(handlePostConfigProfileSwitch)
+def initialize():
+	config.post_configProfileSwitch.register(handlePostConfigProfileSwitch)
+	# patche playWaveFile
+	nvwave.playWaveFile = playWaveFileEx
+
+	synthDrivers.oneCore.SynthDriver._maybeInitPlayer = _maybeInitPlayerEx

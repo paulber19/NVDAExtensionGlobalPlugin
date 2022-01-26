@@ -21,6 +21,7 @@ import globalCommands
 import scriptHandler
 import queueHandler
 import winUser
+import NVDAObjects
 import mouseHandler
 import textInfos
 import winKernel
@@ -39,7 +40,12 @@ from .activeWindowsListReport import ActiveWindowsListDisplay
 from .systemTrayIconsList import ListeNotification
 # to load configuration
 from . import settings
-from .settings import *  # noqa:F403
+# from .settings import *
+from .settings import (
+	isInstall, isInstallWithoutGesture,
+	getInstallFeatureOption
+)
+from .settings import addonConfig
 from . import commandKeysSelectiveAnnouncementAndRemanence
 from . import speechHistory
 from .utils.NVDAStrings import NVDAString
@@ -53,7 +59,8 @@ from .computerTools.volumeControlScripts import ScriptsForVolume
 from .scripts.scriptInfos import scriptsToDocInformations
 try:
 	# form nvda version >= 2020.3
-	from .userInputGestures import inputGesturesEx  # noqa: F401
+	from .userInputGestures import inputGesturesEx
+	inputGesturesEx.initialize()
 except ImportError:
 	pass
 
@@ -89,7 +96,8 @@ def fetchAddon(processID, appName):
 	@rtype: addon
 	"""
 	# First, check whether the module exists.
-	# We need to do this separately because even though an ImportError is raised when a module can't be found, it might also be raised for other reasons.
+	# We need to do this separately# because even though an ImportError is raised
+	# when a module can't be found, it might also be raised for other reasons.
 	# Python 2.x can't properly handle unicode module names, so convert them.
 	modName = appName
 	if appModuleHandler.doesAppModuleExist(modName):
@@ -113,6 +121,64 @@ def fetchAddon(processID, appName):
 		return None
 
 
+class NVDAObjectEx (NVDAObjects.NVDAObject):
+	def _reportErrorInPreviousWord(self):
+		try:
+			# self might be a descendant of the text control; e.g. Symphony.
+			# We want to deal with the entire text, so use the caret object.
+			info = api.getCaretObject().makeTextInfo(textInfos.POSITION_CARET)
+			# This gets called for characters which might end a word; e.g. space.
+			# The character before the caret is the word end.
+			# The one before that is the last of the word, which is what we want.
+			info.move(textInfos.UNIT_CHARACTER, -2)
+			info.expand(textInfos.UNIT_CHARACTER)
+		except Exception:
+			# Focus probably moved.
+			log.debugWarning("Error fetching last character of previous word", exc_info=True)
+			return
+		# Fetch the formatting for the last word to see if it is marked as a spelling error,
+		# However perform the fetch and check in a future core cycle
+
+		# To give the content control more time to detect and mark the error itself.
+		# #12161: MS Word's UIA implementation certainly requires this delay.
+		def _delayedDetection():
+			try:
+				fields = info.getTextWithFields()
+			except Exception:
+				log.debugWarning("Error fetching formatting for last character of previous word", exc_info=True)
+				return
+			for command in fields:
+				if (
+					isinstance(command, textInfos.FieldCommand)
+					and command.command == "formatChange"
+					and command.field.get("invalid-spelling")
+				):
+					break
+			else:
+				# No error.
+				return
+			#  to report  error depending user configuration: wav, beep, or message
+
+			def reportSpellingError():
+				from .settings import _addonConfigManager
+				if _addonConfigManager.reportingSpellingErrorsByBeep():
+					from tones import beep
+					hz = 150
+					length = 50
+					beep(hz, length)
+					from time import sleep
+					sleep(2 * length / 1000)
+					beep(hz, length)
+				elif _addonConfigManager.reportingSpellingErrorsBySound():
+					import nvwave
+					nvwave.playWaveFile(os.path.join(globalVars.appDir, "waves", "textError.wav"))
+				elif _addonConfigManager.reportingSpellingErrorsByMessage():
+					speech.speakMessage(NVDAString("spelling error"))
+
+			reportSpellingError()
+		core.callLater(50, _delayedDetection)
+
+
 class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlugin):
 	_remanenceCharacter = None
 	_trapNextGainFocus = False
@@ -125,38 +191,42 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	_mainScriptToGestureAndfeatureOption = {
 		"test": (("kb:nvda+control+shift+f11",), None),
 		"moduleLayer": (("kb:NVDA+j",), None),
-		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), ID_FocusedApplicationInformations),
-		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), ID_FocusedApplicationInformations),
-		"ComplexSymbolHelp": (("kb:nvda+shift+f4",), ID_ComplexSymbols),
-		"lastUsedComplexSymbolsList": (None, ID_ComplexSymbols),
-		"report_SystrayIconsOrWindowsList": (("kb:nvda+F11",), ID_SystrayIconsAndActiveWindowsList),
-		"reportCurrentFolder": (("kb:nvda+o",), ID_CurrentFolderReport),
-		"reportPreviousSpeechHistoryRecord": (("kb:nvda+control+f8",), ID_SpeechHistory),
-		"reportCurrentSpeechHistoryRecord": (("kb:nvda+control+f9",), ID_SpeechHistory),
-		"reportNextSpeechHistoryRecord": (("kb:nvda+control+f10",), ID_SpeechHistory),
-		"minuteTimer": (("kb:nvda+shift+f12",), ID_MinuteTimer),
-		"speakForegroundEx": (("kb:nvda+b",), ID_ForegroundWindowObjectsList),
-		"dateTimeEx": (("kb:nvda+f12",), ID_DateAndTime),
-		"copyDateAndTimeToClip": (None, ID_DateAndTime),
-		"restartEx": (("kb:nvda+control+f4",), ID_RestartInDebugMode),
-		"keyboardKeyRenaming": (None, ID_KeyboardKeyRenaming),
-		"commandKeySelectiveAnnouncement": (None, ID_CommandKeysSelectiveAnnouncement),
-		"exploreUserConfigFolder": (None, ID_ExploreNVDA),
-		"exploreProgramFiles": (None, ID_ExploreNVDA),
-		"toggleSwitchVoiceProfileMode": (("kb:nvda+control+shift+p",), ID_VoiceProfileSwitching),
-		"manageVoiceProfileSelectors": (("kb:nvda+shift+control+m",), ID_VoiceProfileSwitching),
-		"previousVoiceProfile": (("kb(desktop):nvda+shift+control+leftArrow", "kb(laptop):nvda+control+upArrow",), ID_VoiceProfileSwitching),
-		"nextVoiceProfile": (("kb(desktop):nvda+shift+control+rightArrow", "kb(laptop):nvda+control+downArrow",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector1": (("kb:nvda+shift+control+1",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector2": (("kb:nvda+shift+control+2",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector3": (("kb:nvda+shift+control+3",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector4": (("kb:nvda+shift+control+4",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector5": (("kb:nvda+shift+control+5",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector6": (("kb:nvda+shift+control+6",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector7": (("kb:nvda+shift+control+7",), ID_VoiceProfileSwitching),
-		"setVoiceProfileSelector8": (("kb:nvda+shift+control+8",), ID_VoiceProfileSwitching),
-		"openCurrentOrOldNVDALogFile": (("kb:nvda+shift+j",), ID_OpenCurrentOrOldNVDALogFile),
-		"toolsForAddon": (None, ID_Tools),
+		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), addonConfig.FCT_FocusedApplicationInformations),
+		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), addonConfig.FCT_FocusedApplicationInformations),
+		"ComplexSymbolHelp": (("kb:nvda+shift+f4",), addonConfig.FCT_ComplexSymbols),
+		"lastUsedComplexSymbolsList": (None, addonConfig.FCT_ComplexSymbols),
+		"report_SystrayIconsOrWindowsList": (("kb:nvda+F11",), addonConfig.FCT_SystrayIconsAndActiveWindowsList),
+		"reportCurrentFolder": (("kb:nvda+o",), addonConfig.FCT_CurrentFolderReport),
+		"reportPreviousSpeechHistoryRecord": (("kb:nvda+control+f8",), addonConfig.FCT_SpeechHistory),
+		"reportCurrentSpeechHistoryRecord": (("kb:nvda+control+f9",), addonConfig.FCT_SpeechHistory),
+		"reportNextSpeechHistoryRecord": (("kb:nvda+control+f10",), addonConfig.FCT_SpeechHistory),
+		"minuteTimer": (("kb:nvda+shift+f12",), addonConfig.FCT_MinuteTimer),
+		"speakForegroundEx": (("kb:nvda+b",), addonConfig.FCT_ForegroundWindowObjectsList),
+		"dateTimeEx": (("kb:nvda+f12",), addonConfig.FCT_DateAndTime),
+		"copyDateAndTimeToClip": (None, addonConfig.FCT_DateAndTime),
+		"restartEx": (("kb:nvda+control+f4",), addonConfig.FCT_RestartInDebugMode),
+		"keyboardKeyRenaming": (None, addonConfig.FCT_KeyboardKeyRenaming),
+		"commandKeySelectiveAnnouncement": (None, addonConfig.FCT_CommandKeysSelectiveAnnouncement),
+		"exploreUserConfigFolder": (None, addonConfig.ID_ExploreNVDA),
+		"exploreProgramFiles": (None, addonConfig.ID_ExploreNVDA),
+		"toggleSwitchVoiceProfileMode": (("kb:nvda+control+shift+p",), addonConfig.FCT_VoiceProfileSwitching),
+		"manageVoiceProfileSelectors": (("kb:nvda+shift+control+m",), addonConfig.FCT_VoiceProfileSwitching),
+		"previousVoiceProfile": (
+			("kb(desktop):nvda+shift+control+leftArrow", "kb(laptop):nvda+control+upArrow",),
+			addonConfig.FCT_VoiceProfileSwitching),
+		"nextVoiceProfile": (
+			("kb(desktop):nvda+shift+control+rightArrow", "kb(laptop):nvda+control+downArrow",),
+			addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector1": (("kb:nvda+shift+control+1",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector2": (("kb:nvda+shift+control+2",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector3": (("kb:nvda+shift+control+3",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector4": (("kb:nvda+shift+control+4",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector5": (("kb:nvda+shift+control+5",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector6": (("kb:nvda+shift+control+6",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector7": (("kb:nvda+shift+control+7",), addonConfig.FCT_VoiceProfileSwitching),
+		"setVoiceProfileSelector8": (("kb:nvda+shift+control+8",), addonConfig.FCT_VoiceProfileSwitching),
+		"openCurrentOrOldNVDALogFile": (("kb:nvda+shift+j",), addonConfig.FCT_OpenCurrentOrOldNVDALogFile),
+		"toolsForAddon": (None, addonConfig.FCT_Tools),
 		"leftClickAtNavigatorObjectPosition": (("kb:nvda+,",), None),
 		"rightClickAtNavigatorObjectPosition": (("kb:nvda+shift+,",), None),
 		"globalSettingsDialog": (None, None),
@@ -164,64 +234,66 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"toggleNumpadStandardUse": (None, None),
 		"toggleNumpadStandardUseWithNumlockKey": (("kb:numlock",), None),
 		"reportOrDisplayCurrentSpeechSettings": (None, None),
-		"toggleTextAnalyzer": (("kb:nvda+f8",), FCT_TextAnalysis),
-		"analyzeCurrentWord": (("kb:nvda+shift+f8",), FCT_TextAnalysis),
-		"analyzeCurrentLine": (("kb:nvda+control+f8",), FCT_TextAnalysis),
-		"analyzeCurrentSentence": (("kb:nvda+windows+f8",), FCT_TextAnalysis),
-		"analyzeCurrentParagraph": (("kb:nvda+shift+control+f8",), FCT_TextAnalysis),
+		"toggleTextAnalyzer": (("kb:nvda+f8",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentWord": (("kb:nvda+shift+f8",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentLine": (("kb:nvda+control+f8",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentSentence": (("kb:nvda+windows+f8",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentParagraph": (("kb:nvda+shift+control+f8",), addonConfig.FCT_TextAnalysis),
 		"manageUserConfigurations": (None, None),
 		"toggleReportCurrentCaretPosition": (None, None),
-		"addToClip": (None, ID_ClipboardCommandAnnouncement),
-		"temporaryAudioOutputDeviceManager": (None, FCT_TemporaryAudioDevice),
-		"cancelTemporaryAudioOutputDevice": (None, FCT_TemporaryAudioDevice),
-		"setTemporaryAudioOutputDevice": (None, FCT_TemporaryAudioDevice),
-		"setOrCancelTemporaryAudioOutputDevice": (None, FCT_TemporaryAudioDevice),
-		}
+		"addToClip": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
+		"temporaryAudioOutputDeviceManager": (None, addonConfig.FCT_TemporaryAudioDevice),
+		"cancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
+		"setTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
+		"setOrCancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
+		"activateAddonsActivationDialog": (None, None),
+	}
 
 	# a dictionnary to map shell script to gesture and fonctionality IDs
 	_shellScriptToGestureAndFeatureOption = {
 		"DisplayAppModuleInfo": ("kb:a", None),
-		"foregroundWindowObjectsList": ("kb:b", ID_ForegroundWindowObjectsList),
-		"temporaryAudioOutputDeviceManager": ("kb:c", FCT_TemporaryAudioDevice),
-		"cancelTemporaryAudioOutputDevice": ("kb:control+c", FCT_TemporaryAudioDevice),
-		"setTemporaryAudioOutputDevice": ("kb:shift+c", FCT_TemporaryAudioDevice),
-		"copyDateAndTimeToClip": ("kb:d", ID_DateAndTime),
+		"foregroundWindowObjectsList": ("kb:b", addonConfig.FCT_ForegroundWindowObjectsList),
+		"temporaryAudioOutputDeviceManager": ("kb:c", addonConfig.FCT_TemporaryAudioDevice),
+		"cancelTemporaryAudioOutputDevice": ("kb:control+c", addonConfig.FCT_TemporaryAudioDevice),
+		"setTemporaryAudioOutputDevice": ("kb:shift+c", addonConfig.FCT_TemporaryAudioDevice),
+		"copyDateAndTimeToClip": ("kb:d", addonConfig.FCT_DateAndTime),
 		"displayRunningAddonsList": ("kb:e", None),
 		"displayFormatting": ("kb:f", None),
 		"globalSettingsDialog": ("kb:f1", None),
 		"profileSettingsDialog": ("kb:control+f1", None),
-		"keyboardKeyRenaming": ("kb:f2", ID_KeyboardKeyRenaming),
-		"commandKeySelectiveAnnouncement": ("kb:f3", ID_CommandKeysSelectiveAnnouncement),
-		"ComplexSymbolHelp": ("kb:f4", ID_ComplexSymbols,),
-		"lastUsedComplexSymbolsList": ("kb:control+f4", ID_ComplexSymbols,),
+		"keyboardKeyRenaming": ("kb:f2", addonConfig.FCT_KeyboardKeyRenaming),
+		"commandKeySelectiveAnnouncement": ("kb:f3", addonConfig.FCT_CommandKeysSelectiveAnnouncement),
+		"ComplexSymbolHelp": ("kb:f4", addonConfig.FCT_ComplexSymbols,),
+		"lastUsedComplexSymbolsList": ("kb:control+f4", addonConfig.FCT_ComplexSymbols,),
 		"toggleNumpadStandardUse": ("kb:f5", None),
 		"toggleReportCurrentCaretPosition": ("kb:f7", None),
-		"toggleTextAnalyzer": ("kb:f8", FCT_TextAnalysis),
-		"analyzeCurrentWord": ("kb:shift+f8", FCT_TextAnalysis),
-		"analyzeCurrentLine": ("kb:control+f8", FCT_TextAnalysis),
-		"analyzeCurrentSentence": ("kb:windows+f8", FCT_TextAnalysis),
-		"analyzeCurrentParagraph": ("kb:shift+control+f8", FCT_TextAnalysis),
-		"displaySpeechHistoryRecords": ("kb:f9", ID_SpeechHistory),
-		"report_WindowsList": ("kb:f10", ID_SystrayIconsAndActiveWindowsList),
-		"report_SystrayIcons": ("kb:f11", ID_SystrayIconsAndActiveWindowsList),
-		"minuteTimer": ("kb:f12", ID_MinuteTimer),
+		"toggleTextAnalyzer": ("kb:f8", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentWord": ("kb:shift+f8", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentLine": ("kb:control+f8", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentSentence": ("kb:windows+f8", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentParagraph": ("kb:shift+control+f8", addonConfig.FCT_TextAnalysis),
+		"displaySpeechHistoryRecords": ("kb:f9", addonConfig.FCT_SpeechHistory),
+		"report_WindowsList": ("kb:f10", addonConfig.FCT_SystrayIconsAndActiveWindowsList),
+		"report_SystrayIcons": ("kb:f11", addonConfig.FCT_SystrayIconsAndActiveWindowsList),
+		"minuteTimer": ("kb:f12", addonConfig.FCT_MinuteTimer),
 		"displayModuleUserGuide": ("kb:g", None),
 		"displayHelp": ("kb:h", None),
-		"NVDALogsManagement": ("kb:j", ID_OpenCurrentOrOldNVDALogFile),
+		"NVDALogsManagement": ("kb:j", addonConfig.FCT_OpenCurrentOrOldNVDALogFile),
 		"closeAllWindows": ("kb:k", None),
 		"manageUserConfigurations": ("kb:n", None),
-		"reportCurrentFolderName": ("kb:o", ID_CurrentFolderReport),
-		"reportCurrentFolderFullPath": ("kb:control+o", ID_CurrentFolderReport),
-		"toggleSwitchVoiceProfileMode": ("kb:p", ID_VoiceProfileSwitching),
+		"reportCurrentFolderName": ("kb:o", addonConfig.FCT_CurrentFolderReport),
+		"reportCurrentFolderFullPath": ("kb:control+o", addonConfig.FCT_CurrentFolderReport),
+		"toggleSwitchVoiceProfileMode": ("kb:p", addonConfig.FCT_VoiceProfileSwitching),
+		"activateQuickAddonsActivationDialog": ("kb:q", None),
 		"shutdownComputerDialog": ("kb:r", None),
-		"toggleCurrentAppVolumeMute": ("kb:s", ID_VolumeControl),
-		"toolsForAddon": ("kb:t", ID_Tools),
+		"toggleCurrentAppVolumeMute": ("kb:s", addonConfig.FCT_VolumeControl),
+		"toolsForAddon": ("kb:t", addonConfig.FCT_Tools),
 		"activateUserInputGesturesDialog": ("kb:u", None),
-		"manageVoiceProfileSelectors": ("kb:v", ID_VoiceProfileSwitching),
-		"addToClip": ("kb:x", ID_ClipboardCommandAnnouncement),
+		"manageVoiceProfileSelectors": ("kb:v", addonConfig.FCT_VoiceProfileSwitching),
+		"addToClip": ("kb:x", addonConfig.FCT_ClipboardCommandAnnouncement),
 		"reportCurrentSpeechSettings": ("kb:z", None),
 		"displayCurrentSpeechSettings": ("kb:control+z", None),
-		}
+	}
 
 	def __init__(self, *args, **kwargs):
 		super(NVDAExtensionGlobalPlugin, self).__init__(*args, **kwargs)
@@ -234,33 +306,36 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		self._shellScriptToGestureAndFeatureOption .update(self._volumeControlShellScriptToGestureAndFeatureOption)
 		self.maximizeWindowTimer = None
 		self.installSettingsMenu()
-		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
-			isInstall(ID_KeyRemanence):
+		if isInstall(addonConfig.FCT_CommandKeysSelectiveAnnouncement) or\
+			isInstall(addonConfig.FCT_KeyRemanence):
 			wx.CallLater(800, commandKeysSelectiveAnnouncementAndRemanence.initialize)
-		if isInstall(ID_ExtendedVirtualBuffer):
+		if isInstall(addonConfig.FCT_ExtendedVirtualBuffer):
 			from . import browseModeEx
-			self.browseModeExChooseNVDAObjectOverlayClasses = browseModeEx.chooseNVDAObjectOverlayClasses  # noqa:E501
-		from . import clipboardCommandAnnouncement
-		self.clipboardCommandAnnouncementChooseNVDAObjectOverlayClasses = clipboardCommandAnnouncement.chooseNVDAObjectOverlayClasses  # noqa:E501
-		if toggleNoDescriptionReportInRibbonOption(False):
+			self.browseModeExChooseNVDAObjectOverlayClasses = browseModeEx.chooseNVDAObjectOverlayClasses
+		from .clipboardCommandAnnouncement import chooseNVDAObjectOverlayClasses
+		self.clipboardCommandAnnouncementChooseNVDAObjectOverlayClasses = chooseNVDAObjectOverlayClasses
+		if settings.toggleNoDescriptionReportInRibbonOption(False):
 			from . import extendedNetUIHWND
-			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses = extendedNetUIHWND.chooseNVDAObjectOverlayClasses  # noqa:E501
-		if isInstall(ID_SpeechHistory):
+			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses = extendedNetUIHWND.chooseNVDAObjectOverlayClasses
+		if isInstall(addonConfig.FCT_SpeechHistory):
 			wx.CallLater(800, speechHistory.initialize)
-		if isInstall(ID_KeyboardKeyRenaming):
+		if isInstall(addonConfig.FCT_KeyboardKeyRenaming):
 			settings._addonConfigManager.reDefineKeyboardKeyLabels()
 		self.toggling = False
 		self._bindGestures()
 		self._setShellGestures()
 		core.callLater(200, self.installMainAndShellScriptDocs)
 		self.switchVoiceProfileMode = "off"
-		if isInstall(ID_VolumeControl) and toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
-			from .computerTools import volumeControl
-			volumeControl.setNVDAVolume(withMin=True)
-			volumeControl.setSpeakerVolume(withMin=True)
-		if isInstall(FCT_TemporaryAudioDevice):
-			from .computerTools import audioDevice  # noqa: F401
-		if toggleByPassNoDescriptionAdvancedOption(False):
+		from .computerTools import volumeControl
+		if isInstall(addonConfig.FCT_VolumeControl) and settings.toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
+			volumeControl.setSpeakerVolumeToRecoveryLevel(checkThreshold=True)
+			volumeControl.setNVDAVolumeToRecoveryLevel(checkThreshold=True)
+		if isInstall(addonConfig.FCT_SplitAudio):
+			volumeControl.initialize()
+		if isInstall(addonConfig.FCT_TemporaryAudioDevice):
+			from .computerTools import audioDevice
+			audioDevice.initialize()
+		if settings.toggleByPassNoDescriptionAdvancedOption(False):
 			messageBox.initialize()
 		from .scripts import scriptHandlerEx
 		scriptHandlerEx.initialize()
@@ -268,7 +343,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		if not globalVars.appArgs.secure:
 			from .settings import toggleAutoUpdateGeneralOptions
 			if toggleAutoUpdateGeneralOptions(False):
-				from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions  # noqa:E501
+				from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
 				from . updateHandler import autoUpdateCheck
 				autoUpdateCheck(
 					toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
@@ -276,10 +351,26 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .textAnalysis.textAnalyzer import updateProfileConfiguration
 		updateProfileConfiguration()
 		config.post_configProfileSwitch .register(self.handlePostConfigProfileSwitch)
+		self.updateSettingOfSynthSettingsRing()
 
-	def handlePostConfigProfileSwitch(self, prevConf):
+	def updateSettingOfSynthSettingsRing(self):
+
+		from .settings.nvdaConfig import _NVDAConfigManager
+		from synthDriverHandler import getSynth
+		synthName = getSynth().name
+		id = _NVDAConfigManager.getLastSelectedSettingInSynthSettingsRing(synthName)
+		if id is None:
+			return
+		from globalVars import settingsRing
+		settings = settingsRing.settings
+		for s in settings:
+			if s.setting.id == id:
+				globalVars.settingsRing._current = settings.index(s)
+
+	def handlePostConfigProfileSwitch(self):
 		from .textAnalysis.textAnalyzer import updateProfileConfiguration
 		updateProfileConfiguration()
+		self.updateSettingOfSynthSettingsRing()
 
 	def _bindGestures(self):
 		for script in self._mainScriptToGestureAndfeatureOption:
@@ -358,7 +449,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		gui.mainFrame.sysTrayIcon.Bind(
 			wx.EVT_MENU, self.onProfileSettingsSubMenu, profileSettingsSubMenu)
 
-		if isInstall(ID_KeyboardKeyRenaming):
+		if isInstall(addonConfig.FCT_KeyboardKeyRenaming):
 			self.keyboardKeysRenamingMenu = menu.Append(
 				wx.ID_ANY,
 				# Translators: name of the option in the menu.
@@ -368,7 +459,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				wx.EVT_MENU,
 				self.onKeyboardKeysRenamingMenu,
 				self.keyboardKeysRenamingMenu)
-		if isInstall(ID_CommandKeysSelectiveAnnouncement):
+		if isInstall(addonConfig.FCT_CommandKeysSelectiveAnnouncement):
 			self.commandKeysSelectiveAnnouncementMenu = menu.Append(
 				wx.ID_ANY,
 				# Translators: name of the option in the menu.
@@ -385,7 +476,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			"")
 		gui.mainFrame.sysTrayIcon.Bind(
 			wx.EVT_MENU, self.onResetConfiguration, self.resetConfigurationMenu)
-		if isInstall(ID_ExploreNVDA):
+		if isInstall(addonConfig.ID_ExploreNVDA):
 			self.toolsMenu = gui.mainFrame.sysTrayIcon.toolsMenu
 			menu = wx.Menu()
 			self.exploreNVDAMenu = self.toolsMenu .AppendSubMenu(
@@ -462,6 +553,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		tones.beep(420, 40)
 
 	def terminate(self):
+		from .computerTools import volumeControl
+		volumeControl.terminate()
+
 		from .scripts import scriptHandlerEx
 		scriptHandlerEx.terminate()
 		commandKeysSelectiveAnnouncementAndRemanence.terminate()
@@ -471,7 +565,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .settings import _addonConfigManager
 		_addonConfigManager.terminate()
 		if hasattr(self, "_caretMovementScriptHelper "):
-			CursorManager._caretMovementScriptHelper = self._caretMovementScriptHelper
+			import cursorManager
+			cursorManager.CursorManager._caretMovementScriptHelper = self._caretMovementScriptHelper
 		speechHistory.terminate()
 		for item in ["NVDAExtensionGlobalPluginSettingsMenu", ]:
 			if hasattr(self, item):
@@ -493,7 +588,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			import onInstall
 			onInstall.installNewSymbols(lang)
 			del sys.path[-1]
-
 		super(NVDAExtensionGlobalPlugin, self).terminate()
 
 	def onSettingsSubMenu(self, evt):
@@ -554,9 +648,10 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def onCommandKeysSelectiveAnnouncementMenu(self, evt):
 		gui.mainFrame._popupSettingsDialog(
-			commandKeysSelectiveAnnouncementAndRemanence.CommandKeysSelectiveAnnouncementDialog)  # noqa:E501
+			commandKeysSelectiveAnnouncementAndRemanence.CommandKeysSelectiveAnnouncementDialog)
 
 	def chooseNVDAObjectOverlayClasses(self, obj, clsList):
+		clsList.insert(0, NVDAObjectEx)
 		self.clipboardCommandAnnouncementChooseNVDAObjectOverlayClasses(obj, clsList)
 		if hasattr(self, "extendedNetUIHWNDChooseNVDAObjectOverlayClasses"):
 			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses(obj, clsList)
@@ -569,7 +664,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		maximizeWindow(oForeground.windowHandle)
 
 	def event_foreground(self, obj, nextHandler):
-		if toggleAutomaticWindowMaximizationOption(False):
+		if settings.toggleAutomaticWindowMaximizationOption(False):
 			if self.maximizeWindowTimer is not None:
 				self.maximizeWindowTimer.Stop()
 			self.maximizeWindowTimer = core.callLater(
@@ -597,7 +692,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		except AttributeError:
 			dateText = winKernel.GetDateFormat(
 				winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
-		if toggleReportTimeWithSecondsOption(False):
+		if settings.toggleReportTimeWithSecondsOption(False):
 			try:
 				# for NVDA version >= 2021.1
 				timeText = winKernel.GetTimeFormatEx(
@@ -636,7 +731,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				return
 			curLevel = config.conf["speech"]["symbolLevel"]
 			config.conf["speech"]["symbolLevel"] = SYMLVL_SOME
-			if toggleReportTimeWithSecondsOption(False):
+			if settings.toggleReportTimeWithSecondsOption(False):
 				try:
 					# for NVDA version >= 2021.1
 					text = winKernel.GetTimeFormatEx(
@@ -664,8 +759,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		else:
 			# copyt date and time to clipboard
 			callback("copyToClip")
-	if getInstallFeatureOption(ID_DateAndTime):
-		script_dateTimeEx.removeCommandsScript = globalCommands.commands.script_dateTime  # noqa:E501
+	if getInstallFeatureOption(addonConfig.FCT_DateAndTime):
+		script_dateTimeEx.removeCommandsScript = globalCommands.commands.script_dateTime
 
 	def script_reportAppModuleInfoEx(self, gesture):
 		def reportAppModuleInfo():
@@ -708,7 +803,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			reportAppModuleInfo()
 		else:
 			reportCurrentVoiceProfil()
-	script_reportAppModuleInfoEx.removeCommandsScript = globalCommands.commands.script_reportAppModuleInfo  # noqa:E501
+	script_reportAppModuleInfoEx.removeCommandsScript = globalCommands.commands.script_reportAppModuleInfo
 
 	def script_restartEx(self, gesture):
 		def callback():
@@ -869,7 +964,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		if len(addons) > 1:
 			# Translators: indicate that others add-ons are installed
 			# and activated for this application.
-			text = _("Warning: it seems that others add-ons are installed and activated for this application")   # noqa:E501
+			text = _("Warning: it seems that others add-ons are installed and activated for this application")
 			textList.append(text)
 		# Translators: Indicates the name of the appModule for the current program.
 		msg = _("Loaded python module: %s") % modName
@@ -1021,7 +1116,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		wx.CallAfter(gui.mainFrame._popupSettingsDialog, KeyboardKeyRenamingDialog)
 
 	def script_commandKeySelectiveAnnouncement(self, gesture):
-		from .commandKeysSelectiveAnnouncementAndRemanence import CommandKeysSelectiveAnnouncementDialog  # noqa:E501
+		from .commandKeysSelectiveAnnouncementAndRemanence import CommandKeysSelectiveAnnouncementDialog
 		wx.CallAfter(
 			gui.mainFrame._popupSettingsDialog, CommandKeysSelectiveAnnouncementDialog)
 
@@ -1050,7 +1145,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			callback(False)
 		else:
 			callback(True)
-	script_speakForegroundEx.removeCommandsScript = globalCommands.commands.script_speakForeground  # noqa:E501
+	script_speakForegroundEx.removeCommandsScript = globalCommands.commands.script_speakForeground
 
 	def script_displayModuleUserGuide(self, gesture):
 		path = self.curAddon.getDocFilePath()
@@ -1162,7 +1257,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			"kb:6": "setVoiceProfileSelector6",
 			"kb:7": "setVoiceProfileSelector7",
 			"kb:8": "setVoiceProfileSelector8",
-			}
+		}
 
 		def toggleSwitchVoiceProfileMode(mmode=""):
 			if mode != "":
@@ -1327,13 +1422,15 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	enableNumpadNnavigationKeys = False
 
 	def checkInstallationForNumpadFunctionnality(self):
-		if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
-			isInstall(ID_KeyRemanence):
+		if isInstall(addonConfig.FCT_CommandKeysSelectiveAnnouncement) or\
+			isInstall(addonConfig.FCT_KeyRemanence):
 			return True
 		ui.message(
 			# Translators: message to user the fonctionnality is not available.
-			_("""This functionnality is only available if "command keys selective announcement" functionnality or "keys's remanence" functionnality is installed"""))  # noqa:E501
-		returnFalse
+			_(
+				"""This functionnality is only available if "command keys selective announcement" functionnality """
+				"""or "keys's remanence" functionnality is installed"""))
+		return False
 
 	def script_toggleNumpadStandardUse(self, gesture):
 		if not self.checkInstallationForNumpadFunctionnality():
@@ -1342,7 +1439,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False):
 			ui.message(
 				# Translators: message to user the fonctionnality is not available.
-				_("The standard use of the numeric keypad is not allowed"))  # noqa:E501
+				_("The standard use of the numeric keypad is not allowed"))
 			return
 		from .commandKeysSelectiveAnnouncementAndRemanence import _myInputManager
 		_myInputManager .toggleNavigationNumpadMode()
@@ -1351,12 +1448,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 		def callback(gesture):
 			clearDelayScriptTask()
-			if isInstall(ID_CommandKeysSelectiveAnnouncement) or\
-				isInstall(ID_KeyRemanence):
+			if isInstall(addonConfig.FCT_CommandKeysSelectiveAnnouncement) or\
+				isInstall(addonConfig.FCT_KeyRemanence):
 				gesture.reportExtra()
 		stopDelayScriptTask()
-		if not toggleEnableNumpadNavigationModeToggleAdvancedOption(False) or\
-			not toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False):
+		if not settings.toggleEnableNumpadNavigationModeToggleAdvancedOption(False) or\
+			not settings.toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False):
 			gesture.send()
 			callback(gesture)
 			return
@@ -1474,7 +1571,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		InformationDialog.run(None, dialogTitle, "", "\r\n".join(textList))
 
 	def checkUpdateWithLocalMyAddonsFile(self, auto=False):
-		path = "F:\\nvdaprojet\\paulber007Repositories\\myAddons.latest"  # noqa:E501
+		path = "F:\\nvdaprojet\\paulber007Repositories\\myAddons.latest"
 		from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
 		from .updateHandler.update_check import CheckForAddonUpdate
 		wx.CallAfter(
@@ -1546,13 +1643,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .computerTools.audioDevice import cancelTemporaryAudioOutputDevice
 		wx.CallAfter(cancelTemporaryAudioOutputDevice)
 
-	def script_setOrCancelTemporaryAudioOutputDevice(self, gesture):
-		stopDelayScriptTask()
-		if scriptHandler.getLastScriptRepeatCount():
-			script_cancelTemporaryAudioDevice(None)
-		else:
-			delayScriptTask(script_setTemporaryAudioOutputDevice, None)
-
 	def script_setTemporaryAudioOutputDevice(self, gesture):
 		from .computerTools.audioDevice import setTemporaryAudioOutputDevice
 		from .settings import _addonConfigManager
@@ -1571,57 +1661,77 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		audioDevice = deviceNames[selection]
 		setTemporaryAudioOutputDevice(audioDevice)
 
-	def fromName(self, name):
-		import keyboardHandler
-		import winUser
-		import vkCodes
-		VK_WIN = "windows"
-		VK_NVDA = "NVDA"
-		"""Create an instance given a key name.
-		@param name: The key name.
-		@type name: str
-		@return: A gesture for the specified key.
-		@rtype: L{KeyboardInputGesture}
-		"""
-		keyNames = name.split("+")
-		keys = []
-		for keyName in keyNames:
-			if keyName == "plus":
-				# A key name can't include "+" except as a separator.
-				keyName = "+"
-			if keyName == VK_WIN:
-				vk = winUser.VK_LWIN
-				ext = False
-			elif keyName.lower() == VK_NVDA.lower():
-				vk, ext = keyboardHandler.getNVDAModifierKeys()[0]
-			elif len(keyName) == 1:
-				ext = False
-				requiredMods, vk = winUser.VkKeyScanEx(keyName, keyboardHandler.getInputHkl())
-				print ("%s, %s"%(requiredMods, vk ))
-				if requiredMods & 1:
-					keys.append((winUser.VK_SHIFT, False))
-				if requiredMods & 2:
-					keys.append((winUser.VK_CONTROL, False))
-				if requiredMods & 4:
-					keys.append((winUser.VK_MENU, False))
-				# Not sure whether we need to support the Hankaku modifier (& 8).
-			else:
-				vk, ext = vkCodes.byName[keyName.lower()]
-				if ext is None:
-					ext = False
-			keys.append((vk, ext))
-		print ("keys: %s"%keys)
-		if not keys:
-			raise ValueError
+	def script_setOrCancelTemporaryAudioOutputDevice(self, gesture):
+		stopDelayScriptTask()
+		if scriptHandler.getLastScriptRepeatCount():
+			self.script_cancelTemporaryAudioDevice(None)
+		else:
+			delayScriptTask(self.script_setTemporaryAudioOutputDevice, None)
 
-		g = keyboardHandler.KeyboardInputGesture(keys[:-1], vk, 0, ext)
-		print ("g: %s"%g.displayName)
+	def script_activateQuickAddonsActivationDialog(self, gesture):
+		from .settings.quickAddonsActivation import QuickAddonsActivationDialog
+		wx.CallAfter(QuickAddonsActivationDialog.run)
 
-	
+	def saveCurrentSettingRing(self):
+		settings = globalVars.settingsRing
+		id = (
+			settings.settings[settings._current].setting.id
+			if settings._current is not None and hasattr(settings, 'settings')
+			else None
+		)
+		if id is None:
+			return
+		from synthDriverHandler import getSynth
+		synthName = getSynth().name
+		from .settings.nvdaConfig import _NVDAConfigManager
+		_NVDAConfigManager.saveLastSelectedSettingInSynthSettingsRing(synthName, id)
+		profileName = config.conf.profiles[-1].name
+		log.warning("Last selected setting in synth settings ring  is saved for '%s' profile: %s" % (
+			profileName, id))
+
+	@scriptHandler.script(
+		# Translators: Input help mode message for increase synth setting value command.
+		description=NVDAString("Increases the currently active setting in the synth settings ring"),
+		category=globalCommands.SCRCAT_SPEECH,
+		gestures=("kb(desktop):NVDA+control+upArrow", "kb(laptop):NVDA+shift+control+upArrow")
+	)
+	def script_increaseSynthSetting(self, gesture):
+		globalCommands.commands.script_increaseSynthSetting(gesture)
+		self.saveCurrentSettingRing()
+
+	@scriptHandler.script(
+		# Translators: Input help mode message for decrease synth setting value command.
+		description=NVDAString("Decreases the currently active setting in the synth settings ring"),
+		category=globalCommands.SCRCAT_SPEECH,
+		gestures=("kb(desktop):NVDA+control+downArrow", "kb(laptop):NVDA+control+shift+downArrow")
+	)
+	def script_decreaseSynthSetting(self, gesture):
+		globalCommands.commands.script_decreaseSynthSetting(gesture)
+		self.saveCurrentSettingRing()
+
+	@scriptHandler.script(
+		# Translators: Input help mode message for next synth setting command.
+		description=NVDAString("Moves to the next available setting in the synth settings ring"),
+		category=globalCommands.SCRCAT_SPEECH,
+		gestures=("kb(desktop):NVDA+control+rightArrow", "kb(laptop):NVDA+shift+control+rightArrow")
+	)
+	def script_nextSynthSetting(self, gesture):
+		globalCommands.commands.script_nextSynthSetting(gesture)
+		self.saveCurrentSettingRing()
+
+	@scriptHandler.script(
+		# Translators: Input help mode message for previous synth setting command.
+		description=NVDAString("Moves to the previous available setting in the synth settings ring"),
+		category=globalCommands.SCRCAT_SPEECH,
+		gestures=("kb(desktop):NVDA+control+leftArrow", "kb(laptop):NVDA+shift+control+leftArrow")
+	)
+	def script_previousSynthSetting(self, gesture):
+		globalCommands.commands.script_previousSynthSetting(gesture)
+		self.saveCurrentSettingRing()
+
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin  test")
 		ui.message("NVDAExtensionGlobalPlugin test")
-		g = self.fromName("2")
 
 
 class HelperDialog(

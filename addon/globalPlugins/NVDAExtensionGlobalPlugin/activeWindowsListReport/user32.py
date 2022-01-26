@@ -10,9 +10,8 @@
 
 import winUser
 import ctypes
-from ctypes import *  # noqa:F403
-from ctypes.wintypes import *  # noqa:F403
-
+import ctypes.wintypes
+from ctypes.wintypes import HWND, LPPOINT
 # win32con constant
 WS_EX_APPWINDOW = 262144
 # GWL_EXSTYLE = (-20)
@@ -123,7 +122,7 @@ class Point(object):
 		@rtype: L{Point}
 		@return: New object containing the translated coordinates.
 		"""
-		return ScreenToClient(hWnd, self)
+		return winUser.ScreenToClient(hWnd, self)
 
 	def client_to_screen(self, hWnd):
 		"""
@@ -137,7 +136,7 @@ class Point(object):
 		@rtype: L{Point}
 		@return: New object containing the translated coordinates.
 		"""
-		return ClientToScreen(hWnd, self)
+		return winUser.ClientToScreen(hWnd, self)
 
 	def translate(self, hWndFrom=HWND_DESKTOP, hWndTo=HWND_DESKTOP):
 		"""
@@ -254,8 +253,8 @@ class Rect(object):
 		@rtype: L{Rect}
 		@return: New object containing the translated coordinates.
 		"""
-		topleft = ScreenToClient(hWnd, (self.left, self.top))
-		bottomright = ScreenToClient(hWnd, (self.bottom, self.right))
+		topleft = winUser.ScreenToClient(hWnd, (self.left, self.top))
+		bottomright = winUser.ScreenToClient(hWnd, (self.bottom, self.right))
 		return Rect(topleft.x, topleft.y, bottomright.x, bottomright.y)
 
 	def client_to_screen(self, hWnd):
@@ -270,8 +269,8 @@ class Rect(object):
 		@rtype: L{Rect}
 		@return: New object containing the translated coordinates.
 		"""
-		topleft = ClientToScreen(hWnd, (self.left, self.top))
-		bottomright = ClientToScreen(hWnd, (self.bottom, self.right))
+		topleft = winUser.ClientToScreen(hWnd, (self.left, self.top))
+		bottomright = winUser.ClientToScreen(hWnd, (self.bottom, self.right))
 		return Rect(topleft.x, topleft.y, bottomright.x, bottomright.y)
 
 	def translate(self, hWndFrom=HWND_DESKTOP, hWndTo=HWND_DESKTOP):
@@ -293,6 +292,26 @@ class Rect(object):
 		"""
 		points = [(self.left, self.top), (self.right, self.bottom)]
 		return MapWindowPoints(hWndFrom, hWndTo, points)
+
+
+kernel32 = ctypes.windll.kernel32
+
+
+def MapWindowPoints(hWndFrom, hWndTo, lpPoints):
+	_MapWindowPoints = ctypes.windll.user32.MapWindowPoints
+	_MapWindowPoints.argtypes = [HWND, HWND, LPPOINT, UINT]
+	_MapWindowPoints.restype = ctypes.c_int
+	cPoints = len(lpPoints)
+	lpPoints = (Point * cPoints)(* lpPoints)
+	kernel32.SetLastError(ERROR_SUCCESS)
+	number = _MapWindowPoints(hWndFrom, hWndTo, byref(lpPoints), cPoints)
+	if number == 0:
+		errcode = kernel32.GetLastError()
+		if errcode != ERROR_SUCCESS:
+			raise ctypes.WinError(errcode)
+	x_delta = number & 0xFFFF
+	y_delta = (number >> 16) & 0xFFFF
+	return x_delta, y_delta, [(Point.x, Point.y) for Point in lpPoints]
 
 
 class WindowPlacement(object):
@@ -320,11 +339,11 @@ class WindowPlacement(object):
 			self.ptMinPosition = Point(wp.ptMinPosition.x, wp.ptMinPosition.y)
 			self.ptMaxPosition = Point(wp.ptMaxPosition.x, wp.ptMaxPosition.y)
 			self.rcNormalPosition = Rect(
-										wp.rcNormalPosition.left,
-										wp.rcNormalPosition.top,
-										wp.rcNormalPosition.right,
-										wp.rcNormalPosition.bottom,
-										)
+				wp.rcNormalPosition.left,
+				wp.rcNormalPosition.top,
+				wp.rcNormalPosition.right,
+				wp.rcNormalPosition.bottom,
+			)
 
 	@property
 	def _as_parameter_(self):
@@ -432,7 +451,7 @@ def getParent(hWnd):
 
 
 # dll handles
-user32 = windll.user32
+user32 = ctypes.windll.user32
 
 
 def getExtendedWindowStyle(hwnd):

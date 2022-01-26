@@ -18,7 +18,7 @@ XGETTEXT_COMMON_ARGS = (
 	"--package-name=\"{gettext_package_name}\" "
 	"--package-version=\"{gettext_package_version}\" "
 	"-c -o \"{TARGET}\" -D \"{inputDirectory}\" {SOURCES}"
-	)
+)
 
 
 def getI18nSources(addon, buildVarsI18nSources):
@@ -37,7 +37,7 @@ def getI18nSources(addon, buildVarsI18nSources):
 
 
 def generatePotFile(
-		addon, potFileName, buildVarsAddonInfo, buildVarsI18nSources):
+	addon, potFileName, buildVarsAddonInfo, buildVarsI18nSources):
 	gettextVars = {
 		'gettext_package_bugs_address': 'nvda-translations@freelists.org',
 		'gettext_package_name': buildVarsAddonInfo['addon_name'],

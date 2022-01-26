@@ -4,7 +4,8 @@
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
-# this code comes originaly from clipContentsDesigner add-on(authors: Noelia Ruiz Martenez, other contributors)
+# this code comes originaly from clipContentsDesigner add-on
+# (authors: Noelia Ruiz Martenez, other contributors)
 
 
 import addonHandler
@@ -130,6 +131,8 @@ def performAdd():
 
 
 isInAddToClip = False
+
+
 def addToClip():
 	global isInAddToClip
 	if isInAddToClip:

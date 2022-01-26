@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py
 # a part of NVDAExtensionGlobalPLugin add-on
-# Copyright (C) 2018 - 2021 paulber19
+# Copyright (C) 2018 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -42,12 +42,12 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		"kb:control+alt+shift+rightArrow": "moveToLastCellOfRow",
 		"kb:control+alt+shift+upArrow": "moveToFirstCellOfColumn",
 		"kb:control+alt+shift+downArrow": "moveToLastCellOfColumn",
-		}
+	}
 	# set category of base NVDA scripts
-	documentBase.DocumentWithTableNavigation.script_nextRow.category = SCRCAT_TABLE  # noqa:E501
-	documentBase.DocumentWithTableNavigation.script_previousRow.category = SCRCAT_TABLE  # noqa:E501
-	documentBase.DocumentWithTableNavigation.script_nextColumn.category = SCRCAT_TABLE  # noqa:E501
-	documentBase.DocumentWithTableNavigation.script_previousColumn.category = SCRCAT_TABLE  # noqa:E501
+	documentBase.DocumentWithTableNavigation.script_nextRow.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_previousRow.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_nextColumn.category = SCRCAT_TABLE
+	documentBase.DocumentWithTableNavigation.script_previousColumn.category = SCRCAT_TABLE
 
 	def __init__(self, rootNVDAObject):
 		super(DocumentWithTableNavigationEx, self).__init__(rootNVDAObject)
@@ -58,7 +58,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			return
 
 		try:
-			tableID, origRow, origCol, origRowSpan, origColSpan = self._getTableCellCoords(self.selection)  # noqa:E501
+			tableID, origRow, origCol, origRowSpan, origColSpan = self._getTableCellCoords(self.selection)
 			(row, col) = (origRow, 1) if axis == "row" else (1, origCol)
 			info = self._getTableCellAt(tableID, self.selection, row, col)
 		except LookupError:
@@ -120,7 +120,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		formatConfig = config.conf["documentFormatting"].copy()
 		formatConfig["reportTables"] = True
 		try:
-			tableID, origRow, origCol, origRowSpan, origColSpan = self._getTableCellCoords(self.selection)  # noqa:E501
+			tableID, origRow, origCol, origRowSpan, origColSpan = self._getTableCellCoords(self.selection)
 		except LookupError:
 			# Translators: The message reported when a user attempts
 			# to use a table movement command.
@@ -166,21 +166,21 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		self.moveToAndReportTableElement("row", "previous")
 	# Translators: Input help mode message
 		# to move To And Report previous Row command.
-	script_moveToAndReportPreviousRow.__doc__ = _("Move to and report previous table row")  # noqa:E501
+	script_moveToAndReportPreviousRow.__doc__ = _("Move to and report previous table row")
 	script_moveToAndReportPreviousRow	.category = SCRCAT_TABLE
 
 	def script_moveToAndReportNextColumn(self, gesture):
 		self.moveToAndReportTableElement("column", "next")
 	# Translators: Input help mode message
 		# to move To And Report Next column command.
-	script_moveToAndReportNextColumn.__doc__ = _("Move to and report next table column")  # noqa:E501
+	script_moveToAndReportNextColumn.__doc__ = _("Move to and report next table column")
 	script_moveToAndReportNextColumn	.category = SCRCAT_TABLE
 
 	def script_moveToAndReportPreviousColumn(self, gesture):
 		self.moveToAndReportTableElement("column", "previous")
 	# Translators: Input help mode message
 		# to move To And Report previous column command.
-	script_moveToAndReportPreviousColumn.__doc__ = _("Move to and report previous table column")  # noqa:E501
+	script_moveToAndReportPreviousColumn.__doc__ = _("Move to and report previous table column")
 	script_moveToAndReportPreviousColumn	.category = SCRCAT_TABLE
 
 	def script_reportCurrentCellPosition(self, gesture):
@@ -188,7 +188,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			return
 
 		try:
-			tableID, row, col, rowSpan, colSpan = self._getTableCellCoords(self.selection)  # noqa:E501
+			tableID, row, col, rowSpan, colSpan = self._getTableCellCoords(self.selection)
 			info = self._getTableCellAt(tableID, self.selection, row, col)
 		except LookupError:
 			# Translators: The message reported when a user attempts
@@ -208,7 +208,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			reason=REASON_QUERY, onlyInitialFields=False)
 	# Translators: Input help mode message
 		# to report current cell position command.
-	script_reportCurrentCellPosition.__doc__ = _("Report current table cell position")  # noqa:E501
+	script_reportCurrentCellPosition.__doc__ = _("Report current table cell position")
 	script_reportCurrentCellPosition	.category = SCRCAT_TABLE
 
 	def script_moveToFirstCellOfRow(self, gesture):
@@ -228,7 +228,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		self._tableMovementFirstOrLastScriptHelper(axis="row", movement="first")
 	# Translators: Input help mode message
 		# for move To first cell of column command.
-	script_moveToFirstCellOfColumn.__doc__ = _("Move to first cell of table column")  # noqa:E501
+	script_moveToFirstCellOfColumn.__doc__ = _("Move to first cell of table column")
 	script_moveToFirstCellOfColumn	.category = SCRCAT_TABLE
 
 	def script_moveToLastCellOfColumn(self, gesture):
@@ -245,7 +245,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 		formatConfig["reportTables"] = True
 		formatConfig["includeLayoutTables"] = True
 		try:
-			tableID, origRow, origCol, origRowSpan, origColSpan = self._getTableCellCoords(  # noqa:E501
+			tableID, origRow, origCol, origRowSpan, origColSpan = self._getTableCellCoords(
 				self.selection)
 		except LookupError:
 			# Translators: The message reported when a user attempts
@@ -276,10 +276,11 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 			self.selection = info
 			return
 		try:
-			tableID1, origRow1, origCol1, origRowSpan1, origColSpan1 = tableID, origRow, origCol, origRowSpan, origColSpan  # noqa:E501
+			tableID1, origRow1, origCol1 = tableID, origRow, origCol
+			origRowSpan1, origColSpan1 = origRowSpan, origColSpan
 			i = 500
 			while i > 0:
-				i = i-1
+				i = i - 1
 				info = self._getNearestTableCell(
 					tableID1,
 					self.selection,
@@ -287,7 +288,7 @@ class DocumentWithTableNavigationEx(documentBase.DocumentWithTableNavigation):
 					origRowSpan1, origColSpan1,
 					direction,
 					axis)
-				tableID1, origRow1, origCol1, origRowSpan1, origColSpan1 = self._getTableCellCoords(self.selection)  # noqa:E501
+				tableID1, origRow1, origCol1, origRowSpan1, origColSpan1 = self._getTableCellCoords(self.selection)
 				info.collapse()
 				self.selection = info
 		except LookupError:

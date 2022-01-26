@@ -19,11 +19,12 @@ try:
 	# for nvda version >= 2021.3
 	import gui.message
 	_reportObjectDescriptionOptions = []
+
 	def myMessageBox(
-			message: str,
-			caption: str = wx.MessageBoxCaptionStr,
-			style: int = wx.OK | wx.CENTER,
-			parent: Optional[wx.Window] = None
+		message: str,
+		caption: str = wx.MessageBoxCaptionStr,
+		style: int = wx.OK | wx.CENTER,
+		parent: Optional[wx.Window] = None
 	) -> int:
 		"""Display a message dialog.
 		This should be used for all message dialogs
@@ -35,10 +36,7 @@ try:
 		@return: Same as for wx.MessageBox.
 		"""
 		from gui import mainFrame
-		#global _messageBoxCounter
 		global _reportObjectDescriptionOptions
-		option = config.conf["presentation"]["reportObjectDescriptions"]
-
 		with gui.message._messageBoxCounterLock:
 			gui.message._messageBoxCounter += 1
 			_reportObjectDescriptionOptions.append(config.conf["presentation"]["reportObjectDescriptions"])
@@ -72,7 +70,6 @@ except ImportError:
 		@return: Same as for wx.MessageBox.
 		@rtype: int
 		"""
-	
 		option = config.conf["presentation"]["reportObjectDescriptions"]
 		config.conf["presentation"]["reportObjectDescriptions"] = True
 		wasAlready = gui.isInMessageBox
@@ -86,6 +83,7 @@ except ImportError:
 			gui.isInMessageBox = False
 		config.conf["presentation"]["reportObjectDescriptions"] = option
 		return res
+
 
 def initialize():
 	global _NVDAMessageBox

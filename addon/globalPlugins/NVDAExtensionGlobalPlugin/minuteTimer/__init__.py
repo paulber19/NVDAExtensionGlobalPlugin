@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-pon
-# Copyright (C) 2016 -2020 paulber19
+# Copyright (C) 2016 -2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -39,7 +39,7 @@ class MinuteTimer(object):
 		delayBetweenRings,
 		delayBeforeEndDuration=None):
 		# duration in seconds
-		self.duration = int(duration*60)
+		self.duration = int(duration * 60)
 		# vocal announce to be spoken at the end of duration
 		self.announce = announce
 		# number of rings
@@ -53,7 +53,7 @@ class MinuteTimer(object):
 		self.ringFile = os.path.join(path, "sounds", "ringin.wav")
 		if self.delayBeforeEndDuration is None:
 			self.speakAnnounceTimer = wx.CallLater(
-				int(1000*self.duration), self.speakAnnounce)
+				int(1000 * self.duration), self.speakAnnounce)
 		else:
 			self.speakAnnounceTimer = wx.CallLater(
 				int(1000 * (self.duration - int(60 * self.delayBeforeEndDuration))),
@@ -66,7 +66,7 @@ class MinuteTimer(object):
 			if self.delayBeforeEndDuration > 1 else _("End duration in one minute")
 		ui.message(msg)
 		self.speakAnnounceTimer = wx.CallLater(
-			int(1000*60*self.delayBeforeEndDuration), self.speakAnnounce)
+			int(1000 * 60 * self.delayBeforeEndDuration), self.speakAnnounce)
 
 	def speakAnnounce(self):
 		global _curMinuteTimer
@@ -74,7 +74,7 @@ class MinuteTimer(object):
 		self.speakAnnounceTimer = None
 		if CurrentMinuteTimerDialog._instance is not None:
 			CurrentMinuteTimerDialog._instance .Destroy()
-		th = Ring(self.ringCount, self.delayBetweenRings/1000, self.ringFile)
+		th = Ring(self.ringCount, self.delayBetweenRings / 1000, self.ringFile)
 		th.start()
 		wx.CallAfter(
 			gui.messageBox,
@@ -121,7 +121,7 @@ class MinuteTimerLaunchDialog(
 		self.doGui()
 
 	def doGui(self):
-		(lastDuration, lastAnnounce, lastDelayBeforeEndDuration) = _addonConfigManager.getLastMinuteTimerDatas()  # noqa:E501
+		(lastDuration, lastAnnounce, lastDelayBeforeEndDuration) = _addonConfigManager.getLastMinuteTimerDatas()
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# the minute timer value
@@ -196,7 +196,7 @@ class MinuteTimerLaunchDialog(
 		if delayBeforeEndDuration >= duration:
 			# Translators: message to the user when a invalid
 			# delay before duration ending.
-			text = _("The Delay to be notified before duration ending must be smaller than duration")  # noqa:E501
+			text = _("The Delay to be notified before duration ending must be smaller than duration")
 			speakLater(100, text)
 			wx.CallLater(300, self.delayBeforeEndDurationLB.SetFocus)
 			return False
@@ -259,7 +259,7 @@ class RingOptionsDialog(
 			# in the ring options dialog to define duration between rings.
 			_("&Delay between rings (in milliseconds):"),
 			wx.Choice,
-			choices=[str(x*500) for x in range(1, 11)])
+			choices=[str(x * 500) for x in range(1, 11)])
 		self.delayBetweenRingsBox.SetStringSelection(str(delayBetweenRings))
 
 		# buttons
@@ -363,7 +363,7 @@ class CurrentMinuteTimerDialog(
 			else _curMinuteTimer.getRemainingTime()
 		if remainingTime == 0:
 			return
-		minutes = int(remainingTime/60)
+		minutes = int(remainingTime / 60)
 		seconds = int(remainingTime % 60)
 		delay = 5000
 		if minutes == 0:
@@ -374,7 +374,7 @@ class CurrentMinuteTimerDialog(
 			text = _("{minutes} minutes {seconds}") .format(
 				minutes=minutes, seconds=seconds)
 		self.remainingDurationEdit.SetValue(text)
-		if (minutes == 0) and int(seconds/5) == 0:
+		if (minutes == 0) and int(seconds / 5) == 0:
 			delay = 1000
 		if self.remainingDurationEdit.HasFocus():
 			speakLater(100, text)

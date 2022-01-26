@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -31,7 +31,7 @@ except (ModuleNotFoundError, AttributeError):
 		STATE_PRESSED, STATE_CHECKED, STATE_HALFCHECKED,
 		STATE_READONLY)
 import core
-from ..utils import PutWindowOnForeground,  mouseClick, makeAddonWindowTitle, getHelpObj
+from ..utils import PutWindowOnForeground, mouseClick, makeAddonWindowTitle, getHelpObj
 from ..utils import getSpeechMode, setSpeechMode, setSpeechMode_off
 from ..utils.NVDAStrings import NVDAString
 addonHandler.initTranslation()
@@ -40,17 +40,17 @@ try:
 	# for nvda version >= 2021.2
 	from controlTypes.role import Role
 	_rolesByType = {
-		"button":  (
+		"button": (
 			Role.BUTTON, Role.SPINBUTTON,
 			Role.DROPDOWNBUTTON, Role.RADIOBUTTON,
 			Role.TOGGLEBUTTON, Role.MENUBUTTON,
 			Role.TREEVIEWBUTTON),
-		"checkBox":  (Role.CHECKBOX,),
+		"checkBox": (Role.CHECKBOX,),
 		"edit": (Role.EDITABLETEXT, Role.PASSWORDEDIT,),
 		"text": (Role.STATICTEXT, Role.TEXTFRAME,),
 		"list": (Role.LIST, Role.LISTITEM),
 		"comboBox": (Role.COMBOBOX,),
-		"slider":  (Role.SLIDER,),
+		"slider": (Role.SLIDER,),
 		"link": (Role.LINK,),
 		"table": (
 			Role.TABLE, Role.TABLECELL,
@@ -69,21 +69,21 @@ try:
 			Role.WINDOW),
 		"treeView": (Role.TREEVIEW, Role.TREEVIEWITEM),
 		"tab": (Role.TAB,)
-		}
+	}
 except (ModuleNotFoundError, AttributeError):
 	import controlTypes
 	_rolesByType = {
-		"button":  (
+		"button": (
 			controlTypes.ROLE_BUTTON, controlTypes.ROLE_SPINBUTTON,
 			controlTypes.ROLE_DROPDOWNBUTTON, controlTypes.ROLE_RADIOBUTTON,
 			controlTypes.ROLE_TOGGLEBUTTON, controlTypes.ROLE_MENUBUTTON,
 			controlTypes.ROLE_TREEVIEWBUTTON),
-		"checkBox":  (controlTypes.ROLE_CHECKBOX,),
+		"checkBox": (controlTypes.ROLE_CHECKBOX,),
 		"edit": (controlTypes.ROLE_EDITABLETEXT, controlTypes.ROLE_PASSWORDEDIT,),
 		"text": (controlTypes.ROLE_STATICTEXT, controlTypes.ROLE_TEXTFRAME,),
 		"list": (controlTypes.ROLE_LIST, controlTypes.ROLE_LISTITEM),
 		"comboBox": (controlTypes.ROLE_COMBOBOX,),
-		"slider":  (controlTypes.ROLE_SLIDER,),
+		"slider": (controlTypes.ROLE_SLIDER,),
 		"link": (controlTypes.ROLE_LINK,),
 		"table": (
 			controlTypes.ROLE_TABLE, controlTypes.ROLE_TABLECELL,
@@ -102,7 +102,7 @@ except (ModuleNotFoundError, AttributeError):
 			controlTypes.ROLE_WINDOW),
 		"treeView": (controlTypes.ROLE_TREEVIEW, controlTypes.ROLE_TREEVIEWITEM),
 		"tab": (controlTypes.ROLE_TAB,)
-		}
+	}
 
 
 class ElementListDialog(
@@ -151,14 +151,16 @@ class ElementListDialog(
 		("menu", "%s, %s" % (NVDAString("menu").capitalize(), _("menu item"))),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
-		("container", "%s (%s, %s, %s, ...)" % (NVDAString("container").capitalize(), NVDAString("tool bar"), NVDAString("panel"), NVDAString("application"))),
+		("container", "%s (%s, %s, %s, ...)" % (
+			NVDAString("container").capitalize(),
+			NVDAString("tool bar"), NVDAString("panel"), NVDAString("application"))),
 		# Translators: The label of a list item to select the type of object in
 		# the Element List Dialog.
 		("text", NVDAString("text").capitalize()),
 		# Translators: The label of a list item to select the type of object
 		# in the Element List Dialog.
 		("all", _("All"))
-		)
+	)
 
 	def __new__(cls, *args, **kwargs):
 		if ElementListDialog._instance is not None:
@@ -199,7 +201,7 @@ class ElementListDialog(
 		# the "list of visible items making up the object in the foreground" dialog.
 		labelText = _("Elements:")
 		self.objectListBox = sHelper.addLabeledControl(
-			labelText,  wx.ListBox,
+			labelText, wx.ListBox,
 			id=wx.ID_ANY,
 			style=wx.LB_SINGLE | wx.LB_ALWAYS_SB | wx.WANTS_CHARS,
 			size=(600, 300))
@@ -266,7 +268,7 @@ class ElementListDialog(
 			return False
 		curIndex = self.objectTypesListBox.GetSelection()
 		index = None
-		for i in range(curIndex+1, len(keyCodes)):
+		for i in range(curIndex + 1, len(keyCodes)):
 			k = keyCodes[i]
 			if k == key:
 				index = i
@@ -366,7 +368,7 @@ class ElementListDialog(
 			# change type of objects.
 			index = self.objectTypesListBox.GetSelection()
 			if keyCode == 314:
-				newIndex = index - 1 if index - 1 >= 0 else self.objectTypesListBox.Count - 1  # noqa:E501
+				newIndex = index - 1 if index - 1 >= 0 else self.objectTypesListBox.Count - 1
 			else:
 				newIndex = index + 1 if index < self.objectTypesListBox.Count - 1 else 0
 			self.objectTypesListBox.SetSelection(newIndex)
@@ -537,7 +539,7 @@ class ElementListDialog(
 		core.callLater(400, callback, obj, oldSpeechMode)
 		self.Close()
 
-	def onNavigatorObjectButton(self,  event):
+	def onNavigatorObjectButton(self, event):
 		def callback(obj, oldspeechMode):
 			api.processPendingEvents()
 			speech.cancelSpeech()

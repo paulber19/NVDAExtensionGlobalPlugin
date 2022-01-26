@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -35,7 +35,7 @@ class UserInputGesturesDialog(
 		tree = self.tree = wx.TreeCtrl(
 			self,
 			size=wx.Size(600, 400),
-			style=wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT | wx.TR_SINGLE)  # noqa:E501
+			style=wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT | wx.TR_SINGLE)
 		self.treeRoot = tree.AddRoot("root")
 		tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.onTreeSelect)
 		settingsSizer.Add(tree, proportion=1, flag=wx.EXPAND)
@@ -118,7 +118,7 @@ class UserInputGesturesDialog(
 	def onRemoveAll(self, evt):
 		if gui.messageBox(
 			# Translators: the label of a message box dialog.
-			_("Do you really want to erase all the modifications of input gesture that have been made?"),  # noqa:E501
+			_("Do you really want to erase all the modifications of input gesture that have been made?"),
 			# Translators: the title of a message box dialog.
 			_("Warning"),
 			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
@@ -141,7 +141,7 @@ class UserInputGesturesDialog(
 				# Translators: An error displayed
 				# when saving user defined input gestures fails.
 				gui.messageBox(
-					NVDAString("Error saving user defined gestures - probably read only file system."),  # noqa:E501
+					NVDAString("Error saving user defined gestures - probably read only file system."),
 					NVDAString("Error"), wx.OK | wx.ICON_ERROR)
 		inputCore.manager.loadUserGestureMap()
 		super(UserInputGesturesDialog, self).onOk(evt)
@@ -169,7 +169,7 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		self.results[scriptInfo.category][scriptInfo.displayName] = scriptInfo
 
 	def addGlobalMap(self, gmap):
-		for cls, moduleName, className, gesture, scriptName in gmap.getScriptsForAllGestures():  # noqa:E501
+		for cls, moduleName, className, gesture, scriptName in gmap.getScriptsForAllGestures():
 			c = "%s.%s" % (moduleName, className)
 			key = (c, gesture)
 			if key in self.handledGestures:
@@ -206,7 +206,8 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 			if scriptName:
 				if scriptName.startswith("kb:"):
 					info.category = NVDAString("%s") % inputCore.SCRCAT_KBEMU
-					info.displayName = NVDAString("Emulate key press: {emulateGesture}").format(emulateGesture=scriptName[3:])
+					info.displayName = NVDAString(
+						"Emulate key press: {emulateGesture}").format(emulateGesture=scriptName[3:])
 				else:
 					info.displayName = scriptName
 			else:
@@ -269,5 +270,5 @@ class UserGestureMap(inputCore.GlobalGestureMap):
 		@rtype: generator of (class, str, str)
 		"""
 		for gesture in self._map:
-			for cls, moduleName, className, scriptName in self.getScriptsForGesture(gesture):  # noqa:E501
+			for cls, moduleName, className, scriptName in self.getScriptsForGesture(gesture):
 				yield cls, moduleName, className, gesture, scriptName

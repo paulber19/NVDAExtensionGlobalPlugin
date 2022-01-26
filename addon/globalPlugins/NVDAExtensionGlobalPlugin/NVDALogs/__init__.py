@@ -44,7 +44,7 @@ class NVDALogsManagementDialog (
 			-1,
 			title,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
-			)
+		)
 		self.doGui()
 
 	def doGui(self):
@@ -98,14 +98,14 @@ class NVDALogsManagementDialog (
 				# Translators: The title of an error message dialog.
 				NVDAString("Error"),
 				wx.OK | wx.ICON_ERROR
-				)
+			)
 			return
 		try:
 			os.startfile(logFile)
 		except Exception:
 			wx.CallAfter(
 				gui.messageBox,
-				errorMsg,
+				openErrorMsg,
 				_("Open Error"),
 				wx.OK | wx.ICON_ERROR)
 
@@ -131,7 +131,7 @@ class NVDALogsManagementDialog (
 				# Translators: The title of an error message dialog.
 				NVDAString("Error"),
 				wx.OK | wx.ICON_ERROR
-				)
+			)
 			return
 		if api.copyToClip(logFile):
 			ui.message(_("Current log file path copied to clipboard"))
@@ -148,7 +148,7 @@ class NVDALogsManagementDialog (
 				# Translators: The title of an error message dialog.
 				NVDAString("Error"),
 				wx.OK | wx.ICON_ERROR
-				)
+			)
 			return
 		if api.copyToClip(logFile):
 			ui.message(_("old log file path copied to clipboard"))

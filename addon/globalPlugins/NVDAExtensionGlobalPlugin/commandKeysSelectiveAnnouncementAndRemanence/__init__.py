@@ -1,11 +1,12 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2021 paulber19
+# Copyright (C) 2018 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
+import winKernel
 import scriptHandler
 import ui
 import speech
@@ -38,8 +39,10 @@ import core
 from inputCore import NoInputGestureAction
 from ..utils.NVDAStrings import NVDAString
 from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
-from ..settings import _addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption, toggleBeepAtRemanenceEndAdvancedOption, isInstall  # noqa:E501
-from ..settings.addonConfig import ID_KeyRemanence
+from ..settings import (
+	_addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption,
+	toggleBeepAtRemanenceEndAdvancedOption, isInstall)
+from ..settings.addonConfig import FCT_KeyRemanence
 from ..utils.keyboard import getKeyboardKeys
 from keyboardHandler import KeyboardInputGesture
 from . import specialForGmail
@@ -86,7 +89,7 @@ _availableModifierKeysCombination = {
 	29: ["windows", "shift"],
 	30: ["windows", "NVDA", "shift"],
 	WITHOUT_MODIFIER_BIT_POSITION: [],
-	}
+}
 CHECKED_KEY_BIT_POSITION = 63
 # Translators: label of anyKey item in the excluded keys list.
 ANYKEY_LABEL = _("Any key with modifier key combination")
@@ -107,7 +110,7 @@ class MyInputManager (object):
 	activationSequences = [
 		"rightShift,rightControl,rightShift",
 		"leftShift,leftControl,leftShift",
-		]
+	]
 	# to save last modifiers used for activation setting
 	lastModifiersForActivation = []
 	# remanence timer
@@ -127,7 +130,9 @@ class MyInputManager (object):
 		if _addonConfigManager.getRemanenceAtNVDAStart():
 			self.taskTimer = wx.CallLater(4000, self.toggleRemanenceActivation)
 		self.hasPreviousRemanenceActivationOn = False
-		from ..settings import toggleEnableNumpadNavigationModeToggleAdvancedOption, toggleActivateNumpadNavigationModeAtStartAdvancedOption  # noqa:E501
+		from ..settings import (
+			toggleEnableNumpadNavigationModeToggleAdvancedOption,
+			toggleActivateNumpadNavigationModeAtStartAdvancedOption)
 		if (
 			toggleEnableNumpadNavigationModeToggleAdvancedOption(False)
 			and toggleActivateNumpadNavigationModeAtStartAdvancedOption(False)):
@@ -213,7 +218,7 @@ class MyInputManager (object):
 		tempList = self.lastModifiersForActivation[-3:]
 		s = ""
 		for modifier in tempList:
-			s = s+","+modifier.mainKeyName
+			s = s + "," + modifier.mainKeyName
 		if s[1:] not in self.activationSequences:
 			return False
 		self.lastModifiersForActivation = []
@@ -231,7 +236,7 @@ class MyInputManager (object):
 		return False
 
 	def manageRemanence(self, currentGesture):
-		if not isInstall(ID_KeyRemanence):
+		if not isInstall(FCT_KeyRemanence):
 			return None
 		delayBetweenGestures = time.time() - self.lastGestureTime\
 			if self.lastGestureTime else time.time()
@@ -307,8 +312,8 @@ class MyInputManager (object):
 			numpadKeyNames.extend(["kb:shift+numpad%s" % str(x) for x in range(1, 10)])
 			numpadKeyNames .extend(
 				["kb:numpadMultiply", "kb:numpadDivide", "kb:numpadPlus"])
-			numpadKeyNames .extend(["kb:control+numpadMultiply", "kb:control+numpadDivide", "kb:control+numpadPlus"])  # noqa:E501
-			numpadKeyNames .extend(["kb:shift+numpadMultiply", "kb:shift+numpadDivide", "kb:shift+numpadPlus"])  # noqa:E501
+			numpadKeyNames .extend(["kb:control+numpadMultiply", "kb:control+numpadDivide", "kb:control+numpadPlus"])
+			numpadKeyNames .extend(["kb:shift+numpadMultiply", "kb:shift+numpadDivide", "kb:shift+numpadPlus"])
 			d = {"globalCommands.GlobalCommands": {
 				"None": numpadKeyNames}}
 			_NVDA_InputManager.localeGestureMap.update(d)
@@ -338,7 +343,7 @@ class MyInputManager (object):
 			vkCode = gesture.vkCode
 			scanCode = gesture.scanCode
 			extended = not gesture.isExtended
-			newGesture = KeyboardInputGesture(gesture.modifiers, vkCode, scanCode, extended)  # noqa:E501
+			newGesture = KeyboardInputGesture(gesture.modifiers, vkCode, scanCode, extended)
 			return newGesture
 		return None
 
@@ -384,7 +389,7 @@ class MyInputManager (object):
 		speechEffect = gesture.speechEffectWhenExecuted
 		if speechEffect == gesture.SPEECHEFFECT_CANCEL:
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
-		elif speechEffect in (gesture.SPEECHEFFECT_PAUSE, gesture.SPEECHEFFECT_RESUME):  # noqa:E501
+		elif speechEffect in (gesture.SPEECHEFFECT_PAUSE, gesture.SPEECHEFFECT_RESUME):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				speech.pauseSpeech,
@@ -416,7 +421,7 @@ class MyInputManager (object):
 		if not script and (
 			bypassRemanence
 			or scriptHandler._numIncompleteInterceptedCommandScripts):
-			script = lambda gesture: gesture.send()  # noqa:E731
+			script = lambda gesture: gesture.send()
 		if script:
 			scriptHandler.queueScript(script, gesture)
 			return
@@ -749,7 +754,7 @@ class CommandKeysSelectiveAnnouncementDialog(
 			"control", "rightcontrol", "leftcontrol",
 			"shift", "rightshift", "leftshift",
 			"windows", "leftwindows", "rightwindows",
-			]
+		]
 
 		if key.lower() in modifierKeys:
 			return True
@@ -815,7 +820,7 @@ class CommandKeysSelectiveAnnouncementDialog(
 			index = tempList.GetSelection()
 			count = tempList.GetCount()
 			if index < count - 1:
-				for i in range(index+1, count):
+				for i in range(index + 1, count):
 					if tempList.IsChecked(i):
 						tempList.SetSelection(i)
 						onSelect(evt)
@@ -834,7 +839,7 @@ class CommandKeysSelectiveAnnouncementDialog(
 			index = tempList.GetSelection()
 			if index > 0:
 				while index > 0:
-					index = index-1
+					index = index - 1
 					if tempList.IsChecked(index):
 						tempList.SetSelection(index)
 						onSelect(evt)
@@ -890,7 +895,15 @@ def initialize():
 	global _NVDA_InputManager, _myInputManager, _NVDA_ExecuteGesture
 	from inputCore import manager
 	_NVDA_InputManager = manager
+	if _NVDA_InputManager .__module__ != "inputCore":
+		log.warning(
+			"Incompatibility: manager of inputCore has been also patched by another add-on: %s. "
+			"There is a risk of malfunction" % _NVDA_InputManager.__module__)
 	_NVDA_ExecuteGesture = manager.executeGesture
+	if _NVDA_ExecuteGesture .__module__ != "inputCore":
+		log.warning(
+			"Incompatibility: executeGesture of inputCore manager has been also patched by another add-on: %s. "
+			"There is a risk of malfunction" % _NVDA_ExecuteGesture .__module__)
 	manager.executeGesture = myExecuteGesture
 	_myInputManager = MyInputManager()
 	log.warning("commandKeysSelectiveAnnouncementAndRemanence initialized")

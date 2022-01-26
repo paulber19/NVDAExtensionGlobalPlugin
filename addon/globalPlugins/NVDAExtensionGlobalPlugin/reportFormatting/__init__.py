@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\reportFormating\__init__
 # A part of NvDAextensionGlobalPlugin
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -90,7 +90,7 @@ def getColorText(attrs):
 	bgColorText = backgroundColor.name\
 		if isinstance(backgroundColor, colors.RGB) else backgroundColor
 	if backgroundColor2:
-		bg2Name = backgroundColor2.name if isinstance(backgroundColor2, colors.RGB) else backgroundColor2  # noqa:E501
+		bg2Name = backgroundColor2.name if isinstance(backgroundColor2, colors.RGB) else backgroundColor2
 		# Translators: Reported when there are two background colors.
 		# This occurs when, for example,
 		# a gradient pattern is applied to a spreadsheet cell.
@@ -238,7 +238,7 @@ def getParagraphIndentation(attrs):
 		'first-line-indent': (
 			NVDAString("first line indent"),
 			NVDAString("no first line indent"), ),
-		}
+	}
 	text = None
 	for attr, (label, noVal) in indentLabels.items():
 		newVal = attrs.get(attr)

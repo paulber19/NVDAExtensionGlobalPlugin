@@ -1,6 +1,6 @@
 # globalPlugins/NVDAextensionGlobalPlugin\textAnalysis\textAnalyzer.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright 2021 paulber19
+# Copyright 2021-2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -34,7 +34,7 @@ _formattingFieldChangeMsg = {
 	"sub": _("subscript"),
 	"super": _("superscript"),
 	"baseLine": _("base line"),
-	}
+}
 
 _negativeFields = {
 	"bold": "nonBold",
@@ -43,7 +43,7 @@ _negativeFields = {
 	"strikethrough": "nonStrikethrough ",
 	"hidden": "nonHidden",
 	"text-position": "baseLine",
-	}
+}
 
 
 # keep previous analyzed text
@@ -64,14 +64,14 @@ _defaultSymbolToSymetricDic = {
 	# chevron
 	chr(0x2039): chr(0x203a),
 	chr(0xab): chr(0xbb),
-	}
+}
 _defaultPunctuations = {
 	"All": "()[]{},:.;!?",
 	"NeedSpaceBefore": "([{?!",
 	"NeedSpaceAfter": ")]}?!:;",
 	"NoSpaceBefore": ")]}.:;,",
 	"NoSpaceAfter": "([{",
-	}
+}
 
 
 # memorize all activated profiles
@@ -81,18 +81,22 @@ _profiles = []
 def updateProfileConfiguration():
 	global _profiles
 	# call when profile is triggered.
-	# activate text analyzer  for this profile , at first trigger and , if "start text analyzer at NVDA start" option is checked.
+	# activate text analyzer  for this profile ,
+	# at first trigger and , if "start text analyzer at NVDA start" option is checked.
 	currentProfile = config.conf.profiles[-1].name
 	if currentProfile is None:
 		currentProfile = NVDAString("normal configuration")
 	if currentProfile in _profiles:
 		return
 	_profiles.append(currentProfile)
-	# it's the first time after NVDA start, so set text analyzer activation if text analyzer must be started at NVDA start
-	if _NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False) and not _NVDAConfigManager.toggleTextAnalyzerActivationOption(False):
+	# it's the first time after NVDA start
+	#  so set text analyzer activation if text analyzer must be started at NVDA start
+	if _NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False) and (
+		not _NVDAConfigManager.toggleTextAnalyzerActivationOption(False)):
 		_NVDAConfigManager.toggleTextAnalyzerActivationOption(True, silent=True)
 		log.warning("Text analyzer activated at first time %s profile switched" % currentProfile)
-	if not _NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False) and _NVDAConfigManager.toggleTextAnalyzerActivationOption(False):
+	if not _NVDAConfigManager.toggleTextAnalyzerActivationAtStartOption(False) and (
+		_NVDAConfigManager.toggleTextAnalyzerActivationOption(False)):
 		_NVDAConfigManager.toggleTextAnalyzerActivationOption(True, silent=True)
 		log.warning("Text analyzer desactivated at first time %s profile switched" % currentProfile)
 
@@ -138,7 +142,7 @@ def checkSymbolsDiscrepancies(info, errorPositions):
 				break
 			del characterPositions[pos]
 			del characterPositions[pos]
-			characters = characters[:pos] + characters[pos+2:]
+			characters = characters[:pos] + characters[pos + 2:]
 		for index in range(0, len(characters)):
 			ch = characters[index]
 			position = characterPositions[index]
@@ -161,7 +165,6 @@ def checkExtraWhiteSpace(info, unit, errorPositions):
 		storyEndPos = tempInfo.bookmark._end._endOffset
 	else:
 		storyEndPos = tempInfo.bookmark.endOffset
-	eol = False
 	if unit == textInfos.UNIT_WORD:
 		text = text.strip()
 	else:
@@ -169,9 +172,10 @@ def checkExtraWhiteSpace(info, unit, errorPositions):
 		text = text.replace("\n", "")
 	if len(text) == 0:
 		return
-		if len(text) != len(info.text) or curEndPos == storyEndPos:
-			# there is end of line.
-			eol = True
+	eol = False
+	if len(text) != len(info.text) or curEndPos == storyEndPos:
+		# there is end of line.
+		eol = True
 	# replacing non-breaking space by simple space
 	text = text.replace(chr(0xA0), " ")
 	if _NVDAConfigManager.spaceOrTabAtEndAnomalyOption():
@@ -212,15 +216,15 @@ def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPosition
 	symbolsAndSpaceDic = _NVDAConfigManager.getSymbolsAndSpaceDic()
 	for index in range(0, len(text)):
 		ch = text[index]
-		position = index+1
+		position = index + 1
 		if ch not in symbols.getSymbols_all():
 			if _NVDAConfigManager.uppercaseMissingAnomalyOption():
-				if index > 1 and ch.islower() and text[index-2] == "." and text[index-1] == " ":
+				if index > 1 and ch.islower() and text[index - 2] == "." and text[index - 1] == " ":
 					# missing uppercase
 					if position not in errorPositions:
 						errorPositions[position] = []
 					errorPositions[position].append(("missingUppercase", ch))
-				elif ch.isupper() and (index > 1) and (text[index-1].islower()) and (text[index-2].isspace()):
+				elif ch.isupper() and (index > 1) and (text[index - 1].islower()) and (text[index - 2].isspace()):
 					# inversed uppercase
 					if position not in errorPositions:
 						errorPositions[position] = []
@@ -233,23 +237,24 @@ def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPosition
 				errorPositions[position].append(("unexpectedPunctuation", ch))
 			continue
 		if _NVDAConfigManager.isolatedOrNonSpacedPunctuationsAnomalyOption():
-			if ch in symbolsAndSpaceDic["NeedSpaceBefore"] and index and not text[index-1].isspace():
+			if ch in symbolsAndSpaceDic["NeedSpaceBefore"] and index and not text[index - 1].isspace():
 				if position not in errorPositions:
 					errorPositions[position] = []
 				errorPositions[position].append(("neededSpace", None))
-			if ch in symbolsAndSpaceDic["NeedSpaceAfter"] and (index != len(text)-1) and not text[index+1].isspace():
-				if text[index+1] not in [".", ","]:
+			if ch in symbolsAndSpaceDic["NeedSpaceAfter"] and (
+				index != len(text) - 1) and not text[index + 1].isspace():
+				if text[index + 1] not in [".", ","]:
 					if position + 1not in errorPositions:
-						errorPositions[position+1] = []
-					errorPositions[position+1].append(("neededSpace", None))
-			if ch in symbolsAndSpaceDic["NoSpaceBefore"] and index and text[index-1].isspace():
-				if position-1 not in errorPositions:
-					errorPositions[position-1] = []
-				errorPositions[position-1].append(("unexpectedSpace", None))
-			if ch in symbolsAndSpaceDic["NoSpaceAfter"] and (index < len(text) - 1) and text[index+1].isspace():
+						errorPositions[position + 1] = []
+					errorPositions[position + 1].append(("neededSpace", None))
+			if ch in symbolsAndSpaceDic["NoSpaceBefore"] and index and text[index - 1].isspace():
+				if position - 1 not in errorPositions:
+					errorPositions[position - 1] = []
+				errorPositions[position - 1].append(("unexpectedSpace", None))
+			if ch in symbolsAndSpaceDic["NoSpaceAfter"] and (index < len(text) - 1) and text[index + 1].isspace():
 				if position + 1not in errorPositions:
-					errorPositions[position+1] = []
-				errorPositions[position+1].append(("unexpectedSpace", None))
+					errorPositions[position + 1] = []
+				errorPositions[position + 1].append(("unexpectedSpace", None))
 
 
 def checkAnomalies(info, unit, errorPositions):
@@ -339,7 +344,7 @@ def analyzeText(info, unit):
 	global _previousAnalyzedText
 	if not _NVDAConfigManager.toggleTextAnalyzerActivationOption(False):
 		return
-	if unit in [None,  textInfos.UNIT_CHARACTER]:
+	if unit in [None, textInfos.UNIT_CHARACTER]:
 		return
 	textInfo = info.copy()
 	textInfo.expand(unit)
@@ -456,7 +461,7 @@ def getPreviousFormatField(caretInfo, formatConfig):
 	info.setEndPoint(caretInfo, "startToStart")
 	ret = info.move(textInfos.UNIT_WORD, -1)
 	if ret:
-		info.move(textInfos.UNIT_CHARACTER, len(info.text)-1)
+		info.move(textInfos.UNIT_CHARACTER, len(info.text) - 1)
 		info.expand(textInfos.UNIT_CHARACTER)
 		formatField = getFormatField(info, formatConfig)
 		return formatField
@@ -485,7 +490,7 @@ def findFormatingChanges(info, unit, errorPositions):
 		field for field in textWithFields if (
 			isinstance(field, textInfos.FieldCommand)
 			and field.command == 'formatChange'
-			)
+		)
 		or isinstance(field, str)
 	]
 	if len(fields) == 0:
@@ -511,7 +516,8 @@ def findFormatingChanges(info, unit, errorPositions):
 				textInfo.move(textInfos.UNIT_CHARACTER, adjustment)
 				textInfo.expand(textInfos.UNIT_WORD)
 				textInfo.collapse()
-				newAdjustment, fcp, lastFieldCommandField = findInWord(textInfo, previousFieldCommandField, formatConfig, offset)
+				newAdjustment, fcp, lastFieldCommandField = findInWord(
+					textInfo, previousFieldCommandField, formatConfig, offset)
 				formattingChangePositions .update(fcp)
 				for pos in sorted(fcp):
 					changes = fcp[pos]

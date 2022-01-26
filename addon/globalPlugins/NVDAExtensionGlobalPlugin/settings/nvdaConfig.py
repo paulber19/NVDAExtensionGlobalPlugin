@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021 paulber19
+# Copyright (C) 2021-2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -13,7 +13,7 @@ from ..textAnalysis.symbols import (
 	SMBL_NeedSpaceAfter,
 	SMBL_NoSpaceBefore,
 	SMBL_NoSpaceAfter,
-	)
+)
 addonHandler.initTranslation()
 # sections in nvda and profiles ini files
 # last user config section
@@ -91,7 +91,7 @@ _symbolsAndSpaceConfspec = {
 	SAS_NeedSpaceAfter: """string(default="")""",
 	SAS_NoSpaceBefore: """string(default="")""",
 	SAS_NoSpaceAfter: """string(default="")""",
-	}
+}
 
 _anomaliesConfspec = {
 	ANO_MultipleContigousSpaces: "boolean(default=True)",
@@ -102,7 +102,7 @@ _anomaliesConfspec = {
 	ANO_NeedSpaceAfter: "boolean(default=True)",
 	ANO_NoSpaceBefore: "boolean(default=True)",
 	ANO_NoSpaceAfter: "boolean(default=True)",
-	}
+}
 
 # formatting configuration specification
 _formattingConfspec = {
@@ -111,14 +111,14 @@ _formattingConfspec = {
 	ID_FontSize: "boolean(default=True)",
 	ID_FontAttributes: "boolean(default=True)",
 	ID_Color: "boolean(default=True)",
-	}
+}
 # alert configuration specification
 _alertConfspec = {
 	ID_BeepFrequencyAndLength: """string(default="100,200")""",
 	ID_SoundFile: """string(default="Windows Error.wav")""",
 	# Translators: alert message for text analysis reporting.
 	ID_AlertMessage: """string(default={message})""".format(message=_("Alert")),
-	}
+}
 
 # text analyzer configuration specification
 _textAnalyzerConfspec = {
@@ -132,20 +132,23 @@ _textAnalyzerConfspec = {
 	SCT_SymbolsAndSpace: _symbolsAndSpaceConfspec,
 	SCT_Formatting: _formattingConfspec,
 	SCT_Alert: _alertConfspec,
-		}
+}
 _optionsConfspec = {
 	ID_SymbolLevelOnWordCaretMovement: """string(default="None")""",
 	ID_ReportCurrentCaretPosition: "boolean(default=False)",
 	ID_AddToClipSeparator: """string(default="")""",
 	ID_AddTextBefore: "boolean(default=False)",
 	ID_ConfirmToAddToClip: "boolean(default=False)",
-	}
+}
+SCT_SynthSettingsRing = "SynthSettingsRing"
+SCT_LastSelectedSettings = "lastSelectedSettings"
+
 _curAddon = addonHandler.getCodeAddon()
 _addonName = _curAddon.manifest["name"]
 _addonConfspec = {
 	SCT_Options: _optionsConfspec,
-	SCT_TextAnalyzer: _textAnalyzerConfspec
-	}
+	SCT_TextAnalyzer: _textAnalyzerConfspec,
+}
 config.conf.spec[_addonName] = _addonConfspec
 
 reportByChoiceLabels = {
@@ -159,7 +162,7 @@ reportByChoiceLabels = {
 	SIG_Number: _("Detections's number"),
 	# Translators: choice label to report analysis detection with description of each detected elements.
 	SIG_Description: _("detailed description")
-	}
+}
 anomalyLabels = {
 	# Translators: choice item for reporting extra spaces.label
 	ANO_MultipleContigousSpaces: _("The multiple contiguous spaces"),
@@ -177,7 +180,7 @@ anomalyLabels = {
 	ANO_NoSpaceBefore: _("unexpected space before symbol"),
 	# Translators: choice label for reporting symbols which must not be followed by a space")
 	ANO_NoSpaceAfter: _("unexpected space after symbol"),
-	}
+}
 formattingChangeLabels = {
 	# Translators: choice item for reporting font name change.
 	ID_FontName: _("Font's name"),
@@ -189,7 +192,7 @@ formattingChangeLabels = {
 	ID_Style: _("Style"),
 	# Translators: choice item for reporting color change.
 	ID_Color: _("Color"),
-	}
+}
 
 documentSettingsIDsToOptions = {
 	"reportFontName": ID_FontName,
@@ -198,7 +201,7 @@ documentSettingsIDsToOptions = {
 	"reportSuperscriptsAndSubscripts": ID_FontAttributes,
 	"reportColor": ID_Color,
 	"reportStyle": ID_Style,
-	}
+}
 
 
 class NVDAConfigurationManager(object):
@@ -246,8 +249,8 @@ class NVDAConfigurationManager(object):
 			i = 0
 			while n:
 				i += 1
-				n = int(n/2)
-			return i-1
+				n = int(n / 2)
+			return i - 1
 		conf = config.conf
 		if self.addonName not in conf:
 			return {}
@@ -313,7 +316,7 @@ class NVDAConfigurationManager(object):
 		i = 1
 		for (desc, symb) in symbolsList:
 			d[str(i)] = "%s %s" % (symb, desc)
-			i = i+1
+			i = i + 1
 		conf[addonName][sct] = d.copy()
 		conf[addonName][sct]._cache.clear()
 
@@ -329,7 +332,7 @@ class NVDAConfigurationManager(object):
 			return []
 		symbols = []
 		skip = False
-		for i in range(1, len(d)+1):
+		for i in range(1, len(d) + 1):
 			s = d[str(i)]
 			sym = s[0]
 			# cause of bug , we clean all symbol equal to space
@@ -531,7 +534,8 @@ class NVDAConfigurationManager(object):
 
 	def getAnomalyWithPunctuationsOptionId(self, anomalyLabel):
 		for (id, label) in anomalyLabels .items():
-			if label == anomalyLabel and id in [SAS_NeedSpaceBefore, SAS_NeedSpaceAfter, SAS_NoSpaceBefore, SAS_NoSpaceAfter]:
+			if label == anomalyLabel and (
+				id in [SAS_NeedSpaceBefore, SAS_NeedSpaceAfter, SAS_NoSpaceBefore, SAS_NoSpaceAfter]):
 				return id
 		return None
 
@@ -673,6 +677,25 @@ class NVDAConfigurationManager(object):
 	def setAddToClipSeparator(self, separator):
 		conf = config.conf[self.addonName][SCT_Options]
 		conf[ID_AddToClipSeparator] = separator
+
+	def getLastSelectedSettingInSynthSettingsRing(self, synthName):
+		conf = config.conf
+		addonName = self.addonName
+		try:
+			return conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings][synthName]
+		except Exception:
+			return None
+
+	def saveLastSelectedSettingInSynthSettingsRing(self, synthName, settingId):
+		conf = config.conf
+		addonName = self.addonName
+		if addonName not in conf:
+			conf[addonName] = {}
+		if SCT_SynthSettingsRing not in conf[addonName]:
+			conf[addonName][SCT_SynthSettingsRing] = {}
+		if SCT_LastSelectedSettings not in conf[addonName][SCT_SynthSettingsRing]:
+			conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings] = {}
+		conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings][synthName] = settingId
 
 
 # singleton for addon configuration manager

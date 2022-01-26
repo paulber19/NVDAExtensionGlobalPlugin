@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\elementsListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -88,7 +88,7 @@ class ElementsListDialogEx(
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("separator", NVDAString("separator").capitalize()),
-		)
+	)
 	Element = collections.namedtuple("Element", ("item", "parent"))
 	lastSelectedElementType = 0
 	_timer = None
@@ -129,7 +129,7 @@ class ElementsListDialogEx(
 		self.tree = wx.TreeCtrl(
 			self,
 			size=wx.Size(500, 600),
-			style=wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT | wx.TR_SINGLE | wx.TR_EDIT_LABELS)  # noqa:E501
+			style=wx.TR_HAS_BUTTONS | wx.TR_HIDE_ROOT | wx.TR_LINES_AT_ROOT | wx.TR_SINGLE | wx.TR_EDIT_LABELS)
 		self.tree.Bind(wx.EVT_SET_FOCUS, self.onTreeSetFocus)
 		self.tree.Bind(wx.EVT_CHAR, self.onTreeChar)
 		self.tree.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.onTreeLabelEditBegin)
@@ -285,7 +285,8 @@ class ElementsListDialogEx(
 		# #8753: wxPython 4 returns "invalid tree item"
 		# when the tree view is empty, so use initial element if appropriate.
 		try:
-			defaultElement = self._initialElement if newElementType else self.tree.GetItemData(self.tree.GetSelection())  # noqa:E501
+			defaultElement = self._initialElement if newElementType else self.tree.GetItemData(
+				self.tree.GetSelection())
 		except Exception:
 			defaultElement = self._initialElement
 		# Clear the tree.
@@ -324,7 +325,7 @@ class ElementsListDialogEx(
 			return
 
 		# If there's no default item, use the first item in the tree.
-		self.tree.SelectItem(defaultItem or self.tree.GetFirstChild(self.treeRoot)[0])  # noqa:E501
+		self.tree.SelectItem(defaultItem or self.tree.GetFirstChild(self.treeRoot)[0])
 		# Enable the button(s).
 		# If the activate button isn't the default button,
 		# it is disabled for this element type and shouldn't be enabled here.
@@ -527,7 +528,7 @@ class GeckoElementsListDialog(ElementsListDialogEx):
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("clickable", NVDAString("clickable").capitalize()),
-		)
+	)
 	Element = collections.namedtuple("Element", ("item", "parent"))
 	lastSelectedElementType = 0
 	_timer = None

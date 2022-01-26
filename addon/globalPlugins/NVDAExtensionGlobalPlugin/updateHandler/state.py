@@ -32,7 +32,7 @@ def initialize():
 		with open(_stateFilename, "rb") as f:
 			_state = pickle.load(f)
 	except Exception:
-		log.debugWarning("update state file don't exist: initialization with default values", exc_info=False)  # noqa:E501
+		log.debugWarning("update state file don't exist: initialization with default values", exc_info=False)
 		# Defaults.
 		_state = {
 			"lastCheck": 0,

@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/winExplorer/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -100,8 +100,8 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 		if role == ROLE_TREEVIEWITEM:
 			if childParent and (
 				parentChildCount > 500
-				or childParent.role not in [ROLE_TREEVIEW, ROLE_LIST]  # noqa:E501
-				):
+				or childParent.role not in [ROLE_TREEVIEW, ROLE_LIST]
+			):
 				break
 			if invisible:
 				continue

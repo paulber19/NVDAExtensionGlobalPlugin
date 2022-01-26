@@ -1,10 +1,12 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 Paulber19
+# Copyright (C) 2016 - 2022 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
+from logHandler import log
+import wx
 import api
 import textInfos
 import speech
@@ -38,7 +40,10 @@ try:
 except ImportError:
 	from characterProcessing import SYMLVL_SOME
 from IAccessibleHandler import accNavigate
-from oleacc import *  # noqa:F403
+from oleacc import (
+	STATE_SYSTEM_SELECTED,
+	NAVDIR_PREVIOUS, NAVDIR_NEXT,
+)
 import UIAHandler
 from NVDAObjects.UIA import UIA
 import queueHandler
@@ -46,7 +51,12 @@ import eventHandler
 import core
 import contentRecog.recogUi
 from ..utils.NVDAStrings import NVDAString
-from ..settings import *  # noqa:F403
+from ..settings import (
+	isInstall, toggleReportNextWordOnDeletionOption,
+)
+from ..settings.addonConfig import (
+	FCT_ClipboardCommandAnnouncement,
+)
 from ..utils.keyboard import getEditionKeyCommands
 
 addonHandler.initTranslation()
@@ -67,12 +77,13 @@ _clipboardCommands = {
 	"cut": (_msgCut, True),
 	"copy": (_msgCopy, True),
 	"paste": (_msgPaste, False)
-	}
+}
 
 # task timer
 _GB_taskTimer = None
 
 _taskDelay = None
+
 
 def getWExplorerStatusBarText(foreground):
 	clientObject = UIAHandler.handler.clientObject
@@ -113,7 +124,8 @@ def getStatusBarText():
 	if text:
 		text += " "
 	return text + " ".join(
-		chunk for child in obj.children[:-1] for chunk in (child.name, child.value) if chunk and isinstance(chunk, str) and not chunk.isspace())  # noqa:E501
+		chunk for child in obj.children[:-1] for chunk in (
+			child.name, child.value) if chunk and isinstance(chunk, str) and not chunk.isspace())
 
 
 # for delaying the report of position
@@ -151,15 +163,12 @@ def reportPosition(pos):
 
 class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 	def _caretMovementScriptHelper(
-		self,
-		gesture,
-		unit,
-		*args, **kwargs):
+		self, gesture, unit, *args, **kwargs):
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
 			from ..settings.nvdaConfig import _NVDAConfigManager
 			# save current symbol level
-			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
+			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
 		try:
@@ -171,8 +180,6 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 		# restore current symbol level
 		config.conf["speech"]["symbolLevel"] = curLevel
 
-	
-	
 
 class EditableTextEx(EditableText):
 	_commandToScript = {
@@ -180,10 +187,10 @@ class EditableTextEx(EditableText):
 		"cut": "cutAndCopyToClipboard",
 		"paste": "pasteFromClipboard",
 		"undo": "undo",
-		}
+	}
 
 	def initOverlayClass(self):
-		if isInstall(ID_ClipboardCommandAnnouncement):
+		if isInstall(FCT_ClipboardCommandAnnouncement):
 			d = getEditionKeyCommands(self)
 			for command in self._commandToScript:
 				key = d[command]
@@ -293,7 +300,7 @@ class EditableTextEx(EditableText):
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
 			from ..settings.nvdaConfig import _NVDAConfigManager
-			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
+			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
 		gesture.send()
@@ -316,7 +323,7 @@ class ClipboardCommandAnnouncement(object):
 	}
 
 	def initOverlayClass(self):
-		if isInstall(ID_ClipboardCommandAnnouncement):
+		if isInstall(FCT_ClipboardCommandAnnouncement):
 			editionKeyCommands = getEditionKeyCommands(self)
 			if self.checkSelection:
 				d = self._changeSelectionGestureToMessage .copy()
@@ -429,7 +436,7 @@ class ClipboardCommandAnnouncement(object):
 		gesture.send()
 		try:
 			msg = self.__changeSelectionGestures["+".join(
-				gesture.modifierNames) + "+"+gesture.mainKeyName]
+				gesture.modifierNames) + "+" + gesture.mainKeyName]
 		except Exception:
 			msg = None
 		if msg:
@@ -441,7 +448,7 @@ class ClipboardCommandAnnouncement(object):
 		d = {}
 		for item in _clipboardCommands:
 			d[editionKeyCommands[item]] = _clipboardCommands[item]
-		(msg, checkSelection) = d["+".join(gesture.modifierNames)+"+"+gesture.mainKeyName]  # noqa:E501
+		(msg, checkSelection) = d["+".join(gesture.modifierNames) + "+" + gesture.mainKeyName]
 		if self.checkSelection and checkSelection:
 			if not self.isThereASelection():
 				ui.message(NVDAString("No selection"))
@@ -466,11 +473,11 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	for cls in clsList:
 		if contentRecog.recogUi.RecogResultNVDAObject in cls.__mro__:
 			contentRecogClass = True
-	if contentRecogClass  : #or contentRecog.recogUi.RecogResultNVDAObject in clsList:
+	if contentRecogClass:
 		clsList.insert(0, RecogResultNVDAObjectEx)
 	elif obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck:
 		clsList.insert(0, EditableTextEx)
-	elif isInstall(ID_ClipboardCommandAnnouncement):
+	elif isInstall(FCT_ClipboardCommandAnnouncement):
 		clsList.insert(0, ClipboardCommandAnnouncement)
 		obj.checkSelection = False
 		if obj.role in (ROLE_TREEVIEWITEM, ROLE_LISTITEM):

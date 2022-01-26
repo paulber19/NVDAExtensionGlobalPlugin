@@ -18,7 +18,10 @@ import queueHandler
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
-from .user32 import *  # noqa:F403
+from .user32 import (
+	SW_SHOWMAXIMIZED, SW_SHOWMINIMIZED, getWindowPlacement, enumWindows,
+	getParent, WS_EX_APPWINDOW, WS_EX_TOOLWINDOW, getExtendedWindowStyle
+)
 
 addonHandler.initTranslation()
 
@@ -182,8 +185,7 @@ class ActiveWindowsListDisplay(
 			self,
 			id=wx.ID_CLOSE,
 			label=NVDAString("&Close"))
-		mainSizer.Add(
-			sHelper.sizer, border=guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)
+		mainSizer.Add(sHelper.sizer, border=10, flag=wx.ALL)
 		mainSizer.Fit(self)
 		self.SetSizer(mainSizer)
 		# Events
@@ -212,7 +214,7 @@ class ActiveWindowsListDisplay(
 
 	def selectNextWindow(self, keys):
 		curIndex = self.windowsListBox .GetSelection()
-		for windowName in self.windowNamesList[curIndex+1:]:
+		for windowName in self.windowNamesList[curIndex + 1:]:
 			if windowName.lower().startswith(self.lastTypedKeys):
 				index = self.windowNamesList.index(windowName)
 				self.windowsListBox .SetSelection(index)
@@ -238,7 +240,7 @@ class ActiveWindowsListDisplay(
 			self.lastTypedKeys = ""
 			evt.Skip()
 			return
-		curTime = time.time()*1000
+		curTime = time.time() * 1000
 		if not hasattr(self, "lastKeyDownTime"):
 			self.lastKeyDownTime = 0
 			self.lastTypedKeys = ""
@@ -319,7 +321,7 @@ class ActiveWindowsListDisplay(
 		if newWindowsCount > index + 1:
 			self.windowsListBox.SetSelection(index)
 		else:
-			self.windowsListBox.SetSelection(newWindowsCount-1)
+			self.windowsListBox.SetSelection(newWindowsCount - 1)
 		# focus on windows list
 		self.windowsListBox.SetFocus()
 

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\browseModeUIAEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -22,11 +22,20 @@ except (ModuleNotFoundError, AttributeError):
 	from controlTypes import stateLabels
 	from controlTypes import ROLE_CHECKBOX
 	from controlTypes import STATE_CHECKED
+	from controlTypes import negativeStateLabels
+try:
+	# for nvda version >= 2022.1
+	import UIAHandler.browseMode as UIABrowseMode
+	from UIAHandler.utils import isUIAElementInWalker, getDeepestLastChildUIAElementInWalker
+	from UIAHandler.browseMode import UIABrowseModeDocument
+except ImportError:
+	import UIABrowseMode
+	from UIAUtils import isUIAElementInWalker, getDeepestLastChildUIAElementInWalker
+	from UIABrowseMode import UIABrowseModeDocument
 
-import UIABrowseMode
 import UIAHandler
-from UIABrowseMode import UIABrowseModeDocument
-from UIAUtils import *  # noqa:F403
+
+
 from .__init__ import BrowseModeDocumentTreeInterceptorEx
 from . import elementsList
 from . import UIAParagraph
@@ -72,7 +81,8 @@ def UIAControlQuicknavIteratorEx(
 	# we must always match on the root of the document
 	# so we know when to stop walking
 	runtimeID = VARIANT()
-	document.rootNVDAObject.UIAElement._IUIAutomationElement__com_GetCurrentPropertyValue(UIAHandler.UIA_RuntimeIdPropertyId, byref(runtimeID))  # noqa:E501
+	document.rootNVDAObject.UIAElement._IUIAutomationElement__com_GetCurrentPropertyValue(
+		UIAHandler.UIA_RuntimeIdPropertyId, byref(runtimeID))
 	UIACondition = UIAHandler.handler.clientObject.createOrCondition(
 		UIAHandler.handler.clientObject.createPropertyCondition(
 			UIAHandler.UIA_RuntimeIdPropertyId, runtimeID),
@@ -85,7 +95,7 @@ def UIAControlQuicknavIteratorEx(
 			for index in range(elements.length):
 				element = elements.getElement(index)
 				try:
-					elementRange = document.rootNVDAObject.UIATextPattern.rangeFromChild(element)  # noqa:E501
+					elementRange = document.rootNVDAObject.UIATextPattern.rangeFromChild(element)
 				except COMError:
 					elementRange = None
 				if elementRange:
@@ -137,7 +147,7 @@ def UIAControlQuicknavIteratorEx(
 				if zoomedOnce:
 					child = toPosition.getEnclosingElement()
 				break
-			child = children.getElement(length-1)
+			child = children.getElement(length - 1)
 			try:
 				childRange = document.rootNVDAObject.UIATextPattern.rangeFromChild(child)
 			except COMError:
@@ -361,4 +371,4 @@ class EdgeElementsListDialog(elementsList.ElementsListDialogEx):
 		# Translators: The label of a list item to select the type of element
 		# in the browse mode Elements List dialog.
 		("separator", NVDAString("separator").capitalize())
-		)
+	)

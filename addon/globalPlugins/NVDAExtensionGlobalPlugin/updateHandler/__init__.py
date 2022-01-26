@@ -34,8 +34,8 @@ def autoUpdateCheck(releaseToDev):
 	if updateChecker is not None:
 		updateChecker.Stop()
 	# delay before check update (between 20 and 600 secondes, step = 20 seconds)
-	r = 20*random.randint(1, 30)
-	updateChecker = wx.CallLater(r*1000, addonUpdateCheck, True, releaseToDev)
+	r = 20 * random.randint(1, 30)
+	updateChecker = wx.CallLater(r * 1000, addonUpdateCheck, True, releaseToDev)
 
 
 def addonUpdateCheck(auto, releaseToDev):

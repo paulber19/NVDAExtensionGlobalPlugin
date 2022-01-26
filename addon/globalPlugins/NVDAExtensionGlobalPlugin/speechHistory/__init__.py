@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -15,7 +15,7 @@ import tones
 import ui
 import api
 from ..utils.informationDialog import InformationDialog
-from ..settings import toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption  # noqa:E501
+from ..settings import toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption
 
 addonHandler.initTranslation()
 
@@ -83,7 +83,7 @@ class SpeechRecorderManager(object):
 		self._speechHistory.append(text)
 		if len(self._speechHistory) > MAX_RECORD:
 			self._speechHistory.pop(0)
-		self._lastSpeechHistoryReportIndex = len(self._speechHistory)-1
+		self._lastSpeechHistoryReportIndex = len(self._speechHistory) - 1
 
 	def reportSpeechHistory(self, position, toClip=False):
 		oldOnMonitoring = self._onMonitoring

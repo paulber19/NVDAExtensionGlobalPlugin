@@ -3,19 +3,19 @@
 # Copyright (C) 2019 - 2020 paulber19
 # This file is covered by the GNU General Public License.
 
+import addonHandler
 import os
 import sys
-from ..utils.py3Compatibility import getUtilitiesPath, getCommonUtilitiesPath
-commonUtilitiesPath = getCommonUtilitiesPath()
-sys.path.append(commonUtilitiesPath)
-from win32.ntsecuritycon import *  # noqa:E402,F403
-del sys.path[-1]
+import ctypes
+from ..utils.py3Compatibility import getUtilitiesPath
 utilitiesPath = getUtilitiesPath()
 win32Path = os.path.join(utilitiesPath, "win32")
 sys.path.append(win32Path)
-import win32security  # noqa:E402
-import win32api  # noqa:E402
+import win32security
+import win32api
 del sys.path[-1]
+
+addonHandler.initTranslation()
 
 
 def shutdown(timeout=0, forceClose=False):
@@ -38,10 +38,10 @@ def reboot(timeout=0, forceClose=False):
 
 
 def rebootComputer(
-		message='Rebooting', timeout=30, forceClose=False, reboot=True):
+	message='Rebooting', timeout=30, forceClose=False, reboot=True):
 	# Enable the SeShutdown privilege (which must be present in your
 	# token in the first place)
-	priv_flags = (win32security.TOKEN_ADJUST_PRIVILEGES | win32security.TOKEN_QUERY)  # noqa:E501
+	priv_flags = (win32security.TOKEN_ADJUST_PRIVILEGES | win32security.TOKEN_QUERY)
 	hToken = win32security.OpenProcessToken(
 		win32api.GetCurrentProcess(), priv_flags)
 	priv_id = win32security.LookupPrivilegeValue(

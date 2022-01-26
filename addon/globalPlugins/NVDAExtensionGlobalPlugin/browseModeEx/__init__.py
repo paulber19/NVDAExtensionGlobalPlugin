@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -95,23 +95,16 @@ del qn
 class CursorManagerEx(CursorManager):
 	# we want to ear symbols and punctuation when moving by word
 	def _caretMovementScriptHelper(
-		self, gesture, unit,
-		direction=None,
-		posConstant=textInfos.POSITION_SELECTION,
-		posUnit=None,
-		posUnitEnd=False,
-		extraDetail=False,
-		handleSymbols=False):
+		self, gesture, unit, *args, **kwargs):
+
 		curLevel = config.conf["speech"]["symbolLevel"]
 		if unit == textInfos.UNIT_WORD:
 			from ..settings.nvdaConfig import _NVDAConfigManager
-			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()  # noqa:E501
+			symbolLevelOnWordCaretMovement = _NVDAConfigManager .getSymbolLevelOnWordCaretMovement()
 			if symbolLevelOnWordCaretMovement is not None:
 				config.conf["speech"]["symbolLevel"] = symbolLevelOnWordCaretMovement
 		super(CursorManagerEx, self)._caretMovementScriptHelper(
-			gesture, unit, direction,
-			posConstant, posUnit, posUnitEnd,
-			extraDetail, handleSymbols)
+			gesture, unit, *args, **kwargs)
 		config.conf["speech"]["symbolLevel"] = curLevel
 
 
@@ -121,7 +114,7 @@ class BrowseModeDocumentTreeInterceptorEx(
 	_myGestureMap = {
 		"kb(desktop):nvda+a": "reportDocumentConstantIdentifier",
 		"kb(laptop):nvda+shift+a": "reportDocumentConstantIdentifier",
-		}
+	}
 
 	def __init__(self, rootNVDAObject):
 		super(BrowseModeDocumentTreeInterceptorEx, self).__init__(rootNVDAObject)
@@ -157,7 +150,8 @@ class BrowseModeDocumentTreeInterceptorEx(
 
 	# Translators: Input help mode message
 # for report Document Constant Identifier command.
-	script_reportDocumentConstantIdentifier.__doc__ = _("Report document 's address (URL). Twice: copy it to clipboard")  # noqa:E501
+	script_reportDocumentConstantIdentifier.__doc__ = _(
+		"Report document 's address (URL). Twice: copy it to clipboard")
 	script_reportDocumentConstantIdentifier.category = SCRCAT_BROWSEMODE
 
 	def _quickNavScript(
@@ -165,7 +159,7 @@ class BrowseModeDocumentTreeInterceptorEx(
 		if itemType == "notLinkBlock":
 			iterFactory = self._iterNotLinkBlock
 		else:
-			iterFactory = lambda direction, info: self._iterNodesByType(  # noqa:E731
+			iterFactory = lambda direction, info: self._iterNodesByType(
 				itemType, direction, info)
 		info = self.selection
 		try:
@@ -213,21 +207,23 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 		return
 	if NVDAObjects.IAccessible.MSHTML.MSHTML in clsList:
 		from . import NVDAObjectsIAccessible
-		clsList[clsList.index(NVDAObjects.IAccessible.MSHTML.MSHTML)] = NVDAObjectsIAccessible.NVDAObjectMSHTMLEx  # noqa:E501
+		clsList[clsList.index(NVDAObjects.IAccessible.MSHTML.MSHTML)] = NVDAObjectsIAccessible.NVDAObjectMSHTMLEx
 		return
 	if NVDAObjects.IAccessible.mozilla.Document in clsList:
 		from . import NVDAObjectsIAccessible
-		clsList[clsList.index(NVDAObjects.IAccessible.mozilla.Document)] = NVDAObjectsIAccessible.NVDAObjectMozillaDocumentEx  # noqa:E501
+		clsList[clsList.index(
+			NVDAObjects.IAccessible.mozilla.Document)] = NVDAObjectsIAccessible.NVDAObjectMozillaDocumentEx
 		return
 	if NVDAObjects.IAccessible.chromium.Document in clsList:
 		from . import NVDAObjectsIAccessible
-		clsList[clsList.index(NVDAObjects.IAccessible.chromium.Document)] = NVDAObjectsIAccessible.ChromiumDocument  # noqa:E501
+		clsList[clsList.index(NVDAObjects.IAccessible.chromium.Document)] = NVDAObjectsIAccessible.ChromiumDocument
 		return
 	try:
 		# for nvda version>= 2021.1
 		if NVDAObjects.UIA.chromium.ChromiumUIADocument in clsList:
 			from . import NVDAObjectsUIAChromium
-			clsList[clsList.index(NVDAObjects.UIA.chromium.ChromiumUIADocument)] = NVDAObjectsUIAChromium.ChromiumUIADocumentEx
+			newCls = NVDAObjectsUIAChromium.ChromiumUIADocumentEx
+			clsList[clsList.index(NVDAObjects.UIA.chromium.ChromiumUIADocument)] = newCls
 			return
 	except Exception:
 		pass

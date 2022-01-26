@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\keyboardKeyRenaming\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -34,8 +34,8 @@ class KeyboardKeyRenamingDialog(
 	def makeSettings(self, settingsSizer):
 		# init
 		self.modifiedKeyLabels = _addonConfigManager .getRedefinedKeyLabels()
-		self.basicLocalizedKeyLabels = _addonConfigManager.getBasicLocalizedKeyLabels()  # noqa:E501
-		self.localizedLabel2KeyName = dict((name, code) for code, name in self.basicLocalizedKeyLabels.items())  # noqa:E501
+		self.basicLocalizedKeyLabels = _addonConfigManager.getBasicLocalizedKeyLabels()
+		self.localizedLabel2KeyName = dict((name, code) for code, name in self.basicLocalizedKeyLabels.items())
 		self.localizedLabels = [x for x in self.localizedLabel2KeyName]
 		self.localizedLabels.sort()
 		# gui
@@ -185,7 +185,7 @@ class KeyboardKeyRenamingDialog(
 		keyCode = evt.GetKeyCode()
 		id = evt.GetId()
 		if id == self.modifiedLabelBox_id:
-			if keyCode not in [wx.WXK_RIGHT, wx.WXK_LEFT, wx.WXK_UP, wx.WXK_DOWN, wx.WXK_HOME, wx.WXK_END]:  # noqa:E501
+			if keyCode not in [wx.WXK_RIGHT, wx.WXK_LEFT, wx.WXK_UP, wx.WXK_DOWN, wx.WXK_HOME, wx.WXK_END]:
 				return
 		evt.Skip()
 

@@ -6,8 +6,8 @@
 	* [version stable][1]
 	* [version de développement][2]
 * Compatibilité:
-	* version minimum de NVDAsupportée: 2019.3
-	* dernière version de NVDA testée: 2021.3
+	* version minimum de NVDAsupportée: 2020.4
+	* dernière version de NVDA testée: 2022.1
 
 
 Traducteur (s): texte original par l'auteur de l'extension
@@ -55,14 +55,16 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 	* coupure ou remise du son pour l'application focalisée,
 	* établissement du volume principal ou de NVDA au démarrage de l'extension,
 	* modifier le volume principal ou du flux audio de l'application sous le focus,
-
+	* rétablissement automatique du volume principal et de NVDA au chargement de l'extension,
+	* orientation de la sortie audio de NVDA,
 
 * Outils pour le développement d'extensions,
 * Compléments concernant la date et l'heure: copie de la date et de l'heure dans le presse-papier, annonce de l'heure avec les secondes,
 * gestion des configurations utilisateurs et redémarage de NVDA avec une configuration précise,
 * analyseur de texte,
 * annonce de la position du curseur dans les zones d'édition,
-* utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA.
+* utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA,
+* activation / désactivation rapide des extensions.
 
 
 ## Les options ##
@@ -70,7 +72,8 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * supprimer l'annonce de la description des objets dans les rubans Windows,
 * annoncer le mot focalisé lors d'une suppression de mot (pour les versions de NVDA antérieures à la 2020.3),
 * agrandir automatiquement les fenêtres au premier plan,
-* annoncer des ponctuations et symboles lors de déplacement par mot.
+* annoncer des ponctuations et symboles lors de déplacement par mot,
+*  possibilité de signaler les fautes d'orthographe par un double bip sonore ou par une annonce vocale en lieu et place du son émis par NVDA.
 
 
 ## Les options avancées ##
@@ -88,8 +91,11 @@ Certaines fonctionnalités peuvent être activées ou désactivées individuelle
 * script pour redémarrer rapidement NVDA,
 * script pour émuler la touche "Applications",
 * script pour fermer toutes les fenêtres ouvertes,
-* possibilité d'exécuter des scripts dans le dialogue "Gestes de commandes" (pour les versions de NVDA supérieures à 2020.3).
+* possibilité d'exécuter des scripts dans le dialogue "Gestes de commandes" (pour les versions de NVDA supérieures à 2020.3),
+* sélection automatique de la catégorie dans le dialogue "Gestes de commandes",
+* Sélection du dernier paramètre utilisé dans la boucle des paramètres du synthétiseur.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-10.3.nvda-addon
+
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.0.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

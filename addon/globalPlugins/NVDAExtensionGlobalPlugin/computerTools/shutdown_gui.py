@@ -63,7 +63,7 @@ class ComputerShutdownDialog(
 		self.forceOptionBox.SetValue(_addonConfigManager.getForceCloseOption())
 		# Translators: This is a label for a edit box in Computer shutdown dialog.
 		(min, max) = self._delayBeforeShutdownOrRestartLimits
-		labelText = _("&Delay before shutdown or reboot between {min} and {max} seconds").format(min=min, max=max)  # noqa:E501
+		labelText = _("&Delay before shutdown or reboot between {min} and {max} seconds").format(min=min, max=max)
 		self.delayBeforeShutdownOrRestartBox = sHelper1.addLabeledControl(
 			labelText, nvdaControls.SelectOnFocusSpinCtrl,
 			min=int(0),
@@ -150,7 +150,7 @@ class ShutdownProcessingDialog(wx.Dialog):
 			"shutdown": _("Computer Shutdown"),
 			"reboot": _("Computer reboot"),
 			"hibernate": _("Computer hibernation"),
-			}
+		}
 		self.action = action
 		self.duration = duration
 		dialogTitle = dialogTitles[action]
@@ -171,7 +171,7 @@ class ShutdownProcessingDialog(wx.Dialog):
 			# Translators: This is a label for a edit box in Shutdown processing Dialog
 			# to show remaining duration for hibernate action.
 			"hibernate": _("Number of seconds to wait before hibernation:")
-			}
+		}
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		remainingDurationLabel = remainingDurationLabels[self.action]
@@ -229,7 +229,7 @@ class ShutdownProcessingDialog(wx.Dialog):
 			self.Destroy()
 			return
 		self.remainingDurationEdit.SetValue(str(duration - 1))
-		percentage = 100 - int(100*float(duration)/float(self.duration))
+		percentage = 100 - int(100 * float(duration) / float(self.duration))
 		pbConf = config.conf["presentation"]["progressBarUpdates"]
 		if pbConf["progressBarOutputMode"] == "off":
 			self._timer = wx.CallLater(1000, self.monitorRemainingTime)
@@ -237,7 +237,7 @@ class ShutdownProcessingDialog(wx.Dialog):
 		if self.isActive or config.conf["presentation"]["progressBarUpdates"]["reportBackgroundProgressBars"]:
 			if pbConf["progressBarOutputMode"] in ("beep", "both"):
 				import tones
-				tones.beep(110*2**(percentage/25.0), 40)
+				tones.beep(110 * 2**(percentage / 25.0), 40)
 			if pbConf["progressBarOutputMode"] in ("speak", "both"):
 				wx.CallAfter(speech.speakMessage, str(duration))
 		self._timer = wx.CallLater(1000, self.monitorRemainingTime)

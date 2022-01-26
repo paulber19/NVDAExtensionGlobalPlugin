@@ -110,7 +110,7 @@ class ListeNotification(
 				name = name.replace("\n", ". ")
 				name = name.replace("\r", "")
 				location = oListe.accLocation(i)
-				x = int(location[0]+location[2]/2)
+				x = int(location[0] + location[2] / 2)
 				y = int(location[1] + location[3] / 2)
 				self.PositionXY.append((x, y))
 				namesList.append(name)

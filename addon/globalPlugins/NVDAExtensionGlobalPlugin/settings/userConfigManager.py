@@ -25,10 +25,15 @@ import shutil
 from configobj import ConfigObj
 from configobj.validate import Validator, VdtTypeError
 from io import StringIO
+from versionInfo import version_year, version_major
 from ..utils import makeAddonWindowTitle, isOpened, getHelpObj
 from ..utils.NVDAStrings import NVDAString
 from ..utils import contextHelpEx
+
+
 addonHandler.initTranslation()
+NVDAVersion = [version_year, version_major]
+
 _configSpec = ""
 # section Ids
 SCT_UserConfigurations = "UserConfigurations"
@@ -105,32 +110,35 @@ class UserConfigurationsManager(object):
 			self.conf.write()
 			log.warning("UserConfigurationsManager: userConfigprofiles configuration saved")
 		except Exception:
-			log.warning("UserConfigurationsManager: Could not save userConfigprofiles configuration - probably read only file system: %s" % self.conf.filename)  # noqa:E501
+			log.warning(
+				"UserConfigurationsManager: Could not save userConfigprofiles configuration "
+				"- probably read only file system: %s" % self.conf.filename)
 
 	def handlePostConfigSave(self):
 		self.save()
 
 	def addUserConfig(self, userConfigFolderPath):
-		dir = os.path.abspath(os.path.dirname(userConfigFolderPath))
+		path = os.path.abspath(os.path.dirname(userConfigFolderPath))
 		folderName = os.path.basename(userConfigFolderPath)
-		if SCT_UserConfigurations not in self.conf:
-			self.conf[SCT_UserConfigurations] = {}
-		if dir in self.conf[SCT_UserConfigurations] and folderName in self.conf[SCT_UserConfigurations]:
+		sct = SCT_UserConfigurations
+		if sct not in self.conf:
+			self.conf[sct] = {}
+		if path in self.conf[sct] and folderName in self.conf[sct]:
 			# allready exist, so do nothing
 			return
-		if dir not in self.conf[SCT_UserConfigurations]:
-			self.conf[SCT_UserConfigurations][dir] = {}
+		if path not in self.conf[sct]:
+			self.conf[sct][path] = {}
 		if folderName in ["userConfig", "nvda"]:
-			self.conf[SCT_UserConfigurations][dir][folderName] = True
+			self.conf[sct][path][folderName] = True
 		else:
 			self.conf[SCT_UserConfigurations][dir][folderName] = False
 
 	def deleteUserConfig(self, userConfigFolderPath):
 		folderName = os.path.basename(userConfigFolderPath)
 		try:
-			del self.conf[SCT_UserConfigs][Dir][folderName]
+			del self.conf[SCT_UserConfigurations][folderName]
 		except Exception:
-			Pass
+			pass
 
 	def checkConfigurations(self, conf):
 		from copy import deepcopy
@@ -192,47 +200,84 @@ class UserConfigurationsManager(object):
 
 
 # code from nvda core.py  modified to restart nvda with a config-path option
-def restart(disableAddons=False, debugLogging=False, configPath=None):
-	"""Restarts NVDA by starting a new copy."""
-	if globalVars.appArgs.launcher:
-		import wx
-		globalVars.exitCode = 3
-		wx.GetApp().ExitMainLoop()
-		return
-	import subprocess
-	import winUser
-	import shellapi
-	options = []
-	try:
-		sys.argv.remove('--disable-addons')
-	except ValueError:
-		pass
-	try:
-		sys.argv.remove('--debug-logging')
-	except ValueError:
-		pass
-	try:
-		sys.argv.remove('--config-path')
-	except ValueError:
-		pass
-	if disableAddons:
-		options.append('--disable-addons')
-	if debugLogging:
-		options.append('--debug-logging')
-	if configPath:
-		options.append('--config-path=%s' % configPath)
-	try:
-		sys.argv.remove("--ease-of-access")
-	except ValueError:
-		pass
-	shellapi.ShellExecute(
-		None,
-		None,
-		sys.executable,
-		subprocess.list2cmdline(sys.argv + options),
-		None,
-		# #4475: ensure that the first window of the new process is not hidden by providing SW_SHOWNORMAL
-		winUser.SW_SHOWNORMAL)
+
+
+if NVDAVersion < [2021, 1]:
+	def restart(disableAddons=False, debugLogging=False, configPath=None):
+		"""Restarts NVDA by starting a new copy."""
+		if globalVars.appArgs.launcher:
+			import wx
+			globalVars.exitCode = 3
+			wx.GetApp().ExitMainLoop()
+			return
+		import subprocess
+		import winUser
+		import shellapi
+		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access")
+		if configPath is not None:
+			paramsToRemove += ("--config-path",)
+		for paramToRemove in paramsToRemove:
+			for p in sys.argv:
+				if p.startswith(paramToRemove):
+					sys.argv.remove(p)
+		options = []
+		if not hasattr(sys, "frozen"):
+			options.append(os.path.basename(sys.argv[0]))
+		if disableAddons:
+			options.append('--disable-addons')
+		if debugLogging:
+			options.append('--debug-logging')
+		if configPath:
+			options.append('--config-path=%s' % configPath)
+		shellapi.ShellExecute(
+			hwnd=None,
+			operation=None,
+			file=sys.executable,
+			parameters=subprocess.list2cmdline(options + sys.argv[1:]),
+			directory=globalVars.appDir,
+			# #4475: ensure that the first window of the new process is not hidden by providing SW_SHOWNORMAL
+			showCmd=winUser.SW_SHOWNORMAL
+		)
+		log.warning("restarting NVDA: %s, options: %s" % (
+			sys.executable, subprocess.list2cmdline(options + sys.argv[1:])))
+else:
+	import languageHandler
+	from core import triggerNVDAExit, NewNVDAInstance
+
+	def restart(disableAddons=False, debugLogging=False, configPath=None):
+		"""Restarts NVDA by starting a new copy."""
+		if globalVars.appArgs.launcher:
+			globalVars.exitCode = 3
+			if not triggerNVDAExit():
+				log.error("NVDA already in process of exiting, this indicates a logic error.")
+			return
+		import subprocess
+		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access")
+		if configPath is not None:
+			paramsToRemove += ("--config-path",)
+		if NVDAVersion >= [2022, 1]:
+			paramsToRemove += languageHandler.getLanguageCliArgs()
+		for paramToRemove in paramsToRemove:
+			for p in sys.argv:
+				if p.startswith(paramToRemove):
+					sys.argv.remove(p)
+		options = []
+		if not hasattr(sys, "frozen"):
+			options.append(os.path.basename(sys.argv[0]))
+		if disableAddons:
+			options.append('--disable-addons')
+		if debugLogging:
+			options.append('--debug-logging')
+		if configPath:
+			options.append('--config-path=%s' % configPath)
+		if not triggerNVDAExit(NewNVDAInstance(
+			sys.executable,
+			subprocess.list2cmdline(options + sys.argv[1:]),
+			globalVars.appDir
+		)):
+			log.error("NVDA already in process of exiting, this indicates a logic error.")
+		log.warning("restarting NVDA: %s, options: %s" % (
+			sys.executable, subprocess.list2cmdline(options + sys.argv[1:])))
 
 
 class UserConfigManagementDialog(
@@ -260,7 +305,7 @@ class UserConfigManagementDialog(
 			wx.ID_ANY,
 			self.title,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
-			)
+		)
 		self.userConfigs = _UserConfigurationsManager .getUserConfigurations()
 		self.doGui()
 
@@ -274,7 +319,7 @@ class UserConfigManagementDialog(
 			labelText,
 			wx.ListBox,
 			choices=[],
-			)
+		)
 		self.configurationsListBox .Bind(wx.EVT_LISTBOX, self.onSelectFolder)
 		self.bindHelpEvent(getHelpObj("hdr30-1"), self.configurationsListBox)
 		# the buttons
@@ -334,8 +379,11 @@ class UserConfigManagementDialog(
 		mainSizer.Fit(self)
 		self.SetSizer(mainSizer)
 		self.updateConfigurations()
-		if self.configurationsListBox .Count:
-			self.configurationsListBox .SetSelection(0)
+		# select active configuration folder
+		for path in self.configurations:
+			if path == _UserConfigurationsManager.activeUserConfigPath:
+				index = self.configurations.index(path)
+				self.configurationsListBox .SetSelection(index)
 		self.configurationsListBox .SetFocus()
 		self.onSelectFolder(None)
 
@@ -411,7 +459,7 @@ class UserConfigManagementDialog(
 			if not self.isNVDAUserConfigurationFolder(path):
 				pre += "?"
 			if path == _UserConfigurationsManager.activeUserConfigPath:
-				# checked symbol
+				# add checked symbol before folder name
 				pre = chr(0x2713) + pre
 			folderName = os.path.basename(path)
 			dir = os.path.dirname(path)
@@ -419,7 +467,8 @@ class UserConfigManagementDialog(
 			tempList.append(label)
 		self.configurationsListBox .Clear()
 		self.configurationsListBox .AppendItems(tempList)
-		self.configurationsListBox .SetSelection(index)
+		if index >= 0:
+			self.configurationsListBox .SetSelection(index)
 		self.updateButtons()
 
 	def onRestartNVDAButton(self, evt):
@@ -551,7 +600,7 @@ class UserConfigManagementDialog(
 		if not self.deleteUserConfig(path):
 			return
 		if index:
-			prevSelectedString = self.configurationsListBox .GetString(index-1)
+			prevSelectedString = self.configurationsListBox .GetString(index - 1)
 		if self.configurationsListBox .Count:
 			if index:
 				self.configurationsListBox .SetStringSelection(prevSelectedString)
@@ -577,7 +626,8 @@ class UserConfigManagementDialog(
 			return
 		if gui.messageBox(
 			# Translators: message to user to confirm the dump of the folder.
-			_("""Do you really want to delete all the content of the "%s" folder?""") % os.path.basename(userConfigPath),
+			_("""Do you really want to delete all the content of the "%s" folder?""") % (
+				os.path.basename(userConfigPath)),
 			# Translators: dialog title.
 			_("Confirmation"),
 			wx.YES | wx.NO | wx.CANCEL | wx.YES_DEFAULT) != wx.YES:
@@ -650,7 +700,7 @@ class UpdateFolderDialog(
 			wx.ID_ANY,
 			title=dialogTitle,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
-			)
+		)
 		self.doGui()
 		self.CentreOnScreen()
 
@@ -664,7 +714,7 @@ class UpdateFolderDialog(
 			labelText,
 			wx.ListBox,
 			choices=[],
-			)
+		)
 		# the buttons
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
 		# translators: a label for a button in the update or Prepare folder dialog.
@@ -730,7 +780,7 @@ class UpdateFolderDialog(
 				queueHandler.eventQueue,
 				ui.message,
 				msg,
-				)
+			)
 			obj = api.getFocusObject()
 			eventHandler.queueEvent("gainFocus", obj)
 		wx.CallLater(100, callback)
@@ -915,7 +965,9 @@ class UpdateFolderDialog(
 		if exist:
 			ret = gui.messageBox(
 				# Translators: message to report that there are already symbols pronunciations in configuration.
-				_("The configuration folder already contains symbol/punctuation pronunciations. Do you want to replace it?"),
+				_(
+					"The configuration folder already contains symbol/punctuation pronunciations. "
+					"Do you want to replace it?"),
 				# Translators: message box dialog title.
 				_("Warning"),
 				wx.YES | wx.NO | wx.CANCEL | wx.NO_DEFAULT)
@@ -987,7 +1039,10 @@ class UpdateFolderDialog(
 			if os.listdir(self.preparedFolderPath):
 				if gui.messageBox(
 					# Translators: message to warn datas deletion.
-					_("""The "%s" folder contains data that will be erased during copying. Do you still wish to continue?""") % os.path.basename(self.preparedFolderPath),
+					_(
+						"""The "%s" folder contains data that will be erased during copying. """
+						"""Do you still wish to continue?""") % (
+						os.path.basename(self.preparedFolderPath)),
 					# Translators: message box dialog title.
 					_("Warning"),
 					wx.YES | wx.NO | wx.ICON_WARNING) != wx.YES:
@@ -1045,7 +1100,7 @@ class AddonImportDialog(
 			wx.ID_ANY,
 			self.title,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
-			)
+		)
 		self.doGui()
 		self.CentreOnScreen()
 
@@ -1059,7 +1114,7 @@ class AddonImportDialog(
 			labelText,
 			nvdaControls.CustomCheckListBox,
 			choices=self.addonSummaries
-			)
+		)
 		# by default, check all add-ons
 		self.addonsCheckListBox .SetCheckedStrings(self.addonSummaries)
 		# the buttons
@@ -1102,7 +1157,7 @@ class AddonImportDialog(
 			ui.message,
 			# Translators: message to user to report that all items are checked.
 			_("all items are checked")
-			)
+		)
 		obj = self.FindFocus()
 		if obj == self.addonsCheckListBox:
 			obj = api.getFocusObject()
@@ -1119,7 +1174,7 @@ class AddonImportDialog(
 			ui.message,
 			# Translators: message to user to report that all items are unchecked.
 			_("all items are unchecked")
-			)
+		)
 		obj = self.FindFocus()
 		if obj == self.addonsCheckListBox:
 			obj = api.getFocusObject()
@@ -1194,7 +1249,7 @@ class NewUserConfigurationAddingDialog(
 			wx.ID_ANY,
 			title=self.title,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
-			)
+		)
 		self.parent = parent
 		self.doGui()
 		self.CentreOnScreen()
@@ -1242,7 +1297,10 @@ class NewUserConfigurationAddingDialog(
 
 	def onBrowseButton(self, evt):
 		# Translators: title of folder's selection dialog.
-		dlg = wx.DirDialog(self, message=_("Folder's selection"), defaultPath=_UserConfigurationsManager .getLastSelectedUserConfigLocation())
+		dlg = wx.DirDialog(
+			self,
+			message=_("Folder's selection"),
+			defaultPath=_UserConfigurationsManager .getLastSelectedUserConfigLocation())
 		if dlg.ShowModal() == wx.ID_OK:
 			dirName = dlg.GetPath()
 			self.folderPathEdit.Clear()
@@ -1266,7 +1324,7 @@ class NewUserConfigurationAddingDialog(
 				ui.message,
 				# Translators: message to user to ask for the username of configuration.
 				_("you must specify the username of the folder")
-				)
+			)
 			self.configurationUserNameEdit.SetFocus()
 			return
 		elif self.folderPathEdit.GetValue() == "":
@@ -1275,7 +1333,7 @@ class NewUserConfigurationAddingDialog(
 				ui.message,
 				# Translators: message to user to ask for location of the configuration.
 				_("You must specify the path to the location of the configuration")
-				)
+			)
 			self.folderPathEdit.SetFocus()
 			return
 		configurationUserName = self.configurationUserNameEdit.GetValue()
@@ -1287,14 +1345,15 @@ class NewUserConfigurationAddingDialog(
 				queueHandler.eventQueue,
 				ui.message,
 				# Translators: message to user to report folder already in the list.
-				_("""The folder with "%s" username is already in the list of configuration folders """) % os.path.basename(self.newUserConfigFolderPath)
-				)
+				_("""The folder with "%s" username is already in the list of configuration folders """) % (
+					os.path.basename(self.newUserConfigFolderPath))
+			)
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				ui.message,
 				# Translators: message to user to ask an other username.
 				_("choose another username")
-				)
+			)
 			obj = api.getFocusObject()
 			eventHandler.queueEvent("gainFocus", obj)
 			return
@@ -1302,11 +1361,15 @@ class NewUserConfigurationAddingDialog(
 			if self.isNVDAUserConfigurationFolder(self.newUserConfigFolderPath):
 				# Translators: message to report that the folder already exists and it's a nvda configuration
 				# and ask to confirm adding.
-				msg = _("""The "%s" folder already exists and it's a nvda configuration folder. Do you want to add it anyway?""")
+				msg = _(
+					"""The "%s" folder already exists and it's a nvda configuration folder. """
+					"""Do you want to add it anyway?""")
 			else:
 				# Translators: message to report that the folder already exists and it's not  a nvda configuration
 				# and ask to confirm adding.
-				msg = _("""The "%s" folder already exists and it's not a nvda configuration folder. Do you want to add it anyway?""")
+				msg = _(
+					"""The "%s" folder already exists and it's not a nvda configuration folder. """
+					"""Do you want to add it anyway?""")
 			if gui.messageBox(
 				msg % os.path.basename(self.newUserConfigFolderPath),
 				# Translators: message box dialog title.
@@ -1331,7 +1394,7 @@ class ExistingUserConfigurationAddingDialog(
 			wx.ID_ANY,
 			title=self.title,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX
-			)
+		)
 		self.doGui()
 		self.CentreOnScreen()
 
@@ -1373,7 +1436,10 @@ class ExistingUserConfigurationAddingDialog(
 
 	def onBrowseButton(self, evt):
 		# Translators: title of folder's selection dialog.
-		dlg = wx.DirDialog(self, message=_("Folder's selection"), defaultPath=_UserConfigurationsManager .getLastSelectedUserConfigLocation())
+		dlg = wx.DirDialog(
+			self,
+			message=_("Folder's selection"),
+			defaultPath=_UserConfigurationsManager .getLastSelectedUserConfigLocation())
 		if dlg.ShowModal() == wx.ID_OK:
 			dirName = dlg.GetPath()
 			self.folderPathEdit.Clear()
@@ -1397,8 +1463,10 @@ class ExistingUserConfigurationAddingDialog(
 				queueHandler.eventQueue,
 				ui.message,
 				# Translators: message to user to report folder already in the list.
-				_("""The folder with "%s" username is already in the list of configuration folders """) % os.path.basename(self.newUserConfigFolderPath)
-				)
+				_(
+					"""The folder with "%s" username is already in the list of configuration folders """) % (
+						os.path.basename(self.newUserConfigFolderPath))
+			)
 		# check if it's a nvda user configuration
 		dirs = os.listdir(self.newUserConfigFolderPath)
 		if not (
@@ -1410,7 +1478,7 @@ class ExistingUserConfigurationAddingDialog(
 				ui.message,
 				# Translators: message to user to indicate that the folder is not an user configuration folder.
 				_("The folder is not user configuration's folder")
-				)
+			)
 			return
 		self.EndModal(True)
 		self.Close()
@@ -1435,7 +1503,7 @@ class ProfilesImportDialog(
 			wx.ID_ANY,
 			self.title,
 			style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX,
-			)
+		)
 		self.doGui()
 		self.CentreOnScreen()
 
@@ -1449,7 +1517,7 @@ class ProfilesImportDialog(
 			labelText,
 			nvdaControls.CustomCheckListBox,
 			choices=self.profiles
-			)
+		)
 		self.profilesCheckListBox .SetCheckedStrings(self.profiles)
 		# the buttons
 		bHelper = gui.guiHelper.ButtonHelper(wx.HORIZONTAL)
@@ -1491,7 +1559,7 @@ class ProfilesImportDialog(
 			ui.message,
 			# Translators: message to user to report that all items are checked.
 			_("all items are checked")
-			)
+		)
 		obj = self.FindFocus()
 		if obj == self.profilesCheckListBox:
 			obj = api.getFocusObject()
@@ -1508,7 +1576,7 @@ class ProfilesImportDialog(
 			ui.message,
 			# Translators: message to user to report that all items are unchecked.
 			_("all items are unchecked")
-			)
+		)
 		obj = self.FindFocus()
 		if obj == self.profilesCheckListBox:
 			obj = api.getFocusObject()
