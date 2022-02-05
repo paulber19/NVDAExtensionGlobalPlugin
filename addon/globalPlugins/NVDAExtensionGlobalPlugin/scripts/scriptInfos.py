@@ -475,6 +475,10 @@ scriptsToDocInformations = {
 	"centerNVDAAndAllApplications": (
 		_("Hear NVDA and all audio applications on center"), SCRCAT_VOLUME_CONTROL, "hdr34"),
 	# Translators: Input help mode message
+	# for centerFocusedApplication script command.
+	"centerFocusedApplication": (
+		_("Hear focused application on center"), SCRCAT_VOLUME_CONTROL, "hdr34"),
+	# Translators: Input help mode message
 	# for displayNVDAAndApplicationsAudioChannelsManagerDialog script command
 	"displayNVDAAndApplicationsAudioManager": (
 		_("Display NVDA and active Applications's audio manager"), SCRCAT_VOLUME_CONTROL, "hdr34"),

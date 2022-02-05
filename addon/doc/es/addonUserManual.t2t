@@ -1893,10 +1893,13 @@ Para orientar el sonido de NVDA, el complemento instala los siguientes scripts:
 - Escucha NVDA a la izquierda y todas las aplicaciones a la derecha (órdenes: "KEY_SPLIT_LEFT_ALL"),
 - Escucha NVDA y la aplicación bajo el cursor al centro (órdenes: "KEY_SPLIT_CENTER_FOCUS"),
 - Escucha NVDA y todas las aplicaciones al centro (órdenes: "KEY_SPLIT_CENTER_ALL")
-- Mostrar el administrador de audio de NVDA y aplicaciones activas (órdenes: "KEY_SOUND_SPLIT_MANAGER")
+- Escucha la aplicación bajo el cursor al centro (órdenes: "KEY_CENTER_FOCUSED_APP")
+- Mostrar el administrador de audio de NVDA y aplicaciones activas (órdenes: "KEY_SOUND_SPLIT_MANAGE"R)
 
 
 No se le asigna ningún gesto de entrada por defecto. Pero es siempre posible hacerlo utilizando el diálogo "Gestos de Entrada" de NVDA. Estos scripts están almacenados en la categoría "Control de sonido" de este diálogo.
+
+La órden "KEY_CENTER_FOCUSED_APP" es operacional incluso si  la funcionalidad no está instalada a fin, eventualmente, de poder reequilibrar el audio de algunas aplicaciones que permanecierón desequilibradas después de la desinstalación de la funcionalidad.
 
 El diálogo "Administrador de audio de NVDA y aplicaciones activas" también puede orientar el sonido de NVDA, pero también  establecer el nivel de volumen de los dos canales de audio de NVDA y aplicaciones.
 Él presenta:
@@ -2231,6 +2234,7 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 | KEY_SPLIT_RIGHT_ALL | Escucha NVDA a la derecha y todas las aplicaciones a la izquierda |
 | KEY_SPLIT_CENTER_FOCUS | Escucha NVDA y la aplicación bajo el cursor al centro |
 | KEY_SPLIT_CENTER_ALL | Escucha NVDA y todas las aplicaciones al centro |
+| KEY_CENTER_FOCUSED_App | Escucha la aplicación bajo el cursor al centro |
 
 ++ Gestos de entrada instaladas por las funcionalidades ++
 +++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas +++

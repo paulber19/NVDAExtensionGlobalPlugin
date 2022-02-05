@@ -100,7 +100,10 @@ class InputGesturesDialogEx(
 
 	def postInit(self):
 		super(InputGesturesDialogEx, self).postInit()
-		mod = self.focus.appModule.__module__
+		try:
+			mod = self.focus.appModule.__module__
+		except Exception:
+			return
 		allGestures = self.tree.gesturesVM.allGestures
 		catToSelect = None
 		for cat in allGestures:

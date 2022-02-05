@@ -16,13 +16,13 @@
 
 % main script command keys definition
 %!PostProc (html): KEY_SHELL NVDA+j
-%!PostProc (html): KEY_DATE_TIME NVDA + F12
+%!PostProc (html): KEY_DATE_TIME NVDA+F12
 
 % default fonctionnality  script command keys definition
-%!PostProc (html): MAIN_KEY_ICONS_List NVDA + F11
-%!PostProc (html): MAIN_KEY_COMPLEX_SYMBOL NVDA + shift + f4
-%!PostProc (html): MAIN_KEY_REPORT_NAME_VERSION NVDA + shift + f1
-%!PostProc (html): MAIN_KEY_CONFIGURATION_PROFILE NVDA+ control +F1
+%!PostProc (html): MAIN_KEY_ICONS_List NVDA+F11
+%!PostProc (html): MAIN_KEY_COMPLEX_SYMBOL NVDA+shift+f4
+%!PostProc (html): MAIN_KEY_REPORT_NAME_VERSION NVDA+shift+f1
+%!PostProc (html): MAIN_KEY_CONFIGURATION_PROFILE NVDA+control+F1
 %!PostProc (html): MAIN_KEY_SAY_CURRENT_FOLDER NVDA+o
 %!PostProc (html): MAIN_KEY_LOG_VIEW NVDA+shift+j
 %!PostProc (html): MAIN_KEY_PREVIOUS_RECORD NVDA+control+f8
@@ -31,7 +31,7 @@
 %!PostProc (html): MAIN_KEY_MINUTE_TIMER NVDA+shift+f12
 %!PostProc (html): MAIN_KEY_RESTART_NVDA NVDA+control+f4
 %!PostProc (html): MAIN_KEY_OBJECTS_LIST NVDA+b
-%!PostProc (html): MAIN_KEY_VOICEPROFILE_SELECTOR nvda+shift+control+ selector number
+%!PostProc (html): MAIN_KEY_VOICEPROFILE_SELECTOR nvda+shift+control+selector number
 %!PostProc (html): MAIN_KEY_NEXT_VOICEPROFILE nvda+shift+control+right arrow
 %!PostProc (html): MAIN_KEY_PREVIOUS_VOICEPROFILE nvda+shift+control+left arrow
 %!PostProc (html): MAIN_KEY_MANAGE_SELECTOR nvda+shift+control+m
@@ -87,19 +87,20 @@
 %!PostProc (html): KEY_APP_VOLUME_MAX pageUp
 %!PostProc (html): KEY_APP_VOLUME_MIN pagDown
 %!PostProc (html): KEY_APP_VOLUME_PREVIOUS_LEVEL backSpace
-%!PostProc (html): KEY_NVDA_VOLUME_UP shift + upArrow
-%!PostProc (html): KEY_NVDA_VOLUME_DOWN shift + downArrow
-%!PostProc (html): KEY_NVDA_VOLUME_MAX shift + pageUp
-%!PostProc (html): KEY_NVDA_VOLUME_MIN shift + pagDown
-%!PostProc (html): KEY_NVDA_VOLUME_PREVIOUS_LEVEL shift + backSpace
+%!PostProc (html): KEY_NVDA_VOLUME_UP shift+upArrow
+%!PostProc (html): KEY_NVDA_VOLUME_DOWN shift+downArrow
+%!PostProc (html): KEY_NVDA_VOLUME_MAX shift+pageUp
+%!PostProc (html): KEY_NVDA_VOLUME_MIN shift+pageDown
+%!PostProc (html): KEY_NVDA_VOLUME_PREVIOUS_LEVEL shift+backSpace
 %!PostProc (html): KEY_MAIN_VOLUME_UP control+up arrow
 %!PostProc (html): KEY_MAIN_VOLUME_DOWN control+down arrow
 %!PostProc (html): KEY_MAIN_VOLUME_MAX control+page up
 %!PostProc (html): KEY_MAIN_VOLUME_MIN control+page down
 %!PostProc (html): KEY_MAIN_VOLUME_PREVIOUS_LEVEL control+backspace
 %!PostProc (html): KEY_SPLIT_RIGHT_FOCUS rightArrow
-%!PostProc (html): KEY_SPLIT_RIGHT_ALL control + rightArrow
+%!PostProc (html): KEY_SPLIT_RIGHT_ALL control+rightArrow
 %!PostProc (html): KEY_SPLIT_LEFT_FOCUS leftArrow
-%!PostProc (html): KEY_SPLIT_LEFT_ALL control + leftArrow
+%!PostProc (html): KEY_SPLIT_LEFT_ALL control+leftArrow
 %!PostProc (html): KEY_SPLIT_CENTER_FOCUS space
-%!PostProc (html): KEY_SPLIT_CENTER_ALL control + space
+%!PostProc (html): KEY_SPLIT_CENTER_ALL control+space
+%!PostProc (html): KEY_CENTER_FOCUSED_APP control+shift+espace

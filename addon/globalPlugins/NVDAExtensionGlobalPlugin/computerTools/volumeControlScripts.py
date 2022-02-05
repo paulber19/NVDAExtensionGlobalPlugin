@@ -82,6 +82,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setNVDAToRightAndAllApplicationsToLeft": (None, FCT_SplitAudio),
 		"setNVDAToLeftAndAllApplicationsToRight": (None, FCT_SplitAudio),
 		"centerNVDAAndAllApplications": (None, FCT_SplitAudio),
+		"centerFocusedApplication": (None, None),
 		"displayNVDAAndApplicationsAudioManager": (None, FCT_SplitAudio),
 	}
 
@@ -140,6 +141,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setNVDAToRightAndAllApplicationsToLeft": ("kb:control+rightArrow", FCT_SplitAudio),
 		"setNVDAToLeftAndAllApplicationsToRight": ("kb:control+leftArrow", FCT_SplitAudio),
 		"centerNVDAAndAllApplications": ("kb:control+space", FCT_SplitAudio),
+		"centerFocusedApplication": ("kb:control+shift+space", None),
 		"displayNVDAAndApplicationsAudioManager": ("kb:f6", FCT_SplitAudio),
 	}
 
@@ -361,6 +363,10 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	def script_centerNVDAAndAllApplications(self, gesture):
 		from ..computerTools.volumeControl import splitChannels
 		splitChannels(NVDAChannel="None", application=None)
+
+	def script_centerFocusedApplication(self, gesture):
+		from ..computerTools.volumeControl import centerFocusedApplication
+		centerFocusedApplication()
 
 	def script_displayNVDAAndApplicationsAudioManager(self, gesture):
 		from .audioManagerDialog import NVDAAndAudioApplicationsManagerDialog

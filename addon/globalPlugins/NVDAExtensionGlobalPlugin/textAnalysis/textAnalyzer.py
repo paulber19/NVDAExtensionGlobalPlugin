@@ -468,6 +468,7 @@ def getPreviousFormatField(caretInfo, formatConfig):
 	return None
 
 
+# parts of code originaly written by Tony Malik for  browserNav add-on.
 def findFormatingChanges(info, unit, errorPositions):
 	from ..settings.nvdaConfig import documentSettingsIDsToOptions
 	caretInfo = info.copy()

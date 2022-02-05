@@ -1821,11 +1821,13 @@ To orient the sound of NVDA, the extension installs the following scripts:
 - Hear NVDA on the left and all applications on the right (command: KEY_SPLIT_LEFT_ALL),
 - Hear NVDA and the application under the cursor in the center (command: KEY_SPLIT_CENTER_FOCUS),
 - Hear NVDA and all applications in the center (command: KEY_SPLIT_CENTER_ALL)
+- Hear the application under the cursor in the center (command: KEY_CENTER_FOCUSED_APP)
 - Display the audio manager of NVDA and active applications (command: KEY_SOUND_SPLIT_MANAGER)
 
 
 No input gesture is assigned to them. But it is still possible to do this using NVDA's "Input Gestures" dialog. These scripts can be found under the "Sound Control" category of the NVDA "Input Gestures" dialog.
 
+The "KEY_CENTER_FOCUSED_APP" command is operational even if the feature is not installed in order, possibly, to be able to rebalance the audio of certain applications that remained unbalanced after uninstalling the feature.
 
 The dialog "NVDA audio manager and active applications" also allows you to orient the sound of NVDA, but also to set the volume level of the two audio channels of NVDA and applications.
 He introduces :
@@ -2138,9 +2140,9 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 | KEY_SPLIT_LEFT_ALL | Hear NVDA on the left and all applications on the right |
 | KEY_SPLIT_RIGHT_FOCUS | Hear NVDA on the right and focused  application on the left |
 | KEY_SPLIT_RIGHT_ALL | Hear NVDA on the right and all applications on the left |
-| KEY_SPLIT_CENTER_FOCUS | Hear NVDA and focused in the center |
+| KEY_SPLIT_CENTER_FOCUS | Hear NVDA and focused at the center |
 | KEY_SPLIT_CENTER_ALL | Hear NVDA and all applications at the center |
-
+| KEY_CENTER_FOCUSED_APP | Hear focused application   at the center |
 
 ++ input gestures installed by the functionalities ++
 

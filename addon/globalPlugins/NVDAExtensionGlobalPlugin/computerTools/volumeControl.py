@@ -40,6 +40,7 @@ _previousSpeakersVolumeLevel = None
 volumeMsg = _("Volume")
 # Translators: part of message for announcement of speakers volume level.
 mainVolumeMsg = _("Main volume")
+
 try:
 	devices = AudioUtilities.GetSpeakers()
 	interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -48,12 +49,16 @@ except Exception:
 	# no supported
 	_volumeObj = None
 	log.warning("AudioUtilities getSpeaker not supported on this system")
+
 # save NVDA nvwave.WavePlayer.open method
 _originalWaveOpen = None
 # NVDA channel  levels
 _NVDAChannelsVolume = (1.0, 1.0)
 # previous channel levels
 _prevNVDAChannelsVolume = None
+# nvda volume object
+_nvdaVolumeObj = None
+
 winmm = ctypes.windll.winmm
 
 # Translators: part of message to report position of application on speakers
@@ -62,6 +67,12 @@ toLeftMsg = _("to left")
 toRightMsg = _("to right")
 # Translators: part of message to report position of application on speakers
 inCenterMsg = _("in center")
+
+nvdaAppName = "nvda.exe"
+
+
+def isNVDA(appName):
+	return True if appName.lower() == nvdaAppName else False
 
 
 def toggleProcessVolume(processName):
@@ -158,35 +169,88 @@ def setSpeakerVolumeToRecoveryLevel(checkThreshold=False):
 	return False
 
 
-def getAppVolumeObj(appName):
+def getAppVolumeObjByName(appName):
 	try:
 		sessions = AudioUtilities.GetAllSessions()
 	except Exception:
 		# no supported
 		log.warning("AudioUtilities getAllCessions not supported on this system")
 		return None
+	debugText = []
 	for session in sessions:
 		try:
 			name = session.Process.name()
+			debugText.append(name)
 		except Exception:
 			continue
 		if name.lower() == appName.lower():
 			volumeObj = session.SimpleAudioVolume
 			return volumeObj
+	if isNVDA(appName):
+		text = "getAppVolumeObjByName for %s: "% appName  + ", ".join(debugText)
+		log.debug(text)
 	return None
 
 
+def getNVDAVolumeObjByPid():
+	try:
+		sessions = AudioUtilities.GetAllSessions()
+	except Exception:
+		# no supported
+		log.warning("AudioUtilities getAllCessions not supported on this system")
+		return None
+	nvdapid = os.getpid()
+	for session in sessions:
+		try:
+			pid = session.Process.processId
+		except Exception:
+			continue
+		if pid ==nvdapid:
+			return session.SimpleAudioVolume
+	return None
+
+
+
+def getNVDAVolumeObj():
+	global _nvdaVolumeObj
+	if _nvdaVolumeObj is not None:
+		return _nvdaVolumeObj
+	_nvdaVolumeObj = getAppVolumeObjByName(nvdaAppName)
+	if _nvdaVolumeObj is None:
+		_nvdaVolumeObj = getNVDAVolumeObjByPid()
+		if _nvdaVolumeObj is None:
+			log.warning("NVDA volume object not found and cannot be initialized")
+	return _nvdaVolumeObj 
+
+
+def getAppVolumeObj(appName):
+	if isNVDA(appName):
+		return getNVDAVolumeObj()
+	else:
+		return getAppVolumeObjByName(appName)
+
+
 def getNVDAVolume():
-	volumeObj = getAppVolumeObj("nvda.exe")
+	volumeObj = getNVDAVolumeObj()
 	if volumeObj:
 		return volumeObj.GetMasterVolume()
 	return None
 
 
+def setNVDAVolume(volume):
+	if volume is None:
+		return
+	volumeObj = getNVDAVolumeObj()
+	if volumeObj is None:
+		log.warning("NVDA volume object not initialized")
+		return
+	volumeObj.SetMasterVolume(volume, None)
+
+
 def setNVDAVolumeToRecoveryLevel(checkThreshold=False):
 	log.debug("setNVDAVolumeToRecoveryLevel: checkThreshold = %s" % checkThreshold)
 	from ..settings import _addonConfigManager
-	volumeObj = getAppVolumeObj("nvda.exe")
+	volumeObj = getNVDAVolumeObj()
 	if not volumeObj:
 		return False
 	mute = volumeObj.GetMute()
@@ -220,7 +284,7 @@ def validateVolumeLevel(level, appName):
 		else:
 			absoluteLevel = maxLevel
 		relativeLevel = 100
-	elif "nvda.exe" in appName:
+	elif isNVDA(appName):
 		nvdaVolume = getNVDAVolume()
 		log.debug("nvdaVolume: %s" % nvdaVolume)
 		# check if volume is not less than the configured threshold volume
@@ -372,7 +436,7 @@ def setFocusedAppVolumeToPreviousLevel():
 
 
 def setNVDAVolumeToPreviousLevel():
-	appName = "nvda.exe"
+	appName = nvdaAppName
 	level = _previousAppVolumeLevel.get(appName.lower())
 	if level is None:
 		return
@@ -431,19 +495,15 @@ def setApplicationChannelsLevels(applicationVolumes):
 
 def updateNVDAAndApplicationsChannelsLevels(applicationsChannelsVolumes):
 	global _NVDAChannelsVolume
-	if not _initialized:
-		# cannot split sound
-		wx.CallLater(40, ui.message, _("Not available cause of conflict with another add-on. See NVDA log"))
-		return
-	_NVDAChannelsVolume = applicationsChannelsVolumes["nvda.exe"]
+	_NVDAChannelsVolume = applicationsChannelsVolumes[nvdaAppName]
 	appVolumes = applicationsChannelsVolumes.copy()
-	del appVolumes["nvda.exe"]
+	del appVolumes[nvdaAppName]
 	setApplicationChannelsLevels(appVolumes)
 
 
 def getApplicationVolumeInfo(application):
 	applicationsChannelsVolumes = getChannels()
-	applicationsChannelsVolumes["nvda.exe"] = getNVDAChannelsVolume()
+	applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
 	channelsVolume = applicationsChannelsVolumes[application]
 	if channelsVolume[0] == 0.0:
 		msg = toRightMsg
@@ -463,16 +523,16 @@ def getApplicationVolumeInfo(application):
 def splitChannels(NVDAChannel=None, application=None):
 	log.debug("splitChannels: %s, %s" % (NVDAChannel, application))
 	if not _initialized:
-		# cannot split sound
+		# cannot split sound for NVDA
 		wx.CallLater(40, ui.message, _("Not available cause of conflict with another add-on. See NVDA log"))
 		return
 	applicationsVolumes = getChannels()
-	applicationsVolumes["nvda.exe"] = _NVDAChannelsVolume
+	applicationsVolumes[nvdaAppName] = _NVDAChannelsVolume
 	if NVDAChannel == "left":
 		NVDALevels = (1.0, 0.0)
 		appLevels = (0.0, 1.0)
 		if application:
-			if application == "nvda.exe" or application not in applicationsVolumes:
+			if isNVDA(application) or application not in applicationsVolumes:
 				msg = "NVDA %s" % toLeftMsg
 			else:
 				appMsg = ".".join(application.split(".")[:-1])
@@ -483,7 +543,7 @@ def splitChannels(NVDAChannel=None, application=None):
 		NVDALevels = (0.0, 1.0)
 		appLevels = (1.0, 0.0)
 		if application:
-			if application == "nvda.exe" or application not in applicationsVolumes:
+			if isNVDA(application) or application not in applicationsVolumes:
 				msg = "NVDA %s" % toRightMsg
 			else:
 				appMsg = ".".join(application.split(".")[:-1])
@@ -494,7 +554,7 @@ def splitChannels(NVDAChannel=None, application=None):
 		NVDALevels = (1.0, 1.0)
 		appLevels = (1.0, 1.0)
 		if application:
-			if application == "nvda.exe" or application not in applicationsVolumes:
+			if isNVDA(application) or application not in applicationsVolumes:
 				msg = "NVDA%s" % inCenterMsg
 			else:
 				appMsg = ".".join(application.split(".")[:-1])
@@ -508,26 +568,32 @@ def splitChannels(NVDAChannel=None, application=None):
 	else:
 		# split channel of all audio applications
 		for app in applicationsVolumes:
-			if "nvda.exe" in app:
+			if isNVDA(app):
 				continue
 			applicationsVolumes[app] = appLevels
-	applicationsVolumes["nvda.exe"] = NVDALevels
+	applicationsVolumes[nvdaAppName] = NVDALevels
 	updateNVDAAndApplicationsChannelsLevels(applicationsVolumes)
 	from speech import cancelSpeech
 	wx.CallLater(40, cancelSpeech)
 	wx.CallLater(80, ui.message, msg)
 	log.warning(msg)
 
+def centerFocusedApplication():
+		focus = api.getFocusObject()
+		from appModuleHandler import getAppNameFromProcessID
+		appName = getAppNameFromProcessID(focus.processID, True)
+		toggleChannels(application=appName, balance="center")
+
 
 def toggleChannels(balance="center", application=None):
 	log.debug("toggleChannels: %s, %s" % (balance, application))
-	if not _initialized:
+	if not _initialized and isNVDA(application):
 		# cannot toggle sound
 		wx.CallLater(40, ui.message, _("Not available cause of conflict with another add-on. See NVDA log"))
 		return
 	applicationsVolumes = getChannels()
 	appMsg = ".".join(application.split(".")[:-1])
-	applicationsVolumes["nvda.exe"] = _NVDAChannelsVolume
+	applicationsVolumes[nvdaAppName] = _NVDAChannelsVolume
 	if balance == "left":
 		levels = (1.0, 0.0)
 		toMsg = toLeftMsg
@@ -545,8 +611,8 @@ def toggleChannels(balance="center", application=None):
 	wx.CallLater(80, ui.message, msg)
 	log.warning(msg)
 
-
-def waveOutSetVolume(selfself):
+# some parts of following code comes from Tony's Enhancements addon for NVDA (author: Tony Malykh)
+def waveOutSetVolume(wavePlayer):
 	global _prevNVDAChannelsVolume
 	if _NVDAChannelsVolume == _prevNVDAChannelsVolume:
 		return
@@ -559,17 +625,16 @@ def waveOutSetVolume(selfself):
 	volume2 = leftVolume2
 	volume2 = volume2 | (rightVolume2 << 16)
 	nvdaVolume = getNVDAVolume()
-	winmm.waveOutSetVolume(selfself._waveout, volume2)
-	volumeObj = getAppVolumeObj("nvda.exe")
-	volumeObj.SetMasterVolume(nvdaVolume, None)
+	winmm.waveOutSetVolume(wavePlayer._waveout, volume2)
+	setNVDAVolume(nvdaVolume)
 	_prevNVDAChannelsVolume = _NVDAChannelsVolume
 	log.debug("NVDA channel levels set to %s, %s" % (_NVDAChannelsVolume[0], _NVDAChannelsVolume[1]))
 
 
-def preWaveOpen(selfself, *args, **kwargs):
+def preWaveOpen(wavePlayer, *args, **kwargs):
 	global _originalWaveOpen
-	result = _originalWaveOpen(selfself, *args, **kwargs)
-	waveOutSetVolume(selfself)
+	result = _originalWaveOpen(wavePlayer, *args, **kwargs)
+	waveOutSetVolume(wavePlayer)
 	return result
 
 
@@ -579,6 +644,11 @@ def isInitialized():
 
 def initialize():
 	global _originalWaveOpen, _initialized
+	from ..settings import  isInstall
+	from ..settings.addonConfig import FCT_SplitAudio
+	if not isInstall(FCT_SplitAudio):
+		_initialized = True
+		return
 	if nvwave.WavePlayer.open.__module__ != "nvwave":
 		log.error(
 			"Initialization failed: nvwave.WavePlayer.open already patched by: %s" % nvwave.WavePlayer.open.__module__

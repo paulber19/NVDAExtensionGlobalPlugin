@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: NVDAExtensionGlobalPlugin 11.0\n"
+"Project-Id-Version: NVDAExtensionGlobalPlugin 11.1\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2022-01-26 11:37+0100\n"
+"POT-Creation-Date: 2022-02-05 17:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1278,79 +1278,85 @@ msgid "&Accept"
 msgstr ""
 
 #. Translators: this is the title of NVDA and Applications audio Channels manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:58
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:59
 msgid "NVDA and running Applications audio manager"
 msgstr ""
 
 #. Translators: This is the label for a listbox
 #. in NVDA and audio Applications manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:68
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:69
 msgid "Applications:"
 msgstr ""
 
 #. Translators: This is the label for a group
 #. in NVDA and audio Applications manager dialog
 #. Translators: part of message for announcement of application volume level.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:84
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:85
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:40
 msgid "Volume"
 msgstr ""
 
 #. Translators: This is a label for a choice box
 #. in NVDA and audio Applications manager dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:91
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:92
 msgid "&Volume:"
 msgstr ""
 
 #. Translators: This is the label for a checkbox
 #. in NVDA and audio Applications manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:100
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:101
 msgid "&Muted"
 msgstr ""
 
 #. Translators: This is the label for a group
 #. in NVDA and audio Applications manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:105
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:106
 msgid "Balance"
 msgstr ""
 
 #. Translators: This is a label for a choice box
 #. in NVDA and audio Applications manager dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:112
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:113
 msgid "&Left:"
 msgstr ""
 
 #. Translators: This is a label for a choice box
 #. in NVDA and audio Applications manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:122
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:123
 msgid "&Right:"
 msgstr ""
 
 #. Translators: volume is mute
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:193
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:290
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:207
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:311
 msgid "mute"
 msgstr ""
 
+#. for some unknown reason, nvda volume object cannot be retrieved.
+#. so volume changes are not available
+#. Translators: volume cannot be changed for NVDA
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:247
+msgid "Volume changes are  not available for NVDA"
+msgstr ""
+
 #. Translators: volume is unmute
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:293
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:314
 msgid "unmute"
 msgstr ""
 
 #. Translators: message to user to inform
 #. hat the NVDA channel levels cannot be set to zero simultaneously
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:362
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:383
 msgid "The volume of NVDA channels cannot be zero both simultaneously"
 msgstr ""
 
 #. cannot split sound
 #. Translators: message to user to report incompatibility with another add-on.
-#. cannot split sound
+#. cannot split sound for NVDA
 #. cannot toggle sound
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:394
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:436
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:467
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:526
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:415
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:527
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:592
 msgid "Not available cause of conflict with another add-on. See NVDA log"
 msgstr ""
 
@@ -1450,62 +1456,62 @@ msgid "Main volume"
 msgstr ""
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:60
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:65
 msgid "to left"
 msgstr ""
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:62
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:67
 msgid "to right"
 msgstr ""
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:64
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:69
 msgid "in center"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:85
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:96
 msgid "Volume on"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:87
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:98
 msgid "volume off"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:89
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:100
 msgid "No audio controller for this application"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:346
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:410
 #, python-format
 msgid ""
 "Impossible, the volume level cannot be lower than the configured recovery "
 "threshold equal to %s"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:455
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:515
 msgid "stronger on the right"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:457
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:517
 msgid "stronger on the left"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:479
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:490
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:539
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:550
 msgid "NVDA {to}, {app} {appTo}"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:481
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:492
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:541
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:552
 msgid "NVDA {to} and all applications {appTo}"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:501
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:561
 msgid "NVDA and {app} {to}"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:503
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:563
 msgid "NVDA and all applications {appTo}"
 msgstr ""
 
@@ -1532,16 +1538,16 @@ msgstr ""
 msgid "Set the main volume to %s"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:150
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:152
 msgid "Unavailable for NVDA"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:155
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:165
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:157
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:167
 msgid "Not available on this operating's system"
 msgstr ""
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:162
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:164
 msgid ""
 "The main volume and that of NVDA are established and their level sets to the "
 "one in the configuration"
@@ -2382,6 +2388,10 @@ msgid "Hear NVDA and all audio applications on center"
 msgstr ""
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:480
+msgid "Hear focused application on center"
+msgstr ""
+
+#: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:484
 msgid "Display NVDA and active Applications's audio manager"
 msgstr ""
 

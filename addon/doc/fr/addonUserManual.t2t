@@ -1888,10 +1888,13 @@ Pour orienter le son de NVDA, l'extension installe les scripts suivants :
 - Entendre NVDA à gauche et toutes les applications à droite (commande : KEY_SPLIT_LEFT_ALL),
 - Entendre NVDA et l'application sous le curseur au centre (commande : KEY_SPLIT_CENTER_FOCUS),
 - Entendre NVDA et toutes les applications au centre (commande : KEY_SPLIT_CENTER_ALL)
+- Entendre l'application sous le curseur au centre (commande : KEY_CENTER_FOCUSED_APP)
 - Afficher le Gestionnaire audio de NVDA et des applications actives (commande : KEY_SOUND_SPLIT_MANAGER)
 
 
 Aucun geste de commandes ne leur est affecté. Mais il est toujours possible de le faire en utilisant le dialogue "Gestes de commandes" de NVDA. Ces scripts se trouvent sous la catégorie "Contrôle du son" de ce dialogue.
+
+La commande "KEY_CENTER_FOCUSED_APP" est opérationnelle même si la fonctionnalité n'est pas installée afin, éventuellement, de pouvoir rééquilibrer  l'audio de certaines  applications   restées déséquilibrées après la désinstallation de la fonctionnalité.
 
 Le dialogue "Gestionnaier audio de NVDA et des applications actives" permet aussi d'orienter le son de NVDA, mais aussi de fixer le niveau de volume des deux canaux audio de NVDA et des applications.
 Il présente :
@@ -1930,6 +1933,7 @@ Lorsqu'une application est sélectionnée, l'état de balance des canaux est ann
 
 
 Au redémarrage de NVDA, NVDA est de nouveau entendu sur les deux canaux audio, tandis que les applications restent dans leur état (mémorisé par Windows). Utiliser la commande pour remettre l'écoute sur les deux canaux pour l'application sous le curseur ou pour toutes les applications lancées.
+
 
 Attention : pour un bon fonctionnement, il faut que NVDA et les applications audio utilisent le même périphérique de sortie audio, comme par exemple le mappeur de sons. D'ailleurs la fonctionnalité n'a d'intérêt que dans ce cas.
 
@@ -2226,6 +2230,7 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 | KEY_SPLIT_RIGHT_ALL | Entendre NVDA à droite et toutes les applications à gauche |
 | KEY_SPLIT_CENTER_FOCUS | Entendre NVDA et l'application sous le curseur au centre |
 | KEY_SPLIT_CENTER_ALL | Entendre NVDA et toutes les applications au centre |
+| KEY_CENTER_FOCUSED_App | Entendre l'application sous le curseur au centre |
 
 ++ Gestes de commande installés par les fonctionnalités ++
 +++ Affichage de la liste des icones de la zone de notification et des fenêtres des applications lancées +++

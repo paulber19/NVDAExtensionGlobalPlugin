@@ -73,6 +73,7 @@ _addonSummary = _curAddon.manifest['summary']
 SCRCAT_MODULE = str(_addonSummary)
 
 
+# Below toggle code came from Tyler Spivey's code, with enhancements by Joseph Lee.
 def finally_(func, final):
 	"""Calls final after func, even if it fails."""
 	def wrap(f):
@@ -330,8 +331,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		if isInstall(addonConfig.FCT_VolumeControl) and settings.toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
 			volumeControl.setSpeakerVolumeToRecoveryLevel(checkThreshold=True)
 			volumeControl.setNVDAVolumeToRecoveryLevel(checkThreshold=True)
-		if isInstall(addonConfig.FCT_SplitAudio):
-			volumeControl.initialize()
+		volumeControl.initialize()
 		if isInstall(addonConfig.FCT_TemporaryAudioDevice):
 			from .computerTools import audioDevice
 			audioDevice.initialize()

@@ -23,12 +23,13 @@ else:
 	from ..utils.guiHelper import BoxSizerHelper
 
 from .volumeControl import (
-	getChannels, getAppVolumeObj,
+	getChannels, getAppVolumeObj, getNVDAVolumeObj,
 	getNVDAChannelsVolume, getAbsoluteLevel,
 	splitChannels, toggleChannels,
 	validateVolumeLevel, setAppVolume,
 	updateNVDAAndApplicationsChannelsLevels, changeSpeakersVolume,
-	getApplicationVolumeInfo
+	getApplicationVolumeInfo, isInitialized,
+	nvdaAppName, isNVDA
 )
 
 addonHandler.initTranslation()
@@ -67,7 +68,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		# in NVDA and audio Applications manager dialog
 		labelText = _("Applications:")
 		self.applicationsChannelsVolumes = getChannels()
-		self.applicationsChannelsVolumes["nvda.exe"] = getNVDAChannelsVolume()
+		self.applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
 		self.applications = sorted(list(self.applicationsChannelsVolumes.keys()))
 		choices = [app.split(".")[0] for app in self.applications]
 		self.applicationsListBox = sHelper.addLabeledControl(
@@ -159,7 +160,11 @@ class NVDAAndAudioApplicationsManagerDialog(
 	def updateVolume(self, application):
 		volumeObj = getAppVolumeObj(application)
 		if volumeObj is None:
+			# for some unknown reason , nvda volume object cannot be found.
+			# so, volume change  is  not available.
+			self.volumeBox.Disable()
 			return
+		self.volumeBox.Enable()
 		mute = volumeObj.GetMute()
 		self.volumeMuteCheckBox.SetValue(mute)
 		volume = volumeObj.GetMasterVolume()
@@ -167,13 +172,22 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.volumeBox.SetStringSelection(str(level))
 
 	def updateChannels(self, application):
+		if isNVDA(application) and not isInitialized():
+			# nvda channels  ae manager by other add-on
+			# so disable channels box
+			self.leftChannelBox.Disable()
+			self.rightChannelBox.Disable()
+			return
+			
 		self.applicationsChannelsVolumes = getChannels()
-		self.applicationsChannelsVolumes["nvda.exe"] = getNVDAChannelsVolume()
+		self.applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
 		channelsVolume = self.applicationsChannelsVolumes[application]
 		leftVolume = int(channelsVolume[0] * 100)
 		rightVolume = int(channelsVolume[1] * 100)
 		self.leftChannelBox.SetStringSelection(str(leftVolume))
 		self.rightChannelBox.SetStringSelection(str(rightVolume))
+		self.leftChannelBox.Enable()
+		self.rightChannelBox.Enable()
 
 	def formatApplicationInfo(self, application, name=False, position=True, volume=False, mute=True):
 		textList = []
@@ -204,7 +218,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		application = self.applications[index]
 		self.updateChannels(application)
 		self.updateVolume(application)
-		if "nvda.exe" in application:
+		if isNVDA(application):
 			self.volumeMuteCheckBox.Disable()
 		else:
 			self.volumeMuteCheckBox.Enable()
@@ -226,6 +240,13 @@ class NVDAAndAudioApplicationsManagerDialog(
 			self.updateVolume(application)
 
 		def changeApplicationVolume(application, offset):
+			if isNVDA(application) and getNVDAVolumeObj() is None:
+				# for some unknown reason, nvda volume object cannot be retrieved.
+				# so volume changes are not available
+				# Translators: volume cannot be changed for NVDA
+				wx.CallLater(40, ui.message, _("Volume changes are  not available for NVDA"))
+				return
+
 			level = int(self.volumeBox.GetStringSelection()) + offset
 			level = max(0, level)
 			level = min(100, level)
@@ -297,7 +318,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		# for audio split
 		if keyCode == wx.WXK_LEFT:
 			if mod == wx.MOD_SHIFT:
-				if "nvda.exe" in application:
+				if isNVDA(application):
 					toggleChannels(application=application, balance="left")
 				else:
 					splitChannels(application=application, NVDAChannel="left")
@@ -313,7 +334,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 				return
 		elif keyCode == wx.WXK_RIGHT:
 			if mod == wx.MOD_SHIFT:
-				if "nvda.exe" == application:
+				if isNVDA(application):
 					toggleChannels(application=application, balance="right")
 				else:
 					splitChannels(application=application, NVDAChannel="right")
@@ -356,7 +377,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		rightVolume = int(self.rightChannelBox.GetStringSelection()) / 100
 		index = self.applicationsListBox.GetSelection()
 		application = self.applications[index]
-		if application == "nvda.exe" and (not leftVolume and not rightVolume):
+		if isNVDA(application) and (not leftVolume and not rightVolume):
 			# Translators: message to user to inform
 			# hat the NVDA channel levels cannot be set to zero simultaneously
 			wx.CallLater(40, ui.message, _("The volume of NVDA channels cannot be zero both simultaneously"))
