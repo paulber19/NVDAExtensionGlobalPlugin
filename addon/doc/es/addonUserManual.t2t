@@ -29,7 +29,7 @@ Este complemento añade a las órdenes globales de NVDA:
 - las siguientes características:
  - [Mostrar la lista de iconos  en la bandeja del sistema y las ventanas de las aplicaciones lanzadas #hdr1],
  - [Ayuda para la composición de símbolos complejos #hdr3] como por ejemplo un "e" en la "o", un punto de interrogación invertida...,
- - [Informar o mostrar información acerca de la aplicación enfocada, como su versión o el perfil de configuración activo #hdr4],
+ - [Informar o mostrar información acerca de la aplicación bajo el cursor, como su versión o el perfil de configuración activo #hdr4],
  - [Extensión de la funcionalidad del modo exploración #hdr5] para los navegadores Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge y Google Chrome:
   - Nuevas órdenes para el modo de navegación: (párrafo, división, ancla, región principal),
   - Nuevos tipos de elementos presentado como una lista en el cuadro de diálogo "Lista de Elementos" abierto por NVDA+f7: (botón de opción, párrafos, marco, casillas de verificación, ...) y anuncio  del número de elementos correspondientes al tipo seleccionado,
@@ -40,7 +40,10 @@ Este complemento añade a las órdenes globales de NVDA:
    - Ir a la columna / línea siguiente o anterior con la lectura de las celdas que la componen,
    - Ir a la primera / última celda de la fila / columna,
    - Anunciar las celdas de la columna / fila actual.
-      - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7],
+ - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7] con:
+  - adición  al portapapeles del texto seleccionado,
+  - vaciado del portapapeles,
+  - mejora  del script básico  de NVDA "NVDA+c" que anuncia el texto en el portapapeles,
  - [Anuncio de la carpeta preseleccionada en cuadros de diálogo de estilo Abrir, Guardar, Guardar como #hdr8],
  - [Abrir el registro anterior o actual de NVDA y copiar la ruta de estos al portapapeles #hdr9],
  - [Historial de los anuncios del habla #hdr10], anunciando o mostrando los últimos registros del historial de los anuncios del habla,
@@ -54,9 +57,9 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Apagar, reiniciar o hibernar el ordenador #hdr19],
  - [Administrar los gestos de entrada configurados por el usuario #hdr20],
  - [Control de sonido #hdr21] (solo Windows 10):
-  - Silenciar o reestablecer el sonido  del flujo audio para la aplicación enfocada,
+  - Silenciar o reestablecer el sonido  del flujo audio para la aplicación bajo el cursor,
   - Establecer  manualmente o automáticamente el sonido principal y el flujo audio de NVDA,
-  - Cambiar el nivel del volumen principal o del flujo audio para la aplicación enfocada,
+  - Cambiar el nivel del volumen principal o del flujo audio para la aplicación bajo el cursor,
   - Restablecimiento automático del volumen principal y de NVDA al cargar el complemento,
  - [Herramientas de desarrollo de complementos #hdr22]:
  - Creación del archivo buildVars.py a partir del archivo manifest.ini del complemento,
@@ -80,7 +83,7 @@ Este complemento añade a las órdenes globales de NVDA:
 
 - Las opciones:
  - [Eliminar el anuncio de la descripción de los objetos en las cintas de Windows #hdr100],
- - [Anuncio de la palabra enfocada después de eliminar la palabra (para las versiones de NVDA anteriores a la 2020.3) #hdr101],
+ - [Anuncio de la palabra bajo el cursor después de eliminar la palabra (para las versiones de NVDA anteriores a la 2020.3) #hdr101],
  - [Maximizar automáticamente las ventanas #hdr102],
  - [Anunciar sistemáticamente la puntuación al moverse por palabras #hdr103],
  - [Posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA #hdr104],
@@ -413,7 +416,7 @@ Presenta el mismo tipo de cuadro de diálogo que el script anterior sin el botó
 El número máximo de últimos símbolos se puede configurar con la opción "Número máximo de últimos símbolos compuestos registrados" de la categoría "Opciones avanzadas" en el menú "Opciones" del complemento.
 
 
-++ Información de la aplicación enfocada ++[hdr4]
+++ Información de la aplicación bajo el cursor ++[hdr4]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
 
 Instala, según su estado de instalación, los siguientes scripts:
@@ -438,23 +441,23 @@ Una simple pulsación del gesto de entrada activa el script básico de NVDA que 
 
 Una doble pulsación anuncia el nombre del perfil de configuración y su estado.
 
-+++ Anuncio del número de versión de la aplicación enfocada +++
-La descripción de este script es: "Anunciar el nombre y el número de versión de la aplicación enfocada".
++++ Anuncio del número de versión de la aplicación bajo el cursor +++
+La descripción de este script es: "Anunciar el nombre y el número de versión de la aplicación bajo el cursor. Pulsando dos veces: para copiar esta información al portapapeles"
 
 De forma predeterminada, el gesto de entrada "MAIN_KEY_REPORT_NAME_VERSION" se le asigna.
 
- El gesto de entrada activa el anuncio del nombre y el número de versión de la aplicación colocada bajo el foco.
+El gesto de entrada  con una primera pulsación activa  el anuncio del nombre y el número de versión de la aplicación colocada bajo el cursor. Con una segunda pulsación copia esta información al portapapeles.
 
 
-+++ Mostrar información de la aplicación enfocada +++[hdr4-2]
-La descripción de este script es: "Mostrar información acerca de la aplicación enfocada".
++++ Mostrar información de la aplicación bajo el cursor +++[hdr4-2]
+La descripción de este script es: "Mostrar información acerca de la aplicación bajo el cursor".
 
 Este se lanza mediante  la órden "KEY_APPLICATION_INFORMATIONS" del intérprete.
 
 Por defecto, no se le asigna ningún gesto de entrada.
 
 Muestra el cuadro de diálogo "ADDON_SUMMARY - Información" que presenta la siguiente información:
-- Nombre del archivo de la aplicación enfocada y su número de versión,
+- Nombre del archivo de la aplicación bajo el cursor y su número de versión,
 - El nombre del perfil de configuración disparado,
 - El nombre y el número de versión del complemento activado,
 - La ruta del complemento activado,
@@ -462,7 +465,7 @@ Muestra el cuadro de diálogo "ADDON_SUMMARY - Información" que presenta la sig
 
 
 +++ Mostrar el nombre y número de versión del complemento +++[hdr4-3]
-La descripción de este script es: "Anunciar el nombre y el número de versión del complemento activado para la aplicación enfocada".
+La descripción de este script es: "Anunciar el nombre y el número de versión del complemento activado para la aplicación bajo el cursor".
 
 Por defecto, no se le asignan gestos de entrada, ni ningún intérprete de órdenes.
 
@@ -591,15 +594,21 @@ Esta funcionalidad se instala de forma predeterminada.
 Las funciones activadas mediante las órdenes de teclado "control+v", "control+c", "control+x",  "control+z" no son verbalizadas  por NVDA, el complemento se encarga.
 
 No se realiza ningún control sobre el resultado de la función.
-Pero para las órdenes de teclado "control+c", "control+x", la ausencia de selección de texto se indica en los árboles y las listas.
+Pero:
+- para las órdenes de teclado "control+c", "control+x", la ausencia de selección de texto se indica en los árboles y las listas.
+- para el atajo "control+c", el mensaje "copiado" solo se pronuncia si el contenido del portapapeles ha cambiado.
+- para el atajo "control+v", se indica el estado vacío del portapapeles.
 
-Si el complemento fakeClipboardAnnouncement está instalado (que realiza la misma función), debe ser desinstalado. 
+
+Se recomienda encarecidamente no instalar complementos que proporcionen el mismo tipo de características.
+
+Si se instala esta característica, se instalan a continuación los scripts.
 +++ Añadir el texto seleccionado al portapapeles +++[hdr7-1]
 Esta funcionalidad añade el script que te permite añadir el texto seleccionado al portapapeles.
 
 Esta funcionalidad está, por defecto, instalada sin gesto de entrada, sin embargo, es posible asignarle uno en el cuadro de diálogo "Gestos de Entrada" de NVDA. La descripción de este script es: "Añadir, al portapapeles, el texto seleccionado" y se almacena en la categoría "ADDON_SUMMARY".
 
-Todos los parámetros utilizados para el script se encuentran en el grupo "Portapapeles" en la categoría "Teclado" en el cuadro de diálogo del complemento que presenta la configuración de perfil actual.
+Todas las opciones utilizadas para el script se encuentran en el grupo "Portapapeles" en la categoría "Teclado" en el cuadro de diálogo del complemento que presenta la configuración de perfil actual.
 
 Este script se lanza mediante la órden del intérprete "KEY_ADDING_TO_CLIP".
 
@@ -611,6 +620,25 @@ Se mostrará una solicitud de confirmación antes de continuar con la adición s
 
 Nota: este script se extrae del complemento "ClipContentsDesigner" (Autores  Noelia, Abdel)  que también proporciona otras características interesantes con respecto al Portapapeles. Fue puesto en este complemento debido a una solicitud hecha por un usuario, quien al mismo tiempo quería el anuncio de las funcionalidades de "Copiar" y "Pegar".
 
++++ Anuncio de texto en el portapapeles de Windows +++[hdr7-2]
+Este script reemplaza el script básico de NVDA ("NVDA+c") para completarlo indicando al usuario que ejecutó la órden que:
+- el portapapeles está vacío,
+- en el caso de que no haya texto en el portapapeles, el portapapeles puede no estar vacío.
+
+
+el número de caracteres leídos ya no se limita a 1024.
+
+Este número máximo puede configurarse utilizando la opción "Número máximo de caracteres para leer" del grupo "Portapapeles" en la categoría "Suplementos a NVDA".
+
+
++++ Vaciado del portapapeles +++[hdr7-3]
+Este script está instalado sin gesto de entrada, sin embargo, es posible asignarle uno en el cuadro de diálogo "Gestos de Entrada" de NVDA.
+
+Su descripción es "Vaciar el portapapeles" y se almacena en la categoría "Estado del sistema".
+
+Su función es borrar completamente el contenido del portapapeles de Windows. Tenga en cuenta que esto no se refiere al historial del portapapeles de Windows.
+
+Este script se lanza mediante la órden del intérprete  "KEY_CLEAR_CLIP".
 
 ++ Anuncio de la carpeta seleccionada en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como" ++[hdr8]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
@@ -814,7 +842,7 @@ Este cuadro de diálogo se cierra automáticamente cuando finalice el temporizad
 ++ Reinicio de NVDA ++[hdr15]
 Esta funcionalidad no está instalada por defecto.
 
-Esta instala un script  que permite reiniciar NVDA con el nivel de registro en depuración sin cambiar la configuración de NVDA.
+Esta instala un script  que permite reiniciar NVDA con el nivel de registro en modo depuración sin cambiar la configuración de NVDA.
 
 La descripción de este script es: "Reiniciar NVDA. Pulsando dos veces: reiniciar con el nivel de registro en depuración".
 
@@ -832,7 +860,7 @@ Por defecto, esta funcionalidad se instala con  gesto de entrada.
 
 Esta instala dos scripts almacenados en la categoría "Foco del sistema" del diálogo "Gestos de Entrada" de NVDA:
 
-+++ Mostrar los elementos visibles del objeto bajo el foco +++
++++ Mostrar los elementos visibles del objeto bajo el cursor +++
 La descripción de este script es: "Mostrar los elementos visibles que componen el objeto en primer plano".
 
 Este se lanza mediante la órden "KEY_OBJECTS_LIST" del intérprete.
@@ -871,7 +899,7 @@ Para un elemento de tipo:
 - cuadro de edición: Se indica el estado de solo lectura.
 
 
-+++  Anunciar o mostrar los elementos visibles del objeto bajo el foco +++
++++  Anunciar o mostrar los elementos visibles del objeto bajo el cursor +++
 La descripción de este script es: "Verbaliza el objeto actual en primer plano. Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto en primer plano".
 
 Este se lanza mediante el gesto de entrada "MAIN_KEY_OBJECTS_LIST" asignado a el por defecto.
@@ -968,7 +996,7 @@ El script selecciona el selector x y si está asociado a un perfil de voz, estab
 
 
 +++ Anunciar o mostrar las opciones de voz actuales +++[hdr17-6]
-Los siguientes 3 scripts permiten conocer  las opciones de voz actuales sin la necesidad de usar el menú  "Voz" de NVDA.
+Los siguientes 3 scripts permiten conocer  las opciones de voz actuales sin la necesidad de usar el menú "Voz" de NVDA.
 
 Estos scripts están almacenados en la categoría  "Voz" del diálogo "Gestos de Entrada" de NVDA y se instalan incluso si la funcionalidad "Cambiar el perfil de voz" no está instalado.
 
@@ -1122,16 +1150,16 @@ Este script se lanza:
 
 Establece el sonido para el volumen principal y para el flujo audio de NVDA y fuerza los niveles de cada uno a los valores configurados en el submenú "Control de sonido" del submenú "Opciones".
 
-+++ Silenciando o reestableciendo el sonido del flujo audio para la aplicación enfocada +++[hdr21-2]
++++ Silenciando o reestableciendo el sonido del flujo audio para la aplicación bajo el cursor +++[hdr21-2]
 Este script se lanza:
 - Ya sea mediante la órden "KEY_TOGGLE_MUTE" del intérprete de órden,
 - Ya sea mediante el gesto de entrada "MAIN_KEY_TOGGLE_MUTE" asignado de forma predeterminada.
 
 
-Esta órden silencia el sonido del flujo audio de la aplicación  enfocada si se establece o reestablece el sonido si se silencia.
+Esta órden silencia el sonido del flujo audio de la aplicación bajo el cursor si se establece o reestablece el sonido si se silencia.
 
-+++ Cambio de volumen del flujo de audio de la aplicación enfocada +++[hdr21-3]
-Estos scripts hacen posible aumentar, disminuir o fijar el volumen del flujo de la aplicación presente bajo el foco.
++++ Cambio de volumen del flujo de audio de la aplicación bajo el cursor +++[hdr21-3]
+Estos scripts hacen posible aumentar, disminuir o fijar el volumen del flujo de la aplicación presente bajo el cursor.
 
 Estos se instalan sin gestos de entrada. Pero siempre es posible atribuirles con el diálogo "Gestos de Entrada".
 
@@ -1201,7 +1229,7 @@ Cuando se utiliza las órdenes anteriores, el nivel de volumen se registra antes
 Para volver a este nivel, las siguientes órdenes están disponibles:
 - "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel de volumen principal al nivel anterior.
 - "KEY_NVDA_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel de volumen de NVDA al nivel anterior.
-- "KEY_APP_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel del volumen de la aplicación enfocada a su nivel anterior.
+- "KEY_APP_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel del volumen de la aplicación bajo el cursor a su nivel anterior.
 
 
 El nivel anterior también se registra con la ejecución de estas órdenes.
@@ -1330,7 +1358,7 @@ Para esto, el complemento instala un script bajo la descripción "Mostrar lista 
 El se lanza mediante la órden "KEY_RUNNING_ADDONS" del intérprete de órden. No se le asigna ningún gesto de entrada.
 
 Los complementos se enumeran por tipo:
-- complemento de tipo global: este es un complemento que proporciona accesibilidad adicional, independientemente de la aplicación bajo el foco.
+- complemento de tipo global: este es un complemento que proporciona accesibilidad adicional, independientemente de la aplicación bajo el cursor.
 - complemento de tipo aplicación: este es un complemento que proporciona accesibilidad adicional para una aplicación bien específica.
 - complemento de tipo controlador de sintetizador de voz: este es un complemento que instala un controlador para un sintetizador de voz.
 - complemento de tipo controlador de pantalla braille: este es un complemento que instala un controlador para una pantalla braille.
@@ -1750,12 +1778,13 @@ Los cambios de formato conciernen:
 Pueden ser incluidos o excluidos individualmente de la búsqueda marcandolos o desmarcandolos en la lista "Tipos" del mismo grupo.
 
 +++ Análisis a la demanda +++[hdr31-3]
-El complemento instala scripts para analizar a la demanda el texto que se encuentra a la posición del cursor. No se les asigna ningún gesto de entrada por defecto, pero es posible hacerlo usando el cuadro de diálogo "Gestos de Entrada" de NVDA.
+El complemento instala scripts para analizar a la demanda el texto que se encuentra a la posición del cursor.
 
 Estos scripts son:
-- "Analizar la palabra bajo el cursor del sistema": órden del intérprete "KEY_WORD_TEXT_ANALYZER",
-- "Analizar la línea bajo el cursor del sistema": órden del intérprete "KEY_LINE_TEXT_ANALYZER",
-- "Analizar la frase bajo el cursor del sistema": órden del intérprete "KEY_SENTENCE_TEXT_ANALYZER".
+- "Analizar la palabra bajo el cursor del sistema": "MAIN_KEY_WORD_TEXT_ANALYZER", órden del intérprete "KEY_WORD_TEXT_ANALYZER",
+- "Analizar la línea bajo el cursor del sistema": "MAIN_KEY_LINE_TEXT_ANALYZER", órden del intérprete "KEY_LINE_TEXT_ANALYZER",
+- "Analizar la frase bajo el cursor del sistema": "MAIN_KEY_SENTENCE_TEXT_ANALYZER", órden del intérprete "KEY_SENTENCE_TEXT_ANALYZER".
+- "Analizar el párrafo bajo el cursor del sistema": "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", órden del intérprete "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
 ++ Anuncio de la posición del cursor en los campos de edición ++[hdr32]
@@ -1909,7 +1938,7 @@ El diálogo "Administrador de audio de NVDA y aplicaciones activas" también pue
 - Los potenciómetro para cambiar los canales izquierdo y derecho de la aplicación seleccionada.
 
 
-Cuando la lista está enfocada, se permiten las siguientes órdenes:
+Cuando la lista está bajo el cursor, se permiten las siguientes órdenes:
 - Escucha la aplicación seleccionada a la derecha: "Flecha Derecha",
 - Escucha la aplicación seleccionada a la izquierda: "Flecha Izquierda",
 - Escucha la aplicación seleccionada al centro: "espacio",
@@ -1927,6 +1956,7 @@ Cuando la lista está enfocada, se permiten las siguientes órdenes:
 - Aumentar o disminuir de un doble paso, el volumen principal: "control+mayúscula+rePág o avPág",
 - Maximizar o minimizar el volumen principal: "control+mayúscula+inicio o fin".
 
+Esta lista se refresca automáticamente cuando se le da el cursor.
 
 Los cambios de alternancia de canales o los cambios de nivel de volumen se aplican inmediatamente después de cada  órden.
 
@@ -1937,7 +1967,7 @@ Una protección esta prevista para evitar poner, simultáneamente, en cero el ni
 Cuando se selecciona una aplicación, se anuncia el estado de balance de los canales, así como el estado al silenciar el sonido.
 
 
-Al reiniciar NVDA, NVDA se escucha nuevamente en ambos canales de audio, mientras que las aplicaciones permanecen en su estado (almacenadas por Windows). Utiliza la órden para volver a poner la escucha en ambos canales para la aplicación bajo el cursor  o para todas las aplicaciones lanzadas.
+Al reiniciar NVDA o si el complemento está deshabilitado o desinstalado, NVDA se escucha nuevamente en ambos canales de audio, mientras que las aplicaciones permanecen en su estado (almacenadas por Windows).
 
 Atención: Para un funcionamiento correcto, es necesario que NVDA y las aplicaciones  de audio utilicen el mismo dispositivo de salida de audio, como por ejemplo el Mapeador de sonido. Además, la funcionalidad tiene solo interés que en este caso.
 
@@ -1981,12 +2011,12 @@ Pero esto se puede desactivar mediante la opción "No anunciar la descripción d
 Entonces será necesario reiniciar NVDA para tener en cuenta la opción.
 
 
-++ Anuncio de la palabra enfocada después de la eliminación de palabras ++[hdr101]
+++ Anuncio de la palabra bajo el cursor después de la eliminación de palabras ++[hdr101]
 En algunas aplicaciones como WordPad , microsoft Word, es posible eliminar la siguiente palabra con la órden "control+suprimir", pero las versiones de NVDA anteriores a la 2020.3 no pronuncian la palabra después de la posición del cursor después de la eliminación.
 
 Por defecto, el complemento permite que estas versiones de NVDA pronuncien esta palabra.
 
-Esto se puede evitar desmarcando la opción "Anunciar la palabra enfocada después de una eliminación de palabras" que está en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
+Esto se puede evitar desmarcando la opción "Anunciar la palabra bajo el cursor después de una eliminación de palabras" que está en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
 
 ++ Maximizar automáticamente las ventanas ++[hdr102]
 Esta opción   permite maximizar automáticamente las ventanas que están en primer plano.
@@ -2079,6 +2109,33 @@ Para cambiar el teclado numérico en funcionamiento estándar o NVDA y si la opc
 La opción "Habilitar el uso estándar del teclado numérico cuando se inicia NVDA" (grupo Teclado numérico", categoría "Teclado"), permite, si se marca, de usar el teclado numérico de manera estándar al inicio de NVDA pero también es necesario que la opción que permite el uso estándar del teclado numérico esté marcada.
 
 
+++ Gestión del bloqueo numérico ++[hdr305]
+Esta característica está retomada en parte del complemento "sharedComputer"  (autores "Robert Hänggi <aarjay.robert@gmail.com>, Noelia Ruiz Martínez <nrm1977@gmail.com>" que parece no haber sido actualizado desde 2018.
+
+El consiste en:
++++ Indicar la activación del bloqueo al iniciar NVDA +++
+De forma predeterminada y en la disposición de teclado "Ordenador de escritorio", el complemento indica que el bloqueo  numérico está activado al iniciar NVDA.
+
+Pero este se puede desactivar, Como es el caso por defecto para la disposición de teclado "Ordenador portátil", utilizando la opción  "Indicar el estado activado al iniciar NVDA" del grupo "Bloqueo numérico" de la categoría "Teclado" en las opciones del complemento.
+
+
++++ Activación/desactivación automática al activar un perfil de configuración +++
+A cada activación de un perfil de configuración, es posible activar o desactivar automáticamente el bloqueo numérico.
+
+La elección se realiza en las opciones de perfil de configuración, en la categoría "Teclado" del grupo "Bloqueo numérico" y con la lista  de opciones "Al activar el perfil:".
+
+Esta lista ofrece las siguientes opciones:
+- "No hacer nada": el estado del bloqueo no cambia.
+- "Desactivar": el bloqueo está deshabilitado.
+- "Activar": el bloqueo está habilitado. 
+
+
+Por defecto, la elección es:
+- "Desactivar" para una disposición de teclado "Ordenador de escritorio".
+- "No hacer nada" para una disposición de teclado "Ordenador portátil".
+
+
+
 + Otras mejoras +
 
 ++ Exploración de la carpeta de configuración del usuario o la carpeta del programa de NVDA en archivos de programa ++[hdr202]
@@ -2132,11 +2189,11 @@ Al repetir la acción varias veces rápidamente, el script se ejecutará tantas 
 
 
 ++ Selección automática de categoría en el cuadro de diálogo "Gestos de Entrada" ++[hdr206]
-Puede suceder que necesitemos abrir el cuadro de diálogo "Gestos de Entrada" de NVDA para conocer los gestos de entrada proporcionados por el complemento activo para la aplicación  enfocada.
+Puede suceder que necesitemos abrir el cuadro de diálogo "Gestos de Entrada" de NVDA para conocer los gestos de entrada proporcionados por el complemento activo para la aplicación bajo el cursor.
 
 Sin complemento, esta es la primera categoría que se selecciona de forma predeterminada.
 
-Para ahorrar tiempo, el complemento trae la selección automática de la categoría asociada con el complemento activo para la aplicación enfocada.
+Para ahorrar tiempo, el complemento trae la selección automática de la categoría asociada con el complemento activo para la aplicación bajo el cursor.
 
 Para esto, está buscando la categoría entre las categorías que proporcionan scripts pertenecientes al complemento activo.  Pero esta última puede poner en puesta los scripts en cualquier categoría.
 
@@ -2161,13 +2218,15 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 
 + Resumen de las órdenes proporcionados por el complemento +
 ++ Gestos de entrada instalados sistemáticamente ++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
 | KEY_SHELL | KEY_SHELL | Ninguno | Ejecutar el intérprete de órdenes del complemento |
+| MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR | MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR | Ninguno | Simple clic izquierdo del ratón a la posición actual del navegador de objetos. Dos veces: doble clic izquierdo en esta posición |
+| MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR | MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR | Ninguno | Simple clic derecho del ratón a la posición actual del navegador de objetos. Dos veces: doble clic derecho en esta posición |
 
 ++ Órdenes del intérprete ++
 
 | Órden | Descripción |
-| KEY_APPLICATION_INFORMATIONS | Mostrar información acerca de la aplicación enfocada |
+| KEY_APPLICATION_INFORMATIONS | Mostrar información acerca de la aplicación bajo el cursor |
 | KEY_OBJECTS_LIST | Mostrar los elementos visibles que componen el objeto en primer plano |
 | KEY_TEMPORARY_AUDIO_DEVICE_MANAGER | Mostrar el administrador de dispositivos de audio temporal |
 | KEY_SET_TEMPORARY_AUDIO_DEVICE | Establezca, como dispositivo de audio temporal, el siguiente dispositivo en la lista de dispositivos marcados en el administrador de dispositivos de audio temporal |
@@ -2182,12 +2241,13 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 | KEY_COMPLEX_SYMBOL | Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático |
 | KEY_LAST_USED_COMPLEX_SYMBOL | Mostrar la lista de los últimos símbolos complejos compuestos |
 | KEY_TOGGLE_NUMPAD_NAVIGATION | Habilitar o deshabilitar las teclas direccionales del teclado numérico |
-| KEY_SOUND_SPLIT_MANAGER | Mostrar el administrador de canales de audio de NVDA y aplicaciones activas |
-| KEY_POSITION_REPORT | Habilitar o deshabilitar el anuncio de la posición actual del cursor en un campo de edición |
 | KEY_TEXT_ANALYZER | Habilitar o deshabilitar el analizador de texto |
 | KEY_WORD_TEXT_ANALYZER | Analizar la palabra bajo el cursor del sistema |
 | KEY_LINE_TEXT_ANALYZER | Analizar la línea bajo el cursor del sistema |
 | KEY_SENTENCE_TEXT_ANALYZER | Analizar la frase bajo el cursor del sistema |
+| KEY_PARAGRAPH_TEXT_ANALYZER | Analizar el párrafo bajo el cursor del sistema |
+| KEY_POSITION_REPORT | Habilitar o deshabilitar el anuncio de la posición actual del cursor en un campo de edición |
+| KEY_SOUND_SPLIT_MANAGER | Mostrar el administrador de canales de audio de NVDA y aplicaciones activas |
 | KEY_DISPLAY_SPEECH_HISTORY |  Mostrar los registros del historial de los anuncios del habla |
 | KEY_WINDOWS_LIST | Mostrar la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla |
 | KEY_ICONS_List | Mostrar la lista de iconos en la bandeja del sistema |
@@ -2202,30 +2262,31 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 | KEY_VOICE_PROFIL_SWITCHING | Alternar el modo de cambio de perfil de voz |
 | KEY_QUICK_ADDONS_ACTIVATION | Mostrar el diálogo para habilitar o deshabilitar rápidamente los complementos |
 | KEY_SHUTDOWN | Mostrar el diálogo para apagar, reiniciar o hibernar el ordenador |
-| KEY_TOGGLE_MUTE | Silenciar o reestablecer el sonido para la aplicación enfocada |
+| KEY_TOGGLE_MUTE | Silenciar o reestablecer el sonido para la aplicación bajo el cursor |
 | KEY_VOLUME_ON | Ajustar el sonido principal y de NVDA |
 | KEY_TOOLSFORADDON | Mostrar el diálogo que presenta las herramientas para el desarrollo de complementos |
 | KEY_USER_INPUT_GESTURE  | Mostrar el diálogo para administrar los gestos de entrada configurados por el usuario |
 | KEY_MANAGE_VOICE_PROFIL | Mostrar el diálogo para administrar los selectores de perfil de voz |
 | KEY_ADDING_TO_CLIP | Añadir, al portapapeles, el texto seleccionado |
+| KEY_CLEAR_CLIP | Vaciar el portapapeles |
 | KEY_REPORT_SPEECH_SETTINGS | Anunciar las opciones de voz actuales |
 | KEY_DISPLAY_SPEECH_SETTINGS | Mostrar las opciones de voz actuales |
-| KEY_APP_VOLUME_UP | Aumentar el volumen de la aplicación enfocada |
+| KEY_APP_VOLUME_UP | Aumentar el volumen de la aplicación bajo el cursor |
 | KEY_NVDA_VOLUME_UP | Aumentar el volumen de NVDA |
 | KEY_MAIN_VOLUME_UP | Aumentar el volumen principal |
-| KEY_APP_VOLUME_DOWN | Disminuir el volumen de la aplicación enfocada |
+| KEY_APP_VOLUME_DOWN | Disminuir el volumen de la aplicación bajo el cursor |
 | KEY_NVDA_VOLUME_DOWN | Disminuir el volumen de NVDA |
 | KEY_MAIN_VOLUME_DOWN | Disminuir el volumen principal |
-| KEY_APP_VOLUME_MAX | Maximizar el volumen de la aplicación enfocada |
+| KEY_APP_VOLUME_MAX | Maximizar el volumen de la aplicación bajo el cursor |
 | KEY_NVDA_VOLUME_MAX | Maximizar el volumen de NVDA |
 | KEY_MAIN_VOLUME_MAX | Maximizar el volumen principal |
-| KEY_APP_VOLUME_MIN | Minimizar el volumen de la aplicación enfocada |
+| KEY_APP_VOLUME_MIN | Minimizar el volumen de la aplicación bajo el cursor |
 | KEY_NVDA_VOLUME_MIN | Minimizar el volumen de NVDA |
 | KEY_MAIN_VOLUME_MIN | Minimizar el volumen principal |
-| KEY_APP_VOLUME_PREVIOUS_LEVEL | Ajustar el volumen de la aplicación enfocada al nivel anterior |
+| KEY_APP_VOLUME_PREVIOUS_LEVEL | Ajustar el volumen de la aplicación bajo el cursor al nivel anterior |
 | KEY_NVDA_VOLUME_PREVIOUS_LEVEL | Ajustar el volumen de NVDA al nivel anterior |
 | KEY_MAIN_VOLUME_PREVIOUS_LEVEL | Ajustar el nivel de volumen principal al nivel anterior |
-| número de 1 a 9 | Ajustar el volumen de la aplicación enfocada a x por ciento del volumen principal (x igual a 10 multiplicado por el número) |
+| número de 1 a 9 | Ajustar el volumen de la aplicación bajo el cursor a x por ciento del volumen principal (x igual a 10 multiplicado por el número) |
 | mayúscula+número de 1 a 9 | Ajustar a x el volumen de NVDA (x igual a 10 multiplicado por el número) |
 | control+número de 1 a 9 | Ajustar a x el volumen principal (x igual a 10 multiplicado por el número) |
 | KEY_SPLIT_LEFT_FOCUS | Escucha NVDA a la izquierda y la aplicación bajo el cursor a la derecha |
@@ -2238,19 +2299,17 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 
 ++ Gestos de entrada instaladas por las funcionalidades ++
 +++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Lista de iconos y ventanas activas | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Ninguno | Mostrar la lista de iconos en la bandeja del sistema. Pulsando dos veces: Mostrar la lista de ventanas de las aplicaciones lanzadas |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Ninguno | Mostrar la lista de iconos en la bandeja del sistema. Pulsando dos veces: Mostrar la lista de ventanas de las aplicaciones lanzadas con la posibilidad de cambiar a una de ellas o destruirla |
 
 +++ Ayuda para la composición de símbolos complejos +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Ayuda para la composición de símbolos complejos | MAIN_KEY_COMPLEX_SYMBOL  | MAIN_KEY_COMPLEX_SYMBOL | Ninguno | Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_COMPLEX_SYMBOL  | MAIN_KEY_COMPLEX_SYMBOL | Ninguno | Componer un símbolo complejo como por ejemplo una vocal acentuada, un símbolo matemático |
 
-+++ Mostrar información acerca de la aplicación enfocada +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Anunciar el nombre y el número de versión de la aplicación enfocada | MAIN_KEY_REPORT_NAME_VERSION  | MAIN_KEY_REPORT_NAME_VERSION | Ninguno | Anunciar el nombre y el número de versión de la aplicación enfocada |
-| Anunciar el nombre del archivo de la aplicación, el nombre del complemento cargado y el nombre y estado del perfil de configuración | MAIN_KEY_CONFIGURATION_PROFILE  | MAIN_KEY_CONFIGURATION_PROFILE | Ninguno | Anunciar el nombre del archivo de la aplicación actual y el nombre del complemento cargado. Pulsando dos veces, anunciar el nombre y el estado del perfil de configuración |
-
-
++++ Mostrar información acerca de la aplicación bajo el cursor +++
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_REPORT_NAME_VERSION  | MAIN_KEY_REPORT_NAME_VERSION | Ninguno | Anunciar el nombre y el número de versión de la aplicación bajo el cursor. Pulsando dos veces: para copiar esta información al portapapeles |
+| MAIN_KEY_CONFIGURATION_PROFILE  | MAIN_KEY_CONFIGURATION_PROFILE | Ninguno | Anunciar el nombre del archivo de la aplicación actual y el nombre del complemento cargado. Pulsando dos veces, anunciar el nombre y el estado del perfil de configuración |
 
 +++ Extensión del modo exploración de NVDA +++
 | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
@@ -2268,41 +2327,46 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 | KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | Ninguno | Anunciar la dirección (URL) del documento. Pulsando dos veces: para copiarla al portapapeles |
 
 +++ Anuncio de la carpeta preseleccionada en cuadros de diálogo de estilo Abrir, Guardar, Guardar como +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Anunciar la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Ninguno | Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Ninguno | Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa |
 
 +++ Archivos de registro de NVDA +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Apertura de los registros de NVDA | MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | Ninguno | Abrir el registro actual de NVDA. Pulsando dos veces: abrir el anterior registro. Pulsando tres veces: copiar la ruta del registro actual al portapapeles |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | Ninguno | Abrir el registro actual de NVDA. Pulsando dos veces: abrir el anterior registro. Pulsando tres veces: copiar la ruta del registro actual al portapapeles |
 
 +++ Historial de los anuncios del habla +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Anunciar el registro anterior del historial de los anuncios del habla  | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Ninguno | Anunciar el registro anterior del historial de los anuncios del habla y cópiarlo al portapapeles |
-| Anunciar el siguiente registro del historial de los anuncios del habla  | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Ninguno | Anunciar el siguiente registro del historial de los anuncios del habla y cópiarlo al portapapeles |
-| Anunciar el registro actual del historial de los anuncios del habla | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Ninguno | Anunciar el registro actual del historial de los anuncios del habla y cópiarlo al portapapeles. Pulsando dos veces: para mostrar todo el  historial de los anuncios del habla |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Ninguno | Anunciar el registro anterior del historial de los anuncios del habla y cópiarlo al portapapeles |
+| MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Ninguno | Anunciar el siguiente registro del historial de los anuncios del habla y cópiarlo al portapapeles |
+| MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Ninguno | Anunciar el registro actual del historial de los anuncios del habla y cópiarlo al portapapeles. Pulsando dos veces: para mostrar todo el  historial de los anuncios del habla |
 
 +++ Temporizador de minutos +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Temporizador de minutos | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Ninguno | Mostrar el diálogo que permite, si se detuvo el temporizador de minutos, ya sea para iniciarlo o si no para consultar la duración restante o para detenerlo |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Ninguno | Mostrar el diálogo que permite, si se detuvo el temporizador de minutos, ya sea para iniciarlo o si no para consultar la duración restante o para detenerlo |
 
 +++ Reinicio de NVDA +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Reinicio de NVDA | MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | Ninguno | Reiniciar NVDA. Pulsando dos veces: reiniciar con el nivel de registro en depuración |
+| Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | Ninguno | Reiniciar NVDA. Pulsando dos veces: reiniciar con el nivel de registro en depuración |
 
 +++ Mostrar los elementos visibles que componen el objeto en primer plano +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Mostrar los elementos visibles del objeto en primer plano  | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Ninguno | Verbaliza el objeto actual en primer plano. Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto en primer plano |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Ninguno | Verbaliza el objeto actual en primer plano. Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto en primer plano |
 
 +++ Cambiar el perfil de voz +++
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Administrar los selectores del perfil de voz | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Ninguno | Establezca el selector 1 a 8 como el selector actual y, si es posible, defina su perfil de voz asociado como un perfil de voz actual |
-| Ir al primer selector siguiente | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Ninguno | Ir al primer selector siguiente asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
-| Ir al primer selector anterior | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Ninguno | Ir al primer selector anterior asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
-| Asociación de perfil de voz | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Ninguno | Asociar el perfil de voz actual con el selector actual. Pulsando dos veces: liberar el selector de su perfil de voz asociado. Pulsando tres veces: liberar todos los selectores de su perfil de voz asociado |
-| Alternar el modo de cambio de perfil de voz | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | Ninguno | Habilitar o deshabilitar el modo de cambio de perfil de voz |
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Ninguno | Establezca el selector 1 a 8 como el selector actual y, si es posible, defina su perfil de voz asociado como un perfil de voz actual |
+| MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Ninguno | Ir al primer selector siguiente asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
+| MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Ninguno | Ir al primer selector anterior asociado con un perfil de voz y configurar este perfil de voz como un perfil de voz actual |
+| MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Ninguno | Asociar el perfil de voz actual con el selector actual. Pulsando dos veces: liberar el selector de su perfil de voz asociado. Pulsando tres veces: liberar todos los selectores de su perfil de voz asociado |
+| MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | Ninguno | Habilitar o deshabilitar el modo de cambio de perfil de voz |
 
 +++ Fecha y hora - suplementos +++
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| KEY_DATE_TIME | KEY_DATE_TIME | Ninguno | Anunciar la hora actual. Pulsando dos veces, anunciar la fecha actual. Pulsando tres veces: copiar la fecha y hora al portapapeles |
 
-| Nombre | Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
-| Fecha y hora | KEY_DATE_TIME | KEY_DATE_TIME | Ninguno | Anunciar la hora actual. Pulsando dos veces, anunciar la fecha actual. Pulsando tres veces: copiar la fecha y hora al portapapeles |
-
++++ Análisis de texto +++
+| Ordenador de escritorio | Ordenador portátil | Táctil | Descripción |
+| MAIN_KEY_WORD_TEXT_ANALYZER | MAIN_KEY_WORD_TEXT_ANALYZER | Ninguno | Analizar la palabra bajo el cursor del sistema |
+| MAIN_KEY_LINE_TEXT_ANALYZER | MAIN_KEY_LINE_TEXT_ANALYZER | Ninguno | Analizar la línea bajo el cursor del sistema |
+| MAIN_KEY_SENTENCE_TEXT_ANALYZER | MAIN_KEY_SENTENCE_TEXT_ANALYZER | Ninguno | Analizar la frase bajo el cursor del sistema |
+| MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | Ninguno| Analizar el párrafo bajo el cursor del sistema |

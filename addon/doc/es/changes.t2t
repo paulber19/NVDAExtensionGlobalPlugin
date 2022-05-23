@@ -25,9 +25,40 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v11.2 (23/05/2022) +
+Mejoras y nuevas características:
+- con respecto al portapapeles:
+ - script para vaciar el portapapeles.
+ - reanudación del script básico de NVDA anunciando el texto en el portapapeles ("NVDA+c") para
+  - indicar si el portapapeles está vacío,
+  - indicar  que el portapapeles no está vacío cuando no hay texto en el portapapeles.
+  - aumentar el número de caracteres leídos (configurables).
+- en el diálogo "Administrador de audio de NVDA y aplicaciones activas", la lista de aplicaciones ahora se refresca automáticamente cada vez que recibe el cursor.
+- puesta del sonido de NVDA al centro si el complemento está desactivado o desinstalado.
+- reanudación del funcionamiento del complemento en modo seguro.
+- gestión del bloqueo numérico:
+ - indicación de la activación  del bloqueo  al iniciar NVDA.
+ - activación o desactivación configurable del bloqueo numérico al activar un perfil de configuración.
+
+
+Corección de Fallos:
+- el analizador de texto no indicaba los cambios de fuente del texto en ocultadó o no ocultadó.
+- se tiene en cuenta la modificación realizada en el marco de la pr #11767 (https://github.com/nvaccess/nvda/pull/11767).
+- corrección del archivo "keyboard.ini" para el idioma francés.
+
+
+Cambios:
+- el mensaje "copiado" solo se anuncia si el portapapeles cambia después de la órden "control+c".
+- el estado vacío del portapapeles se anuncia cuando se usa la órden para pegar el contenido del portapapeles.
+- Debido a un conflicto con el gesto de entrada "nvda+control+f8":
+ - los gestos de entrada instalados para el analizador de texto utiliza la tecla "f6" en lugar de la tecla "f8",
+ - las órdenes del intérprete relativo al analizador de texto ahora usa la tecla "f6" en lugar de la tecla "f8",
+ - la órden del intérprete para Mostrar el administrador de audio de NVDA y aplicaciones activas es ahora "f8" en lugar de "f6".
+
+
 + v11.1 (05/02/2022) +
 Nuevas características:
-- se añadió la órden para centrar el audio de la aplicación bajo el foco.
+- se añadió la órden para centrar el audio de la aplicación bajo el cursor.
 
 
 Corección de Fallos:
@@ -42,7 +73,7 @@ Nuevas características:
 - se añadió los scripts para aumentar o disminuir el volumen de NVDA.
 - aumento possible del volumen principal si es necesario al aumentar el volumen de NVDA o aplicaciones (opción para configurar).
 - nuevo diálogo para habilitar o deshabilitar los complementos más rápidamente.
-- en la apertura del diálogo "Gestos de Entrada", la categoría asociada al complemento activo para la aplicación enfocada se selecciona automáticamente.
+- en la apertura del diálogo "Gestos de Entrada", la categoría asociada al complemento activo para la aplicación bajo el cursor se selecciona automáticamente.
 - posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA.
 - la última opción utilizada en el Anillo de Opciones de Sintetizador se guarda para encontrarlo seleccionado después de un reinicio deNVDA.
 
@@ -149,10 +180,10 @@ Nuevas características:
  - se añadió el estado de los botones y casillas de verificación en la lista de elementos encontrados.
  - posibilidad de seleccionar  un elemento escribiendo el comienzo de su etiqueta.
 - Con respecto a la funcionalidad "Control de sonido":
- - scripts para ajustar el volumen de la aplicación enfocada a un cierto porcentaje del volumen principal.
+ - scripts para ajustar el volumen de la aplicación bajo el cursor a un cierto porcentaje del volumen principal.
  - scripts para ajustar a un nivel fijado el volumen principal.
- - scripts para restablecer el volumen principal o el de la aplicación enfocada al nivel anterior.
- - anunciar el cambio del nivel de volumen de la aplicación enfocada en valor absoluto o en porcentaje del volumen principal.
+ - scripts para restablecer el volumen principal o el de la aplicación bajo el cursor al nivel anterior.
+ - anunciar el cambio del nivel de volumen de la aplicación bajo el cursor en valor absoluto o en porcentaje del volumen principal.
 - mejora de la funcionalidad "Anuncio selectivo de teclas de órdenes":
  - se tiene en cuenta de la tecla modificadora "windows",
  - se añadió los botones "Marcar todo" y "Desmarcar todo"  para seleccionar o deseleccionar todas las combinaciones de teclas modificadoras,
@@ -221,7 +252,7 @@ Corección de fallo:
 - Aumento del límite  alto de la duración de la remanencia.
 - Aumento del límite  alto del retardo de espera de repetición del mismo gesto de entrada.
 - Corrección para poder usar las teclas "mayúscula" y "control" con las teclas de flecha en uso estándar del teclado numérico.
-- eliminación, para las versiones de NVDA superiores a la 2020.3, del anuncio de la palabra enfocada después de la eliminación mediante "control+suprimir" (ahora apoyado por NVDA).
+- eliminación, para las versiones de NVDA superiores a la 2020.3, del anuncio de la palabra bajo el cursor después de la eliminación mediante "control+suprimir" (ahora apoyado por NVDA).
 - funcionamiento parcial del complemento en modo seguro.
 - Supresión de código específico para wxPython 3.
 - gran limpieza del código (corrección de errores planteado por el analizador Flake8).
@@ -313,7 +344,7 @@ Compatibilidad con NVDA 2019.2
 Nueva características:
 - Posibilidad de limitar la remanencia a la única tecla "NVDA".
 - Suplementos para la funcionalidad "Control de sonido":
- - Aumentar, disminuir, maximizar o minimizar el volumen de la aplicación enfocada,
+ - Aumentar, disminuir, maximizar o minimizar el volumen de la aplicación bajo el cursor,
  - Aumentar, disminuir, maximizar o minimizar el volumen principal,
  - Agrupación de estos gestos de entrada en la categoría "control de sonido",
 - Posibilidad de usar las teclas del teclado numérico como las teclas de flechas (funcionamiento normal de Windows).
@@ -438,11 +469,11 @@ Esta versión del complemento no es compatible con versiones anteriores a la ver
 - Puesta en marcha del intérprete de órdenes que permiten lanzar los scripts con una simple tecla,
 - Instalación mediante la configuración de las funcionalidades con o sin gestos de entrada,
 - Nueva característica "Remanencia de teclas"  para componer los gestos de entrada usando las teclas NVDA, Control, Alt, Mayuscula o Windows, con un solo dedo,
-- Anuncio o visualización del nombre y número de versión del complemento activado  para la aplicación colocado bajo el foco,
+- Anuncio o visualización del nombre y número de versión del complemento activado  para la aplicación colocado bajo el cursor,
 - Apagar, reiniciar o hibernar el ordenador,
 - Administrar los gestos de entrada configurados por el usuario.
 - Control del sonido del ordenador (Windows 10)  para:
- - Silenciar o restablecer el sonido  del flujo audio para la aplicación que tiene el foco,
+ - Silenciar o restablecer el sonido  del flujo audio para la aplicación bajo el cursor,
  - Establecer, mediante el script y en el lanzamiento del complemento, el sonido del flujo audio principal y el de NVDA.
 
 

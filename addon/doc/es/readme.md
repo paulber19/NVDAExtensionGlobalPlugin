@@ -32,7 +32,7 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 
 * Anuncio de la funcionalidad asociada a las órdenes de edición de estilo Copiar, Pegar, etc,
 * Anuncio del nombre de la carpeta preseleccionada en cuadros de diálogo de estilo Abrir, Guardar, Guardar como,
-* Mostrar información sobre la aplicación enfocada:
+* Mostrar información sobre la aplicación bajo el cursor:
 	* El nombre y número de versión de la aplicación,
 	* El perfil de configuración actual,
 	* El complemento activo asociado a la aplicación,
@@ -52,9 +52,9 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 * Remanencia de teclas modificadoras,
 * Reiniciar, apagar o hibernar el ordenador,
 * Control del volumen principal y de NVDA:
-	* Silenciar o reestablecer el sonido para la aplicación enfocada,
+	* Silenciar o reestablecer el sonido para la aplicación bajo el cursor,
 	* Establecer el volumen principal o de NVDA al iniciar el complemento,
-	* Cambiar el volumen principal o el flujo de audio de la aplicación enfocada,
+	* Cambiar el volumen principal o el flujo de audio de la aplicación bajo el cursor,
 	* Restablecimiento automático del volumen  principal o de NVDA al iniciar el complemento,
 	* Orientación de la salida de audio de NVDA,
 
@@ -70,7 +70,7 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 ## Las opciones: ##
 
 * Eliminar el anuncio de la descripción de los objetos en las cintas de Windows,
-* Anunciar la palabra enfocada durante la eliminación de palabras (para las versiones de NVDA anteriores a la 2020.3),
+* Anunciar la palabra bajo el cursor durante la eliminación de palabras (para las versiones de NVDA anteriores a la 2020.3),
 * Maximizar automáticamente la ventana en primer plano,
 * Anunciar la puntuación y los símbolos al moverse por palabras,
 * Posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA.
@@ -97,5 +97,5 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.1.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.2.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

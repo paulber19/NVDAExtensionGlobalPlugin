@@ -585,7 +585,7 @@ def centerFocusedApplication():
 		toggleChannels(application=appName, balance="center")
 
 
-def toggleChannels(balance="center", application=None):
+def toggleChannels(balance="center", application=None, silent=False):
 	log.debug("toggleChannels: %s, %s" % (balance, application))
 	if not _initialized and isNVDA(application):
 		# cannot toggle sound
@@ -606,11 +606,12 @@ def toggleChannels(balance="center", application=None):
 	applicationsVolumes[application] = levels
 	updateNVDAAndApplicationsChannelsLevels(applicationsVolumes)
 	msg = "{app} {to}" .format(app=appMsg, to=toMsg)
-	from speech import cancelSpeech
-	wx.CallLater(40, cancelSpeech)
-	wx.CallLater(80, ui.message, msg)
+	if not silent:
+		from speech import cancelSpeech
+		wx.CallLater(40, cancelSpeech)
+		wx.CallLater(80, ui.message, msg)
 	log.warning(msg)
-
+_wavePlayer = None
 # some parts of following code comes from Tony's Enhancements addon for NVDA (author: Tony Malykh)
 def waveOutSetVolume(wavePlayer):
 	global _prevNVDAChannelsVolume
@@ -632,7 +633,8 @@ def waveOutSetVolume(wavePlayer):
 
 
 def preWaveOpen(wavePlayer, *args, **kwargs):
-	global _originalWaveOpen
+	global _originalWaveOpen, _NVDAWavePlayer
+	_NVDAWavePlayer = wavePlayer
 	result = _originalWaveOpen(wavePlayer, *args, **kwargs)
 	waveOutSetVolume(wavePlayer)
 	return result
@@ -646,6 +648,7 @@ def initialize():
 	global _originalWaveOpen, _initialized
 	from ..settings import  isInstall
 	from ..settings.addonConfig import FCT_SplitAudio
+	_initialized = False
 	if not isInstall(FCT_SplitAudio):
 		_initialized = True
 		return
@@ -660,9 +663,12 @@ def initialize():
 		_initialized = True
 		log.debug("volumeControl initialization: nvwave.WavePlayer.open  patched")
 
-
 def terminate():
-	global _originalWaveOpen
+	global _originalWaveOpen, _NVDAChannelsVolume
 	if _originalWaveOpen:
+		# replace NVDA on center
+		_NVDAChannelsVolume = (1.0, 1.0)
+		waveOutSetVolume(_NVDAWavePlayer)
 		nvwave.WavePlayer.open = _originalWaveOpen
 		_originalWaveOpen = None
+	_initialized = False

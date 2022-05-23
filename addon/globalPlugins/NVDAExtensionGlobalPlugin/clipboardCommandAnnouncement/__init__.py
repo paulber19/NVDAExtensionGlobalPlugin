@@ -58,6 +58,7 @@ from ..settings.addonConfig import (
 	FCT_ClipboardCommandAnnouncement,
 )
 from ..utils.keyboard import getEditionKeyCommands
+from . import clipboard
 
 addonHandler.initTranslation()
 
@@ -73,10 +74,11 @@ _msgUnDo = _("Undo")
 _msgSelectAll = _("select all")
 
 _clipboardCommands = {
-	"undo": (_msgUnDo, False),
-	"cut": (_msgCut, True),
-	"copy": (_msgCopy, True),
-	"paste": (_msgPaste, False)
+# associate function to: check selection, check clipboard change, check empty clipboard
+	"undo": (_msgUnDo, False, False, False),
+	"cut": (_msgCut, True, True, False),
+	"copy": (_msgCopy, True, True, False),
+	"paste": (_msgPaste, False, False, True)
 }
 
 # task timer
@@ -222,9 +224,12 @@ class EditableTextEx(EditableText):
 			ui.message(NVDAString("No selection"))
 			gesture.send()
 			return
-		# Translators: Message presented when text has been copied to clipboard.
-		ui.message(_msgCopy)
+		cm = clipboard.ClipboardManager()
 		gesture.send()
+		time.sleep(0.1)
+		if cm.changed():
+			# Translators: Message presented when text has been copied to clipboard.
+			ui.message(_msgCopy)
 
 	def script_cutAndCopyToClipboard(self, gesture):
 		if STATE_READONLY in self.states or (
@@ -238,18 +243,27 @@ class EditableTextEx(EditableText):
 			ui.message(NVDAString("No selection"))
 			gesture.send()
 			return
-		ui.message(_msgCut)
+		cm = clipboard.ClipboardManager()
 		gesture.send()
+		time.sleep(0.1)
+		if cm.changed():
+			ui.message(_msgCut)
+
 
 	def script_pasteFromClipboard(self, gesture):
+		# in all case, send gesture
+		gesture.send()
 		if (
 			STATE_READONLY in self.states or (
 			STATE_EDITABLE not in self.states
 			and not STATE_MULTILINE)):
-			gesture.send()
+			return
+		cm = clipboard.ClipboardManager()
+		if cm.isEmpty:
+			# Translators: message to report clipboard is empty
+			ui.message(_("Clipboard is empty"))
 			return
 		ui.message(_msgPaste)
-		gesture.send()
 		from globalCommands import commands
 		wx.CallLater(100, commands.script_reportCurrentLine, None)
 
@@ -323,19 +337,20 @@ class ClipboardCommandAnnouncement(object):
 	}
 
 	def initOverlayClass(self):
-		if isInstall(FCT_ClipboardCommandAnnouncement):
-			editionKeyCommands = getEditionKeyCommands(self)
-			if self.checkSelection:
-				d = self._changeSelectionGestureToMessage .copy()
-				selectAllKey = editionKeyCommands["selectAll"]
-				if selectAllKey != "":
-					d[selectAllKey] = _msgSelectAll,
-				for key in d:
-					self.bindGesture("kb:%s" % key, "reportChangeSelection")
-			for item in _clipboardCommands:
-				key = editionKeyCommands[item]
-				if key != "":
-					self.bindGesture("kb:%s" % key, "clipboardCommandAnnouncement")
+		if not isInstall(FCT_ClipboardCommandAnnouncement):
+			return
+		editionKeyCommands = getEditionKeyCommands(self)
+		if self.checkSelection:
+			d = self._changeSelectionGestureToMessage .copy()
+			selectAllKey = editionKeyCommands["selectAll"]
+			if selectAllKey != "":
+				d[selectAllKey] = _msgSelectAll,
+			for key in d:
+				self.bindGesture("kb:%s" % key, "reportChangeSelection")
+		for item in _clipboardCommands:
+			key = editionKeyCommands[item]
+			if key != "":
+				self.bindGesture("kb:%s" % key, "clipboardCommandAnnouncement")
 
 	def getSelectionCountByIA(self, obj):
 		count = 0
@@ -444,21 +459,33 @@ class ClipboardCommandAnnouncement(object):
 		_GB_taskTimer = core.callLater(800, callback)
 
 	def script_clipboardCommandAnnouncement(self, gesture):
+		cm = clipboard.ClipboardManager()
 		editionKeyCommands = getEditionKeyCommands(self)
 		d = {}
 		for item in _clipboardCommands:
 			d[editionKeyCommands[item]] = _clipboardCommands[item]
-		(msg, checkSelection) = d["+".join(gesture.modifierNames) + "+" + gesture.mainKeyName]
+		(msg, checkSelection, checkClipChange, checkClipEmpty) = d["+".join(gesture.modifierNames) + "+" + gesture.mainKeyName]
+		if checkClipEmpty and cm.isEmpty:
+			# Translators: message to report clipboard is empty
+			ui.message(_("Clipboard is empty"))
+			# we send always command key
+			gesture.send()
+			return
 		if self.checkSelection and checkSelection:
 			if not self.isThereASelection():
 				ui.message(NVDAString("No selection"))
-			else:
-				ui.message(msg)
 				# we send always command key
 				gesture.send()
-			return
-		ui.message(msg)
+				return
+		# we send always command key
 		gesture.send()
+		
+		if checkClipChange:
+			time.sleep(0.1)
+			if not cm.changed():
+				return
+		ui.message(msg)
+
 
 
 _classNamesToCheck = [
@@ -475,7 +502,10 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 			contentRecogClass = True
 	if contentRecogClass:
 		clsList.insert(0, RecogResultNVDAObjectEx)
-	elif obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck:
+	# to fix the Access8Math  problem with the "alt+m" virtual menu
+	# for the obj, the informations are bad: role= Window, className= Edit, not states
+	#  tand with no better solution, we check the length of obj.states
+	elif len(obj.states) and (obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck):
 		clsList.insert(0, EditableTextEx)
 	elif isInstall(FCT_ClipboardCommandAnnouncement):
 		clsList.insert(0, ClipboardCommandAnnouncement)

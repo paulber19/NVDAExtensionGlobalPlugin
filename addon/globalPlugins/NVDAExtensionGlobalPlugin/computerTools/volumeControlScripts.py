@@ -142,7 +142,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setNVDAToLeftAndAllApplicationsToRight": ("kb:control+leftArrow", FCT_SplitAudio),
 		"centerNVDAAndAllApplications": ("kb:control+space", FCT_SplitAudio),
 		"centerFocusedApplication": ("kb:control+shift+space", None),
-		"displayNVDAAndApplicationsAudioManager": ("kb:f6", FCT_SplitAudio),
+		"displayNVDAAndApplicationsAudioManager": ("kb:f8", FCT_SplitAudio),
 	}
 
 	def script_toggleCurrentAppVolumeMute(self, gesture):

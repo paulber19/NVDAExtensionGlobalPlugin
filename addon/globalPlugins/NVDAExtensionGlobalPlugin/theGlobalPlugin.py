@@ -13,6 +13,7 @@ import globalVars
 import api
 import ui
 import speech
+import braille
 import time
 import gui
 import wx
@@ -50,6 +51,7 @@ from . import commandKeysSelectiveAnnouncementAndRemanence
 from . import speechHistory
 from .utils.NVDAStrings import NVDAString
 from .utils import maximizeWindow, makeAddonWindowTitle, isOpened, getHelpObj
+from .utils.secure import inSecureMode
 from .utils import getSpeechMode, setSpeechMode, setSpeechMode_off
 from .utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
 from .utils import messageBox
@@ -208,8 +210,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"restartEx": (("kb:nvda+control+f4",), addonConfig.FCT_RestartInDebugMode),
 		"keyboardKeyRenaming": (None, addonConfig.FCT_KeyboardKeyRenaming),
 		"commandKeySelectiveAnnouncement": (None, addonConfig.FCT_CommandKeysSelectiveAnnouncement),
-		"exploreUserConfigFolder": (None, addonConfig.ID_ExploreNVDA),
-		"exploreProgramFiles": (None, addonConfig.ID_ExploreNVDA),
+		"exploreUserConfigFolder": (None, addonConfig.FCT_ExploreNVDA),
+		"exploreProgramFiles": (None, addonConfig.FCT_ExploreNVDA),
 		"toggleSwitchVoiceProfileMode": (("kb:nvda+control+shift+p",), addonConfig.FCT_VoiceProfileSwitching),
 		"manageVoiceProfileSelectors": (("kb:nvda+shift+control+m",), addonConfig.FCT_VoiceProfileSwitching),
 		"previousVoiceProfile": (
@@ -235,19 +237,21 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"toggleNumpadStandardUse": (None, None),
 		"toggleNumpadStandardUseWithNumlockKey": (("kb:numlock",), None),
 		"reportOrDisplayCurrentSpeechSettings": (None, None),
-		"toggleTextAnalyzer": (("kb:nvda+f8",), addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentWord": (("kb:nvda+shift+f8",), addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentLine": (("kb:nvda+control+f8",), addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentSentence": (("kb:nvda+windows+f8",), addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentParagraph": (("kb:nvda+shift+control+f8",), addonConfig.FCT_TextAnalysis),
+		"toggleTextAnalyzer": (("kb:nvda+f6",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentWord": (("kb:nvda+shift+f6",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentLine": (("kb:nvda+control+f6",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentSentence": (("kb:nvda+windows+f6",), addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentParagraph": (("kb:nvda+shift+control+f6",), addonConfig.FCT_TextAnalysis),
 		"manageUserConfigurations": (None, None),
 		"toggleReportCurrentCaretPosition": (None, None),
+		"reportClipboardTextEx": (("kb:nvda+c",), addonConfig.FCT_ClipboardCommandAnnouncement),
 		"addToClip": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
+		"emptyClipboard": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
 		"temporaryAudioOutputDeviceManager": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"cancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"setTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"setOrCancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
-		"activateAddonsActivationDialog": (None, None),
+		"activateAddonsActivationDialog": (None, addonConfig.FCT_VariousOutSecureMode),
 	}
 
 	# a dictionnary to map shell script to gesture and fonctionality IDs
@@ -268,30 +272,31 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"lastUsedComplexSymbolsList": ("kb:control+f4", addonConfig.FCT_ComplexSymbols,),
 		"toggleNumpadStandardUse": ("kb:f5", None),
 		"toggleReportCurrentCaretPosition": ("kb:f7", None),
-		"toggleTextAnalyzer": ("kb:f8", addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentWord": ("kb:shift+f8", addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentLine": ("kb:control+f8", addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentSentence": ("kb:windows+f8", addonConfig.FCT_TextAnalysis),
-		"analyzeCurrentParagraph": ("kb:shift+control+f8", addonConfig.FCT_TextAnalysis),
+		"toggleTextAnalyzer": ("kb:f6", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentWord": ("kb:shift+f6", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentLine": ("kb:control+f6", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentSentence": ("kb:windows+f6", addonConfig.FCT_TextAnalysis),
+		"analyzeCurrentParagraph": ("kb:shift+control+f6", addonConfig.FCT_TextAnalysis),
 		"displaySpeechHistoryRecords": ("kb:f9", addonConfig.FCT_SpeechHistory),
 		"report_WindowsList": ("kb:f10", addonConfig.FCT_SystrayIconsAndActiveWindowsList),
 		"report_SystrayIcons": ("kb:f11", addonConfig.FCT_SystrayIconsAndActiveWindowsList),
 		"minuteTimer": ("kb:f12", addonConfig.FCT_MinuteTimer),
-		"displayModuleUserGuide": ("kb:g", None),
+		"displayModuleUserGuide": ("kb:g", addonConfig.FCT_VariousOutSecureMode),
 		"displayHelp": ("kb:h", None),
 		"NVDALogsManagement": ("kb:j", addonConfig.FCT_OpenCurrentOrOldNVDALogFile),
-		"closeAllWindows": ("kb:k", None),
-		"manageUserConfigurations": ("kb:n", None),
+		"closeAllWindows": ("kb:k", addonConfig.FCT_VariousOutSecureMode),
+		"manageUserConfigurations": ("kb:n", addonConfig.FCT_VariousOutSecureMode),
 		"reportCurrentFolderName": ("kb:o", addonConfig.FCT_CurrentFolderReport),
 		"reportCurrentFolderFullPath": ("kb:control+o", addonConfig.FCT_CurrentFolderReport),
 		"toggleSwitchVoiceProfileMode": ("kb:p", addonConfig.FCT_VoiceProfileSwitching),
-		"activateQuickAddonsActivationDialog": ("kb:q", None),
+		"activateQuickAddonsActivationDialog": ("kb:q", addonConfig.FCT_VariousOutSecureMode),
 		"shutdownComputerDialog": ("kb:r", None),
 		"toggleCurrentAppVolumeMute": ("kb:s", addonConfig.FCT_VolumeControl),
 		"toolsForAddon": ("kb:t", addonConfig.FCT_Tools),
-		"activateUserInputGesturesDialog": ("kb:u", None),
+		"activateUserInputGesturesDialog": ("kb:u", addonConfig.FCT_VariousOutSecureMode),
 		"manageVoiceProfileSelectors": ("kb:v", addonConfig.FCT_VoiceProfileSwitching),
 		"addToClip": ("kb:x", addonConfig.FCT_ClipboardCommandAnnouncement),
+		"emptyClipboard": ("kb:control+x", addonConfig.FCT_ClipboardCommandAnnouncement),
 		"reportCurrentSpeechSettings": ("kb:z", None),
 		"displayCurrentSpeechSettings": ("kb:control+z", None),
 	}
@@ -340,7 +345,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .scripts import scriptHandlerEx
 		scriptHandlerEx.initialize()
 		# start update check if not in secur mode and option is set
-		if not globalVars.appArgs.secure:
+		if not inSecureMode:
 			from .settings import toggleAutoUpdateGeneralOptions
 			if toggleAutoUpdateGeneralOptions(False):
 				from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
@@ -348,10 +353,14 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				autoUpdateCheck(
 					toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 		# activate text analyzer if option is checked
-		from .textAnalysis.textAnalyzer import updateProfileConfiguration
-		updateProfileConfiguration()
+		#from .textAnalysis.textAnalyzer import updateProfileConfiguration
+		#updateProfileConfiguration()
 		config.post_configProfileSwitch .register(self.handlePostConfigProfileSwitch)
-		self.updateSettingOfSynthSettingsRing()
+		self.handlePostConfigProfileSwitch()
+		#self.updateSettingOfSynthSettingsRing()
+		#self.manageNumlockActivation()
+		from .utils import numlock
+		wx.CallLater(2000, numlock.reportNumLockState, winUser.getKeyState(winUser.VK_NUMLOCK))
 
 	def updateSettingOfSynthSettingsRing(self):
 
@@ -368,6 +377,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				globalVars.settingsRing._current = settings.index(s)
 
 	def handlePostConfigProfileSwitch(self):
+		from .utils import numlock
+		wx.CallLater(400, numlock.manageNumlockActivation)
 		from .textAnalysis.textAnalyzer import updateProfileConfiguration
 		updateProfileConfiguration()
 		self.updateSettingOfSynthSettingsRing()
@@ -476,8 +487,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			"")
 		gui.mainFrame.sysTrayIcon.Bind(
 			wx.EVT_MENU, self.onResetConfiguration, self.resetConfigurationMenu)
-		if isInstall(addonConfig.ID_ExploreNVDA):
-			self.toolsMenu = gui.mainFrame.sysTrayIcon.toolsMenu
+		self.toolsMenu = gui.mainFrame.sysTrayIcon.toolsMenu
+		if isInstall(addonConfig.FCT_ExploreNVDA):
 			menu = wx.Menu()
 			self.exploreNVDAMenu = self.toolsMenu .AppendSubMenu(
 				menu,
@@ -501,14 +512,15 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				"")
 			gui.mainFrame.sysTrayIcon.Bind(
 				wx.EVT_MENU, self.onExploreProgramFilesMenu, exploreProgramFilesMenu)
-		menu = wx.Menu()
-		item = self.toolsMenu .Append(
-			wx.ID_ANY,
-			# Translators: name of the option in the menu.
-			_("Manage user configurations"),
-			"")
-		gui.mainFrame.sysTrayIcon.Bind(
-			wx.EVT_MENU, self.onManageUserConfigurationsMenu, item)
+		if isInstall(addonConfig.FCT_ManageUserConfigurations):
+			menu = wx.Menu()
+			item = self.toolsMenu .Append(
+				wx.ID_ANY,
+				# Translators: name of the option in the menu.
+				_("Manage user configurations"),
+				"")
+			gui.mainFrame.sysTrayIcon.Bind(
+				wx.EVT_MENU, self.onManageUserConfigurationsMenu, item)
 
 	def onManageUserConfigurationsMenu(self, evt):
 		from .settings.userConfigManager import UserConfigManagementDialog
@@ -709,9 +721,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				timeText = winKernel.GetTimeFormat(
 					winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
 		msg = "%s %s" % (dateText, timeText)
-		api.copyToClip(msg)
-		# Translators: message to report date and time copy to clipboard.
-		ui.message(_("{0} copied to clipboard").format(msg))
+		if api.copyToClip(msg):
+			# Translators: message to report date and time copy to clipboard.
+			ui.message(_("{0} copied to clipboard").format(msg))
+		else:
+			# Translators: Presented when unable to copy to the clipboard because of an error.
+			ui.message(NVDAString("Unable to copy"))
 
 	# modified nvda scripts
 	def script_dateTimeEx(self, gesture):
@@ -855,10 +870,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			if repeatCount == 0:
 				ui.message(text)
 			else:
-				api.copyToClip(text)
-				# Translators: message to report that product name and version
-				# are copied to clipboard.
-				ui.message(_("Product name and version has been copied to clipboard"))
+				if api.copyToClip(text):
+					# Translators: message to report that product name and version are copied to clipboard.
+					ui.message(_("Product name and version has been copied to clipboard"))
+				else:
+					# Translators: Presented when unable to copy to the clipboard because of an error.
+					ui.message(NVDAString("Unable to copy"))
 		stopDelayScriptTask()
 		repeatCount = scriptHandler.getLastScriptRepeatCount()
 		if repeatCount == 0:
@@ -1205,11 +1222,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def _reportOrDisplayCurrentSpeechSettings(self, display=False):
 		from . import switchVoiceProfile
 		textList = switchVoiceProfile.SwitchVoiceProfilesManager().getSynthInformations()
+		text = "\r\n".join(textList)
 		if not display:
 			for item in textList:
-				ui.message(item)
+				speech.speakMessage(item)
+			braille.handler.message(text)
 		else:
-			text = "\r\n".join(textList)
 			# Translators: this is the title <of informationdialog box
 			# to show current speech settings.
 			dialogTitle = _("Current speech settings")
@@ -1631,9 +1649,53 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			msg = _("report current caret position off")
 		ui.message(msg)
 
+	def script_reportClipboardTextEx(self,gesture):
+		from .clipboardCommandAnnouncement  import clipboard
+		cm = clipboard.ClipboardManager()
+		if cm.isEmpty:
+			ui.message(_("Clipboard is empty"))
+			return
+		try:
+			text = api.getClipData()
+		except Exception:
+			text = None
+		if not text or not isinstance(text,str) or text.isspace():
+			noTextMsg = NVDAString("There is no text on the clipboard")
+			# Translators: Presented when there is no text on the clipboard, but clipboard is not empty.
+			noEmptyMsg = _("but the clipboard is not empty")
+			ui.message("%s, %s" % (noTextMsg, noEmptyMsg))
+			return
+		from .settings import _addonConfigManager
+		max = _addonConfigManager.getMaximumClipboardReportedCharacters()
+		if not max or (max and len(text) < max): 
+			brailleText = text
+			while len(text)/1024:
+				speech.speakMessage(text[:1025])
+				text = text[1025:]
+			if len(text):
+				speech.speakMessage(text)
+			braille.handler.message(brailleText)
+		else:
+			# Translators: If the number of characters on the clipboard is greater than about 1000, it reports this message and gives number of characters on the clipboard.
+			# Example output: The clipboard contains a large portion of text. It is 2300 characters long.
+			ui.message(NVDAString("The clipboard contains a large portion of text. It is %s characters long") % len(text))
+
+	script_reportClipboardTextEx.removeCommandsScript = globalCommands.commands.script_reportClipboardText
+
 	def script_addToClip(self, gesture):
 		from .clipboardCommandAnnouncement .addToClip import addToClip
 		wx.CallAfter(addToClip)
+
+	def script_emptyClipboard(self,gesture):
+		from .clipboardCommandAnnouncement  import clipboard
+		cm = clipboard.ClipboardManager()
+		if cm.clear():
+			# Translators: message to user to report clipboard
+			ui.message(_("Clipboard cleared"))
+		else:
+			# Translators: message to user because of error on clipboard clearing
+			ui.message(_("Error: clipboard cannot cleared"))
+
 
 	def script_temporaryAudioOutputDeviceManager(self, gesture):
 		from .computerTools.audioDevice import TemporaryAudioDeviceManagerDialog
@@ -1732,6 +1794,11 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin  test")
 		ui.message("NVDAExtensionGlobalPlugin test")
+		from .settings.userConfigManager import restart
+		restart(secureMode=True)
+		
+
+
 
 
 class HelperDialog(

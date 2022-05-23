@@ -126,7 +126,7 @@ In NVDA's "Preferences" sub-menu, the "ADDON_SUMMARY" sub-menu has been added wh
 
 Apart from the last menu, each is associated with a script without a command gesture allowing it to be activated. With the dialog "gestures of commands" of NVDA it is possible to assign them one.
 
-These are the following scripts with their shell command:
+These are the following scripts with their interpreter command:
 - "Display the add-on settings dialog": "KEY_ADDON_SETTINGS" command,
 - "Display the dialog for configuring the add-on for the current configuration profile": "KEY_PROFILE_SETTINGS" command,
 - "Display the  keyboard keys renaming dialog": "KEY_RENAMING" command,
@@ -587,15 +587,22 @@ This feature is installed by default.
 The functions triggered by the shortcuts "control + v", "control + c", "control + x", "control + z" are not vocalized by NVDA, this extension takes care of them.
 
 No check on the result of the function is done.
-But for the shortcuts "control + c", "control + x", the absence of text selection is indicated in the trees and the lists.
 
-If the fakeClipboardAnnouncement extension is installed (which performs the same function), it must be uninstalled.
+But:
+- for the shortcuts "control + c", "control + x", the absence of text selection is indicated in the trees and the lists.
+- for the "control+c" shortcut, the "copied" message is only pronounced if the content of the clipboard has changed.
+- for the "control+v" shortcut, the empty state of the clipboard is signaled.
+
+
+It is strongly advised not to install extensions that provide the same kind of functionality.
+
+If this feature is installed, the following scripts are installed.
 +++ Add selected text to clipboard +++[hdr7-1]
 This feature adds the script that allows you to add the selected text to the clipboard.
 
-This script is installed without a command gesture, but it is possible to assign one to it using the NVDA "Command Gestures" dialog. Its description is "Add, to clipboard,  selected text" and is placed in the "ADDON_SUMMARY" category.
+This script is installed without input gesture, but it is possible to assign one to it using the NVDA "Input gestures" dialog. Its description is "Add, to clipboard,  selected text" and is placed in the "ADDON_SUMMARY" category.
 
-All the parameters used for the script are located in the "Clipboard" group of the "Keyboard" category of the add-on dialog which presents the settings  of the current Profile.
+All the parameters used for the script are located in the "Clipboard" group of the "Keyboard" category of the add-on dialog which presents the settings  of the current configuration Profile.
 
 It is started using the "KEY_ADDING_TO_CLIP" interpreter command.
 
@@ -607,6 +614,25 @@ It is possible to place a separator text between the text blocks. This text can 
 A confirmation request will be displayed before proceeding with the addition if the "Ask confirmation before adding to the clipboard" checkbox is checked. 
 
 Note: this script is taken from the "ClipContentsDesigner" add-on (Authors Noelia, Abdel) which also provides other interesting features regarding the clipboard. It was put in this add-on  on request of users who wanted at the same time the announcement of the functions "copy" and "paste".
+
++++ Report text on Windows clipboard +++[hdr7-2]
+This script replaces the base NVDA script ("NVDA+c") to complete it by telling the user who ran the command that:
+- the clipboard is empty,
+- in case there is no text in the clipboard, the clipboard may not be empty.
+
+
+the number of characters read is no longer limited to 1024.
+
+This maximum number can be configured using the "Maximum reported characters" choice in the "Clipboard" group of the "NVDA enhancements" category.
+
++++ Empty the clipboard +++[hdr7-3]
+This script is installed without a input gesture, but it is possible to assign one using NVDA's "Input gestures" dialog.
+
+Its description is "Empty the clipboard" and is placed under the "System status" category.
+
+Its function is to completely erase the contents of the Windows clipboard. Attention, this does not concern the history of the Windows clipboard.
+
+It is launched using the "KEY_CLEAR_CLIP" interpreter command.
 
 ++ Announcement of the selected folder in the "Open", "Save", "Save as" style dialog boxes ++[hdr8]
 This feature is installed by default without input gesture.
@@ -1165,7 +1191,7 @@ They are launched using the following interpreter commands:
 - "upper case + a number from 1 to 9" to set the NVDA volume level to 10, 20, 30, ..., 90 percent of the main volume.
 
 
-These commands, unlike other shell commands, can be repeated without having to restart the shell. The interpreter is always active.
+These commands, unlike other interpreter commands, can be repeated without having to restart the interpreter. The interpreter is always active.
 
 Once the volume level is reached, press the "Escape" key to exit the interpreter.
 
@@ -1680,12 +1706,12 @@ The formatting changes concern:
 They can be included or excluded individually from the search by checking or unchecking them in the "Types" list of the same group.
 
 +++ On-demand scan +++[hdr31-3]
-The extension installs scripts to analyze text at the cursor position on demand. No command gestures are assigned to them, but it is possible to do so using NVDA's "Command gestures" dialog.
-
+The extension installs scripts to analyze text at the cursor position on demand.
 These scripts are:
-- "Analyze the word under the cursor": command of the "uppercase + f8" interpreter,
-- "Analyze the line under the cursor": interpreter command "control + f8",
-- "Analyze the sentence under the cursor": interpreter command "windows + f8".
+- "Analyze the word under the cursor": "MAIN_KEY_WORD_TEXT_ANALYZER", command of the "KEY_WORD_TEXT_ANALYZER" interpreter,
+- "Analyze the line under the cursor": "MAIN_KEY_LINE_TEXT_ANALYZER", interpreter command "KEY_LINE_TEXT_ANALYZER",
+- "Analyze the sentence under the cursor": "MAIN_KEY_SENTENCE_TEXT_ANALYZER", interpreter command "KEY_SENTENCE_TEXT_ANALYZER".
+- "Analyze the paragraph under the cursor": "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", interpreter command "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
 ++ Announcement of cursor position in edit boxes ++[hdr32]
@@ -1855,6 +1881,8 @@ When the list is focused, the following commands are allowed:
 - maximize or minimize  main volume: "control + shift + home or end".
 
 
+This list is automatically refreshed when the cursor is given to it.
+
 Channel changeover changes or volume level changes are applied immediately after each command.
 
 By default, the application volume level cannot be greater than the master volume level. But the option "Increase the main volume if necessary" allows to deactivate this limitation. This option can be found in the "Volume modification" group of the "Computer" category of the extension's "Settings" dialog.
@@ -1863,7 +1891,7 @@ Protection is provided to avoid simultaneously zeroing the level of NVDA's audio
 
 When an application is selected, the channel balance status is announced along with the mute status.
 
-When NVDA is restarted, NVDA is heard again on both audio channels, while the applications remain in their state (remembered by Windows). Use the command to resume listening on both channels for the application under the cursor or for all the applications launched.
+When restarting NVDA or if the extension is disabled or uninstalled, NVDA is again heard on both audio channels, while applications remain in their state (remembered by Windows).
 
 Note: For proper operation, NVDA and audio applications must use the same audio output device, such as the sound mapper. Moreover, the functionality is only of interest in this case.
 
@@ -1943,6 +1971,31 @@ This sound is emitted just after the hit on the space bar ending the word.
 Some users find this sound unpleasant, the extension brings the possibility of replacing this sound either by a double beep, or by the voice announcement "Spelling error".
 
 The choice is made in the group "Reporting spelling errors" of the category "NVDA enhancements" of the global settings of the add-on.
+
+++ Num lock management ++[hdr305]
+This feature is partly taken from the "sharedComputer" add-on (authors "Robert Hänggi <aarjay.robert@gmail.com>, Noelia Ruiz Martínez <nrm1977@gmail.com>" which seems not to have been updated since 2018 .
+
+It consists of:
++++ reporting activating lock when starting NVDA +++
+By default and in "Desktop" keyboard layout, the add-on reports that Numeric Lock is enabled when starting NVDA.
+
+But this can be disabled, as is the default for the "laptop" keyboard layout, using the "Report enabled state when NVDA starts" option in the "Numeric Lock" group of the "Keyboard" category of the add-on settings.
+
+
++++ Automatic activation/deactivation when activating a configuration profile +++
+Each time a configuration profile is activated, it is possible to automatically activate or deactivate the numeric lock.
+
+The choice is made in the settings of the configuration profile, in the "Keyboard" category of the "Numeric lock" group and with the list of choices "On activating the profile: ".
+
+This list offers the following choices:
+- "Do Nothing": the locking status is not modified.
+- "Desactivate": the lock is desactivated.
+- "Activate": locking is activated.
+
+
+By default, the choice is:
+- "Disabled" for a "Desktop Computer" keyboard layout.
+- "Do nothing" for a "laptop" keyboard layout.
 
 + Advanced options +
 ++ Signaling by sound of an error in the NVDA log ++[hdr300]
@@ -2081,31 +2134,44 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 + Summary of the commands provided by this extension +
 
 ++ input gestures installed systematically ++
-| Name | Desktop computer | Laptop | Touch | Description |
+| Desktop computer | Laptop | Touch | Description |
 | KEY_SHELL | KEY_SHELL | None | Start the add-on command interpreter |
+| MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR | MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR | none | make a single left click at the position of the navigator object. The second press makes a double click |
+| MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR | MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR | none | right-click at the position of the navigator object. The second press makes a double click |
 
 ++ Interpreter commands ++
 | Order | Description |
 | KEY_APPLICATION_INFORMATIONS | Display informations about the focused application |
 | KEY_OBJECTS_LIST | Display the list's visible items making up current foreground object |
+| KEY_TEMPORARY_AUDIO_DEVICE_MANAGER | Show Temporary Audio Device Manager |
+| KEY_SET_TEMPORARY_AUDIO_DEVICE | Set, as temporary audio device, the next device in the list of checked devices in the temporary audio device manager |
+| KEY_LEAVEUP_TEMPORARY_AUDIO_DEVICE | Discard temporary audio device |
 | KEY_COPY_DATETIME | Copy date and time to the clipboard |
 | KEY_RUNNING_ADDONS | Display running add-ons list |
 | KEY_REPORT_FORMATTING | Display formatting info for the current review cursor position within a document in dialog box |
 | KEY_ADDON_SETTINGS | Display add-on settings dialog |
+| KEY_PROFILE_SETTINGS | Show extension settings dialog for current configuration profile |
 | KEY_RENAMING | Display keyboard key renaming dialog |
 | KEY_SELECTIVE_ANNOUNCEMENT | Display command key selective announcement dialog |
 | KEY_COMPLEX_SYMBOL | Allow you to copy or type complex symbol |
 | KEY_LAST_USED_COMPLEX_SYMBOL | Display the list of last used symbols |
 | KEY_TOGGLE_NUMPAD_NAVIGATION | Enable or disable the standard use of numeric keypad |
+| KEY_TEXT_ANALYZER | Enable or disable text analyzer |
+| KEY_WORD_TEXT_ANALYZER | Analyze word under system cursor |
+| KEY_LINE_TEXT_ANALYZER | Analyze Line Under System Cursor |
+| KEY_SENTENCE_TEXT_ANALYZER | Analyze sentence under system cursor |
+| KEY_PARAGRAPH_TEXT_ANALYZER | Analyze paragraph under system cursor |
+| KEY_POSITION_REPORT | Enable/disable the announcement of the current cursor position in an edit box |
 | KEY_SOUND_SPLIT_MANAGER | Display NVDA and applications channels manager dialog |
 | KEY_DISPLAY_SPEECH_HISTORY | display speech history records |
 | KEY_WINDOWS_LIST | Display the running application windows's list with opportunity to put one of them on the foreground or destroy it |
 | KEY_ICONS_List | Shows the list of buttons on the System Tray |
 | KEY_MINUTE_TIMER | Display dialog to start the minute timer.If minute timer already started, display dialog to report duration |
-| KEY_CLOSE_ALL_WINDOWS | Close all opened windows |
 | KEY_MODULE_GUIDE | Display add-on user's guide |
 | KEY_HELP_SHELL | Display the commands of the  commands interpreter |
 | KEY_LOG_VIEW | Open a dialog to manage NVDA logs |
+| KEY_CLOSE_ALL_WINDOWS | Close all opened windows |
+| KEY_USER_CONFIG_MANAGEMENT | Show dialog to manage user configurations |
 | KEY_SAY_CURRENT_FOLDERNAME | report the name of current selected folder in the open or Save dialog box |
 | KEY_VOICE_PROFIL_SWITCHING | Toggle voice profile switch mode |
 | KEY_QUICK_ADDONS_ACTIVATION | Activate quick add-ons activation dialog |
@@ -2115,7 +2181,8 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 | KEY_TOOLSFORADDON | Display tools for add-on development dialog |
 | KEY_USER_INPUT_GESTURE | Displays the dialog to manage the input gestures configured by user |
 | KEY_MANAGE_VOICE_PROFIL | Display dialog to manage voice profile selectors |
-| KEY_MANAGE_VOICE_PROFIL | Display the dialog to manage the voice profile selectors |
+| KEY_ADDING_TO_CLIP | Add selected text to clipboard |
+| KEY_CLEAR_CLIP | Clear clipboard |
 | KEY_REPORT_SPEECH_SETTINGS | Report current speech settings |
 | KEY_DISPLAY_SPEECH_SETTINGS | Display current speech settings |
 | KEY_APP_VOLUME_UP | Increase the volume of the application under focus |
@@ -2147,19 +2214,17 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 ++ input gestures installed by the functionalities ++
 
 +++ Display of the list of icons in the notification area and windows of the applications launched +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| List of icons and active windows | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | None | Shows the list of buttons on the System Tray. Twice, Display the running application windows's list with opportunity to put one of them on the foreground or destroy it |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | None | Shows the list of buttons on the System Tray. Twice, Display the running application windows's list with opportunity to put one of them on the foreground or destroy it |
 
 +++ Help with the composition of complex symbols +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Help with the composition of complex Symbols | MAIN_KEY_COMPLEX_SYMBOL | MAIN_KEY_COMPLEX_SYMBOL | None | Allow you to copy or type complex symbol |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_COMPLEX_SYMBOL | MAIN_KEY_COMPLEX_SYMBOL | None | Allow you to copy or type complex symbol |
 
 +++ Information on the application under the focus +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Report the Name and Version of the focused application | MAIN_KEY_REPORT_NAME_VERSION | MAIN_KEY_REPORT_NAME_VERSION | None | Report the application 's name and version |
-| Report Configuration Profile | MAIN_KEY_CONFIGURATION_PROFILE | MAIN_KEY_CONFIGURATION_PROFILE | None | Speaks the filename of the active application along with the name of the currently loaded appModule python file. Pressing this key twice,speak the name and state of the current configuration profile |
-
-
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_REPORT_NAME_VERSION | MAIN_KEY_REPORT_NAME_VERSION | None | Report the application 's name and version |
+| MAIN_KEY_CONFIGURATION_PROFILE | MAIN_KEY_CONFIGURATION_PROFILE | None | Speaks the filename of the active application along with the name of the currently loaded appModule python file. Pressing this key twice,speak the name and state of the current configuration profile |
 
 +++ Extension of virtual buffer functionality +++
 | Desktop computer | Laptop | Touch | Description |
@@ -2177,40 +2242,46 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 | KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | none | Report document 's address (URL). Twice: copy it to clipboard |
 
 +++ Announcement of the folder preselect dialog boxes of the style Open, save, save as +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Announce the preselected Folder | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | None | report the name of current selected folder in the open or Save dialog box. Twice: report full path |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | None | report the name of current selected folder in the open or Save dialog box. Twice: report full path |
 
 +++ NVDA logs +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Open Journal | MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | None | Open current NVDA log file. Pressing this key twice, open the old NVDA log file. Pressing third, copy current log path to the clipboard |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | None | Open current NVDA log file. Pressing this key twice, open the old NVDA log file. Pressing third, copy current log path to the clipboard |
 
 +++ Speech history +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Report the previous record | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | None | Report previous record of the speech history and copy it to clipboard |
-| Report the next record | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | None | Report next record of the speech history and copy it to clipboard |
-| Report current record | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | None | Report current record of the speech history and copy it to clipboard. Twice: display speech history |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | None | Report previous record of the speech history and copy it to clipboard |
+| MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | None | Report next record of the speech history and copy it to clipboard |
+| MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | None | Report current record of the speech history and copy it to clipboard. Twice: display speech history |
 
 +++ Timer +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Timer | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | None | Display dialog to start the minute timer.If minute timer already started, display dialog to report duration |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | None | Display dialog to start the minute timer.If minute timer already started, display dialog to report duration |
 
 +++ Restarting NVDA +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Restarting NVDA | MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | None | Restart NVDA. Twice: restart with log levelset to debug |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | None | Restart NVDA. Twice: restart with log levelset to debug |
 
 +++ Display of visible elements composing the object in the foreground +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Display of objects | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | None | Reads all controls in the active window. If pressed twice: display the list's visible items making up it |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | None | Reads all controls in the active window. If pressed twice: display the list's visible items making up it |
 
 +++ Voice profile switching +++
-| Name | Desktop computer | Laptop | Touch | Description |
-| Choosing the selector | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | None | Set selector x as current selector and Sets , if possible, it associated voice profile as current voice profile (x equals number 1 to 8) |
-| Next voice profile | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | None | Go to forward to the first selector associated to a voice profile and set this voice profile as current voice profile |
-| Previous voice profile | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | None | Go backward to the first selector associated to a voice profile and set this voice profile as current voice profile |
-| Voice profile management | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | None | Display dialog to manage voice profile selectors (command: v) |
-| Activation / deactivation of voice profile switching mode | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | none | Activate or deactivate Voice profile switching mode |
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | None | Set selector x as current selector and Sets , if possible, it associated voice profile as current voice profile (x equals number 1 to 8) |
+| MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | None | Go to forward to the first selector associated to a voice profile and set this voice profile as current voice profile |
+| MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | None | Go backward to the first selector associated to a voice profile and set this voice profile as current voice profile |
+| MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | None | Display dialog to manage voice profile selectors (command: v) |
+| MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | none | Activate or deactivate Voice profile switching mode |
 
 +++ Date and time - additions +++
+| Desktop computer | Laptop | Touch | Description |
+| KEY_DATE_TIME | KEY_DATE_TIME | none | Reports the current time. Twice, reports the current date. Third: copy date and time to the clipboard |
 
-| Name | Desktop computer | Laptop | Touch | Description |
-| Date and time | KEY_DATE_TIME | KEY_DATE_TIME | none | Reports the current time. Twice, reports the current date. Third: copy date and time to the clipboard |
++++ Text analysis +++
+| Desktop computer | Laptop | Touch | Description |
+| MAIN_KEY_WORD_TEXT_ANALYZER | MAIN_KEY_WORD_TEXT_ANALYZER | none | Analyze word under cursor |
+| MAIN_KEY_LINE_TEXT_ANALYZER | MAIN_KEY_LINE_TEXT_ANALYZER | none | Analyze Line Under Cursor |
+| MAIN_KEY_SENTENCE_TEXT_ANALYZER | MAIN_KEY_SENTENCE_TEXT_ANALYZER | none | Analyze sentence under cursor |
+| MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | none | Analyze paragraph under cursor |

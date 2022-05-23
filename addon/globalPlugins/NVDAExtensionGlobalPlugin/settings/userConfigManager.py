@@ -27,6 +27,7 @@ from configobj.validate import Validator, VdtTypeError
 from io import StringIO
 from versionInfo import version_year, version_major
 from ..utils import makeAddonWindowTitle, isOpened, getHelpObj
+from ..utils.secure import inSecureMode
 from ..utils.NVDAStrings import NVDAString
 from ..utils import contextHelpEx
 
@@ -97,7 +98,7 @@ class UserConfigurationsManager(object):
 
 	def save(self):
 		# We never want to save config if runing securely
-		if globalVars.appArgs.secure:
+		if inSecureMode():
 			return
 		val = Validator()
 		try:
@@ -203,7 +204,7 @@ class UserConfigurationsManager(object):
 
 
 if NVDAVersion < [2021, 1]:
-	def restart(disableAddons=False, debugLogging=False, configPath=None):
+	def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
 		"""Restarts NVDA by starting a new copy."""
 		if globalVars.appArgs.launcher:
 			import wx
@@ -213,7 +214,7 @@ if NVDAVersion < [2021, 1]:
 		import subprocess
 		import winUser
 		import shellapi
-		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access")
+		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
 		if configPath is not None:
 			paramsToRemove += ("--config-path",)
 		for paramToRemove in paramsToRemove:
@@ -229,6 +230,8 @@ if NVDAVersion < [2021, 1]:
 			options.append('--debug-logging')
 		if configPath:
 			options.append('--config-path=%s' % configPath)
+		if secureMode:
+			options.append('--secure')
 		shellapi.ShellExecute(
 			hwnd=None,
 			operation=None,
@@ -244,7 +247,7 @@ else:
 	import languageHandler
 	from core import triggerNVDAExit, NewNVDAInstance
 
-	def restart(disableAddons=False, debugLogging=False, configPath=None):
+	def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
 		"""Restarts NVDA by starting a new copy."""
 		if globalVars.appArgs.launcher:
 			globalVars.exitCode = 3
@@ -252,7 +255,7 @@ else:
 				log.error("NVDA already in process of exiting, this indicates a logic error.")
 			return
 		import subprocess
-		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access")
+		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
 		if configPath is not None:
 			paramsToRemove += ("--config-path",)
 		if NVDAVersion >= [2022, 1]:
@@ -270,6 +273,8 @@ else:
 			options.append('--debug-logging')
 		if configPath:
 			options.append('--config-path=%s' % configPath)
+		if secureMode:
+			options.append('--secure')
 		if not triggerNVDAExit(NewNVDAInstance(
 			sys.executable,
 			subprocess.list2cmdline(options + sys.argv[1:]),

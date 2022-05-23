@@ -15,6 +15,7 @@ import tones
 import ui
 import api
 from ..utils.informationDialog import InformationDialog
+from ..utils.NVDAStrings import NVDAString
 from ..settings import toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption
 
 addonHandler.initTranslation()
@@ -86,9 +87,13 @@ class SpeechRecorderManager(object):
 		self._lastSpeechHistoryReportIndex = len(self._speechHistory) - 1
 
 	def reportSpeechHistory(self, position, toClip=False):
+		index = self._lastSpeechHistoryReportIndex
+		if index is None:
+			return
 		oldOnMonitoring = self._onMonitoring
 		self._onMonitoring = False
-		index = self._lastSpeechHistoryReportIndex
+
+
 		if position == "previous" and index > 0:
 			index -= 1
 		elif position == "next" and index < len(self._speechHistory) - 1:
@@ -98,7 +103,9 @@ class SpeechRecorderManager(object):
 		self._lastSpeechHistoryReportIndex = index
 		text = self._speechHistory[index]
 		ui.message(text)
-		api.copyToClip(text)
+		if  not api.copyToClip(text):
+			# Translators: Presented when unable to copy to the clipboard because of an error.
+			ui.message(NVDAString("Unable to copy"))
 		self._onMonitoring = oldOnMonitoring
 
 	def displaySpeechHistory(self):
@@ -113,7 +120,6 @@ class SpeechRecorderManager(object):
 		if not toggleSpeechRecordInAscendingOrderOption(False):
 			text.reverse()
 		text = "\r\n".join(text)
-
 		# Translators: title of informations dialog.
 		dialogTitle = _("Speech history")
 		if toggleSpeechRecordInAscendingOrderOption(False):

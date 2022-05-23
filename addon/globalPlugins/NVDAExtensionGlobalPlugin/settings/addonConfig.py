@@ -8,6 +8,7 @@ import addonHandler
 from configobj import ConfigObj
 from configobj.validate import Validator, ValidateError
 from io import StringIO
+import config
 
 addonHandler.initTranslation()
 
@@ -53,7 +54,10 @@ FCT_Tools = "Tools"
 FCT_DateAndTime = "DateAndTime"
 FCT_TextAnalysis = "TextAnalysis"
 FCT_TemporaryAudioDevice = "TemporaryAudioDevice"
-
+FCT_ManageUserConfigurations = "manageUserConfigurations"
+FCT_ExploreNVDA = "ExploreNVDA"
+FCT_VariousOutSecureMode = "VariousOutSecureMode"
+FCT_Various = "Various"
 # option ids
 ID_ReportNextWordOnDeletion = "ReportNextWordOnDeletion"
 ID_NoDescriptionReportInRibbon = "NoDescriptionReportInRibbon"
@@ -64,7 +68,8 @@ ID_SayPunctuationsOnWordCaretMovement = "SayPunctuationsOnWordCaretMovement"
 ID_OnlyNVDAKeyInRemanence = "OnlyNVDAKeyInRemanence"
 ID_RemanenceAtNVDAStart = "RemanenceAtNVDAStart"
 ID_RemanenceForGmail = "RemanenceForGmail"
-ID_ExploreNVDA = "ExploreNVDA"
+ID_MaxClipboardReportedCharacters = "MaximumClipboardReportedCharacters"
+
 # constants for InstallFeatureOption section  items
 C_DoNotInstall = 0
 C_Install = 1
@@ -109,6 +114,7 @@ ID_ByPassNoDescription = "ByPassNoDescription"
 ID_EnableNumpadNavigationModeToggle = "EnableNumpadNavigationModeToggle"
 ID_ActivateNumpadNavigationModeAtStart = "ActivateNumpadNavigationModeAtStart"
 ID_ActivateNumpadStandardUseWithNumLock = "ActivateNumpadStandardUseWithNumLock"
+ID_ReportNumlockStateAtStart = "ReportNumlockStateAtStart"
 
 PSOE_NoVersion = 0
 PSOE_SnapshotVersions = 1
@@ -723,6 +729,8 @@ class AddonConfiguration27(BaseAddonConfiguration):
 			shutdown=_ShutdownComputerConfSpec)
 	), list_values=False, encoding="UTF-8")
 
+_reportNumlockStateAtStartDefault = True if config.conf['keyboard']['keyboardLayout']=="desktop" else False
+
 
 class AddonConfiguration28(BaseAddonConfiguration):
 	_version = "2.8"
@@ -849,6 +857,10 @@ class AddonConfiguration28(BaseAddonConfiguration):
 	{activateNumpadStandardUseWithNumLock}  = boolean(default=False)
 	{confirmAudioDeviceChange}  = boolean(default=True)
 	{confirmAudioDeviceChangeTimeOut} = integer(default=10)
+	{reportNumlockStateAtStart} = boolean(default={reportNumlockStateAtStartDefault})
+	{maxClipboardReportedCharacters} = integer(default=1024)
+
+
 	""".format(
 		section=SCT_AdvancedOptions,
 		playSoundOnErrors=ID_PlaySoundOnErrors,
@@ -880,7 +892,10 @@ class AddonConfiguration28(BaseAddonConfiguration):
 		activateNumpadNavigationModeAtStart=ID_ActivateNumpadNavigationModeAtStart,
 		activateNumpadStandardUseWithNumLock=ID_ActivateNumpadStandardUseWithNumLock,
 		confirmAudioDeviceChange=ID_ConfirmAudioDeviceChange,
-		confirmAudioDeviceChangeTimeOut=ID_ConfirmAudioDeviceChangeTimeOut
+		confirmAudioDeviceChangeTimeOut=ID_ConfirmAudioDeviceChangeTimeOut,
+		reportNumlockStateAtStart =ID_ReportNumlockStateAtStart,
+		reportNumlockStateAtStartDefault=_reportNumlockStateAtStartDefault,
+		maxClipboardReportedCharacters=ID_MaxClipboardReportedCharacters,
 	)
 
 	_ShutdownComputerConfSpec = """[{section}]

@@ -11,7 +11,11 @@
 import addonHandler
 import api
 import textInfos
-import controlTypes
+try:
+	from controlTypes.role import Role
+	ROLE_MATH = Role.MATH
+except ImportError:
+	from controlTypes import ROLE_MATH
 import ui
 import winUser
 import browseMode
@@ -51,7 +55,7 @@ def getMath():
 	mathMl = mathPres.getMathMlFromTextInfo(api.getReviewPosition())
 	if not mathMl:
 		obj = api.getNavigatorObject()
-		if obj.role == controlTypes.ROLE_MATH:
+		if obj.role == ROLE_MATH:
 			try:
 				mathMl = obj.mathMl
 			except (NotImplementedError, LookupError):
@@ -89,18 +93,6 @@ def getTextToAdd():
 	return text
 
 
-def clipboardHasContent():
-	with winUser.openClipboard(gui.mainFrame.Handle):
-		clipFormat = winUser.windll.user32.EnumClipboardFormats(0)
-	if clipFormat:
-		return True
-	return False
-
-
-def requiredFormatInClip():
-	return True
-
-
 def confirmAdd():
 	text = getTextToAdd()
 	if not text:
@@ -122,6 +114,8 @@ def confirmAdd():
 
 def performAdd():
 	text = getTextToAdd()
+	if text is None or len(text) == 0:
+		return
 	if api.copyToClip(text):
 		# Translators: message presented when the text has been added to the clipboard.
 		ui.message(_("Added"))

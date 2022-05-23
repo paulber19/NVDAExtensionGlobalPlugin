@@ -5,10 +5,12 @@
 # See the file COPYING for more details.
 
 import os
+import globalVars
 import tempfile
 import typing
 import wx
 from logHandler import log
+from .secure import inSecureMode
 try:
 	from documentationUtils import getDocFilePath
 except ImportError:
@@ -88,6 +90,9 @@ def bindHelpEvent(helpObj, window: wx.Window):
 
 
 def _onEvtHelp(helpObj, evt: wx.HelpEvent):
+	if inSecureMode():
+		# Disable context help in secure screens to avoid opening a browser with system-wide privileges.
+		return
 	# Don't call evt.skip. Events bubble upwards through parent controls.
 	# Context help for more specific controls should override the less specific parent controls.
 	showHelp(helpObj)

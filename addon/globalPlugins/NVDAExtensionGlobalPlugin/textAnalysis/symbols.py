@@ -14,6 +14,9 @@ from io import StringIO
 # sections
 SCT_SymbolToSymetric = "SymbolToSymetric"
 SCT_Punctuations = "Punctuations"
+# symbols for numbers
+NUM_DecimalSymbol = "decimalSymbol"
+NUM_DigitGroupingSymbol = "digitGroupingSymbol"
 # items of Punctuations section
 SMBL_All = "All"
 SMBL_NeedSpaceBefore = "NeedSpaceBefore"
@@ -22,6 +25,8 @@ SMBL_NoSpaceBefore = "NoSpaceBefore"
 SMBL_NoSpaceAfter = "NoSpaceAfter"
 
 _configSpec = """
+{decimalSymbol}= string(default=".")
+{digitGroupingSymbol}= string(default=",")
 [{symbolToSymetric}]
 [{punctuations}]
 	{all}= string(default="")
@@ -30,6 +35,8 @@ _configSpec = """
 	{noSpaceBefore}= string(default="")
 	{noSpaceAfter}= string(default="")
 """.format(
+	decimalSymbol=NUM_DecimalSymbol,
+	digitGroupingSymbol=NUM_DigitGroupingSymbol,
 	symbolToSymetric=SCT_SymbolToSymetric,
 	punctuations=SCT_Punctuations,
 	all=SMBL_All,
@@ -93,7 +100,15 @@ def getSymbolToSymetricDic():
 	log.error("textAnalysis configuration cannot be loaded")
 	return None
 
+def getDecimalSymbol():
+	if _conf is None:
+		return ""
+	return _conf.get(NUM_DecimalSymbol,"")
 
+def getDigitGroupingSymbol():
+	if _conf is None:
+		return ""
+	return _conf.get(NUM_DigitGroupingSymbol,"")
 def getTextAnalysisConfig():
 	path = getTextAnalysisIniFilePath()
 	conf = ConfigObj(

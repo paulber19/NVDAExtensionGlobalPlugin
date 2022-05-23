@@ -41,7 +41,10 @@ Cette extension ajoute aux commandes globales de NVDA:
    - déplacement à la colonne/ligne suivante ou précédente avec lecture des cellules la composant,
    - déplacement à la première /dernière cellule de la ligne/colonne,
    - annonce  des cellules de la colonne/ligne courante.
- - [Annonce de la  fonction associée aux commandes clavier d'édition #hdr7],
+ - [Annonce de la  fonction associée aux commandes clavier d'édition #hdr7] avec :
+  - ajout dans le presse-papier du texte sélectionné,
+  - vidage du presse-papier,
+  - amélioration du script de base de NVDA "NVDA+c" qui annonce  le texte dans le presse-papier,
  - [Annonce du dossier présélectionné dans les boites de dialogue du style "Ouvrir, Enregistrer", "Enregistrer sous" #hdr8],
  - [Ouverture du journal précédent ou courant  de NVDA et copie du chemin de ceux-ci dans le presse-papier #hdr9],
  - [réécoute ou affichage des dernières annonces vocales #hdr10],
@@ -438,11 +441,11 @@ Un simple appui du geste de commande déclenche le script de base de NVDA qui an
 Un double appui annonce le nom du profil de configuration et son état.
 
 +++ Annonce du numéro de version de l'application sous le curseur +++
-La description de ce script est: "Annoncer le nom et le numéro de version de l'application sous le curseur".
+La description de ce script est : "Annoncer le nom et le numéro de version de l'application sous le curseur. Deux appuis: copier ces informations dans le presse-papier".
 
 Par défaut, le geste de commande "MAIN_KEY_REPORT_NAME_VERSION " lui est affecté.
 
-Le geste de commande déclenche l'annonce du nom et du numéro de version de l'application placée sous le curseur.
+Le geste de commande déclenche au premier appui, l'annonce du nom et du numéro de version de l'application placée sous le curseur et au second appui, la copie de ces informations dans le presse-papier.
 
 
 +++ Affichage des informations sur l'application sous le curseur +++[hdr4-2]
@@ -587,18 +590,24 @@ Par défaut, cette option n'est pas cochée. Le fonctionnement de base de NVDA e
 ++ Annonce de la fonction associée aux commandes d'édition du style "copier", "Coller" ++[hdr7]
 Cette fonctionnalité est installée par défaut.
 
-Les fonctions déclenchées par les raccourcis "contrôle + v", "contrpôle + c", "contrôle + x", "contrôle + z" n'étant pas vocalisées par NVDA, cette extension s'en charge.
+Les fonctions déclenchées par les raccourcis "contrôle + v", "contrôle + c", "contrôle + x", "contrôle + z" n'étant pas vocalisées par NVDA, cette extension s'en charge.
 
 Aucun contrôle sur le résultat de la fonction n'est fait.
-Mais pour les raccourcis "contrôle + c", "contrôle + x", l'absence de sélection de texte est signalée dans les arborescences et les listes.
+Mais :
+- pour les raccourcis "contrôle + c", "contrôle + x", l'absence de sélection de texte est signalée dans les arborescences et les listes.
+- pour le raccourci "control+c", le  message "copié" n'est prononcé que si le contenu du presse-papier a changé.
+- pour le raccourci "control+v", l'état vide du presse-papier est signalé.
 
-Si l'extension fakeClipboardAnnouncement est installée (qui réalise la même fonction), il faut la désinstaller. 
-+++ Ajoute du texte sélectionné dans le presse-papier +++[hdr7-1]
-Cette fonctionnalité ajoute le script qui permet d'ajouter le texte sélectionné dans le presse-papier.
 
-Ce script  est installé sans geste de commande, mais il est possible de lui en attribuer un à l'aide du dialogue "Gestes de Commandes" de NVDA. Sa description est "Ajouter, dans le presse-papier, le texte sélectionné" et est placé dans la catégorie "ADDON_SUMMARY".
+Il est fortement conseillé de ne pas installer des extensions qui fournissent le même genre de fonctionnalités.
 
-Tous les paramètres utilisés pour le script sont  situés dans le groupe "Presse-papier" de la catégorie "Clavier"  du dialogue de l'extension qui présente les paramètres du Profil courant.
+Si cette fonctionnalité est installée, les scripts ci-après  sont installés.
++++ Ajout du texte sélectionné dans le presse-papier +++[hdr7-1]
+Ce script  permet d'ajouter le texte sélectionné dans le presse-papier.
+
+Il  est installé sans geste de commande, mais il est possible de lui en attribuer un à l'aide du dialogue "Gestes de Commandes" de NVDA. Sa description est "Ajouter, dans le presse-papier, le texte sélectionné" et est placé dans la catégorie "ADDON_SUMMARY".
+
+Tous les paramètres utilisés pour le script sont  situés dans le groupe "Presse-papier" de la catégorie "Clavier"  du dialogue de l'extension qui présente les paramètres du Profil de configuration courant.
 
 Ce script se lance à l'aide de la commande de l'interpréteur "KEY_ADDING_TO_CLIP".
 
@@ -609,6 +618,26 @@ Il est possible de placer un texte de séparation entre les blocs de texte ajout
 Une demande  de confirmation sera  afficher avant de procéder à l'ajout si la case à cocher "Demander confirmation avant l'ajout dans le presse-papier" est cochée. 
 
 Note: ce script est extrait de l'extension "ClipContentsDesigner" (Auteurs  Noelia, Abdel)  qui fournit  aussi d'autres fonctionnalités intéressantes concernant le presse-papier. Il a été mis dans cette extension sur demande d'utilisateur qui voulaient en même temps l'annonce des     fonctions "copier" et "coller".
+
++++ Annonce du texte  dans le presse-papier de Windows +++[hdr7-2]
+Ce script remplace le script de base de NVDA ("NVDA+c") pour le compléter en  indiquant à l'utilisateur qui a exécuté la commande que :
+- le presse-papier est vide,
+- dans le cas où il n'y a pas de texte dans le presse-papier, le presse-papier peut ne pas être vide.
+
+
+le nombre de caractères lus n'est plus limité à 1024.
+
+Ce nombre maximum dpeut être  configuré à l'aide du choix "Nombre maximum de caractères à lire" du groupe "Presse-papier" de la catégorie "Compléments à NVDA".
+
+
++++ Vidage du presse-papier +++[hdr7-3]
+Ce script  est installé sans geste de commande, mais il est possible de lui en attribuer un à l'aide du dialogue "Gestes de Commandes" de NVDA.
+
+Sa description est "Vider le presse-papier" et est placé dans la catégorie "État du système".
+
+Sa fonction est d'effacer complétement le contenu du presse-papier de Windows. Attention, cela ne concerne pas l'historique du presse-papier de Windows.
+
+Il se lance à l'aide de la commande interpréteur "KEY_CLEAR_CLIP".
 
 ++ Annonce du dossier sélectionné dans les boites de dialogue du style "Ouvrir", "Enregistrer", "Enregistrer sous" ++[hdr8]
 Cette fonctionnalité est installée par défaut sans geste de commande.
@@ -1745,12 +1774,13 @@ Les changements de mise en forme concernent :
 Ils peuvent être inclus ou exclus individuellement de la recherche en les cochant ou décochant dans la liste "Types" du même groupe.
 
 +++ Analyse à la demande +++[hdr31-3]
-L'extension installe des scripts pour analyser sur demande le texte se trouvant à la position du curseur. Aucun geste de commande ne leurs sont affecté, mais il est possible de le faire en utilisant le dialogue "Gestes de commande" de NVDA.
+L'extension installe des scripts pour analyser sur demande le texte se trouvant à la position du curseur.
 
 Ces scripts sont:
-- "Analyser le mot sous le curseur" : commande de l'interpréteur "KEY_WORD_TEXT_ANALYZER",
-- "Analyser la ligne sous le curseur" : commande interpréteur "KEY_LINE_TEXT_ANALYZER",
-- "Analyser la phrase sous le curseur" : commande interpréteur "KEY_SENTENCE_TEXT_ANALYZER".
+- "Analyser le mot sous le curseur" : "MAIN_KEY_WORD_TEXT_ANALYZER", commande de l'interpréteur "KEY_WORD_TEXT_ANALYZER",
+- "Analyser la ligne sous le curseur" : "MAIN_KEY_LINE_TEXT_ANALYZER", commande interpréteur "KEY_LINE_TEXT_ANALYZER",
+- "Analyser la phrase sous le curseur" : "MAIN_KEY_SENTENCE_TEXT_ANALYZER", commande interpréteur "KEY_SENTENCE_TEXT_ANALYZER".
+- "Analyser le paragraphe sous le curseur" : "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", commande interpréteur "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
 ++ Annonce de la position du curseur dans les zones d'édition ++[hdr32]
@@ -1923,6 +1953,8 @@ Quand la liste est focalisée, les commandes suivantes sont permises :
 - maximiser ou minimiser le volume principal : "contrôle + majuscule + début ou fin".
 
 
+Cette liste est automatiquement rafraichie lorsque le curseur lui est donné.
+
 Les modifications de basculement de canaux ou les changements de niveaux de volume sont appliquées immédiatement après chaque commande.
 
 Par défaut, le niveau de volume des applications ne peut pas être plus grand que le niveau du volume principal. Mais l'option "Augmenter le volume principal si nécessaire" permet de désactiver cette limitation. Cette option se trouve dans le groupe "Modification du volume" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension.
@@ -1932,7 +1964,8 @@ Une protection est prévue pour éviter de mettre, simultanément, à zéro le n
 Lorsqu'une application est sélectionnée, l'état de balance des canaux est annoncé ainsi que l'état de coupure du son.
 
 
-Au redémarrage de NVDA, NVDA est de nouveau entendu sur les deux canaux audio, tandis que les applications restent dans leur état (mémorisé par Windows). Utiliser la commande pour remettre l'écoute sur les deux canaux pour l'application sous le curseur ou pour toutes les applications lancées.
+Au redémarrage de NVDA ou si l'extension est désactivée ou désinstallée, NVDA est de nouveau entendu sur les deux canaux audio, tandis que les applications restent dans leur état (mémorisé par Windows).
+
 
 
 Attention : pour un bon fonctionnement, il faut que NVDA et les applications audio utilisent le même périphérique de sortie audio, comme par exemple le mappeur de sons. D'ailleurs la fonctionnalité n'a d'intérêt que dans ce cas.
@@ -2076,6 +2109,31 @@ Pour activer ou désactiver l'utilisation du pavé numérique en fonctionnement 
 
 L'option "Activer l'utilisation standard du pavé numérique au démarrage de NVDA " (groupe "Pavé numérique, catégorie "Clavier"), permet, si elle est cochée, d'utiliser le pavé numérique de manière standard dès le démarrage de NVDA, mais il faut aussi que l'option qui autorise l'utilisation standard du pavé numérique soit cochée.
 
+++ Gestion du verrouillage numérique ++[hdr305]
+Cette fonctionnalité est reprise en partie   de  l'extension "sharedComputer"  (auteurs "Robert Hänggi <aarjay.robert@gmail.com>, Noelia Ruiz Martínez <nrm1977@gmail.com>" qui semble ne pas avoir été mise à jour depuis 2018.
+
+Elle consiste en :
++++ Signalement  de l'activation du verrouillage lors du démarrage de NVDA +++
+Par défaut et en disposition de clavier "Ordinateur de bureau", l'extension signale que le verrouillage numérique est activé lors du démarrage de NVDA.
+
+Mais ceci peut être désactivé, comme c'est le cas par défaut pour la disposition de clavier "ordinateur portable",  à l'aide de l'option "Signaler l'état activé au démarrage de NVDA" du groupe "Verrouillage numérique" de la catécorie "Clavier" des paramètres de l'extension.
+
+
++++ Activation/désactivation automatique lors de l'activation d'un profil de configuration +++
+À chaque activation d'un profile de configuration, il est possible d'activer ou de désactiver automatiquement le verrouillage numérique.
+
+Le choix se fait dans les paramètres du profil de configuration, dans la catégorie "Clavier" du groupe "Verrouillage numérique" et avec la liste de choix "Lors de l'activation du profil: ".
+
+Cette liste propose les choix suivants:
+- "Ne rien faire" : l'état du verrouillage n'est pas modifié.
+- "Désactiver" : le verrouillage est désactivé.
+- "Activer" : le verrouillage est activé. 
+
+
+Par défaut, le choix est :
+- "Désactiver"  pour une disposition de clavier "Ordinateur de bureau".
+- "Ne rien faire" pour une disposition de clavier "ordinateur portable".
+
 
 + Autres améliorations +
 
@@ -2157,8 +2215,10 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 
 + Résumé des commandes apportées par cette extension +
 ++ Gestes de commande installés systématiquement ++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | KEY_SHELL | KEY_SHELL | Aucun | Lancer l'interpréteur de commandes de l'extension |
+| MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR | MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR | aucune | faire un simple clic gauche à la position de l'objet navigateur. Le deuxième appui fait un double clic |
+| MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR | MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR | aucune | faire un simple clic droit à la position de l'objet navigateur. Le deuxième appui fait un double clic |
 
 ++ Commandes de l'interpréteur ++
 
@@ -2178,12 +2238,13 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 | KEY_COMPLEX_SYMBOL | Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique |
 | KEY_LAST_USED_COMPLEX_SYMBOL | Afficher la liste des derniers symboles complexes composés |
 | KEY_TOGGLE_NUMPAD_NAVIGATION | Activer ou désactiver l'utilisation standard du pavé numérique |
-| KEY_SOUND_SPLIT_MANAGER | Afficher le gestionnaire  audio de NVDA et des applications actives |
-| KEY_POSITION_REPORT | Activer/ désactiver l'annonce de la position courante du curseur dans une zone d'édition |
 | KEY_TEXT_ANALYZER | Activer ou désactiver l'analyseur de texte |
 | KEY_WORD_TEXT_ANALYZER | Analyser le mot sous le curseur système |
 | KEY_LINE_TEXT_ANALYZER | Analyser la ligne sous le curseur système |
 | KEY_SENTENCE_TEXT_ANALYZER | Analyser la phrase sous le curseur système |
+| KEY_PARAGRAPH_TEXT_ANALYZER | Analyser le paragraphe sous le curseur système |
+| KEY_POSITION_REPORT | Activer/ désactiver l'annonce de la position courante du curseur dans une zone d'édition |
+| KEY_SOUND_SPLIT_MANAGER | Afficher le gestionnaire  audio de NVDA et des applications actives |
 | KEY_DISPLAY_SPEECH_HISTORY | Afficher les enregistrements de l'historique vocal |
 | KEY_WINDOWS_LIST | Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 | KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
@@ -2204,6 +2265,7 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 | KEY_USER_INPUT_GESTURE | Afficher le dialogue pour gérer les gestes de commande configurés par l'utilisateur |
 | KEY_MANAGE_VOICE_PROFIL | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
 | KEY_ADDING_TO_CLIP | Ajouter, dans le presse-papier,  le texte sélectionné |
+| KEY_CLEAR_CLIP | Vider le presse-papier |
 | KEY_REPORT_SPEECH_SETTINGS | Annoncer les paramètres vocaux acctuels |
 | KEY_DISPLAY_SPEECH_SETTINGS | Afficher les paramètres vocaux acctuels |
 | KEY_APP_VOLUME_UP | Augmenter le volume de l'application sous le curseur |
@@ -2230,21 +2292,21 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 | KEY_SPLIT_RIGHT_ALL | Entendre NVDA à droite et toutes les applications à gauche |
 | KEY_SPLIT_CENTER_FOCUS | Entendre NVDA et l'application sous le curseur au centre |
 | KEY_SPLIT_CENTER_ALL | Entendre NVDA et toutes les applications au centre |
-| KEY_CENTER_FOCUSED_App | Entendre l'application sous le curseur au centre |
+| KEY_CENTER_FOCUSED_APP | Entendre l'application sous le curseur au centre |
 
 ++ Gestes de commande installés par les fonctionnalités ++
 +++ Affichage de la liste des icones de la zone de notification et des fenêtres des applications lancées +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Liste des icônes et fenêtres actives | MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 
 +++ Aide à la composition de symboles complexes +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Aide à la composition de Symboles complexes | MAIN_KEY_COMPLEX_SYMBOL | MAIN_KEY_COMPLEX_SYMBOL | Aucune | Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_COMPLEX_SYMBOL | MAIN_KEY_COMPLEX_SYMBOL | Aucune | Composer un symbole complexe comme par exemple une voyelle accentuée, un symbole mathématique |
 
 +++ Informations sur l'application sous le curseur +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Annoncer le nom et le numéro de version de l'application sous le curseur | MAIN_KEY_REPORT_NAME_VERSION | MAIN_KEY_REPORT_NAME_VERSION | Aucune | Annoncer le nom et la version de l'application sous le curseur |
-| Annoncer le Profil de configuration | MAIN_KEY_CONFIGURATION_PROFILE | MAIN_KEY_CONFIGURATION_PROFILE | Aucune | Annoncer le nom de fichier de l'application en cours ainsi que le nom du module python chargé. Deux appuis: annoncer le nom et l'état du profil de configuration |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_REPORT_NAME_VERSION | MAIN_KEY_REPORT_NAME_VERSION | Aucune | Annoncer le nom et le numéro de version de l'application sous le curseur. Deux appuis: copier ces informations dans le presse-papier|
+| MAIN_KEY_CONFIGURATION_PROFILE | MAIN_KEY_CONFIGURATION_PROFILE | Aucune | Annoncer le nom de fichier de l'application en cours ainsi que le nom du module python chargé. Deux appuis: annoncer le nom et l'état du profil de configuration | 
 
 +++ Extension des fonctionnalités du tampon virtuel +++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
@@ -2262,41 +2324,46 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 | KEY1_DOCUMENT_ADDRESS | KEY2_DOCUMENT_ADDRESS | aucun | Annoncer l'adresse (URL) du document. Deux appuis: l'enregistrer dans le presse-papier | 
 
 +++ Annonce du dossier présélectionner des boites de dialogue du style Ouvrir, enregistrer, enregistrer sous +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Annoncer le Dossier présélectionné | MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Aucune | Annoncer le nom du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer. Deux appuis: annoncer son chemin complet |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_SAY_CURRENT_FOLDER | MAIN_KEY_SAY_CURRENT_FOLDER | Aucune | Annoncer le nom du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer. Deux appuis: annoncer son chemin complet |
 
 +++ Journaux de NVDA +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Ouvrir le Journal | MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | Aucune | Ouvrir le journal courant de NVDA. Deux appuis: ouvrir son ancien journal. Trois appuis: copier le chemin du journal courant dans le presse-papier |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_LOG_VIEW | MAIN_KEY_LOG_VIEW | Aucune | Ouvrir le journal courant de NVDA. Deux appuis: ouvrir son ancien journal. Trois appuis: copier le chemin du journal courant dans le presse-papier |
 
 +++ Historique des annonces vocales +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Annoncer l'enregistrement précédent | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent enregistrement de l'historique vocal et le copier dans le presse-papier |
-| Annoncer l'enregistrement suivant | MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l' enregistrement suivant de l'historique des annonces vocales et le copier dans le presse-papier |
-| Annoncer l'enregistrement courant | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique des annonces vocales et le copier dans le presse-papier. Deux appui: afficher tout l'historique |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent enregistrement de l'historique vocal et le copier dans le presse-papier |
+| MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l' enregistrement suivant de l'historique des annonces vocales et le copier dans le presse-papier |
+| MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique des annonces vocales et le copier dans le presse-papier. Deux appui: afficher tout l'historique |
 
 +++ Minuterie +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Minuterie | MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Aucune | Afficher le dialogue permettant, sila minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_MINUTE_TIMER | MAIN_KEY_MINUTE_TIMER | Aucune | Afficher le dialogue permettant, sila minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
 
 +++ Redémarrage de NVDA +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Redémarrage de NVDA | MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | Aucune | Redémarrer NVDA. Deux appuis: redémarrer en niveau de journalisation débogage |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_RESTART_NVDA | MAIN_KEY_RESTART_NVDA | Aucune | Redémarrer NVDA. Deux appuis: redémarrer en niveau de journalisation débogage |
 
 +++ Affichage des éléments visibles composant l'objet en avant plan +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Affichage des objets | MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Aucune | Annoncer tous les contrôles dans la fenêtre active. Deux appuis: afficher les éléments visibles composant l'objet en avant plan |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_OBJECTS_LIST | MAIN_KEY_OBJECTS_LIST | Aucune | Annoncer tous les contrôles dans la fenêtre active. Deux appuis: afficher les éléments visibles composant l'objet en avant plan |
 
 +++ Commutation de profil vocal +++
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Choix du sélecteur | MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur x comme sélecteur courant et définir , si possible, son profil vocal associé comme profil vocal courant(x égal chiffre 1 à 8) |
-| Profil vocal suivant | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Aucune | Aller au premier sélecteur suivant associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
-| Profil vocal précédent | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Aucune | Aller au premier sélecteur précédent associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
-| Association du profil vocal | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
-| Activation/désactivation du mode commutation de profil vocal | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | aucune | Activer ou désactiver le Mode commutation de profil vocal |
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur x comme sélecteur courant et définir , si possible, son profil vocal associé comme profil vocal courant(x égal chiffre 1 à 8) |
+| MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Aucune | Aller au premier sélecteur suivant associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
+| MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Aucune | Aller au premier sélecteur précédent associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
+| MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Afficher le dialogue pour gérer les sélecteurs de profil vocal |
+| MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING | aucune | Activer ou désactiver le Mode commutation de profil vocal |
 
 +++ Date et heure- compléments +++
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| KEY_DATE_TIME | KEY_DATE_TIME | aucune | Annoncer l'heure. Deux appuis: annoncer la date. Trois appuis: copier la date et l'heure dans le presse-papier |
 
-| Nom | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| Date et heure | KEY_DATE_TIME | KEY_DATE_TIME | aucune | Annoncer l'heure. Deux appuis: annoncer la date. Trois appuis: copier la date et l'heure dans le presse-papier |
-
++++ Analyze de texte +++
+| Ordinateur de bureau | Ordinateur portable | Tactile | Description |
+| MAIN_KEY_WORD_TEXT_ANALYZER | MAIN_KEY_WORD_TEXT_ANALYZER | aucune | Analyser le mot sous le curseur |
+| MAIN_KEY_LINE_TEXT_ANALYZER | MAIN_KEY_LINE_TEXT_ANALYZER | aucune | Analyser la ligne sous le curseur |
+| MAIN_KEY_SENTENCE_TEXT_ANALYZER | MAIN_KEY_SENTENCE_TEXT_ANALYZER | aucune | Analyser la phrase sous le curseur |
+| MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | aucune | Analyser le paragraphe sous le curseur |

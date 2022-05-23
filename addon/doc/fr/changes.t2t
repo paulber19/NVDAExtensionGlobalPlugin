@@ -20,8 +20,35 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
 
 
++ v11.2 (23/05/2022) +
+Améliorations et nouvelles fonctionnalités :
+- concernant le presse-papier:
+ - script pour vider le presse-papier.
+ - reprise du script de base de NVDA annonçant  le texte dans le presse-papier ("NVDA+c") pour
+  - indiquer si le presse-papier est vide,
+  - indiquer que le presse-papier n'est pas vide quand il n'y a pas de texte dans le presse-papier.
+  - augmenter le nombre  de caractères lus (configurable).
+- dans le dialogue "Gestionnaier audio de NVDA et des applications actives", la liste des applications est maintenant automatiquement rafraichie à chaque fois qu'elle reçoit le curseur.
+- remise du son de NVDA au centre si l'extension est désactivée ou désinstallée.
+- reprise du fonctionnement de l'extension en mode sécurisé.
+- gestion du verrouillage numérique:
+ - signalement de l'activation du verrouillage au démarrage de NVDA.
+ - activation ou désactivation configurable du verrouillage numérique lors de l'activation d'un profil de configuration.
 
 
+Corrections de bogues :
+- l'annalyseur de texte ne signalait pas les changements de police de texte en masqué ou non masqué.
+- prise en compte de la modification  faite dans le cadre de la pr #11767 (https://github.com/nvaccess/nvda/pull/11767).
+- correction du fichier "keyboard.ini" pour  la langue française.
+
+
+Changements:
+- le message "copié" n'est annoncé que si le presse-papier  change après la commande "control+c".
+- l'état vide du presse-papier est annoncé lors de l'utilisation de la commande pour coller le contenu du presse-papier.
+- À cause d'un conflit avec le geste de commande "nvda+control+f8":
+ - les gestes de commandes installés pour l'analyseur de texte  utilise la touche "f6" au lieu de la touche "f8",
+ - les commandes de l'interpréteur concernant l'analyseur de texte utilise maintenant la touche "f6" au lieu de la touche "f8",
+ - la commande  de l'interpréteur pour Afficher le gestionnaire audio de NVDA et des applications actives est maintenant "f8" au lieu de "f6".
 
 
 + v11.1 (05/02/2022) +

@@ -6,7 +6,7 @@
 import addonHandler
 import globalCommands
 import inputCore
-
+from ..utils.NVDAStrings import NVDAString
 addonHandler.initTranslation()
 
 # Translators: The name of a category of NVDA commands.
@@ -74,7 +74,7 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for report current application name and version command.
 	"reportAppProductNameAndVersion": (
-		_("Report the application 's name and version"), globalCommands.SCRCAT_TOOLS, None),
+		_("Report the application 's name and version. Twice: copy these informations to clipboard"), globalCommands.SCRCAT_TOOLS, None),
 	# Translators: Input help mode message
 	# for report current program name and app module name or current configuration profile name command.
 	"reportAppModuleInfoEx": (
@@ -321,8 +321,14 @@ scriptsToDocInformations = {
 	"toggleReportCurrentCaretPosition": (
 		_("Toggle reporting of current caret position in edit box"), None, "hdr32"),
 	# Translators: Input help mode message
+	# for reportClipboardTextEx script commands.
+	"reportClipboardTextEx": (NVDAString("Reports the text on the Windows clipboard"), globalCommands.SCRCAT_SYSTEM, "hdr7-2"),
+	# Translators: Input help mode message
 	# for addToClip script commands.
 	"addToClip": (_("Add, to  clipboard,  the selected text "), None, "hdr7-1"),
+	# Translators: Input help mode message
+	# for clearClipboard script commands.
+	"emptyClipboard": (_("Empty the clipboard"), globalCommands.SCRCAT_SYSTEM, "hdr7-3"),
 	# Translators: Input help mode message
 	# for temporary audio device manager script commands.
 	"temporaryAudioOutputDeviceManager": (

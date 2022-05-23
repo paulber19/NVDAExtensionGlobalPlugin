@@ -32,6 +32,12 @@ ID_ReportCurrentCaretPosition = "ReportCurrentCaretPosition"
 ID_AddToClipSeparator = "AddToClipSeparator"
 ID_AddTextBefore = "AddTextBefore"
 ID_ConfirmToAddToClip = "ConfirmToAddToClip"
+ID_ActivateNumlock = "ActivateNumlOck"
+
+# activateNumlock values
+ANL_NoChange = 0
+ANL_Off = 1
+ANL_On = 2
 
 # text analyzer section
 SCT_TextAnalyzer = "textAnalyzer"
@@ -133,13 +139,17 @@ _textAnalyzerConfspec = {
 	SCT_Formatting: _formattingConfspec,
 	SCT_Alert: _alertConfspec,
 }
+numLockByLayoutDefault=ANL_Off if config.conf['keyboard']['keyboardLayout']=="desktop" else ANL_NoChange
+
 _optionsConfspec = {
 	ID_SymbolLevelOnWordCaretMovement: """string(default="None")""",
 	ID_ReportCurrentCaretPosition: "boolean(default=False)",
 	ID_AddToClipSeparator: """string(default="")""",
 	ID_AddTextBefore: "boolean(default=False)",
 	ID_ConfirmToAddToClip: "boolean(default=False)",
+	ID_ActivateNumlock: "integer(default="+str(numLockByLayoutDefault)+")",
 }
+
 SCT_SynthSettingsRing = "SynthSettingsRing"
 SCT_LastSelectedSettings = "lastSelectedSettings"
 
@@ -696,6 +706,12 @@ class NVDAConfigurationManager(object):
 		if SCT_LastSelectedSettings not in conf[addonName][SCT_SynthSettingsRing]:
 			conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings] = {}
 		conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings][synthName] = settingId
+	def setActivateNumlockOption(self, option):
+		config.conf[self.addonName][SCT_Options][ID_ActivateNumlock] = option
+	
+	def getActivateNumlockOption(self):
+		return config.conf[self.addonName][SCT_Options][ID_ActivateNumlock]
+		
 
 
 # singleton for addon configuration manager

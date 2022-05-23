@@ -20,6 +20,7 @@ from languageHandler import getLanguage
 from ..settings import _addonConfigManager
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle, getHelpObj
+from ..utils.secure import inSecureMode
 from ..utils import contextHelpEx
 from versionInfo import version_year, version_major
 NVDAVersion = [version_year, version_major]
@@ -414,17 +415,17 @@ class NVDAEnhancementSettingsPanel(
 		self.ReportNextWordOnDeletionOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.ReportNextWordOnDeletionOptionBox.SetValue(toggleReportNextWordOnDeletionOption(False))
 		self.bindHelpEvent(getHelpObj("hdr101"), self.ReportNextWordOnDeletionOptionBox)
-		if globalVars.appArgs.secure\
+		if inSecureMode()\
 			or NVDAVersion >= [2020, 3]:
 			self.ReportNextWordOnDeletionOptionBox .Hide()
 		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
 		labelText = _("maximum number of last &used symbols recorded:")
-		choice = [x * 10 for x in range(1, 11)]
-		choice = list(reversed(choice))
+		choices = [x * 10 for x in range(1, 11)]
+		choices = list(reversed(choices))
 		self.maximumOfLastUsedSymbolsBox = group.addLabeledControl(
-			labelText, wx.Choice, choices=[str(x) for x in choice])
+			labelText, wx.Choice, choices=[str(x) for x in choices])
 		self.maximumOfLastUsedSymbolsBox.SetSelection(
-			choice.index(_addonConfigManager.getMaximumOfLastUsedSymbols()))
+			choices.index(_addonConfigManager.getMaximumOfLastUsedSymbols()))
 		self.bindHelpEvent(getHelpObj("hdr3-1"), self.maximumOfLastUsedSymbolsBox)
 		if getInstallFeatureOption(FCT_ComplexSymbols) == C_DoNotInstall:
 			self.maximumOfLastUsedSymbolsBox.Disable()
@@ -479,7 +480,27 @@ class NVDAEnhancementSettingsPanel(
 		self.reportingSpellingErrorsByChoiceBox.SetSelection(
 			list(reportingSpellingErrorsChoiceLabels .keys()).index(option))
 		self.bindHelpEvent(getHelpObj("hdr104"), self.reportingSpellingErrorsByChoiceBox)
-
+		# Translators: This is the label for a group of editing options in the
+		# NVDAEnhancement settings panel
+		groupText = _("Clipboard")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
+		labelText = _("maximum number of reported characters:")
+		choices = [x * 1024 for x in range(1, 1000)]
+		choices = list(reversed(choices))
+		choiceLabels = [str(x) for x in choices]
+		choices = [0,] + choices
+		# Translators: choice for no limit
+		choiceLabels.insert(0, _("No limit"))
+		self.maximumOfReportedCharactersBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=choiceLabels)
+		print(choices)
+		self.maximumOfReportedCharactersBox.SetSelection(
+			choices.index(_addonConfigManager.getMaximumClipboardReportedCharacters()))
+		self.bindHelpEvent(getHelpObj("hdr3-1"), self.maximumOfReportedCharactersBox)
 	def saveSettingChanges(self):
 		from ..settings import (
 			toggleReportNextWordOnDeletionOption,
@@ -506,6 +527,11 @@ class NVDAEnhancementSettingsPanel(
 		index = self.reportingSpellingErrorsByChoiceBox.GetSelection()
 		option = [x for x in reportingSpellingErrorsChoiceLabels .keys()][index]
 		_addonConfigManager.setReportingSpellingErrorsByOption(option)
+		index = self.maximumOfReportedCharactersBox.GetSelection()
+		max = 0
+		if index:
+			max = int(self.maximumOfReportedCharactersBox.GetStringSelection())
+		_addonConfigManager.setMaximumClipboardReportedCharacters(max)
 
 	def onSave(self):
 		self.saveSettingChanges()
@@ -544,7 +570,7 @@ class ComputerSettingsPanel(
 		self.noDescriptionReportInRibbonOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.noDescriptionReportInRibbonOptionBox.SetValue(toggleNoDescriptionReportInRibbonOption(False))
 		self.bindHelpEvent(getHelpObj("hdr100"), self.noDescriptionReportInRibbonOptionBox)
-		if globalVars.appArgs.secure:
+		if inSecureMode():
 			self.noDescriptionReportInRibbonOptionBox .Hide()
 		# Translators: This is the label for a checkbox in the Computer settings panel.
 		labelText = _("Automatically &maximize windows")
@@ -762,7 +788,7 @@ class AdvancedSettingsPanel(
 		self.byPassNoDescriptionOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.byPassNoDescriptionOptionBox.SetValue(toggleByPassNoDescriptionAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr204"), self.byPassNoDescriptionOptionBox)
-		if globalVars.appArgs.secure:
+		if inSecureMode():
 			self.MaximumDelayBetweenSameScriptBox .Hide()
 			self.byPassNoDescriptionOptionBox.Hide()
 
@@ -811,6 +837,7 @@ class KeyboardSettingsPanel(
 			toggleEnableNumpadNavigationModeToggleAdvancedOption,
 			toggleActivateNumpadStandardUseWithNumLockAdvancedOption,
 			toggleActivateNumpadNavigationModeAtStartAdvancedOption,
+			toggleReportNumlockStateAtStartAdvancedOption
 		)
 		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the Keyboard settings panel.
@@ -881,6 +908,19 @@ class KeyboardSettingsPanel(
 		self.activateNumpadStandardUseWithNumLockOptionBox.SetValue(
 			toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr304"), self.activateNumpadStandardUseWithNumLockOptionBox)
+		# Translators: This is the label for a group of editing options in the Keyboard settings panel.
+		groupText = _("Numeric lock")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is the label for a checkbox in the keyboard settings panel.
+		labelText = _("&Report ?he activated state at NVDA starting")
+		self.reportNumlockStateAtStartOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
+		self.reportNumlockStateAtStartOptionBox .SetValue(
+			toggleReportNumlockStateAtStartAdvancedOption(False))
+		self.bindHelpEvent(getHelpObj("hdr30?"), self.reportNumlockStateAtStartOptionBox)
+
 
 	def saveSettingChanges(self):
 		from ..settings import (
@@ -893,6 +933,7 @@ class KeyboardSettingsPanel(
 			toggleEnableNumpadNavigationModeToggleAdvancedOption,
 			toggleActivateNumpadStandardUseWithNumLockAdvancedOption,
 			toggleActivateNumpadNavigationModeAtStartAdvancedOption,
+			toggleReportNumlockStateAtStartAdvancedOption,
 		)
 		self.restartNVDA = False
 		from .addonConfig import FCT_KeyRemanence
@@ -927,6 +968,9 @@ class KeyboardSettingsPanel(
 		option = toggleActivateNumpadStandardUseWithNumLockAdvancedOption(False)
 		if self.activateNumpadStandardUseWithNumLockOptionBox.IsChecked() != option:
 			toggleActivateNumpadStandardUseWithNumLockAdvancedOption()
+		option = toggleReportNumlockStateAtStartAdvancedOption(False)
+		if self.reportNumlockStateAtStartOptionBox.IsChecked() != option:
+			toggleReportNumlockStateAtStartAdvancedOption()
 
 	def onSave(self):
 		self.saveSettingChanges()
@@ -1033,17 +1077,23 @@ class GlobalSettingsDialog(MultiCategorySettingsDialogEx):
 		AdvancedSettingsPanel,
 		UpdateSettingsPanel,
 	]
+	# if in secur mode, some panels must be disabled
+	inSecureModeCategoryClasses = [
+		NVDAEnhancementSettingsPanel,
+		ComputerSettingsPanel,
+		KeyboardSettingsPanel,
+		AdvancedSettingsPanel,
+	]
 
 	def __init__(self, parent, initialCategory=None):
 		curAddon = addonHandler.getCodeAddon()
 		# Translators: title of add-on settings dialog.
 		dialogTitle = _("Settings")
 		self.title = "%s - %s" % (curAddon.manifest["summary"], dialogTitle)
-		self.categoryClasses = self.baseCategoryClasses[:]
-		# if in secur mode, some panels must be disabled
-		if globalVars.appArgs.secure:
-			self.categoryClasses.remove(FeaturesInstallationSettingsPanel)
-			self.categoryClasses .remove(UpdateSettingsPanel)
+		if inSecureMode():
+			self.categoryClasses = self.inSecureModeCategoryClasses[:]
+		else:
+			self.categoryClasses = self.baseCategoryClasses[:]
 		super(GlobalSettingsDialog, self).__init__(parent, initialCategory)
 
 
@@ -1126,12 +1176,38 @@ class KeyboardProfileSettingsPanel(
 		self.addTextBeforeCheckBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.addTextBeforeCheckBox.SetValue(_NVDAConfigManager.toggleAddTextBeforeOption(False))
 		self.bindHelpEvent(getHelpObj("hdr7-1"), self.addTextBeforeCheckBox)
-		# Translators: This is the label for a combobox in the Keyboard profile settings panel.
+		# Translators: This is the label for a checkBox in the Keyboard profile settings panel.
 		labelText = _("Ask &confirmation before adding")
 		self.confirmToAddToClipCheckBox = group.addItem(wx.CheckBox(self, label=labelText))
 		self.confirmToAddToClipCheckBox .SetValue(_NVDAConfigManager.toggleAddTextBeforeOption(False))
 		self.bindHelpEvent(getHelpObj("hdr7-1"), self.confirmToAddToClipCheckBox)
 		labelText = _("&Remanence's delay (in milliseconds):")
+		# Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
+		groupText = _("Numeric lock")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is the label for a combobox in the Keyboard profile settings panel.
+		labelText = _("&On profile activation:")
+		# numlock activation choices for 
+		# must be  in the same order that the ANL constants
+		activateNumlockChoices = (
+			# Translators: label Choice in Activate NumLock combo box
+		# ANL_NoChange constant
+			_("Do nothing"),
+			# Translators: Choice in Activate NumLock combo box
+			# ANL_Off constant
+			_("Desactivate"), 
+			# Translators: Choice in Activate NumLock combo box
+			# ANL_On
+			_("Activate"), 
+		)
+		self.activateNumlockBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=activateNumlockChoices)
+		self.activateNumlockBox .SetStringSelection(
+			activateNumlockChoices[_NVDAConfigManager.getActivateNumlockOption()])
+		self.bindHelpEvent(getHelpObj("hdr305"), self.activateNumlockBox )
 
 	def saveSettingChanges(self):
 		from .nvdaConfig import _NVDAConfigManager
@@ -1141,9 +1217,13 @@ class KeyboardProfileSettingsPanel(
 			_NVDAConfigManager.toggleAddTextBeforeOption(True)
 		if self.confirmToAddToClipCheckBox.IsChecked() != _NVDAConfigManager.toggleConfirmToAddToClipOption(False):
 			_NVDAConfigManager.toggleConfirmToAddToClipOption(True)
-
+		option = self.activateNumlockBox .GetSelection()
+		_NVDAConfigManager.setActivateNumlockOption(option)
+		
 	def onSave(self):
 		self.saveSettingChanges()
+		from ..utils import numlock
+		wx.CallLater(400, numlock.manageNumlockActivation)
 
 
 class TextAnalyzerProfileSettingsPanel(
@@ -1463,6 +1543,10 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 		KeyboardProfileSettingsPanel,
 		TextAnalyzerProfileSettingsPanel,
 	]
+	# if in secur mode, some panels must be disabled
+	inSecureModeCategoryClasses = [
+		NVDAEnhancementProfileSettingsPanel,
+	]
 
 	def __init__(self, parent, initialCategory=None):
 		curAddon = addonHandler.getCodeAddon()
@@ -1472,6 +1556,9 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 		# Translators: title of add-on settings dialog.
 		dialogTitle = _("Profile settings's %s") % currentProfile
 		self.title = "%s - %s" % (curAddon.manifest["summary"], dialogTitle)
-		self.categoryClasses = self.baseCategoryClasses[:]
-
+		if inSecureMode():
+			self.categoryClasses = self.inSecureModeCategoryClasses[:]
+		else:
+			self.categoryClasses = self.baseCategoryClasses[:]
 		super(ProfileSettingsDialog, self).__init__(parent, initialCategory)
+

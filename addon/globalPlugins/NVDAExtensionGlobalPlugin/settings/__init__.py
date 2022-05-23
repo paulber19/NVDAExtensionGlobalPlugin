@@ -19,19 +19,30 @@ import ui
 from configobj.validate import Validator, VdtTypeError
 from languageHandler import getLanguage
 from . import addonConfig
+from ..utils.secure import inSecureMode
 
 addonHandler.initTranslation()
+# list of functionnalities which should not be installed in secure mode
+_functionnalitiesNoInSecurMode = [
+	addonConfig.FCT_SystrayIconsAndActiveWindowsList,
+	addonConfig.FCT_FocusedApplicationInformations,
+	addonConfig.FCT_ExtendedVirtualBuffer,
+	addonConfig.FCT_ClipboardCommandAnnouncement,
+	addonConfig.FCT_CurrentFolderReport,
+	addonConfig.FCT_RestartInDebugMode,
+	addonConfig.FCT_OpenCurrentOrOldNVDALogFile,
+	addonConfig.FCT_SplitAudio ,
+	addonConfig.FCT_Tools,
+	addonConfig.FCT_TextAnalysis ,
+	addonConfig.FCT_ManageUserConfigurations ,
+	addonConfig.FCT_ExploreNVDA,
+	addonConfig.FCT_VariousOutSecureMode,
+]
 
 
 def getInstallFeatureOption(featureID):
-	if globalVars.appArgs.secure:
-		noInstallList = [
-			addonConfig.FCT_SystrayIconsAndActiveWindowsList,
-			addonConfig.FCT_OpenCurrentOrOldNVDALogFile,
-			addonConfig.FCT_Tools,
-			addonConfig.ID_ExploreNVDA,
-		]
-		if featureID in noInstallList:
+	if inSecureMode():
+		if featureID in _functionnalitiesNoInSecurMode:
 			return addonConfig.C_DoNotInstall
 	conf = _addonConfigManager.addonConfig
 	state = conf[addonConfig.SCT_InstallFeatureOptions].get(featureID)
@@ -181,6 +192,9 @@ def toggleActivateNumpadStandardUseWithNumLockAdvancedOption(toggle=True):
 
 def toggleConfirmAudioDeviceChangeAdvancedOption(toggle=True):
 	return toggleAdvancedOption(addonConfig.ID_ConfirmAudioDeviceChange, toggle)
+
+def toggleReportNumlockStateAtStartAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_ReportNumlockStateAtStart, toggle)
 
 
 class AddonConfigurationManager():
@@ -353,7 +367,7 @@ class AddonConfigurationManager():
 
 	def saveSettings(self, force=False):
 		# We never want to save config if runing securely
-		if globalVars.appArgs.secure:
+		if inSecureMode():
 			return
 		# We save the configuration,
 			# in case the user would not have checked the "Save configuration on exit"
@@ -482,6 +496,16 @@ class AddonConfigurationManager():
 		from .addonConfig import SCT_AdvancedOptions, ID_MaximumOfLastUsedSymbols
 		conf = self.addonConfig
 		conf[SCT_AdvancedOptions][ID_MaximumOfLastUsedSymbols] = str(max)
+
+	def getMaximumClipboardReportedCharacters(self):
+		from .addonConfig import SCT_AdvancedOptions, ID_MaxClipboardReportedCharacters
+		conf = self.addonConfig
+		return int(conf[SCT_AdvancedOptions][ID_MaxClipboardReportedCharacters])
+
+	def setMaximumClipboardReportedCharacters(self, max):
+		from .addonConfig import SCT_AdvancedOptions, ID_MaxClipboardReportedCharacters
+		conf = self.addonConfig
+		conf[SCT_AdvancedOptions][ID_MaxClipboardReportedCharacters] = str(max)
 
 	# minute timer feature
 	def getMinuteTimerOptions(self):

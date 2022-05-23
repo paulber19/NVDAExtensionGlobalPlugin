@@ -21,7 +21,36 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
 
-+ v11.1 (02/05/2022) +
++ v11.2 (May/23/2022) +
+Improvements and new features:
+- script to empty the clipboard.
+- resumption of the base script of NVDA announcing the text in the clipboard ("NVDA+c") for
+ - indicate if the clipboard is empty,
+ - increase the number of reported characters (configurable).
+ - indicate that the clipboard is not empty when there is no text in the clipboard.
+- in the "NVDA audio manager and active applications" dialog, the list of applications is now automatically refreshed each time it receives the cursor.
+- put NVDA sound back to center if add-on is disabled or uninstalled.
+- resumption of the operation of the extension in secure mode.
+- numeric lock management:
+ - reporte lock activation on NVDA Starting.
+ - Configurable activation or deactivation of Numeric Lock when activating a configuration profile.
+
+Bug fixes:
+- text parser did not report text font changes to hidden or unhidden.
+- taking into account the modification made in the context of pr #11767 (https://github.com/nvaccess/nvda/pull/11767).
+- correction of the "keyboard.ini" file for the French language.
+
+
+Changes:
+- the "copied" message is announced only if the clipboard changes after the "control+c" command.
+- the empty state of the clipboard is announced when using the command to paste the contents of the clipboard.
+- Due to a conflict with the input gesture "nvda+control+f8":
+ - the command gestures installed for the text analyzer use the "f6" key instead of the "f8" key,
+ - the interpreter commands concerning the text parser now use the "f6" key instead of the "f8" key,
+ - the interpreter command for Show audio manager of NVDA and active applications is now "f8" instead of "f6".
+
+
++ v11.1 (February/05/2022) +
 Features:
 - added command to center  audio of focused application,
 
@@ -33,7 +62,7 @@ over the "NVDA Audio Manager and Active Applications" dialog.
 - fix to avoid speech blocking by "Audio Separation" feature.
 
 
-+ v11.0 (01/26/2022) +
++ v11.0 (january/26/2022) +
 new features:
 - orientation of NVDA audio output.
 - added scripts to increase or decrease the volume of NVDA.
@@ -54,18 +83,18 @@ Compatibility with NVDA 22.1:
 - taking into account of the new UIAHandler package.
 
 
-+ v10.3 (12/12/2021) +
++ v10.3 (December/12/2021) +
 Bug fixes:
 - resolution of the problem encountered with the new extension "NAO" when presenting the result of optical recognition and the previous and next page keys.
 
 
-+ v10.2 (12/10/2021) +
++ v10.2 (December/10/2021) +
 Bug fixes:
 - resolution of the problem encountered with the new "NAO" extension when presenting the optical recognition result: unexpected closing of the window.
 - scripts can be started again in the "Shell scripts" dialog.
 
 
-+ v10.1 (11/28/2021) +
++ v10.1 (November/28/2021) +
 Bugfix:
 - the configuration folders added using the "User Configuration Manager" dialog are kept when installing the add-on. The "NVDAExtensionGlobalPlugin-userConfigs.ini" file is no longer deleted.
 - the state of the "Symbol and punctuation level when moving by word" option is now preserved when it is used in an alpha version.
@@ -76,7 +105,7 @@ Preparation for compatibility with NVDA 2022.1:
 -replacement of "curLang" by "getLanguage ()"
 
 
-+ v10.0 (11/21/2021) +
++ v10.0 (November/21/2021) +
 New features:
 - addition of the "Text analyzer" functionality.
 - added functionality "manage user configurations and restart NVDA with a precise configuration".

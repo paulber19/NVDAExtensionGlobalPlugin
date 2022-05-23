@@ -21,19 +21,20 @@ addonHandler.initTranslation()
 _formattingFieldChangeMsg = {
 	"color": _("color"),
 	"background-color": _("background color"),
-	"bold": _("bold"),
-	"nonBold": _("non bold"),
-	"italic": _(" italic"),
-	"nonItalic": _(" non italic"),
-	"underline": _("underline"),
-	"nonUnderline": _("non underline"),
-	"strikethrough": _("strikethrough"),
-	"nonStrikethrough ": _("non strikethrough"),
-	"hidden": _("hidden"),
-	"nonHidden": _("non hidden"),
-	"sub": _("subscript"),
-	"super": _("superscript"),
-	"baseLine": _("base line"),
+	"bold": NVDAString("bold"),
+	"nonBold": NVDAString("no bold"),
+	"italic": NVDAString(" italic"),
+	"nonItalic": NVDAString("no italic"),
+	"underline": NVDAString("underline"),
+	"nonUnderline": NVDAString("not underlined"),
+	"nonUnderline": NVDAString("not underlined"),
+	"strikethrough": NVDAString("strikethrough"),
+	"nonStrikethrough ": NVDAString("no strikethrough"),
+	"hidden": NVDAString("hidden"),
+	"nonHidden": NVDAString("not hidden"),
+	"sub": NVDAString("subscript"),
+	"super": NVDAString("superscript"),
+	"baseLine": NVDAString("base line"),
 }
 
 _negativeFields = {
@@ -150,7 +151,8 @@ def checkSymbolsDiscrepancies(info, errorPositions):
 				errorPositions[position] = []
 			errorPositions[position].append(("unexpectedSymbol", ch))
 
-
+decimalSymbol = symbols.getDecimalSymbol()
+digitGroupingSymbol = symbols.getDigitGroupingSymbol()
 def checkExtraWhiteSpace(info, unit, errorPositions):
 	text = info.text
 	log.info("checkExtraWhiteSpace: %s" % text)
@@ -216,6 +218,9 @@ def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPosition
 	symbolsAndSpaceDic = _NVDAConfigManager.getSymbolsAndSpaceDic()
 	for index in range(0, len(text)):
 		ch = text[index]
+		if (index >0 and index <len(text) -1) and ch in [decimalSymbol, digitGroupingSymbol]:
+			if text[index-1].isdigit() and text[index+1].isdigit():
+				continue
 		position = index + 1
 		if ch not in symbols.getSymbols_all():
 			if _NVDAConfigManager.uppercaseMissingAnomalyOption():
@@ -357,13 +362,17 @@ def analyzeText(info, unit):
 	_previousAnalyzedText = info.text
 
 
-# code from Javi Dominguez
-blacklistKeys = {"_startOfNode", "_endOfNode"}
-whitelistKeys = "color,font-name, font-family,font-size,bold,italic,strikethrough,underline".split(",")
+_formatFieldList = [
+	"color", "font-name", "font-family",
+	"font-size", "bold", "italic", "strikethrough",
+	"underline", "hidden"
+]
 
 
+# parts of code originaly written by Tony Malik for  browserNav add-on.
 def compareFormatFields(f1, f2):
-	for key in whitelistKeys:
+	for key in _formatFieldList :
+		print ("key: %s"%key)
 		if key not in f1 and key not in f2:
 			continue
 		try:

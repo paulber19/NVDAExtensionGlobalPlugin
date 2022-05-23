@@ -425,6 +425,9 @@ class MyInputManager (object):
 		if script:
 			scriptHandler.queueScript(script, gesture)
 			return
+		# Clear memorized last script to avoid getLastScriptRepeatCount detect a repeat
+		# in case an unbound gesture is executed between two identical bound gestures.
+		queueHandler.queueFunction(queueHandler.eventQueue, scriptHandler.clearLastScript)
 		raise NoInputGestureAction
 
 	def speakGesture(self, gesture):

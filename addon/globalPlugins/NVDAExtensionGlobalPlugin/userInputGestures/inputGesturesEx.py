@@ -176,9 +176,10 @@ class InputGesturesDialogEx(
 		if module[0] == "globalPlugins":
 			import globalPluginHandler
 			plugins = list(globalPluginHandler .runningPlugins)
+			gp = ".".join(module[:2]) 
 			for p in plugins:
 				m = p.__module__
-				if m == "%s.%s" % (module[0], module[1]):
+				if gp in m:
 					i = plugins .index(p)
 					script = getattr(list(plugins)[i], "script_%s" % scriptInfo.scriptName, None)
 					if script:

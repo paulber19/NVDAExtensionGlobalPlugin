@@ -8,7 +8,7 @@
 import addonHandler
 # from logHandler import log
 import ui
-
+import queueHandler
 import api
 import wx
 from gui import guiHelper, mainFrame
@@ -60,6 +60,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		title = NVDAAndAudioApplicationsManagerDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(NVDAAndAudioApplicationsManagerDialog, self).__init__(parent, wx.ID_ANY, title)
 		self.doGui()
+		self.backToForeground = False
 
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -67,9 +68,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		# Translators: This is the label for a listbox
 		# in NVDA and audio Applications manager dialog
 		labelText = _("Applications:")
-		self.applicationsChannelsVolumes = getChannels()
-		self.applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
-		self.applications = sorted(list(self.applicationsChannelsVolumes.keys()))
+		self.initApplicationsList()
 		choices = [app.split(".")[0] for app in self.applications]
 		self.applicationsListBox = sHelper.addLabeledControl(
 			labelText,
@@ -148,14 +147,82 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.applicationsListBox.SetFocus()
 		self.updateChannels(self.applications[0])
 		self.updateVolume(self.applications[0])
+		self.applicationsListBox.Bind(wx.EVT_SET_FOCUS, self.onFocusApplicationsList)
+		info = self.formatApplicationInfo(self.applications[0], name=False, mute=True)
+		wx.CallLater(100, ui.message, info)
 
 	def Destroy(self):
 		self.Unbind(wx.EVT_ACTIVATE)
 		NVDAAndAudioApplicationsManagerDialog._instance = None
 		super(NVDAAndAudioApplicationsManagerDialog, self).Destroy()
 
+
 	def onActivate(self, evt):
-		pass
+		isActive = evt.GetActive()
+		self.isActive = isActive
+		if isActive:
+			if not hasattr(self, "delay"):
+				self.backToForeground = True
+			else:
+				self.backToForeground = False
+		else:
+			del self.backToForeground
+		evt.Skip()
+
+	
+	def initApplicationsList(self):
+		self.applicationsChannelsVolumes = getChannels()
+		self.applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
+		self.applications = sorted(list(self.applicationsChannelsVolumes.keys()))
+		
+	def updateApplicationsList(self):
+		curApplications = self.applications
+		curApp = self.applicationsListBox.GetStringSelection()
+		self.initApplicationsList()
+		if curApplications == self.applications:
+			return
+		choices = [app.split(".")[0] for app in self.applications]
+		self.applicationsListBox.Clear()
+		self.applicationsListBox.Append(choices)
+		if curApp in choices:
+			self.applicationsListBox.SetStringSelection(curApp)
+		else:
+			self.applicationsListBox.SetSelection(0)
+	def focusApplicationsList(self, speakEnd=False):
+		if not self.isActive or not self.applicationsListBox.HasFocus():
+			return
+		self.updateApplicationsList()
+		index = self.applicationsListBox.GetSelection()
+		application = self.applications[index]
+		#self.reportState(application)
+		#info = self.formatApplicationInfo(application, name=False, mute=True)
+		#wx.CallLater(40, ui.message, info)
+		if speakEnd:
+			info = self.formatApplicationInfo(application, name=True, mute=True)
+			wx.CallLater(40, ui.message, info)
+			wx.CallLater(20, queueHandler.queueFunction(
+				queueHandler.eventQueue,
+				ui.message, _("refresh terminated")))
+			#wx.CallLater(30, ui.message, _("refresh terminated"))
+			return
+		self.reportState(application)
+
+	def onFocusApplicationsList(self, evt):
+		if hasattr(self, "backToForeground")and self.backToForeground:
+			delay = 5000
+			wx.CallLater(50, ui.message, _("Please wait, refreshing list"))
+			speakEnd = True
+			self.backToForeground = False
+		else:
+			delay = 50
+			speakEnd = False
+		wx.CallLater(delay, self.focusApplicationsList, speakEnd)
+
+	def onRefreshButton(self, evt):
+		if self.applicationsListBox.HasFocus():
+			self.focusApplicationsList()
+			return
+		self.applicationsListBox.SetFocus()
 
 	def updateVolume(self, application):
 		volumeObj = getAppVolumeObj(application)
@@ -192,7 +259,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 	def formatApplicationInfo(self, application, name=False, position=True, volume=False, mute=True):
 		textList = []
 		if name:
-			textList.append(application)
+			textList.append(application.split(".")[0])
 		if position:
 			positionMsg = getApplicationVolumeInfo(application)
 			textList.append(positionMsg)
