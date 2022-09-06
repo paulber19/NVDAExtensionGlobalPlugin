@@ -42,6 +42,7 @@ class SymbolsManager(object):
 		orderedSymbols = {}
 		with codecs.open(fileName, "r", "utf_8_sig", errors="replace") as f:
 			for line in f:
+				log.warning("line0: %s" % line)
 				if line.isspace() or line.startswith("#"):
 					# Whitespace or comment.
 					continue

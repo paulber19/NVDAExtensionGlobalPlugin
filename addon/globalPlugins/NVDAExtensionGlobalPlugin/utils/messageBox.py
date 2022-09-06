@@ -1,6 +1,6 @@
 # globalPlugins/NVDAextensionGlobalPlugin\messageBox.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright 2018-2021 paulber19
+# Copyright 2018-2022 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -27,13 +27,24 @@ try:
 		parent: Optional[wx.Window] = None
 	) -> int:
 		"""Display a message dialog.
-		This should be used for all message dialogs
-		rather than using C{wx.MessageDialog} and C{wx.MessageBox} directly.
+		Avoid using C{wx.MessageDialog} and C{wx.MessageBox} directly.
 		@param message: The message text.
 		@param caption: The caption (title) of the dialog.
 		@param style: Same as for wx.MessageBox.
 		@param parent: The parent window.
 		@return: Same as for wx.MessageBox.
+		`gui.message.messageBox` is a function which blocks the calling thread,
+		until a user responds to the modal dialog.
+		This function should be used when an answer is required before proceeding.
+		Consider using a custom subclass of a wxDialog if an answer is not required
+		or a default answer can be provided.
+
+		It's possible for multiple message boxes to be open at a time.
+		Before opening a new messageBox, use `isModalMessageBoxActive`
+		to check if another messageBox modal response is still pending.
+
+		Because an answer is required to continue after a modal messageBox is opened,
+		some actions such as shutting down are prevented while NVDA is in a possibly uncertain state.
 		"""
 		from gui import mainFrame
 		global _reportObjectDescriptionOptions
@@ -45,9 +56,9 @@ try:
 			if not parent:
 				mainFrame.prePopup()
 			res = wx.MessageBox(message, caption, style, parent or mainFrame)
+		finally:
 			if not parent:
 				mainFrame.postPopup()
-		finally:
 			with gui.message._messageBoxCounterLock:
 				gui.message._messageBoxCounter -= 1
 			config.conf["presentation"]["reportObjectDescriptions"] = _reportObjectDescriptionOptions.pop()

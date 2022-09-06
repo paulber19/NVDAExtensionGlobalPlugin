@@ -103,7 +103,7 @@ This add-on adds to NVDA's global commands:
  - [script to close all open windows # hdr26],
  - [possibility of executing scripts in the "input gestures" dialog # hdr205] (for NVDA versions greater than 2020.3),
  - [automatic selection of the category in the dialog "Command gestures" # hdr206].
-- [Selection of the last setting  used in the synthesizer settings  ring # hdr207].
+- [Selection of the last setting  used in the synthesizer settings ring # hdr207].
 
 
 ++ Add-on configuration menu ++[hdr-configurationMenu]
@@ -129,7 +129,7 @@ Apart from the last menu, each is associated with a script without a command ges
 These are the following scripts with their interpreter command:
 - "Display the add-on settings dialog": "KEY_ADDON_SETTINGS" command,
 - "Display the dialog for configuring the add-on for the current configuration profile": "KEY_PROFILE_SETTINGS" command,
-- "Display the  keyboard keys renaming dialog": "KEY_RENAMING" command,
+- "Display the keyboard keys renaming dialog": "KEY_RENAMING" command,
 - "Display the dialog to configure the selective announcements of the command keys": "KEY_RENAMING" command,
 
 
@@ -205,7 +205,7 @@ The configuration of the "Voice profile switching" functionality having changed,
 
 
 ++ History ++
-The version history of this add-on is in the  ["changes.html" file changes.html]
+The version history of this add-on is in the ["changes.html" file changes.html]
 
 + Features +[hdr0]
 ++ Preamble ++[hdr0-1]
@@ -430,10 +430,10 @@ And in any case, the scripts:
 These scripts are stored in the "Tools" section of the NVDA "input gestures" dialog.
 
 
-+++ Announcement of the application file name, the   loaded python appModule's name and the name and status of the configuration profile +++[hdr4-1]
++++ Announcement of the application file name, the loaded python appModule's name and the name and status of the configuration profile +++[hdr4-1]
 The description of this script is: "Speaks the filename of the active application along with the name of the currently loaded appModule python file. Pressing this key twice,speak the name and state of the current configuration profile".
 
-By default, the "MAIN_KEY_CONFIGURATION_PROFILE" input gesture is assigned to it.A single press of the input gesture triggers the basic NVDA script which announces the name of the application file and if there is one, the name of the loaded python  appModule's name.
+By default, the "MAIN_KEY_CONFIGURATION_PROFILE" input gesture is assigned to it.A single press of the input gesture triggers the basic NVDA script which announces the name of the application file and if there is one, the name of the loaded python appModule's name.
 
 Pressing twice announces the name of the configuration profile and its status.
 
@@ -554,6 +554,8 @@ For Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefox, GoogleChrome b
 - go to the first cell of the column (input gesture KEY_MOVE_FIRST_CELL_COLUMN),- go to the last cell of the column (KEY_MOVE_LAST_CELL_COLUMN input gesture).
 
 
+The last four scripts are removed from the extension for versions greater than or equal to 2022.2 because they are now provided by NVDA.
+
 All of these scripts are stored in the "Table" category in the tree view of the NVDA "input gestures" dialog.
 
 This add-on also moves NVDA base scripts that used to be under the "Miscellaneous" category into this category. Those are:
@@ -600,20 +602,20 @@ If this feature is installed, the following scripts are installed.
 +++ Add selected text to clipboard +++[hdr7-1]
 This feature adds the script that allows you to add the selected text to the clipboard.
 
-This script is installed without input gesture, but it is possible to assign one to it using the NVDA "Input gestures" dialog. Its description is "Add, to clipboard,  selected text" and is placed in the "ADDON_SUMMARY" category.
+This script is installed without input gesture, but it is possible to assign one to it using the NVDA "Input gestures" dialog. Its description is "Add, to clipboard, selected text" and is placed in the "ADDON_SUMMARY" category.
 
-All the parameters used for the script are located in the "Clipboard" group of the "Keyboard" category of the add-on dialog which presents the settings  of the current configuration Profile.
+All the parameters used for the script are located in the "Clipboard" group of the "Keyboard" category of the add-on dialog which presents the settings of the current configuration Profile.
 
 It is started using the "KEY_ADDING_TO_CLIP" interpreter command.
 
-Following the command, the selected text is added to the content of the clipboard, either after or before depending on the state of the  "Add to clipboard before"checkbox.
+Following the command, the selected text is added to the content of the clipboard, either after or before depending on the state of the "Add to clipboard before"checkbox.
 
 It is possible to place a separator text between the text blocks. This text can be configured using the Edit Text field used as a separator between the contents added to the clipboard ".
 
 
-A confirmation request will be displayed before proceeding with the addition if the "Ask confirmation before adding to the clipboard" checkbox is checked. 
+A confirmation request will be displayed before proceeding with the addition if the "Ask confirmation before adding to the clipboard" checkbox is checked.
 
-Note: this script is taken from the "ClipContentsDesigner" add-on (Authors Noelia, Abdel) which also provides other interesting features regarding the clipboard. It was put in this add-on  on request of users who wanted at the same time the announcement of the functions "copy" and "paste".
+Note: this script is taken from the "ClipContentsDesigner" add-on (Authors Noelia, Abdel) which also provides other interesting features regarding the clipboard. It was put in this add-on on request of users who wanted at the same time the announcement of the functions "copy" and "paste".
 
 +++ Report text on Windows clipboard +++[hdr7-2]
 This script replaces the base NVDA script ("NVDA+c") to complete it by telling the user who ran the command that:
@@ -759,7 +761,7 @@ It is possible to not install this feature by selecting, in the "Installed featu
 ++ Selective announcement of command keys ++[hdr13]
 This feature is installed by default.
 
-NVDA allows the command keys to be spoken by voice using the "Speek command keys" option located in the "Keyboard" category of the NVDA "Settings" dialog or by the  "NVDA + 4" input gesture.
+NVDA allows the command keys to be spoken by voice using the "Speek command keys" option located in the "Keyboard" category of the NVDA "Settings" dialog or by the "NVDA + 4" input gesture.
 
 This functionality provides, by configuration and using a dialog box, the possibility of:
 - do not announce certain command keys when the "Speek command keys" option is checked,
@@ -769,7 +771,7 @@ This functionality provides, by configuration and using a dialog box, the possib
 To display this dialog, three possibilities:
 - by selecting and activating the item "Command selective announcement" in the "ADDON_SUMMARY" submenu,
 - using the "KEY_SELECTIVE_ANNOUNCEMENT" command of the interpreter,
-- using the script "Display    command selective announcements dialog", provided without input gesture. An input gesture can be assigned to it using the NVDA "input gestures" dialog.
+- using the script "Display command selective announcements dialog", provided without input gesture. An input gesture can be assigned to it using the NVDA "input gestures" dialog.
 
 
 The dialogue presents:
@@ -849,7 +851,7 @@ A simple press of this gesture triggers a restart of NVDA with the logging level
 Double pressing of this input gesture restarts NVDA with the debug logging level without changing the logging level configured in NVDA general preferences.
 
 
-++ Displaying of  visible elements of the object in the foreground ++[hdr16]
+++ Displaying of visible elements of the object in the foreground ++[hdr16]
 By default, this feature is installed with input gesture.
 
 It installs two scripts stored in the "System focus" category of the NVDA "input gestures" dialog:
@@ -1009,12 +1011,14 @@ No input gesture is associated with them, but it is possible to assign one to ea
 
 Their descriptions are:
 - "Report the current speech settings": is started with the "KEY_REPORT_SPEECH_SETTINGS" command from the command interpreter.
-- "Display the current speech settings": is started with the  "KEY_DISPLAY_SPEECH_SETTINGS"commond  from the command interpreter.
+- "Display the current speech settings": is started with the "KEY_DISPLAY_SPEECH_SETTINGS"commond from the command interpreter.
 - "Report the current speech settings. Press twice: display them": no interpreter command is associated with it.
+
+
 ++ NVDA and modifier keys's remanence ++[hdr18]
 This feature is not installed by default.
 
-It allows to make the NVDA keys ("Insert" of the normal or extended numeric keypad,  "Caps Lock" key) and the modifier keys ("shift", "control", "left Alt", "Control right Alt" , "Windows") to be made peersistent.
+It allows to make the NVDA keys ("Insert" of the normal or extended numeric keypad, "Caps Lock" key) and the modifier keys ("shift", "control", "left Alt", "Control right Alt" , "Windows") to be made peersistent.
 
 The objective being to be able to use only one finger, for example, to compose a input gesture requiring the pressing of several keys.
 
@@ -1024,7 +1028,7 @@ To activate or deactivate keys's remanence, all you have to do is dial one of th
 - "Right shift", "Right control", "Right shift",
 - "left shift", "left control", "left shift".
 
-Keys's remanence can be enabled automatically at  NVDAstart  by checking the "Activate remanence at NVDA's start" check box in the "Keys persistence" grouping.The activation or deactivation of afterglow is signaled by voice.
+Keys's remanence can be enabled automatically at NVDAstart by checking the "Activate remanence at NVDA's start" check box in the "Keys persistence" grouping.The activation or deactivation of afterglow is signaled by voice.
 
 When remanence is activated, pressing one of the NVDA or modification keys triggers a timeout and the key is memorized.
 This time delay can be configured using the "Remanence's delay (in milliseconds)" combobox in the "Keys' remanence" grouping.
@@ -1147,7 +1151,7 @@ This script is launched:
 - or using the "MAIN_KEY_VOLUME_ON" input gesture assigned by default.
 
 
-It sets the main and NVDA volume   and forces the levels of each to the values ​​of the recovery levels configured in the "Volume control" grouping of the "Computer" category of add-on settings.
+It sets the main and NVDA volume and forces the levels of each to the values ​​of the recovery levels configured in the "Volume control" grouping of the "Computer" category of add-on settings.
 
 +++ Mute or establish the volume of the audio stream of the application placed under the focus +++[hdr21-2]
 This script is launched:
@@ -1179,8 +1183,7 @@ By default, the app volume level cannot exceed the master volume level. But this
 
 
 
-
-+++ Modify the volume of NVDA +++ [hdr21-8]
++++ Modify the volume of NVDA +++[hdr21-8]
 These scripts allow you to increase, decrease, or fix the volume of NVDA.
 
 They are installed without input gestures. But it is still possible to assign them with the "Input gestures" dialog.
@@ -1217,7 +1220,7 @@ These commands, unlike the other interpreter commands, can be repeated without h
 
 Once the volume level is reached, press the "Escape" key to exit the interpreter.
 
-The increase or decrease in volume is done in steps. It is possible to adjust the size of these steps in the settings of the add-on under the  "Computer" category, grouping "Sound control", by choosing the size of the step.
+The increase or decrease in volume is done in steps. It is possible to adjust the size of these steps in the settings of the add-on under the "Computer" category, grouping "Sound control", by choosing the size of the step.
 Size 1 is the smallest step, size 20 is the largest step. By default, the size is set to 5, which corresponds to 5 steps of varying the volume in the Windows mixer.
 
 The primary volume cannot fall below the configured recovery threshold.
@@ -1397,7 +1400,7 @@ It presents a dialog box containing an edit zone initialized with the current ve
 
 Pressing the "OK" button saves the new version in the file.
 
-+++ Updating  manifest.ini +++[hdr22-3]
++++ Updating manifest.ini +++[hdr22-3]
 The "manifest.ini" file must be updated as soon as the "buildVars.py" file is modified.
 
 Use the "Update manifest.ini file" button for this.
@@ -1525,6 +1528,7 @@ Pressing the second button brings up the "Add an existing folder" dialog which p
 - the "Add" button to validate the entry,
 - the "Cancel" button.
 
+
 ++++ Deletion of folder ++++[hdr30-1-2]
 The "Delete this folder" button allows you to remove the selected folder from the list and erase it from the drive.
 
@@ -1547,7 +1551,7 @@ In these dialogues we find:
 - the "Import add-ons" button,
 - the "Import speech dictionaries" button,
 - the "Import symbol or punctuation pronunciations" button,
-- the  "Import input gestures changes" button,
+- the "Import input gestures changes" button,
 - the "Import configuration profiles" button,
 - the "Import NVDA parameters (normal configuration)" button,
 - the "Import all the configuration" button,
@@ -1654,7 +1658,7 @@ The result of the analysis is indicated according to the choice made, by:
 - a voice message giving a detailed description of the irregularities found.
 
 
-For the alert configuration, see the "Alert" group of the "Text analysis" category.+++ Analyze configuration +++
+For the alert configuration, see the "Alert" group of the "Text analysis" category.
 
 +++ Analyze configuration +++[hdr31-2]
 ++++ Checking for symbol mismatches ++++[hdr31-2-1]
@@ -1714,6 +1718,13 @@ These scripts are:
 - "Analyze the paragraph under the cursor": "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", interpreter command "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
++++ Move cursor to next/previous line containing irregularity +++[hdr31-4]
+The following scripts allow to move the cursor to the beginning of the next/previous line containing at least one irregularity:
+- move the cursor to the next line with irregularity: interpreter command "KEY_MOVETONEXTALERT_ANALYZER",
+- move the cursor to the previous line with irregularity: interpreter command "KEY_MOVETOPREVIOUSALERT_ANALYZER",
+
+
+They have no command gesture associated with them, but it is possible to do so using the "Input gestures" dialog. They are placed in the "ADDON_SUMMARY" category.
 ++ Announcement of cursor position in edit boxes ++[hdr32]
 The script "Toggle reporting of current caret position in edit box" allows you to have the cursor position announced or not when it is in an edit zone.
 
@@ -1776,7 +1787,7 @@ It can be prevented using the "Ask for confirmation" option in the "Temporary au
 
 This confirmation request consists of displaying a dialog box for a limited time and asking the user to accept the use of the new audio output device.
 
-The display time of this dialog box can also be configured using the "Maximum  waiting time for confirmation" drop-down list located in the same group as the previous option.
+The display time of this dialog box can also be configured using the "Maximum waiting time for confirmation" drop-down list located in the same group as the previous option.
 
 Pressing the "OK" button or the "Enter" key validates the acceptance.
 
@@ -1789,7 +1800,7 @@ In the list of audio output devices, it is possible to check certain devices. Th
 +++ Temporary audio device change +++[hdr33-2]
 There are two ways to change the device:
 - either by launching the previous script and choosing another device,
-- or by using the script (see below) which allows to loop between the checked devices of the "devices" list of   the temporary audio device manager.
+- or by using the script (see below) which allows to loop between the checked devices of the "devices" list of the temporary audio device manager.
 
 
 This script has the description "Set, as temporary audio device, the next device in the list of checked devices of the temporary audio device manager " and is placed in the "Speech" category of the "input gestures" dialog.
@@ -1875,10 +1886,10 @@ When the list is focused, the following commands are allowed:
 - Hear NVDA and all applications in the center: "control + space",
 - increase or decrease the application volume by one step: "control + up or down arrow",
 - increase or decrease by a double step, the volume of the application: "control + previous or next page",
-- maximize or minimize  mapplication volume: "control + home or end",
-- increase or decrease the main  volume by one step: "control +shift + up or down arrow",
+- maximize or minimize mapplication volume: "control + home or end",
+- increase or decrease the main volume by one step: "control +shift + up or down arrow",
 - increase or decrease by a double step, the main volume : "control + shift + previous or next page",
-- maximize or minimize  main volume: "control + shift + home or end".
+- maximize or minimize main volume: "control + shift + home or end".
 
 
 This list is automatically refreshed when the cursor is given to it.
@@ -1903,17 +1914,17 @@ With the extension manager, it is then necessary to review each extension to act
 This extension tries to make this manipulation faster and for that, it provides a script to display the "Quick add-ons activation" dialog.
 
 This script is started using the "KEY_QUICK_ADDONS_ACTIVATION" command of the command interpreter. No input gesture is associated with it. But it is possible to do this using NVDA's "input Gestures" dialog.
-It can be found in the "ADDON_SUMMARY" category with the description "Activate  quick add-ons activation dialog".
+It can be found in the "ADDON_SUMMARY" category with the description "Activate quick add-ons activation dialog".
 
 This dialogue presents:
 - the list of add-ons installed, activated or deactivated,
 - the "Check all" button to check all the add-ons of the list,
-- the "Uncheck all" button to uncheck all the add-ons of  the list,
+- the "Uncheck all" button to uncheck all the add-ons of the list,
 - the "Save and restart NVDA" button to validate the changes and restart NVDA,
 - the "Cancel" button to close the dialog without any modification of the add-ons activation status.
 
 
-The list  shows only the add-ons enabled or disabled when the dialog is displayed. Incompatible add-ons, to be activated or deactivated at the next start-up, are not included in the list.
+The list shows only the add-ons enabled or disabled when the dialog is displayed. Incompatible add-ons, to be activated or deactivated at the next start-up, are not included in the list.
 
 When the dialog is displayed, the activated add-ons are checked.
 
@@ -1938,7 +1949,7 @@ In some applications such as WordPad, Microsoft Word, it is possible to delete t
 
 By default, this add-on allows these versions of NVDA to speak this word.
 
-For these versions, this can be prevented by unchecking the "Report next word on deletion" option from the "NVDA enhancement" category of the  add-on's "Settings" dialog.
+For these versions, this can be prevented by unchecking the "Report next word on deletion" option from the "NVDA enhancement" category of the add-on's "Settings" dialog.
 
 ++ Automatic window maximization ++[hdr102]
 This option automatically maximizes windows that are brought to the foreground.
@@ -1963,7 +1974,7 @@ It is presented in the form of a combobox which allows you to choose:
 - or one of NVDA's symbol and punctuation levels (None, some one, most, all).
 
 
-++ Reporting spelling errors by beep or voice announcement ++ [hdr104]
+++ Reporting spelling errors by beep or voice announcement ++[hdr104]
 When the "Spelling error" option in the "Document information" group of the "Document formatting" category of NVDA settings is checked, NVDA will sound a special sound for the spelling error that comes from be made.
 
 This sound is emitted just after the hit on the space bar ending the word.
@@ -1996,6 +2007,7 @@ This list offers the following choices:
 By default, the choice is:
 - "Disabled" for a "Desktop Computer" keyboard layout.
 - "Do nothing" for a "laptop" keyboard layout.
+
 
 + Advanced options +
 ++ Signaling by sound of an error in the NVDA log ++[hdr300]
@@ -2052,7 +2064,7 @@ To enable or disable the use of the numeric keypad in standard operation and if 
 - activation by two successive presses on the "Num lock" key if the option "Enable / disable numeric keypad's standard use with num lock key" ("Numeric Keypad" grouping, "Keyboard" category) is checked.
 
 
-The  "Enable the standard use of the numeric keypad at NVDA's start" option ("Numeric keypad" grouping, " Keyboard " category), allows, if it is checked, to use the numeric keypad as standard from the start of NVDA , but the option that allows standard use of the numeric keypad must also be checked.
+The "Enable the standard use of the numeric keypad at NVDA's start" option ("Numeric keypad" grouping, " Keyboard " category), allows, if it is checked, to use the numeric keypad as standard from the start of NVDA , but the option that allows standard use of the numeric keypad must also be checked.
 
 
 + Other improvements +
@@ -2088,7 +2100,7 @@ NVDA considers some dialog boxes, such as confirmation dialogs, that the text th
 
 So if the "Announce object description" option in the "Object overview" category of the NVDA "Settings" dialog is not checked, the text is not announced by NVDA.
 
-This add-on implements the  "Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation" option  in the "Advanced" category of the "Settings" dialog of the add-on to force, if checked, the announcement of the text of these boxes in all cases. This option is checked by default.
+This add-on implements the "Do not take account of the option called Report object descriptions during the display of the dialog box style confirmation" option in the "Advanced" category of the "Settings" dialog of the add-on to force, if checked, the announcement of the text of these boxes in all cases. This option is checked by default.
 
 
 ++ Running scripts in the "Input gestures" dialog ++[hdr205]
@@ -2107,7 +2119,7 @@ The script can be executed using one of the following three actions:
 
 By repeating the action several times quickly, the script will be executed as many times.
 
-++ Automatic selection of the category in the "Command gestures" dialog ++ [hdr206]
+++ Automatic selection of the category in the "Command gestures" dialog ++[hdr206]
 It may happen that we need to open the "Command gestures" dialog to know the command gestures provided by the active extension for the application under focus.
 
 Without extension, the first category is selected by default.
@@ -2118,7 +2130,7 @@ It does this by looking for the category among the categories that provide scrip
 
 This category will then be automatically selected and expanded.
 
-++ Selection of the last setting used in the synthesizer settings ring ++ [hdr207]
+++ Selection of the last setting used in the synthesizer settings ring ++[hdr207]
 NVDA's "NVDA + control + right or left arrow" input gestures allow you to jump from one setting to another in the synthesizer's settings ring.
 
 But after restarting NVDA, the last used setting is forgotten.
@@ -2127,7 +2139,7 @@ This improvement attempts to overcome this drawback.
 
 To do this, the add-on saves, at each movement in the synthesizer settings ring, the last setting used for each synthesizer and for each configuration profile.
 
-This setting will then be selected again when NVDA starts up for the synthesizer and for the "normal configuration" profile or when  profiles switching.
+This setting will then be selected again when NVDA starts up for the synthesizer and for the "normal configuration" profile or when profiles switching.
 
 Warning: like all NVDA parameters, it is necessary that the NVDA configuration is saved before restarting NVDA (either automatically or manually) in order to find them after the restart.
 
@@ -2168,7 +2180,7 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 | KEY_ICONS_List | Shows the list of buttons on the System Tray |
 | KEY_MINUTE_TIMER | Display dialog to start the minute timer.If minute timer already started, display dialog to report duration |
 | KEY_MODULE_GUIDE | Display add-on user's guide |
-| KEY_HELP_SHELL | Display the commands of the  commands interpreter |
+| KEY_HELP_SHELL | Display the commands of the commands interpreter |
 | KEY_LOG_VIEW | Open a dialog to manage NVDA logs |
 | KEY_CLOSE_ALL_WINDOWS | Close all opened windows |
 | KEY_USER_CONFIG_MANAGEMENT | Show dialog to manage user configurations |
@@ -2203,13 +2215,13 @@ Warning: like all NVDA parameters, it is necessary that the NVDA configuration i
 | number from 1 to 9 | Set the volume of the application under focus to x percent of the main volume (x equal to 10 multiplied by the number) |
 | shift + number from 1 to 9 | Set to x the NVDA volume (x equal to 10 multiplied by the figure) |
 | control + number from 1 to 9 | Set to x the main volume (x equal to 10 multiplied by the figure) |
-| KEY_SPLIT_LEFT_FOCUS | Hear NVDA on the left and focused  application on the right |
+| KEY_SPLIT_LEFT_FOCUS | Hear NVDA on the left and focused application on the right |
 | KEY_SPLIT_LEFT_ALL | Hear NVDA on the left and all applications on the right |
-| KEY_SPLIT_RIGHT_FOCUS | Hear NVDA on the right and focused  application on the left |
+| KEY_SPLIT_RIGHT_FOCUS | Hear NVDA on the right and focused application on the left |
 | KEY_SPLIT_RIGHT_ALL | Hear NVDA on the right and all applications on the left |
 | KEY_SPLIT_CENTER_FOCUS | Hear NVDA and focused at the center |
 | KEY_SPLIT_CENTER_ALL | Hear NVDA and all applications at the center |
-| KEY_CENTER_FOCUSED_APP | Hear focused application   at the center |
+| KEY_CENTER_FOCUSED_APP | Hear focused application at the center |
 
 ++ input gestures installed by the functionalities ++
 

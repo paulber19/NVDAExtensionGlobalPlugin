@@ -557,6 +557,8 @@ Para los navegadores Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefo
 - Ir a la última celda de la columna (gesto de entrada KEY_MOVE_LAST_CELL_COLUMN).
 
 
+Los últimos cuatro scripts se eliminan del complemento para versiones mayores o igual a 2022.2 porque ahora son proporcionados por NVDA.
+
 Todos estos scripts están almacenados en la categoría "Tabla" en el árbol del cuadro de diálogo "Gestos de Entrada".
 
 El complemento también mueve en esta categoría los scripts básicos de NVDA que se  almacenaron en la categoría "Miscelánea". Estos son:
@@ -1785,6 +1787,15 @@ Estos scripts son:
 - "Analizar la línea bajo el cursor del sistema": "MAIN_KEY_LINE_TEXT_ANALYZER", órden del intérprete "KEY_LINE_TEXT_ANALYZER",
 - "Analizar la frase bajo el cursor del sistema": "MAIN_KEY_SENTENCE_TEXT_ANALYZER", órden del intérprete "KEY_SENTENCE_TEXT_ANALYZER".
 - "Analizar el párrafo bajo el cursor del sistema": "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", órden del intérprete "KEY_PARAGRAPH_TEXT_ANALYZER".
+
+
++++ Desplazamiento del cursor a la línea siguiente/anterior que contiene una irregularidad +++[hdr31-4]
+Los siguientes scripts permiten mover el cursor al comienzo de la línea siguiente/anterior que contiene al menos una irregularidad:
+- mueva el cursor a la siguiente línea con una irregularidad: órden del intérprete "KEY_MOVETONEXTALERT_ANALYZER",
+- mueva el cursor a la línea anterior con una irregularidad: órden del intérprete "KEY_MOVETOPREVIOUSALERT_ANALYZER",
+
+
+Ningún gesto de entrada está asociado con ellos, pero es posible hacerlo utilizando el cuadro de diálogo "Gestos de Entrada". Se colocan en la categoría "ADDON_SUMMARY".
 
 
 ++ Anuncio de la posición del cursor en los campos de edición ++[hdr32]

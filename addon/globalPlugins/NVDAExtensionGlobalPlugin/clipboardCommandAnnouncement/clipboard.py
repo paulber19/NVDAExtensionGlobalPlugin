@@ -15,8 +15,8 @@ class ClipboardManager(object):
 
 	def __init__(self):
 		log.debug("Initialising clipboard manager.")
-		self.sequenceNumber = user32.GetClipboardSequenceNumber ()
-		log.debug("clipboard manager init: current sequence number = %s"%self.sequenceNumber)
+		self.sequenceNumber = user32.GetClipboardSequenceNumber()
+		log.debug("clipboard manager init: current sequence number = %s" % self.sequenceNumber)
 
 	def getClipboardDatas(self):
 		log.debug("getting clipboard data...")
@@ -24,7 +24,7 @@ class ClipboardManager(object):
 		log.debug("Opening the clipboard for enumeration.")
 		try:
 			user32.OpenClipboard(None)
-		except:
+		except Exception:
 			log.debug("Clipboard failed to open. Cannot enumerate.")
 			return data
 		format = 0
@@ -32,7 +32,8 @@ class ClipboardManager(object):
 			try:
 				format = user32.EnumClipboardFormats(format)
 				log.debug("Retrieving clipboard format: %d" % format)
-				if format == 0: break
+				if format == 0:
+					break
 				pos = str(format)
 				log.debug("Retrieving data for format %s" % pos)
 				data[pos] = user32.GetClipboardData(format)
@@ -46,7 +47,7 @@ class ClipboardManager(object):
 
 	def changed(self):
 		log.debug("Checking for clipboard changes.")
-		sequenceNumber = user32.GetClipboardSequenceNumber ()
+		sequenceNumber = user32.GetClipboardSequenceNumber()
 		if sequenceNumber == self.sequenceNumber:
 			log.debug("No changes detected.")
 			return False
@@ -77,7 +78,7 @@ class ClipboardManager(object):
 		log.debug("Opening the clipboard for clearing.")
 		try:
 			user32.OpenClipboard(None)
-		except:
+		except Exception:
 			log.debug("Clipboard failed to open. Cannot clear.")
 			return False
 		res = user32.EmptyClipboard()

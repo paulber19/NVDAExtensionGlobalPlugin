@@ -8,6 +8,8 @@
 import addonHandler
 # from logHandler import log
 import ui
+import braille
+import speech
 import queueHandler
 import api
 import wx
@@ -150,12 +152,16 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.applicationsListBox.Bind(wx.EVT_SET_FOCUS, self.onFocusApplicationsList)
 		info = self.formatApplicationInfo(self.applications[0], name=False, mute=True)
 		wx.CallLater(100, ui.message, info)
+		info = self.formatApplicationInfo(self.applications[0], name=True, mute=True)
+		wx.CallLater(
+			40,
+			braille.handler.message,
+			info)
 
 	def Destroy(self):
 		self.Unbind(wx.EVT_ACTIVATE)
 		NVDAAndAudioApplicationsManagerDialog._instance = None
 		super(NVDAAndAudioApplicationsManagerDialog, self).Destroy()
-
 
 	def onActivate(self, evt):
 		isActive = evt.GetActive()
@@ -169,12 +175,11 @@ class NVDAAndAudioApplicationsManagerDialog(
 			del self.backToForeground
 		evt.Skip()
 
-	
 	def initApplicationsList(self):
 		self.applicationsChannelsVolumes = getChannels()
 		self.applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
 		self.applications = sorted(list(self.applicationsChannelsVolumes.keys()))
-		
+
 	def updateApplicationsList(self):
 		curApplications = self.applications
 		curApp = self.applicationsListBox.GetStringSelection()
@@ -188,27 +193,25 @@ class NVDAAndAudioApplicationsManagerDialog(
 			self.applicationsListBox.SetStringSelection(curApp)
 		else:
 			self.applicationsListBox.SetSelection(0)
+
 	def focusApplicationsList(self, speakEnd=False):
 		if not self.isActive or not self.applicationsListBox.HasFocus():
 			return
 		self.updateApplicationsList()
 		index = self.applicationsListBox.GetSelection()
 		application = self.applications[index]
-		#self.reportState(application)
-		#info = self.formatApplicationInfo(application, name=False, mute=True)
-		#wx.CallLater(40, ui.message, info)
 		if speakEnd:
 			info = self.formatApplicationInfo(application, name=True, mute=True)
 			wx.CallLater(40, ui.message, info)
-			wx.CallLater(20, queueHandler.queueFunction(
+			wx.CallLater(
+				20, queueHandler.queueFunction,
 				queueHandler.eventQueue,
-				ui.message, _("refresh terminated")))
-			#wx.CallLater(30, ui.message, _("refresh terminated"))
+				ui.message, _("refresh terminated"))
 			return
 		self.reportState(application)
 
 	def onFocusApplicationsList(self, evt):
-		if hasattr(self, "backToForeground")and self.backToForeground:
+		if hasattr(self, "backToForeground") and self.backToForeground:
 			delay = 5000
 			wx.CallLater(50, ui.message, _("Please wait, refreshing list"))
 			speakEnd = True
@@ -245,7 +248,6 @@ class NVDAAndAudioApplicationsManagerDialog(
 			self.leftChannelBox.Disable()
 			self.rightChannelBox.Disable()
 			return
-			
 		self.applicationsChannelsVolumes = getChannels()
 		self.applicationsChannelsVolumes[nvdaAppName] = getNVDAChannelsVolume()
 		channelsVolume = self.applicationsChannelsVolumes[application]
@@ -278,7 +280,12 @@ class NVDAAndAudioApplicationsManagerDialog(
 
 	def reportState(self, application):
 		info = self.formatApplicationInfo(application, mute=True)
-		wx.CallLater(40, ui.message, info)
+		wx.CallLater(40, speech.speakMessage, info)
+		info = self.formatApplicationInfo(application, name=True, mute=True)
+		wx.CallLater(
+			40,
+			braille.handler.message,
+			info)
 
 	def onSelectApplication(self, evt):
 		index = self.applicationsListBox.GetSelection()

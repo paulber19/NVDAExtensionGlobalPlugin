@@ -6,26 +6,27 @@
 import addonHandler
 import wx
 import ui
-import config
 import winUser
 from ..settings.nvdaConfig import _NVDAConfigManager, ANL_NoChange, ANL_Off, ANL_On
 addonHandler.initTranslation()
 
+
 def manageNumlockActivation():
 	from keyboardHandler import KeyboardInputGesture
 	activateNumlockOption = _NVDAConfigManager.getActivateNumlockOption()
-	curNumlockState = winUser.getKeyState(winUser.VK_NUMLOCK) 
+	curNumlockState = winUser.getKeyState(winUser.VK_NUMLOCK)
 	if activateNumlockOption != ANL_NoChange:
 		if (
-			(curNumlockState   and (activateNumlockOption == ANL_Off))
-			or  (not curNumlockState and (activateNumlockOption == ANL_On))
+			(curNumlockState and (activateNumlockOption == ANL_Off))
+			or (not curNumlockState and (activateNumlockOption == ANL_On))
 		):
-			gesture = KeyboardInputGesture.fromName( "numLock")
+			gesture = KeyboardInputGesture.fromName("numLock")
 			gesture.send()
 			wx.CallLater(200, gesture.reportExtra)
 
+
 def reportNumLockState(oldState):
-	numlockState = winUser.getKeyState(winUser.VK_NUMLOCK) 
+	numlockState = winUser.getKeyState(winUser.VK_NUMLOCK)
 	from ..settings import toggleReportNumlockStateAtStartAdvancedOption
 	if not toggleReportNumlockStateAtStartAdvancedOption(False):
 		return

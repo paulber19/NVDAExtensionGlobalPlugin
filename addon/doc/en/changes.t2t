@@ -20,6 +20,29 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ v11.3 (September/10/2022) +
+New:
+- added scripts to move the cursor to the next/previous line of text containing an irregularity detected by the text analyzer.
+
+
+Changes:
+- addition of the vertical Tabulation symbol and its pronunciation in the "symbols-en.dic" file of the "newSymbols" folder.
+- removed some symbols whose pronunciation is already defined by NVDA.
+- base undefined symbols in NVDA are now injected on every voice change. Installing the extension no longer creates a symbol file.
+- removed scripts to move cursor to first/last cell of row/column in a table. These scripts are now provided by NVDA. However, they are kept for versions lower than 2022.2.
+- the new scripts of NVDA version 2022.2 concerning tables are moved to the "Table" category added by the add-on in the "Input gestures" dialog.
+
+
+Bug fixes:
+- fixed error when launching the "User Configuration Manager" dialog with a configuration other than "userConfig" or "NVDA".
+- when opening the emojis panel in Windows 11, the direction arrows can be used again when the cursor is in the editing area.
+- work around NVDA bug causing a series of errors in the log when typing in the "Filter by:" field of the "command gestures" dialog.
+- fixed the malfunction of the text parser in a UIA document.
+
+
+Compatibility:
+- resumption of the code of the documentBaseEx.py module to adapt to the modifications made in the "documentBase.py" module of NVDA version 2022..
+
 
 + v11.2 (May/23/2022) +
 Improvements and new features:
@@ -52,7 +75,7 @@ Changes:
 
 + v11.1 (February/05/2022) +
 Features:
-- added command to center  audio of focused application,
+- added command to center audio of focused application,
 
 
 bugfixes:
@@ -217,13 +240,13 @@ Fixed incorrect registration of complex copied or pasted symbols.
 
 
 Bug fixes:
-- the "Browse in loop" option will no longer toggle each time the add-on  configuration is modified.
+- the "Browse in loop" option will no longer toggle each time the add-on configuration is modified.
 
 
 + v9.4 (29/11/2020) +
 - correction of the problem concerning:
  - the inability to assign a braille command gesture in "input gesture" dialog,
- - the impossibility of having the help of the braille input gestures  when input  help is activated.
+ - the impossibility of having the help of the braille input gestures when input help is activated.
 - added download links in the add-on's history.
 - addition of the "View history" button in the "Update" category of the add-on's parameters.
 - fixed NVDA crash when copying and pasting to Thunderbird's editor window.

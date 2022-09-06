@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 # installTasks.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 Paulber19
+# Copyright (C) 2016 - 2022 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -70,14 +70,14 @@ def onInstall():
 	import sys
 	curPath = os.path.dirname(__file__)
 	sys.path.append(curPath)
-	from onInstall import checkWindowListAddonInstalled, installNewSymbols
+	from onInstall import checkWindowListAddonInstalled
 	del sys.path[-1]
 	from addonHandler import _availableAddons
 	addon = _availableAddons[curPath]
 	addonName = addon.manifest["name"]
 	addonSummary = addon.manifest["summary"]
 	checkWindowListAddonInstalled()
-	installNewSymbols()
+
 	# save old configuration if user wants it
 	userConfigPath = globalVars.appArgs.configPath
 	addonConfigFile = os.path.join(userConfigPath, curConfigFileName)

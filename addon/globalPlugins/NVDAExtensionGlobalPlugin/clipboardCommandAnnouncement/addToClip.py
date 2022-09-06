@@ -17,7 +17,6 @@ try:
 except ImportError:
 	from controlTypes import ROLE_MATH
 import ui
-import winUser
 import browseMode
 import core
 import wx

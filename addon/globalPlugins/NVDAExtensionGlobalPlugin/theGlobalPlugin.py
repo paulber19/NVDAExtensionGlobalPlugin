@@ -242,6 +242,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"analyzeCurrentLine": (("kb:nvda+control+f6",), addonConfig.FCT_TextAnalysis),
 		"analyzeCurrentSentence": (("kb:nvda+windows+f6",), addonConfig.FCT_TextAnalysis),
 		"analyzeCurrentParagraph": (("kb:nvda+shift+control+f6",), addonConfig.FCT_TextAnalysis),
+		"findNextTextAnalyzerAlert": (None, addonConfig.FCT_TextAnalysis),
+		"findPreviousTextAnalyzerAlert": (None, addonConfig.FCT_TextAnalysis),
 		"manageUserConfigurations": (None, None),
 		"toggleReportCurrentCaretPosition": (None, None),
 		"reportClipboardTextEx": (("kb:nvda+c",), addonConfig.FCT_ClipboardCommandAnnouncement),
@@ -277,6 +279,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"analyzeCurrentLine": ("kb:control+f6", addonConfig.FCT_TextAnalysis),
 		"analyzeCurrentSentence": ("kb:windows+f6", addonConfig.FCT_TextAnalysis),
 		"analyzeCurrentParagraph": ("kb:shift+control+f6", addonConfig.FCT_TextAnalysis),
+		"findNextTextAnalyzerAlert": ("kb:alt+f6", addonConfig.FCT_TextAnalysis),
+		"findPreviousTextAnalyzerAlert": ("kb:alt+shift+f6", addonConfig.FCT_TextAnalysis),
 		"displaySpeechHistoryRecords": ("kb:f9", addonConfig.FCT_SpeechHistory),
 		"report_WindowsList": ("kb:f10", addonConfig.FCT_SystrayIconsAndActiveWindowsList),
 		"report_SystrayIcons": ("kb:f11", addonConfig.FCT_SystrayIconsAndActiveWindowsList),
@@ -352,13 +356,11 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				from . updateHandler import autoUpdateCheck
 				autoUpdateCheck(
 					toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
-		# activate text analyzer if option is checked
-		#from .textAnalysis.textAnalyzer import updateProfileConfiguration
-		#updateProfileConfiguration()
+		from .ComplexSymbols import newSymbolsHandler
+		newSymbolsHandler.initialize()
 		config.post_configProfileSwitch .register(self.handlePostConfigProfileSwitch)
 		self.handlePostConfigProfileSwitch()
-		#self.updateSettingOfSynthSettingsRing()
-		#self.manageNumlockActivation()
+
 		from .utils import numlock
 		wx.CallLater(2000, numlock.reportNumLockState, winUser.getKeyState(winUser.VK_NUMLOCK))
 
@@ -1619,6 +1621,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			return
 		if unit in [textInfos.UNIT_SENTENCE, textInfos.UNIT_PARAGRAPH] and len(textInfo.text) > 80:
 			ui.message(_("Please wait"))
+
 		(alertCount, textList) = getAnalyze(textInfo, unit)
 		if alertCount:
 			reportAnalysis(alertCount, textList, description=True)
@@ -1638,6 +1641,24 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_analyzeCurrentParagraph(self, gesture):
 		wx.CallAfter(self.analyzeText, textInfos.UNIT_PARAGRAPH)
 
+	def script_findNextTextAnalyzerAlert(self, gesture):
+		focus = api.getFocusObject()
+		try:
+			info = focus.makeTextInfo(textInfos.POSITION_CARET)
+		except Exception:
+			return
+		from .textAnalysis.textAnalyzer import moveToLineWithAlert
+		wx.CallAfter(moveToLineWithAlert, info)
+
+	def script_findPreviousTextAnalyzerAlert(self, gesture):
+		focus = api.getFocusObject()
+		try:
+			info = focus.makeTextInfo(textInfos.POSITION_CARET)
+		except Exception:
+			return
+		from .textAnalysis.textAnalyzer import moveToLineWithAlert
+		wx.CallAfter(moveToLineWithAlert, info, False)
+
 	def script_toggleReportCurrentCaretPosition(self, gesture):
 		from .settings.nvdaConfig import _NVDAConfigManager
 		state = _NVDAConfigManager.toggleReportCurrentCaretPositionOption()
@@ -1649,8 +1670,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			msg = _("report current caret position off")
 		ui.message(msg)
 
-	def script_reportClipboardTextEx(self,gesture):
-		from .clipboardCommandAnnouncement  import clipboard
+	def script_reportClipboardTextEx(self, gesture):
+		from .clipboardCommandAnnouncement import clipboard
 		cm = clipboard.ClipboardManager()
 		if cm.isEmpty:
 			ui.message(_("Clipboard is empty"))
@@ -1659,7 +1680,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			text = api.getClipData()
 		except Exception:
 			text = None
-		if not text or not isinstance(text,str) or text.isspace():
+		if not text or not isinstance(text, str) or text.isspace():
 			noTextMsg = NVDAString("There is no text on the clipboard")
 			# Translators: Presented when there is no text on the clipboard, but clipboard is not empty.
 			noEmptyMsg = _("but the clipboard is not empty")
@@ -1667,18 +1688,20 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			return
 		from .settings import _addonConfigManager
 		max = _addonConfigManager.getMaximumClipboardReportedCharacters()
-		if not max or (max and len(text) < max): 
+		if not max or (max and len(text) < max):
 			brailleText = text
-			while len(text)/1024:
+			while len(text) / 1024:
 				speech.speakMessage(text[:1025])
 				text = text[1025:]
 			if len(text):
 				speech.speakMessage(text)
 			braille.handler.message(brailleText)
 		else:
-			# Translators: If the number of characters on the clipboard is greater than about 1000, it reports this message and gives number of characters on the clipboard.
+			# Translators: If the number of characters on the clipboard is greater than about 1000,
+			# it reports this message and gives number of characters on the clipboard.
 			# Example output: The clipboard contains a large portion of text. It is 2300 characters long.
-			ui.message(NVDAString("The clipboard contains a large portion of text. It is %s characters long") % len(text))
+			ui.message(
+				NVDAString("The clipboard contains a large portion of text. It is %s characters long") % len(text))
 
 	script_reportClipboardTextEx.removeCommandsScript = globalCommands.commands.script_reportClipboardText
 
@@ -1686,8 +1709,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .clipboardCommandAnnouncement .addToClip import addToClip
 		wx.CallAfter(addToClip)
 
-	def script_emptyClipboard(self,gesture):
-		from .clipboardCommandAnnouncement  import clipboard
+	def script_emptyClipboard(self, gesture):
+		from .clipboardCommandAnnouncement import clipboard
 		cm = clipboard.ClipboardManager()
 		if cm.clear():
 			# Translators: message to user to report clipboard
@@ -1695,7 +1718,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		else:
 			# Translators: message to user because of error on clipboard clearing
 			ui.message(_("Error: clipboard cannot cleared"))
-
 
 	def script_temporaryAudioOutputDeviceManager(self, gesture):
 		from .computerTools.audioDevice import TemporaryAudioDeviceManagerDialog
@@ -1747,9 +1769,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		synthName = getSynth().name
 		from .settings.nvdaConfig import _NVDAConfigManager
 		_NVDAConfigManager.saveLastSelectedSettingInSynthSettingsRing(synthName, id)
-		profileName = config.conf.profiles[-1].name
-		log.warning("Last selected setting in synth settings ring  is saved for '%s' profile: %s" % (
-			profileName, id))
 
 	@scriptHandler.script(
 		# Translators: Input help mode message for increase synth setting value command.
@@ -1794,11 +1813,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin  test")
 		ui.message("NVDAExtensionGlobalPlugin test")
-		from .settings.userConfigManager import restart
-		restart(secureMode=True)
-		
-
-
 
 
 class HelperDialog(

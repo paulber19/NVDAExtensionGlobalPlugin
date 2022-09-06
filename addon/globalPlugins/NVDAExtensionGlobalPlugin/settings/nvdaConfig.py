@@ -139,7 +139,7 @@ _textAnalyzerConfspec = {
 	SCT_Formatting: _formattingConfspec,
 	SCT_Alert: _alertConfspec,
 }
-numLockByLayoutDefault=ANL_Off if config.conf['keyboard']['keyboardLayout']=="desktop" else ANL_NoChange
+numLockByLayoutDefault = ANL_Off if config.conf['keyboard']['keyboardLayout'] == "desktop" else ANL_NoChange
 
 _optionsConfspec = {
 	ID_SymbolLevelOnWordCaretMovement: """string(default="None")""",
@@ -147,7 +147,7 @@ _optionsConfspec = {
 	ID_AddToClipSeparator: """string(default="")""",
 	ID_AddTextBefore: "boolean(default=False)",
 	ID_ConfirmToAddToClip: "boolean(default=False)",
-	ID_ActivateNumlock: "integer(default="+str(numLockByLayoutDefault)+")",
+	ID_ActivateNumlock: "integer(default=" + str(numLockByLayoutDefault) + ")",
 }
 
 SCT_SynthSettingsRing = "SynthSettingsRing"
@@ -705,13 +705,18 @@ class NVDAConfigurationManager(object):
 			conf[addonName][SCT_SynthSettingsRing] = {}
 		if SCT_LastSelectedSettings not in conf[addonName][SCT_SynthSettingsRing]:
 			conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings] = {}
+		if conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings].get(synthName, None) == settingId:
+			return
 		conf[addonName][SCT_SynthSettingsRing][SCT_LastSelectedSettings][synthName] = settingId
+		profileName = config.conf.profiles[-1].name
+		log.warning("Last selected setting in synth settings ring  is saved to  '%s' setting for '%s' profile " % (
+			settingId, profileName))
+
 	def setActivateNumlockOption(self, option):
 		config.conf[self.addonName][SCT_Options][ID_ActivateNumlock] = option
-	
+
 	def getActivateNumlockOption(self):
 		return config.conf[self.addonName][SCT_Options][ID_ActivateNumlock]
-		
 
 
 # singleton for addon configuration manager

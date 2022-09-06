@@ -9,6 +9,8 @@ from logHandler import log
 import os
 import config
 import ui
+import speech
+import controlTypes
 from ..utils.NVDAStrings import NVDAString
 import tones
 import textInfos
@@ -26,7 +28,6 @@ _formattingFieldChangeMsg = {
 	"italic": NVDAString(" italic"),
 	"nonItalic": NVDAString("no italic"),
 	"underline": NVDAString("underline"),
-	"nonUnderline": NVDAString("not underlined"),
 	"nonUnderline": NVDAString("not underlined"),
 	"strikethrough": NVDAString("strikethrough"),
 	"nonStrikethrough ": NVDAString("no strikethrough"),
@@ -151,22 +152,49 @@ def checkSymbolsDiscrepancies(info, errorPositions):
 				errorPositions[position] = []
 			errorPositions[position].append(("unexpectedSymbol", ch))
 
+
 decimalSymbol = symbols.getDecimalSymbol()
 digitGroupingSymbol = symbols.getDigitGroupingSymbol()
+
+
+def getStartOffset(textInfo):
+	from NVDAObjects.UIA import UIATextInfo
+	if issubclass(textInfo.obj.TextInfo, UIATextInfo):
+		# UIA bookmark has no endOffset, so calculate it
+		first = textInfo.copy()
+		first.expand(textInfos.UNIT_STORY)
+		startOffset = textInfo.compareEndPoints(first, "startToStart")
+	else:
+		if hasattr(textInfo.bookmark, "_start"):
+			startOffset = textInfo.bookmark._start._startOffset
+		else:
+			startOffset = textInfo.bookmark.startOffset
+	return startOffset
+
+
+def getEndOffset(textInfo):
+	from NVDAObjects.UIA import UIATextInfo
+	if issubclass(textInfo.obj.TextInfo, UIATextInfo):
+		# UIA bookmark has no endOffset, so calculate it
+		first = textInfo.copy()
+		first.expand(textInfos.UNIT_STORY)
+		endOffset = textInfo.compareEndPoints(first, "endToStart")
+	else:
+		if hasattr(textInfo.bookmark, "_end"):
+			endOffset = textInfo.bookmark._end._endOffset
+		else:
+			endOffset = textInfo.bookmark.endOffset
+	return endOffset
+
+
 def checkExtraWhiteSpace(info, unit, errorPositions):
 	text = info.text
 	log.info("checkExtraWhiteSpace: %s" % text)
-	if hasattr(info.bookmark, "_end"):
-		curEndPos = info.bookmark._end._endOffset
-	else:
-		curEndPos = info.bookmark.endOffset
+	curEndPos = getEndOffset(info)
 	tempInfo = info.copy()
 	tempInfo.collapse()
 	tempInfo.expand(textInfos.UNIT_STORY)
-	if hasattr(tempInfo.bookmark, "_end"):
-		storyEndPos = tempInfo.bookmark._end._endOffset
-	else:
-		storyEndPos = tempInfo.bookmark.endOffset
+	storyEndPos = getEndOffset(tempInfo)
 	if unit == textInfos.UNIT_WORD:
 		text = text.strip()
 	else:
@@ -218,8 +246,8 @@ def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPosition
 	symbolsAndSpaceDic = _NVDAConfigManager.getSymbolsAndSpaceDic()
 	for index in range(0, len(text)):
 		ch = text[index]
-		if (index >0 and index <len(text) -1) and ch in [decimalSymbol, digitGroupingSymbol]:
-			if text[index-1].isdigit() and text[index+1].isdigit():
+		if (index > 0 and index < len(text) - 1) and ch in [decimalSymbol, digitGroupingSymbol]:
+			if text[index - 1].isdigit() and text[index + 1].isdigit():
 				continue
 		position = index + 1
 		if ch not in symbols.getSymbols_all():
@@ -331,7 +359,7 @@ def getAlertCount(errorPositions):
 	return count
 
 
-def getAnalyze(textInfo, unit):
+def getAnalyze(textInfo, unit, reportFormatted=True):
 	log.info("getAnalyse: %s, %s" % (unit, textInfo.text))
 	errorPositions = {}
 	if _NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False):
@@ -341,6 +369,8 @@ def getAnalyze(textInfo, unit):
 	if _NVDAConfigManager.toggleReportFormattingChangesOption(False):
 		checkFormatingChanges(textInfo, unit, errorPositions)
 	alertCount = getAlertCount(errorPositions)
+	if not reportFormatted:
+		return (alertCount, errorPositions)
 	textList = getReportText(errorPositions)
 	return (alertCount, textList)
 
@@ -371,8 +401,7 @@ _formatFieldList = [
 
 # parts of code originaly written by Tony Malik for  browserNav add-on.
 def compareFormatFields(f1, f2):
-	for key in _formatFieldList :
-		print ("key: %s"%key)
+	for key in _formatFieldList:
 		if key not in f1 and key not in f2:
 			continue
 		try:
@@ -541,3 +570,44 @@ def findFormatingChanges(info, unit, errorPositions):
 			previousFieldCommandField = lastFieldCommandField
 		else:
 			raise Exception("Impossible!")
+
+
+def moveToLineWithAlert(info, next=True):
+	from ..utils import runInThread
+	textInfo = info.copy()
+	start = getStartOffset(textInfo)
+	direction = 1 if next else -1
+	i = 1000
+	th = runInThread.RepeatBeep(delay=1.5, beep=(200, 200))
+	th.start()
+	while i:
+		i -= 1
+		textInfo.collapse()
+		textInfo.expand(textInfos.UNIT_LINE)
+		oldStart = getStartOffset(textInfo)
+		result = textInfo.move(textInfos.UNIT_LINE, direction)
+		textInfo.expand(textInfos.UNIT_LINE)
+		start = getStartOffset(textInfo)
+		# with word, move don't return 0. So checks start of textinfo.
+		if result == 0 or oldStart == start:
+			# on first or last line of document, so stop search
+			break
+		textInfo.expand(textInfos.UNIT_LINE)
+		alertCount, textList = getAnalyze(textInfo, textInfos.UNIT_LINE, False)
+		if alertCount:
+			for position in sorted(textList):
+				if position > start:
+					break
+			textInfo.updateCaret()
+			speech.speakTextInfo(textInfo, reason=controlTypes.OutputReason.CARET)
+			textInfo.collapse()
+			reportAnalysis(alertCount, getReportText(textList))
+			th.stop()
+			del th
+			return
+	th.stop()
+	del th
+	if i == 0:
+		ui.message(_("Aborted: The maximum number of lines without irregularity (1000) is exceeded."))
+		return
+	ui.message(_("No more irregularity"))

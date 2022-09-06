@@ -1,4 +1,4 @@
-# globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__
+# globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
 # Copyright (C) 2018 - 2021 paulber19
 # This file is covered by the GNU General Public License.

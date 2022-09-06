@@ -5,7 +5,6 @@
 # See the file COPYING for more details.
 
 import os
-import globalVars
 import tempfile
 import typing
 import wx

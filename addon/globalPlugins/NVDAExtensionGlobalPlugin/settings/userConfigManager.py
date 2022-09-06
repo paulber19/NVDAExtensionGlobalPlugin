@@ -50,18 +50,10 @@ class UserConfigurationsManager(object):
 
 		self.curAddon = addonHandler.getCodeAddon()
 		self.addonName = self.curAddon.manifest["name"]
-		# for nvda version < 2020.4
-		self.setNVDAAppDir()
 		self.activeUserConfigPath = self.getActiveConfigurationPath()
 		self.load()
 		self.addUserConfig(self.activeUserConfigPath)
 		config.post_configSave.register(self.handlePostConfigSave)
-
-	def setNVDAAppDir(self):
-		if hasattr(globalVars, "appDir"):
-			return
-		# for nvda version < 2020.4
-		globalVars.appDir = os.getcwd()
 
 	def getUserConfigParentFolder(self):
 		import globalVars
@@ -132,7 +124,7 @@ class UserConfigurationsManager(object):
 		if folderName in ["userConfig", "nvda"]:
 			self.conf[sct][path][folderName] = True
 		else:
-			self.conf[SCT_UserConfigurations][dir][folderName] = False
+			self.conf[SCT_UserConfigurations][path][folderName] = False
 
 	def deleteUserConfig(self, userConfigFolderPath):
 		folderName = os.path.basename(userConfigFolderPath)

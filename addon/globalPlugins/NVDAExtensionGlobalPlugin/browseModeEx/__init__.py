@@ -28,7 +28,15 @@ import ui
 import textInfos
 import api
 import config
-from . import documentBaseEx
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
+if NVDAVersion > [2022, 1]:
+	# for nvda version >= 2022.2
+	from .documentBaseEx import DocumentWithTableNavigation_2022_2 as DocumentWithTableNavigationEx
+else:
+	# for nvda versions until 2022.1
+	from .documentBaseEx import DocumentWithTableNavigation_2022_1 as DocumentWithTableNavigationEx
+
 from .. utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
 from ..utils.NVDAStrings import NVDAString
 from ..settings import toggleLoopInNavigationModeOption
@@ -109,7 +117,7 @@ class CursorManagerEx(CursorManager):
 
 
 class BrowseModeDocumentTreeInterceptorEx(
-	documentBaseEx.DocumentWithTableNavigationEx,
+	DocumentWithTableNavigationEx,
 	CursorManagerEx, browseMode.BrowseModeDocumentTreeInterceptor):
 	_myGestureMap = {
 		"kb(desktop):nvda+a": "reportDocumentConstantIdentifier",

@@ -92,8 +92,6 @@ class SpeechRecorderManager(object):
 			return
 		oldOnMonitoring = self._onMonitoring
 		self._onMonitoring = False
-
-
 		if position == "previous" and index > 0:
 			index -= 1
 		elif position == "next" and index < len(self._speechHistory) - 1:
@@ -103,7 +101,7 @@ class SpeechRecorderManager(object):
 		self._lastSpeechHistoryReportIndex = index
 		text = self._speechHistory[index]
 		ui.message(text)
-		if  not api.copyToClip(text):
+		if not api.copyToClip(text):
 			# Translators: Presented when unable to copy to the clipboard because of an error.
 			ui.message(NVDAString("Unable to copy"))
 		self._onMonitoring = oldOnMonitoring

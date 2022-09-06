@@ -100,15 +100,19 @@ def getSymbolToSymetricDic():
 	log.error("textAnalysis configuration cannot be loaded")
 	return None
 
+
 def getDecimalSymbol():
 	if _conf is None:
 		return ""
-	return _conf.get(NUM_DecimalSymbol,"")
+	return _conf.get(NUM_DecimalSymbol, "")
+
 
 def getDigitGroupingSymbol():
 	if _conf is None:
 		return ""
-	return _conf.get(NUM_DigitGroupingSymbol,"")
+	return _conf.get(NUM_DigitGroupingSymbol, "")
+
+
 def getTextAnalysisConfig():
 	path = getTextAnalysisIniFilePath()
 	conf = ConfigObj(

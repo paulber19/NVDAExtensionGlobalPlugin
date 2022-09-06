@@ -42,7 +42,7 @@ def initialize():
 class InputGesturesDialogEx(
 	contextHelpEx.ContextHelpMixinEx,
 	InputGesturesDialog):
-
+	refreshButtonStateDelay = None
 	_executeScriptWaitingTimer = None
 	repeatCount = 0
 
@@ -176,7 +176,7 @@ class InputGesturesDialogEx(
 		if module[0] == "globalPlugins":
 			import globalPluginHandler
 			plugins = list(globalPluginHandler .runningPlugins)
-			gp = ".".join(module[:2]) 
+			gp = ".".join(module[:2])
 			for p in plugins:
 				m = p.__module__
 				if gp in m:
@@ -202,7 +202,21 @@ class InputGesturesDialogEx(
 			return script
 		return None
 
+	def onTreeSelect(self, evt):
+		if evt:
+			evt.Skip()
+		if self.refreshButtonStateDelay is not None:
+			self.refreshButtonStateDelay.Stop()
+			# to work around the NVDA bug that generates a series of errors in the log,
+			# when entering text in the "Filter by" field
+			# the refreshItems on the tree generates an onTreeSelect for each item.
+			# so wait for the last item to refresh buttons
+		self.refreshButtonStateDelay = wx.CallLater(50, self._refreshButtonState)
+
 	def _refreshButtonState(self):
+		if self.refreshButtonStateDelay is not None:
+			self.refreshButtonStateDelay.Stop()
+			self.refreshButtonStateDelay = None
 		selectedItems = self.tree.getSelectedItemData()
 		if selectedItems is None:
 			item = None

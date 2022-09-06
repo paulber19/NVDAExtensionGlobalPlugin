@@ -74,7 +74,8 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for report current application name and version command.
 	"reportAppProductNameAndVersion": (
-		_("Report the application 's name and version. Twice: copy these informations to clipboard"), globalCommands.SCRCAT_TOOLS, None),
+		_("Report the application 's name and version. Twice: copy these informations to clipboard"),
+		globalCommands.SCRCAT_TOOLS, None),
 	# Translators: Input help mode message
 	# for report current program name and app module name or current configuration profile name command.
 	"reportAppModuleInfoEx": (
@@ -314,6 +315,16 @@ scriptsToDocInformations = {
 	# for analyzeCurrentParagraph script commands.
 	"analyzeCurrentParagraph": (_("Analyze the paragraph under system cursor"), None, "hdr31-3"),
 	# Translators: Input help mode message
+	# for find and move to next line with textanalyzer irregularity
+	"findNextTextAnalyzerAlert": (
+		_("Move to next line with irregularity detected by text analyzer"),
+		None, "hdr31-3"),
+	# Translators: Input help mode message
+	# for find and move to previous line with textanalyzer irregularitiy
+	"findPreviousTextAnalyzerAlert": (
+		_("Move to previous line with irregularity detected by text analyzer"),
+		None, "hdr31-3"),
+	# Translators: Input help mode message
 	# for manageUserConfigurations script commands.
 	"manageUserConfigurations": (_("Display the dialog to manage user configurations"), None, "hdr30"),
 	# Translators: Input help mode message
@@ -322,7 +333,10 @@ scriptsToDocInformations = {
 		_("Toggle reporting of current caret position in edit box"), None, "hdr32"),
 	# Translators: Input help mode message
 	# for reportClipboardTextEx script commands.
-	"reportClipboardTextEx": (NVDAString("Reports the text on the Windows clipboard"), globalCommands.SCRCAT_SYSTEM, "hdr7-2"),
+	"reportClipboardTextEx": (
+		NVDAString("Reports the text on the Windows clipboard"),
+		globalCommands.SCRCAT_SYSTEM,
+		"hdr7-2"),
 	# Translators: Input help mode message
 	# for addToClip script commands.
 	"addToClip": (_("Add, to  clipboard,  the selected text "), None, "hdr7-1"),

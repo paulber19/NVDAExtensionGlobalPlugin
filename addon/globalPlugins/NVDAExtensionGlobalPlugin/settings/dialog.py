@@ -5,7 +5,6 @@
 # See the file COPYING for more details.
 
 import addonHandler
-import globalVars
 import wx
 import os
 import config
@@ -492,7 +491,7 @@ class NVDAEnhancementSettingsPanel(
 		choices = [x * 1024 for x in range(1, 1000)]
 		choices = list(reversed(choices))
 		choiceLabels = [str(x) for x in choices]
-		choices = [0,] + choices
+		choices = [0, ] + choices
 		# Translators: choice for no limit
 		choiceLabels.insert(0, _("No limit"))
 		self.maximumOfReportedCharactersBox = group.addLabeledControl(
@@ -501,6 +500,7 @@ class NVDAEnhancementSettingsPanel(
 		self.maximumOfReportedCharactersBox.SetSelection(
 			choices.index(_addonConfigManager.getMaximumClipboardReportedCharacters()))
 		self.bindHelpEvent(getHelpObj("hdr3-1"), self.maximumOfReportedCharactersBox)
+
 	def saveSettingChanges(self):
 		from ..settings import (
 			toggleReportNextWordOnDeletionOption,
@@ -921,7 +921,6 @@ class KeyboardSettingsPanel(
 			toggleReportNumlockStateAtStartAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr30?"), self.reportNumlockStateAtStartOptionBox)
 
-
 	def saveSettingChanges(self):
 		from ..settings import (
 			getInstallFeatureOption,
@@ -1190,24 +1189,24 @@ class KeyboardProfileSettingsPanel(
 		sHelper.addItem(group)
 		# Translators: This is the label for a combobox in the Keyboard profile settings panel.
 		labelText = _("&On profile activation:")
-		# numlock activation choices for 
+		# numlock activation choices for
 		# must be  in the same order that the ANL constants
 		activateNumlockChoices = (
 			# Translators: label Choice in Activate NumLock combo box
-		# ANL_NoChange constant
+			# ANL_NoChange constant
 			_("Do nothing"),
 			# Translators: Choice in Activate NumLock combo box
 			# ANL_Off constant
-			_("Desactivate"), 
+			_("Desactivate"),
 			# Translators: Choice in Activate NumLock combo box
 			# ANL_On
-			_("Activate"), 
+			_("Activate"),
 		)
 		self.activateNumlockBox = group.addLabeledControl(
 			labelText, wx.Choice, choices=activateNumlockChoices)
 		self.activateNumlockBox .SetStringSelection(
 			activateNumlockChoices[_NVDAConfigManager.getActivateNumlockOption()])
-		self.bindHelpEvent(getHelpObj("hdr305"), self.activateNumlockBox )
+		self.bindHelpEvent(getHelpObj("hdr305"), self.activateNumlockBox)
 
 	def saveSettingChanges(self):
 		from .nvdaConfig import _NVDAConfigManager
@@ -1219,7 +1218,7 @@ class KeyboardProfileSettingsPanel(
 			_NVDAConfigManager.toggleConfirmToAddToClipOption(True)
 		option = self.activateNumlockBox .GetSelection()
 		_NVDAConfigManager.setActivateNumlockOption(option)
-		
+
 	def onSave(self):
 		self.saveSettingChanges()
 		from ..utils import numlock
@@ -1561,4 +1560,3 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 		else:
 			self.categoryClasses = self.baseCategoryClasses[:]
 		super(ProfileSettingsDialog, self).__init__(parent, initialCategory)
-

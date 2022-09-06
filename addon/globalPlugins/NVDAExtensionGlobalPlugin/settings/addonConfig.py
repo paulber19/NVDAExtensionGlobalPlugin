@@ -729,7 +729,8 @@ class AddonConfiguration27(BaseAddonConfiguration):
 			shutdown=_ShutdownComputerConfSpec)
 	), list_values=False, encoding="UTF-8")
 
-_reportNumlockStateAtStartDefault = True if config.conf['keyboard']['keyboardLayout']=="desktop" else False
+
+_reportNumlockStateAtStartDefault = True if config.conf['keyboard']['keyboardLayout'] == "desktop" else False
 
 
 class AddonConfiguration28(BaseAddonConfiguration):
@@ -893,7 +894,7 @@ class AddonConfiguration28(BaseAddonConfiguration):
 		activateNumpadStandardUseWithNumLock=ID_ActivateNumpadStandardUseWithNumLock,
 		confirmAudioDeviceChange=ID_ConfirmAudioDeviceChange,
 		confirmAudioDeviceChangeTimeOut=ID_ConfirmAudioDeviceChangeTimeOut,
-		reportNumlockStateAtStart =ID_ReportNumlockStateAtStart,
+		reportNumlockStateAtStart=ID_ReportNumlockStateAtStart,
 		reportNumlockStateAtStartDefault=_reportNumlockStateAtStartDefault,
 		maxClipboardReportedCharacters=ID_MaxClipboardReportedCharacters,
 	)

@@ -31,10 +31,10 @@ _functionnalitiesNoInSecurMode = [
 	addonConfig.FCT_CurrentFolderReport,
 	addonConfig.FCT_RestartInDebugMode,
 	addonConfig.FCT_OpenCurrentOrOldNVDALogFile,
-	addonConfig.FCT_SplitAudio ,
+	addonConfig.FCT_SplitAudio,
 	addonConfig.FCT_Tools,
-	addonConfig.FCT_TextAnalysis ,
-	addonConfig.FCT_ManageUserConfigurations ,
+	addonConfig.FCT_TextAnalysis,
+	addonConfig.FCT_ManageUserConfigurations,
 	addonConfig.FCT_ExploreNVDA,
 	addonConfig.FCT_VariousOutSecureMode,
 ]
@@ -192,6 +192,7 @@ def toggleActivateNumpadStandardUseWithNumLockAdvancedOption(toggle=True):
 
 def toggleConfirmAudioDeviceChangeAdvancedOption(toggle=True):
 	return toggleAdvancedOption(addonConfig.ID_ConfirmAudioDeviceChange, toggle)
+
 
 def toggleReportNumlockStateAtStartAdvancedOption(toggle=True):
 	return toggleAdvancedOption(addonConfig.ID_ReportNumlockStateAtStart, toggle)

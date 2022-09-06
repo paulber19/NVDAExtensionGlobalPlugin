@@ -74,7 +74,7 @@ _msgUnDo = _("Undo")
 _msgSelectAll = _("select all")
 
 _clipboardCommands = {
-# associate function to: check selection, check clipboard change, check empty clipboard
+	# associate function to: check selection, check clipboard change, check empty clipboard
 	"undo": (_msgUnDo, False, False, False),
 	"cut": (_msgCut, True, True, False),
 	"copy": (_msgCopy, True, True, False),
@@ -134,6 +134,21 @@ def getStatusBarText():
 _reportPositionTimer = None
 
 
+def getStartOffset(textInfo):
+	from NVDAObjects.UIA import UIATextInfo
+	if issubclass(textInfo.obj.TextInfo, UIATextInfo):
+		# UIA bookmark has no endOffset, so calculate it
+		first = textInfo.copy()
+		first.expand(textInfos.UNIT_STORY)
+		startOffset = textInfo.compareEndPoints(first, "startToStart")
+	else:
+		if hasattr(textInfo.bookmark, "_start"):
+			startOffset = textInfo.bookmark._start._startOffset
+		else:
+			startOffset = textInfo.bookmark.startOffset
+	return startOffset
+
+
 def reportPosition(pos):
 	global _reportPositionTimer
 	if _reportPositionTimer:
@@ -142,20 +157,11 @@ def reportPosition(pos):
 	if not _NVDAConfigManager.toggleReportCurrentCaretPositionOption(False):
 		return
 	info = pos.copy()
-	try:
-		if hasattr(info.bookmark, "_start"):
-			start = info.bookmark._start._startOffset
-		else:
-			start = info.bookmark.startOffset
-	except AttributeError:
-		return
+	start = getStartOffset(info)
 	lineInfo = info.copy()
 	lineInfo.collapse()
 	lineInfo.expand(textInfos.UNIT_LINE)
-	if hasattr(lineInfo.bookmark, "_start"):
-		lineStart = lineInfo.bookmark._start._startOffset
-	else:
-		lineStart = lineInfo.bookmark.startOffset
+	lineStart = getStartOffset(lineInfo)
 	index = start - lineStart
 
 	def callback(index):
@@ -249,7 +255,6 @@ class EditableTextEx(EditableText):
 		if cm.changed():
 			ui.message(_msgCut)
 
-
 	def script_pasteFromClipboard(self, gesture):
 		# in all case, send gesture
 		gesture.send()
@@ -337,8 +342,6 @@ class ClipboardCommandAnnouncement(object):
 	}
 
 	def initOverlayClass(self):
-		if not isInstall(FCT_ClipboardCommandAnnouncement):
-			return
 		editionKeyCommands = getEditionKeyCommands(self)
 		if self.checkSelection:
 			d = self._changeSelectionGestureToMessage .copy()
@@ -464,7 +467,8 @@ class ClipboardCommandAnnouncement(object):
 		d = {}
 		for item in _clipboardCommands:
 			d[editionKeyCommands[item]] = _clipboardCommands[item]
-		(msg, checkSelection, checkClipChange, checkClipEmpty) = d["+".join(gesture.modifierNames) + "+" + gesture.mainKeyName]
+		(msg, checkSelection, checkClipChange, checkClipEmpty) = d["+".join(
+			gesture.modifierNames) + "+" + gesture.mainKeyName]
 		if checkClipEmpty and cm.isEmpty:
 			# Translators: message to report clipboard is empty
 			ui.message(_("Clipboard is empty"))
@@ -479,13 +483,11 @@ class ClipboardCommandAnnouncement(object):
 				return
 		# we send always command key
 		gesture.send()
-		
 		if checkClipChange:
 			time.sleep(0.1)
 			if not cm.changed():
 				return
 		ui.message(msg)
-
 
 
 _classNamesToCheck = [
@@ -506,7 +508,15 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	# for the obj, the informations are bad: role= Window, className= Edit, not states
 	#  tand with no better solution, we check the length of obj.states
 	elif len(obj.states) and (obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck):
-		clsList.insert(0, EditableTextEx)
+		# newer revisions of Windows 11 build 22000 moves focus to emoji search field.
+		# However this means NVDA's own edit field scripts will override emoji panel commands.
+		# Therefore remove text field movement commands so emoji panel commands can be used directly.
+		if hasattr(obj, "UIAAutomationId")\
+			and obj.UIAAutomationId == "Windows.Shell.InputApp.FloatingSuggestionUI.DelegationTextBox":
+			pass
+		else:
+			clsList.insert(0, EditableTextEx)
+		return
 	elif isInstall(FCT_ClipboardCommandAnnouncement):
 		clsList.insert(0, ClipboardCommandAnnouncement)
 		obj.checkSelection = False

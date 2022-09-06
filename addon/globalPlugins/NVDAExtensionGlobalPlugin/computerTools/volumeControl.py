@@ -187,7 +187,7 @@ def getAppVolumeObjByName(appName):
 			volumeObj = session.SimpleAudioVolume
 			return volumeObj
 	if isNVDA(appName):
-		text = "getAppVolumeObjByName for %s: "% appName  + ", ".join(debugText)
+		text = "getAppVolumeObjByName for %s: " % appName + ", ".join(debugText)
 		log.debug(text)
 	return None
 
@@ -205,10 +205,9 @@ def getNVDAVolumeObjByPid():
 			pid = session.Process.processId
 		except Exception:
 			continue
-		if pid ==nvdapid:
+		if pid == nvdapid:
 			return session.SimpleAudioVolume
 	return None
-
 
 
 def getNVDAVolumeObj():
@@ -220,7 +219,7 @@ def getNVDAVolumeObj():
 		_nvdaVolumeObj = getNVDAVolumeObjByPid()
 		if _nvdaVolumeObj is None:
 			log.warning("NVDA volume object not found and cannot be initialized")
-	return _nvdaVolumeObj 
+	return _nvdaVolumeObj
 
 
 def getAppVolumeObj(appName):
@@ -578,11 +577,12 @@ def splitChannels(NVDAChannel=None, application=None):
 	wx.CallLater(80, ui.message, msg)
 	log.warning(msg)
 
+
 def centerFocusedApplication():
-		focus = api.getFocusObject()
-		from appModuleHandler import getAppNameFromProcessID
-		appName = getAppNameFromProcessID(focus.processID, True)
-		toggleChannels(application=appName, balance="center")
+	focus = api.getFocusObject()
+	from appModuleHandler import getAppNameFromProcessID
+	appName = getAppNameFromProcessID(focus.processID, True)
+	toggleChannels(application=appName, balance="center")
 
 
 def toggleChannels(balance="center", application=None, silent=False):
@@ -611,7 +611,11 @@ def toggleChannels(balance="center", application=None, silent=False):
 		wx.CallLater(40, cancelSpeech)
 		wx.CallLater(80, ui.message, msg)
 	log.warning(msg)
+
+
 _wavePlayer = None
+
+
 # some parts of following code comes from Tony's Enhancements addon for NVDA (author: Tony Malykh)
 def waveOutSetVolume(wavePlayer):
 	global _prevNVDAChannelsVolume
@@ -646,7 +650,7 @@ def isInitialized():
 
 def initialize():
 	global _originalWaveOpen, _initialized
-	from ..settings import  isInstall
+	from ..settings import isInstall
 	from ..settings.addonConfig import FCT_SplitAudio
 	_initialized = False
 	if not isInstall(FCT_SplitAudio):
@@ -663,8 +667,9 @@ def initialize():
 		_initialized = True
 		log.debug("volumeControl initialization: nvwave.WavePlayer.open  patched")
 
+
 def terminate():
-	global _originalWaveOpen, _NVDAChannelsVolume
+	global _originalWaveOpen, _NVDAChannelsVolume, _initialized
 	if _originalWaveOpen:
 		# replace NVDA on center
 		_NVDAChannelsVolume = (1.0, 1.0)

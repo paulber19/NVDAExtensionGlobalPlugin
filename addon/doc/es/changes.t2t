@@ -25,6 +25,30 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v11.3 (10/09/2022) +
+Nuevas características:
+- se añadió los scripts para mover el cursor a la línea de texto siguiente/anterior que contiene una irregularidad detectada por el analizador de texto.
+
+
+Cambios:
+- se añadió el símbolo Tabulación vertical y su pronunciación en el archivo "symbols-es.dic" en la carpeta "newSymbols".
+- eliminación de ciertos símbolos cuya pronunciación ya está definida por NVDA.
+- los símbolos básicos no definidos en NVDA ahora se inyectan con cada cambio de voz. La instalación del complemento ya no crea un archivo de símbolos.
+- eliminación de los scripts al moverse el cursor en la primera / última celda de la línea / columna en una tabla. Estos scripts ahora son proporcionados por NVDA. Sin embargo, se guardan para versiones inferiores a 2022.2.
+-  los nuevos scripts de NVDA versión 2022.2 y futura versión 2022.3 para las tablas se mueven a la categoría "Tabla" añadidó por el complemento en el diálogo "Gestos de Entrada".
+
+
+Corección de Fallos:
+- corrección del error al iniciar el diálogo "Gestionar las configuraciones del usuario" con una configuración que no sea "userConfig" o "NVDA".
+- al abrir el panel de emojis en Windows 11, las flechas de dirección se pueden usar nuevamente cuando el cursor está en el campo de edición.
+- omisión del error de NVDA que genera una serie de errores en el registro durante la entrada en el campo "Filtrar por:" del diálogo "Gestos de Entrada".
+- corrección de disfunción del analizador de texto en un documento de UIA.
+
+
+Compatibilidad:
+- reanudación del código del módulo documentBaseEx.py para adaptarse a las modificaciones realizadas en el módulo "documentBase.py" de NVDA en las versiones 2022.2 y futura 2022.3.
+
+
 + v11.2 (23/05/2022) +
 Mejoras y nuevas características:
 - con respecto al portapapeles:
