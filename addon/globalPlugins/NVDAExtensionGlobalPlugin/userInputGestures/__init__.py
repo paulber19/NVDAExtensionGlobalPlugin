@@ -39,11 +39,6 @@ class UserInputGesturesDialog(
 		self.treeRoot = tree.AddRoot("root")
 		tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.onTreeSelect)
 		settingsSizer.Add(tree, proportion=1, flag=wx.EXPAND)
-		GestureMappingsRetriever = _UserGestureMappingsRetriever(
-			obj=gui.mainFrame.prevFocus,
-			ancestors=gui.mainFrame.prevFocusAncestors)
-		self.gestures = GestureMappingsRetriever.results
-		self.userGestureMap = GestureMappingsRetriever.userGestureMap
 		self.populateTree()
 		settingsSizer.AddSpacer(
 			gui.guiHelper.SPACE_BETWEEN_ASSOCIATED_CONTROL_VERTICAL)
@@ -59,11 +54,17 @@ class UserInputGesturesDialog(
 		self.removeAllButton.Bind(wx.EVT_BUTTON, self.onRemoveAll)
 		self.pendingRemoves = set()
 		settingsSizer.Add(bHelper.sizer)
+		self.tree.Bind(wx.EVT_WINDOW_DESTROY, self._onDestroyTree)
 
 	def postInit(self):
 		self.tree.SetFocus()
 
-	def populateTree(self, filter=''):
+	def populateTree(self):
+		GestureMappingsRetriever = _UserGestureMappingsRetriever(
+			obj=gui.mainFrame.prevFocus,
+			ancestors=gui.mainFrame.prevFocusAncestors)
+		self.gestures = GestureMappingsRetriever.results
+		self.userGestureMap = GestureMappingsRetriever.userGestureMap
 		for category in sorted(self.gestures):
 			treeCat = self.tree.AppendItem(self.treeRoot, category)
 			commands = self.gestures[category]
@@ -125,6 +126,11 @@ class UserInputGesturesDialog(
 			return
 		inputCore.manager.userGestureMap.clear()
 		inputCore.manager.userGestureMap.save()
+
+	def _onDestroyTree(self, evt: wx.WindowDestroyEvent):
+		# Remove the binding when the tree is destroyed so that it can not be called during destruction
+		# of the dialog.
+		self.tree.Unbind(wx.EVT_TREE_SEL_CHANGED)
 
 	def onOk(self, evt):
 		for gesture, module, className, scriptName in self.pendingRemoves:
@@ -197,8 +203,8 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		className,
 		scriptName,
 		script):
-		info = AllGesturesScriptInfo(cls, moduleName, className, scriptName)
-		category = self.getScriptCategory(cls, script)
+		info = inputCore.AllGesturesScriptInfo(cls, scriptName)
+		category = inputCore._AllGestureMappingsRetriever.getScriptCategory(cls, script)
 		if category is None:
 			category = "%s.%s" % (moduleName, className)
 		info.category = category
@@ -217,35 +223,6 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 			if not info.displayName:
 				return None
 		return info
-
-	def getScriptCategory(self, cls, script):
-		try:
-			return script.category
-		except AttributeError:
-			pass
-		try:
-			return cls.scriptCategory
-		except AttributeError:
-			pass
-		return None
-
-
-class AllGesturesScriptInfo(inputCore.AllGesturesScriptInfo):
-	__slots__ = (
-		"cls",
-		"moduleName",
-		"className",
-		"scriptName",
-		"category",
-		"displayName",
-		"gestures")
-
-	def __init__(self, cls, moduleName, className, scriptName):
-		self.cls = cls
-		self.moduleName = moduleName
-		self.className = className
-		self.scriptName = scriptName
-		self.gestures = []
 
 
 class UserGestureMap(inputCore.GlobalGestureMap):

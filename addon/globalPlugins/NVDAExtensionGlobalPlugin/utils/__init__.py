@@ -61,6 +61,11 @@ def delayScriptTask(func, *args, **kwargs):
 	GB_scriptTaskTimer = wx.CallLater(delay, func, *args, **kwargs)
 
 
+def delayScriptTaskWithDelay(delay, func, *args, **kwargs):
+	global GB_scriptTaskTimer
+	GB_scriptTaskTimer = wx.CallLater(delay, func, *args, **kwargs)
+
+
 def stopDelayScriptTask():
 	global GB_scriptTaskTimer
 	if GB_scriptTaskTimer is not None:

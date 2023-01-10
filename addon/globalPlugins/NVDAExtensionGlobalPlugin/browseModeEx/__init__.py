@@ -30,7 +30,10 @@ import api
 import config
 from versionInfo import version_year, version_major
 NVDAVersion = [version_year, version_major]
-if NVDAVersion > [2022, 1]:
+if NVDAVersion >= [2022, 4]:
+	# for nvda version >= 2022.4
+	from .documentBaseEx import DocumentWithTableNavigation_2022_4 as DocumentWithTableNavigationEx
+elif NVDAVersion > [2022, 1]:
 	# for nvda version >= 2022.2
 	from .documentBaseEx import DocumentWithTableNavigation_2022_2 as DocumentWithTableNavigationEx
 else:

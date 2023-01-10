@@ -20,7 +20,9 @@ from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
 from .user32 import (
 	SW_SHOWMAXIMIZED, SW_SHOWMINIMIZED, getWindowPlacement, enumWindows,
-	getParent, WS_EX_APPWINDOW, WS_EX_TOOLWINDOW, getExtendedWindowStyle
+	getParent, getExtendedWindowStyle,
+	WS_EX_APPWINDOW, WS_EX_TOOLWINDOW,
+	WS_EX_NOACTIVATE, WS_EX_NOREDIRECTIONBITMAP
 )
 
 addonHandler.initTranslation()
@@ -38,6 +40,12 @@ def isRealWindow(hWnd):
 		return False
 	if getParent(hWnd):
 		return False
+	if (
+		lExStyle & WS_EX_NOACTIVATE
+		or lExStyle & WS_EX_NOREDIRECTIONBITMAP
+	):
+		return False
+
 	if (isToolWindow and not hasOwner) or (
 		(isAppWindow and hasOwner)):
 		if winUser.getWindowText(hWnd):

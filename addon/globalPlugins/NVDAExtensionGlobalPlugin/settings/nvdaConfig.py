@@ -33,6 +33,7 @@ ID_AddToClipSeparator = "AddToClipSeparator"
 ID_AddTextBefore = "AddTextBefore"
 ID_ConfirmToAddToClip = "ConfirmToAddToClip"
 ID_ActivateNumlock = "ActivateNumlOck"
+ID_SpeakAlphaNumChars = "SpeakAlphaNumChars"
 
 # activateNumlock values
 ANL_NoChange = 0
@@ -148,6 +149,7 @@ _optionsConfspec = {
 	ID_AddTextBefore: "boolean(default=False)",
 	ID_ConfirmToAddToClip: "boolean(default=False)",
 	ID_ActivateNumlock: "integer(default=" + str(numLockByLayoutDefault) + ")",
+	ID_SpeakAlphaNumChars: "boolean(default=False)",
 }
 
 SCT_SynthSettingsRing = "SynthSettingsRing"
@@ -717,6 +719,9 @@ class NVDAConfigurationManager(object):
 
 	def getActivateNumlockOption(self):
 		return config.conf[self.addonName][SCT_Options][ID_ActivateNumlock]
+
+	def toggleSpeakAlphaNumCharsOption(self, toggle=True):
+		return self.toggleOption(ID_SpeakAlphaNumChars, toggle)
 
 
 # singleton for addon configuration manager

@@ -14,8 +14,9 @@ import ctypes.wintypes
 from ctypes.wintypes import HWND, LPPOINT
 # win32con constant
 WS_EX_APPWINDOW = 262144
-# GWL_EXSTYLE = (-20)
 WS_EX_TOOLWINDOW = 128
+WS_EX_NOACTIVATE = 0x08000000
+WS_EX_NOREDIRECTIONBITMAP = 0x00200000
 SW_MAXIMIZE = 3
 
 # flags placement

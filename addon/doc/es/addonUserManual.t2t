@@ -78,7 +78,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Anuncio de la posición del cursor en los campos de edición #hdr32],
 - [Uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA #hdr33],
  - [Orientación de la salida de audio de NVDA #hdr34],
-  - [Activación o desactivación rápida de los complementos # hdr35],
+  - [Activación o desactivación rápida de los complementos #hdr35],
 
 
 - Las opciones:
@@ -125,7 +125,7 @@ En el menú "Preferencias" de NVDA, se añade el submenú "ADDON_SUMMARY" que pr
 Aparte del último menú, cada uno está asociado con un script sin gesto de entrada para activarlo. Mediante el cuadro de diálogo "Gestos de Entrada" de NVDA, es posible asignarles uno.
 
 Estos son los siguientes scripts con su órden del intérprete:
-- "Mostrar el diálogo de configuración del complemento": "KEY_ADDON_SETTINGS", 
+- "Mostrar el diálogo de configuración del complemento": "KEY_ADDON_SETTINGS",
 - "Mostrar el diálogo de opciones para el perfil de configuración actual": "KEY_PROFILE_SETTINGS",
 - "Mostrar el diálogo Renombrar teclas del teclado": "KEY_RENAMING",
 - "Mostrar el diálogo Anuncio selectivo de teclas de órdenes": "KEY_SELECTIVE_ANNOUNCEMENT".
@@ -186,7 +186,7 @@ En el caso de una actualización automática, y si se detecta una nueva versión
 - ya sea para posponer la actualización a más tarde. En este caso, la búsqueda se reiniciará como mínimo una hora más tarde.
 
 
-Para una actualización de una versión estable, el botón "Qué hay de nuevo" ofrece la posibilidad, de abrir en el navegador, el historial del complemento y asi poder conocer las novedades de la versión propuesta.
+En el caso  de una actualización de una versión estable, el botón "Qué hay de nuevo" ofrece la posibilidad, de abrir en el navegador, el historial del complemento y asi poder conocer las novedades de la versión propuesta.
 
 
 ++ Funcionamiento en Modo seguro ++
@@ -393,9 +393,9 @@ Cada categoría es una sección definida como sigue:
 Las categorías básicas del complemento con sus símbolos se definen en un archivo "symbolCategories.dic" propio a cada idioma específico y se encuentra en la carpeta "xxx" en la carpeta "locale" del complemento (xxx siendo el identificador de la lengua, por ejemplo "fr" por el francés) o en este caso "es" por el español.
 Puedes personalizar el complemento y constituir tus propias categorías básicas.
 Para ello, simplemente debe crear en la carpeta userConfig, un archivo "symbolCategories-xxx.dic", guardado en codificación "utf-8", (xx es el código de la lengua). En este archivo, el nombre de las categorías se definirá entre corchetes y cada símbolo como sigue:
-- El símbolo (un solo carácter),  
-- Una tabulación (carácter "Tab")  
-- La descripción del símbolo (una cadena de caracteres).  
+- El símbolo (un solo carácter),
+- Una tabulación (carácter "Tab"),
+- La descripción del símbolo (una cadena de caracteres).
 
 
 Las líneas en blanco o comentario (empezando por "#") son aceptados.
@@ -493,7 +493,7 @@ A excepción de los primeros cuatro, estas órdenes no se implementan en el nave
 
 +++ Nuevos tipos de elementos para el script "NVDA + f7" +++[hdr5-2]
 Básicamente, el script integrado en NVDA y activado por el gesto de entrada "NVDA + f7", muestra el cuadro de diálogo "Lista de elementos" con la lista de algunos elementos presentes en una página web.
-Este complemento aumenta el número de tipos de elementos que se pueden seleccionar.
+Este complemento aumenta el número de tipos de elementos que se pueden seleccionar y se muestran en el título del diálogo, el tipo seleccionado.
 
 La lista de estos tipos se convierte en:
 
@@ -645,11 +645,9 @@ Este script se lanza mediante la órden del intérprete  "KEY_CLEAR_CLIP".
 ++ Anuncio de la carpeta seleccionada en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como" ++[hdr8]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
 
-Añade, en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como", "Buscar en", el script que permite conocer el nombre y la ruta de la carpeta que es seleccionada para definir la ubicación donde el archivo será buscado o guardado.
+Añade, en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como", "Buscar en", los scripts que permiten conocer el nombre y la ruta de la carpeta que es seleccionada para definir la ubicación donde el archivo será buscado o guardado.
 
-La descripción de este script es: "Anunciar la carpeta seleccionada para los cuadros de diálogo de estilo Abrir, Guardar".
-
-Este script se almacena en la categoría "ADDON_SUMMARY" del cuadro de diálogo "Gestos de Entrada".
+Estos scripts se almacenan en la categoría "ADDON_SUMMARY" del cuadro de diálogo "Gestos de Entrada".
 Estos son:
 - "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar. Pulsando dos veces: para anunciar la ruta completa": gesto de entrada "MAIN_KEY_SAY_CURRENT_FOLDER " asignado a él por defecto.
 - "Anunciar el nombre de la carpeta seleccionada en cuadros de diálogo de estilo Abrir, Guardar": órden "KEY_SAY_CURRENT_FOLDERNAME" del intérprete.
@@ -775,6 +773,7 @@ Esta funcionalidad proporciona, por configuración y a través de un cuadro de d
 - No anunciar algunas teclas de  órdenes cuando la opción "Verbalizar teclas de órdenes" está marcada,
 - Para anunciar algunas teclas de  órdenes cuando la opción "Verbalizar teclas de órdenes" no está marcada.
 
+
 Para visualizar este diálogo, tres posibilidades:
 - Seleccionando y activando el elemento "Anuncio selectivo de teclas de órdenes" en el submenú "ADDON_SUMMARY",
 - Mediante la órden "KEY_SELECTIVE_ANNOUNCEMENT" del intérprete,
@@ -866,6 +865,7 @@ Esta instala dos scripts almacenados en la categoría "Foco del sistema" del di�
 La descripción de este script es: "Mostrar los elementos visibles que componen el objeto en primer plano".
 
 Este se lanza mediante la órden "KEY_OBJECTS_LIST" del intérprete.
+
 No se le asigna ningún gesto de entrada.
 
 El script comienza a buscar estos elementos. Esto puede llevar mucho tiempo. Se emite un pitido cada dos segundos durante esta búsqueda.
@@ -903,7 +903,6 @@ Para un elemento de tipo:
 
 +++  Anunciar o mostrar los elementos visibles del objeto bajo el cursor +++
 La descripción de este script es: "Verbaliza el objeto actual en primer plano. Si se pulsa dos veces: mostrar los elementos visibles que componen el objeto en primer plano".
-
 Este se lanza mediante el gesto de entrada "MAIN_KEY_OBJECTS_LIST" asignado a el por defecto.
 
 Una simple pulsación lanza el script básico de NVDA que anuncia todos los objetos del objeto en primer plano.
@@ -948,7 +947,9 @@ Este cuadro de diálogo le permite administrar la asociación de perfil de selec
 La lista "Selectores" presenta la lista de selectores libres o asociados con un perfil de voz. Los selectores asociados son:
 - Aquellos que se han asociado con el perfil de configuración actual (su nombre se indica en el título del diálogo),
 - Aquellos que se han asociado con el perfil de configuración normal si la casilla de verificación "Usar los selectores asociados en el perfil de configuración normal" está marcada. La indicación "configuración normal" se indica entonces para estos selectores.
+
 Cuando el selector se indica como "libre", el botón "Asociar el perfil de voz" permite asociar el perfil de voz actual con este selector. Este botón abre un cuadro de diálogo que permite asignar  un nombre a este perfil de voz. Un nombre por defecto es propuesto. El botón  "Predeterminado" permite retornar a esta propuesta.
+
 Cuando un selector ya está asociado con un perfil de voz entonces es posible:
 - Activar este perfil de voz con el botón "Activar el perfil de voz": el perfil se convierte en el perfil de voz actual y el cuadro se cierra.
 - Asociar el perfil actual con el selector mediante el botón "Asociar el perfil de voz". luego reemplaza el perfil de voz asociado con este selector,
@@ -1026,6 +1027,7 @@ Para activar o desactivar el modo de remanencia, simplemente componga una de las
 La remanencia de las teclas se pueden activar de forma automática al iniciar NVDA marcando la casilla de verificación "Activar la remanencia de las teclas cuando se inicia NVDA" del grupo "Remanencia de las teclas".
 
 La activación o desactivación de este modo es indicado verbalmente.
+
 Cuando el modo "Remanencia " esté activado,  al pulsar una de las teclas NVDA o la modificadora desencadena un retardo y la tecla se almacena.
 Este retardo de tiempo es configurable mediante la opción "Duración de la remanencia de las  teclas" del grupo "Remanencia de las teclas.
 
@@ -1101,7 +1103,6 @@ El anunciado del tiempo de espera restante respeta la opción "actualizaciones d
 
 El botón "Anunciar el tiempo restante" te permite leer el tiempo de espera que se muestra en el cuadro de diálogo.
 
-
 Todos los scripts están almacenados en la categoría "ADDON_SUMMARY" del diálogo "Gestos de Entrada" de NVDA, pero no se les asigna ningún gesto.
 
 
@@ -1169,6 +1170,7 @@ Se lanzan con las siguientes órdenes del intérprete:
 - "KEY_APP_VOLUME_UP" o "KEY_APP_VOLUME_DOWN" para aumentar o disminuir el volumen,
 - "KEY_APP_VOLUME_MAX" o "KEY_APP_VOLUME_MIN" para maximizar o minimizar el volumen,
 - un número de 1 a 9 para fijar el nivel de volumen a 10%, 20%, 30%, ..., 90% del volumen principal.
+
 
 Estas órdenes, a diferencia de las otras órdenes del intérprete, pueden repetirse sin tener que reiniciarlo. El intérprete permanece activo.
 Una vez que se establece el nivel de volumen, debes presionar la tecla "Escape" para salir del intérprete.
@@ -1934,7 +1936,7 @@ Para orientar el sonido de NVDA, el complemento instala los siguientes scripts:
 - Escucha NVDA y la aplicación bajo el cursor al centro (órdenes: "KEY_SPLIT_CENTER_FOCUS"),
 - Escucha NVDA y todas las aplicaciones al centro (órdenes: "KEY_SPLIT_CENTER_ALL")
 - Escucha la aplicación bajo el cursor al centro (órdenes: "KEY_CENTER_FOCUSED_APP")
-- Mostrar el administrador de audio de NVDA y aplicaciones activas (órdenes: "KEY_SOUND_SPLIT_MANAGE"R)
+- Mostrar el administrador de audio de NVDA y aplicaciones activas (órdenes: "KEY_SOUND_SPLIT_MANAGER")
 
 
 No se le asigna ningún gesto de entrada por defecto. Pero es siempre posible hacerlo utilizando el diálogo "Gestos de Entrada" de NVDA. Estos scripts están almacenados en la categoría "Control de sonido" de este diálogo.
@@ -1966,6 +1968,8 @@ Cuando la lista está bajo el cursor, se permiten las siguientes órdenes:
 - Aumentar o disminuir de un paso, el volumen principal: "control+mayúscula+Flecha Arriba o Abajo",
 - Aumentar o disminuir de un doble paso, el volumen principal: "control+mayúscula+rePág o avPág",
 - Maximizar o minimizar el volumen principal: "control+mayúscula+inicio o fin".
+
+
 
 Esta lista se refresca automáticamente cuando se le da el cursor.
 
@@ -2065,6 +2069,16 @@ Algunos usuarios encuentran este sonido desagradable, el complemento trae la pos
 La elección se realiza en el grupo "Informando errores de ortografía" de la categoría "Suplementos a NVDA" en las "Opciones globales..." del complemento.
 
 
+++ Pronunciación de caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado ++[hdr105]
+Esta opción permite pronunciar caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado.
+
+Esto permite que ciertos usuarios escuchen, por ejemplo, los símbolos de puntuación escritos, incluso si han desactivado verbalizar caracteres al escribir.
+
+Esta opción se configura mediante la casilla de verificación "Pronunciar caracteres no alfanuméricos de todos modos cuando verbalizar caracteres al escribir está desactivado" esta se encuentra en la categoría "Teclado" para el perfil de configuración actual.
+
+Por defecto, no está marcada.
+
+
 + Opciones avanzadas +
 ++ Advertir con un sonido la escritura de un error en el registro de NVDA ++[hdr300]
 Los usuarios experimentados pueden haber notado que al usar una versión de desarrollo de NVDA (version snapshot master o next), todo error  escrito en el registro de NVDA es advertido con un sonido. Pero con las versiones  finales o releases candidates, esta advertencia no se repoduce.
@@ -2116,6 +2130,7 @@ Para cambiar el teclado numérico en funcionamiento estándar o NVDA y si la opc
 - Un script cuya descripción es "Habilitar o deshabilitar el uso estándar del teclado numérico". No se le asigna ningún gesto de entrada.
 - La órden "KEY_TOGGLE_NUMPAD_NAVIGATION" del intérprete de órdenes.
 - La activación pulsando dos veces seguidas la tecla "Bloqueo numérico" si la opción "Habilitar o deshabilitar el uso estándar de teclado numérico con la tecla bloqueo numérico" (grupo Teclado numérico", categoría "Teclado") está marcada.
+
 
 La opción "Habilitar el uso estándar del teclado numérico cuando se inicia NVDA" (grupo Teclado numérico", categoría "Teclado"), permite, si se marca, de usar el teclado numérico de manera estándar al inicio de NVDA pero también es necesario que la opción que permite el uso estándar del teclado numérico esté marcada.
 
@@ -2208,7 +2223,7 @@ Para ahorrar tiempo, el complemento trae la selección automática de la categor
 
 Para esto, está buscando la categoría entre las categorías que proporcionan scripts pertenecientes al complemento activo.  Pero esta última puede poner en puesta los scripts en cualquier categoría.
 
-Esta categoría será entonces seleccionada automáticamente y desarrollada.
+Esta categoría será entonces seleccionada automáticamente y expandida.
 
 
 ++ Selección de la última opción utilizada en el Anillo de Opciones de Sintetizador ++[hdr207]
@@ -2306,7 +2321,7 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 | KEY_SPLIT_RIGHT_ALL | Escucha NVDA a la derecha y todas las aplicaciones a la izquierda |
 | KEY_SPLIT_CENTER_FOCUS | Escucha NVDA y la aplicación bajo el cursor al centro |
 | KEY_SPLIT_CENTER_ALL | Escucha NVDA y todas las aplicaciones al centro |
-| KEY_CENTER_FOCUSED_App | Escucha la aplicación bajo el cursor al centro |
+| KEY_CENTER_FOCUSED_APP | Escucha la aplicación bajo el cursor al centro |
 
 ++ Gestos de entrada instaladas por las funcionalidades ++
 +++ Mostrar los iconos en la bandeja del sistema y la lista de ventanas de las aplicaciones lanzadas +++
@@ -2380,4 +2395,4 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 | MAIN_KEY_WORD_TEXT_ANALYZER | MAIN_KEY_WORD_TEXT_ANALYZER | Ninguno | Analizar la palabra bajo el cursor del sistema |
 | MAIN_KEY_LINE_TEXT_ANALYZER | MAIN_KEY_LINE_TEXT_ANALYZER | Ninguno | Analizar la línea bajo el cursor del sistema |
 | MAIN_KEY_SENTENCE_TEXT_ANALYZER | MAIN_KEY_SENTENCE_TEXT_ANALYZER | Ninguno | Analizar la frase bajo el cursor del sistema |
-| MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | Ninguno| Analizar el párrafo bajo el cursor del sistema |
+| MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | MAIN_KEY_PARAGRAPH_TEXT_ANALYZER | Ninguno | Analizar el párrafo bajo el cursor del sistema |

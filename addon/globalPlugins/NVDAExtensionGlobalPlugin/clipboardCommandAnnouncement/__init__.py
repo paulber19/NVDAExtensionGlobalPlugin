@@ -51,6 +51,7 @@ import eventHandler
 import core
 import contentRecog.recogUi
 from ..utils.NVDAStrings import NVDAString
+from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
 from ..settings import (
 	isInstall, toggleReportNextWordOnDeletionOption,
 )
@@ -190,6 +191,7 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 
 
 class EditableTextEx(EditableText):
+
 	_commandToScript = {
 		"copy": "copyToClipboard",
 		"cut": "cutAndCopyToClipboard",
@@ -224,65 +226,105 @@ class EditableTextEx(EditableText):
 		return info
 
 	def script_copyToClipboard(self, gesture):
-		info = self.getSelectionInfo()
-		if not info:
-			# Translators: Reported when there is no text selected (for copying).
-			ui.message(NVDAString("No selection"))
+		def callback():
+			clearDelayScriptTask()
+			info = self.getSelectionInfo()
+			if not info:
+				# Translators: Reported when there is no text selected (for copying).
+				ui.message(NVDAString("No selection"))
+				gesture.send()
+				return
+			cm = clipboard.ClipboardManager()
 			gesture.send()
-			return
-		cm = clipboard.ClipboardManager()
-		gesture.send()
-		time.sleep(0.1)
-		if cm.changed():
-			# Translators: Message presented when text has been copied to clipboard.
-			ui.message(_msgCopy)
+			time.sleep(0.1)
+			if cm.changed():
+				# Translators: Message presented when text has been copied to clipboard.
+				ui.message(_msgCopy)
+
+		stopDelayScriptTask()
+		# to filter out too fast script calls while holding down the command gesture.
+		delayScriptTaskWithDelay(150, callback)
 
 	def script_cutAndCopyToClipboard(self, gesture):
-		if STATE_READONLY in self.states or (
-			STATE_EDITABLE not in self.states
-			and STATE_MULTILINE not in self.states):
+		def callback():
+			clearDelayScriptTask()
+			if STATE_READONLY in self.states or (
+				STATE_EDITABLE not in self.states
+				and STATE_MULTILINE not in self.states):
+				gesture.send()
+				return
+			info = self.getSelectionInfo()
+			if not info:
+				# Translators: Reported when there is no text selected (for copying).
+				ui.message(NVDAString("No selection"))
+				gesture.send()
+				return
+			cm = clipboard.ClipboardManager()
 			gesture.send()
-			return
-		info = self.getSelectionInfo()
-		if not info:
-			# Translators: Reported when there is no text selected (for copying).
-			ui.message(NVDAString("No selection"))
-			gesture.send()
-			return
-		cm = clipboard.ClipboardManager()
-		gesture.send()
-		time.sleep(0.1)
-		if cm.changed():
-			ui.message(_msgCut)
+			time.sleep(0.1)
+			if cm.changed():
+				ui.message(_msgCut)
+
+		stopDelayScriptTask()
+		# to filter out too fast script calls while holding down the command gesture.
+		delayScriptTaskWithDelay(150, callback)
 
 	def script_pasteFromClipboard(self, gesture):
-		# in all case, send gesture
-		gesture.send()
-		if (
-			STATE_READONLY in self.states or (
-			STATE_EDITABLE not in self.states
-			and not STATE_MULTILINE)):
-			return
-		cm = clipboard.ClipboardManager()
-		if cm.isEmpty:
-			# Translators: message to report clipboard is empty
-			ui.message(_("Clipboard is empty"))
-			return
-		ui.message(_msgPaste)
-		from globalCommands import commands
-		wx.CallLater(100, commands.script_reportCurrentLine, None)
+		def callback():
+			clearDelayScriptTask()
+			if (
+				STATE_READONLY in self.states or (
+				STATE_EDITABLE not in self.states
+				and not STATE_MULTILINE)):
+				gesture.send()
+				return
+
+			cm = clipboard.ClipboardManager()
+			time.sleep(0.1)
+			if cm.isEmpty:
+				# Translators: message to report clipboard is empty
+				ui.message(_("Clipboard is empty"))
+				gesture.send()
+				return
+			ui.message(_msgPaste)
+			gesture.send()
+			import treeInterceptorHandler
+			import controlTypes
+			obj = api.getFocusObject()
+			treeInterceptor = obj.treeInterceptor
+			if isinstance(
+				treeInterceptor,
+				treeInterceptorHandler.DocumentTreeInterceptor) and not treeInterceptor.passThrough:
+				obj = treeInterceptor
+			try:
+				info = obj.makeTextInfo(textInfos.POSITION_CARET)
+			except (NotImplementedError, RuntimeError):
+				info = obj.makeTextInfo(textInfos.POSITION_FIRST)
+			info.expand(textInfos.UNIT_LINE)
+			speech.speakTextInfo(info, unit=textInfos.UNIT_LINE, reason=controlTypes.OutputReason.CARET)
+
+		stopDelayScriptTask()
+		# to filter out too fast script calls while holding down the command gesture.
+		delayScriptTaskWithDelay(150, callback)
 
 	def script_undo(self, gesture):
-		if (
-			STATE_READONLY in self.states or (
-			STATE_EDITABLE not in self.states
-			and not STATE_MULTILINE)):
+		def callback():
+			clearDelayScriptTask()
+			if (
+				STATE_READONLY in self.states or (
+				STATE_EDITABLE not in self.states
+				and not STATE_MULTILINE)):
+				gesture.send()
+				return
+			ui.message(_msgUnDo)
 			gesture.send()
-			return
-		ui.message(_msgUnDo)
-		gesture.send()
+
+		stopDelayScriptTask()
+		# to filter out too fast script calls while holding down the command gesture.
+		delayScriptTaskWithDelay(150, callback)
 
 	def script_controlDelete(self, gesture):
+		stopDelayScriptTask()
 		from editableText import EditableText
 		gesture.send()
 		if not isinstance(self, EditableText):
@@ -332,6 +374,7 @@ class EditableTextEx(EditableText):
 
 
 class ClipboardCommandAnnouncement(object):
+	scriptDelay = None
 	_changeSelectionGestureToMessage = {
 		"shift+upArrow": None,
 		"shift+downArrow": None,
@@ -462,36 +505,40 @@ class ClipboardCommandAnnouncement(object):
 		_GB_taskTimer = core.callLater(800, callback)
 
 	def script_clipboardCommandAnnouncement(self, gesture):
-		cm = clipboard.ClipboardManager()
-		editionKeyCommands = getEditionKeyCommands(self)
-		d = {}
-		for item in _clipboardCommands:
-			d[editionKeyCommands[item]] = _clipboardCommands[item]
-		(msg, checkSelection, checkClipChange, checkClipEmpty) = d["+".join(
-			gesture.modifierNames) + "+" + gesture.mainKeyName]
-		if checkClipEmpty and cm.isEmpty:
-			# Translators: message to report clipboard is empty
-			ui.message(_("Clipboard is empty"))
+		stopDelayScriptTask()
+
+		def callback():
+			clearDelayScriptTask()
+			editionKeyCommands = getEditionKeyCommands(self)
+			d = {}
+			for item in _clipboardCommands:
+				d[editionKeyCommands[item]] = _clipboardCommands[item]
+			(msg, checkSelection, checkClipChange, checkClipEmpty) = d["+".join(
+				gesture.modifierNames) + "+" + gesture.mainKeyName]
+			cm = clipboard.ClipboardManager()
+			clipEmpty = cm.isEmpty if checkClipEmpty else None
+			selection = self.checkSelection if checkSelection else None
 			# we send always command key
 			gesture.send()
-			return
-		if self.checkSelection and checkSelection:
-			if not self.isThereASelection():
-				ui.message(NVDAString("No selection"))
-				# we send always command key
-				gesture.send()
+			if selection:
+				if not self.isThereASelection():
+					ui.message(NVDAString("No selection"))
+					return
+
+			if clipEmpty:
+				# Translators: message to report clipboard is empty
+				ui.message(_("Clipboard is empty"))
 				return
-		# we send always command key
-		gesture.send()
-		if checkClipChange:
-			time.sleep(0.1)
-			if not cm.changed():
-				return
-		ui.message(msg)
+			if checkClipChange:
+				time.sleep(0.1)
+				if not cm.changed():
+					return
+			ui.message(msg)
+		delayScriptTaskWithDelay(100, callback)
 
 
 _classNamesToCheck = [
-	"Edit", "RichEdit", "RichEdit20", "REComboBox20W", "RICHEDIT50W",
+	"Edit", "RichEdit", "RichEdit20", "REComboBox20W", "RICHEDIT50W", "RichEditD2DPT",
 	"Scintilla", "TScintilla", "AkelEditW", "AkelEditA", "_WwG", "_WwN", "_WwO",
 	"SALFRAME"]
 _rolesToCheck = [ROLE_DOCUMENT, ROLE_EDITABLETEXT]
@@ -507,7 +554,7 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	# to fix the Access8Math  problem with the "alt+m" virtual menu
 	# for the obj, the informations are bad: role= Window, className= Edit, not states
 	#  tand with no better solution, we check the length of obj.states
-	elif len(obj.states) and (obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck):
+	elif (obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck) and len(obj.states):
 		# newer revisions of Windows 11 build 22000 moves focus to emoji search field.
 		# However this means NVDA's own edit field scripts will override emoji panel commands.
 		# Therefore remove text field movement commands so emoji panel commands can be used directly.

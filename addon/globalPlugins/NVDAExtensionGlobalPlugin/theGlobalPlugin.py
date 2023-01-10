@@ -38,7 +38,7 @@ try:
 except ImportError:
 	from characterProcessing import SYMLVL_SOME
 from .activeWindowsListReport import ActiveWindowsListDisplay
-from .systemTrayIconsList import ListeNotification
+from .systemTrayIconsList import DisplayNotificationIconsList
 # to load configuration
 from . import settings
 # from .settings import *
@@ -176,7 +176,7 @@ class NVDAObjectEx (NVDAObjects.NVDAObject):
 					import nvwave
 					nvwave.playWaveFile(os.path.join(globalVars.appDir, "waves", "textError.wav"))
 				elif _addonConfigManager.reportingSpellingErrorsByMessage():
-					speech.speakMessage(NVDAString("spelling error"))
+					ui.message(NVDAString("spelling error"))
 
 			reportSpellingError()
 		core.callLater(50, _delayedDetection)
@@ -534,6 +534,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_moduleLayer(self, gesture):
 		# A run-time binding will occur
 		# from which we can perform various layered script commands
+		if self.switchVoiceProfileMode == "on":
+			self._setSwitchVoiceProfileMode("off")
+			return
 		# First, check if a second press of the script was done.
 		if self.toggling:
 			self.script_error(gesture)
@@ -671,11 +674,37 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses(obj, clsList)
 		if hasattr(self, "browseModeExChooseNVDAObjectOverlayClasses"):
 			self.browseModeExChooseNVDAObjectOverlayClasses(obj, clsList)
+		try:
+			# for nvda version > 2020.4
+			# code comes from  officeDesk.py module of nvda office desk add-on written by Joseph Lee.
+			from NVDAObjects.UIA import UIA, SearchField, SuggestionsList, SuggestionListItem
+			if isinstance(obj, UIA):
+				# Recognize search field found in backstage view.
+				if obj.UIAAutomationId == "HomePageSearchBox":
+					clsList.insert(0, SearchField)
+				# Also recognize suggestions list and its items.
+				elif obj.UIAElement.cachedClassName == "NetUIListView" and isinstance(obj.parent.previous, SearchField):
+					clsList.insert(0, SuggestionsList)
+				elif obj.UIAElement.cachedClassName == "NetUIListViewItem" and isinstance(obj.parent, SuggestionsList):
+					clsList.insert(0, SuggestionListItem)
+		except ImportError:
+			pass
 
 	def maximizeForegroundWindow(self):
 		self.maximizeWindowTimer = None
 		oForeground = api.getForegroundObject()
 		maximizeWindow(oForeground.windowHandle)
+
+	def event_typedCharacter(self, obj, nextHandler, ch):
+		from .settings.nvdaConfig import _NVDAConfigManager
+		if ch.isalnum() or ch.isspace():
+			nextHandler()
+			return
+		speakCharacter = config.conf["keyboard"]["speakTypedCharacters"]
+		if _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False):
+			config.conf["keyboard"]["speakTypedCharacters"] = True
+		nextHandler()
+		config.conf["keyboard"]["speakTypedCharacters"] = speakCharacter
 
 	def event_foreground(self, obj, nextHandler):
 		if settings.toggleAutomaticWindowMaximizationOption(False):
@@ -837,7 +866,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	# new scripts
 	def script_report_SystrayIcons(self, gesture):
-		wx.CallAfter(ListeNotification.run)
+		wx.CallAfter(DisplayNotificationIconsList.run)
 
 	def script_report_WindowsList(self, gesture):
 		wx.CallAfter(ActiveWindowsListDisplay.run)
@@ -845,7 +874,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_report_SystrayIconsOrWindowsList(self, gesture):
 		def callback():
 			clearDelayScriptTask()
-			wx.CallAfter(ListeNotification.run)
+			wx.CallAfter(DisplayNotificationIconsList.run)
 
 		stopDelayScriptTask()
 		if scriptHandler.getLastScriptRepeatCount() == 0:
@@ -861,14 +890,28 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from . import ComplexSymbols
 		wx.CallAfter(ComplexSymbols.LastUsedComplexSymbolsDialog.run)
 
+	def _getProductNameAndVersion(self, obj):
+		productName = ""
+		# for some software,  procuttName contains control characters. Must be deleted.
+		for ch in obj.appModule.productName:
+			if ord(ch) < 32:
+				break
+			productName = productName + ch
+		appVersion = ""
+		# for some software, version contains control characters. Must be deleted.
+		for ch in obj.appModule.productVersion:
+			if ord(ch) < 32:
+				break
+			appVersion += ch
+		return(productName, appVersion)
+
 	def script_reportAppProductNameAndVersion(self, gesture):
 		def callback(repeatCount):
 			clearDelayScriptTask()
-			obj = api.getFocusObject()
-			appName = obj.appModule.productName
-			appVersion = obj.appModule.productVersion
+			(productName, appVersion) = self._getProductNameAndVersion(api.getFocusObject())
+
 			# Translators: message to report app version.
-			text = _("{0} version {1}") .format(appName, appVersion)
+			text = _("{0} version {1}") .format(productName, appVersion)
 			if repeatCount == 0:
 				ui.message(text)
 			else:
@@ -942,8 +985,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		focus = api.getFocusObject()
 		appProcessName = appModuleHandler.getAppNameFromProcessID(
 			focus.processID, True)
-		appName = "%s, %s" % (appProcessName, focus.appModule.productName)
-		appVersion = focus.appModule.productVersion
+		(productName, appVersion) = self._getProductNameAndVersion(focus)
+		appName = "%s, %s" % (appProcessName, productName)
 		# Translators: Indicates the name of the current program and it version.
 		msg = _("Application: {appName} {appVersion}") .format(
 			appName=appName, appVersion=appVersion)
@@ -1264,7 +1307,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		switchVoiceProfile.SwitchVoiceProfilesManager().nextVoiceProfile(
 			forward=False)
 
-	def script_toggleSwitchVoiceProfileMode(self, gesture):
+	def _setSwitchVoiceProfileMode(self, mode=None):
 		__switchVoiceProfileModeGestures = {
 			"kb:leftArrow": "previousVoiceProfile",
 			"kb:rightArrow": "nextVoiceProfile",
@@ -1278,24 +1321,23 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			"kb:7": "setVoiceProfileSelector7",
 			"kb:8": "setVoiceProfileSelector8",
 		}
+		if mode:
+			self.switchVoiceProfileMode = "on" if mode == "off" else "off"
+		if self.switchVoiceProfileMode == "off":
+			self.switchVoiceProfileMode = "on"
+			ui.message(_("Voice profile switch mode on"))
+			self.bindGestures(__switchVoiceProfileModeGestures)
+		else:
+			self.switchVoiceProfileMode = "off"
+			ui.message(_("Voice profile switch mode off"))
+			self.clearGestureBindings()
+		self._bindGestures()
 
-		def toggleSwitchVoiceProfileMode(mmode=""):
-			if mode != "":
-				self.switchVoiceProfileMode = "on" if mode == "off" else "off"
-			if self.switchVoiceProfileMode == "off":
-				self.switchVoiceProfileMode = "on"
-				ui.message(_("Voice profile switch mode on"))
-
-				self.bindGestures(__switchVoiceProfileModeGestures)
-			else:
-				self.switchVoiceProfileMode = "off"
-				ui.message(_("Voice profile switch mode off"))
-				self.clearGestureBindings()
-				self._bindGestures()
-		mode = ""
+	def script_toggleSwitchVoiceProfileMode(self, gesture):
+		mode = None
 		if gesture.displayName == "escape":
 			mode = "off"
-		wx.CallAfter(toggleSwitchVoiceProfileMode, mode)
+		wx.CallAfter(self._setSwitchVoiceProfileMode, mode)
 
 	def setVoiceProfileSelector(self, selector):
 		from . import switchVoiceProfile

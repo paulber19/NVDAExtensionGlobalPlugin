@@ -1983,31 +1983,14 @@ Some users find this sound unpleasant, the extension brings the possibility of r
 
 The choice is made in the group "Reporting spelling errors" of the category "NVDA enhancements" of the global settings of the add-on.
 
-++ Num lock management ++[hdr305]
-This feature is partly taken from the "sharedComputer" add-on (authors "Robert Hänggi <aarjay.robert@gmail.com>, Noelia Ruiz Martínez <nrm1977@gmail.com>" which seems not to have been updated since 2018 .
+++ Pronunciation of non-alphanumeric characters when per-character keyboard echo is disabled ++[hdr105]
+This option allows non-alphanumeric characters to be spoken when keyboard echo by characters is disabled.
 
-It consists of:
-+++ reporting activating lock when starting NVDA +++
-By default and in "Desktop" keyboard layout, the add-on reports that Numeric Lock is enabled when starting NVDA.
+This allows some users to hear, for example, typed punctuation symbols, even if they have disabled keyboard echo by character.
 
-But this can be disabled, as is the default for the "laptop" keyboard layout, using the "Report enabled state when NVDA starts" option in the "Numeric Lock" group of the "Keyboard" category of the add-on settings.
+It is configured using the "Speak non-alphanumeric characters anyway when keyboard echo by character is disabled" checkbox found in the "Keyboard" category for the current configuration profile.
 
-
-+++ Automatic activation/deactivation when activating a configuration profile +++
-Each time a configuration profile is activated, it is possible to automatically activate or deactivate the numeric lock.
-
-The choice is made in the settings of the configuration profile, in the "Keyboard" category of the "Numeric lock" group and with the list of choices "On activating the profile: ".
-
-This list offers the following choices:
-- "Do Nothing": the locking status is not modified.
-- "Desactivate": the lock is desactivated.
-- "Activate": locking is activated.
-
-
-By default, the choice is:
-- "Disabled" for a "Desktop Computer" keyboard layout.
-- "Do nothing" for a "laptop" keyboard layout.
-
+By default, it is unchecked.
 
 + Advanced options +
 ++ Signaling by sound of an error in the NVDA log ++[hdr300]
@@ -2065,6 +2048,32 @@ To enable or disable the use of the numeric keypad in standard operation and if 
 
 
 The "Enable the standard use of the numeric keypad at NVDA's start" option ("Numeric keypad" grouping, " Keyboard " category), allows, if it is checked, to use the numeric keypad as standard from the start of NVDA , but the option that allows standard use of the numeric keypad must also be checked.
+
+++ Num lock management ++[hdr305]
+This feature is partly taken from the "sharedComputer" add-on (authors "Robert Hänggi <aarjay.robert@gmail.com>, Noelia Ruiz Martínez <nrm1977@gmail.com>" which seems not to have been updated since 2018 .
+
+It consists of:
++++ reporting activating lock when starting NVDA +++
+By default and in "Desktop" keyboard layout, the add-on reports that Numeric Lock is enabled when starting NVDA.
+
+But this can be disabled, as is the default for the "laptop" keyboard layout, using the "Report enabled state when NVDA starts" option in the "Numeric Lock" group of the "Keyboard" category of the add-on settings.
+
+
++++ Automatic activation/deactivation when activating a configuration profile +++
+Each time a configuration profile is activated, it is possible to automatically activate or deactivate the numeric lock.
+
+The choice is made in the settings of the configuration profile, in the "Keyboard" category of the "Numeric lock" group and with the list of choices "On activating the profile: ".
+
+This list offers the following choices:
+- "Do Nothing": the locking status is not modified.
+- "Desactivate": the lock is desactivated.
+- "Activate": locking is activated.
+
+
+By default, the choice is:
+- "Disabled" for a "Desktop Computer" keyboard layout.
+- "Do nothing" for a "laptop" keyboard layout.
+
 
 
 + Other improvements +

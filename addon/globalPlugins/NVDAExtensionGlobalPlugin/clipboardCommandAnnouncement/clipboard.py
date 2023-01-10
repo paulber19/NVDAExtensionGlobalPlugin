@@ -51,7 +51,7 @@ class ClipboardManager(object):
 		if sequenceNumber == self.sequenceNumber:
 			log.debug("No changes detected.")
 			return False
-		log.debug("Clipboard data has changed. Updating sequence number")
+		log.debug("Clipboard data has changed. Updating sequence number: %s" % sequenceNumber)
 		self.sequenceNumber = sequenceNumber
 		return True
 

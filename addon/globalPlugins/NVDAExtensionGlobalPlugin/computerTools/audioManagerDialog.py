@@ -42,7 +42,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 	wx.Dialog):
 	_instance = None
 	# help in the user manual.
-	helpObj = getHelpObj("hdr35")
+	helpObj = getHelpObj("hdr34")
 	selectDelay = None
 
 	def __new__(cls, *args, **kwargs):

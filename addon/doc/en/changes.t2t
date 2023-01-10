@@ -20,6 +20,34 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ v11.4 (January/09/2023) +
+New:
+- new script to empty the clipboard (already present in the previous version, but not announced).
+- as an option, it is possible to have the non-alphanumeric characters typed spoken when the keyboard echo by character is deactivated.
+
+
+Bug fixes:
+- fixed issue with sapi5 synthesizer to put NVDA sound on right or left channel.
+- fixed issue when "nvda+j" is typed while voice switch mode is enabled. This mode is now disabled on this keystroke.
+- pressing "f1" in the "NVDA audio manager and active applications" dialog now opens the user manual on the correct chapter.
+- correction of incorrect display of boolean type information (yes or no) in the "Voice profile information" dialog box.
+- fixed incorrect display of application context information for an application that contains control characters in their product name (like Agenda, ApprentiClavier).
+- gestures added in the "Miscellaneous" category of the "Input gestures" dialog are now correctly displayed in the "Miscellaneous" category of the "User input gestures" dialog.
+- under W11, the icons of the notification area are now correctly presented in the list of the dialog displayed by "nvda+f11" or "nvda+J" followed by f11. It was missing the icons like "system network status", system volume status", "system clock" and "show desktop".
+- work around NVDA bug with PowerPoint (Office 365, 2019 and 2016) when putting focus on an obscured text shape, resulting in recursion overflow (infinite loop)
+
+
+Others:
+- added code written by Joseph Lee in his "Office desk"add-on" for the W11 search box and notifications.
+- improvement of the announcement of the editing commands "control+c", "control+v", "control+x" and "control+z" when these commands are not released.
+- removal of the display of windows as "Microsoft Text Input Application" from the list of current applications in the "List of windows" dialog.
+
+
+Compatibility with NVDA 2022.3 and 2022.4:
+- taking into account the new option "Delayed description of characters during cursor movement" in the "Speech" category.
+- the new scripts of NVDA version 2022.4 concerning tables are moved to the "Table" category added by the add-on in the "Input gestures" dialog.
+
+
 + v11.3 (September/10/2022) +
 New:
 - added scripts to move the cursor to the next/previous line of text containing an irregularity detected by the text analyzer.

@@ -1207,6 +1207,11 @@ class KeyboardProfileSettingsPanel(
 		self.activateNumlockBox .SetStringSelection(
 			activateNumlockChoices[_NVDAConfigManager.getActivateNumlockOption()])
 		self.bindHelpEvent(getHelpObj("hdr305"), self.activateNumlockBox)
+		# Translators: This is the label for a checkBox in the Keyboard profile settings panel.
+		labelText = _("Still speak &non-alphanumeric characters when keyboard echo by characters is disabled")
+		self.alphaNumCharsCheckBox = sHelper.addItem(wx.CheckBox(self, label=labelText))
+		self.alphaNumCharsCheckBox .SetValue(_NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False))
+		self.bindHelpEvent(getHelpObj("hdr105"), self.alphaNumCharsCheckBox)
 
 	def saveSettingChanges(self):
 		from .nvdaConfig import _NVDAConfigManager
@@ -1218,6 +1223,8 @@ class KeyboardProfileSettingsPanel(
 			_NVDAConfigManager.toggleConfirmToAddToClipOption(True)
 		option = self.activateNumlockBox .GetSelection()
 		_NVDAConfigManager.setActivateNumlockOption(option)
+		if self.alphaNumCharsCheckBox .IsChecked() != _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False):
+			_NVDAConfigManager.toggleSpeakAlphaNumCharsOption(True)
 
 	def onSave(self):
 		self.saveSettingChanges()

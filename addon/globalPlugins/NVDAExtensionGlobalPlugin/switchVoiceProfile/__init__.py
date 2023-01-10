@@ -1,4 +1,5 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
+# globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
 # Copyright (C) 2018 - 2021 paulber19
 # This file is covered by the GNU General Public License.
@@ -60,7 +61,8 @@ class SwitchVoiceProfilesManager(object):
 		"autoDialectSwitching",
 		"symbolLevel",
 		"trustVoiceLanguage",
-		"includeCLDR"]
+		"includeCLDR",
+		"delayedCharacterDescriptions"]
 	NVDASpeechManySettings = [
 		"capPitchChange",
 		"sayCapForCapitals",
@@ -149,7 +151,23 @@ class SwitchVoiceProfilesManager(object):
 		return False
 
 	def getConfig(self):
-		return config.conf[self.addonName][SCT_VoiceProfileSwitching].dict()
+		cfg = config.conf[self.addonName][SCT_VoiceProfileSwitching]
+		return cfg.dict()
+
+	def getSelectorConfig(self, selector):
+		cfg = config.conf[self.addonName][SCT_VoiceProfileSwitching]
+		speechSpec = config.conf["speech"].spec
+		selectorCfg = cfg.get(selector)
+		if selectorCfg is None:
+			return {}
+		selectorCfg._cache.clear()
+		selectorCfg.spec["speech"] = speechSpec
+		return selectorCfg.dict()
+
+	def getVoiceProfile(self, selector):
+		if not self.isSet(selector):
+			return {}
+		return self.getSelectorConfig(selector)
 
 	def isSet(self, selector, inUpdate=False):
 		if inUpdate:
@@ -334,19 +352,6 @@ class SwitchVoiceProfilesManager(object):
 		synthDatas = self.getCurrentSynthDatas()
 		for key in synthDatas.keys():
 			conf[key] = synthDatas[key]
-		"""
-		synth = self.curSynth
-		conf[KEY_SynthName] = synth.name
-		# save only current synth config
-		d = config.conf[SCT_Speech].dict()
-		for key in config.conf[SCT_Speech].copy():
-			val = config.conf[SCT_Speech][key]
-			if type(val) == config.AggregatedSection\
-				and key not in [SCT_Many, synth.name]:
-				del d[key]
-		conf[SCT_Speech] = d
-		conf[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name])
-		"""
 		conf._cache.clear()
 		self.setLastSelector(selector)
 		# Translators: message to user to report the association
@@ -373,11 +378,6 @@ class SwitchVoiceProfilesManager(object):
 		msg = _("all selectors are freed from their vocal profile")
 		ui.message(msg)
 
-	def getVoiceProfile(self, selector):
-		if not self.isSet(selector):
-			return {}
-		return config.conf[self.addonName][SCT_VoiceProfileSwitching][selector].dict()
-
 	def getUpdatedConfig(self):
 		conf = config.conf
 		if conf.get(self.addonName)\
@@ -401,8 +401,17 @@ class SwitchVoiceProfilesManager(object):
 		return conf[selector][KEY_VoiceProfileName]
 
 	def getSynthInformations(self, selector=None):
-		def boolToText(val):
-			return _("yes") if val else _("no")
+		def boolToText(value):
+
+			if type(value) == str and value == "True":
+				return _("yes")
+			if type(value) == str and value == "False":
+				return _("no")
+			if type(value) == bool:
+				text = _("yes") if value else _("no")
+				return text
+			log.error("boolToText: value is out of type range:  bool, str")
+			return ""
 
 		def punctuationLevelToText(level):
 			return characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS[int(level)]
@@ -414,7 +423,9 @@ class SwitchVoiceProfilesManager(object):
 			(_(
 				"Include Unicode Consortium data (including emoji) when processing characters and symbols"),
 				boolToText),
+			(_("Delayed descriptions for characters on cursor movement"), boolToText),
 		]
+
 		NVDASpeechManySettingsInfos = [
 			(_("Capital pitch change percentage"), None),
 			(_("Say cap before capitals"), boolToText),
@@ -426,7 +437,7 @@ class SwitchVoiceProfilesManager(object):
 			# get infos for current synth
 			selectorConfig = self.getCurrentSynthDatas()
 		else:
-			selectorConfig = self.getConfig()[selector].copy()
+			selectorConfig = self.getSelectorConfig(selector)
 			textList.append(_("selector: %s") % selector)
 			textList.append(
 				# Translators: text to report voice profile name.
@@ -453,8 +464,8 @@ class SwitchVoiceProfilesManager(object):
 			index = SwitchVoiceProfilesManager.NVDASpeechSettings.index(setting)
 			(name, f) = NVDASpeechSettingsInfos[index]
 			if f is not None:
-				val = f(val)
-			textList.append("%s: %s" % (name, val))
+				res = f(val)
+			textList.append("%s: %s" % (name, res))
 		for setting in SwitchVoiceProfilesManager.NVDASpeechManySettings:
 			val = selectorConfig[SCT_Speech][SCT_Many][setting]
 			if setting in synthSettings:

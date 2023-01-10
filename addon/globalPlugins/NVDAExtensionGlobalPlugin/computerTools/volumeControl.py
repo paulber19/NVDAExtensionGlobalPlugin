@@ -496,7 +496,7 @@ def updateNVDAAndApplicationsChannelsLevels(applicationsChannelsVolumes):
 	global _NVDAChannelsVolume
 	_NVDAChannelsVolume = applicationsChannelsVolumes[nvdaAppName]
 	appVolumes = applicationsChannelsVolumes.copy()
-	del appVolumes[nvdaAppName]
+	# del appVolumes[nvdaAppName]
 	setApplicationChannelsLevels(appVolumes)
 
 

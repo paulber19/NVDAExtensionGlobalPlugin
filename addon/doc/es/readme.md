@@ -7,7 +7,7 @@
 	* [versión de desarrollo][2]
 * Compatibilidad:
 	* mínima de NVDA requerida: 2020.4
-	* última versión de NVDA probada: 2022.3
+	* última versión de NVDA probada: 2022.4
 
 
 * Traducido por Rémy Ruiz, cambios por Carlos Esteban martínez Macías.
@@ -97,5 +97,5 @@ Algunas de ellas se pueden habilitar o deshabilitar individualmente.
 
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.3.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.4.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

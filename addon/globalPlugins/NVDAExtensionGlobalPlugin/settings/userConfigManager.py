@@ -812,6 +812,8 @@ class UpdateFolderDialog(
 		from locale import strxfrm
 		addons = []
 		for path in addonPaths:
+			if not os.path.isdir(path):
+				continue
 			addon = Addon(path)
 			addons.append(addon)
 		return sorted(addons, key=lambda a: strxfrm(a.manifest['summary']))

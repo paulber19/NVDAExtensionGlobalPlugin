@@ -37,7 +37,12 @@ def getNewSymbolsFileForVoiceLanguage(curLang):
 
 
 def getNewSymbolsForCurrentLanguage():
-	from speech.speech import getCurrentLanguage
+	try:
+		from speech.speech import getCurrentLanguage
+	except ImportError:
+		# for NVDA version <= 2020.4
+		from speech import getCurrentLanguage
+
 	curLang = getCurrentLanguage()
 	log.debug("Get new symbols for current language: %s" % curLang)
 	try:

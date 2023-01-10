@@ -19,6 +19,35 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 
 Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
 
+
++ v11.4 (09/01/2023) +
+Nouveautés:
+- nouveau script  pour vider le presse-papier (déjà présent dans la version précédente, mais non annoncé).
+- par option, il est possible de faire prononcer les caractères non alphanumériques tapés quand l'écho clavier par caractère est désactivé.
+
+
+Corrections de bogues:
+- correction du problème avec le synthétiseur sapi5  pour mettre le son de NVDA  sur le canal droit ou gauche.
+- correction du problème lorsque "nvda+j" est tapé alors que le mode de commutation vocal est activé. Ce mode est maintenant désactivé sur cette frappe.
+- l'appui sur "f1" dans le dialogue "Gestionnaire audio de NVDA et des applications actives " ouvre maintenant le manuel utilisateur sur le bon chapitre.
+- correction du mauvais affichage des informations de type booléen (oui ou non) dans  la boite de dialogue "Informations sur le profile vocal".
+- correction du mauvais affichage des informations  sur le contexte de l'application pour une application qui contient des caractères de contrôle dans leur nom de produit (comme Agenda, ApprentiClavier).
+- les gestes ajoutés dans la catégorie "Divers" du dialogue "Gestes de commande"  sont maintenant correctement affichés dans la catégorie "Divers" du dialogue "Gestes de commande utilisateur".
+- sous W11, les icônes de la zone de notification sont maintenant correctement présentés dans la liste du dialogue affiché par "nvda+f11" ou "nvda+J" suivi de f11. Il y manquait les icônes comme "état du réseau système", état du volume système",  "horloge système" et "afficher le bureau".
+- contournement du bogue de NVDA  avec PowerPoint (Office 365, 2019 et 2016) lors de la mise du focus sur une forme de texte obscurcie, se traduisant par  un dépassement de récursivité (boucle infinie)
+
+
+Autres:
+- ajout du code écrit par Joseph Lee dans son extension "Office desk"add-on" pour la zone de recherche de W11 et les notifications.
+- amélioration de l'annonce des commandes d'édition "contrôle+c", "contrôle+v", "contrôle+x" et "contrôle+z" lorsque ces commandes ne sont pas relâchées.
+- suppression de l'affichage des fenêtres comme "Microsoft Text Input Application " de la liste des applications en cours du dialogue "Liste des fenêtres".
+
+
+Compatibilité avec  NVDA 2022.3 et 2022.4:
+- prise en compte de la nouvelle option "Description différée des caractères lors du mouvement du curseur" de la catégorie "Parole".
+- les nouveaux scripts de NVDA version 2022.4 concernant les tableaux sont déplacés dans la catégorie "Tableau"  ajoutée par l'extension dans le dialogue "Gestes de commandes".
+
+
 + v11.3 (10/09/2022) +
 Nouveautés:
 - ajout des scripts pour déplacer le curseur à la prochaine/précédente ligne de texte contenant une irrégularité détectée par l'analyseur de texte.
@@ -29,7 +58,7 @@ Changements:
 - suppression  de certains symboles dont la prononciation est déjà définie par NVDA.
 - les symboles non définis de base dans NVDA sont maintenant injectés à chaque changement de voix. L'installation de l'extension ne crée plus de fichier de symboles.
 - suppression des scripts de déplacement du curseur à la première / dernière cellule de la ligne/colonne dans un tableau. Ces scripts sont maintenant fournit par NVDA. Il sont cependant conserver pour les versions inférieurs à 2022.2.
--  les nouveaux scripts de NVDA version 2022.2 concernant les tableaux sont déplacés dans la catégorie "Tableau"  ajoutée par l'extension dans le dialogue "Gestes de commandes".
+- les nouveaux scripts de NVDA version 2022.2 concernant les tableaux sont déplacés dans la catégorie "Tableau"  ajoutée par l'extension dans le dialogue "Gestes de commandes".
 
 
 Corrections de bogues:
