@@ -7,7 +7,7 @@
 	* [версію в розробці][2]
 * Сумісність:
 	* мінімальна підтримувана версія NVDA: 2020.4
-	* остання перевірена версія NVDA: 2022.1
+	* остання перевірена версія NVDA: 2022.4
 
 
 Перекладачі: Іван Штефуряк, Володимир Пиріг, Максим Задорожний
@@ -97,5 +97,5 @@
 * Вибір останнього використаного параметра в кільці налаштувань синтезатора.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.2.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-11.4.1.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev

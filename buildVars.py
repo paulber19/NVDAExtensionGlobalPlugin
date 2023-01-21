@@ -113,7 +113,7 @@ Some features can be enabled or disabled individually.
 """),
 
 	# version
-	"addon_version": "11.4",
+	"addon_version": "11.4.1",
 	# Author(s)
 	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support
