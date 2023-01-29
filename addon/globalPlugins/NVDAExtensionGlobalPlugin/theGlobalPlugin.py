@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 Paulber19
+# Copyright (C) 2016 - 2023 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -349,7 +349,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .scripts import scriptHandlerEx
 		scriptHandlerEx.initialize()
 		# start update check if not in secur mode and option is set
-		if not inSecureMode:
+		if not inSecureMode():
 			from .settings import toggleAutoUpdateGeneralOptions
 			if toggleAutoUpdateGeneralOptions(False):
 				from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
