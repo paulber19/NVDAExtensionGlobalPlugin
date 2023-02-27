@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\volumeControl\audioManagerDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021 paulber19
+# Copyright (C) 2021-2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -13,16 +13,13 @@ import speech
 import queueHandler
 import api
 import wx
+from gui.guiHelper import BoxSizerHelper
 from gui import guiHelper, mainFrame
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
-if NVDAVersion >= [2021, 1]:
-	from gui.guiHelper import BoxSizerHelper
-else:
-	# we need the 2021.1 guiHelper changes to maintain compatibility with nvda version < 2021.1
-	from ..utils.guiHelper import BoxSizerHelper
+
+
+
 
 from .volumeControl import (
 	getChannels, getAppVolumeObj, getNVDAVolumeObj,

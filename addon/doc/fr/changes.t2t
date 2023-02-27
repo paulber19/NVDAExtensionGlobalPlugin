@@ -20,6 +20,46 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
 
 
++ v12.0 (22/02/2023) +
+Compatibilité avec NVDA 2023.1 et abandon du support des versions de NVDA antérieures à la version 2021.1.
+
+Nouveautés :
+- compléments pour l'explorateur Windows :
+ - un script pour annoncer le chemin d'accès du dossier ou du fichier qui se trouve sous le curseur de l'explorateur Windows, ou copier ce chemin dans le presse-papier.
+ - un script pour annoncer, en remontant l'arborescense des dossiers, le nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur,
+- possibilité de bloquer les touches "Insertion" et "Verrouillage majuscule".
+- possibilité de limiter la répitition de touches
+
+
+Correction de bogues :
+- rappel : la version 11.4.2 a corrigé le problème de régression de la mise à jour automatique de l'extension. Les versions antérieures à cette version doivent être mise à jour manuellement.
+- le sous-menu "Gérer les configuration utilisateur"  n'apparaitra plus plusieurs fois après le rechargement de l'extension.
+
+
+Changements :
+- les scripts concernant l'historique vocal ne copi plus directement l'enregistrement dans le presse-papier. Cette copie  se fait maintenant par un double appui  du geste de commande  du script pour l'annonce de l'enregistrement courant.
+- le fichier "readme.md" est supprimé pour les languages autre que l'anglais (en) et ne doit plus être traduit.
+
+
+Mise à jour du code :
+- suppression du code concernant l'annonce du mot focalisé après suppression de mot  introduite dans NVDA 2020.3.
+- suppression du code concernant la correction faite dans  la class BoxSizerHelper de guiHelper.py à partir de NVDA 2021.1
+- suppression du code prenant en charge les versions antérieure à la version 2021.1 de NVDA. Les modules concernés sont :
+ - browseModeEx : __init__.py, documentBaseEx.py, NVDAObjectsUIA.py, virtualBuffers.py
+ - commandKeysSelectiveAnnouncementAndRemanence : __init__.py
+ - complexSymbols : newSymbolsHandler.py
+ - scripts : scriptHandlerEx.py
+ - settings : userConfigManager.py
+ - switchVoiceProfile : __init__.py
+ - speechHistory : __init__.py
+ - systemTrayIconsList : __init__.py
+ - utils : __init__.py, contextHelpEx.py, keyboard.py
+ -theGlobalPlugin.py
+
+
+
+
+
 + v11.4 (09/01/2023) +
 Nouveautés:
 - nouveau script  pour vider le presse-papier (déjà présent dans la version précédente, mais non annoncé).

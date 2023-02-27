@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021 Paulber19
+# Copyright (C) 2021-2023 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -12,6 +12,7 @@ import addonHandler
 import api
 import textInfos
 try:
+	# for NVDA version >= 2021.2
 	from controlTypes.role import Role
 	ROLE_MATH = Role.MATH
 except ImportError:

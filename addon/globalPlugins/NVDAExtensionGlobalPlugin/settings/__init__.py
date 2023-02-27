@@ -99,16 +99,6 @@ def toggleOption(id, toggle):
 	return TOGGLE(sct, id, toggle)
 
 
-def toggleReportNextWordOnDeletionOption(toggle=True):
-	# bug fix in nvda 2020.3
-	# so return always False if nvda version is equal or higher to this version
-	import versionInfo
-	NVDAVersion = [versionInfo.version_year, versionInfo.version_major]
-	if NVDAVersion >= [2020, 3]:
-		return False
-	return toggleOption(addonConfig.ID_ReportNextWordOnDeletion, toggle)
-
-
 def toggleNoDescriptionReportInRibbonOption(toggle=True):
 	return toggleOption(addonConfig.ID_NoDescriptionReportInRibbon, toggle)
 
@@ -198,8 +188,17 @@ def toggleReportNumlockStateAtStartAdvancedOption(toggle=True):
 	return toggleAdvancedOption(addonConfig.ID_ReportNumlockStateAtStart, toggle)
 
 
+def toggleReversedPathWithLevelAdvancedOption(toggle=True):
+		return toggleAdvancedOption(addonConfig.ID_ReversedPathWithLevel, toggle)
+
+
+def toggleLimitKeyRepeatsAdvancedOption(toggle=True):
+		return toggleAdvancedOption(addonConfig.ID_LimitKeyRepeats, toggle)
+
+
+
 class AddonConfigurationManager():
-	_currentConfigVersion = "2.8"
+	_currentConfigVersion = "2.9"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
 
@@ -207,6 +206,7 @@ class AddonConfigurationManager():
 		"2.6": addonConfig.AddonConfiguration26,
 		"2.7": addonConfig.AddonConfiguration27,
 		"2.8": addonConfig.AddonConfiguration28,
+		"2.9": addonConfig.AddonConfiguration29,
 	}
 
 	def __init__(self):
@@ -656,6 +656,18 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		conf[SCT_AdvancedOptions][ID_MaximumDelayBetweenSameScript] = str(delay)
 
+	def getReducedPathItemsNumber(self):
+		from .addonConfig import SCT_AdvancedOptions, ID_ReducedPathItemsNumber
+		conf = self.addonConfig
+		return int(conf[SCT_AdvancedOptions][ID_ReducedPathItemsNumber])
+
+	def setReducedPathItemsNumber(self,nb):
+		from .addonConfig import SCT_AdvancedOptions, ID_ReducedPathItemsNumber
+		conf = self.addonConfig
+		conf[SCT_AdvancedOptions][ID_ReducedPathItemsNumber] = str(nb)
+
+
+
 	def getConfirmAudioDeviceChangeTimeOut(self):
 		from .addonConfig import SCT_AdvancedOptions, ID_ConfirmAudioDeviceChangeTimeOut
 		conf = self.addonConfig
@@ -728,6 +740,18 @@ class AddonConfigurationManager():
 		if option is None:
 			option = self.getReportingSpellingErrorsByOption()
 		return option == addonConfig.RSE_Message
+
+
+	def getKeyRepeatDelay(self):
+		from .addonConfig import SCT_AdvancedOptions, ID_KeyRepeatDelay
+		conf = self.addonConfig
+		return int(conf[SCT_AdvancedOptions][ID_KeyRepeatDelay])
+
+	def setKeyRepeatDelay(self, delay):
+		from .addonConfig import SCT_AdvancedOptions, ID_KeyRepeatDelay
+		conf = self.addonConfig
+		conf[SCT_AdvancedOptions][ID_KeyRepeatDelay] = str(delay)
+
 
 
 # singleton for add-on configuration manager

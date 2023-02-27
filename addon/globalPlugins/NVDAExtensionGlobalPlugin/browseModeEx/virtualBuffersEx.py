@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\virtualBuffersEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 paulber19
+# Copyright (C) 2016 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -31,12 +31,7 @@ from virtualBuffers import (
 from virtualBuffers import _prepareForFindByAttributes
 from NVDAObjects.IAccessible import ia2Web
 from comtypes import COMError
-try:
-	# for nvda version >= 2021.1
-	from comInterfaces import IAccessible2Lib as IA2
-except ImportError:
-	import IAccessibleHandler as IA2
-
+from comInterfaces import IAccessible2Lib as IA2
 from ..utils.NVDAStrings import NVDAString
 from . import elementsList
 from .__init__ import BrowseModeDocumentTreeInterceptorEx

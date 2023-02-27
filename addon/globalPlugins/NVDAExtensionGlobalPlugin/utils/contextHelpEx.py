@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021 paulber19
+# Copyright (C) 2021-2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -10,10 +10,8 @@ import typing
 import wx
 from logHandler import log
 from .secure import inSecureMode
-try:
-	from documentationUtils import getDocFilePath
-except ImportError:
-	from gui import getDocFilePath
+from documentationUtils import getDocFilePath
+
 
 # same as contextHelp of NVDA core
 # but for also addon user documentation

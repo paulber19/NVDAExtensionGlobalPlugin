@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2023 Paulber19
+# Copyright (C) 2016 - 2021 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -59,12 +59,10 @@ from .utils.informationDialog import InformationDialog
 from .utils import contextHelpEx
 from .computerTools.volumeControlScripts import ScriptsForVolume
 from .scripts.scriptInfos import scriptsToDocInformations
-try:
-	# form nvda version >= 2020.3
-	from .userInputGestures import inputGesturesEx
-	inputGesturesEx.initialize()
-except ImportError:
-	pass
+# to add "run script" button in "Input gestures" dialog
+# we patche it
+from .userInputGestures import inputGesturesEx
+inputGesturesEx.initialize()
 
 
 addonHandler.initTranslation()
@@ -516,13 +514,13 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				wx.EVT_MENU, self.onExploreProgramFilesMenu, exploreProgramFilesMenu)
 		if isInstall(addonConfig.FCT_ManageUserConfigurations):
 			menu = wx.Menu()
-			item = self.toolsMenu .Append(
+			self.manageUserConfigurationMenu = self.toolsMenu .Append(
 				wx.ID_ANY,
 				# Translators: name of the option in the menu.
 				_("Manage user configurations"),
 				"")
 			gui.mainFrame.sysTrayIcon.Bind(
-				wx.EVT_MENU, self.onManageUserConfigurationsMenu, item)
+				wx.EVT_MENU, self.onManageUserConfigurationsMenu, self.manageUserConfigurationMenu)
 
 	def onManageUserConfigurationsMenu(self, evt):
 		from .settings.userConfigManager import UserConfigManagementDialog
@@ -590,6 +588,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				self.prefsMenu.Remove(getattr(self, item))
 		if hasattr(self, "exploreNVDAMenu"):
 			self.toolsMenu .Remove(getattr(self, "exploreNVDAMenu"))
+		if hasattr(self, "manageUserConfigurationMenu"):
+			self.toolsMenu .Remove(getattr(self, "manageUserConfigurationMenu"))
+			
 		messageBox.terminate()
 		# if language has changed, we must update symbols files
 		from languageHandler import getLanguage, getWindowsLanguage
@@ -669,13 +670,16 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def chooseNVDAObjectOverlayClasses(self, obj, clsList):
 		clsList.insert(0, NVDAObjectEx)
+		from .WindowsExplorer import updateChooseNVDAOverlayClass
+		updateChooseNVDAOverlayClass(obj, clsList)
+
 		self.clipboardCommandAnnouncementChooseNVDAObjectOverlayClasses(obj, clsList)
 		if hasattr(self, "extendedNetUIHWNDChooseNVDAObjectOverlayClasses"):
 			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses(obj, clsList)
 		if hasattr(self, "browseModeExChooseNVDAObjectOverlayClasses"):
 			self.browseModeExChooseNVDAObjectOverlayClasses(obj, clsList)
 		try:
-			# for nvda version > 2020.4
+			# for nvda version >= 2021.3
 			# code comes from  officeDesk.py module of nvda office desk add-on written by Joseph Lee.
 			from NVDAObjects.UIA import UIA, SearchField, SuggestionsList, SuggestionListItem
 			if isinstance(obj, UIA):
@@ -728,29 +732,14 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		nextHandler()
 
 	def script_copyDateAndTimeToClip(self, gesture):
-		try:
-			# for NVDA version >= 2021.1
-			dateText = winKernel.GetDateFormatEx(
-				winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
-		except AttributeError:
-			dateText = winKernel.GetDateFormat(
-				winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
+		dateText = winKernel.GetDateFormatEx(
+			winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
 		if settings.toggleReportTimeWithSecondsOption(False):
-			try:
-				# for NVDA version >= 2021.1
-				timeText = winKernel.GetTimeFormatEx(
-					winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
-			except AttributeError:
-				timeText = winKernel.GetTimeFormat(
-					winKernel.LOCALE_USER_DEFAULT, None, None, None)
+			timeText = winKernel.GetTimeFormatEx(
+				winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
 		else:
-			try:
-				# for NVDA version >= 2021.1
-				timeText = winKernel.GetTimeFormatEx(
-					winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
-			except AttributeError:
-				timeText = winKernel.GetTimeFormat(
-					winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
+			timeText = winKernel.GetTimeFormatEx(
+				winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
 		msg = "%s %s" % (dateText, timeText)
 		if api.copyToClip(msg):
 			# Translators: message to report date and time copy to clipboard.
@@ -767,32 +756,17 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				self.script_copyDateAndTimeToClip(gesture)
 				return
 			if action == "date":
-				try:
-					# for NVDA version >= 2021.1
-					text = winKernel.GetDateFormatEx(winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
-				except AttributeError:
-					text = winKernel.GetDateFormat(
-						winKernel.LOCALE_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
+				text = winKernel.GetDateFormatEx(winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.DATE_LONGDATE, None, None)
 				ui.message(text)
 				return
 			curLevel = config.conf["speech"]["symbolLevel"]
 			config.conf["speech"]["symbolLevel"] = SYMLVL_SOME
 			if settings.toggleReportTimeWithSecondsOption(False):
-				try:
-					# for NVDA version >= 2021.1
-					text = winKernel.GetTimeFormatEx(
-						winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
-				except AttributeError:
-					text = winKernel.GetTimeFormat(
-						winKernel.LOCALE_USER_DEFAULT, None, None, None)
+				text = winKernel.GetTimeFormatEx(
+					winKernel.LOCALE_NAME_USER_DEFAULT, None, None, None)
 			else:
-				try:
-					# for NVDA version >= 2021.1
-					text = winKernel.GetTimeFormatEx(
-						winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
-				except AttributeError:
-					text = winKernel.GetTimeFormat(
-						winKernel.LOCALE_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
+				text = winKernel.GetTimeFormatEx(
+					winKernel.LOCALE_NAME_USER_DEFAULT, winKernel.TIME_NOSECONDS, None, None)
 			ui.message(text)
 			config.conf["speech"]["symbolLevel"] = curLevel
 		count = scriptHandler.getLastScriptRepeatCount()
@@ -1098,22 +1072,22 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_reportPreviousSpeechHistoryRecord(self, gesture):
 		stopDelayScriptTask()
 		if speechHistory.isActive():
-			speechHistory.getSpeechRecorder().reportSpeechHistory("previous")
+			speechHistory.getSpeechRecorder().reportSpeechHistory("previous", toClip=False)
 
 	def script_reportNextSpeechHistoryRecord(self, gesture):
 		stopDelayScriptTask()
 		if speechHistory.isActive():
-			speechHistory.getSpeechRecorder().reportSpeechHistory("next")
+			speechHistory.getSpeechRecorder().reportSpeechHistory("next", toClip=False)
 
 	def script_reportCurrentSpeechHistoryRecord(self, gesture):
-		def callback():
+		def callback(count):
 			clearDelayScriptTask()
 			if speechHistory.isActive():
-				speechHistory.getSpeechRecorder().reportSpeechHistory("current")
+				speechHistory.getSpeechRecorder().reportSpeechHistory("current", toClip=True if count == 1 else False)
 		stopDelayScriptTask()
 		count = scriptHandler.getLastScriptRepeatCount()
-		if count == 0:
-			delayScriptTask(callback)
+		if count < 2:
+			delayScriptTask(callback, count)
 		else:
 			speechHistory.getSpeechRecorder().displaySpeechHistory()
 
@@ -1121,22 +1095,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		speechHistory.getSpeechRecorder().displaySpeechHistory()
 
 	def script_displayFormatting(self, gesture):
-		reportFormattingOptions = (
-			"reportFontName",
-			"reportFontSize",
-			"reportFontAttributes",
-			"reportSuperscriptsAndSubscripts",
-			"reportColor",
-			"reportStyle",
-			"reportAlignment",
-			"reportSpellingErrors",
-			"reportLineIndentation",
-			"reportParagraphIndentation",
-			"reportLineSpacing",
-			"reportBorderStyle",
-			"reportBorderColor",
-		)
-
+		from .reportFormatting import getReportFormattingOptions 
+		reportFormattingOptions =   getReportFormattingOptions ()
+		
 		# Create a dictionary to replace the config section that would normally be
 		# passed to getFormatFieldsSpeech / getFormatFieldsBraille
 		formatConfig = dict()

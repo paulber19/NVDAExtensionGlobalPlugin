@@ -30,80 +30,79 @@ on going redaction
 + Introduction +
 ++ General ++
 This add-on adds to NVDA's global commands:
-- the following features:
+- The following features:
  - [Display of the list of icons in the notification area or windows of applications launched #hdr1],
  - [Help with the composition of complex symbols #hdr3] such as for example an "e" in the "o", an inverted question mark ...,
- - [Announcement or display of information about the application under focus, such as its version or the active configuration profile #hdr4],
+ - [Announcement or display of information about the application under focus, such as its version, the active configuration profile, loaded add-on #hdr4],
  - [Virtual buffer functionality extension #hdr5] for Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge and Google Chrome browsers:
   - new commands for navigation mode: paragraph, division, anchor, main region,
   - new types of elements presented in list form in the "List of elements" dialog box opened by NVDA + f7: (radio button, paragraph, frame, checkbox, ...) and announcement of the number of elements corresponding to the selected type,
   - announcement of the address (URL) of the document,
   - option to browse in a loop in search of a next or previous item,
+  - [scripts to click at the current position of the browser object #hdr23],
   - scripts for tables:
    - announcement of the position of the current cell,
    - move to the next or previous column / row with reading of the cells composing it,
-   - move to the first / last cell of the row / column,
+   - move to the first / last cell of the row / column (keep for NVDA versions lower than 2022.2),
    - announcement of the cells of the current column / row.
- - [Announcement of the function associated with the keyboard editing commands #hdr7],
+ - [Announcement of the function associated with the keyboard editing commands #hdr7] with:
+  - adding the selected text to the clipboard,
+  - emptying the clipboard,
+  - improvement of the NVDA base script "NVDA+c" which announces the text in the clipboard,
  - [Announcement of the pre-selected folder in the "Open, Save", "Save as" style dialog boxes #hdr8],
  - [Open previous or current NVDA log and copy their path to clipboard # hdr9],
- - [speak again or display the last voice announcements #hdr10],
- - [rename keyboard keys #hdr12],
+ - [history of voice speechs #hdr10],
+ - [renaming keyboard keys #hdr12],
  - [selective announcement of command keys #hdr13],
- - [simple timer #hdr14],
- - [restart NVDA in "debugging" logging level by simple input gesture #hdr15],
+ - [simple countdown timer #hdr14],
+ - [restarting NVDA in "debugging" logging level by simple input gesture #hdr15],
  - [display of visible elements making up the object in the foreground #hdr16],
  - [quick voice profile switching #hdr17],
  - [persistence of NVDA and modification keys and specific persistence for the gmail.com site #hdr18],
  - [Shutdown, restart or hibernate computer #hdr19],
- - [management of control gestures configured by user #hdr20],
+ - management of input gestures configured by user,
  - [sound control #hdr21] (Windows 10 only):
-  - cut or set the sound for the audio stream of the application under focus,
+  - mute or unmute volume for the focused application,
   - manually or automatically establish the main sound and that of the NVDA audio stream,
   - modify the level of the main volume or that of the audio stream of the application under focus,
   - automatic recovery of the main volume and NVDA when loading the extension,
- - [Tools for the development of add-ons #hdr22]:
-  - creation of the buildVars.py file from the manifest.ini file of the add-on,
-  - update of the manifest file.ini from the information in the buildVars.py file,
-  - creation of the localization manifest.ini file for one or all of the languages ​​supported by the add-on,
-  - creation of HTML documentation for the add-on for one or all languages,
-  - preparation of the add-on,
-  - exploration of the add-on file,
- - [scripts to click at the current position of the browser object #hdr23],
+  - [temporary use of an audio output device without impacting the NVDA configuration # hdr33],
+  - [orientation of the NVDA audio output #hdr34],
+ - [Tools for the development of add-ons #hdr22],
  - [Complements concerning the date and time #hdr24]:
   - copy of the date and time to the clipboard,
   - Announce the time on the Windows clock with seconds,
   - announcement of the time independent of the punctuation level.
- - [script to emulate the "Applications" key #hdr25],
- - [script to close all open windows #hdr26],
- - [script to display the list of running add-ons #hdr27].
  - [user configurations management and NVDA restarting with precise configuration #HDR23],
-  - [text analyzer # hdr31],
- - [announcement of the cursor position in the edit boxes # hdr32],
-- [temporary use of an audio output device without impacting the NVDA configuration # hdr33],
-- [orientation of the NVDA audio output #hdr34],
-- [ quick add-ons activation or desactivation #hdr35],
-
+ - [text analyzer # hdr31],
+ - [ quick add-ons activation or desactivation #hdr35],
 - The options:
  - [removal of the announcement of the description of objects in Windows ribbons #hdr100],
- - [Advertise focused word after word deletion (for NVDA versions prior to 2020.3) #hdr101],
  - [automatic window maximization #hdr102],
  - [systematic announcement of punctuation marks when moving by word #hdr103],
  - [possibility of signaling spelling errors by a double beep or by a voice announcement instead of the sound emitted by NVDA # hdr104],
+ - [possibility to block the "Insert" and "Caps lock" keys #hdr105],
+ - [Pronunciation of non-alphanumeric characters when per-character keyboard echo is disabled #hdr106].
 - advanced options:
  - [Signaling by a sound of the entry of an error in the log of NVDA #hdr300],
  - [Title of the add-on's dialog boxes with the add-on's summary #hdr302],
  - [configuration of the wait time delay for repeating the same input gesture #hdr303],
  - [possible use of numeric keypad keys as standard #hdr304].
+ - [possibility to limit the repetition of keys #hdr306],
 - and the other improvements:
  - [menu to explore user configuration folder or NVDA program folder #hdr202],
  - [presentation of text formatting information in a dialog box instead of an HTML document #hdr203],
  - [Announcement of confirmation style dialog box text even if item description announcement is disabled #hdr204].
+ - [announcement of the cursor position in the edit boxes # hdr32],
  - [script to emulate the "Applications" key # hdr25],
  - [script to close all open windows # hdr26],
- - [possibility of executing scripts in the "input gestures" dialog # hdr205] (for NVDA versions greater than 2020.3),
- - [automatic selection of the category in the dialog "Command gestures" # hdr206].
-- [Selection of the last setting  used in the synthesizer settings ring # hdr207].
+ - [script to display the list of running add-ons #hdr27].
+ - [possibility of executing scripts in the "input gestures" dialog # hdr205],
+ - [automatic selection of the category in the dialog "Input gestures" # hdr206].
+ - [Selection of the last setting  used in the synthesizer settings ring # hdr207].
+ - [Enhancements for Windows Explorer#hdr208]:
+  - a script to announce the access path of the folder or the file which is under the cursor of the Windows explorer, or copy this path in the clipboard.
+  - a script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
 
 
 ++ Add-on configuration menu ++[hdr-configurationMenu]
@@ -124,7 +123,7 @@ In NVDA's "Preferences" sub-menu, the "ADDON_SUMMARY" sub-menu has been added wh
 - "Reset the configuration" to restore the configuration to its initial state when the add-on is first installed.
 
 
-Apart from the last menu, each is associated with a script without a command gesture allowing it to be activated. With the dialog "gestures of commands" of NVDA it is possible to assign them one.
+Apart from the last menu, each is associated with a script without a input gesture allowing it to be activated. With the dialog "gestures of commands" of NVDA it is possible to assign them one.
 
 These are the following scripts with their interpreter command:
 - "Display the add-on settings dialog": "KEY_ADDON_SETTINGS" command,
@@ -702,21 +701,22 @@ To listen to these recordings again, the following scripts, placed in the "Speec
 +++ Announcement of the previous recording +++
 This script is started using the input gesture, "MAIN_KEY_PREVIOUS_RECORD" assigned by default.
 
-The input gesture triggers the announcement of the previous recording compared to the last announced recording and copy it to the clipboard.
-
+The input gesture triggers the announcement of the previous recording compared to the last announced recording.
 +++ Announcement of the next recording +++
 This script is launched using the input gesture, "MAIN_KEY_NEXT_RECORD" assigned by default.
 
-The input gesture triggers the announcement of the next recording compared to the last announced recording and copy it to the clipboard
+The input gesture triggers the announcement of the next recording compared to the last announced recording.
 
 +++ Re-announce the last recording announced +++
 The description of this script is: "Report current record of the speech history and copy it to clipboard. Twice: display speech history".
 
 This script is started using "MAIN_KEY_CURRENT_RECORD" input gesture assigned by default.
 
-A simple press triggers the announcement of the last recorded recording and its copy to the clipboard
+A simple press triggers the announcement of the last recording.
 
-A double press, displays the entire history.
+A double press, triggers the copy of the recording to the clipboard.
+
+A triple press, displays the entire history.
 
 +++ Show speech history +++[hdr10-1]
 The description of this script is: "display speech history records".
@@ -973,7 +973,7 @@ The description of this script is: "Activate or deactivate Voice profile switchi
 
 To run this script, two possibilities:
 - either by typing the "KEY_VOICE_PROFIL_SWITCHING" command from the interpreter,
-- or using the "MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING" command gesture (not installed by default).
+- or using the "MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING" Input gesture (not installed by default).
 
 
 When this mode is activated, the right or left arrows are used to move to the first next or previous selector associated with a voice profile and thus define the voice profile associated with this selector as the current voice profile.
@@ -1103,7 +1103,7 @@ Reporting of remaining wait time respects NVDA's "tracking progress bars" option
 
 The "Announce the remaining waiting time" button allows you to read the waiting time displayed in the dialog box.
 
-All scripts are placed in the "ADDON_SUMMARY" category of the NVDA "Command gestures" dialog, but no gestures are assigned to them.
+All scripts are placed in the "ADDON_SUMMARY" category of the NVDA "Input gestures" dialog, but no gestures are assigned to them.
 
 ++ Management of user input gestures ++[hdr20]
 This feature cannot be uninstalled.
@@ -1285,9 +1285,9 @@ This script is stored in the "System status" category of the "input gestures" NV
 
 No interpreter command is associated with it.
 
-If the extension's install status is "Install", this script replaces the NVDA script and is started using the "NVDA + f12" command gesture.
+If the extension's install status is "Install", this script replaces the NVDA script and is started using the "NVDA + f12" input gesture.
 
-Otherwise no command gesture is assigned to it, but it is still possible to assign it using the NVDA "Command gestures" dialog.
+Otherwise no input gesture is assigned to it, but it is still possible to assign it using the NVDA "input gestures" dialog.
 
 This script allows:
 - at the first press of the gesture: the announcement of the current time.
@@ -1298,12 +1298,12 @@ This script allows:
 It also brings:
 
 ++++ Announcement of the hour independent of the punctuation level ++++
-The basic command gesture "NVDA + f12" gives the time with a simple press, but the time is not announced in the same way depending on the Level of punctuation and symbols selected in the voice parameters.
+The basic input gesture "NVDA + f12" gives the time with a simple press, but the time is not announced in the same way depending on the Level of punctuation and symbols selected in the voice parameters.
 
 This script corrects this small flaw by announcing the time with the Level of punctuation and symbols forced to "None" without modifying the level defined in the "Speech" category's parameters.
 
 ++++ Announcement of the time with seconds ++++
-By default, NVDA's command gesture "nvda + f12" announces the time without the seconds.
+By default, NVDA's input gesture "nvda + f12" announces the time without the seconds.
 
 This script offers the possibility of announcing the time in seconds.
 
@@ -1641,7 +1641,7 @@ The settings in this category are specific to the active profile that is announc
 The analyzer can be turned on or off in three ways:
 - using the "KEY_TEXT_ANALYZER" command of the interpreter,
 - using the "Activate text analyzer" checkbox located in the "Text analysis" category of the extension settings dialog,
-- using the script "Activate or deactivate the text analyzer": no command gesture is assigned to it, but it is possible to do so using the NVDA "Command gestures" dialog.
+- using the script "Activate or deactivate the text analyzer": no input gesture is assigned to it, but it is possible to do so using the NVDA "input gestures" dialog.
 
 
 Enabling and disabling the analyzer only affects the active configuration profile.
@@ -1724,7 +1724,7 @@ The following scripts allow to move the cursor to the beginning of the next/prev
 - move the cursor to the previous line with irregularity: interpreter command "KEY_MOVETOPREVIOUSALERT_ANALYZER",
 
 
-They have no command gesture associated with them, but it is possible to do so using the "Input gestures" dialog. They are placed in the "ADDON_SUMMARY" category.
+They have no input gesture associated with them, but it is possible to do so using the "Input gestures" dialog. They are placed in the "ADDON_SUMMARY" category.
 ++ Announcement of cursor position in edit boxes ++[hdr32]
 The script "Toggle reporting of current caret position in edit box" allows you to have the cursor position announced or not when it is in an edit zone.
 
@@ -1732,7 +1732,7 @@ This position is relative to the start of the line on which the cursor is locate
 
 The activation or deactivation of this announcement is specific to the current profile.
 
-The script is installed without a command gesture and with the "KEY_POSITION_REPORT" interpreter command.
+The script is installed without a input gesture and with the "KEY_POSITION_REPORT" interpreter command.
 
 If desired, NVDA's "input gesture" dialog allows you to assign an input gesture to it.
 
@@ -1943,14 +1943,6 @@ But this can be disabled using the "No object description inWindows ribbons" opt
 
 A restart of NVDA will then be necessary for the option to be taken into account.
 
-
-++ Announcement of the focused word after a word deletion ++[hdr101]
-In some applications such as WordPad, Microsoft Word, it is possible to delete the following word with the command "control + Del", but versions of NVDA prior to 2020.3 do not pronounce the word following the cursor position after the deletion.
-
-By default, this add-on allows these versions of NVDA to speak this word.
-
-For these versions, this can be prevented by unchecking the "Report next word on deletion" option from the "NVDA enhancement" category of the add-on's "Settings" dialog.
-
 ++ Automatic window maximization ++[hdr102]
 This option automatically maximizes windows that are brought to the foreground.
 
@@ -1983,7 +1975,26 @@ Some users find this sound unpleasant, the extension brings the possibility of r
 
 The choice is made in the group "Reporting spelling errors" of the category "NVDA enhancements" of the global settings of the add-on.
 
-++ Pronunciation of non-alphanumeric characters when per-character keyboard echo is disabled ++[hdr105]
+++ Blocking "Insert" and "Capslock" keys ++[hdr105]
+(available for NVDA versions lower than 2023.1 if the "Selective announcement of command keys" feature is installed)
+
+It can be useful in some cases to prevent the action of the "Insert" and "Caps lock" keys.
+
+Their initial role is:
+- The "Insert" key can switch from "Insert" mode to "Overtype" mode and vice versa.
+- The "Caps lock" key simulates the permanent depression of the "Shift" key.
+
+
+NVDA allows the user to define these keys as "NVDA" key. But in this case, the "Insert" key like the "Caps Lock" key only plays their initial role if there is a quick double press.
+ 
+By configuration, the add-on gives the possibility that these keys have no action when they are in their initial role.
+
+This configuration is done by configuration profile using one check box per key (See the "Key lock" group in the "Keyboard" category of the current profile).
+
+When the key action is blocked, a beep sounds.
+
+
+++ Pronunciation of non-alphanumeric characters when per-character keyboard echo is disabled ++[hdr106]
 This option allows non-alphanumeric characters to be spoken when keyboard echo by characters is disabled.
 
 This allows some users to hear, for example, typed punctuation symbols, even if they have disabled keyboard echo by character.
@@ -2075,6 +2086,20 @@ By default, the choice is:
 - "Do nothing" for a "laptop" keyboard layout.
 
 
+++ Key repeat limitation ++[hdr306]
+When a key is pressed and not released quickly enough, Windows generates a series of keypresses which can be annoying especially in an editing area.
+
+This feature attempts to keep this number of key presses to a minimum.
+
+It is controlled by the "Limit repetitions" checkbox which is in the "Keystroke repetition" group of the "Advanced" category of the global parameters of the add-on and by the repetition delay which is configured in the same group.
+
+When this option is checked, any new press of the same key that occurs within a delay less than the configured repeat delay is ignored.
+
+By default, this box is unchecked and the snooze delay is set to 100 milliseconds
+
+It is not possible to keep only the first key press because the delay with the following key press is too great (around 500 milliseconds).
+
+Modifier keys are not affected by this limitation.
 
 + Other improvements +
 ++ Exploring the user configuration folder or nvda program folder ++[hdr202]
@@ -2115,7 +2140,7 @@ This add-on implements the "Do not take account of the option called Report obje
 ++ Running scripts in the "Input gestures" dialog ++[hdr205]
 The NVDA "Input gestures" dialog allows you to configure the input gestures (keyboard shortcuts, braille display buttons, etc.) for the scripts (called commands in the NVDA user manual) available at this time. For more information, see the "Input gestures" chapter of this manual.
 
-The extension makes it possible to execute scripts in this dialog, even if no command gesture is configured.
+The extension makes it possible to execute scripts in this dialog, even if no input gesture is configured.
 
 
 It modifies this dialog by adding the "Execute the script" button when a script is selected in the tree view.
@@ -2128,8 +2153,8 @@ The script can be executed using one of the following three actions:
 
 By repeating the action several times quickly, the script will be executed as many times.
 
-++ Automatic selection of the category in the "Command gestures" dialog ++[hdr206]
-It may happen that we need to open the "Command gestures" dialog to know the command gestures provided by the active extension for the application under focus.
+++ Automatic selection of the category in the "Input gestures" dialog ++[hdr206]
+It may happen that we need to open the "Input gestures" dialog to know the input gestures provided by the active extension for the application under focus.
 
 Without extension, the first category is selected by default.
 
@@ -2151,6 +2176,50 @@ To do this, the add-on saves, at each movement in the synthesizer settings ring,
 This setting will then be selected again when NVDA starts up for the synthesizer and for the "normal configuration" profile or when profiles switching.
 
 Warning: like all NVDA parameters, it is necessary that the NVDA configuration is saved before restarting NVDA (either automatically or manually) in order to find them after the restart.
+
+++ Enhancements for Windows Explorer ++[hdr208]
+The add-on brings the following scripts When the cursor is in the folder tree:
++++ Announcement of folder or file path under cursor +++
+This script allows, when the cursor is positioned on one of the elements of the folder n of the Windows explorer tree, to:
+- on the first press: to announce the reduced access path in the form: reader identifier\...\name of folder n-3\name of folder n-2\name of folder n-1\name of folder n\file or folder name.
+- on the second press: to announce the full access path.
+- on the third press: to copy the full path to the clipboard.
+
+
+No input gesture or interpreter command is assigned to it by default.
+
+The description of the script is: "Announce the reduced path of the folder or file under the cursor of Windows Explorer. Two presses: announce the full path. Three presses: copy the full path to the clipboard".
+
+It is stored under the "ADDON_SUMMARY" section of the "input Gestures" NVDA dialog.
+
+It is possible to associate a input gesture to it using this dialog.
+
+The number of folders to keep for the reduced path is configurable (see the "Windows Explorer" group of the "Computer" category of the add-on's global settings. By default, this number is 4).
+
++++ Announcement, going up the folder tree, of the names of the folders making up the path of the folder containing the element under the cursor +++
+This script, like the one announcing the reduced path, allows you to locate the element under the cursor without having to hear all the names of the folders that make up the full path.
+
+Unlike the other script, it is not limited by the configuration, ie the number of path folders to keep.
+
+It announces the name of the folders making up the path in the opposite direction, ie going up the tree of folders. This announcement can be stopped at any time by pressing the "Control" key.
+
+For example, if the selected item is in folder n, NVDA will announce in the following order:
+- the name of folder n followed by (n),
+- the name of folder n-1 followed by (n-1),
+- the name of folder n-2 followed by (n-2)
+- the name of folder n-3 followed by (n-3),
+- and so on up to the reader's identifier followed by the last level in brackets.
+
+
+The option "Report   folder name of  reversed path with level" makes it possible not to announce the level of the folders. It is in the "Windows Explorer" group of the "Computer" category.
+
+No input gesture or interpreter command is assigned by default to this script.
+
+The description of this script is: "Announce the path of the file or folder under the cursor of Windows Explorer going up the tree structure of folders".
+
+It is stored under the "ADDON_SUMMARY" section of the "Input Gestures" NVDA dialog.
+
+It is possible to associate a input gesture to it using this dialog.
 
 + Summary of the commands provided by this extension +
 

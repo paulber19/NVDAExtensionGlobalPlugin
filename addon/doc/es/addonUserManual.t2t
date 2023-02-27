@@ -29,16 +29,17 @@ Este complemento añade a las órdenes globales de NVDA:
 - las siguientes características:
  - [Mostrar la lista de iconos  en la bandeja del sistema y las ventanas de las aplicaciones lanzadas #hdr1],
  - [Ayuda para la composición de símbolos complejos #hdr3] como por ejemplo un "e" en la "o", un punto de interrogación invertida...,
- - [Informar o mostrar información acerca de la aplicación bajo el cursor, como su versión o el perfil de configuración activo #hdr4],
+ - [Informar o mostrar información acerca de la aplicación bajo el cursor, como su versión o el perfil de configuración activo, el complemento cargado #hdr4],
  - [Extensión de la funcionalidad del modo exploración #hdr5] para los navegadores Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge y Google Chrome:
   - Nuevas órdenes para el modo de navegación: (párrafo, división, ancla, región principal),
   - Nuevos tipos de elementos presentado como una lista en el cuadro de diálogo "Lista de Elementos" abierto por NVDA+f7: (botón de opción, párrafos, marco, casillas de verificación, ...) y anuncio  del número de elementos correspondientes al tipo seleccionado,
   - Anunciar la dirección URL del documento,
   - Opción para navegar en bucle para la búsqueda de un elemento siguiente o anterior,
+  - [Scripts para hacer clic en la posición actual   del navegador de objetos  #hdr23],
   - Script para las tablas:
    - Anunciar la posición de la celda actual,
    - Ir a la columna / línea siguiente o anterior con la lectura de las celdas que la componen,
-   - Ir a la primera / última celda de la fila / columna,
+   - Ir a la primera / última celda de la fila / columna (conservar para las versiones de NVDA inferiores a la 2022.2),
    - Anunciar las celdas de la columna / fila actual.
  - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7] con:
   - adición  al portapapeles del texto seleccionado,
@@ -46,7 +47,7 @@ Este complemento añade a las órdenes globales de NVDA:
   - mejora  del script básico  de NVDA "NVDA+c" que anuncia el texto en el portapapeles,
  - [Anuncio de la carpeta preseleccionada en cuadros de diálogo de estilo Abrir, Guardar, Guardar como #hdr8],
  - [Abrir el registro anterior o actual de NVDA y copiar la ruta de estos al portapapeles #hdr9],
- - [Historial de los anuncios del habla #hdr10], anunciando o mostrando los últimos registros del historial de los anuncios del habla,
+ - [Historial de los anuncios del habla #hdr10],
  - [Renombrar teclas del teclado #hdr12],
  - [Anuncio selectivo de teclas de órdenes #hdr13],
  - [Temporizador de minutos simple #hdr14],
@@ -61,47 +62,43 @@ Este complemento añade a las órdenes globales de NVDA:
   - Establecer  manualmente o automáticamente el sonido principal y el flujo audio de NVDA,
   - Cambiar el nivel del volumen principal o del flujo audio para la aplicación bajo el cursor,
   - Restablecimiento automático del volumen principal y de NVDA al cargar el complemento,
- - [Herramientas de desarrollo de complementos #hdr22]:
- - Creación del archivo buildVars.py a partir del archivo manifest.ini del complemento,
- - Actualizar el archivo manifest.ini a partir de la información  del archivo buildVars.py,
- - Creación del archivo manifest.ini de localización para uno o todos los idiomas admitidos por el complemento,
-  - Creación de la documentación HTML del complemento para uno o todos los idiomas,
-  - Preparación del complemento,
-  - Exploración de la carpeta del complemento,
- - [Scripts para hacer clic en la posición actual   del navegador de objetos  #hdr23],
+  - [Uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA #hdr33],
+  - [Orientación de la salida de audio de NVDA #hdr34],
+ - [Herramientas de desarrollo de complementos #hdr22],
  - [Suplementos  relativos a la fecha y hora #hdr24]:
  - Copia de la fecha y hora al portapapeles,
   - Anunciar la hora del reloj de Windows con los segundos,
   - Anuncio de la hora independiente del nivel de puntuación.
  - [Gestión de configuraciones del usuario y reinicio de NVDA con una configuración precisa #hdr30],
  - [Analizador de texto #hdr31],
- - [Anuncio de la posición del cursor en los campos de edición #hdr32],
-- [Uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA #hdr33],
- - [Orientación de la salida de audio de NVDA #hdr34],
-  - [Activación o desactivación rápida de los complementos #hdr35],
-
-
+ - [Activación o desactivación rápida de los complementos #hdr35],
 - Las opciones:
  - [Eliminar el anuncio de la descripción de los objetos en las cintas de Windows #hdr100],
- - [Anuncio de la palabra bajo el cursor después de eliminar la palabra (para las versiones de NVDA anteriores a la 2020.3) #hdr101],
  - [Maximizar automáticamente las ventanas #hdr102],
  - [Anunciar sistemáticamente la puntuación al moverse por palabras #hdr103],
  - [Posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA #hdr104],
+ - [Posibilidad de bloquear las teclas "Insertar" y "Bloqueo mayúsculas" #hdr105],
+ - [Pronunciación de caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado #hdr106].
 - Las opciones avanzadas:
  - [Advertir con un sonido la escritura de un error en el registro de NVDA #hdr300],
   - [Titular los cuadros de diálogos del complemento con el nombre del complemento #hdr302],
  - [Configuración del retardo de espera de repetición para el mismo gesto de entrada #hdr303],
- - [Posibilidad de usar las teclas del teclado numérico de manera estándar #hdr304].
+ - [Posibilidad de usar las teclas del teclado numérico de manera estándar #hdr304],
+ - [Posibilidad de limitar la repetición de las teclas #hdr306],
 - Y otras mejoras:
  - [Menú para explorar tu carpeta de configuración o la carpeta del programa NVDA en archivos de programa #hdr202],
  - [Presentación de la información de formato del texto en un cuadro de diálogo, en lugar de un documento HTML #hdr203],
  - [Anuncio del texto en los cuadros de diálogo de estilo de confirmación aunque el anuncio de las descripciones de objeto está deshabilitado #hdr204].
+ - [Anuncio de la posición del cursor en los campos de edición #hdr32],
  - [script para emular la tecla "Aplicaciones" #hdr25],
  - [script para cerrar todas las ventanas abiertas #hdr26],
  - [script para mostrar la lista de complementos en funcionamiento #hdr27],
- - [Posibilidad de ejecutar scripts en el cuadro de diálogo "Gestos de Entrada" de NVDA #hdr205] (para las versiones de NVDA superiores a la 2020.3),
+ - [Posibilidad de ejecutar scripts en el cuadro de diálogo "Gestos de Entrada" de NVDA #hdr205],
  - [Selección automática de la categoría en el cuadro de diálogo "Gestos de Entrada" #hdr206],
- - [Selección de la última opción utilizada en el Anillo de Opciones de Sintetizador #hdr207].
+ - [Selección de la última opción utilizada en el Anillo de Opciones de Sintetizador #hdr207],
+ - [Suplementos para el Explorador de Windows #hdr208]:
+  - un script para anunciar la ruta de acceso de la carpeta o del archivo que se encuentra bajo el cursor del Explorador de Windows, o copiar esta ruta al portapapeles.
+  - un script para anunciar, subiendo la vista en árbol de las carpetas, el nombre de las carpetas que componen la ruta de la carpeta que contiene el elemento bajo el cursor.
 
 
 ++ Menú de configuración del complemento ++
@@ -708,21 +705,23 @@ Para volver a escuchar estos registros, los siguientes scripts, que se encuentra
 +++ Anuncio del registro anterior +++
 Este script se lanza mediante el gesto de entrada, "MAIN_KEY_PREVIOUS_RECORD" asignado por defecto.
 
-El gesto de entrada activa el anuncio del registro anterior en relación con el último registro anunciado y cópiarlo al portapapeles.
+El gesto de entrada activa el anuncio del registro anterior en relación con el último registro anunciado.
 
 +++ Anuncio del siguiente registro +++
 Este script se lanza mediante el gesto de entrada, "MAIN_KEY_NEXT_RECORD" asignado por defecto.
 
-El gesto de entrada activa el anuncio del siguiente registro en relación con el último registro anunciado y cópiarlo al portapapeles.
+El gesto de entrada activa el anuncio del siguiente registro en relación con el último registro anunciado.
 
 +++ Re-anuncio del último registro anunciado +++
-La descripción de este script es: "Anunciar el registro actual del historial de los anuncios del habla y cópiarlo al portapapeles. Pulsando dos veces: para mostrar todo el historial de los anuncios del habla".
+La descripción de este script es: "Anunciar el registro actual del historial de los anuncios del habla. Pulsando dos veces: para cópiarlo al portapapeles. Pulsando tres veces: para mostrar todo el historial de los anuncios del habla".
 
 Este script se lanza mediante el gesto de entrada, "MAIN_KEY_CURRENT_RECORD" asignado por defecto.
 
-Una simple pulsación activa El anuncio del último registro anunciado y cópiarlo al portapapeles.
+Una simple pulsación activa el anuncio del último registro anunciado.
 
-Una doble pulsación, para mostrar todo el historial de los anuncios del habla.
+Una doble pulsación, activa su copia al portapapeles.
+
+Una triple pulsación, para mostrar todo el historial de los anuncios del habla.
 
 +++ Mostrando el historial del habla +++[hdr10-1]
 La descripción de este script es: "Mostrar los registros del historial de los anuncios del habla".
@@ -2026,13 +2025,6 @@ Pero esto se puede desactivar mediante la opción "No anunciar la descripción d
 Entonces será necesario reiniciar NVDA para tener en cuenta la opción.
 
 
-++ Anuncio de la palabra bajo el cursor después de la eliminación de palabras ++[hdr101]
-En algunas aplicaciones como WordPad , microsoft Word, es posible eliminar la siguiente palabra con la órden "control+suprimir", pero las versiones de NVDA anteriores a la 2020.3 no pronuncian la palabra después de la posición del cursor después de la eliminación.
-
-Por defecto, el complemento permite que estas versiones de NVDA pronuncien esta palabra.
-
-Esto se puede evitar desmarcando la opción "Anunciar la palabra bajo el cursor después de una eliminación de palabras" que está en la categoría "Suplementos a NVDA" del cuadro de diálogo "ADDON_SUMMARY - Opciones" del complemento.
-
 ++ Maximizar automáticamente las ventanas ++[hdr102]
 Esta opción   permite maximizar automáticamente las ventanas que están en primer plano.
 
@@ -2069,7 +2061,27 @@ Algunos usuarios encuentran este sonido desagradable, el complemento trae la pos
 La elección se realiza en el grupo "Informando errores de ortografía" de la categoría "Suplementos a NVDA" en las "Opciones globales..." del complemento.
 
 
-++ Pronunciación de caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado ++[hdr105]
+
+++ Bloqueo de las teclas "Insertar" y "Bloqueo mayúsculas" ++[hdr105]
+(disponible para las versiones de NVDA inferiores a la 2023.1 si la funcionalidad "Anuncio selectivo de teclas de órdenes" está instalada)
+
+Puede ser útil en algunos casos para evitar la acción de las teclas "Insertar" y "Bloqueo mayúsculas".
+
+Su papel inicial es:
+- La tecla "Insertar" puede pasar del modo "Insertar" o "Inserción" al modo "Sobreescribir" o "Sustitución" y viceversa.
+- La tecla "Bloqueo mayúsculas" hace como si la tecla "Mayús" (Shift) estuviese siempre pulsada.
+
+
+NVDA permite al usuario definir estas teclas como la tecla "NVDA". Pero en este caso, la tecla "Insertar" como la tecla "Bloqueo mayúsculas" solo juega su papel inicial si hay una doble pulsación rápida.
+ 
+Por configuración, El Complemento ofrece la posibilidad de que estas teclas  no tengan acciones cuando están en su papel inicial.
+
+Esta configuración se hace por perfil de configuración utilizando una casilla de verificación  por tecla (Ver el grupo "Bloqueo de tecla" de la categoría "Teclado" del perfil actual).
+
+Cuando se bloquea la acción de la tecla, se escucha un pitido de audio.
+
+
+++ Pronunciación de caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado ++[hdr106]
 Esta opción permite pronunciar caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado.
 
 Esto permite que ciertos usuarios escuchen, por ejemplo, los símbolos de puntuación escritos, incluso si han desactivado verbalizar caracteres al escribir.
@@ -2161,6 +2173,21 @@ Por defecto, la elección es:
 - "No hacer nada" para una disposición de teclado "Ordenador portátil".
 
 
+++ Limitación de repetición de teclas ++[hdr306]
+Cuando se pulsa y no se suelta una tecla lo suficientemente rápido, Windows genera una serie de pulsación de teclas que pueden ser molestas especialmente en un campo de edición.
+
+Esta característica intenta limitar este número de pulsación de teclas al mínimo.
+
+Está controlado por la casilla de verificación "Limitar las repeticiones" que se encuentra en el grupo "Repetición de teclas" de la categoría "Avanzadas" en "Opciones globales" del complemento y por la duración de repetición que está configurado en el mismo grupo.
+
+Esta opción es una casilla de verificación que, cuando se marca,  ignora cualquier nueva pulsación de la misma tecla que llega dentro de una duración inferior a la duración de repetición configurada por lo tanto se ignora.
+
+Por defecto, esta casilla no está marcada y la duración de repetición se establece en 100 milisegundos
+
+No es posible mantener solo la unica primera pulsación de teclas porque la duración con la pulsación  que sigue es demasiado grande (alrededor de 500 milisegundos).
+
+Las teclas modificadoras no se ven afectadas por esta limitación.
+
 
 + Otras mejoras +
 
@@ -2241,6 +2268,51 @@ Atención: Al igual que todas las opciones de NVDA, es necesario que la configur
 
 
 
+++ Suplementos para el Explorador de Windows ++[hdr208]
+El complemento trae los siguientes scripts cuando el cursor está en la vista de árbol en las carpetas:
++++ Anunciar la ruta de acceso de la carpeta o del archivo que se encuentra bajo el cursor +++
+Este script permite, cuando el cursor se coloca en uno de los elementos de la carpeta n en vista de árbol del Explorador de Windows, de:
+- En la primera pulsación: para anunciar la ruta de acceso reducida bajo la forma: identificador del lector\...\nombre de la carpeta n-3\nombre de la carpeta n-2\nombre de la carpeta n-1\nombre de la carpeta n\nombre del archivo o de la carpeta.
+- En la segunda pulsación: para anunciar la ruta de acceso completa.
+- En la tercera pulsación: para copiar la ruta completa al portapapeles.
+
+
+No se le asigna ningún gesto de entrada o órden del intérprete de forma predeterminada a este script.
+
+La descripción del script es: "Anunciar la ruta reducida de la carpeta o archivo bajo el cursor en el Explorador de Windows. Pulsando dos veces: para anunciar la ruta completa. Pulsando tres veces: para copiar la ruta completa al portapapeles".
+
+Se almacena bajo la sección "ADDON_SUMMARY" del diálogo "Gestos de Entrada de NVDA".
+
+Sin embargo, es posible asignarle un gesto de entrada usando este diálogo.
+
+El número de carpeta que se mantendrá para la ruta reducida es configurable (Ver el grupo "Explorador de Windows" de la categoría "Ordenador" en "Opciones globales" del complemento. Por defecto, este número es de 4).
+
++++ Anunciar, subiendo en la vista de árbol de las carpetas, el nombre de las carpetas que componen la ruta de la carpeta que contiene el elemento bajo el cursor +++
+Este script permite, como el que anuncia la ruta reducida, localizar el elemento bajo el cursor sin tener que escuchar todos los nombres de las carpetas que componen la ruta completa.
+
+A diferencia del otro script, no está limitado por la configuración, es decir, el número de carpetas en la ruta que se conservará.
+
+Anuncia el nombre de las carpetas que componen la ruta en la dirección opuesta, es decir, subiendo en la vista de árbol de las carpetas. Este anuncio se puede detener en cualquier momento pulsando la tecla  "Control".
+
+Por ejemplo, si el elemento seleccionado está en la carpeta n, NVDA lo anunciará en el siguiente orden:
+- el nombre de la carpeta n seguido de (n),
+- el nombre de la carpeta n-1 seguido de (n-1),
+- el nombre de la carpeta n-2 seguido de (n-2),
+- el nombre de la carpeta n-3 seguido de (n-3),
+- y así sucesivamente hasta el identificador del lector seguido del último nivel entre paréntesis.
+
+
+La opción "Anunciar el nombre de las carpetas de la ruta invertida con el nivel" permite no anunciar el nivel de las carpetas. Está en el grupo "Explorador de Windows" de la categoría "Ordenador".
+
+
+
+No se le asigna ningún gesto de entrada o órden del intérprete de forma predeterminada a este script.
+
+La descripción del script es: "Anunciar la ruta del archivo o de la carpeta bajo el cursor en el Explorador de Windows subiendo en la vista de árbol de las carpetas".
+
+Se almacena bajo la sección "ADDON_SUMMARY" del diálogo "Gestos de Entrada de NVDA".
+
+Sin embargo, es posible asignarle un gesto de entrada usando este diálogo.
 
 + Resumen de las órdenes proporcionados por el complemento +
 ++ Gestos de entrada instalados sistemáticamente ++

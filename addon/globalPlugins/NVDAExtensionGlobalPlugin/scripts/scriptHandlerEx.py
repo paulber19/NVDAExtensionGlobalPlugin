@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptHandlerEx.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2022 paulber19
+# Copyright (C) 2022-2023 paulber19
 
 
 # For patching executeScript and getLastRepeatCount methods
@@ -12,11 +12,8 @@
 from logHandler import log
 import time
 import weakref
-try:
-	# for NVDA version >= 2021.1
-	from speech.sayAll import SayAllHandler as sayAllHandler
-except ImportError:
-	import sayAllHandler
+from speech.sayAll import SayAllHandler as sayAllHandler
+
 import scriptHandler
 
 

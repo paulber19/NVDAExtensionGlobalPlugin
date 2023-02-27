@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\configsSwitchingDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021 paulber19
+# Copyright (C) 2021-2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -194,87 +194,45 @@ class UserConfigurationsManager(object):
 
 # code from nvda core.py  modified to restart nvda with a config-path option
 
+import languageHandler
+from core import triggerNVDAExit, NewNVDAInstance
 
-if NVDAVersion < [2021, 1]:
-	def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
-		"""Restarts NVDA by starting a new copy."""
-		if globalVars.appArgs.launcher:
-			import wx
-			globalVars.exitCode = 3
-			wx.GetApp().ExitMainLoop()
-			return
-		import subprocess
-		import winUser
-		import shellapi
-		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
-		if configPath is not None:
-			paramsToRemove += ("--config-path",)
-		for paramToRemove in paramsToRemove:
-			for p in sys.argv:
-				if p.startswith(paramToRemove):
-					sys.argv.remove(p)
-		options = []
-		if not hasattr(sys, "frozen"):
-			options.append(os.path.basename(sys.argv[0]))
-		if disableAddons:
-			options.append('--disable-addons')
-		if debugLogging:
-			options.append('--debug-logging')
-		if configPath:
-			options.append('--config-path=%s' % configPath)
-		if secureMode:
-			options.append('--secure')
-		shellapi.ShellExecute(
-			hwnd=None,
-			operation=None,
-			file=sys.executable,
-			parameters=subprocess.list2cmdline(options + sys.argv[1:]),
-			directory=globalVars.appDir,
-			# #4475: ensure that the first window of the new process is not hidden by providing SW_SHOWNORMAL
-			showCmd=winUser.SW_SHOWNORMAL
-		)
-		log.warning("restarting NVDA: %s, options: %s" % (
-			sys.executable, subprocess.list2cmdline(options + sys.argv[1:])))
-else:
-	import languageHandler
-	from core import triggerNVDAExit, NewNVDAInstance
-
-	def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
-		"""Restarts NVDA by starting a new copy."""
-		if globalVars.appArgs.launcher:
-			globalVars.exitCode = 3
-			if not triggerNVDAExit():
-				log.error("NVDA already in process of exiting, this indicates a logic error.")
-			return
-		import subprocess
-		paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
-		if configPath is not None:
-			paramsToRemove += ("--config-path",)
-		if NVDAVersion >= [2022, 1]:
-			paramsToRemove += languageHandler.getLanguageCliArgs()
-		for paramToRemove in paramsToRemove:
-			for p in sys.argv:
-				if p.startswith(paramToRemove):
-					sys.argv.remove(p)
-		options = []
-		if not hasattr(sys, "frozen"):
-			options.append(os.path.basename(sys.argv[0]))
-		if disableAddons:
-			options.append('--disable-addons')
-		if debugLogging:
-			options.append('--debug-logging')
-		if configPath:
-			options.append('--config-path=%s' % configPath)
-		if secureMode:
-			options.append('--secure')
-		if not triggerNVDAExit(NewNVDAInstance(
-			sys.executable,
-			subprocess.list2cmdline(options + sys.argv[1:]),
-			globalVars.appDir
-		)):
+def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
+	"""Restarts NVDA by starting a new copy."""
+	if globalVars.appArgs.launcher:
+		globalVars.exitCode = 3
+		if not triggerNVDAExit():
 			log.error("NVDA already in process of exiting, this indicates a logic error.")
-		log.warning("restarting NVDA: %s, options: %s" % (
-			sys.executable, subprocess.list2cmdline(options + sys.argv[1:])))
+		return
+	import subprocess
+	paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
+	if configPath is not None:
+		paramsToRemove += ("--config-path",)
+	if NVDAVersion >= [2022, 1]:
+		paramsToRemove += languageHandler.getLanguageCliArgs()
+	for paramToRemove in paramsToRemove:
+		for p in sys.argv:
+			if p.startswith(paramToRemove):
+				sys.argv.remove(p)
+	options = []
+	if not hasattr(sys, "frozen"):
+		options.append(os.path.basename(sys.argv[0]))
+	if disableAddons:
+		options.append('--disable-addons')
+	if debugLogging:
+		options.append('--debug-logging')
+	if configPath:
+		options.append('--config-path=%s' % configPath)
+	if secureMode:
+		options.append('--secure')
+	if not triggerNVDAExit(NewNVDAInstance(
+		sys.executable,
+		subprocess.list2cmdline(options + sys.argv[1:]),
+		globalVars.appDir
+	)):
+		log.error("NVDA already in process of exiting, this indicates a logic error.")
+	log.warning("restarting NVDA: %s, options: %s" % (
+		sys.executable, subprocess.list2cmdline(options + sys.argv[1:])))
 
 
 class UserConfigManagementDialog(

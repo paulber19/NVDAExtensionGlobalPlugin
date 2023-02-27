@@ -1,7 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
-# globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2021 paulber19
+# Copyright (C) 2018 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -288,14 +287,9 @@ class SwitchVoiceProfilesManager(object):
 		conf = synthConf
 		import driverHandler
 		id = "id"
-		try:
-			# for nvda< 2021.1
-			numericSynthSetting = [driverHandler.NumericDriverSetting, ]
-			booleanSynthSetting = [driverHandler.BooleanDriverSetting, ]
-		except AttributeError:
-			import autoSettingsUtils.driverSetting
-			numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
-			booleanSynthSetting = [autoSettingsUtils.driverSetting.BooleanDriverSetting, ]
+		import autoSettingsUtils.driverSetting
+		numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
+		booleanSynthSetting = [autoSettingsUtils.driverSetting.BooleanDriverSetting, ]
 
 		infos = []
 		for setting in synth.supportedSettings:

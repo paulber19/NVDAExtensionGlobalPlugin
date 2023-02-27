@@ -1,15 +1,51 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\reportFormating\__init__
 # A part of NvDAextensionGlobalPlugin
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 import colors
+from versionInfo import version_year, version_major
 from ..utils.NVDAStrings import NVDAString
 from ..utils.informationDialog import InformationDialog
 
 addonHandler.initTranslation()
+
+def getReportFormattingOptions ():
+	NVDAVersion = [version_year, version_major]
+	if NVDAVersion >= [2023, 1]:
+		return(
+			"reportFontName",
+			"reportFontSize",
+			"reportFontAttributes",
+			"reportSuperscriptsAndSubscripts",
+			"reportColor",
+			"reportStyle",
+			"reportAlignment",
+			"reportSpellingErrors",
+			"reportLineIndentation",
+			"reportParagraphIndentation",
+			"reportLineSpacing",
+			"reportCellBorders",
+		)
+
+	else:
+		return(
+			"reportFontName",
+			"reportFontSize",
+			"reportFontAttributes",
+			"reportSuperscriptsAndSubscripts",
+			"reportColor",
+			"reportStyle",
+			"reportAlignment",
+			"reportSpellingErrors",
+			"reportLineIndentation",
+			"reportParagraphIndentation",
+			"reportLineSpacing",
+			"reportBorderStyle",
+			"reportBorderColor",
+		)
 
 
 def getFontText(attrs):
@@ -268,7 +304,7 @@ def getGrammarErrorText(attrs):
 	return None
 
 
-def getBorderStyleText(attrs):
+def getCellBorderText(attrs):
 	borderStyle = attrs.get("border-style")
 	if borderStyle:
 		text = borderStyle
@@ -316,10 +352,10 @@ def getFormatFieldText(attrs):
 	grammarError = getGrammarErrorText(attrs)
 	if grammarError:
 		textList.append(grammarError)
-	# border stylTexte
-	borderStyle = getBorderStyleText(attrs)
-	if borderStyle:
-		textList.append(borderStyle)
+	# cell bordertext
+	cellBorder= getCellBorderText(attrs)
+	if cellBorder:
+		textList.append(cellBorder)
 	return textList
 
 

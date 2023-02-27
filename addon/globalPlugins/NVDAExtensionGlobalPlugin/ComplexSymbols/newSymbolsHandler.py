@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\newSymbolsHandler.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2022 paulber19
+# Copyright (C) 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -37,12 +37,7 @@ def getNewSymbolsFileForVoiceLanguage(curLang):
 
 
 def getNewSymbolsForCurrentLanguage():
-	try:
-		from speech.speech import getCurrentLanguage
-	except ImportError:
-		# for NVDA version <= 2020.4
-		from speech import getCurrentLanguage
-
+	from speech.speech import getCurrentLanguage
 	curLang = getCurrentLanguage()
 	log.debug("Get new symbols for current language: %s" % curLang)
 	try:

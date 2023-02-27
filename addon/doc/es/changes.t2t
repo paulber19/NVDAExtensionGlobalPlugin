@@ -24,13 +24,53 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v12.0 (22/02/2023) +
+Compatibilidad con NVDA 2023.1 y el abandono del apoyo de las versiones de NVDA anteriores a la versión 2021.1.
+
+Nuevas características:
+- suplementos para el Explorador de Windows:
+ - un script para anunciar la ruta de acceso de la carpeta o del archivo que se encuentra bajo el cursor del Explorador de Windows, o copiar esta ruta al portapapeles.
+ - un script para anunciar, subiendo en la vista de árbol de las carpetas, el nombre de las carpetas que componen la ruta de la carpeta que contiene el elemento bajo el cursor,
+- posibilidad de bloquear las teclas "Insertar" y "Bloqueo mayúsculas".
+- posibilidad de limitar la repetición de las teclas
+
+
+Corección de fallos:
+- recordatorio: la versión 11.4.2 ha corregido el problema de regresión de la actualización automática del complemento. Las versiones anteriores a esta versión deben actualizarse manualmente.
+- el submenú "Gestión de configuraciones del usuario" ya no aparecerá varias veces después de recargar el complemento.
+
+
+Cambios:
+- los scripts con respecto a los registros del historial de los anuncios del habla ya no copia directamente el registro al portapapeles. Esta copia ahora se hace mediante una doble pulsación del gesto de entrada del script para anunciar el registro actual del historial de los anuncios del habla.
+- el archivo "readme.md" se elimina para idiomas distintos del inglés (en) y ya no debe traducirse.
+
+
+Actualización del código:
+- se ha eliminado el código con respecto de anunciar la palabra bajo el cursor durante la eliminación de palabras introducida en NVDA 2020.3.
+- se ha eliminado el código con respecto a la corrección realizada en  la clase BoxSizerHelper de guiHelper.py a partir de NVDA 2021.1
+- se ha eliminado el código que admitan las versiones anteriores a la versión 2021.1 de NVDA. Los módulos en cuestión son:
+ - browseModeEx : __init__.py, documentBaseEx.py, NVDAObjectsUIA.py, virtualBuffers.py
+ - commandKeysSelectiveAnnouncementAndRemanence : __init__.py
+ - complexSymbols : newSymbolsHandler.py
+ - scripts : scriptHandlerEx.py
+ - settings : userConfigManager.py
+ - switchVoiceProfile : __init__.py
+ - speechHistory : __init__.py
+ - systemTrayIconsList : __init__.py
+ - utils : __init__.py, contextHelpEx.py, keyboard.py
+ -theGlobalPlugin.py
+
+
+
+
+
 + v11.4 (09/01/2023) +
 Nuevas características:
 - nuevo script para vaciar el portapapeles (ya presente en la versión anterior, pero no anunciado).
 - por opción, es posible verbalizar los caracteres no alfanuméricos escritos cuando verbalizar caracteres al escribir está desactivado.
 
 
-Corección de Fallos:
+Corección de fallos:
 - corrección del problema con el sintetizador SAPI5 para poner el sonido de NVDA en el canal derecho o izquierdo.
 - corrección del problema cuando se pulsa "nvda+j" mientras que el modo de conmutación de voz está activado. Este modo ahora está deshabilitado en esta pulsación.
 - al pulsar "f1" en el diálogo "Administrador de audio de NVDA y aplicaciones activas" ahora abre el manual del usuario en el capítulo correcto.
@@ -65,7 +105,7 @@ Cambios:
 - los nuevos scripts de NVDA versión 2022.2 y futura versión 2022.3 para las tablas se mueven a la categoría "Tabla" añadidó por el complemento en el diálogo "Gestos de Entrada".
 
 
-Corección de Fallos:
+Corección de fallos:
 - corrección del error al iniciar el diálogo "Gestionar las configuraciones del usuario" con una configuración que no sea "userConfig" o "NVDA".
 - al abrir el panel de emojis en Windows 11, las flechas de dirección se pueden usar nuevamente cuando el cursor está en el campo de edición.
 - omisión del error de NVDA que genera una serie de errores en el registro durante la entrada en el campo "Filtrar por:" del diálogo "Gestos de Entrada".
@@ -92,7 +132,7 @@ Mejoras y nuevas características:
  - activación o desactivación configurable del bloqueo numérico al activar un perfil de configuración.
 
 
-Corección de Fallos:
+Corección de fallos:
 - el analizador de texto no indicaba los cambios de fuente del texto en ocultadó o no ocultadó.
 - se tiene en cuenta la modificación realizada en el marco de la pr #11767 (https://github.com/nvaccess/nvda/pull/11767).
 - corrección del archivo "keyboard.ini" para el idioma francés.
@@ -112,8 +152,8 @@ Nuevas características:
 - se añadió la órden para centrar el audio de la aplicación bajo el cursor.
 
 
-Corección de Fallos:
-- corrección relativ al error que aparece en el registro cuando se muestra el diálogo "Gestos de Entrada" encima del diálogo "Administrador de audio de NVDA y aplicaciones activas".
+Corección de fallos:
+- corrección relativa al error que aparece en el registro cuando se muestra el diálogo "Gestos de Entrada" encima del diálogo "Administrador de audio de NVDA y aplicaciones activas".
 - se añadió un comentario para designar la parte del código prestadó del complemento Tony's enhancements de Tony Malik
 - corrección para evitar el bloqueo de la voz mediante la funcionalidad "Separación de audio".
 
@@ -143,12 +183,12 @@ Compatibilidad:
 
 
 + v10.3 (12/12/2021) +
-Corección de Fallos:
+Corección de fallos:
 - resolución del problema con el nuevo complemento "NAO" al mostrar el resultado del reconocimiento óptico y las teclas rePág y avPág.
 
 
 + v10.2 (10/12/2021) +
-Corección de Fallos:
+Corección de fallos:
 - resolución del problema con el nuevo complemento "NAO" al mostrar el resultado del reconocimiento óptico: cierre inesperado de la ventana.
 - el lanzamiento de los scripts es posible nuevamente en el diálogo "Scripts del intérprete de órdenes".
 
@@ -401,7 +441,7 @@ Nueva características:
 - Posibilidad de usar las teclas del teclado numérico como las teclas de flechas (funcionamiento normal de Windows).
 
 
-Corección de Fallos:
+Corección de fallos:
 - No salvaguarda de algunos ajustes  durante la salvaguarda  manual y cuando la   opción "No guardar la configuración" fue marcado.
 - Funcionalidad "Herramientas de desarrollo": Se ah correjido  la mala   tenída en cuenta de los sub-idiomas para la creación de la documentación de  un complemento.
 
@@ -421,7 +461,7 @@ Nueva características:
 - Eliminación del tiempo de espera entre pulsar la tecla para todos los scripts  básicos de NVDA modificados por el complemento.
 
 
-Corección de Fallos:
+Corección de fallos:
 - No se muestran todos los gestos de entrada añadidos o eliminados por el usuario (Cuadro de diálogo "Gestos de entrada del usuario").
 
 
@@ -480,7 +520,7 @@ Finalización de la puesta en compatibilidad con NVDA 2018.3 y con wxPython 4.
  - El menú de configuración del complemento cambió para parecerse al menú de configuración de NVDA,
 
 
-- Corección de Fallos:
+- Corección de fallos:
  - Corrección de las etiquetas de lista de opciones de los diálogos de configuración del complemento.
  - Corrección de la no interrupción del pitido al buscar elementos de la ventana en primer plano en la interrupción de escape,
   - Problema de pie de página cuando la conversión incorrecta de un documento t2t (modificación del archivo txt2tags.py y supresión del pie de página).
@@ -537,7 +577,7 @@ Esta versión del complemento no es compatible con versiones anteriores a la ver
 - La documentación ha sido reorganizada: el capítulo "Historial" se mueve al capítulo "Generalidades" y el historial del complemento se coloca en un archivo separado (change.html).
 
 
-++ Corección de Fallos ++
+++ Corección de fallos ++
 - Corrección de las descripciones erróneas de los gestos de entrada de los scripts que reemplazan a los scripts básicos,
 - En la corrupción del archivo de configuración, restableciendo la configuración a los valores predeterminados.
 

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\utils\/keyboard.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016- 2021 paulber19
+# Copyright (C) 2016- 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,11 +8,7 @@ import addonHandler
 from logHandler import log
 import os.path
 from configobj import ConfigObj
-# ConfigObj 5.1.0 and later integrates validate module.
-try:
-	from configobj.validate import Validator
-except ImportError:
-	from validate import Validator
+from configobj.validate import Validator
 from io import StringIO
 
 _configSpec = """

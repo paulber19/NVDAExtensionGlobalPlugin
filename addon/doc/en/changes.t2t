@@ -20,6 +20,43 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ v12.0 (February/22/2023) +
+Compatibility with NVDA 2023.1 and dropping support for NVDA versions earlier than 2021.1.
+
+New:
+- enhancements for Windows Explorer:
+ - a script to announce the access path of the folder or the file which is under the cursor of the Windows explorer, or copy this path in the clipboard.
+ - a script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
+- possibility to block the "Insert" and "Caps lock" keys.
+- possibility to limit the repetition of keys
+
+
+Bug fixes:
+- reminder: version 11.4.2 fixed the problem of regression of the automatic update of the extension. Versions prior to this version must be updated manually.
+- the "Manage user configuration" sub-menu will no longer appear several times after reloading the add-on.
+
+
+Changes:
+- the scripts concerning the voice history no longer directly copy the recording to the clipboard. This copy is now done by double-pressing the command gesture of the script to announce the current record.
+- the "readme.md" file is deleted for languages ​​other than English (en) and should no longer be translated.
+
+
+Updating the code :
+- removed the code regarding the announcement of the focused word after word deletion introduced in NVDA 2020.3.
+- removal of the code concerning the correction made in the BoxSizerHelper class of guiHelper.py from NVDA 2021.1
+- removed code supporting versions prior to NVDA 2021.1. The modules concerned are:
+ - browseModeEx: __init__.py, documentBaseEx.py, NVDAObjectsUIA.py, virtualBuffers.py
+ - commandKeysSelectiveAnnouncementAndRemanence: __init__.py
+ - complexSymbols: newSymbolsHandler.py
+ - scripts: scriptHandlerEx.py
+ - settings: userConfigManager.py
+ - switchVoiceProfile: __init__.py
+ - speechHistory: __init__.py
+ - systemTrayIconsList: __init__.py
+ - utils: __init__.py, contextHelpEx.py, keyboard.py
+ -theGlobalPlugin.py
+
+
 + v11.4 (January/09/2023) +
 New:
 - new script to empty the clipboard (already present in the previous version, but not announced).

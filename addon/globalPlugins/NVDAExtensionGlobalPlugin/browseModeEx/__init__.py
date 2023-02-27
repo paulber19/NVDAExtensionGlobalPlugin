@@ -1,24 +1,17 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 
 
 import addonHandler
 from cursorManager import CursorManager
-try:
-	# for nvda version < 2020.1
-	import NVDAObjects.UIA.edge as EDGE
-except ImportError:
-	import NVDAObjects.UIA.spartanEdge as EDGE
+import NVDAObjects.UIA.spartanEdge as EDGE
 import NVDAObjects.IAccessible.MSHTML
 import NVDAObjects.IAccessible.mozilla
-# for nvda version >= 2021.1
-try:
-	import NVDAObjects.IAccessible.chromium
-	import NVDAObjects.UIA.chromium
-except ImportError:
-	pass
+import NVDAObjects.IAccessible.chromium
+import NVDAObjects.UIA.chromium
+
 import browseMode
 from inputCore import SCRCAT_BROWSEMODE
 from scriptHandler import getLastScriptRepeatCount, willSayAllResume
@@ -39,6 +32,8 @@ elif NVDAVersion > [2022, 1]:
 else:
 	# for nvda versions until 2022.1
 	from .documentBaseEx import DocumentWithTableNavigation_2022_1 as DocumentWithTableNavigationEx
+
+
 
 from .. utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
 from ..utils.NVDAStrings import NVDAString
@@ -229,12 +224,7 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 		from . import NVDAObjectsIAccessible
 		clsList[clsList.index(NVDAObjects.IAccessible.chromium.Document)] = NVDAObjectsIAccessible.ChromiumDocument
 		return
-	try:
-		# for nvda version>= 2021.1
-		if NVDAObjects.UIA.chromium.ChromiumUIADocument in clsList:
-			from . import NVDAObjectsUIAChromium
-			newCls = NVDAObjectsUIAChromium.ChromiumUIADocumentEx
-			clsList[clsList.index(NVDAObjects.UIA.chromium.ChromiumUIADocument)] = newCls
-			return
-	except Exception:
-		pass
+	if NVDAObjects.UIA.chromium.ChromiumUIADocument in clsList:
+		from . import NVDAObjectsUIAChromium
+		newCls = NVDAObjectsUIAChromium.ChromiumUIADocumentEx
+		clsList[clsList.index(NVDAObjects.UIA.chromium.ChromiumUIADocument)] = newCls

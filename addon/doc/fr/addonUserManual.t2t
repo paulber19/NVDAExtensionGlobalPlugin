@@ -30,16 +30,17 @@ Cette extension ajoute aux commandes globales de NVDA:
 - les fonctionnalités suivantes:
  - [Affichage de la liste Des icônes de la zone de notification ou des fenêtres des applications lancées #hdr1],
  - [Aide à la composition de symboles complexes #hdr3] comme par exemple un "e" dans l'"o", un point d'interrogation renversé...,
- - [Annonce ou affichage d'informations concernant l'application sous le curseur, comme sa version ou le profil de configuration actif #hdr4],
+ - [Annonce ou affichage d'informations concernant l'application sous le curseur, comme sa version, le profil de configuration actif, l'extension chargée #hdr4],
  - [Extension des fonctionnalités du tampon virtuel #hdr5] pour les navigateurs Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge et Google Chrome:
   - nouvelles commandes pour le mode de navigation : paragraphe, division, ancre, région principale,
   - nouveaux types d'éléments présentés sous forme de liste dans la boite de dialogue "Liste des éléments" ouverte par NVDA+f7: (radio bouton, paragraphe, cadre, case à cocher, ...) et annonce du nombre d'éléments correspondant au type sélectionné,
   - annonce  de l'adresse (URL) du document,
   - option pour  naviguer en boucle à la recherche d'un élément suivant ou précédent,
+  - [scripts pour cliquer à la position courante de l'objet navigateur #hdr23],
   - scripts pour les tableaux:
    - annonce de la position de la cellule courante,
    - déplacement à la colonne/ligne suivante ou précédente avec lecture des cellules la composant,
-   - déplacement à la première /dernière cellule de la ligne/colonne,
+   - déplacement à la première /dernière cellule de la ligne/colonne (conserver pour les versions de NVDA inférieures à la 2022.2),
    - annonce  des cellules de la colonne/ligne courante.
  - [Annonce de la  fonction associée aux commandes clavier d'édition #hdr7] avec :
   - ajout dans le presse-papier du texte sélectionné,
@@ -47,7 +48,7 @@ Cette extension ajoute aux commandes globales de NVDA:
   - amélioration du script de base de NVDA "NVDA+c" qui annonce  le texte dans le presse-papier,
  - [Annonce du dossier présélectionné dans les boites de dialogue du style "Ouvrir, Enregistrer", "Enregistrer sous" #hdr8],
  - [Ouverture du journal précédent ou courant  de NVDA et copie du chemin de ceux-ci dans le presse-papier #hdr9],
- - [réécoute ou affichage des dernières annonces vocales #hdr10],
+ - [Historique des annonces vocales #hdr10],
  - [renommage des touches clavier #hdr12],
  - [annonce sélective des touches de commandes #hdr13],
  - [simple minuterie #hdr14],
@@ -62,47 +63,43 @@ Cette extension ajoute aux commandes globales de NVDA:
   - établir manuellement ou automatiquement le son principal et celui du flux audio de NVDA ,
   - modifier le niveau du volume principal ou celui du flux audio de l'application sous le curseur,
   - rétablissement automatique du volume principal et de NVDA au chargement de l'extension,
- - [Outils pour le  développement d'extensions #hdr22]:
-  - création du fichier buildVars.py à partir du fichier manifest.ini de l'extension,
-  - mise à jour du fichier manifest.ini à partir des informations du fichier buildVars.py,
-  - création du fichier manifest.ini de localisation pour une ou toutes les langues supportées par l'extension,
-  - création de la documentation HTML de l'extension pour une ou toutes les langues,
-  - préparation de l'extension,
-  - exploration du dossier de l'extension,
- - [scripts pour cliquer à la position courante de l'objet navigateur #hdr23],
+  - [ utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA #hdr33],
+  - [orientation de la sortie audio de NVDA #hdr34]
+ - [Outils pour le  développement d'extensions #hdr22],
  - [Compléments concernant la date et l'heure #hdr24]:
   - copie de la date et l'heure dans le presse-papier,
   - Annoncer l'heure de l'horloge Windows avec les secondes,
   - annonce  de l'heure  indépendante du niveau de ponctuation.
  - [gestion des configurations utilisateur et redémarrage de NVDA avec une configuration précise #hdr30],
  - [analyseur de texte #hdr31],
- - [annonce de la position du curseur dans les zones d'édition #hdr32],
- - [ utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA #hdr33],
- - [orientation de la sortie audio de NVDA #hdr34]
-  - [activation ou désactivation rapide des extensions # hdr35],
-
-
+ - [activation ou désactivation rapide des extensions # hdr35],
 - Les options:
  - [suppression de l'annonce de la description des objets dans les rubans Windows #hdr100],
- - [Annonce du mot focalisé après suppression de mot (pour les versions de NVDA antérieures à la 2020.3) #hdr101],
  - [agrandissement automatique des fenêtres #hdr102],
  - [annonce systématique des ponctuations lors de déplacement par mot #hdr103],
  - [possibilité de signaler les fautes d'orthographe par un double bip sonore ou par une annonce vocale en lieu et place du son émis par NVDA #hdr104],
+ - [possibilité de bloquer les touches "Insertion" et "Verrouillage majuscule" #hdr105],
+ - [Prononciation des caractères non alphanumériques quand l'écho clavier par caractère est désactivé #hdr106].
 - les options avancées:
  - [Signalement par un son de l'inscription d'une erreur dans le journal de NVDA #hdr300],
-  - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
+ - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
  - [configuration de la temporisation d'attente de répétition du même geste de commande #hdr303],
- - [utilisation possible des touches du pavé numérique de manière standard #hdr304].
+ - [utilisation possible des touches du pavé numérique de manière standard #hdr304],
+ - [possibilité de limiter la répitition de touches #hdr306],
 - et les autres améliorations:
  - [menu pour explorer le dossier de configuration de l'utilisateur ou le dossier programme de NVDA #hdr202],
  - [présentation des informations de mise en forme du texte dans une boite de dialogue  en lieu et place d'un document HTML #hdr203],
  - [Annonce du texte des boite de dialogue du style confirmation même si l'annonce de la description de l'objet est désactivée #hdr204].
+ - [annonce de la position du curseur dans les zones d'édition #hdr32],
  - [script pour émuler la touche "Applications" #hdr25],
  - [script pour fermer toutes les fenêtres ouvertes #hdr26],
  - [script pour afficher la liste des extensions en fonctionnement #hdr27],
- - [possibilité d'exécution  des scripts dans le dialogue "Gestes de commandes" de NVDA #hdr205] (pour les versions de NVDA supérieures à 2020.3),
+ - [possibilité d'exécution  des scripts dans le dialogue "Gestes de commandes" de NVDA #hdr205] ,
  - [sélection automatique de la catégorie dans le dialogue "Gestes de commandes" #hdr206],
- - [Sélection du dernier paramètre utilisé dans la boucle des paramètres du synthétiseur #hdr207].
+ - [Sélection du dernier paramètre utilisé dans la boucle des paramètres du synthétiseur #hdr207],
+ - [compléments pour l'explorateur Windows#hdr208] :
+  - un script pour annoncer le chemin d'accès du dossier ou du fichier qui se trouve sous le curseur de l'explorateur Windows, ou copier ce chemin dans le presse-papier.
+  - un script pour annoncer, en remontant l'arborescense des dossiers, le nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur.
 
 
 ++ Menu de configuration de l'extension ++[hdr-configurationMenu]
@@ -707,22 +704,23 @@ Pour réécouter ces enregistrements, les scripts suivants, rangés dans la cat�
 +++ Annonce du précédent enregistrement +++
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_PREVIOUS_RECORD" affecté par défaut.
 
-Le geste de commande déclenche l'annonce du précédent enregistrement par rapport au dernier enregistrement annoncé et le copier dans le presse-papier.
+Le geste de commande déclenche l'annonce du précédent enregistrement par rapport au dernier enregistrement annoncé.
 
 +++ Annonce de l'enregistrement suivant +++
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_NEXT_RECORD" affecté par défaut.
 
-Le geste de commande déclenche l'annonce de l'enregistrement suivant par rapport au dernier enregistrement annoncé et le copier dans le presse-papier
+Le geste de commande déclenche l'annonce de l'enregistrement suivant par rapport au dernier enregistrement annoncé.
 
 +++ Ré-annonce du dernier enregistrement annoncé +++
-La description de ce script est: "Annoncer l'enregistrement courant de l'historique des annonces vocales et le copier dans le presse-papier. Deux appui: afficher tout l'historique".
+La description de ce script est: "Annoncer l'enregistrement courant de l'historique des annonces vocales. Deux appuis: le copier dans le presse-papier. Trois appui: afficher tout l'historique".
 
 Ce script se lance à l'aide du geste de commande, "MAIN_KEY_CURRENT_RECORD" affecté par défaut.
 
-Un simple appui déclenche l'annonce du dernier enregistrement annoncé et sa copie dans le presse-papier
+Un simple appui déclenche l'annonce du dernier enregistrement annoncé.
 
+Undouble appui,  déclenche sa  copie dans le presse-papier
 
-Un double appui, affiche tout l'historique.
+Un triple appui, déclenche l'affichage de tout l'historique.
 
 +++ Affichage de l'historique vocal +++[hdr10-1]
 La description de ce script est: "Afficher les enregistrements de l'historique vocal".
@@ -2022,13 +2020,6 @@ Mais ceci peut être désactivé à l'aide de l'option "Ne pas annoncer la descr
 Un redémarrage de NVDA sera alors nécessaire pour la prise en compte de l'option.
 
 
-++ Annonce du mot focalisé après une suppression de mot ++[hdr101]
-Dans certaines application telle que WordPad , microsoft Word, il est possible d'effacer le mot suivant avec la commande "contrôle + Suppr", mais les versions de NVDA antérieure à la 2020.3 ne prononcent pas le mot qui suit la position du curseur après la suppression.
-
-Par défaut, cette extension permet à ces versions de NVDA de prononcer ce mot.
-
-, ceci peut être empêché en décochant l'option "Annoncer le mot focalisé après une suppression de mot" de la catégorie "Compléments à NVDA" du dialogue "Paramètres" de l'extension.
-
 ++ Agrandissement automatique des fenêtres ++[hdr102]
 Cette option permet d'agrandir automatiquement les fenêtres qui sont mises au premier plan.
 
@@ -2066,10 +2057,29 @@ Le choix se fait dans le groupe "Signalement des fautes d'orthographe" de la cat
 
 
 
-++ Prononciation des caractères non alphanumériques quand l'écho clavier par caractère est désactivé ++[hdr105]
-Cette option permet de faire prononcer les caractères non alphanumériques quand l'echo clavier par caractères est désactivé.
 
-Cela permet à certains utilisateurs d'entendre, par exemple, les symboles de ponctuation tapés, même s'ils ont désactivé l'echo clavier par caractère.
+++ Blocage des touches "Insertion" et "Verrouillage" ++[hdr105]
+(disponible pour les versions de NVDA inférieurs à 2023.1 si la fonctionnalité "Annonce sélective des touches de commande " est installée)
+
+Il peut être utile dans certains cas d'empêcher l'action des touches "Insertion" et "Verrouillage majuscule".
+
+Leur rôle initial est:
+- La touche "Insertion" peut faire passer du mode "Insertion"  au mode "Refrappe" et inversement.
+- La touche "Verrouillage majuscule" simule l'enfoncement permanent de la touche "Majuscule".
+
+
+NVDA permet à l'utilisateur de définir ces touches comme touche "NVDA". Mais dans ce cas, la touche "Insertion" comme  la touche "Verrouillage majuscule" ne joue leur rôle initial que si il y a un double appui rapide.
+ 
+Par configuration, L'extension donne la possibilité  que ces touches  n'aient pas d'action quand elles sont dans leur rôle initial.
+
+Cette configuration se fait par profil de configuration à l'aide d'une case à cocher par touche (Voir le groupe "Blocage de touches" de la catégorie "Clavier" du profil courant).
+
+Quand l'action de la touche est bloquée, un bip sonore se fait entendre.
+
+++ Prononciation des caractères non alphanumériques quand l'écho clavier par caractère est désactivé ++[hdr106]
+Cette option permet de faire prononcer les caractères non alphanumériques quand l'écho clavier par caractères est désactivé.
+
+Cela permet à certains utilisateurs d'entendre, par exemple, les symboles de ponctuation tapés, même s'ils ont désactivé l'écho clavier par caractère.
 
 Elle se configure à l'aide de la case à cocher "Prononcer quand même les caractères non alphanumériques quand l'écho clavier par caractère est désactivé" qui se trouve dans la catégorie "Clavier" pour le profil de configuration courant.
 
@@ -2159,6 +2169,22 @@ Par défaut, le choix est :
 - "Ne rien faire" pour une disposition de clavier "ordinateur portable".
 
 
+++ Limitation de répétition de touches ++[hdr306]
+Lorsque une touche est enfoncée  et pas relâchée suffisamment rapidement, Windows génère une série d'appui- touches qui peuvent être gênants surtout dans une zone d'édition.
+
+Cette fonctionnalité tente de limiter ce nombre d'appui-touches au minimum.
+
+Elle est contrôlée par la case à cochée  "Limiter les répétitions" qui se trouve dans le groupe "Répétition de touches" de la catégorie "Avancée" des paramètres globaux de l'extension et par le délai de répétition qui se configure dans le même groupe.
+
+Quand cette option est cochée,  tout nouvel appui de la même touche qui arrive dans un délai inférieur au délai de répétition configuré est ignoré.
+
+Par défaut, cette case n'est pas cochée et le délai de répétition est fixé à 100 millisecondes
+
+Il n'est pas possible de ne garder que le seul premier appui-touche car le délai avec l'appui qui suit est trop grand (de l'ordre de 500 millisecondes).
+
+Les touches de modifications ne sont pas concernées par cette limitation.
+
+
 + Autres améliorations +
 
 ++ Exploration du dossier de configuration ou dossier programme de NVDA++[hdr202]
@@ -2236,6 +2262,51 @@ Attention: comme tous les paramètres de NVDA, il est nécessaire que la configu
 
 
 
+++ Compléments pour l'explorateur Windows ++[hdr208]
+L'extension apporte les scripts suivants Quand le curseur est dans l'arborescence des dossiers :
++++ Annonce du chemin d'accès du dossier ou du fichier sous le curseur +++
+Ce script permet, quand le curseur est positionné sur un des éléments du dossier n de l'arborescence de l'explorateur Windows, de :
+- au premier appui : de faire annoncer le chemin d'accès réduit sous la forme : identifiant du lecteur\...\nom du dossier n-3\nom du dossier n-2\nom du dossier n-1\nom du dossier n\nom du fichier ou du dossier.
+- au second appui : de faire annoncer le chemin d'accès complet.
+- au troisième appui : de copier le chemin complet dans le presse-papier.
+
+
+Aucun geste de commande, ni commande interpréteur ne lui est affecté par défaut.
+
+La description du script est : "Annoncer le chemin réduit du dossier ou du fichier sous le curseur de l'explorateur Windows. Deux appuis : annoncer le chemin complet. Trois appuis : copier le chemin complet dans le presse-papier".
+
+Il est rangé sous la rubrique "ADDON_SUMMARY" du dialogue "Gestes de commande de NVDA".
+
+Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
+
+Le nombre de dossier à conserver pour le chemin réduit est configurable (voir le groupe "Explorateur Windows " de la catégorie "Ordinateur" des paramètres globaux de l'extension. Par défaut, ce nombre est de 4).
+
++++ Annonce, en remontant l'arborescence des dossiers, du nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur +++
+Ce script permet, comme celui annonçant le chemin réduit, de localiser l'élément sous le curseur sans avoir besoin d'entendre tous les noms des dossiers composants le chemin complet.
+
+Contrairement à l'autre script, il n'est pas limité par la configuration c'est à dire le nombre de dossiers du chemin à conserver.
+
+Il annonce le nom des dossiers composants le chemin en sens inverse, c'est à dire en remontant l'arborescence des dossiers. Cette annonce peut être arrêtée à tout moment en appuyant sur la touche "Contrôle".
+
+Par exemple, si l'élément sélectionné se trouve dans le dossier n, NVDA annoncera dans l'ordre suivant :
+- le nom du dossier n suivi de (n),
+- le nom du dossier n-1 suivi de (n-1),
+- le nom du dossier n-2 suivi de (n-2)
+- le nom du dossier n-3 suivi de (n-3),
+- et ainsi de suite jusqu'à l'identifiant du lecteur suivi du dernier niveau entre parenthèses.
+
+
+L'option "Annoncer le nom des dossiers du chemin inversé avec le niveau" permet de ne pas faire annoncer le niveau des dossiers. Elle se trouve dans le groupe "Explorateur Windows" de la catégorie "Ordinateur".
+
+
+
+Aucun geste de commande, ni commande interpréteur n'est affecté par défaut à ce script.
+
+La description de ce script est : "Annoncez le chemin du fichier ou du dossier sous le curseur de l'explorateur Windows en remontant l'arborescence des dossiers".
+
+Il est rangé sous la rubrique "ADDON_SUMMARY" du dialogue "Gestes de commande de NVDA".
+
+Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 
 + Résumé des commandes apportées par cette extension +
 ++ Gestes de commande installés systématiquement ++

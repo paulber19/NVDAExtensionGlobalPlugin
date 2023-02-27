@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2022 paulber19
+# Copyright (C) 2018 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -11,6 +11,8 @@ import scriptHandler
 import ui
 import speech
 import gui
+import winUser
+import tones
 try:
 	# for nvda version >= 2021.2
 	from controlTypes.state import _stateLabels as stateLabels
@@ -27,11 +29,9 @@ import queueHandler
 import api
 import wx
 import config
-try:
-	# for NVDA version >= 2021.1
-	from speech.sayAll import SayAllHandler as sayAllHandler
-except ImportError:
-	import sayAllHandler
+
+from speech.sayAll import SayAllHandler as sayAllHandler
+
 import time
 from vkCodes import byName
 import tones
@@ -93,6 +93,23 @@ _availableModifierKeysCombination = {
 CHECKED_KEY_BIT_POSITION = 63
 # Translators: label of anyKey item in the excluded keys list.
 ANYKEY_LABEL = _("Any key with modifier key combination")
+try:
+	# for nvda version >= 2023.1
+	from inputCore import decide_executeGesture 
+except ImportError:
+	import extensionPoints
+	decide_executeGesture = extensionPoints.Decider()
+	"""
+	Notifies when a gesture is about to be executed,
+	and allows components or add-ons to decide whether or not to execute a gesture.
+	For example, when controlling a remote system with a connected local braille display,
+	braille display gestures should not be executed locally.
+	Handlers are called with one argument:
+	@param gesture: The gesture that is about to be executed.
+	@type gesture: L{InputGesture}
+	"""
+
+_numpadKeyNames = ["numpad%s" % str(x) for x in range(1, 10)]
 
 
 def myExecuteGesture(gesture):
@@ -103,6 +120,61 @@ def myExecuteGesture(gesture):
 			_NVDA_ExecuteGesture(gesture)
 	except NoInputGestureAction:
 		raise NoInputGestureAction
+
+
+def compareGestures(gesture1, gesture2):
+	gest1 = (gesture1.vkCode,gesture1.scanCode, gesture1.isExtended)
+	gest2 = (gesture2.vkCode,gesture2.scanCode, gesture2.isExtended)
+	return gest1 == gest2
+
+_prevGesture = None
+_lastPrevGestureTime = time.time()
+
+
+def shouldTrapGestureRepeat(gesture):
+	global _prevGesture, _lastPrevGestureTime
+	delay = time.time() - _lastPrevGestureTime
+	ret = False
+	from ..settings import toggleLimitKeyRepeatsAdvancedOption
+	trapOption = toggleLimitKeyRepeatsAdvancedOption(False)
+	if trapOption and isinstance(gesture, KeyboardInputGesture) and _prevGesture:
+		from ..settings import _addonConfigManager
+		keyRepeatDelay = _addonConfigManager.getKeyRepeatDelay()
+		if compareGestures(gesture, _prevGesture) and delay < keyRepeatDelay/1000:
+			ret = True
+
+	_prevGesture = gesture
+	_lastPrevGestureTime = time.time()
+	_lastPrevGestureTime = time.time()
+	return ret
+
+
+def shouldExecuteGesture(gesture):
+	if not gesture.isModifier and shouldTrapGestureRepeat(gesture):
+		# trap this gesture
+		return  False
+
+	from ..settings.nvdaConfig import _NVDAConfigManager 
+	#A part of  Tony's Enhancements addon for NVDA
+	#Copyright (C) 2019 Tony Malykh
+	if (
+		_NVDAConfigManager .toggleBlockInsertKeyOption(False) and
+		gesture.vkCode == winUser.VK_INSERT and
+		not gesture.isNVDAModifierKey
+	):
+		tones.beep(500, 50)
+		return False
+	if (
+		_NVDAConfigManager .toggleBlockCapslockKeyOption(False) and
+		gesture.vkCode == winUser.VK_CAPITAL and
+		not gesture.isNVDAModifierKey
+	):
+		tones.beep(500, 50)
+		return False
+	return True
+
+
+decide_executeGesture .register(shouldExecuteGesture)
 
 
 class MyInputManager (object):
@@ -337,9 +409,7 @@ class MyInputManager (object):
 		if gesture.isModifier or "nvda" in gesture.displayName.lower():
 			# excluded modifier key and numpad keys with NVDA modifiers
 			return None
-		numpadKeyNames = ["numpad%s" % str(x) for x in range(1, 10)]
-		numpadKeyNames.remove("numpad5")
-		if gesture.mainKeyName in numpadKeyNames:
+		if gesture.mainKeyName in _numpadKeyNames.remove("numpad5"):
 			vkCode = gesture.vkCode
 			scanCode = gesture.scanCode
 			extended = not gesture.isExtended
@@ -360,6 +430,7 @@ class MyInputManager (object):
 			# This lets gestures pass through unhindered where possible,
 			# as well as stopping a flood of actions when the core revives.
 			raise NoInputGestureAction
+
 		newGesture = self.manageRemanence(gesture) if not bypassRemanence else None
 		if newGesture is not None:
 			queueHandler.queueFunction(
@@ -370,6 +441,18 @@ class MyInputManager (object):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue, self.executeNewGesture, newGesture)
 			return
+
+		if not decide_executeGesture.decide(gesture=gesture):
+			# A registered handler decided that this gesture shouldn't be executed.
+			# Purposely do not raise a NoInputGestureAction here, as that could
+			# lead to unexpected behavior for gesture emulation, i.e. the gesture will be send to the system
+			# when the decider decided not to execute it.
+			log.debug(
+				"Gesture execution canceled by handler registered to decide_executeGesture extension point"
+			)
+			return
+
+		
 		script = gesture.script
 		focus = api.getFocusObject()
 		if focus.sleepMode is focus.SLEEP_FULL\
@@ -597,12 +680,7 @@ class CommandKeysSelectiveAnnouncementDialog(
 		# gui
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# the speak command key flag
-		from versionInfo import version_year, version_major
-		NVDAVersion = [version_year, version_major]
-		if NVDAVersion >= [2020, 1]:
-			labelText = NVDAString("Speak c&ommand keys")
-		else:
-			labelText = NVDAString("Speak command &keys")
+		labelText = NVDAString("Speak c&ommand keys")
 		self.commandKeysCheckBox = sHelper.addItem(wx.CheckBox(
 			self,
 			wx.ID_ANY,

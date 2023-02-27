@@ -1,16 +1,12 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
-try:
-	# for nvda version >= 2021.1
-	from speech import speech as speech
-except ImportError:
-	import speech
+from speech import speech as speech
 import tones
 import ui
 import api
@@ -100,10 +96,15 @@ class SpeechRecorderManager(object):
 			tones.beep(100, 40)
 		self._lastSpeechHistoryReportIndex = index
 		text = self._speechHistory[index]
-		ui.message(text)
+		if  not toClip:
+			ui.message(text)
+			self._onMonitoring = oldOnMonitoring
+			return
 		if not api.copyToClip(text):
 			# Translators: Presented when unable to copy to the clipboard because of an error.
 			ui.message(NVDAString("Unable to copy"))
+		# Translators: message to user to report copy to clipboard
+		ui.message(_("{0} copied to clipboard") .format(text))
 		self._onMonitoring = oldOnMonitoring
 
 	def displaySpeechHistory(self):

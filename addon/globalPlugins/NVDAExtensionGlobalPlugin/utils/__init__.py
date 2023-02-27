@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin/utils/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016-2022  paulber19
+# Copyright (C) 2016-2023  paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -189,24 +189,13 @@ def mouseClick(obj, rightButton=False, twice=False):
 
 
 def getSpeechMode():
-	try:
-		# for nvda  version >= 2021.1
-		return speech.getState().speechMode
-	except AttributeError:
-		return speech.speechMode
+	return speech.getState().speechMode
 
 
 def setSpeechMode(mode):
-	try:
-		# for nvda version >= 2021.1
-		speech.setSpeechMode(mode)
-	except AttributeError:
-		speech.speechMode = mode
+	speech.setSpeechMode(mode)
 
 
 def setSpeechMode_off():
-	try:
-		# for nvda version >= 2021.1
-		speech.setSpeechMode(speech.SpeechMode.off)
-	except AttributeError:
-		speech.speechMode = speech.speechMode_off
+	speech.setSpeechMode(speech.SpeechMode.off)
+

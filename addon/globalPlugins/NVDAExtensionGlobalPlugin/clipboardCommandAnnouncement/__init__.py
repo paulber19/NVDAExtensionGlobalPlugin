@@ -9,6 +9,8 @@ from logHandler import log
 import wx
 import api
 import textInfos
+import treeInterceptorHandler
+import controlTypes
 import speech
 import ui
 import time
@@ -52,9 +54,7 @@ import core
 import contentRecog.recogUi
 from ..utils.NVDAStrings import NVDAString
 from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
-from ..settings import (
-	isInstall, toggleReportNextWordOnDeletionOption,
-)
+from ..settings import isInstall
 from ..settings.addonConfig import (
 	FCT_ClipboardCommandAnnouncement,
 )
@@ -206,11 +206,6 @@ class EditableTextEx(EditableText):
 				key = d[command]
 				if key != "":
 					self.bindGesture("kb:%s" % key, self._commandToScript[command])
-		# bug fix in nvda 2020.3
-					# so toggleReportNextWordOnDeletionOption return always since this version.
-		if toggleReportNextWordOnDeletionOption(False):
-			self.bindGesture("kb:control+numpadDelete", "controlDelete")
-			self.bindGesture("kb:control+delete", "controlDelete")
 
 	def getSelectionInfo(self):
 		obj = api.getFocusObject()
@@ -278,31 +273,33 @@ class EditableTextEx(EditableText):
 				and not STATE_MULTILINE)):
 				gesture.send()
 				return
-
+			gesture.send()
 			cm = clipboard.ClipboardManager()
 			time.sleep(0.1)
 			if cm.isEmpty:
 				# Translators: message to report clipboard is empty
 				ui.message(_("Clipboard is empty"))
-				gesture.send()
 				return
 			ui.message(_msgPaste)
-			gesture.send()
-			import treeInterceptorHandler
-			import controlTypes
-			obj = api.getFocusObject()
-			treeInterceptor = obj.treeInterceptor
-			if isinstance(
-				treeInterceptor,
-				treeInterceptorHandler.DocumentTreeInterceptor) and not treeInterceptor.passThrough:
-				obj = treeInterceptor
-			try:
-				info = obj.makeTextInfo(textInfos.POSITION_CARET)
-			except (NotImplementedError, RuntimeError):
-				info = obj.makeTextInfo(textInfos.POSITION_FIRST)
-			info.expand(textInfos.UNIT_LINE)
-			speech.speakTextInfo(info, unit=textInfos.UNIT_LINE, reason=controlTypes.OutputReason.CARET)
-
+			def reportLine():
+				obj = api.getFocusObject()
+				treeInterceptor = obj.treeInterceptor
+				if isinstance(
+					treeInterceptor,
+					treeInterceptorHandler.DocumentTreeInterceptor) and not treeInterceptor.passThrough:
+					obj = treeInterceptor
+				try:
+					info = obj.makeTextInfo(textInfos.POSITION_CARET)
+				except (NotImplementedError, RuntimeError):
+					info = obj.makeTextInfo(textInfos.POSITION_FIRST)
+				info.collapse()
+				info.expand(textInfos.UNIT_LINE)
+				return
+				speech.speakTextInfo(info, unit=textInfos.UNIT_LINE, reason=controlTypes.OutputReason.CARET)
+			queueHandler.queueFunction(
+				queueHandler.eventQueue,
+				reportLine
+			)
 		stopDelayScriptTask()
 		# to filter out too fast script calls while holding down the command gesture.
 		delayScriptTaskWithDelay(150, callback)
@@ -322,22 +319,6 @@ class EditableTextEx(EditableText):
 		stopDelayScriptTask()
 		# to filter out too fast script calls while holding down the command gesture.
 		delayScriptTaskWithDelay(150, callback)
-
-	def script_controlDelete(self, gesture):
-		stopDelayScriptTask()
-		from editableText import EditableText
-		gesture.send()
-		if not isinstance(self, EditableText):
-			log.warning("Not EtitableText class instance ")
-			return
-		time.sleep(0.3)
-		try:
-			info = self.makeTextInfo(textInfos.POSITION_CARET)
-		except Exception:
-			log.warning("not makeTextInfo")
-			return
-		self._caretScriptPostMovedHelper(textInfos.UNIT_WORD, gesture, info)
-		braille.handler.handleCaretMove(self)
 
 	def _caretScriptPostMovedHelper(self, speakUnit, gesture, info=None):
 		super(EditableTextEx, self)._caretScriptPostMovedHelper(speakUnit, gesture, info)

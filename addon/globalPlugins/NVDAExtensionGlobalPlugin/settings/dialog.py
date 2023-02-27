@@ -16,22 +16,18 @@ import core
 import characterProcessing
 import queueHandler
 from languageHandler import getLanguage
+from gui.guiHelper import BoxSizerHelper
+from versionInfo import version_year, version_major
 from ..settings import _addonConfigManager
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle, getHelpObj
 from ..utils.secure import inSecureMode
 from ..utils import contextHelpEx
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
-if NVDAVersion >= [2021, 1]:
-	from gui.guiHelper import BoxSizerHelper
-else:
-	# we need the 2021.1 guiHelper changes to maintain compatibility with nvda version < 2021.1
-	from ..utils.guiHelper import BoxSizerHelper
 
 
 addonHandler.initTranslation()
 
+_helpMsg = _("Press F1 for help")
 
 def askForNVDARestart():
 	if gui.messageBox(
@@ -394,7 +390,6 @@ class NVDAEnhancementSettingsPanel(
 		)
 		from ..settings import (
 			getInstallFeatureOption,
-			toggleReportNextWordOnDeletionOption,
 			toggleSpeechRecordWithNumberOption,
 			toggleSpeechRecordInAscendingOrderOption,
 			toggleLoopInNavigationModeOption
@@ -407,16 +402,6 @@ class NVDAEnhancementSettingsPanel(
 		groupBox = groupSizer.GetStaticBox()
 		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
-		# bug fix in nvda 2020.3
-		# so hide it for nvda version higher or equal to this version
-		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-		labelText = _("&Report next word on deletion")
-		self.ReportNextWordOnDeletionOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
-		self.ReportNextWordOnDeletionOptionBox.SetValue(toggleReportNextWordOnDeletionOption(False))
-		self.bindHelpEvent(getHelpObj("hdr101"), self.ReportNextWordOnDeletionOptionBox)
-		if inSecureMode()\
-			or NVDAVersion >= [2020, 3]:
-			self.ReportNextWordOnDeletionOptionBox .Hide()
 		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
 		labelText = _("maximum number of last &used symbols recorded:")
 		choices = [x * 10 for x in range(1, 11)]
@@ -496,23 +481,18 @@ class NVDAEnhancementSettingsPanel(
 		choiceLabels.insert(0, _("No limit"))
 		self.maximumOfReportedCharactersBox = group.addLabeledControl(
 			labelText, wx.Choice, choices=choiceLabels)
-		print(choices)
 		self.maximumOfReportedCharactersBox.SetSelection(
 			choices.index(_addonConfigManager.getMaximumClipboardReportedCharacters()))
 		self.bindHelpEvent(getHelpObj("hdr3-1"), self.maximumOfReportedCharactersBox)
 
 	def saveSettingChanges(self):
 		from ..settings import (
-			toggleReportNextWordOnDeletionOption,
 			toggleSpeechRecordWithNumberOption,
 			toggleSpeechRecordInAscendingOrderOption,
 			toggleLoopInNavigationModeOption
 		)
 		from . import _addonConfigManager
 		self.restartNVDA = False
-		if self.ReportNextWordOnDeletionOptionBox.IsChecked() != toggleReportNextWordOnDeletionOption(False):
-			toggleReportNextWordOnDeletionOption()
-			self.restartNVDA = True
 		if self.speechRecordWithNumberOptionBox.IsChecked() != toggleSpeechRecordWithNumberOption(False):
 			toggleSpeechRecordWithNumberOption()
 		option = toggleSpeechRecordInAscendingOrderOption(False)
@@ -556,7 +536,8 @@ class ComputerSettingsPanel(
 			toggleSetOnMainAndNVDAVolumeAdvancedOption,
 			toggleReportVolumeChangeAdvancedOption,
 			toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption,
-			toggleConfirmAudioDeviceChangeAdvancedOption
+			toggleConfirmAudioDeviceChangeAdvancedOption,
+		toggleReversedPathWithLevelAdvancedOption
 		)
 		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a group of editing options in the computer settings panel.
@@ -587,6 +568,24 @@ class ComputerSettingsPanel(
 		if getInstallFeatureOption(FCT_DateAndTime) == C_DoNotInstall:
 			self.reportTimeWithSecondsOptionBox.Disable()
 
+		# Translators: This is the label for a group of editing options in the computer settings panel.
+		groupText = _("Windows explorer")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is a label for a choice box in computer settings panel.
+		labelText = _("Number of items to &keep for reduced path:")
+		choice = [x for x in reversed(list(range(1, 11)))]
+		self.reducedPathItemsNumberBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) for x in choice])
+		self.reducedPathItemsNumberBox .SetSelection(choice.index(_addonConfigManager.getReducedPathItemsNumber()))
+		self.bindHelpEvent(getHelpObj("hdr208"), self.reducedPathItemsNumberBox )
+		# Translators: This is the label for a checkbox in the Computer settings panel.
+		labelText = _("Report folder name of Reversed path with levels")
+		self.reversedPathWithLevelOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
+		self.reversedPathWithLevelOptionBox .SetValue(toggleReversedPathWithLevelAdvancedOption(False))
+		self.bindHelpEvent(getHelpObj("hdr208"), self.reversedPathWithLevelOptionBox )
 		# Translators: This is the label for a group in computer settings panel.
 		groupText = _("Volume control")
 		volumeGroup = BoxSizerHelper(
@@ -695,7 +694,8 @@ class ComputerSettingsPanel(
 			toggleSetOnMainAndNVDAVolumeAdvancedOption,
 			toggleReportVolumeChangeAdvancedOption,
 			toggleIncreaseSpeakersVolumeIfNecessaryAdvancedOption,
-			toggleConfirmAudioDeviceChangeAdvancedOption
+			toggleConfirmAudioDeviceChangeAdvancedOption,
+			toggleReversedPathWithLevelAdvancedOption
 		)
 		self.restartNVDA = False
 		if self.noDescriptionReportInRibbonOptionBox.IsChecked() != toggleNoDescriptionReportInRibbonOption(False):
@@ -710,6 +710,11 @@ class ComputerSettingsPanel(
 		option = toggleSetOnMainAndNVDAVolumeAdvancedOption(False)
 		if self.setOnMainAndNVDAVolumeOptionCheckBox.IsChecked() != option:
 			toggleSetOnMainAndNVDAVolumeAdvancedOption()
+		itemsNumber= self.reducedPathItemsNumberBox .GetStringSelection()
+		_addonConfigManager.setReducedPathItemsNumber(int(itemsNumber))
+		option = toggleReversedPathWithLevelAdvancedOption(False)
+		if self.reversedPathWithLevelOptionBox.IsChecked() != option:
+			toggleReversedPathWithLevelAdvancedOption()
 		levelString = self.minMasterVolumeLevelBox.GetStringSelection()
 		_addonConfigManager.setMinMasterVolumeLevel(int(levelString))
 		levelString = self.masterVolumeLevelBox.GetStringSelection()
@@ -759,6 +764,7 @@ class AdvancedSettingsPanel(
 		from ..settings import (
 			toggleDialogTitleWithAddonSummaryAdvancedOption,
 			toggleByPassNoDescriptionAdvancedOption,
+			toggleLimitKeyRepeatsAdvancedOption,
 		)
 		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a choice box in the advanced settings panel.
@@ -791,11 +797,30 @@ class AdvancedSettingsPanel(
 		if inSecureMode():
 			self.MaximumDelayBetweenSameScriptBox .Hide()
 			self.byPassNoDescriptionOptionBox.Hide()
-
+		# Translators: This is the label for a group of editing options in the computer settings panel.
+		groupText = _("Key Repeat")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is the label for a checkbox in the Advanced settings panel.
+		labelText = _("&Limit key repeats")
+		self.limitKeyRepeatsOptionBox = group.addItem(wx.CheckBox(groupBox, wx.ID_ANY, label=labelText))
+		self.limitKeyRepeatsOptionBox.SetValue(toggleLimitKeyRepeatsAdvancedOption(False))
+		self.bindHelpEvent(getHelpObj("hdr306"), self.limitKeyRepeatsOptionBox)
+		# Translators: This is the label for a choice box in the advanced settings panel.
+		labelText = _("Delay between &repeat (in ms):")
+		choices = [x for x in range(10, 510, 10)]
+		choices = list(reversed(choices))
+		self.keyRepeatDelayOptionChoiceBox = group.addLabeledControl(
+			labelText, wx.Choice, choices=[str(x) for x in choices])
+		self.keyRepeatDelayOptionChoiceBox.SetSelection(choices.index(_addonConfigManager.getKeyRepeatDelay()))
+		self.bindHelpEvent(getHelpObj("hdr306"), self.keyRepeatDelayOptionChoiceBox)
 	def saveSettingChanges(self):
 		from ..settings import (
 			toggleDialogTitleWithAddonSummaryAdvancedOption,
 			toggleByPassNoDescriptionAdvancedOption,
+			toggleLimitKeyRepeatsAdvancedOption,
 		)
 		self.restartNVDA = False
 		playSoundOnErrorsOption = self.playSoundOnErrorsOptionChoiceBox.GetSelection()
@@ -811,6 +836,13 @@ class AdvancedSettingsPanel(
 		if self.byPassNoDescriptionOptionBox.IsChecked() != toggleByPassNoDescriptionAdvancedOption(False):
 			toggleByPassNoDescriptionAdvancedOption()
 			self.restartNVDA = True
+		option = toggleLimitKeyRepeatsAdvancedOption(False)
+		if self.limitKeyRepeatsOptionBox.IsChecked() != option:
+			toggleLimitKeyRepeatsAdvancedOption()
+		keyRepeatDelay= int(
+		self.keyRepeatDelayOptionChoiceBox.GetString(self.keyRepeatDelayOptionChoiceBox.GetSelection()))
+		if keyRepeatDelay != _addonConfigManager.getKeyRepeatDelay():
+			_addonConfigManager.setKeyRepeatDelay(keyRepeatDelay)
 
 	def onSave(self):
 		self.saveSettingChanges()
@@ -1094,6 +1126,8 @@ class GlobalSettingsDialog(MultiCategorySettingsDialogEx):
 		else:
 			self.categoryClasses = self.baseCategoryClasses[:]
 		super(GlobalSettingsDialog, self).__init__(parent, initialCategory)
+		from speech.speech import speakMessage
+		wx.CallLater(1000, speakMessage, _helpMsg)
 
 
 class NVDAEnhancementProfileSettingsPanel(SettingsPanel):
@@ -1207,12 +1241,38 @@ class KeyboardProfileSettingsPanel(
 		self.activateNumlockBox .SetStringSelection(
 			activateNumlockChoices[_NVDAConfigManager.getActivateNumlockOption()])
 		self.bindHelpEvent(getHelpObj("hdr305"), self.activateNumlockBox)
+		# Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
+		groupText = _("Key blocking")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
+		# Translators: This is the label for a checkBox in the Keyboard profile settings panel.
+		labelText = _("Block insert key")
+		self.blockInsertKeyCheckBox = group.addItem(wx.CheckBox(self, label=labelText))
+		self.blockInsertKeyCheckBox .SetValue(_NVDAConfigManager.toggleBlockInsertKeyOption(False))
+		self.bindHelpEvent(getHelpObj("hdr105"), self.blockInsertKeyCheckBox)
+		# Translators: This is the label for a checkBox in the Keyboard profile settings panel.
+		labelText = _("Block capslock key")
+		self.blockCapslockKeyCheckBox = group.addItem(wx.CheckBox(self, label=labelText))
+		self.blockCapslockKeyCheckBox .SetValue(_NVDAConfigManager.toggleBlockCapslockKeyOption(False))
+		self.bindHelpEvent(getHelpObj("hdr105"), self.blockCapslockKeyCheckBox)
+		from ..settings import getInstallFeatureOption
+		from .addonConfig import FCT_KeyRemanence, FCT_CommandKeysSelectiveAnnouncement
+		if not getInstallFeatureOption(FCT_KeyRemanence) and not getInstallFeatureOption(FCT_CommandKeysSelectiveAnnouncement):
+			for item in range(0, group.sizer.GetItemCount()):
+				group.sizer.Hide(item)
+		# Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
+		groupText = _("Characters echo")
+		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
+		groupBox = groupSizer.GetStaticBox()
+		group = BoxSizerHelper(self, sizer=groupSizer)
+		sHelper.addItem(group)
 		# Translators: This is the label for a checkBox in the Keyboard profile settings panel.
 		labelText = _("Still speak &non-alphanumeric characters when keyboard echo by characters is disabled")
-		self.alphaNumCharsCheckBox = sHelper.addItem(wx.CheckBox(self, label=labelText))
+		self.alphaNumCharsCheckBox = group.addItem(wx.CheckBox(self, label=labelText))
 		self.alphaNumCharsCheckBox .SetValue(_NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False))
-		self.bindHelpEvent(getHelpObj("hdr105"), self.alphaNumCharsCheckBox)
-
+		self.bindHelpEvent(getHelpObj("hdr106"), self.alphaNumCharsCheckBox)
 	def saveSettingChanges(self):
 		from .nvdaConfig import _NVDAConfigManager
 		self.restartNVDA = False
@@ -1223,6 +1283,10 @@ class KeyboardProfileSettingsPanel(
 			_NVDAConfigManager.toggleConfirmToAddToClipOption(True)
 		option = self.activateNumlockBox .GetSelection()
 		_NVDAConfigManager.setActivateNumlockOption(option)
+		if self.blockInsertKeyCheckBox .IsChecked() != _NVDAConfigManager.toggleBlockInsertKeyOption(False):
+			_NVDAConfigManager.toggleBlockInsertKeyOption(True)
+		if self.blockCapslockKeyCheckBox .IsChecked() != _NVDAConfigManager.toggleBlockCapslockKeyOption(False):
+			_NVDAConfigManager.toggleBlockCapslockKeyOption(True)
 		if self.alphaNumCharsCheckBox .IsChecked() != _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False):
 			_NVDAConfigManager.toggleSpeakAlphaNumCharsOption(True)
 
@@ -1567,3 +1631,5 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 		else:
 			self.categoryClasses = self.baseCategoryClasses[:]
 		super(ProfileSettingsDialog, self).__init__(parent, initialCategory)
+		from speech.speech import speakMessage
+		wx.CallLater(1000, speakMessage, _helpMsg)

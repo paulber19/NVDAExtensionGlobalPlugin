@@ -52,13 +52,8 @@ class DisplayNotificationIconsList(
 		super(DisplayNotificationIconsList, self).__init__(parent, wx.ID_ANY, title)
 		# init icons list
 		self.icons = []
-		try:
-			# for nvda version >= 2021.1
-			from winVersion import getWinVer, WinVersion
-			win11 = getWinVer() >= WinVersion(major=10, minor=0, build=22000)
-		except ImportError:
-			# for NVDA 2020.4, windows 11 not supported
-			win11 = False
+		from winVersion import getWinVer, WinVersion
+		win11 = getWinVer() >= WinVersion(major=10, minor=0, build=22000)
 		if win11:
 			self.updateIconsList_w11()
 		else:

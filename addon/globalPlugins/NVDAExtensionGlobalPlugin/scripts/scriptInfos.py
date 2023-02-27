@@ -140,18 +140,18 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for report previous speech history record command.
 	"reportPreviousSpeechHistoryRecord": (
-		_("Report previous record of the speech history and copy it to clipboard"),
+		_("Report previous record of the speech history"),
 		globalCommands.SCRCAT_SPEECH, "hdr10"),
 	# Translators: Input help mode message
 	# for report current speech history record command.
 	"reportCurrentSpeechHistoryRecord": (
 		_(
-			"Report current record of the speech history and copy it to clipboard. "
-			"Twice: display speech history"), globalCommands.SCRCAT_SPEECH, "hdr10"),
+			"Report current record of the speech history.Pressing Twice: copy it to clipboard. "
+			"Pressing three: display speech history"), globalCommands.SCRCAT_SPEECH, "hdr10"),
 	# Translators: Input help mode message
 	# for report next speech history record command.
 	"reportNextSpeechHistoryRecord": (
-		_("Report next record of the speech history and copy it to clipboard"),
+		_("Report next record of the speech history"),
 		globalCommands.SCRCAT_SPEECH, "hdr10"),
 	# Translators: Input help mode message
 	# for restart NVDA in default or debug log level command.

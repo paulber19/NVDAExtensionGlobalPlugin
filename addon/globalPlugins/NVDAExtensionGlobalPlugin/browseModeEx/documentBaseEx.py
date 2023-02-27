@@ -10,17 +10,8 @@ from scriptHandler import script
 
 from ..utils.NVDAStrings import NVDAString
 import config
-import controlTypes
-try:
-	# fornvda version >=  2020.1
-	from controlTypes import OutputReason
-	REASON_MESSAGE = OutputReason.MESSAGE
-	REASON_CARET = OutputReason.CARET
-	REASON_QUERY = OutputReason.QUERY
-except ImportError:
-	REASON_MESSAGE = controlTypes.REASON_MESSAGE
-	REASON_CARET = controlTypes.REASON_CARET
-	REASON_QUERY = controlTypes.REASON_QUERY
+from controlTypes import OutputReason
+
 
 addonHandler.initTranslation()
 
@@ -71,7 +62,7 @@ class _DocumentWithTableNavigationBase(documentBase.DocumentWithTableNavigation)
 				pass
 			else:
 				speakTextInfo(
-					info, formatConfig=formatConfig, reason=REASON_MESSAGE)
+					info, formatConfig=formatConfig, reason=OutputReason.MESSAGE)
 			try:
 				if axis == "row":
 					info = self._getNearestTableCell(
@@ -185,7 +176,7 @@ class _DocumentWithTableNavigationBase(documentBase.DocumentWithTableNavigation)
 			info,
 			useCache=False,
 			formatConfig=formatConfig,
-			reason=REASON_QUERY, onlyInitialFields=False)
+			reason=OutputReason.QUERY, onlyInitialFields=False)
 
 	@script(
 		# Translators: Input help mode message for report current cell position command
@@ -307,7 +298,7 @@ class DocumentWithTableNavigation_2022_1(_DocumentWithTableNavigationBase):
 			# Retrieve the cell on which we started.
 			info = self._getTableCellAt(tableID, self.selection, origRow, origCol)
 			speakTextInfo(
-				info, formatConfig=formatConfig, reason=REASON_CARET)
+				info, formatConfig=formatConfig, reason=OutputReason.CARET)
 			info.collapse()
 			self.selection = info
 			return
@@ -331,7 +322,7 @@ class DocumentWithTableNavigation_2022_1(_DocumentWithTableNavigationBase):
 			# Retrieve the previous cell
 			info = self._getTableCellAt(tableID1, self.selection, origRow1, origCol1)
 		speakTextInfo(
-			info, formatConfig=formatConfig, reason=REASON_CARET)
+			info, formatConfig=formatConfig, reason=OutputReason.CARET)
 		info.collapse()
 		self.selection = info
 
@@ -379,7 +370,7 @@ class DocumentWithTableNavigation_2022_4(_DocumentWithTableNavigationBase):
 			info,
 			useCache=False,
 			formatConfig=formatConfig,
-			reason=REASON_QUERY, onlyInitialFields=False)
+			reason=OutputReason.QUERY, onlyInitialFields=False)
 
 	def _reportRowOrColumn(self, axis="row"):
 		from speech import speakTextInfo
@@ -406,7 +397,7 @@ class DocumentWithTableNavigation_2022_4(_DocumentWithTableNavigationBase):
 				pass
 			else:
 				speakTextInfo(
-					info, formatConfig=formatConfig, reason=REASON_MESSAGE)
+					info, formatConfig=formatConfig, reason=OutputReason.MESSAGE)
 			try:
 				if axis == "row":
 					info = self._getNearestTableCell(
