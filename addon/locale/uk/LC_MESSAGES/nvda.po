@@ -5,11 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 'NVDAExtensionGlobalPlugin' '11.2'\n"
+"Project-Id-Version: 'NVDAExtensionGlobalPlugin' '12.01'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@freelists.org'\n"
-"POT-Creation-Date: 2023-01-19 18:07+0200\n"
-"PO-Revision-Date: 2023-01-20 20:32+0200\n"
-"Last-Translator: Ukrainian NVDA Community <vp88.mobile@gmail.com>\n"
+"POT-Creation-Date: 2023-03-02 10:10+0200\n"
+"PO-Revision-Date: 2023-03-05 15:59+0200\n"
+"Last-Translator: Ivan Shtefuriak <ip0877@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
@@ -26,195 +26,16 @@ msgstr ""
 msgid "NVDA global commands extension"
 msgstr "Глобальне розширення команд NVDA"
 
-#: addon\buildVars.py:33
+#. Add-on description
+#. Translators: Long description to be shown for this add-on on
+#. add-on information from add-ons manager
+#: addon\buildVars.py:32
 msgid ""
-"This add-on has been developed with the participation of Daniel Poiraud.\n"
-"It adds to NVDA:\n"
-"1- The features\n"
-"Some features can be enabled or disabled individually.\n"
-"* Display of the list of icons in the notification area,\n"
-"* Display of the windows list of running applications,\n"
-"* Help in the composition of a symbol that is complex such as, for example, "
-"an a e related, a symbol power of 2\n"
-"\tand possibility to add its own categories and symbols,\n"
-"* Extension of the functionality of the virtual buffer\n"
-"\tfor browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, "
-"and Google Chrome:\n"
-"\n"
-"\t* new commands for navigation mode (paragraph, division, anchor, main "
-"area,\n"
-"\t* new types of elements for the dialog box opened by \"NVDA+F7\" (radio "
-"button, paragraph, frame, check box, ...) with the announcement of the "
-"number of items found,\n"
-"\t* commands for the tables:\n"
-"\tannounce the cells of a row /column, go to first/last cell in the row/"
-"current column, move the column/row preceding or following with announcement "
-"possible of the cells in that row/column,\n"
-"\t* announcement of the URL of the document,\n"
-"\t* navigate in loop,\n"
-"* Announcement of the function associated with editing commands\n"
-"\tstyle Copy, Paste, etc.,\n"
-"* Announcement of the name of the folder pre-selected in the dialog boxes "
-"like \"Open\", \"Save\", \"Save as\", ...,\n"
-"* display of information on the focused application:\n"
-"\t* the name and version number of the application,\n"
-"\t* the current profile configuration,\n"
-"\t* the add-on loaded for the application,\n"
-"*\tNVDA logs tools:\n"
-"\t* Opening the previous or current log,\n"
-"\t* copy of the path of these in the clipboard.\n"
-"\n"
-"* history of voice speech,\n"
-"* renaming keyboard keys,\n"
-"* selective announcement of command keyboard keys,\n"
-"* simple countdown timer,\n"
-"* display of visible elements making up the object in the foreground,\n"
-"* fast switching of voice profile,\n"
-"* remanence of the modifier keys,\n"
-"* shutdown, reboot or hibernate the computer,\n"
-"* control the main or NVDA volume:\n"
-"\t* mute or unmute volume for the focused application,\n"
-"\t* establishment of the main Windows or NVDA volume at the start of add-"
-"on,\n"
-"\t* modification of main volume or audio stream's volume of focused "
-"application.\n"
-"\t* automatic recovery of the main volume and NVDA when the extension is "
-"loaded,\n"
-"\t* orientation of NVDA audio output,\n"
-"* Tools for development of add-on\n"
-"* supplements regarding the date and time: copy date and time to clipboard, "
-"report time with seconds\n"
-"* user configurations management and NVDA restarting with precise "
-"configuration,\n"
-"* text analyser,\n"
-"* announcement of the cursor position in the edit boxes,\n"
-"* temporary use of an audio output device without impacting the NVDA "
-"configuration,\n"
-"* quick add-ons activation / desactivation,\n"
-"\n"
-"\n"
-"2- The options\n"
-"* remove the announcement from the description of the objects in the Windows "
-"ribbons,\n"
-"* proclaim the word focused when deleting a word (for NVDA versions lower "
-"than 2020.3),\n"
-"* automatically maximize the foreground window,\n"
-"* announce punctuations and symbols when moving by word in a document,\n"
-"* possibility of signaling spelling errors by a double beep or by a voice "
-"announcement instead of the sound emitted by NVDA.\n"
-"\n"
-"3- The advanced options\n"
-"* report, with a sound, the registration of an error in the NVDA log also "
-"for the final versions and release candidate of NVDA,\n"
-"* Caption dialog title with the name of the add-on,\n"
-"* Do not take account of the option called Report object descriptions during "
-"the display of the dialog box style confirmation,\n"
-"* use numeric keypad's keys conventionally.\n"
-"\n"
-"\n"
-"4- Various other elements\n"
-"* presentation formatting of the text in a dialog box,\n"
-"* sub-menus to explore the program folders or configuration,\n"
-"* script to quickly restart NVDA,\n"
-"* script to emulate the \"Applications\" key,\n"
-"* script to close all open windows,\n"
-"* possibility of executing scripts in the \"Input gestures\" dialog (for "
-"versions of NVDA greater than 2020.3),\n"
-"* automatic selection of the category in the dialog \"Command gestures\",\n"
-"* Selection of the last parameter used in the synthesizer parameter loop.\n"
+"This global add-on provides a multitude of features described in detail in "
+"its user manual (see the add-on's help for this)."
 msgstr ""
-"Цей додаток розроблено за участю Даніеля Пуаро.\n"
-"Він додає до NVDA:\n"
-"1- функції\n"
-"Деякі функції можна увімкнути або вимкнути окремо.\n"
-"* Відображення списку піктограм області сповіщень,\n"
-"* Відображення списку вікон запущених програм,\n"
-"* Допомога у складанні складного символу,\n"
-"\tможливість додавати свої категорії та символи,\n"
-"* Розширення функціональності віртуального буфера\n"
-"\tдля браузерів Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge "
-"і Google Chrome:\n"
-"\n"
-"\t* нові команди для режиму огляду (абзац, розділ, якір, основна область,\n"
-"\t* нові типи елементів для діалогу, що відкривається командою "
-"«NVDA+F7» (радіокнопка, абзац, фрейм, прапорець, ...) з оголошенням "
-"кількості знайдених елементів,\n"
-"\t* команди для таблиць:\n"
-"\tоголошення комірки рядка/стовпця, перейти до першої/останньої комірки в "
-"рядку/поточному стовпці, перейти до попереднього чи наступного стовпця/рядка "
-"з можливістю оголошення комірок у цьому рядку/стовпці,\n"
-"\t* оголошення URL-адреси документа,\n"
-"\t* циклічна навігація,\n"
-"* Оголошення функції, пов'язаної з командами редагування\n"
-"\tКопіювати, Вставити тощо,\n"
-"* Оголошення назви попередньо вибраної папки, в таких діалогах як "
-"«Відкрити», «Зберегти», «Зберегти як», ...,\n"
-"* відображення інформації про програму у фокусі:\n"
-"\t* назва та номер версії програми,\n"
-"\t* поточний конфігураційний профіль,\n"
-"\t* додаток, завантажений для програми,\n"
-"\t* Інструменти журналів NVDA:\n"
-"\t* Відкриття попереднього або поточного журналу,\n"
-"\t* копіювання їхнього шляху в буфер обміну.\n"
-"\n"
-"* історія мовлення,\n"
-"* перейменування клавіш клавіатури,\n"
-"* вибіркове оголошення командних клавіш клавіатури,\n"
-"* простий зворотний таймер,\n"
-"* відображення видимих елементів, що утворюють об'єкт на передньому плані,\n"
-"* швидке перемикання голосового профілю,\n"
-"* залипання клавіш-модифікаторів,\n"
-"* вимкнення, перезавантаження або режим глибокого сну комп'ютера,\n"
-"* керування системною гучністю, або гучністю NVDA:\n"
-"\t* вимкнути або увімкнути гучність для програми у фокусі,\n"
-"\t* встановлення системної гучності Windows або NVDA під час запуску "
-"додатка,\n"
-"\t* зміна системної гучності або гучності аудіопотоку програми у фокусі.\n"
-"\t* автоматичне відновлення системної гучності та гучності NVDA після "
-"завантаження додатка,\n"
-"\t* орієнтація аудіовиходу NVDA\n"
-"* Засоби для розробки додатків\n"
-"* Поліпшення, пов'язані з датою та часом: можливість копіювати дату та час у "
-"буфер обміну, оголошення часу разом з секундами,\n"
-"* керування конфігураціями користувача і перезапуск NVDA з точною "
-"конфігурацією,\n"
-"* аналізатор тексту,\n"
-"* оголошення позиції курсора в полях редагування,\n"
-"* використання тимчасового пристрою виводу звуку без впливу на конфігурацію "
-"NVDA,\n"
-"* швидке увімкнення/вимкнення додатків,\n"
-"\n"
-"\n"
-"2- Параметри\n"
-"* прибрати оголошення опису об'єктів у стрічках Windows,\n"
-"* оголошувати слово у фокусі під час видалення слова (для версій NVDA "
-"нижчих, ніж 2020.3),\n"
-"* автоматично розгортати вікно на передньому плані,\n"
-"* оголошувати розділові знаки та символи при переміщенні по слову в "
-"документі.\n"
-"* можливість оповіщення про орфографічні помилки подвійним звуковим "
-"сигналом, або голосовим сповіщенням замість звуку, який видає NVDA.\n"
-"\n"
-"3- Розширені параметри\n"
-"* повідомляти звуком про реєстрацію помилки в журналі NVDA також для "
-"фінальних версій, та реліз-кандидатів NVDA,\n"
-"* Заголовок діалогу з назвою додатка,\n"
-"* Не брати до уваги опцію, що зветься «Читати опис об’єкта», в діалогах "
-"підтвердження\n"
-"* * використання клавіш цифрової клавіатури звичайним способом.\n"
-"\n"
-"\n"
-"4- Різні інші елементи\n"
-"* представлення інформації про форматування тексту в окремому вікні,\n"
-"* окреме підменю для перегляду папки NVDA або конфігурації користувача,\n"
-"* сценарій для швидкого перезапуску NVDA,\n"
-"* сценарій для емуляції клавіши \"Контекст\",\n"
-"* сценарій для закриття всіх вікон,\n"
-"* можливість виконання сценаріїв у діалозі «Жести вводу» (для версій NVDA "
-"вище 2020.3),\n"
-"* автоматичний вибір категорії в діалозі \"Жести вводу\",\n"
-"* Вибір останнього використаного параметра в кільці налаштувань "
-"синтезатора.\n"
+"Цей глобальний додаток надає безліч функцій, детально описаних у посібнику "
+"користувача (дивіться довідку додатка)."
 
 #. Translators: the label of a message box dialog.
 #: addon\installTasks.py:90
@@ -246,149 +67,153 @@ msgstr ""
 "цього додатка"
 
 #. Translators: message for indicate shell command in input help mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:415
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:413
 #, python-format
 msgid "(command: %s)"
 msgstr "(команда: %s)"
 
 #. Translators: the tooltip text for addon submenu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:449
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:447
 #, python-format
 msgid "%s add-on configuration menu"
 msgstr "меню конфігурації додатка %s"
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:453
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:451
 msgid "Global settings..."
 msgstr "Глобальні налаштування..."
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:460
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:458
 msgid "Current configuration profile settings..."
 msgstr "Налаштування поточного конфігураційного профілю..."
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:469
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:467
 msgid "Keyboard Keys renaming..."
 msgstr "Перейменування клавіш клавіатури..."
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:479
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:477
 msgid "Command keys selective announcement..."
 msgstr "Вибіркове оголошення командних клавіш..."
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:488
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:486
 msgid "Reset configuration to default values"
 msgstr "Скинути налаштування до початкових значень"
 
 #. Translators: the name of addon submenu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:498
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:496
 msgid "Explore &NVDA"
 msgstr "Огляд &NVDA"
 
 #. Translators: the tooltip text for addon submenu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:500
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:498
 msgid ""
 "Menu to explore the NVDA program folder or the user configuration folder"
 msgstr ""
 "Меню для перегляду папки програми NVDA або папки конфігурації користувача"
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:504
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:502
 msgid "My &configuration's folder"
 msgstr "Папка моєї &конфігурації"
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:513
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:511
 msgid "NVDA &Program folder"
 msgstr "&папка NVDA"
 
 #. Translators: name of the option in the menu.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:522
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:520
 msgid "Manage user configurations"
 msgstr "Керування конфігураціями користувача"
 
 #. Translators: message to user to wait.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:655
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:663
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1214
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1665
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:638
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:872
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:923
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1070
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1210
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1612
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1635
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py:76
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:656
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:664
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1175
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1626
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:596
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:830
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:881
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1028
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1168
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1570
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1593
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py:74
 msgid "Please wait"
 msgstr "Зачекайте будь ласка"
 
 #. Translators: message to report date and time copy to clipboard.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:757
+#. Translators: message to user to report copy to clipboard
+#. Translators: message to user to report path copy to clipboard
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:746
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:107
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:124
 msgid "{0} copied to clipboard"
 msgstr "{0} скопійовано в буфер обміну"
 
 #. Translators: Indicates the name of the configuration profile trigger
 #. for the current program.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:845
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:819
 msgid "Configuration's profile {profileName} {state}"
 msgstr "Конфігураційний профіль {profileName} {state}"
 
 #. Translators: message to report app version.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:914
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:888
 msgid "{0} version {1}"
 msgstr "{0} версія {1}"
 
 #. Translators: message to report that product name and version are copied to clipboard.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:920
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:894
 msgid "Product name and version has been copied to clipboard"
 msgstr "Назву та версію продукту скопійовано в буфер обміну"
 
 #. Translators: indicate name and version of active addon
 #. for current focused application.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:940
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:914
 msgid "add-on: {name}, version: {version}"
 msgstr "додаток: {name}, версія: {version}"
 
 #. Translators: indicates that there is no active addon
 #. for current focused application.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:946
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:920
 msgid "No add-on"
 msgstr "Без додатка"
 
 #. Translators: Indicates the name of the configuration profile trigger
 #. for the current program.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:981
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:955
 msgid "Configuration profile: {profileName} {state}"
 msgstr "Конфігураційний профіль: {profileName} {state}"
 
 #. Translators: Indicates the name of the current program and it version.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:991
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:965
 msgid "Application: {appName} {appVersion}"
 msgstr "Програма: {appName} {appVersion}"
 
 #. Translators: indicates name and version of current add-on.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1016
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:990
 msgid "{summary}, version: {version}"
 msgstr "{summary}, версія: {version}"
 
 #. Translators: indicates summary of current add-on.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1021
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:995
 #, python-format
 msgid "Active add-on: %s"
 msgstr "Активний додаток: %s"
 
 #. Translators: path of current add-on
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1024
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:998
 #, python-format
 msgid "add-on's path: %s"
 msgstr "шлях додатка: %s"
 
 #. Translators: indicate that others add-ons are installed
 #. and activated for this application.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1029
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1003
 msgid ""
 "Warning: it seems that others add-ons are installed and activated for this "
 "application"
@@ -396,43 +221,43 @@ msgstr ""
 "Увага: схоже, що для цієї програми встановлені та активовані інші додатки"
 
 #. Translators: Indicates the name of the appModule for the current program.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1032
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1006
 #, python-format
 msgid "Loaded python module: %s"
 msgstr "Завантажено модуль python: %s"
 
 #. Translators: title of informationdialog box to show appModule informations.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1035
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1009
 msgid "Application context's informations"
 msgstr "Інформація про програму"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1068
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1042
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:137
 msgid "Current log file path copied to clipboard"
 msgstr "Шлях поточного файлу журналу скопійовано в буфер обміну"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1070
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1044
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:139
 msgid "Current log file path cannot be copied to clipboard"
 msgstr "Шлях поточного файлу журналу не можна скопіювати в буфер обміну"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1075
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1049
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:120
 msgid "Previous log file cannot be opened"
 msgstr "Неможливо відкрити попередній файл журналу"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1079
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1053
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:114
 msgid "Current log file cannot be opened"
 msgstr "Неможливо відкрити поточний файл журналу"
 
 #. Translators: dialog title.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1087
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1061
 msgid "File open Error"
 msgstr "Помилка відкриття файлу"
 
 #. Translators: message to confirm computer shutdown.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1225
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1186
 msgid "Are you sure you want to shutdown immediately the computer ?"
 msgstr "Ви впевнені, що хочете негайно вимкнути комп'ютер?"
 
@@ -442,46 +267,46 @@ msgstr "Ви впевнені, що хочете негайно вимкнути
 #. Translators: the title of a message box dialog.
 #. Translators: dialog title.
 #. Translators: the title of a message box dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1227
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1243
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1259
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1536
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:702
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1188
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1204
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1220
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1497
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:780
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:459
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:470
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:538
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:721
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:478
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:593
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:629
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:689
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:730
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:743
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:436
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:551
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:587
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:683
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:724
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:737
 msgid "Confirmation"
 msgstr "Підтвердження"
 
 #. Translators: message to confirm computer reboot.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1241
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1202
 msgid "Are you sure you want to reboot immediately the computer ?"
 msgstr "Ви впевнені, що хочете негайно перезавантажити комп'ютер?"
 
 #. Translators: message to confirm computer hibernation.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1257
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1218
 msgid "Are you sure you want to hibernate immediately the computer ?"
 msgstr ""
 "Ви впевнені, що хочете негайно перевести комп'ютер у режим глибокого сну?"
 
 #. Translators: this is the title <of informationdialog box
 #. to show current speech settings.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1278
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1239
 msgid "Current speech settings"
 msgstr "Поточні налаштування мовлення"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1328
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1289
 msgid "Voice profile switch mode on"
 msgstr "Режим перемикання голосового профілю увімкнено"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1332
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1293
 msgid "Voice profile switch mode off"
 msgstr "Режим перемикання голосового профілю вимкнено"
 
@@ -489,36 +314,36 @@ msgstr "Режим перемикання голосового профілю в
 #. Translators: message to user to report  the selector is not set.
 #. Translators: this is a message to inform the user
 #. that the selector is not associated.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1350
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:283
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:369
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1311
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:282
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:363
 #, python-format
 msgid "Selector %s is free"
 msgstr "Селектор %s вільний"
 
 #. Translators: message to user no configuration change made.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1381
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1342
 msgid "There was no change of input gesture made by the user"
 msgstr "Користувач не змінив жест вводу"
 
 #. Translators: Reported when left mouse button is clicked.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1403
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1364
 msgid "Double left click"
 msgstr "Подвійний лівий клік"
 
 #. Translators: Reported when the object has no location
 #. for the mouse to move to it.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1419
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1462
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1380
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1423
 msgid "Object has no location"
 msgstr "Об’єкт не має розташування"
 
 #. Translators: Reported when right mouse button is clicked.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1446
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1407
 msgid "Double right click"
 msgstr "Подвійний правий клік"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1493
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1454
 msgid ""
 "This functionnality is only available if \"command keys selective "
 "announcement\" functionnality or \"keys's remanence\" functionnality is "
@@ -528,121 +353,121 @@ msgstr ""
 "командних клавіш» або функцію «залипання клавіш»"
 
 #. Translators: message to user the fonctionnality is not available.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1504
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1465
 msgid "The standard use of the numeric keypad is not allowed"
 msgstr "Стандартне використання цифрової клавіатури заборонено"
 
 #. Translators: message to confirm closing all windows
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1534
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1495
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:358
 msgid "Are you sure you want to close all windows?"
 msgstr "Ви впевнені, що хочете закрити всі вікна?"
 
 #. Translators: extension type tag.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1555
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1516
 msgid "global"
 msgstr "глобальний"
 
 #. Translators: extension type tag.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1557
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1518
 msgid "application"
 msgstr "програма"
 
 #. Translators: extension type tag.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1559
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1520
 msgid "speech synthesizer driver"
 msgstr "драйвер синтезатора мовлення"
 
 #. Translators: extension type tag.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1561
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1522
 msgid "braille display driver"
 msgstr "драйвер брайлівського дисплея"
 
 #. Translators: extension type tag.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1563
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1524
 msgid "mixed"
 msgstr "змішаний"
 
 #. Translators: add-on type.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1565
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1526
 #, python-format
 msgid "%s add-on type:"
 msgstr "Тип додатка %s:"
 
 #. Translators: no add-on
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1567
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:552
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1528
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:635
 msgid "any"
 msgstr "немає"
 
 #. Translators: title of informationdialog box to show active add-ons.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1632
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1593
 msgid "Running add-ons"
 msgstr "Запущені додатки"
 
 #. Translators: message to user when text analysis is not available (for example by sentence).
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1662
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1623
 msgid "Text analysis not available"
 msgstr "Аналіз тексту недоступний"
 
 #. Translators: message to user to report no analysis alert.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1672
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1633
 msgid "Nothing to report"
 msgstr "Звіт порожній"
 
 #. Translators: message to indicate then report current caret position is on.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1709
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1670
 msgid "report current caret position on"
 msgstr "повідомляти про поточну позицію каретки увімкнено"
 
 #. Translators: message to indicate then report current caret position is off.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1712
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1673
 msgid "report current caret position off"
 msgstr "повідомляти про поточну позицію каретки вимкнено"
 
 #. Translators: message to report clipboard is empty
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1719
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:286
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:530
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1680
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:281
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:511
 msgid "Clipboard is empty"
 msgstr "Буфер обміну порожній"
 
 #. Translators: Presented when there is no text on the clipboard, but clipboard is not empty.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1728
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1689
 msgid "but the clipboard is not empty"
 msgstr "але буфер обміну не порожній"
 
 #. Translators: message to user to report clipboard
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1759
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1720
 msgid "Clipboard cleared"
 msgstr "Буфер обміну очищено"
 
 #. Translators: message to user because of error on clipboard clearing
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1762
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1723
 msgid "Error: clipboard cannot cleared"
 msgstr "Помилка: не вдалося очистити буфер обміну"
 
 #. Translators: message to user when cycle is not possible
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1778
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1739
 msgid "cycle is not possible on audio output device"
 msgstr "цикл неможливий на пристрої вивводу"
 
 #. Translators: this is the title of Helper dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1879
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1840
 msgid "Shell's scripts"
 msgstr "Сценарії інтерпретатора команд"
 
 #. the list box
 #. Translators: This is the label of the list appearing
 #. on HelperDialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1912
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1873
 msgid "Description: command"
 msgstr "Опис: команда"
 
 #. Translators: This is a label of a button appearing
 #. on HelperDialog
 #. Translators: The label of a button to run the script in the Input Gestures dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1927
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1888
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\inputGesturesEx.py:77
 msgid "&Execute the script"
 msgstr "&Виконати сценарій"
@@ -721,131 +546,131 @@ msgstr "Неможливо завершити це вікно"
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:251
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:256
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:337
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:526
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:857
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:918
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:971
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1003
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1027
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1046
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1375
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1645
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:484
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:815
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:876
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:929
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:961
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:985
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1004
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1333
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1603
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\__init__.py:124
 msgid "Warning"
 msgstr "УВАГА"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:54
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:49
 msgid "moves to the next paragraph"
 msgstr "переходить до наступного абзацу"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:56
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:51
 msgid "no next paragraph"
 msgstr "немає наступного абзацу"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:59
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:54
 msgid "moves to the previous paragraph"
 msgstr "переходить до попереднього абзацу"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:61
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:56
 msgid "no previous paragraph"
 msgstr "немає попереднього абзацу"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:67
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:62
 msgid "moves to the next division"
 msgstr "переходить до наступного розділу"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:69
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:64
 msgid "no next division"
 msgstr "немає наступного розділу"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:72
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:67
 msgid "moves to the previous division"
 msgstr "переходить до попереднього розділу"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:74
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:69
 msgid "no previous division"
 msgstr "немає попереднього розділу"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:80
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:75
 msgid "moves to the next main landmark"
 msgstr "переходить до наступного основного орієнтира"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:82
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:77
 msgid "no next main landmark"
 msgstr "немає наступного основного орієнтира"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:85
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:80
 msgid "moves to the previous main landmark"
 msgstr "переходить до попереднього основного орієнтира"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:87
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:82
 msgid "no previous main landmark"
 msgstr "немає попереднього основного орієнтира"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:94
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:89
 msgid "moves to the next clickable element"
 msgstr "переходить до наступного елемента, який можна натиснути"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:96
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:91
 msgid "no next clickable element"
 msgstr "немає наступного елемента, який можна натиснути"
 
 #. Translators: Input help message for a quick navigation command
 #. in browse mode.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:99
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:94
 msgid "moves to the previous clickable element"
 msgstr "переходить до попереднього елемента, який можна натиснути"
 
 #. Translators: Message presented when the browse mode element is not found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:101
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:96
 msgid "no previous clickable element"
 msgstr "немає попереднього елемента, який можна натиснути"
 
 #. Translators: message presented when the text is copied to the clipboard.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:151
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:146
 msgid "Copied to clipboard"
 msgstr "Скопійовано в буфер обміну"
 
 #. Translators: message presented when the text cannot be
 #. copied to the clipboard.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:155
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:150
 msgid "Cannot copy to clipboard"
 msgstr "Неможливо скопіювати в буфер обміну"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:165
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:160
 msgid "Report document 's address (URL). Twice: copy it to clipboard"
 msgstr "Повідомляє адресу веб-документа. Двічі: копіює її в буфер обміну"
 
 #. Translators: message to the user which indicates the return
 #. to the bottom of the page.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:193
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:188
 msgid "Return to bottom of page"
 msgstr "Перейти в кінець сторінки"
 
 #. Translators: message to user which indicates the return
 #. to the top of the page.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:198
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\__init__.py:193
 msgid "Return to top of page"
 msgstr "Перейти на початок сторінки"
 
@@ -864,60 +689,60 @@ msgid "Form field"
 msgstr "Поле форми"
 
 #. Translators: Input help mode message for report current table row cells command
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:98
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:89
 msgid "Report current table row's cells"
 msgstr "Промовити комірки поточного рядка таблиці"
 
 #. Translators: Input help mode message for report current table column cells command
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:109
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:100
 msgid "Report current table column's cells"
 msgstr "Промовити комірки поточного стовпця таблиці"
 
 #. Translators: Input help mode message for move to and report next table row
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:137
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:128
 msgid "Move to and report next table row"
 msgstr "Перейти до наступного рядка таблиці і прочитати його"
 
 #. Translators: Input help mode message for move to and report previous table row
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:145
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:136
 msgid "Move to and report previous table row"
 msgstr "Перейти до попереднього рядка таблиці і прочитати його"
 
 #. Translators: Input help mode message for move to and report next table column
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:153
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:144
 msgid "Move to and report next table column"
 msgstr "Перейти до наступного стовпця таблиці та прочитати його"
 
 #. Translators: Input help mode message for move to and report previous table column
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:161
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:152
 msgid "Move to and report previous table column"
 msgstr "Перейти до попереднього стовпця таблиці і прочитати його"
 
 #. Translators: Input help mode message for report current cell position command
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:192
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:183
 msgid "Report current table cell position"
 msgstr "Промовити поточну позицію комірки таблиці"
 
 #. Translators: Input help mode message for move To  First Cell Of Row
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:238
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:229
 msgid "Move to first cell of table row"
 msgstr "Перейти до першої комірки рядка таблиці"
 
 #. Translators: Input help mode message for move To  last Cell Of Row
 #. Translators: Input help mode message for move To last cell of row command.
 #. Translators: Input help mode message to move To last cell of row command.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:246
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:253
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:237
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:244
 msgid "Move to last cell of table row"
 msgstr "Перейти до останньої комірки рядка таблиці"
 
 #. Translators: Input help mode message for move To  first Cell Of column
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:257
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:248
 msgid "Move to first cell of table column"
 msgstr "Перейти до першої комірки стовпця таблиці"
 
 #. Translators: Input help mode message for move To  last Cell Of column
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:265
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:256
 msgid "Move to last cell of table column"
 msgstr "Перейти до останньої комірки стовпця таблиці"
 
@@ -971,40 +796,40 @@ msgid "select all"
 msgstr "вибрати все"
 
 #. Translators: no comment.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:476
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:457
 msgid " one selected object"
 msgstr " виділено один об’єкт"
 
 #. Translators: no comment.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:479
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:460
 #, python-format
 msgid "%s selected objects"
 msgstr "Вибрано %s об'єктів"
 
 #. Translators: message presented when it's not possible to add text, since no text has been selected.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:78
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:79
 msgid "No text to add"
 msgstr "Немає тексту для додавання"
 
 #. Translators: Label of a dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:101
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:102
 msgid "Do you want realy add the selected text to the clipboard?"
 msgstr "Ви справді хочете додати виділений текст у буфер обміну?"
 
 #. Translators: Title of a dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:103
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:104
 msgid "Adding text to clipboard"
 msgstr "Додавання тексту в буфер обміну"
 
 #. Translators: message presented when the text has been added to the clipboard.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:108
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:120
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:109
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:121
 msgid "Added"
 msgstr "Додано"
 
 #. Translators: message presented when the text cannot be added to the clipboard.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:111
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:123
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:112
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py:124
 msgid "Cannot add"
 msgstr "Неможливо додати"
 
@@ -1014,71 +839,71 @@ msgid "Any key with modifier key combination"
 msgstr "Будь-яка клавіша з комбінацією клавіші-модифікатора"
 
 #. Translators: message to user to report keys remanence is on.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:190
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:262
 msgid "Keys's remanence activation on"
 msgstr "Залипання клавіш увімкнено"
 
 #. Translators: message to user to report keys remanence is off.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:196
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:268
 msgid "Keys's remanence activation off"
 msgstr "Залипання клавіш вимкнено"
 
 #. Translators: message to user to report numpad navigation mode change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:328
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:400
 msgid "Standard use of the numeric keypad enabled"
 msgstr "Стандартне використання цифрової клавіатури увімкнено"
 
 #. Translators: message to user to report numpad navigation mode change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:331
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:403
 msgid "Standard use of the numeric keypad disabled"
 msgstr "Стандартне використання цифрової клавіатури вимкнено"
 
 #. Translators: title for the Command Keys Selective Announcement Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:512
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:595
 msgid "Command keys selective Announcement"
 msgstr "Вибіркове промовляння командних клавіш"
 
 #. the keyboard key list box
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:615
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:693
 msgid "Check &excluded keys:"
 msgstr "Встановити &винятки для клавіш:"
 
 #. the modifiers keys list box
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:630
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:708
 msgid "Pressed W&ith modifier key combination:"
 msgstr "Натиснуто &з модифікатором:"
 
 #. Translators: This is a label of a button appearing
 #. on Command Keys Selective Announcement Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:649
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:727
 msgid "&Check all modifier combinations"
 msgstr "&Позначити всі комбінації модифікаторів"
 
 #. Translators: This is a label of a button appearing
 #. on Command Keys Selective Announcement Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:655
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:733
 msgid "&Uncheck all modifier combinations"
 msgstr "&Зняти позначки з усіх комбінацій модифікаторів"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:694
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:772
 msgid "Do not speak command &keys"
 msgstr "Не промовляти командні &клавіші"
 
 #. Translators: the text of a message box dialog
 #. in Command keys selective announcement dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:699
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:777
 #, python-format
 msgid "Do you want to save changes made in \"%s\" mode?"
 msgstr "Хочете зберегти зміни, внесені в режимі \"%s\"?"
 
 #. Translators: message to user when there is no more checked command key.
 #. Translators: message to user when there is no more checked command key .
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:832
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:851
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:910
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:929
 msgid "No more checked command key"
 msgstr "Більше немає встановлених командних клавіш"
 
@@ -1103,7 +928,7 @@ msgstr "&Категорії:"
 #. Translators: This is the label for a checkListBox in the TextAnalyzer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:89
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:310
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1285
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1349
 msgid "S&ymbols:"
 msgstr "&Символи:"
 
@@ -1403,83 +1228,83 @@ msgid "&Accept"
 msgstr "&Прийняти"
 
 #. Translators: this is the title of NVDA and Applications audio Channels manager dialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:61
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:58
 msgid "NVDA and running Applications audio manager"
 msgstr "Аудіодиспетчер NVDA та запущених програм"
 
 #. Translators: This is the label for a listbox
 #. in NVDA and audio Applications manager dialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:72
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:69
 msgid "Applications:"
 msgstr "Програми:"
 
 #. Translators: This is the label for a group
 #. in NVDA and audio Applications manager dialog
 #. Translators: part of message for announcement of application volume level.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:86
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:83
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:40
 msgid "Volume"
 msgstr "Гучність"
 
 #. Translators: This is a label for a choice box
 #. in NVDA and audio Applications manager dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:93
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:90
 msgid "&Volume:"
 msgstr "&Гучність:"
 
 #. Translators: This is the label for a checkbox
 #. in NVDA and audio Applications manager dialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:102
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:99
 msgid "&Muted"
 msgstr "&Вимкнуто"
 
 #. Translators: This is the label for a group
 #. in NVDA and audio Applications manager dialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:107
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:104
 msgid "Balance"
 msgstr "Баланс"
 
 #. Translators: This is a label for a choice box
 #. in NVDA and audio Applications manager dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:114
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:111
 msgid "&Left:"
 msgstr "&Зліва:"
 
 #. Translators: This is a label for a choice box
 #. in NVDA and audio Applications manager dialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:124
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:121
 msgid "&Right:"
 msgstr "&Справа:"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:209
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:206
 msgid "refresh terminated"
 msgstr "оновлення перервано"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:216
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:213
 msgid "Please wait, refreshing list"
 msgstr "Будь ласка зачекайте, список оновлюється"
 
 #. Translators: volume is mute
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:276
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:385
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:273
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:382
 msgid "mute"
 msgstr "заглушити"
 
 #. for some unknown reason, nvda volume object cannot be retrieved.
 #. so volume changes are not available
 #. Translators: volume cannot be changed for NVDA
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:321
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:318
 msgid "Volume changes are  not available for NVDA"
 msgstr "Зміна гучності недоступна для NVDA"
 
 #. Translators: volume is unmute
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:388
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:385
 msgid "unmute"
 msgstr "увімкнути звук"
 
 #. Translators: message to user to inform
 #. hat the NVDA channel levels cannot be set to zero simultaneously
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:457
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:454
 msgid "The volume of NVDA channels cannot be zero both simultaneously"
 msgstr "Гучність обидвох каналів NVDA не може дорівнювати нулю одночасно"
 
@@ -1487,7 +1312,7 @@ msgstr "Гучність обидвох каналів NVDA не може дор
 #. Translators: message to user to report incompatibility with another add-on.
 #. cannot split sound for NVDA
 #. cannot toggle sound
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:489
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:486
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:526
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:592
 msgid "Not available cause of conflict with another add-on. See NVDA log"
@@ -1585,7 +1410,7 @@ msgstr "Режим глибокого сну недоступний. актив�
 #. Translators: part of message for announcement of speakers volume level.
 #. Translators: This is the label for a group of main volume options in the computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControl.py:42
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:607
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:606
 msgid "Main volume"
 msgstr "Гучність системи"
 
@@ -1655,7 +1480,7 @@ msgstr "NVDA та всі програми {appTo}"
 #. Translators: This is the label for a group in computer settings panel.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:19
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:23
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:591
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:590
 msgid "Volume control"
 msgstr "Керування гучністю"
 
@@ -1915,82 +1740,82 @@ msgid "%s dialog is allready open"
 msgstr "Діалог %s уже відкрито"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:18
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:54
 msgid "Font:"
 msgstr "Шрифт:"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:22
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:58
 #, python-format
 msgid "Family: %s"
 msgstr "Сімейство шрифтів: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:27
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:63
 #, python-format
 msgid "Name: %s"
 msgstr "Ім'я: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:33
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:69
 #, python-format
 msgid "Size: %s"
 msgstr "Розмір: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:81
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:117
 #, python-format
 msgid "Text's alignment: %s"
 msgstr "Вирівнювання тексту: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:135
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:140
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:145
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:150
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:155
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:171
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:176
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:181
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:186
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:191
 #, python-format
 msgid "Attributes: %s"
 msgstr "Атрибути: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:181
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:217
 #, python-format
 msgid "Vertical alignment: %s"
 msgstr "Вертикальне вирівнювання: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:198
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:234
 #, python-format
 msgid "Position: %s"
 msgstr "Позиція: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:253
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:289
 #, python-format
 msgid "Paragraph's indentation: %s"
 msgstr "Відступ абзацу: %s"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:285
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:321
 #, python-format
 msgid "style: %s"
 msgstr "стиль: %s"
 
 #. Translators: a type of line spacing (E.g. single line spacing).
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:310
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:346
 #, python-format
 msgid "Line spacing: %s"
 msgstr "Міжрядковий інтервал: %s"
 
 #. Translators: this is a element in report formatting dialog box.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:330
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:366
 #, python-format
 msgid "Indentation: %s"
 msgstr "Відступ: %s"
 
 #. Translators: this is the title of information dialog
 #. to show formatting informations.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:337
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:373
 msgid "Formatting's Informations"
 msgstr "Інформація про форматування"
 
@@ -2179,22 +2004,20 @@ msgid "Display speech history records"
 msgstr "Показати записи історії мовлення"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:143
-msgid "Report previous record of the speech history and copy it to clipboard"
-msgstr ""
-"Промовити попередній запис історії мовлення та скопіювати його в буфер обміну"
+msgid "Report previous record of the speech history"
+msgstr "Промовити попередній запис історії мовлення"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:149
 msgid ""
-"Report current record of the speech history and copy it to clipboard. Twice: "
-"display speech history"
+"Report current record of the speech history.Pressing Twice: copy it to "
+"clipboard. Pressing three: display speech history"
 msgstr ""
-"Промовити поточний запис історії мовлення та скопіювати його в буфер обміну. "
-"Двічі: показати історію мовлення"
+"Промовити поточний запис історії мовлення. Двічі: скопіювати його до буфера "
+"обміну. Тричі: показати історію мовлення"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:154
-msgid "Report next record of the speech history and copy it to clipboard"
-msgstr ""
-"Промовити наступний запис історії мовлення та скопіювати його в буфер обміну"
+msgid "Report next record of the speech history"
+msgstr "Промовити наступний запис історії мовлення"
 
 #. Translators: Input help mode message
 #. for restart NVDA in default or debug log level command.
@@ -2430,14 +2253,12 @@ msgstr "Проаналізувати абзац під системним кур
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:320
 msgid "Move to next line with irregularity detected by text analyzer"
-msgstr ""
-"Перейти до наступного рядка з невідповідністю, виявленого аналізатором тексту"
+msgstr "Перейти до наступного рядка з відхиленням, що виявив аналізатор тексту"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:325
 msgid "Move to previous line with irregularity detected by text analyzer"
 msgstr ""
-"Перейти до попереднього рядка з невідповідністю, виявленого аналізатором "
-"тексту"
+"Перейти до попереднього рядка з відхиленням, що виявив аналізатор тексту"
 
 #. Translators: Input help mode message
 #. for manageUserConfigurations script commands.
@@ -2645,35 +2466,39 @@ msgid "Configuration reset"
 msgstr "Скидання конфігурації"
 
 #. Translators: default message to user when of minute timer ends.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:131
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:134
 msgid "It's time"
 msgstr "Час минув"
 
 #. Translators: choice label to report spelling errors with a beep.
 #. Translators: choice label to report analysis detection with a beep.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:154
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:168
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:157
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:172
 msgid "Beep"
 msgstr "Сигнал"
 
 #. Translators: choice label to report  spelling errors with a sound.
 #. Translators: choice label to report  analysis detection with a sound.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:156
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:170
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:159
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:174
 msgid "Sound"
 msgstr "Звук"
 
 #. Translators: choice label to report spelling errors with speech message.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:158
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:161
 msgid "Message"
 msgstr "Повідомлення"
 
 #. Translators: choice label to no reporting spelling errors
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:160
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\addonConfig.py:163
 msgid "nothing"
 msgstr "нічого"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:41
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:30
+msgid "Press F1 for help"
+msgstr "Натисніть F1 для отримання довідки"
+
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:37
 msgid ""
 "Some changes have been made. You must save the configuration and restart "
 "NVDA for these changes to take effect. Would you like to do it now?"
@@ -2682,55 +2507,55 @@ msgstr ""
 "щоб ці зміни набули чинності. Чи хочете ви зробити це зараз?"
 
 #. Translators: A message to user
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:51
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:47
 msgid "Don't forget to save the configuration for the changes to take effect !"
 msgstr "Не забудьте зберегти конфігурацію, щоб зміни набули чинності!"
 
 #. Translators: This is the label for the Installed features dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:60
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:56
 msgid "Features's installation"
 msgstr "Встановлення функцій"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:83
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:79
 msgid "Do not install"
 msgstr "Не встановлювати"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:84
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:80
 msgid "Install"
 msgstr "Встановити"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:85
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:81
 msgid "Install without gesture"
 msgstr "Встановити без жестів"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:90
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:86
 msgid "Display &systray icons and running application windows list:"
 msgstr ""
 "Показати піктограми &області сповіщень і список вікон запущених програм:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:97
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:93
 msgid "&Complex symbols edition help:"
 msgstr "&Довідка щодо редагування складних символів:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:103
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:99
 msgid "&Focused application's informations:"
 msgstr "&Інформація про програму у фокусі:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:110
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:106
 msgid "&Extended Virtual Buffer:"
 msgstr "&Розширений віртуальний буфер:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:117
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:113
 msgid "C&lipboard command announcement:"
 msgstr "О&голошення команд буфера обміну:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:124
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:120
 msgid ""
 "Anno&uncement of the preselected folder in \"Open\", \"Save\", \"Save as\" "
 "dialog boxes:"
@@ -2739,299 +2564,307 @@ msgstr ""
 "«Зберегти як»:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:131
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:127
 msgid "&NVDA's log Files:"
 msgstr "&файли журналу NVDA:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:138
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:134
 msgid "Speech &history:"
 msgstr "Історія &мовлення:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:144
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:140
 msgid "&Keyboard keys renaming:"
 msgstr "&Перейменування клавіш клавіатури:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:151
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:147
 msgid "C&ommand keys selective announcement:"
 msgstr "В&ибіркове оголошення командних клавіш:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:158
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:154
 msgid "Minute &timer:"
 msgstr "&Таймер:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:164
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:160
 msgid "NVDA's &restart:"
 msgstr "Перезапуск &NVDA:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:170
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:166
 msgid "Display visible items making up the foreground &object:"
 msgstr "Показ видимих елементів, що утворюють &об'єкт переднього плану:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:177
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:173
 msgid "&Voice profile switching:"
 msgstr "&Перемикання голосового профілю:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:184
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:180
 msgid "Ke&ys's remanence:"
 msgstr "Залипання &клавіш:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:190
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:186
 msgid "Volu&me's control:"
 msgstr "Керування &гучністю:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:196
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:192
 msgid "&audio split:"
 msgstr "&розділення аудіо:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:202
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:198
 msgid "&Development's tools:"
 msgstr "&Інструменти розробки:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:208
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:204
 msgid "&Date and time - supplements:"
 msgstr "Доповнені &дата і час:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:214
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:210
 msgid "Text anal&ysis:"
 msgstr "Аналіз &тексту:"
 
 #. Translators: This is the label for a listbox in the FeaturesInstallation settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:220
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:216
 msgid "Temporar&y audio device:"
 msgstr "Тимчасовий &пристрій виводу:"
 
 #. Translators: This is the label for the settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:383
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1101
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:379
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1135
 msgid "NVDA enhancements"
 msgstr "Покращення NVDA"
 
 #. Translators: This is the label for a group of editing options in the
 #. NVDAEnhancement settings panel
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:405
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:400
 msgid "Editing"
 msgstr "Редагування"
 
-#. bug fix in nvda 2020.3
-#. so hide it for nvda version higher or equal to this version
-#. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:413
-msgid "&Report next word on deletion"
-msgstr "&Промовити наступне слово при видаленні"
-
 #. Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:421
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:406
 msgid "maximum number of last &used symbols recorded:"
 msgstr "максимальна кількість останніх &записаних складених символів:"
 
 #. Translators: This is the label for a group in NVDAEnhancement settings panel
 #. Translators: title of informations dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:432
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:122
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:417
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:123
 msgid "Speech history"
 msgstr "Історія мовлення"
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:438
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:423
 msgid "&Number the records "
 msgstr "&Нумерувати записи "
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:443
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:428
 msgid "&Display records in ascending order"
 msgstr "&Показувати записи в порядку зростання"
 
 #. Translators: This is the label for a group NVDAEnhancement settings panel
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:452
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:437
 msgid "Browser"
 msgstr "Браузер"
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:458
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:443
 msgid "&Browse in loop"
 msgstr "&Циклічна навігація"
 
 #. Translators: This is the label for a group of editing options in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:465
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:450
 msgid "reporting spelling errors"
 msgstr "інформування про орфографічні помилки"
 
 #. Translators: This is the label for a choice box in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:471
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1376
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:456
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1440
 msgid "Report &by:"
 msgstr "Тип &повідомлення:"
 
 #. Translators: This is the label for a group of editing options in the
 #. NVDAEnhancement settings panel
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:484
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1163
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:469
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1197
 msgid "Clipboard"
 msgstr "Буфер обміну"
 
 #. Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:490
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:475
 msgid "maximum number of reported characters:"
 msgstr "максимальна кількість промовлених символів:"
 
 #. Translators: choice for no limit
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:496
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:481
 msgid "No limit"
 msgstr "Немає обмежень"
 
 #. Translators: This is the label for the options settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:544
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:524
 msgid "Computer"
 msgstr "Комп'ютер"
 
 #. Translators: This is the label for a group of editing options in the computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:563
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:544
 msgid "Windows"
 msgstr "Windows"
 
 #. Translators: This is the label for a checkbox in the Computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:569
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:550
 msgid "&No object description in Windows ribbons"
 msgstr "&Немає опису об’єкта у стрічках Windows"
 
 #. Translators: This is the label for a checkbox in the Computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:576
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:557
 msgid "Automatically &maximize windows"
 msgstr "Автоматично &розгортати вікна"
 
 #. Translators: This is the label for a checkbox in the Computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:582
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:563
 msgid "Report &windows clock's time with seconds"
 msgstr "&Промовляти час із секундами"
 
+#. Translators: This is the label for a group of editing options in the computer settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:572
+msgid "Windows explorer"
+msgstr "Провідник Windows"
+
+#. Translators: This is a label for a choice box in computer settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:578
+msgid "Number of items to &keep for reduced path:"
+msgstr "Кількість папок для &збереження скороченого шляху:"
+
+#. Translators: This is the label for a checkbox in the Computer settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:585
+msgid "Report folder name of Reversed path with levels"
+msgstr "Вказувати рівні зі зворотнім шляхом до папки"
+
 #. Translators: This is the label for a group in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:596
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:595
 msgid "Main and NVDA volume"
 msgstr "Гучність системи та гучність NVDA"
 
 #. Translators: This is the label for a checkbox in the computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:602
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:601
 msgid "Set on &volume at the loading of the add-on"
 msgstr "Встановлювати &гучність під час завантаження додатка"
 
 #. Translators: This is a label for a choice box in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:613
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:612
 msgid "&Threshold of recovery of the volume:"
 msgstr "&Поріг відновлення гучності:"
 
 #. Translators: This is a label for a choice box in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:620
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:619
 msgid "Recovery &level:"
 msgstr "&Рівень відновлення:"
 
 #. Translators: This is the label for a group of NVDA volume options in the computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:625
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:624
 msgid "NVDA volume"
 msgstr "Гучність nvda"
 
 #. Translators: This is a label for a choice box in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:631
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:630
 msgid "T&hreshold of recovery of the volume:"
 msgstr "П&оріг відновлення гучності:"
 
 #. Translators: This is a label for a choice box in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:637
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:636
 msgid "&Recovery level:"
 msgstr "&Рівень відновлення:"
 
 #. Translators: This is the label for a group in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:643
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:642
 msgid "Volume change"
 msgstr "Зміна гучності"
 
 #. Translators: This is a label for a choice box in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:649
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:648
 msgid "Ste&ps's size:"
 msgstr "Розмір &кроку:"
 
 #. Translators: This is the label for a checkbox in the computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:656
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:655
 msgid "R&eport volume changes"
 msgstr "&Повідомляти про зміну гучності"
 
 #. Translators: This is the label for a checkbox in the computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:661
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:660
 msgid "&Increase speakers volume if necessary"
 msgstr "&За потреби збільшити гучність динаміків"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:670
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:669
 msgid "Temporary audio device"
 msgstr "Тимчасовий пристрій виводу"
 
 #. Translators: This is the label for a checkbox in the Computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:676
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:675
 msgid "Ask for confirmation"
 msgstr "Запитувати підтвердження"
 
 #. Translators: This is a label for a choice box in computer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:681
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:680
 msgid "ma&ximum waiting time for confirmation (in seconds):"
 msgstr "&максимальний час очікування підтвердження (у секундах):"
 
 #. Translators: This is the label for the Advanced settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:742
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:747
 msgid "advanced"
 msgstr "додатково"
 
 #. becarefull: order is important
 #. Translators: This is a label for a choice item in Advanced options settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:745
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:750
 msgid "For No NVDA's version"
 msgstr "Не для цієї версії NVDA"
 
 #. PSOE_NoVersion
 #. Translators: This is a label for a choice item in Advanced options settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:747
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:752
 msgid "For Only the NVDA's snapshot versions"
 msgstr "Тільки для снепшот-версій NVDA"
 
 #. PSOE_SnapshotVersions
 #. Translators: This is a label for a choice item in Advanced options settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:749
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:754
 msgid "Only until the next NVDA restart"
 msgstr "Лише до наступного перезапуску NVDA"
 
 #. PSOE_UntilNVDARestart
 #. Translators: This is a label for a choice item in Advanced options settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:751
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:756
 msgid "For all NVDA's versions"
 msgstr "Для всіх версій NVDA"
 
 #. Translators: This is the label for a choice box in the advanced settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:765
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:771
 msgid "&Play sound on logged errors:"
 msgstr "&Відтворення звуку під час журналювання помилок:"
 
 #. Translators: This is the label for a checkbox in the Advanced settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:771
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:777
 msgid "&Title dialog with add-on name"
 msgstr "&Показувати в заголовках діалогів назву додатка"
 
 #. Translators: This is the label for a comboBox in the advanced settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:776
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:782
 msgid "&Delay between repeat of same gesture:"
 msgstr "&Затримка між повтореннями одного і того ж жесту:"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:786
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:792
 msgid ""
 "&Do not take account of the option called \"Report object descriptions\" "
 "during the display of the dialog box same as confirmation"
@@ -3039,66 +2872,81 @@ msgstr ""
 "&Не брати до уваги опцію, що зветься «Читати опис об’єкта», в діалогах "
 "підтвердження"
 
+#. Translators: This is the label for a group of editing options in the computer settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:801
+msgid "Key Repeat"
+msgstr "Повторення клавіш"
+
+#. Translators: This is the label for a checkbox in the Advanced settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:807
+msgid "&Limit key repeats"
+msgstr "&Обмежити повторення клавіш"
+
+#. Translators: This is the label for a choice box in the advanced settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:812
+msgid "Delay between &repeat (in ms):"
+msgstr "Затримка між &повтореннями (у мс):"
+
 #. Translators: This is the label for the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:823
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1153
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:855
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1187
 msgid "Keyboard"
 msgstr "Клавіатура"
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:844
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:876
 msgid "Keys's remanence"
 msgstr "Залипання клавіш"
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:850
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:882
 msgid "&Only NVDA key in remanence"
 msgstr "Залипає &тільки клавіша NVDA"
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:855
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:887
 msgid "Activate &remanence at NVDA's start"
 msgstr "Увімкнути &залипання під час запуску NVDA"
 
 #. Translators: This is the label for a combobox in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:860
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1183
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:892
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1217
 msgid "&Remanence's delay (in milliseconds):"
 msgstr "&Залипання (у мілісекундах):"
 
 #. Translators: This is the label for a check box in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:869
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:901
 msgid "Play &sound at the start of remanence"
 msgstr "Відтворювати &звук на початку залипання"
 
 #. Translators: This is the label for a check box in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:874
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:906
 msgid "Play sound at the &end of remanence"
 msgstr "Відтворювати звук &наприкінці залипання"
 
 #. Translators: This is the label for a check box in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:879
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:911
 msgid "Special remanence for &Gmail.com"
 msgstr "Особливе залипання для &Gmail.com"
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:888
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:920
 msgid "Numeric keypad"
 msgstr "Цифрова клавіатура"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:894
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:926
 msgid "&Allow the standard use of the numeric keypad"
 msgstr "&Дозволити стандартне використання цифрової клавіатури"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:900
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:932
 msgid "&Enable the standard use of the numeric keypad at NVDA's start"
 msgstr ""
 "&Увімкнути стандартне використання цифрової клавіатури під час запуску NVDA"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:906
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:938
 msgid "&Enable / disable numeric keypad's standard use with num lock key"
 msgstr ""
 "&Увімкнути/вимкнути стандартне використання цифрової клавіатури за допомогою "
@@ -3106,106 +2954,126 @@ msgstr ""
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:912
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1185
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:944
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1219
 msgid "Numeric lock"
 msgstr "Цифрова клавіатура"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:918
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:950
 msgid "&Report ?he activated state at NVDA starting"
 msgstr "&Повідомити про стан активації під час запуску NVDA"
 
 #. Translators: This is the label for the Advanced settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:982
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1014
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:112
 msgid "Update"
 msgstr "Оновлення"
 
 #. Translators: This is the label for a checkbox in the Update settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:995
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1027
 msgid "Automatically check for &updates"
 msgstr "Автоматично перевіряти наявність &оновлень"
 
 #. Translators: This is the label for a checkbox in the Update settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1000
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1032
 msgid "Update also release versions to &development versions"
 msgstr "Також оновлювати стабільні версії до версій &у розробці"
 
 #. translators: this is a label for a button in update settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1007
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1039
 msgid "&Check for update"
 msgstr "&Перевірити оновлення"
 
 #. translators: this is a label for a button in update settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1013
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1045
 msgid "View &history"
 msgstr "Переглянути &історію"
 
 #. Translators: title of add-on settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1090
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1122
 msgid "Settings"
 msgstr "Налаштування"
 
 #. Translators: This is the label for a group of cursor's movement options in the
 #. NVDAEnhancement profile settings panel
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1111
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1145
 msgid "Cursor's moving"
 msgstr "Переміщення курсора"
 
 #. Translators: This is the label for a combobox in the NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1116
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1150
 msgid "&Punctuation/symbol level on word movement:"
 msgstr "&Рівень промовляння символів під час переміщення по словах:"
 
 #. Translators: This is the label for an item in combobox in the
 #. NVDAEnhancement settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1122
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1156
 msgid "Current configuration profile's level"
 msgstr "Рівень поточного конфігураційного профілю"
 
 #. Translators: This is the label for a checkbox in the Keyboard profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1169
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1203
 msgid "Text used as a &separator between contents added to the clipboard."
 msgstr ""
 "Текст, що використовується як &роздільник, між блоками, доданими до буфера "
 "обміну."
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1174
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1208
 msgid "&Add text before clipboard datas"
 msgstr "&Додавати текст перед даними буфера обміну"
 
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1179
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1213
 msgid "Ask &confirmation before adding"
 msgstr "Запитувати &підтвердження перед додаванням"
 
 #. Translators: This is the label for a combobox in the Keyboard profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1191
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1225
 msgid "&On profile activation:"
 msgstr "&При активації профілю:"
 
 #. Translators: label Choice in Activate NumLock combo box
 #. ANL_NoChange constant
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1197
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1231
 msgid "Do nothing"
 msgstr "Нічого не робити"
 
 #. Translators: Choice in Activate NumLock combo box
 #. ANL_Off constant
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1200
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1234
 msgid "Desactivate"
 msgstr "Вимкнути"
 
 #. Translators: Choice in Activate NumLock combo box
 #. ANL_On
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1203
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1237
 msgid "Activate"
 msgstr "Увімкнути"
 
+#. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1245
+msgid "Key blocking"
+msgstr "Блокування клавіш"
+
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1211
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1251
+msgid "Block insert key"
+msgstr "Блокувати клавішу insert"
+
+#. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1256
+msgid "Block capslock key"
+msgstr "Блокувати клавішу capslock"
+
+#. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1266
+msgid "Characters echo"
+msgstr "Ехо символів"
+
+#. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1272
 msgid ""
 "Still speak &non-alphanumeric characters when keyboard echo by characters is "
 "disabled"
@@ -3214,189 +3082,189 @@ msgstr ""
 "вимкнено"
 
 #. Translators: This is the label for the text analyzer profile settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1239
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1303
 msgid "Text analysis"
 msgstr "Аналіз тексту"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1262
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1326
 msgid "&Activate text analyzer"
 msgstr "&Увімкнути аналізатор тексту"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1267
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1331
 msgid "Activate text analyzer at add-on's &start"
 msgstr "Увімкнути аналізатор тексту &під час запуску додатка"
 
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1273
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1337
 msgid "Symbols match"
 msgstr "Збіг символів"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1279
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1343
 msgid "Report &discrepancies"
 msgstr "Повідомляти про &невідповідності"
 
 #. anomalies group
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1304
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1368
 msgid "Anomalies"
 msgstr "Відхилення"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1310
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1374
 msgid "Report a&nomalies"
 msgstr "Повідомляти про &відхилення"
 
 #. Translators: This is the label for a checkListbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1315
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1379
 msgid "&Verify:"
 msgstr "&Перевіряти:"
 
 #. Translators: label for a checkListbox in TextAnalysis settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1332
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1396
 msgid "&For symbols:"
 msgstr "&Для символів:"
 
 #. formatting changes groupe
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1344
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1408
 msgid "Formatting"
 msgstr "Форматування"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1350
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1414
 msgid "Report &changes"
 msgstr "Повідомляти про &зміни"
 
 #. Translators: This is the label for a checkListbox in the TextAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1355
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1419
 msgid "Ty&pe:"
 msgstr "&Тип:"
 
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
 #. Translators: alert message for text analysis reporting.
 #. Translators: default alert message when text analyzer detect something.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1370
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:127
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1434
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:129
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:347
 msgid "Alert"
 msgstr "Попередження"
 
 #. Translators: This is the label for a choice box in the textAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1389
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1453
 msgid "Sounds:"
 msgstr "Звуки:"
 
 #. Translators: This is the label for a choice box in the textAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1402
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1466
 msgid "Frequency:"
 msgstr "Частота:"
 
 #. Translators: This is the label for a choice box in the textAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1407
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1471
 msgid "Length:"
 msgstr "Тривалість:"
 
 #. Translators: This is the label for a edit box in the textAnalyzer settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1412
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1476
 msgid "Message:"
 msgstr "Повідомлення:"
 
 #. Translators: title of add-on settings dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1563
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1627
 #, python-format
 msgid "Profile settings's %s"
 msgstr "Налаштування профілю %s"
 
 #. Translators: choice label to report analysis detection with speech message.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:172
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:176
 msgid "Alert message"
 msgstr "Попереджувальне повідомлення"
 
 #. Translators: choice label to report analysis detection by the number of detected elements .
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:174
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:178
 msgid "Detections's number"
 msgstr "Кількість виявлень"
 
 #. Translators: choice label to report analysis detection with description of each detected elements.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:176
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:180
 msgid "detailed description"
 msgstr "детальний опис"
 
 #. Translators: choice item for reporting extra spaces.label
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:180
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:184
 msgid "The multiple contiguous spaces"
 msgstr "Кілька суміжних пробілів"
 
 #. Translators: choice item for reporting space or tab at end of text.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:182
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:186
 msgid "The space or Tab at end"
 msgstr "Пробіл або Tab в кінці"
 
 #. Translators: choice item for reporting strayed or non spaced punctuations.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:184
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:188
 msgid "The isolated or non spaced punctuations"
 msgstr "Розділові знаки без пробілів"
 
 #. Translators: choice item for reporting uppercase missing or inversed.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:186
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:190
 msgid "The uppercase missing or inversed"
 msgstr "Верхній регістр відсутній або інвертований"
 
 #. Translators: choice label for reporting symbols which need space before it.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:188
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:192
 msgid "The required space before the symbol"
 msgstr "Необхідний пробіл перед символом"
 
 #. Translators: choice label for reporting symbols which need need space after it.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:190
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:194
 msgid "The required space after the symbol"
 msgstr "Необхідний пробіл після символу"
 
 #. Translators: choice label for reporting symbols which must not be preceded by a space.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:192
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:196
 msgid "unexpected space before symbol"
 msgstr "неочікуваний пробіл перед символом"
 
 #. Translators: choice label for reporting symbols which must not be followed by a space")
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:194
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:198
 msgid "unexpected space after symbol"
 msgstr "неочікуваний пробіл після символу"
 
 #. Translators: choice item for reporting font name change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:198
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:202
 msgid "Font's name"
 msgstr "Назва шрифту"
 
 #. Translators: choice item for reporting font size change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:200
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:204
 msgid "Font's size"
 msgstr "Розмір шрифту"
 
 #. Translators: choice item for reporting font attributes change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:202
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:206
 msgid "Font's attributes"
 msgstr "Атрибути шрифту"
 
 #. Translators: choice item for reporting tyle change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:204
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:208
 msgid "Style"
 msgstr "Стиль"
 
 #. Translators: choice item for reporting color change.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:206
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:210
 msgid "Color"
 msgstr "Колір"
 
 #. Translators: message to user to report tex analyzer activation.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:454
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:458
 msgid "Text analyzer activated"
 msgstr "Аналізатор тексту увімкнено"
 
 #. Translators: message to user to report text analyzer desactivation.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:459
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:463
 msgid "Text analyzer desactivated"
 msgstr "Аналізатор тексту вимкнено"
 
@@ -3422,8 +3290,8 @@ msgstr "&Позначити все"
 #. translators: this is a label for a button in addons import dialog.
 #. translators: this is a label for a button in Profiles Import Dialog.
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:73
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1126
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1528
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1084
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1486
 msgid "&Uncheck all"
 msgstr "&Зняти всі позначки"
 
@@ -3456,19 +3324,19 @@ msgid "Error: the \"%s\" folder cannot be deleted"
 msgstr "Помилка: папку \"%s\" не можна видалити"
 
 #. Translators: This is the title of the user configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:297
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:255
 msgid "User Configurations's management"
 msgstr "Керування конфігураціями користувача"
 
 #. Translators: This is the label of list box appearing
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:314
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:272
 msgid "Configuration's &folders:"
 msgstr "П&апки конфігурації:"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:326
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:284
 msgid "&Restart NVDA with this configuration's folder"
 msgstr "&Перезапустити NVDA з папкою цієї конфігурації"
 
@@ -3477,56 +3345,56 @@ msgstr "&Перезапустити NVDA з папкою цієї конфігу
 #. change label button to "Prepare")
 #. Translators:  label of  prepare button
 #. in user configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:333
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:404
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:291
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:362
 msgid "&Prepare this folder"
 msgstr "&Підготувати цю папку"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:338
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:296
 msgid "&Delete this folder"
 msgstr "&Видалити цю папку"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:344
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:302
 msgid "Empt&y this folder"
 msgstr "Очистит&и цю папку"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:349
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:307
 msgid "E&xplore this folder"
 msgstr "П&ереглянути цю папку"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:357
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:315
 msgid "Add &new folder"
 msgstr "Додати &нову папку"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:363
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:321
 msgid "Add &existing folder"
 msgstr "Додати &наявну папку"
 
 #. change the update button label to "modify"
 #. Translators:  label of  modify button
 #. in user configuration management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:398
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:356
 msgid "&Modify this folder"
 msgstr "&Змінити цю папку"
 
 #. Translators: message to user to report
 #. that the selected user configuration folder   is the current active configuration.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:432
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:390
 msgid "Active configuration"
 msgstr "Активна конфігурація"
 
 #. Translators: message to confirm nvda restarting with this configuration.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:476
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:434
 #, python-format
 msgid ""
 "Do you really want to restart NVDA with this user configuration's folder: %s?"
@@ -3535,7 +3403,7 @@ msgstr ""
 "%s?"
 
 #. Translators: message to ask user to continue.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:524
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:482
 msgid ""
 "You are going to modify the active configuration's folder. Do you want to "
 "continue?"
@@ -3543,121 +3411,121 @@ msgstr ""
 "Ви збираєтеся змінити папку активної конфігурації. Ви хочете продовжити?"
 
 #. Translators: message to user to report error on creation folder.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:551
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:509
 #, python-format
 msgid "Impossible to create %s folder"
 msgstr "Неможливо створити папку %s"
 
 #. Translators: message to user to say that active configuration path cannot be deleted.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:587
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:545
 msgid "Active configuration path cannot be deleted"
 msgstr "Шлях до активної конфігурації неможливо видалити"
 
 #. Translators: message to confirm folder deletion.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:591
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:549
 #, python-format
 msgid "Do you really want to delete the \"%s\" folder?"
 msgstr "Ви справді хочете видалити папку \"%s\"?"
 
 #. Translators: message to user to report that the folder is emppty.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:622
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:580
 #, python-format
 msgid "The folder %s is already empty"
 msgstr "Папка %s вже порожня"
 
 #. Translators: message to user to confirm the dump of the folder.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:626
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:584
 #, python-format
 msgid "Do you really want to delete all the content of the \"%s\" folder?"
 msgstr "Ви справді хочете видалити весь вміст папки \"%s\"?"
 
 #. Translators: message to user to report end of deletion.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:653
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1220
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1622
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:611
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1178
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1580
 msgid "End of deletion"
 msgstr "Кінець видалення"
 
 #. Translators: this is the title of Update folder dialog.
 #. Translators: This is the title of the Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:687
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1076
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:645
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1034
 #, python-format
 msgid "Preparation of %s folder"
 msgstr "Підготовка папки %s"
 
 #. Translators: This is the label of list box appearing
 #. in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:709
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:667
 msgid "Import from &folder:"
 msgstr "Імпорт із &папки:"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:718
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:676
 msgid "Import &add-ons"
 msgstr "Імпорт &додатків"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:722
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:680
 msgid "Import speech &dictionaries"
 msgstr "Імпорт мовленнєвих &словників"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:726
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:684
 msgid "Import ponctuation/symbol &pronunciations"
 msgstr "Імпорт &вимови символів і знаків пунктуації"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:730
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:688
 msgid "Import input &gesture changes"
 msgstr "Імпорт змінених &жестів вводу"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:734
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:692
 msgid "Import configuration p&rofiles"
 msgstr "Імпорт &конфігураційних профілів"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:738
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:696
 msgid "Import &NVDA parameters (normal configuration)"
 msgstr "Імпорт параметрів &NVDA (нормальна конфігурація)"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:741
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:699
 msgid "Import all the &configuration"
 msgstr "Імпорт всієї &конфігурації"
 
 #. Translators: message to user to report end of import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:775
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:733
 msgid "Import terminated"
 msgstr "Імпорт завершено"
 
 #. Translators: message to user there is no addon to import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:827
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:832
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:785
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:790
 msgid "No addon to import"
 msgstr "Немає додатка для імпорту"
 
 #. Translators: message to report that add-on already exists and ask user to replace it.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:855
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:813
 #, python-format
 msgid "%s add-on exists. Do you want to replace it?"
 msgstr "Додаток %s існує. Ви бажаєте його замінити?"
 
 #. Translators: message to user there is no addon to import.
 #. Translators: message to user there is no profile to import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:884
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:889
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:842
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:847
 msgid "No profile to import"
 msgstr "Немає профілю для імпорту"
 
 #. Translators: message to user that there is no speech dictionary to import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:905
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:910
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:863
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:868
 msgid "No speech dictionary to import"
 msgstr "Немає мовленнєвого словника для імпорту"
 
 #. Translators: message when speechDicts folder exists and will be replaced.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:916
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:874
 msgid ""
 "The configuration folder contains already speech dictionaries. Do you want "
 "to replace them?"
@@ -3665,11 +3533,11 @@ msgstr ""
 "Папка конфігурації вже містить мовленнєві словники. Ви хочете їх замінити?"
 
 #. Translators: message to user to report no ponctuation\symbol prononunciations to import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:950
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:908
 msgid "No ponctuation or symbol pronunciations to import"
 msgstr "Відсутні для імпорту налаштування вимови символів і знаків пунктуації"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:968
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:926
 msgid ""
 "The configuration folder already contains symbol/punctuation pronunciations. "
 "Do you want to replace it?"
@@ -3678,12 +3546,12 @@ msgstr ""
 "хочете її замінити?"
 
 #. Translators: message to user when there is no input gesture change to import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:995
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:953
 msgid "No input gesture change to import"
 msgstr "Немає змінених жестів вводу для імпорту"
 
 #. Translators: message to inform user that there are already input gesture changes.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1001
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:959
 msgid ""
 "The configuration folder already contains input gesture changes. Do you want "
 "to replace them?"
@@ -3691,12 +3559,12 @@ msgstr ""
 "Папка конфігурації вже містить зміни жестів вводу. Ви хочете їх замінити?"
 
 #. Translators: message to user when there is no nvda normal configuration to import.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1019
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:977
 msgid "No NVDA normal configuration to import"
 msgstr "Немає звичайної конфігурації NVDA для імпорту"
 
 #. Translators: message to inform user that there is already NVDA normal configuration .
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1025
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:983
 msgid ""
 "The configuration folder already contains NVDA normal configuration. Do you "
 "want to replace it?"
@@ -3704,7 +3572,7 @@ msgstr ""
 "Папка конфігурації вже містить нормальну конфігурацію NVDA. Ви хочете її "
 "замінити?"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1042
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1000
 #, python-format
 msgid ""
 "The \"%s\" folder contains data that will be erased during copying. Do you "
@@ -3714,13 +3582,13 @@ msgstr ""
 "бажаєте продовжити?"
 
 #. Translators: This is the title of the modify user configuration dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1081
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1039
 #, python-format
 msgid "Modification of %s folder"
 msgstr "Зміна папки %s"
 
 #. Translators: This is the title of the Addons Import dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1091
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1049
 msgid "Addons's import"
 msgstr "Імпорт додатків"
 
@@ -3728,111 +3596,111 @@ msgstr "Імпорт додатків"
 #. on the Addon import dialog.
 #. the addons list
 #. Translators: This is a label appearing on Convert to HTML dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1111
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1069
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:673
 msgid "&Add-ons:"
 msgstr "&Додатки:"
 
 #. translators: this is a label for a button in addons import dialog.
 #. translators: this is a label for a button in Profiles Import Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1122
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1524
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1080
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1482
 msgid "Check &all"
 msgstr "Позначити &все"
 
 #. translators: this is a label for a button in addons import dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1130
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1088
 msgid "&Delete existing add-ons"
 msgstr "&Видалити наявні додатки"
 
 #. translators: this is a label for a button in addons import dialog.
 #. translators: this is a label for a button in Profiles Import Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1134
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1536
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1092
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1494
 msgid "&Import"
 msgstr "&Імпорт"
 
 #. Translators: message to user to report that all items are checked.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1158
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1560
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1116
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1518
 msgid "all items are checked"
 msgstr "всі елементи позначено"
 
 #. Translators: message to user to report that all items are unchecked.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1175
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1577
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1133
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1535
 msgid "all items are unchecked"
 msgstr "всі позначки знято"
 
 #. Translators: message to ask user if he want continue to delete current add-ons.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1199
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1157
 #, python-format
 msgid "Do you really want to delete all add-ons of %s folder?"
 msgstr "Ви справді хочете видалити всі додатки папки %s?"
 
 #. Translators: message box title
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1201
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1603
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1159
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1561
 msgid "confirmation"
 msgstr "підтвердження"
 
 #. Translators: message to user to say that there is no addon checked.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1229
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1187
 msgid "there is no add-on checked"
 msgstr "немає позначених додатків"
 
 #. Translators: This is the title of the adding new folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1243
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1201
 msgid "Adding new folder"
 msgstr "Додавання нової папки"
 
 #. Translators: This is the label of the edit field appearing
 #. on the adding new folder  dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1261
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1219
 msgid "folder's userName:"
 msgstr "ім'я папки:"
 
 #. Translators: This is the label of the edit field appearing
 #. on the adding new folder dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1267
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1225
 msgid "folder's &location:"
 msgstr "&розташування папки:"
 
 #. translators: this is a label for a button in adding new folder  dialog.
 #. translators: this is a label for a button
 #. in the Existing User Configuration Adding Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1274
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1412
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1232
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1370
 msgid "&Browse..."
 msgstr "&Огляд..."
 
 #. translators: this is a label for a button in adding new folder  dialog.
 #. translators: this is a label for a button
 #. in the Existing User Configuration Adding Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1281
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1420
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1239
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1378
 msgid "&Add"
 msgstr "&Додати"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1301
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1440
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1259
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1398
 msgid "Folder's selection"
 msgstr "Вибір папки"
 
 #. Translators: message to user to ask for the username of configuration.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1325
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1283
 msgid "you must specify the username of the folder"
 msgstr "необхідно вказати ім'я папки"
 
 #. Translators: message to user to ask for location of the configuration.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1334
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1455
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1292
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1413
 msgid "You must specify the path to the location of the configuration"
 msgstr "Необхідно вказати шлях до розташування конфігурації"
 
 #. Translators: message to user to report folder already in the list.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1347
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1466
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1305
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1424
 #, python-format
 msgid ""
 "The folder with \"%s\" username is already in the list of configuration "
@@ -3840,11 +3708,11 @@ msgid ""
 msgstr "Папка з іменем користувача \"%s\" вже є в списку папок конфігурації "
 
 #. Translators: message to user to ask an other username.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1354
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1312
 msgid "choose another username"
 msgstr "виберіть інше ім'я користувача"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1364
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1322
 #, python-format
 msgid ""
 "The \"%s\" folder already exists and it's a nvda configuration folder. Do "
@@ -3853,7 +3721,7 @@ msgstr ""
 "Папка \"%s\" вже існує, і це папка конфігурації nvda. Ви все одно хочете її "
 "додати?"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1370
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1328
 #, python-format
 msgid ""
 "The \"%s\" folder already exists and it's not a nvda configuration folder. "
@@ -3863,65 +3731,65 @@ msgstr ""
 "додати?"
 
 #. Translators: This is the title of the Existing User Configuration Adding Dialog
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1387
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1345
 msgid "Adding existing folder"
 msgstr "Додавання наявної папки"
 
 #. Translators: This is the label of the edit field appearing
 #. in the Existing User Configuration Adding Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1405
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1363
 msgid "folder's &path:"
 msgstr "&шлях папки:"
 
 #. Translators: message to user to indicate that the folder is not an user configuration folder.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1479
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1437
 msgid "The folder is not user configuration's folder"
 msgstr "Ця папка не є папкою конфігурації користувача"
 
 #. Translators: This is the title of the Profiles import dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1493
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1451
 msgid "Configuration profiles's import"
 msgstr "Імпорт конфігураційних профілів"
 
 #. Translators: This is the label of list box appearing
 #. on the Profiles Import dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1514
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1472
 msgid "&Profiles:"
 msgstr "&Профілі:"
 
 #. translators: this is a label for a button in Profiles Import Dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1532
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1490
 msgid "&Delete existing profiles"
 msgstr "&Видалити наявні профілі"
 
 #. Translators: message to ask user if he want continue to delete current profiles.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1601
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1559
 #, python-format
 msgid "Do you really want to delete all profiles of %s folder?"
 msgstr "Ви справді хочете видалити всі профілі папки %s?"
 
 #. Translators: there is no profile checked.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1631
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1589
 msgid "There is no profile checked"
 msgstr "Немає позначених профілів"
 
 #. Translators: message to report that profile already exists and ask user to replace it.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1643
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1601
 #, python-format
 msgid "%s profile exists. Do you want to replace it?"
 msgstr "Профіль %s вже існує. Ви хочете його замінити?"
 
 #. Translators: message to user to report error on creation of folder.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1655
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1613
 msgid "Impossible to import profils"
 msgstr "Неможливо імпортувати профілі"
 
 #. Translators: label of information area.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:128
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:129
 msgid "Records:"
 msgstr "Записи:"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:102
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:101
 msgid ""
 "The current configuration of the \"Voice profile switching\"feature is not "
 "compatible with this add-on's version, All selectors have been released and "
@@ -3932,11 +3800,11 @@ msgstr ""
 "видалено. Вибачте за незручності."
 
 #. Translators: the title of a message box dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:106
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:105
 msgid "warning"
 msgstr "увага"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:222
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:221
 msgid ""
 "Impossible, the synthesizer of voice profile {voiceProfileName} associated "
 "to selector {selector} is not available. Do you want to free this selector?"
@@ -3945,65 +3813,65 @@ msgstr ""
 "селектором {selector}, недоступний. Ви хочете звільнити цей селектор?"
 
 #. Translators: the title of a message box dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:226
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:225
 msgid "Synthesizer error"
 msgstr "Помилка синтезатора"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:233
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:272
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:232
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:271
 msgid "Selector {selector}: {name}"
 msgstr "Селектор {selector}: {name}"
 
 #. Translators: message to user to report there is no other voice profile.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:269
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:268
 msgid "no other selector set to voice profile"
 msgstr "жоден інший селектор не встановлено на голосовий профіль"
 
 #. Translators: message to user to report  there is no voice profile set.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:277
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:276
 msgid "no selector set to voice profile"
 msgstr "немає селектора, встановленого на голосовий профіль"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:307
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:407
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:411
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:301
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:401
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:405
 msgid "yes"
 msgstr "так"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:307
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:409
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:411
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:301
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:403
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:405
 msgid "no"
 msgstr "ні"
 
 #. Translators: message to user to report the association
 #. between selector and voice profile.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:359
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:353
 msgid "{name} voice profile set to selector {selector}"
 msgstr "{name} голосовий профіль встановлено на селектор {selector}"
 
 #. Translators: this a message to inform that all slots are not associated.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:378
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:372
 msgid "all selectors are freed from their vocal profile"
 msgstr "усі селектори звільняються від свого голосового профілю"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:419
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:413
 msgid "Automatic language switching (when supported)"
 msgstr "Автоматичне перемикання мови (якщо підтримується)"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:420
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:414
 msgid "Automatic dialect switching (when supported)"
 msgstr "Автоматичне перемикання діалектів (якщо підтримується)"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:421
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:415
 msgid "Punctuation/symbol level"
 msgstr "Рівень промовляння символів"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:422
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:416
 msgid "Trust voice's language when processing characters and symbols"
 msgstr "Довіряти голосу для вибраної мови обробку знаків та символів"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:424
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:418
 msgid ""
 "Include Unicode Consortium data (including emoji) when processing characters "
 "and symbols"
@@ -4011,114 +3879,114 @@ msgstr ""
 "Включити дані Консорціуму Юнікоду (включно з емодзі) при обробці знаків та "
 "символів"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:426
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:420
 msgid "Delayed descriptions for characters on cursor movement"
 msgstr "Відкладений опис символів під час переміщення курсора"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:430
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:424
 msgid "Capital pitch change percentage"
 msgstr "Відсоток зміни тону для великих букв"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:431
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:425
 msgid "Say cap before capitals"
 msgstr "Промовляти велика перед великими літерами"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:432
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:426
 msgid "Beep for capitals"
 msgstr "Звуковий сигнал для великих літер"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:433
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:427
 msgid "Use spelling functionality if supported"
 msgstr "Використовувати функцію посимвольного читання, якщо підтримується"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:441
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:435
 #, python-format
 msgid "selector: %s"
 msgstr "селектор: %s"
 
 #. Translators: text to report voice profile name.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:444
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:438
 #, python-format
 msgid "Voice profile name: %s"
 msgstr "Назва голосового профілю: %s"
 
 #. Translators:text to report that it is normal configuration.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:449
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:443
 #, python-format
 msgid "Associated under %s configuration profile"
 msgstr "Поєднано з профілем конфігурації %s"
 
 #. Translators: text to report synthesizer name.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:453
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:447
 #, python-format
 msgid "Synthesizer: %s"
 msgstr "Синтезатор: %s"
 
 #. Translators:  label to report synthesizer output device .
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:457
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:451
 #, python-format
 msgid "Output device: %s"
 msgstr "Пристрій виводу: %s"
 
 #. Translators: This is the title of the Selectors Management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:511
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:505
 #, python-format
 msgid "Voice profile selectors's Management of profile %s"
 msgstr "Керування селекторами голосових профілів %s"
 
 #. Translators: part of label of selectors list.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:520
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:514
 msgid "&Selectors"
 msgstr "&Селектори"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:544
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:757
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:538
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:751
 msgid "free"
 msgstr "вільний"
 
 #. Translators: This is the label for a checkbox appearing
 #. in the various settings panel.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:575
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:569
 msgid "&Use selectors associated under normal cconfiguration's profile"
 msgstr "&Використовувати селектори, поєднані з профілем звичайної конфігурації"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:595
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:589
 msgid "&Activate voice profile"
 msgstr "&Активувати голосовий профіль"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:599
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:593
 msgid "A&ssociate voice profile"
 msgstr "&Поєднати голосовий профіль"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:602
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:596
 msgid "&Modify voice profile"
 msgstr "&Змінити голосовий профіль"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:605
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:599
 msgid "&Free selector"
 msgstr "&Звільнити селектор"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:608
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:602
 msgid "&Free all selectors"
 msgstr "&Звільнити всі селектори"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:612
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:606
 msgid "Voice profile's &informations"
 msgstr "&інформація про голосовий профіль"
 
 #. Translators: this is the title of informationdialog box
 #. to show voice profile informations.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:662
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:656
 msgid "Voice profile 's informations"
 msgstr "Інформація про голосовий профіль"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:685
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:679
 msgid ""
 "Selector {selector} is already set to {voiceProfileName} voice profile. Do "
 "you want to replace this voice profile?"
@@ -4126,7 +3994,7 @@ msgstr ""
 "Для селектора {selector} уже встановлено голосовий профіль "
 "{voiceProfileName}. Замінити цей голосовий профіль?"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:726
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:720
 msgid ""
 "Do you really want to free selector {selector} associated to the voice "
 "profile \"{voiceProfileName}\"?"
@@ -4135,7 +4003,7 @@ msgstr ""
 "профілем «{voiceProfileName}»?"
 
 #. Translators: the label of a message box dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:741
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:735
 msgid ""
 "Do you really want to free all selectors set to this configuration profile?"
 msgstr ""
@@ -4143,7 +4011,7 @@ msgstr ""
 "конфігурації?"
 
 #. Translators: This is the title of the modify voice profile dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:820
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:814
 msgid "Modify voice profile "
 msgstr "Змінити голосовий профіль "
 
@@ -4151,8 +4019,8 @@ msgstr "Змінити голосовий профіль "
 #. on the Modify voice profile dialog.
 #. Translators: This is the label of the edit field appearing
 #. in the associate voice profile dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:830
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:892
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:824
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:886
 msgid "voice profile name:"
 msgstr "назва голосового профілю:"
 
@@ -4160,19 +4028,19 @@ msgstr "назва голосового профілю:"
 #. on modify voice profile Dialog.
 #. Translators: This is a label of a button appearing
 #. on associate voice profile dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:837
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:899
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:831
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:893
 msgid "&Default"
 msgstr "&Стандартно"
 
 #. Translators: message to user: profile's name must be set.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:863
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:946
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:857
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:940
 msgid "You must set the name of voice profile"
 msgstr "Ви повинні встановити назву голосового профілю"
 
 #. Translators: This is the title of the Associate voice profile dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:874
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:868
 msgid "Voice profile association"
 msgstr "Поєднання голосового профілю"
 
@@ -4184,7 +4052,7 @@ msgstr "Список піктограм області сповіщень"
 #. the list box
 #. Translators: this is the label of the list appearing
 #. in NVDA - System tray icons 's list dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:74
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:69
 msgid "&Icons"
 msgstr "&Піктограми"
 
@@ -4192,7 +4060,7 @@ msgstr "&Піктограми"
 #. in NVDA - System tray icons 's list dialog.
 #. Translators: The label for a button in
 #. the "list of visible items making up the object in the foreground" dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:89
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:84
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:221
 msgid "&Right click"
 msgstr "&Правий клік"
@@ -4201,12 +4069,12 @@ msgstr "&Правий клік"
 #. in NVDA - System tray icons 's list dialog.
 #. Translators: The label for a button in
 #. the "list of visible items making up the object in the foreground" dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:93
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:88
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:217
 msgid "&Left click"
 msgstr "&Лівий клік"
 
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:97
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:92
 msgid "Dou&ble left click"
 msgstr "&Подвійний лівий клік"
 
@@ -4685,13 +4553,13 @@ msgid "\"%s\" dialog is already open"
 msgstr "Діалог \"%s\" вже відкрито"
 
 #. Translators: Message indicating no context sensitive help is available for the control or dialog.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py:42
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py:40
 msgid "No help available here."
 msgstr "Тут немає розділу довідки."
 
 #. Translators: Message shown when trying to display context sensitive help,
 #. indicating that	the user guide could not be found.
-#: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py:59
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\contextHelpEx.py:57
 msgid "No user guide found."
 msgstr "Посібник користувача не знайдено."
 
@@ -4726,6 +4594,22 @@ msgstr "Увага: цифрову клавіатуру увімкнено"
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\utils\runInThread.py:42
 msgid "interrupted"
 msgstr "перервано"
+
+#. Translators: Message presented in input help mode.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:96
+msgid ""
+"Report the short path of focused folder or file  of Windows Explorer. Twice: "
+"report the full path. Three time: copy the full path  to the clipboard"
+msgstr ""
+"Повідомляє короткий шлях до папки чи файлу в провіднику Windows. Двічі: "
+"повідомляє повний шлях. Тричі: копіює повний шлях до буфера обміну"
+
+#. Translators: Message presented in input help mode.
+#: addon\globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:137
+msgid ""
+"Report the path of the file or folder under the cursor of Windows Explorer "
+"by going up the folders tree"
+msgstr "Оголошує зворотній шлях до об'єкта під курсором у провіднику Windows"
 
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\__init__.py:135
 msgid "Elements's searching"
@@ -4781,6 +4665,202 @@ msgstr "Елементи:"
 #: addon\globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:225
 msgid "Move &navigator object to it"
 msgstr "Перемістити на елемент &об'єкт навігатора"
+
+#~ msgid ""
+#~ "This add-on has been developed with the participation of Daniel Poiraud.\n"
+#~ "It adds to NVDA:\n"
+#~ "1- The features\n"
+#~ "Some features can be enabled or disabled individually.\n"
+#~ "* Display of the list of icons in the notification area,\n"
+#~ "* Display of the windows list of running applications,\n"
+#~ "* Help in the composition of a symbol that is complex such as, for "
+#~ "example, an a e related, a symbol power of 2\n"
+#~ "\tand possibility to add its own categories and symbols,\n"
+#~ "* Extension of the functionality of the virtual buffer\n"
+#~ "\tfor browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft "
+#~ "Edge, and Google Chrome:\n"
+#~ "\n"
+#~ "\t* new commands for navigation mode (paragraph, division, anchor, main "
+#~ "area,\n"
+#~ "\t* new types of elements for the dialog box opened by \"NVDA+F7\" (radio "
+#~ "button, paragraph, frame, check box, ...) with the announcement of the "
+#~ "number of items found,\n"
+#~ "\t* commands for the tables:\n"
+#~ "\tannounce the cells of a row /column, go to first/last cell in the row/"
+#~ "current column, move the column/row preceding or following with "
+#~ "announcement possible of the cells in that row/column,\n"
+#~ "\t* announcement of the URL of the document,\n"
+#~ "\t* navigate in loop,\n"
+#~ "* Announcement of the function associated with editing commands\n"
+#~ "\tstyle Copy, Paste, etc.,\n"
+#~ "* Announcement of the name of the folder pre-selected in the dialog boxes "
+#~ "like \"Open\", \"Save\", \"Save as\", ...,\n"
+#~ "* display of information on the focused application:\n"
+#~ "\t* the name and version number of the application,\n"
+#~ "\t* the current profile configuration,\n"
+#~ "\t* the add-on loaded for the application,\n"
+#~ "*\tNVDA logs tools:\n"
+#~ "\t* Opening the previous or current log,\n"
+#~ "\t* copy of the path of these in the clipboard.\n"
+#~ "\n"
+#~ "* history of voice speech,\n"
+#~ "* renaming keyboard keys,\n"
+#~ "* selective announcement of command keyboard keys,\n"
+#~ "* simple countdown timer,\n"
+#~ "* display of visible elements making up the object in the foreground,\n"
+#~ "* fast switching of voice profile,\n"
+#~ "* remanence of the modifier keys,\n"
+#~ "* shutdown, reboot or hibernate the computer,\n"
+#~ "* control the main or NVDA volume:\n"
+#~ "\t* mute or unmute volume for the focused application,\n"
+#~ "\t* establishment of the main Windows or NVDA volume at the start of add-"
+#~ "on,\n"
+#~ "\t* modification of main volume or audio stream's volume of focused "
+#~ "application.\n"
+#~ "\t* automatic recovery of the main volume and NVDA when the extension is "
+#~ "loaded,\n"
+#~ "\t* orientation of NVDA audio output,\n"
+#~ "* Tools for development of add-on\n"
+#~ "* supplements regarding the date and time: copy date and time to "
+#~ "clipboard, report time with seconds\n"
+#~ "* user configurations management and NVDA restarting with precise "
+#~ "configuration,\n"
+#~ "* text analyser,\n"
+#~ "* announcement of the cursor position in the edit boxes,\n"
+#~ "* temporary use of an audio output device without impacting the NVDA "
+#~ "configuration,\n"
+#~ "* quick add-ons activation / desactivation,\n"
+#~ "\n"
+#~ "\n"
+#~ "2- The options\n"
+#~ "* remove the announcement from the description of the objects in the "
+#~ "Windows ribbons,\n"
+#~ "* proclaim the word focused when deleting a word (for NVDA versions lower "
+#~ "than 2020.3),\n"
+#~ "* automatically maximize the foreground window,\n"
+#~ "* announce punctuations and symbols when moving by word in a document,\n"
+#~ "* possibility of signaling spelling errors by a double beep or by a voice "
+#~ "announcement instead of the sound emitted by NVDA.\n"
+#~ "\n"
+#~ "3- The advanced options\n"
+#~ "* report, with a sound, the registration of an error in the NVDA log also "
+#~ "for the final versions and release candidate of NVDA,\n"
+#~ "* Caption dialog title with the name of the add-on,\n"
+#~ "* Do not take account of the option called Report object descriptions "
+#~ "during the display of the dialog box style confirmation,\n"
+#~ "* use numeric keypad's keys conventionally.\n"
+#~ "\n"
+#~ "\n"
+#~ "4- Various other elements\n"
+#~ "* presentation formatting of the text in a dialog box,\n"
+#~ "* sub-menus to explore the program folders or configuration,\n"
+#~ "* script to quickly restart NVDA,\n"
+#~ "* script to emulate the \"Applications\" key,\n"
+#~ "* script to close all open windows,\n"
+#~ "* possibility of executing scripts in the \"Input gestures\" dialog (for "
+#~ "versions of NVDA greater than 2020.3),\n"
+#~ "* automatic selection of the category in the dialog \"Command "
+#~ "gestures\",\n"
+#~ "* Selection of the last parameter used in the synthesizer parameter "
+#~ "loop.\n"
+#~ msgstr ""
+#~ "Цей додаток розроблено за участю Даніеля Пуаро.\n"
+#~ "Він додає до NVDA:\n"
+#~ "1- функції\n"
+#~ "Деякі функції можна увімкнути або вимкнути окремо.\n"
+#~ "* Відображення списку піктограм області сповіщень,\n"
+#~ "* Відображення списку вікон запущених програм,\n"
+#~ "* Допомога у складанні складного символу,\n"
+#~ "\tможливість додавати свої категорії та символи,\n"
+#~ "* Розширення функціональності віртуального буфера\n"
+#~ "\tдля браузерів Mozilla Firefox, Microsoft Internet Explorer, Microsoft "
+#~ "Edge і Google Chrome:\n"
+#~ "\n"
+#~ "\t* нові команди для режиму огляду (абзац, розділ, якір, основна "
+#~ "область,\n"
+#~ "\t* нові типи елементів для діалогу, що відкривається командою "
+#~ "«NVDA+F7» (радіокнопка, абзац, фрейм, прапорець, ...) з оголошенням "
+#~ "кількості знайдених елементів,\n"
+#~ "\t* команди для таблиць:\n"
+#~ "\tоголошення комірки рядка/стовпця, перейти до першої/останньої комірки в "
+#~ "рядку/поточному стовпці, перейти до попереднього чи наступного стовпця/"
+#~ "рядка з можливістю оголошення комірок у цьому рядку/стовпці,\n"
+#~ "\t* оголошення URL-адреси документа,\n"
+#~ "\t* циклічна навігація,\n"
+#~ "* Оголошення функції, пов'язаної з командами редагування\n"
+#~ "\tКопіювати, Вставити тощо,\n"
+#~ "* Оголошення назви попередньо вибраної папки, в таких діалогах як "
+#~ "«Відкрити», «Зберегти», «Зберегти як», ...,\n"
+#~ "* відображення інформації про програму у фокусі:\n"
+#~ "\t* назва та номер версії програми,\n"
+#~ "\t* поточний конфігураційний профіль,\n"
+#~ "\t* додаток, завантажений для програми,\n"
+#~ "\t* Інструменти журналів NVDA:\n"
+#~ "\t* Відкриття попереднього або поточного журналу,\n"
+#~ "\t* копіювання їхнього шляху в буфер обміну.\n"
+#~ "\n"
+#~ "* історія мовлення,\n"
+#~ "* перейменування клавіш клавіатури,\n"
+#~ "* вибіркове оголошення командних клавіш клавіатури,\n"
+#~ "* простий зворотний таймер,\n"
+#~ "* відображення видимих елементів, що утворюють об'єкт на передньому "
+#~ "плані,\n"
+#~ "* швидке перемикання голосового профілю,\n"
+#~ "* залипання клавіш-модифікаторів,\n"
+#~ "* вимкнення, перезавантаження або режим глибокого сну комп'ютера,\n"
+#~ "* керування системною гучністю, або гучністю NVDA:\n"
+#~ "\t* вимкнути або увімкнути гучність для програми у фокусі,\n"
+#~ "\t* встановлення системної гучності Windows або NVDA під час запуску "
+#~ "додатка,\n"
+#~ "\t* зміна системної гучності або гучності аудіопотоку програми у фокусі.\n"
+#~ "\t* автоматичне відновлення системної гучності та гучності NVDA після "
+#~ "завантаження додатка,\n"
+#~ "\t* орієнтація аудіовиходу NVDA\n"
+#~ "* Засоби для розробки додатків\n"
+#~ "* Поліпшення, пов'язані з датою та часом: можливість копіювати дату та "
+#~ "час у буфер обміну, оголошення часу разом з секундами,\n"
+#~ "* керування конфігураціями користувача і перезапуск NVDA з точною "
+#~ "конфігурацією,\n"
+#~ "* аналізатор тексту,\n"
+#~ "* оголошення позиції курсора в полях редагування,\n"
+#~ "* використання тимчасового пристрою виводу звуку без впливу на "
+#~ "конфігурацію NVDA,\n"
+#~ "* швидке увімкнення/вимкнення додатків,\n"
+#~ "\n"
+#~ "\n"
+#~ "2- Параметри\n"
+#~ "* прибрати оголошення опису об'єктів у стрічках Windows,\n"
+#~ "* оголошувати слово у фокусі під час видалення слова (для версій NVDA "
+#~ "нижчих, ніж 2020.3),\n"
+#~ "* автоматично розгортати вікно на передньому плані,\n"
+#~ "* оголошувати розділові знаки та символи при переміщенні по слову в "
+#~ "документі.\n"
+#~ "* можливість оповіщення про орфографічні помилки подвійним звуковим "
+#~ "сигналом, або голосовим сповіщенням замість звуку, який видає NVDA.\n"
+#~ "\n"
+#~ "3- Розширені параметри\n"
+#~ "* повідомляти звуком про реєстрацію помилки в журналі NVDA також для "
+#~ "фінальних версій, та реліз-кандидатів NVDA,\n"
+#~ "* Заголовок діалогу з назвою додатка,\n"
+#~ "* Не брати до уваги опцію, що зветься «Читати опис об’єкта», в діалогах "
+#~ "підтвердження\n"
+#~ "* * використання клавіш цифрової клавіатури звичайним способом.\n"
+#~ "\n"
+#~ "\n"
+#~ "4- Різні інші елементи\n"
+#~ "* представлення інформації про форматування тексту в окремому вікні,\n"
+#~ "* окреме підменю для перегляду папки NVDA або конфігурації користувача,\n"
+#~ "* сценарій для швидкого перезапуску NVDA,\n"
+#~ "* сценарій для емуляції клавіши \"Контекст\",\n"
+#~ "* сценарій для закриття всіх вікон,\n"
+#~ "* можливість виконання сценаріїв у діалозі «Жести вводу» (для версій NVDA "
+#~ "вище 2020.3),\n"
+#~ "* автоматичний вибір категорії в діалозі \"Жести вводу\",\n"
+#~ "* Вибір останнього використаного параметра в кільці налаштувань "
+#~ "синтезатора.\n"
+
+#~ msgid "&Report next word on deletion"
+#~ msgstr "&Промовити наступне слово при видаленні"
 
 #~ msgid "percent"
 #~ msgstr "відсотків"

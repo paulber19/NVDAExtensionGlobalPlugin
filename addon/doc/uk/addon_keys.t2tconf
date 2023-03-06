@@ -44,6 +44,7 @@
 %!PostProc (html): MAIN_KEY_TOGGLE_MUTE nvda+shift+pause
 %!PostProc (html): MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR nvda+,
 %!PostProc (html): MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR nvda+shift+,
+
 % script shell command keys definitions
 %!PostProc (html): KEY_APPLICATION_INFORMATIONS a
 %!PostProc (html): KEY_OBJECTS_LIST b
@@ -51,6 +52,7 @@
 %!PostProc (html): KEY_SET_TEMPORARY_AUDIO_DEVICE shift+c
 %!PostProc (html): KEY_LEAVEUP_TEMPORARY_AUDIO_DEVICE control+c
 %!PostProc (html): KEY_COPY_DATETIME d
+%!PostProc (html): KEY_RUNNING_ADDONS e
 %!PostProc (html): KEY_REPORT_FORMATTING f
 %!PostProc (html): KEY_ADDON_SETTINGS f1
 %!PostProc (html): KEY_PROFILE_SETTINGS control+f1
@@ -64,6 +66,8 @@
 %!PostProc (html): KEY_LINE_TEXT_ANALYZER control+f6
 %!PostProc (html): KEY_SENTENCE_TEXT_ANALYZER windows+f6
 %!PostProc (html): KEY_PARAGRAPH_TEXT_ANALYZER shift+control+f6
+%!PostProc (html): KEY_MOVETONEXTALERT_ANALYZER alt+f6
+%!PostProc (html): KEY_MOVETOPREVIOUSALERT_ANALYZER alt+shift+f6
 %!PostProc (html): KEY_POSITION_REPORT f7
 %!PostProc (html): KEY_SOUND_SPLIT_MANAGER f8
 %!PostProc (html): KEY_DISPLAY_SPEECH_HISTORY f9
@@ -73,39 +77,38 @@
 %!PostProc (html): KEY_MODULE_GUIDE g
 %!PostProc (html): KEY_HELP_SHELL h
 %!PostProc (html): KEY_LOG_VIEW j
+%!PostProc (html): KEY_CLOSE_ALL_WINDOWS k
 %!PostProc (html): KEY_USER_CONFIG_MANAGEMENT n
 %!PostProc (html): KEY_SAY_CURRENT_FOLDERNAME o
 %!PostProc (html): KEY_SAY_CURRENT_FOLDERPATH control+o
 %!PostProc (html): KEY_VOICE_PROFIL_SWITCHING p
 %!PostProc (html): KEY_QUICK_ADDONS_ACTIVATION q
+
 %!PostProc (html): KEY_SHUTDOWN r
 %!PostProc (html): KEY_TOGGLE_MUTE s
 %!PostProc (html): KEY_VOLUME_ON control+s
 %!PostProc (html): KEY_TOOLSFORADDON t
 %!PostProc (html): KEY_USER_INPUT_GESTURE u
 %!PostProc (html): KEY_MANAGE_VOICE_PROFIL v
-%!PostProc (html): KEY_CLOSE_ALL_WINDOWS k
-%!PostProc (html): KEY_RUNNING_ADDONS e
 %!PostProc (html): KEY_ADDING_TO_CLIP x
 %!PostProc (html): KEY_CLEAR_CLIP control+x
 %!PostProc (html): KEY_REPORT_SPEECH_SETTINGS z
 %!PostProc (html): KEY_DISPLAY_SPEECH_SETTINGS control+z
-
-%!PostProc (html): KEY_APP_VOLUME_UP стрілка вгору
-%!PostProc (html): KEY_APP_VOLUME_DOWN стрілка вниз
-%!PostProc (html): KEY_APP_VOLUME_MAX сторінка вгору
-%!PostProc (html): KEY_APP_VOLUME_MIN сторінка вниз
-%!PostProc (html): KEY_APP_VOLUME_PREVIOUS_LEVEL бекспейс
-%!PostProc (html): KEY_NVDA_VOLUME_UP shift+стрілка вгору
-%!PostProc (html): KEY_NVDA_VOLUME_DOWN shift+стрілка вниз
-%!PostProc (html): KEY_NVDA_VOLUME_MAX shift+сторінка вгору
-%!PostProc (html): KEY_NVDA_VOLUME_MIN shift+сторінка вниз
-%!PostProc (html): KEY_NVDA_VOLUME_PREVIOUS_LEVEL shift+бекспейс
 %!PostProc (html): KEY_MAIN_VOLUME_UP control+стрілка вгору
 %!PostProc (html): KEY_MAIN_VOLUME_DOWN control+стрілка вниз
 %!PostProc (html): KEY_MAIN_VOLUME_MAX control+сторінка вгору
 %!PostProc (html): KEY_MAIN_VOLUME_MIN control+сторінка вниз
 %!PostProc (html): KEY_MAIN_VOLUME_PREVIOUS_LEVEL control+бекспейс
+%!PostProc (html): KEY_NVDA_VOLUME_UP shift+стрілка вгору
+%!PostProc (html): KEY_NVDA_VOLUME_DOWN shift+стрілка вниз
+%!PostProc (html): KEY_NVDA_VOLUME_MAX shift+сторінка вгору
+%!PostProc (html): KEY_NVDA_VOLUME_MIN shift+сторінка вниз
+%!PostProc (html): KEY_NVDA_VOLUME_PREVIOUS_LEVEL shift+бекспейс
+%!PostProc (html): KEY_APP_VOLUME_UP стрілка вгору
+%!PostProc (html): KEY_APP_VOLUME_DOWN стрілка вниз
+%!PostProc (html): KEY_APP_VOLUME_MAX сторінка вгору
+%!PostProc (html): KEY_APP_VOLUME_MIN сторінка вниз
+%!PostProc (html): KEY_APP_VOLUME_PREVIOUS_LEVEL бекспейс
 %!PostProc (html): KEY_SPLIT_RIGHT_FOCUS стрілка вправо
 %!PostProc (html): KEY_SPLIT_RIGHT_ALL control+стрілка вправо
 %!PostProc (html): KEY_SPLIT_LEFT_FOCUS стрілка вліво
