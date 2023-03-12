@@ -294,7 +294,6 @@ class EditableTextEx(EditableText):
 					info = obj.makeTextInfo(textInfos.POSITION_FIRST)
 				info.collapse()
 				info.expand(textInfos.UNIT_LINE)
-				return
 				speech.speakTextInfo(info, unit=textInfos.UNIT_LINE, reason=controlTypes.OutputReason.CARET)
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,

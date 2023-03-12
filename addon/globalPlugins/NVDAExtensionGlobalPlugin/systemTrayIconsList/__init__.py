@@ -19,7 +19,7 @@ from ..utils import contextHelpEx
 
 addonHandler.initTranslation()
 
-
+import windowUtils
 def findWindow(windowClassPath):
 	hd = 0
 	for className in windowClassPath:
@@ -53,10 +53,15 @@ class DisplayNotificationIconsList(
 		# init icons list
 		self.icons = []
 		from winVersion import getWinVer, WinVersion
-		win11 = getWinVer() >= WinVersion(major=10, minor=0, build=22000)
-		if win11:
+		winver = getWinVer() 
+		if winver >= WinVersion(major=10, minor=0, build=22621):
+			# w11 22h2 and upper
+			self.updateIconsList_w11_22h2()
+		elif winver >= WinVersion(major=10, minor=0, build=22000):
+			# w11 and upper
 			self.updateIconsList_w11()
 		else:
+			# w10 and lower
 			self.updateIconsList_w10()
 		self.doGui()
 
@@ -130,6 +135,27 @@ class DisplayNotificationIconsList(
 			self.icons.extend([obj for obj in window.children])
 		else:
 			log.warning("Cannot find window: %s" % ", ".join([str(x) for x in path]))
+
+	def updateIconsList_w11_22h2(self):
+		print("w11_22h2")
+#		self.updateIconsList_w10()
+		#path = (b"Shell_TrayWnd", b"TrayNotifyWnd", b"Windows.UI.Composition.DesktopWindowContentBridge")
+		#hd = findWindow(path)
+		h = winUser.FindWindow("Shell_TrayWnd", None)
+		# Now, lets get the handle of Windows.UI.Input.InputSite.WindowClass window, where the icons reside...
+		hd = windowUtils.findDescendantWindow(h, visible=None, controlID=None, className="Windows.UI.Input.InputSite.WindowClass")
+		if hd:
+			window = NVDAObjects.IAccessible.getNVDAObjectFromEvent(hd, -4, 0)
+			objs = []
+			for obj in window.children:
+				print (obj.name)
+				if obj.name:
+					objs.append(obj)
+			self.icons.extend(objs)
+		else:
+			log.warning("Cannot find window: %s" % ", ".join([str(x) for x in path]))
+
+
 
 	def getPosition(self):
 		index = self.iconsListBox.GetSelection()

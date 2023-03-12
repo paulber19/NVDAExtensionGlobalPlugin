@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin-12.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2023-02-13 09:25+0100\n"
-"PO-Revision-Date: 2023-02-14 11:14+0100\n"
+"POT-Creation-Date: 2023-03-06 11:21+0100\n"
+"PO-Revision-Date: 2023-03-06 19:32+0100\n"
 "Last-Translator: Daniel Gartmann <lists@danielgartmann.dk>\n"
 "Language-Team: \n"
 "Language: da\n"
@@ -157,8 +157,10 @@ msgstr "Vent venligst"
 
 #. Translators: message to report date and time copy to clipboard.
 #. Translators: message to user to report copy to clipboard
+#. Translators: message to user to report path copy to clipboard
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:746
-#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:106
+#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:107
+#: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:124
 msgid "{0} copied to clipboard"
 msgstr "{0} kopieret til udklipsholder"
 
@@ -2016,15 +2018,10 @@ msgid "Display speech history records"
 msgstr "Vis elementerne i talehistorikken"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:143
-#| msgid ""
-#| "Report previous record of the speech history and copy it to clipboard"
 msgid "Report previous record of the speech history"
 msgstr "Oplyser forrige element i talehistorikken"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:149
-#| msgid ""
-#| "Report current record of the speech history and copy it to clipboard. "
-#| "Twice: display speech history"
 msgid ""
 "Report current record of the speech history.Pressing Twice: copy it to "
 "clipboard. Pressing three: display speech history"
@@ -2033,7 +2030,6 @@ msgstr ""
 "udklipsholderen. 3 tryk: Vis talehistorikken"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:154
-#| msgid "Report next record of the speech history and copy it to clipboard"
 msgid "Report next record of the speech history"
 msgstr "Oplys næste element i talehistorikken"
 
@@ -2646,7 +2642,7 @@ msgstr "maksimalt antal senest &anvendte symboler gemt:"
 #. Translators: This is the label for a group in NVDAEnhancement settings panel
 #. Translators: title of informations dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:417
-#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:122
+#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:123
 msgid "Speech history"
 msgstr "Talehistorik"
 
@@ -2726,13 +2722,11 @@ msgstr "Oplys &windows-urets tid i sekunder"
 
 #. Translators: This is the label for a group of editing options in the computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:572
-#| msgid "Windows"
 msgid "Windows explorer"
 msgstr "Windows stifinder"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:578
-#| msgid "Number of seconds to wait before reboot:"
 msgid "Number of items to &keep for reduced path:"
 msgstr "Antal elementer der skal bevares ved reduceret sti:"
 
@@ -2874,7 +2868,6 @@ msgstr "&Begræns gentagelser af taster"
 
 #. Translators: This is the label for a choice box in the advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:812
-#| msgid "&Delay between repeat of same gesture:"
 msgid "Delay between &repeat (in ms):"
 msgstr "Forsinkelse mellem &gentagelser (i ms):"
 
@@ -3810,7 +3803,7 @@ msgid "Configuration reset"
 msgstr "Konfigurationen gendannet"
 
 #. Translators: label of information area.
-#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:128
+#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:129
 msgid "Records:"
 msgstr "Emner:"
 
@@ -4624,6 +4617,28 @@ msgstr "afbrudt"
 #, python-format
 msgid "\"%s\" dialog is already open"
 msgstr "Dialogen %s er allerede åben"
+
+#. Translators: Message presented in input help mode.
+#: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:96
+#| msgid ""
+#| "Report the current time. Twice: report the current date. Third: copy date "
+#| "and time to the clipboard"
+msgid ""
+"Report the short path of focused folder or file  of Windows Explorer. Twice: "
+"report the full path. Three time: copy the full path  to the clipboard"
+msgstr ""
+"Oplyser den korte sti på den markerede mappe eller fil i Windows Stifinder. "
+"To tryk: Oplyser den fuldstændige sti. Tre tryk: Kopiér den fuldstændige sti "
+"til udklipsholderen"
+
+#. Translators: Message presented in input help mode.
+#: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:137
+msgid ""
+"Report the path of the file or folder under the cursor of Windows Explorer "
+"by going up the folders tree"
+msgstr ""
+"Oplyser stien til filen eller mappen, der er under markøren i Windows "
+"Stifinder ved at gå opad i mappestrukturen"
 
 #. Translators: The label of a list item to select the type of object
 #. in the Element List Dialog.
