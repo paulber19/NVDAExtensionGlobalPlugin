@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2023-02-19 09:27+0100\n"
+"POT-Creation-Date: 2023-03-13 16:07+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Umut KORKMAZ <umutkork@gmail.com>\n"
 "Language-Team: cagrid@hotmail.com\n"
@@ -149,8 +149,10 @@ msgstr "Lütfen bekleyin"
 
 #. Translators: message to report date and time copy to clipboard.
 #. Translators: message to user to report copy to clipboard
+#. Translators: message to user to report path copy to clipboard
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:746
-#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:106
+#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:107
+#: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:124
 msgid "{0} copied to clipboard"
 msgstr "{0} panoya kopyalandı"
 
@@ -428,7 +430,7 @@ msgstr "geçerli imleç konumunu bildirme"
 #. Translators: message to report clipboard is empty
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1680
 #: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:281
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:511
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:510
 msgid "Clipboard is empty"
 msgstr "Pano boş"
 
@@ -823,12 +825,12 @@ msgid "select all"
 msgstr "tümünü seç"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:457
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:456
 msgid " one selected object"
 msgstr " bir nesne seçili"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:460
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:459
 #, python-format
 msgid "%s selected objects"
 msgstr "%s seçili nesne"
@@ -2003,8 +2005,6 @@ msgid "Display speech history records"
 msgstr "Konuşma geçmişi kayıtlarını görüntüle"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:143
-#| msgid ""
-#| "Report previous record of the speech history and copy it to clipboard"
 msgid "Report previous record of the speech history"
 msgstr "Konuşma geçmişindeki önceki kaydı bildir"
 
@@ -2018,7 +2018,7 @@ msgstr ""
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:154
 msgid "Report next record of the speech history"
-msgstr "Konuşma geçmişindeki sonraki öğeyi bildir."
+msgstr "Konuşma geçmişindeki sonraki öğeyi bildir"
 
 #. Translators: Input help mode message
 #. for restart NVDA in default or debug log level command.
@@ -2623,7 +2623,7 @@ msgstr "&kayıtlı maksimum son kullanılan sembol sayısı:"
 #. Translators: This is the label for a group in NVDAEnhancement settings panel
 #. Translators: title of informations dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:417
-#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:122
+#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:123
 msgid "Speech history"
 msgstr "Konuşma geçmişi"
 
@@ -2703,13 +2703,11 @@ msgstr "Windows &saatini saniye bilgisiyle birlikte söyle"
 
 #. Translators: This is the label for a group of editing options in the computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:572
-#| msgid "Windows"
 msgid "Windows explorer"
 msgstr "Windows gezgini"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:578
-#| msgid "Number of seconds to wait before reboot:"
 msgid "Number of items to &keep for reduced path:"
 msgstr "Kısaltılmış yol için tutulacak &öğe sayısı:"
 
@@ -2852,7 +2850,7 @@ msgstr "&Tuş tekrarlarını sınırla"
 #. Translators: This is the label for a choice box in the advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:812
 msgid "Delay between &repeat (in ms):"
-msgstr "&Aynı hareket tekrarları  arasındaki gecikme (milisaniye cinsinden): "
+msgstr "&Aynı hareket tekrarları  arasındaki gecikme (milisaniye cinsinden):"
 
 #. Translators: This is the label for the Keyboard settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:855
@@ -3783,7 +3781,7 @@ msgid "Configuration reset"
 msgstr "Konfigürasyon sıfırlandı"
 
 #. Translators: label of information area.
-#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:128
+#: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:129
 msgid "Records:"
 msgstr "Kayıtlar:"
 
@@ -4051,7 +4049,7 @@ msgstr "Sistem Tepsisi Simge Listesi"
 #. the list box
 #. Translators: this is the label of the list appearing
 #. in NVDA - System tray icons 's list dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:69
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:74
 msgid "&Icons"
 msgstr "&Simgeler"
 
@@ -4059,7 +4057,7 @@ msgstr "&Simgeler"
 #. in NVDA - System tray icons 's list dialog.
 #. Translators: The label for a button in
 #. the "list of visible items making up the object in the foreground" dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:84
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:89
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:221
 msgid "&Right click"
 msgstr "S&ağ tık"
@@ -4068,12 +4066,12 @@ msgstr "S&ağ tık"
 #. in NVDA - System tray icons 's list dialog.
 #. Translators: The label for a button in
 #. the "list of visible items making up the object in the foreground" dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:88
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:93
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:217
 msgid "&Left click"
 msgstr "&Sol tık"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:92
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:97
 msgid "Dou&ble left click"
 msgstr "Sol çift &tık"
 
@@ -4594,6 +4592,27 @@ msgstr "kesildi"
 #, python-format
 msgid "\"%s\" dialog is already open"
 msgstr "Halihazırda %s iletişim kutusu açık"
+
+#. Translators: Message presented in input help mode.
+#: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:96
+#| msgid ""
+#| "Report the current time. Twice: report the current date. Third: copy date "
+#| "and time to the clipboard"
+msgid ""
+"Report the short path of focused folder or file  of Windows Explorer. Twice: "
+"report the full path. Three time: copy the full path  to the clipboard"
+msgstr ""
+"Windows gezgininde üzerinde bulunulan öğenin adresini öğe ismini de dahil "
+"ederek bildir. İki kez: tam yolu bildir. Üç kez: tam yolu panoya kopyala"
+
+#. Translators: Message presented in input help mode.
+#: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:137
+msgid ""
+"Report the path of the file or folder under the cursor of Windows Explorer "
+"by going up the folders tree"
+msgstr ""
+"Windows gezgininde üzerinde bulunulan öğenin adresini öğe ismini dahil "
+"etmeden bildir"
 
 #. Translators: The label of a list item to select the type of object
 #. in the Element List Dialog.
