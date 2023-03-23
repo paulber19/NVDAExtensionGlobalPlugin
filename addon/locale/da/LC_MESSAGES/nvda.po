@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: NVDAExtensionGlobalPlugin-12.0\n"
+"Project-Id-Version: NVDAExtensionGlobalPlugin-12.0.4\n"
 "Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2023-03-06 11:21+0100\n"
-"PO-Revision-Date: 2023-03-06 19:32+0100\n"
+"POT-Creation-Date: 2023-03-13 16:07+0100\n"
+"PO-Revision-Date: 2023-03-14 20:31+0100\n"
 "Last-Translator: Daniel Gartmann <lists@danielgartmann.dk>\n"
 "Language-Team: \n"
 "Language: da\n"
@@ -437,7 +437,7 @@ msgstr "Oplæs markørens aktuelle position slået fra"
 #. Translators: message to report clipboard is empty
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1680
 #: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:281
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:511
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:510
 msgid "Clipboard is empty"
 msgstr "Udklipsholderen er tom"
 
@@ -833,12 +833,12 @@ msgid "select all"
 msgstr "vælg alt"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:457
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:456
 msgid " one selected object"
 msgstr "et objekt valgt"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:460
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:459
 #, python-format
 msgid "%s selected objects"
 msgstr "%s objekter valgt"
@@ -1629,7 +1629,7 @@ msgstr "Indtast &beskeden, der skal læses op, når tiden er gået:"
 #. Translators: This is a label for a setting in MinuteTimer dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:142
 msgid "Delay to be alerted before ending (in minutes):"
-msgstr "Delay to be alerted before ending (in minutes):"
+msgstr "Hvor lang tid før afslutning skal der advares (i minutter):"
 
 #. Translators: The label for a button
 #. in Minute Timer Launch dialog to display ring options dialog.
@@ -4070,7 +4070,7 @@ msgstr "Liste med ikoner i Systembakken"
 #. the list box
 #. Translators: this is the label of the list appearing
 #. in NVDA - System tray icons 's list dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:69
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:74
 msgid "&Icons"
 msgstr "&Ikoner"
 
@@ -4078,7 +4078,7 @@ msgstr "&Ikoner"
 #. in NVDA - System tray icons 's list dialog.
 #. Translators: The label for a button in
 #. the "list of visible items making up the object in the foreground" dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:84
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:89
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:221
 msgid "&Right click"
 msgstr "&Højre klik"
@@ -4087,12 +4087,12 @@ msgstr "&Højre klik"
 #. in NVDA - System tray icons 's list dialog.
 #. Translators: The label for a button in
 #. the "list of visible items making up the object in the foreground" dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:88
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:93
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:217
 msgid "&Left click"
 msgstr "&Venstre klik"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:92
+#: globalPlugins\NVDAExtensionGlobalPlugin\systemTrayIconsList\__init__.py:97
 msgid "Dou&ble left click"
 msgstr "Do&bbelt venstreklik"
 
@@ -4620,9 +4620,6 @@ msgstr "Dialogen %s er allerede åben"
 
 #. Translators: Message presented in input help mode.
 #: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:96
-#| msgid ""
-#| "Report the current time. Twice: report the current date. Third: copy date "
-#| "and time to the clipboard"
 msgid ""
 "Report the short path of focused folder or file  of Windows Explorer. Twice: "
 "report the full path. Three time: copy the full path  to the clipboard"
