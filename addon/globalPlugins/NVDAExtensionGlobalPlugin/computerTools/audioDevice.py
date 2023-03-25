@@ -77,6 +77,54 @@ config.conf["speech"]["outputDevice"] = oldOutputDevice
 We use _audioOutputDevice variable set by setSynth method
 """
 
+def playWaveFileEx_2023_1(
+		fileName: str,
+		asynchronous: bool = True,
+		isSpeechWaveFileCommand: bool = False
+):
+	"""plays a specified wave file.
+	@param fileName: the path to the wave file, usually absolute.
+	@param asynchronous: whether the wave file should be played asynchronously
+		If C{False}, the calling thread is blocked until the wave has finished playing.
+	@param isSpeechWaveFileCommand: whether this wave is played as part of a speech sequence.
+	"""
+	#global fileWavePlayer, fileWavePlayerThread
+	from synthDriverHandler import _audioOutputDevice
+	f = wave.open(fileName,"r")
+	if f is None: raise RuntimeError("can not open file %s"%fileName)
+	if nvwave.fileWavePlayer is not None:
+		nvwave.fileWavePlayer.stop()
+	if not nvwave.decide_playWaveFile.decide(
+		fileName=fileName,
+		asynchronous=asynchronous,
+		isSpeechWaveFileCommand=isSpeechWaveFileCommand
+	):
+		log.debug(
+			"Playing wave file canceled by handler registered to decide_playWaveFile extension point"
+		)
+		return
+	nvwave.fileWavePlayer = nvwave.WavePlayer(
+		channels=f.getnchannels(),
+		samplesPerSec=f.getframerate(),
+		bitsPerSample=f.getsampwidth() * 8,
+		#outputDevice=config.conf["speech"]["outputDevice"],
+		outputDevice=_audioOutputDevice,
+		wantDucking=False
+	)
+	nvwave.fileWavePlayer.feed(f.readframes(f.getnframes()))
+	if asynchronous:
+		if nvwave.fileWavePlayerThread is not None:
+			nvwave.fileWavePlayerThread.join()
+		nvwave.fileWavePlayerThread = threading.Thread(
+			name=f"{__name__}.playWaveFile({os.path.basename(fileName)})",
+			target=nvwave.fileWavePlayer.idle
+		)
+		nvwave.fileWavePlayerThread.start()
+	else:
+		nvwave.fileWavePlayer.idle()
+
+
+
 
 def _maybeInitPlayerEx(self, wav):
 	from synthDriverHandler import _audioOutputDevice
@@ -381,6 +429,10 @@ def handlePostConfigProfileSwitch():
 def initialize():
 	config.post_configProfileSwitch.register(handlePostConfigProfileSwitch)
 	# patche playWaveFile
-	nvwave.playWaveFile = playWaveFileEx
-
+	from versionInfo import version_year, version_major
+	NVDAVersion = [version_year, version_major]
+	if NVDAVersion >= [2023, 1]:
+		nvwave.playWaveFile = playWaveFileEx_2023_1
+	else:
+		nvwave.playWaveFile = playWaveFileEx
 	synthDrivers.oneCore.SynthDriver._maybeInitPlayer = _maybeInitPlayerEx
