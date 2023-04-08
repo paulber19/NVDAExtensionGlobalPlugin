@@ -33,7 +33,7 @@ addon_info = {
 
 
 	# version
-	"addon_version": "12.0.7",
+	"addon_version": "12.0.8",
 	# Author(s)
 	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support

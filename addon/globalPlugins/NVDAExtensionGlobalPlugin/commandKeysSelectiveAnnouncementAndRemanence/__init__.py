@@ -409,7 +409,9 @@ class MyInputManager (object):
 		if gesture.isModifier or "nvda" in gesture.displayName.lower():
 			# excluded modifier key and numpad keys with NVDA modifiers
 			return None
-		if gesture.mainKeyName in _numpadKeyNames.remove("numpad5"):
+		numpadKeyNames = _numpadKeyNames.copy()
+		numpadKeyNames.remove("numpad5")
+		if gesture.mainKeyName in numpadKeyNames:
 			vkCode = gesture.vkCode
 			scanCode = gesture.scanCode
 			extended = not gesture.isExtended
