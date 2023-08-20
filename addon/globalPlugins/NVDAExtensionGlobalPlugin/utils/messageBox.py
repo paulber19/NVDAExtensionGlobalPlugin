@@ -1,17 +1,15 @@
 # globalPlugins/NVDAextensionGlobalPlugin\messageBox.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright 2018-2022 paulber19
+# Copyright 2018-2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
-
+from logHandler import log
 import gui
 import config
 import wx
 from typing import Optional
 
-
 _NVDAMessageBox = None
-
 
 # NVDA messageBox method patched to say in all cases the window content.
 # even if the user has chosen not to have NVDA announce the description of the object
@@ -101,6 +99,9 @@ def initialize():
 	# replace NVDA gui.messageBox by myMessageBox
 	_NVDAMessageBox = gui.messageBox
 	gui.messageBox = myMessageBox
+	log.debug(
+		"gui.messageBox patched by: %s of %s module "
+		% (myMessageBox.__name__, myMessageBox.__module__))
 
 
 def terminate():

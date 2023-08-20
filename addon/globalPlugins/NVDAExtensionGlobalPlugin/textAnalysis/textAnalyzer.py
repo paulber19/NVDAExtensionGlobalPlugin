@@ -7,16 +7,19 @@
 import addonHandler
 from logHandler import log
 import os
+import wx
+import api
+import gui
 import config
 import ui
 import speech
-import controlTypes
 from ..utils.NVDAStrings import NVDAString
 import tones
 import textInfos
 import nvwave
 from ..settings.nvdaConfig import _NVDAConfigManager
 from . import symbols
+from ..utils.textInfo import getStartOffset, getEndOffset
 
 addonHandler.initTranslation()
 
@@ -114,7 +117,7 @@ def checkSymbolsDiscrepancies(info, errorPositions):
 	allSymbols = symbolToSymetricDic .keys()
 	allSymbols.extend(symbolToSymetricDic .values())
 	charactersToSymbol = {}
-	characterPositionsToSymbol = {}
+	symbolsToPositions = {}
 	for index in range(0, len(text)):
 		ch = text[index]
 		if ch not in allSymbols:
@@ -127,27 +130,27 @@ def checkSymbolsDiscrepancies(info, errorPositions):
 		if c not in charactersToSymbol:
 			charactersToSymbol[c] = ""
 		charactersToSymbol[c] += ch
-		if c not in characterPositionsToSymbol:
-			characterPositionsToSymbol[c] = []
-		characterPositionsToSymbol[c].append(position)
+		if c not in symbolsToPositions:
+			symbolsToPositions[c] = []
+		symbolsToPositions[c].append(position)
 	for symbol, symetric in symbolToSymetricDic .items():
 		if symbol not in charactersToSymbol:
 			continue
 		done = False
 		i = 100
 		characters = charactersToSymbol[symbol]
-		characterPositions = characterPositionsToSymbol[symbol]
+		symbolPositions = symbolsToPositions[symbol]
 		while i and not done:
 			i -= 1
 			pos = characters.find("%s%s" % (symbol, symetric))
 			if pos < 0:
 				break
-			del characterPositions[pos]
-			del characterPositions[pos]
+			del symbolPositions[pos]
+			del symbolPositions[pos]
 			characters = characters[:pos] + characters[pos + 2:]
 		for index in range(0, len(characters)):
 			ch = characters[index]
-			position = characterPositions[index]
+			position = symbolPositions[index]
 			if position not in errorPositions:
 				errorPositions[position] = []
 			errorPositions[position].append(("unexpectedSymbol", ch))
@@ -157,39 +160,9 @@ decimalSymbol = symbols.getDecimalSymbol()
 digitGroupingSymbol = symbols.getDigitGroupingSymbol()
 
 
-def getStartOffset(textInfo):
-	from NVDAObjects.UIA import UIATextInfo
-	if issubclass(textInfo.obj.TextInfo, UIATextInfo):
-		# UIA bookmark has no endOffset, so calculate it
-		first = textInfo.copy()
-		first.expand(textInfos.UNIT_STORY)
-		startOffset = textInfo.compareEndPoints(first, "startToStart")
-	else:
-		if hasattr(textInfo.bookmark, "_start"):
-			startOffset = textInfo.bookmark._start._startOffset
-		else:
-			startOffset = textInfo.bookmark.startOffset
-	return startOffset
-
-
-def getEndOffset(textInfo):
-	from NVDAObjects.UIA import UIATextInfo
-	if issubclass(textInfo.obj.TextInfo, UIATextInfo):
-		# UIA bookmark has no endOffset, so calculate it
-		first = textInfo.copy()
-		first.expand(textInfos.UNIT_STORY)
-		endOffset = textInfo.compareEndPoints(first, "endToStart")
-	else:
-		if hasattr(textInfo.bookmark, "_end"):
-			endOffset = textInfo.bookmark._end._endOffset
-		else:
-			endOffset = textInfo.bookmark.endOffset
-	return endOffset
-
-
 def checkExtraWhiteSpace(info, unit, errorPositions):
 	text = info.text
-	log.info("checkExtraWhiteSpace: %s" % text)
+	log.debug("checkExtraWhiteSpace: %s" % text)
 	curEndPos = getEndOffset(info)
 	tempInfo = info.copy()
 	tempInfo.collapse()
@@ -203,12 +176,15 @@ def checkExtraWhiteSpace(info, unit, errorPositions):
 	if len(text) == 0:
 		return
 	eol = False
-	if len(text) != len(info.text) or curEndPos == storyEndPos:
+	if unit == textInfos.UNIT_LINE:
+		eol = True
+	elif len(text) != len(info.text) or curEndPos == storyEndPos:
 		# there is end of line.
 		eol = True
 	# replacing non-breaking space by simple space
 	text = text.replace(chr(0xA0), " ")
 	if _NVDAConfigManager.spaceOrTabAtEndAnomalyOption():
+		log.debug("eol: %s, text: %s" % (eol, text))
 		if text[-1] == "\t" and eol:
 			if len(text) not in errorPositions:
 				errorPositions[len(text)] = []
@@ -237,7 +213,6 @@ def checkExtraWhiteSpace(info, unit, errorPositions):
 
 def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPositions):
 	text = info.text
-
 	text = text.replace("\r", "")
 	text = text.replace("\n", "")
 	text = text.replace(chr(0xA0), " ")
@@ -338,7 +313,7 @@ def reportAnalysis(count, textList, description=False):
 	elif _NVDAConfigManager.reportBySound():
 		fileName = _NVDAConfigManager.getSoundFileName()
 		path = addonHandler.getCodeAddon().path
-		file = os.path.join(path, "sounds", "text analyzer alerts", fileName)
+		file = os.path.join(path, "sounds", "textAnalyzerAlerts", fileName)
 		nvwave.playWaveFile(file)
 	elif _NVDAConfigManager.reportByAlertMessage():
 		msg = _NVDAConfigManager.getAlertMessage()
@@ -360,7 +335,7 @@ def getAlertCount(errorPositions):
 
 
 def getAnalyze(textInfo, unit, reportFormatted=True):
-	log.info("getAnalyse: %s, %s" % (unit, textInfo.text))
+	log.debug("getAnalyse: %s, %s" % (unit, textInfo.text))
 	errorPositions = {}
 	if _NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False):
 		checkSymbolsDiscrepancies(textInfo, errorPositions)
@@ -383,7 +358,7 @@ def analyzeText(info, unit):
 		return
 	textInfo = info.copy()
 	textInfo.expand(unit)
-	log.info("analyzeText: %s, %s" % (unit, info.text))
+	log.debug("analyzeText: %s, %s" % (unit, info.text))
 	if textInfo.text == _previousAnalyzedText:
 		return
 	alertCount, textList = getAnalyze(textInfo, unit)
@@ -572,42 +547,178 @@ def findFormatingChanges(info, unit, errorPositions):
 			raise Exception("Impossible!")
 
 
-def moveToLineWithAlert(info, next=True):
+_maxNumberOfLinesToScan = 100
+
+
+def askToContinueSearching(textInfo, next):
+	textInfo.updateCaret()
+	if gui.messageBox(
+		# Translators: message to indicate the no alert found by scanning 1000 lines
+		_(
+			"No irregularities were found on %s lines scanned."
+			" Do you want to continue the analysis?") % _maxNumberOfLinesToScan,
+		# Translators: dialog title.
+		_("Text analysis"),
+		wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+		return
+
+	def callback(textInfo, next):
+		speech.cancelSpeech()
+		wx.CallLater(50, moveToAlert, next)
+	wx.CallLater(500, callback, textInfo, next)
+
+
+_newLine = False
+
+
+def getLineText(textInfo):
+	tempInfo = textInfo.copy()
+	tempInfo.expand(textInfos.UNIT_LINE)
+	lineText = tempInfo.text
+	lineText = lineText.replace("\n", "")
+	lineText = lineText.replace("\r", "")
+	del tempInfo
+	return lineText
+
+
+def moveToAlert(next=True):
+	log.debug("moveToLineWithAlert: next= %s" % next)
+	focus = api.getFocusObject()
+	info = focus.makeTextInfo(textInfos.POSITION_CARET)
+	try:
+		info = focus.makeTextInfo(textInfos.POSITION_CARET)
+	except Exception:
+		return
 	from ..utils import runInThread
 	textInfo = info.copy()
-	start = getStartOffset(textInfo)
 	direction = 1 if next else -1
-	i = 1000
+	i = _maxNumberOfLinesToScan
 	th = runInThread.RepeatBeep(delay=1.5, beep=(200, 200))
 	th.start()
+	global _newLine
+	_newLine = False
 	while i:
 		i -= 1
+		# check if no character on the line
+		lineText = getLineText(textInfo)
+		if len(lineText) == 0:
+			log.debug("Line is empty")
+			res = None
+		else:
+			res = findAlertOnTheLine(textInfo, next)
+		if res is not None:
+			# an alert is found
+			th.stop()
+			del th
+			offset, positionMsg = res
+			textInfo.collapse()
+			# offset can be 0 when an alert is found on first character and cursor is on this character
+			if offset:
+				result = textInfo.move(textInfos.UNIT_CHARACTER, offset)
+				if result == 0:
+					log.debug("Cannot move to alert: offset: %s" % offset)
+					return
+			textInfo.collapse()
+			log.debug("Moved to alert: position= %s" % (getStartOffset(textInfo)))
+			textInfo.updateCaret()
+			from ..utils.textInfo import getLineInfoMessage
+			lineNumberMsg = getLineInfoMessage(textInfo)
+			textInfo.collapse()
+			textInfo.expand(textInfos.UNIT_WORD)
+			ui.message("%s%s %s" % (lineNumberMsg, positionMsg, textInfo.text))
+			return
+		# not alert found, so  go to next or prior line
 		textInfo.collapse()
 		textInfo.expand(textInfos.UNIT_LINE)
 		oldStart = getStartOffset(textInfo)
+		textInfo.collapse()
 		result = textInfo.move(textInfos.UNIT_LINE, direction)
 		textInfo.expand(textInfos.UNIT_LINE)
-		start = getStartOffset(textInfo)
+		newStart = getStartOffset(textInfo)
+		log.debug("after move to line:result= %s, direction= %s,  newStart= %s, oldStart= %s" % (
+			result, direction, newStart, oldStart))
 		# with word, move don't return 0. So checks start of textinfo.
-		if result == 0 or oldStart == start:
+		if result == 0 or oldStart == newStart:
 			# on first or last line of document, so stop search
 			break
+		#  we are on new line
+		textInfo.collapse()
+		curPos = getStartOffset(textInfo)
 		textInfo.expand(textInfos.UNIT_LINE)
-		alertCount, textList = getAnalyze(textInfo, textInfos.UNIT_LINE, False)
-		if alertCount:
-			for position in sorted(textList):
-				if position > start:
-					break
-			textInfo.updateCaret()
-			speech.speakTextInfo(textInfo, reason=controlTypes.OutputReason.CARET)
+		lineStart = getStartOffset(textInfo)
+		lineEnd = getEndOffset(textInfo)
+		log.debug("On new line: curPos: %s, start: %s, end: %s" % (curPos, lineStart, lineEnd))
+		lineText = textInfo.text.replace("\n", "")
+		lineText = lineText.replace("\r", "")
+		if len(lineText) != 0 and not next:
+			# move to last character of line
+			offset = len(lineText) - 1
+			log.debug("lineText: %s, %s" % (len(lineText), lineText))
 			textInfo.collapse()
-			reportAnalysis(alertCount, getReportText(textList))
-			th.stop()
-			del th
-			return
+			result = textInfo.move(textInfos.UNIT_CHARACTER, offset)
+			log.debug("after going to last charatter of the line:  result= %s, position= %s" % (
+				result, getStartOffset(textInfo)))
+		_newLine = True
+		# continue the loop
+
 	th.stop()
 	del th
 	if i == 0:
-		ui.message(_("Aborted: The maximum number of lines without irregularity (1000) is exceeded."))
+		wx.CallAfter(askToContinueSearching, textInfo, next)
 		return
 	ui.message(_("No more irregularity"))
+
+
+def findAlertOnTheLine(info, next=True):
+	textInfo = info.copy()
+	from ..utils.textInfo import getRealPosition
+	curPosition = getRealPosition(info)
+	lineText = getLineText(textInfo)
+	log.debug("findAlertOnTheLine: next= %s, curPosition= %s" % (next, curPosition))
+	global _newLine
+	textInfo.expand(textInfos.UNIT_LINE)
+	lineStart = getStartOffset(textInfo)
+	lineEnd = getEndOffset(textInfo)
+	log.debug("line: Start: %s, end: %s" % (lineStart, lineEnd))
+	# find alerts
+	(alertCount, alerts) = getAnalyze(textInfo, textInfos.UNIT_LINE, reportFormatted=False)
+	log.debug("allerts: %s" % alerts)
+	if alertCount == 0:
+		# no alerts
+		log.debug("no alert")
+		return None
+	# prepare alert messages
+	alertPositions = sorted(list(alerts))
+	textList = getReportText(alerts)
+	alertMessages = {}
+	for alert in alertPositions:
+		alertMessages[alert] = textList[alertPositions.index(alert)]
+	if not next:
+		alertPositions.reverse()
+	# now search for next alert on the line from current position
+	log.debug("alertPositions: %s" % alertPositions)
+	lastPosition = len(lineText) - 1
+	for position in alertPositions:
+		newPosition = position - 1
+		if _newLine and newPosition == 0 and curPosition == 0:
+			offset = 0
+			log.debug("alert found: curPosition= %s, newPosition= %s, offset= %s" % (curPosition, newPosition, offset))
+			_newLine = False
+			return (offset, alertMessages[position])
+		if _newLine and curPosition == lastPosition:
+			# cursor is on an alert at the end of line.
+			offset = 0
+			log.debug("alert found: curPosition= %s, newPosition= %s, offset= %s" % (curPosition, newPosition, offset))
+			_newLine = False
+			return (offset, alertMessages[position])
+		if next and newPosition > curPosition:
+			offset = newPosition - curPosition if curPosition >= 0 else 0
+			log.debug("alert found: curPosition= %s, newPosition= %s, offset= %s" % (curPosition, newPosition, offset))
+			_newLine = False
+			return (offset, alertMessages[position])
+		elif not next and curPosition > newPosition:
+			offset = newPosition - curPosition
+			log.debug("alert found: curPosition= %s, newPosition= %s, offset= %s" % (curPosition, newPosition, offset))
+			return (offset, alertMessages[position])
+	log.debug("no alert")
+	return None

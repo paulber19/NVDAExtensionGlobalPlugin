@@ -1,18 +1,17 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\userConfig\inputGestures.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2022 Paulber19
+# Copyright (C) 2021-2023 Paulber19
 # This file is covered by the GNU General Public License.
 # from a Javi Dominguez's idea  and some code  of it "commandHelper" add-on
 
 
 import addonHandler
-
+from logHandler import log
 import api
 import wx
 import speech
 import gui
 import gui.guiHelper as guiHelper
-from logHandler import log
 import scriptHandler
 from keyboardHandler import KeyboardInputGesture
 import inputCore
@@ -30,13 +29,20 @@ def onInputGesturesCommandEx(evt):
 
 def initialize():
 	gui.mainFrame.onInputGesturesCommand = onInputGesturesCommandEx
+	log.debug(
+		"gui.mainFrame.onInputGesturesCommand patched by: %s of %s module "
+		% (onInputGesturesCommandEx.__name__, onInputGesturesCommandEx.__module__))
+
 	menus = gui.mainFrame.sysTrayIcon.preferencesMenu.GetMenuItems()
 	item = None
 	for menuItem in menus:
 		if menuItem.GetItemLabel() == NVDAString("I&nput gestures..."):
 			item = menuItem
+			break
 	if item is not None:
 		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, onInputGesturesCommandEx, item)
+		log.debug("%s of %s module is now the action for the  Input gestures  sub-menu " % (
+			onInputGesturesCommandEx.__name__, onInputGesturesCommandEx.__module__))
 
 
 class InputGesturesDialogEx(

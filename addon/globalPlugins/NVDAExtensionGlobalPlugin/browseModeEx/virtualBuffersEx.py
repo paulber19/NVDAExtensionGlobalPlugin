@@ -15,7 +15,6 @@ try:
 except (ModuleNotFoundError, AttributeError):
 	from controlTypes import roleLabels, ROLE_CHECKBOX
 	from controlTypes import STATE_CHECKED
-import IAccessibleHandler
 import NVDAHelper
 import ctypes
 import aria

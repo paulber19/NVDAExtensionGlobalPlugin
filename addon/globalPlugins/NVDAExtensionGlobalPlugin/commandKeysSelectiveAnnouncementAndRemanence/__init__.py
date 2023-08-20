@@ -34,7 +34,6 @@ from speech.sayAll import SayAllHandler as sayAllHandler
 
 import time
 from vkCodes import byName
-import tones
 import core
 from inputCore import NoInputGestureAction
 from ..utils.NVDAStrings import NVDAString
@@ -95,7 +94,7 @@ CHECKED_KEY_BIT_POSITION = 63
 ANYKEY_LABEL = _("Any key with modifier key combination")
 try:
 	# for nvda version >= 2023.1
-	from inputCore import decide_executeGesture 
+	from inputCore import decide_executeGesture
 except ImportError:
 	import extensionPoints
 	decide_executeGesture = extensionPoints.Decider()
@@ -113,19 +112,26 @@ _numpadKeyNames = ["numpad%s" % str(x) for x in range(1, 10)]
 
 
 def myExecuteGesture(gesture):
+	log.debug("MyExecuteGesture: %s,%s" % (gesture.identifiers[0], gesture.__class__))
 	try:
 		if isinstance(gesture, KeyboardInputGesture):
+			log.debug("gesture: vkCode= %s, scanCode= %s, isextended= %s, modifiers= %s" % (
+				gesture.vkCode, gesture.scanCode, gesture.isExtended, gesture.modifiers))
+
 			_myInputManager.executeKeyboardGesture(gesture)
 		else:
+			log.debug("Gesture executed by: %s.%s" % (_NVDA_ExecuteGesture.__module__, _NVDA_ExecuteGesture.__name__))
 			_NVDA_ExecuteGesture(gesture)
 	except NoInputGestureAction:
+		log.debug("myExecuteGesture exception NoInputGestureAction")
 		raise NoInputGestureAction
 
 
-def compareGestures(gesture1, gesture2):
-	gest1 = (gesture1.vkCode,gesture1.scanCode, gesture1.isExtended)
-	gest2 = (gesture2.vkCode,gesture2.scanCode, gesture2.isExtended)
+def isSameGesture(gesture1, gesture2):
+	gest1 = (gesture1.vkCode, gesture1.scanCode, gesture1.isExtended)
+	gest2 = (gesture2.vkCode, gesture2.scanCode, gesture2.isExtended)
 	return gest1 == gest2
+
 
 _prevGesture = None
 _lastPrevGestureTime = time.time()
@@ -137,37 +143,36 @@ def shouldTrapGestureRepeat(gesture):
 	ret = False
 	from ..settings import toggleLimitKeyRepeatsAdvancedOption
 	trapOption = toggleLimitKeyRepeatsAdvancedOption(False)
-	if trapOption and isinstance(gesture, KeyboardInputGesture) and _prevGesture:
+	if trapOption and isinstance(
+		gesture, KeyboardInputGesture) and _prevGesture and isinstance(_prevGesture, KeyboardInputGesture):
 		from ..settings import _addonConfigManager
 		keyRepeatDelay = _addonConfigManager.getKeyRepeatDelay()
-		if compareGestures(gesture, _prevGesture) and delay < keyRepeatDelay/1000:
+		if isSameGesture(gesture, _prevGesture) and delay < keyRepeatDelay / 1000:
 			ret = True
-
 	_prevGesture = gesture
-	_lastPrevGestureTime = time.time()
 	_lastPrevGestureTime = time.time()
 	return ret
 
 
 def shouldExecuteGesture(gesture):
+	if not isinstance(gesture, KeyboardInputGesture):
+		return True
 	if not gesture.isModifier and shouldTrapGestureRepeat(gesture):
 		# trap this gesture
-		return  False
-
-	from ..settings.nvdaConfig import _NVDAConfigManager 
-	#A part of  Tony's Enhancements addon for NVDA
-	#Copyright (C) 2019 Tony Malykh
+		return False
+	from ..settings.nvdaConfig import _NVDAConfigManager
+	# A part of  Tony's Enhancements addon for NVDA
+	# Copyright (C) 2019 Tony Malykh
 	if (
-		_NVDAConfigManager .toggleBlockInsertKeyOption(False) and
-		gesture.vkCode == winUser.VK_INSERT and
-		not gesture.isNVDAModifierKey
+		_NVDAConfigManager .toggleBlockInsertKeyOption(False)
+		and gesture.vkCode == winUser.VK_INSERT
+		and not gesture.isNVDAModifierKey
 	):
 		tones.beep(500, 50)
 		return False
 	if (
-		_NVDAConfigManager .toggleBlockCapslockKeyOption(False) and
-		gesture.vkCode == winUser.VK_CAPITAL and
-		not gesture.isNVDAModifierKey
+		_NVDAConfigManager .toggleBlockCapslockKeyOption(False)
+		and gesture.vkCode == winUser.VK_CAPITAL and not gesture.isNVDAModifierKey
 	):
 		tones.beep(500, 50)
 		return False
@@ -410,7 +415,7 @@ class MyInputManager (object):
 			# excluded modifier key and numpad keys with NVDA modifiers
 			return None
 		numpadKeyNames = _numpadKeyNames.copy()
-		numpadKeyNames.remove("numpad5")
+		numpadKeyNames .remove("numpad5")
 		if gesture.mainKeyName in numpadKeyNames:
 			vkCode = gesture.vkCode
 			scanCode = gesture.scanCode
@@ -453,8 +458,6 @@ class MyInputManager (object):
 				"Gesture execution canceled by handler registered to decide_executeGesture extension point"
 			)
 			return
-
-		
 		script = gesture.script
 		focus = api.getFocusObject()
 		if focus.sleepMode is focus.SLEEP_FULL\
@@ -980,14 +983,17 @@ def initialize():
 	_NVDA_InputManager = manager
 	if _NVDA_InputManager .__module__ != "inputCore":
 		log.warning(
-			"Incompatibility: manager of inputCore has been also patched by another add-on: %s. "
-			"There is a risk of malfunction" % _NVDA_InputManager.__module__)
+			"Incompatibility: manager of inputCore has been also patched probably by another add-on: %s of %s module. "
+			"There is a risk of malfunction" % (_NVDA_InputManager.__name__, _NVDA_InputManager.__module__))
 	_NVDA_ExecuteGesture = manager.executeGesture
 	if _NVDA_ExecuteGesture .__module__ != "inputCore":
 		log.warning(
-			"Incompatibility: executeGesture of inputCore manager has been also patched by another add-on: %s. "
-			"There is a risk of malfunction" % _NVDA_ExecuteGesture .__module__)
+			"Incompatibility: executeGesture of inputCore manager has been also patched probably by another add-on:"
+			" %s of %s. There is a risk of malfunction" % (
+				_NVDA_ExecuteGesture .__name__, _NVDA_ExecuteGesture .__module__))
 	manager.executeGesture = myExecuteGesture
+	log.debug("NVDA core manager executeGesture method has been replaced by %s method of %s module" % (
+		manager.executeGesture.__name__, manager.executeGesture .__module__))
 	_myInputManager = MyInputManager()
 	log.warning("commandKeysSelectiveAnnouncementAndRemanence initialized")
 

@@ -67,7 +67,8 @@ This add-on adds to NVDA's global commands:
   - modify the level of the main volume or that of the audio stream of the application under focus,
   - automatic recovery of the main volume and NVDA when loading the extension,
   - [temporary use of an audio output device without impacting the NVDA configuration # hdr33],
-  - [orientation of the NVDA audio output #hdr34],
+  [NVDA audio output orientation and applications #hdr34],
+  -[NVDA tones and sounds volume adjustment #hdr34],
  - [Tools for the development of add-ons #hdr22],
  - [Complements concerning the date and time #hdr24]:
   - copy of the date and time to the clipboard,
@@ -103,6 +104,7 @@ This add-on adds to NVDA's global commands:
  - [Enhancements for Windows Explorer#hdr208]:
   - a script to announce the access path of the folder or the file which is under the cursor of the Windows explorer, or copy this path in the clipboard.
   - a script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
+ - [Speak typed word enhancement #hdr209].
 
 
 ++ Add-on configuration menu ++[hdr-configurationMenu]
@@ -675,7 +677,16 @@ This script displays the "NVDA Log Management" dialog box showing:
 - the "Close" button to close the dialog box.
 
 
-The log opens in the program associated with the .log add-on. If there is not yet the association of a program with this add-on, you will have to define it (choose the notepad for example).
+The log is not directly opened. It is previously copied to a temporary "NVDALog.txt file" or "oldNVDALog.txt".
+This temporary file then opens in the program associated with the .txt extension. Default is notepad.
+On Windows 11, for some unknown reason, opening this file like NVDA's "contributors.txt" causes an error.
+This only happens with an installed version of NVDA. Portable versions are not affected.
+To solve this problem pending a future correction from Microsoft, you must ask Windows to launch NVDA in administrator mode, as follows:
+- go to the NVDA folder and to the "nvda.exe" file.
+- open the properties of this file.
+- in the "Compatibility" tab, check the box "Run this program as an administrator".
+- confirm with "OK".
+
 
 +++ Opening NVDA logs +++[hdr9-2]
 The description of this script is: "Open current NVDA log file. Pressing this key twice, open the old NVDA log file. Pressing third, copy current log path to the clipboard".
@@ -690,7 +701,9 @@ A triple press, copying the path of the current log to the clipboard.
 
 
 
-The log opens in the program associated with the .log add-on. If there is not yet the association of a program with this add-on, you will have to define it (choose the notepad for example).
+The journal is not directly opened. It is previously copied to a temporary NVDALog.txt file.
+This temporary file then opens in the program associated with the .txt extension. Default is notepad.
+
 
 ++ Speech history ++[hdr10]
 This feature is installed by default without input gesture.
@@ -1015,6 +1028,17 @@ Their descriptions are:
 - "Report the current speech settings. Press twice: display them": no interpreter command is associated with it.
 
 
++++ Autosave voice settings when switching profiles +++[hdr17-7]
+Current voice settings can be automatically saved for the current selector when switching voice profiles.
+
+The purpose of this is to avoid having to manually reassociate the vocal profile to the same selector if vocal parameters have been modified, such as for example the rate, the volume and to lose these modifications by switching to another vocal profile if this is not done.
+
+Obviously, the current selector must be associated with a voice profile. If not, there will be no recording.
+
+This feature is configurable and is not enabled by default.
+
+To activate it, you must check the option "Automatically save current voice settings for the current selector before switching" which is in the "Advanced" category of the global settings of the add-on.
+
 ++ NVDA and modifier keys's remanence ++[hdr18]
 This feature is not installed by default.
 
@@ -1151,7 +1175,7 @@ This script is launched:
 - or using the "MAIN_KEY_VOLUME_ON" input gesture assigned by default.
 
 
-It sets the main and NVDA volume and forces the levels of each to the values ​​of the recovery levels configured in the "Volume control" grouping of the "Computer" category of add-on settings.
+It sets the volumes of the audio output device that NVDA uses and that of the audio stream from NVDA and forces the levels of each to the values ​​of the undo levels configured in the "Sound Control" group of the "Computer" category of the settings. the extension.
 
 +++ Mute or establish the volume of the audio stream of the application placed under the focus +++[hdr21-2]
 This script is launched:
@@ -1206,7 +1230,7 @@ NVDA volume cannot fall below the configured recovery threshold.
 By default, it cannot be greater than the primary volume, but this limitation can be overridden if the option "Increase speakers volume if necessary" is checked. This option can be found in the "Volume modification" group of the "Computer" category of the global settings of the extension.
 
 +++ Modify main volume +++[hdr21-4]
-These scripts allow to increase, decrease, or fix the main volume.
+These scripts allow to increase, decrease, or fix the main volume of the audio output device used by the application under focus (including NVDA) or the Windows default one if the application under focus does not use one .
 
 They are installed without input gestures. But it is still possible to assign them with the "input gestures" dialog.
 
@@ -1227,10 +1251,10 @@ The primary volume cannot fall below the configured recovery threshold.
 
 
 +++ Return to previous level +++[hdr21-5]
-When using the preceding commands, the volume level is recorded before the execution of each command, for the main volume and for each application.
+When using the preceding commands, the volume level is saved before each command is executed, for the audio device, for NVDA, and for each application.
 
 To return to this level, the following commands are available:
-- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": to reset the level of the main volume to the previous level.
+- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": to reset the volume level of the last audio device used to the previous level.
 - "KEY_APP_VOLUME_PREVIOUS_LEVEL": to reset the volume level of the application under focus to its previous level.
 
 
@@ -1240,32 +1264,27 @@ The previous level is also saved when these commands are executed.
 These records are not kept when restarting NVDA.
 
 +++ Announcement of level changes +++[hdr21-6]
-Volume level changes are announced by default.But it is possible to deactivate this announcement using the "Report volume changes" option in the "Volume change" grouping of the "Computer" category.
+Volume level changes are announced by default. The name of the audio output device is also announced on the first volume change for that device.
 
-For the volume of applications, this can be said:
-- either as a percentage of the main volume,
-- or in absolute value (as in the Windows mixer).
-
-
-The choice is made using the "Announce application volume level in percent" option in the "Volume change" grouping in the "Computer" category.
+But it is possible to disable this announcement using the "Announce volume changes" option in the "Volume change" group of the "Computer" category.
 
 +++ Automatically restore main sound and NVDA when plugin loads +++[hdr21-7]
-This function is used to restore, when loading this extension, the main volume and that of NVDA and to set the level of each volume to a value defined by configuration if it is lower than the minimum threshold defined by configuration.
+This feature allows you to restore, when loading this add-on, the volume of the NVDA audio source and that of the audio output device it uses by setting the level of each to a value defined by configuration in the event that it is lower than the minimum threshold defined by configuration.
 
-For this, the "Sound control" group of the "Computer" category of the "Parameters" dialog of the extension, presents the following configuration elements:
-- the checkbox "Automatically set the main sound and NVDA when loading the extension" which enables or disables this option,
+For this, the "Sound control" group of the "Computer" category of the "Parameters" dialog of the add-on, presents the following configuration elements:
+- the checkbox "Automatically set the main sound and NVDA when loading the add-on" which enables or disables this option,
 - the restoration threshold of the main volume below which its level will be automatically restored,
 - the level of the main volume to restore,
-
 - the recovery threshold of the NVDA volume below which its level will be restored (as a percentage of that of the main volume),
 - the volume level of NVDA to restore (as a percentage of the main volume).
 
 
-When launched, this extension verifies that the primary volume and the NVDA volume are above the recovery threshold configured for each.
+When launched, this add-on verifies that the primary volume and the NVDA volume are above the recovery threshold configured for each.
 
-If this is not the case, this extension then fixes the volume level to the value of the level to restore configured.
+If this is not the case, this add-on then fixes the volume level to the value of the level to restore configured.
 
-When installing this extension, the current levels of the main volume and NVDA are taken into account when setting the values ​​for the levels to be restored.
+When installing this extension, the current NVDA volume levels and the audio output device used by NVDA are taken into account to set the values ​​of the levels to be restored.
+
 
 +++ Copy date and time to clipboard +++[hdr24-1]
 The description of this script is: "Copy date and time to clipboard".
@@ -1718,13 +1737,17 @@ These scripts are:
 - "Analyze the paragraph under the cursor": "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", interpreter command "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
-+++ Move cursor to next/previous line containing irregularity +++[hdr31-4]
-The following scripts allow to move the cursor to the beginning of the next/previous line containing at least one irregularity:
-- move the cursor to the next line with irregularity: interpreter command "KEY_MOVETONEXTALERT_ANALYZER",
-- move the cursor to the previous line with irregularity: interpreter command "KEY_MOVETOPREVIOUSALERT_ANALYZER",
++++ Move cursor to next/previous irregularity +++[hdr31-4]
+The following scripts allow to move the cursor to the next/previous irregularity:
+- move the cursor to the next irregularity: interpreter command "KEY_MOVETONEXTALERT_ANALYZER",
+- move the cursor to the previous irregularity: interpreter command "KEY_MOVETOPREVIOUSALERT_ANALYZER",
 
 
-They have no input gesture associated with them, but it is possible to do so using the "Input gestures" dialog. They are placed in the "ADDON_SUMMARY" category.
+The search for the irregularity is carried out in a range of 100 lines. If no irregularity is found in this range, a request is made to the user to continue the search in a new range.
+
+
+These two scripts have no input gesture associated with them, but it is possible to do so using the "Input gestures" dialog. They are placed in the "ADDON_SUMMARY" category.
+
 ++ Announcement of cursor position in edit boxes ++[hdr32]
 The script "Toggle reporting of current caret position in edit box" allows you to have the cursor position announced or not when it is in an edit zone.
 
@@ -1840,71 +1863,127 @@ The first press of the input gesture launches the script "Set, as temporary audi
 
 The second press in a short time, launches the script "Leave up the temporary audio device".
 
-++ Orientation of the audio output of NVDA ++[hdr34]
-This feature makes it possible to separate the sound of NVDA from the sound of the audio applications launched and thus to hear in one ear the sound of NVDA and in the other ear the sound of other audio applications.
+++ NVDA audio output orientation ++[hdr34]
+This feature makes it possible to separate the sound from NVDA from the sound emitted by the other audio sources and thus to hear in one ear, the sound from NVDA and in the other ear, the sound from the other audio sources.
+
+Only applications with a two-channel audio source and using the same audio output device are affected.
+It also allows you to adjust the volume level of tonalities played by NVDA (when Sasapi is not used) and change the gain of sound files from NVDA and the add-on.
 
 It is installed by default.
 
-Technically, this is to zero the volume level of the right or left audio channels of NVDA and applications.
+For audio direction, technically this means zeroing out the volume level of NVDA's right or left audio channels and audio sources.
 
-NVDA being a monaural application, the same sound is played on both channels. There is no phonic audio loss at zeroing a channel.
+NVDA being a monophonic application, the same sound is played on both channels. There is no phonic audio loss in zeroing a channel.
 
 But this is not the case for stereophonic applications.
 
-To orient the sound of NVDA, the extension installs the following scripts:
-- Hear NVDA on the right and the application under the cursor on the left (command: KEY_SPLIT_RIGHT_FOCUS),
-- Hear NVDA on the right and all applications on the left (command: KEY_SPLIT_RIGHT_ALL),
-- Hear NVDA on the left and the application under focus on the right (command: KEY_SPLIT_LEFT_FOCUS),
-- Hear NVDA on the left and all applications on the right (command: KEY_SPLIT_LEFT_ALL),
-- Hear NVDA and the application under the cursor in the center (command: KEY_SPLIT_CENTER_FOCUS),
-- Hear NVDA and all applications in the center (command: KEY_SPLIT_CENTER_ALL)
-- Hear the application under the cursor in the center (command: KEY_CENTER_FOCUSED_APP)
-- Display the audio manager of NVDA and active applications (command: KEY_SOUND_SPLIT_MANAGER)
+To direct NVDA's sound, the extension installs the following scripts:
+- Hear NVDA on the right and the sound of the audio source of the application under the cursor on the left (command: KEY_SPLIT_RIGHT_FOCUS),
+- Hear NVDA on the right and the sound of all audio sources on the left (command: KEY_SPLIT_RIGHT_ALL),
+- Hear NVDA on the left and the sound of the audio source of the application under the cursor on the right (command: KEY_SPLIT_LEFT_FOCUS),
+- Hear NVDA on the left and sound from all audio sources on the right (command: KEY_SPLIT_LEFT_ALL),
+- Hear NVDA and the sound of the audio source of the application under the cursor in the center (command: KEY_SPLIT_CENTER_FOCUS),
+- Hear NVDA and sound from all audio sources in center (command: KEY_SPLIT_CENTER_ALL)
+- Hear the sound from the audio source of the application under the cursor in the center (command: KEY_CENTER_FOCUSED_APP)
+- Display the Audio Source Manager (command: KEY_SOUND_SPLIT_MANAGER)
 
 
-No input gesture is assigned to them. But it is still possible to do this using NVDA's "Input Gestures" dialog. These scripts can be found under the "Sound Control" category of the NVDA "Input Gestures" dialog.
+No input gestures are assigned to them. But it is still possible to do this using NVDA's "Input Gestures" dialog. These scripts can be found under the "Sound Control" category of this dialog.
 
 The "KEY_CENTER_FOCUSED_APP" command is operational even if the feature is not installed in order, possibly, to be able to rebalance the audio of certain applications that remained unbalanced after uninstalling the feature.
 
-The dialog "NVDA audio manager and active applications" also allows you to orient the sound of NVDA, but also to set the volume level of the two audio channels of NVDA and applications.
+The "Audio Source Manager" dialog allows, besides NVDA sound orientation, to:
+- set the volume level of both NVDA audio channels and audio sources,
+- adjust the volume of NVDA tones when Wasapi is not used,
+- change the gain of NVDA sound files.
+
 He introduces :
-- the list of audio applications,
-- the potentiometer to modify the volume of the selected application,
-- the box checked to modify the "mute" state of the selected application,
-- the potentiometers to modify the levels of the left and right channels of the selected application.
+- the list of audio sources,
+- the potentiometer to modify the volume of the selected source,- except for the "NVDA" source, the box checked to modify the "mute" state of the selected source,
+- the potentiometers to modify the levels of the left and right channels of the selected source,	
+- for the "NVDA" source only and without Wasapi, the potentiometer to adjust the volume of the tones emitted by NVDA and the button to modify the gain of the sound files
+- for only the "NVDA" source, the button to modify the gain of the sound files.
 
 
 When the list is focused, the following commands are allowed:
-- hear the selected application on the right: right arrow,
--hear the selected application on the left: left arrow,
-- hear the selected application in the center: space,
-- Hear NVDA on the right and the selected application on the left: "shift + right arrow",
-- Hear NVDA on the left and the selected application on the right: "shift + left arrow",
-- Hear NVDA and the selected application in the center: "shift + space",
-- Hear NVDA on the right and all applications on the left: "control + right arrow",
-- Hear NVDA on the left and all applications on the right: "control + left arrow",
-- Hear NVDA and all applications in the center: "control + space",
-- increase or decrease the application volume by one step: "control + up or down arrow",
-- increase or decrease by a double step, the volume of the application: "control + previous or next page",
-- maximize or minimize mapplication volume: "control + home or end",
-- increase or decrease the main volume by one step: "control +shift + up or down arrow",
-- increase or decrease by a double step, the main volume : "control + shift + previous or next page",
-- maximize or minimize main volume: "control + shift + home or end".
+- hear the audio source selected on the right: "right arrow",
+- hear the audio source selected on the left: "left arrow",
+- hear the audio source selected in the center: "space",
+- Hear NVDA on the right and the selected audio source on the left: "shift + right arrow",
+- Hear NVDA on the left and the selected audio source on the right: "shift + left arrow",
+- Hear NVDA and the audio source selected in the center: "capital letter + space",
+- Hear NVDA on the right and all audio sources on the left: "control + right arrow",
+- Hear NVDA on the left and all audio sources on the right: "control + left arrow",
+- Hear NVDA and all audio sources in the center: "control + space",
+- increase or decrease the volume of the selected audio source by one step: "control + up or down arrow",
+- increase or decrease by a double step, the volume of the selected audio source: "control + previous or next page",
+- maximize or minimize the volume of the audio source: "control + start or end",
+- mute or restore the sound of the audio source: "control + m",
+- increase or decrease the main volume by one step: "control + shift + up or down arrow",
+- increase or decrease by a double step, the main volume: "control + uppercase + previous or next page",
+- maximize or minimize the main volume: "control + shift + start or end".
 
 
 This list is automatically refreshed when the cursor is given to it.
 
-Channel changeover changes or volume level changes are applied immediately after each command.
+Channel toggle changes or volume level changes are applied immediately after each command. However, to find them after restarting NVDA, the NVDA configuration must be saved.
 
-By default, the application volume level cannot be greater than the master volume level. But the option "Increase the main volume if necessary" allows to deactivate this limitation. This option can be found in the "Volume modification" group of the "Computer" category of the extension's "Settings" dialog.
+By default, the audio source volume level cannot be set higher than the main volume level. But the option "Raise master volume if necessary" can disable this limitation. This option can be found in the "Volume change" group of the "Computer" category of the extension's "Settings" dialog.
 
-Protection is provided to avoid simultaneously zeroing the level of NVDA's audio channels and having its volume level lower than its configured restore threshold.
+By default and when wasapi is not used, NVDA's tone level is set to 50 which is NVDA's internally set base value.
 
-When an application is selected, the channel balance status is announced along with the mute status.
+A protection is provided to avoid putting, simultaneously,to zero the level of NVDA's audio channels and that its volume level is lower than its configured undo threshold.
 
-When restarting NVDA or if the extension is disabled or uninstalled, NVDA is again heard on both audio channels, while applications remain in their state (remembered by Windows).
+When an audio source is selected, the channel balance status is announced as well as the mute status.
 
-Note: For proper operation, NVDA and audio applications must use the same audio output device, such as the sound mapper. Moreover, the functionality is only of interest in this case.
+When restarting NVDA or if the add-on is disabled or uninstalled, NVDA is again heard on both audio channels, while the audio sources remain in their state (remembered by Windows).
+
+Warning: NVDA and the audio sources must use the same audio output device, such as the sound mapper, for proper operation. Besides, the functionality is of interest only in this case.
+
+
++++ Changed gain of NVDA and add-on sound files +++[hdr34-1]
+Pressing the "Change Sound Files Gain" button opens the "Change NVDA Sound Files Gain" dialog which shows:
+- the list of sounds used by NVDA and the add-on,
+- the "Play" button which allows you to listen to the selected sound,
+- the gain choice list: a positive value amplifies the sound, a negative value reduces it.
+- the "Test" button which allows you to listen to the result of the sound modification with the selected gain,
+- the "Apply gain" button to apply the gain to the selected sound,
+- the "Apply gain to all sounds" button to apply the gain to all sounds,
+- the "Reset sound" button to restore the selected sound to the way it was when NVDA was installed,
+- the "Reset all sounds" button to reset all sounds to the way they were when NVDA was installed.
+
+
+NVDA sounds are presented in the list with a translatable description.
+
+The sounds of the add-on are presented by a prefix, a "_" and the name of the sound file.
+The prefix designates the origin of the sound file: NVDAExtensionGlobalPluginSounds or NVDAExtensionGlobalPluginSoundsTextAnalyzerAlerts.
+
+If the gain is zero, the "Test", "Apply gain" and "Apply gain to all sounds" buttons are not present.
+
+Pressing the "Apply gain" button modifies the original sound and saves the result in another sound file. This sound file will then be used. The "Reset sound" button allows you to return to the original sound by erasing this new file.
+
+Modified sounds are marked in the list with the indication "modified". They are all stored in the "NVDAExtensionGlobalPlugin-NVDAWaves" folder created for the occasion in the user configuration folder. This folder does not exist if no sound is modified.
+
+If the selected sound has not been modified, the "Reset sound" button is not presented.
+
+If there are no already modified sounds in the list of sounds, the "Reset all sounds" button is not presented.
+
+NVDA's startup sound cannot be changed because it is played before the add-on loads.It is possible to not authorize the modification of the gain of the sounds by unchecking the checkbox "Allow the modification of the gain" found in the "Advanced" category. This box is checked by default.
+
++++ Technical details +++
+To achieve the functionality of adjusting the volume of NVDA tones when Wasapi is not used, the add-on has changed the operation of the "beep" function of the "tones" module of NVDA.
+
+This can be a problem if another add-on has also modified it.
+
+To avoid this kind of conflict, the add-on gives the possibility to not activate this feature by unchecking the "Allow tonalities's volume adjustment" option which is located in the "Advanced" category of the add-on' settings. . In this case, there will be no modification of the "beep" function by the extension.
+
+If Wasapi is used, this option is not present because NVDA's tonalities and sounds adjustment is done by NVDA itself.
+
+By default, This option is checked.
+
+In order for the modified sound files to be played instead of the original sounds, the playWaveFile function of the nvwave.py module of NVDA has been replaced. This replacement feature is common with the "Temporary Audio Device" feature.
+
+If modifying this function is a problem, you must both uncheck the "Allow gain modification" option and uninstall this feature.
 
 ++ Quick activation or deactivation of extensions ++[hdr35]
 To enable or disable extensions, NVDA natively offers the Extension Manager.
@@ -2064,14 +2143,14 @@ The "Enable the standard use of the numeric keypad at NVDA's start" option ("Num
 This feature is partly taken from the "sharedComputer" add-on (authors "Robert Hänggi <aarjay.robert@gmail.com>, Noelia Ruiz Martínez <nrm1977@gmail.com>" which seems not to have been updated since 2018 .
 
 It consists of:
-+++ reporting activating lock when starting NVDA +++
++++ reporting enabled numeric lock state when starting NVDA +++
 By default and in "Desktop" keyboard layout, the add-on reports that Numeric Lock is enabled when starting NVDA.
 
 But this can be disabled, as is the default for the "laptop" keyboard layout, using the "Report enabled state when NVDA starts" option in the "Numeric Lock" group of the "Keyboard" category of the add-on settings.
 
 
 +++ Automatic activation/deactivation when activating a configuration profile +++
-Each time a configuration profile is activated, it is possible to automatically activate or deactivate the numeric lock.
+Each time a configuration profile is activated, it is possible to automatically enable or disable the numeric lock.
 
 The choice is made in the settings of the configuration profile, in the "Keyboard" category of the "Numeric lock" group and with the list of choices "On activating the profile: ".
 
@@ -2082,11 +2161,17 @@ This list offers the following choices:
 
 
 By default, the choice is:
-- "Disabled" for a "Desktop Computer" keyboard layout.
+- "Desactivate" for a "Desktop Computer" keyboard layout.
 - "Do nothing" for a "laptop" keyboard layout.
 
 
-++ Key repeat limitation ++[hdr306]
+
+++ Caps lock ++[hdr306]
+By default, when NVDA starts, the enabled capital lock status is reported.
+
+This reporting can be disabled by unchecking the "Report enabled state on NVDA startup" option in the "Capital lock" group of the "Keyboard" category of the add-on's global settings.
+
+++ Key repeat limitation ++[hdr307]
 When a key is pressed and not released quickly enough, Windows generates a series of keypresses which can be annoying especially in an editing area.
 
 This feature attempts to keep this number of key presses to a minimum.
@@ -2220,6 +2305,19 @@ The description of this script is: "Announce the path of the file or folder unde
 It is stored under the "ADDON_SUMMARY" section of the "Input Gestures" NVDA dialog.
 
 It is possible to associate a input gesture to it using this dialog.
+
+
+++ Speak typed words enhancement ++[hdr209]
+In the following cases, NVDA does not speak the typed word when the "Speak typed words" option is enabled:
+- a space is inserted in the middle of a word.
+- after correcting a word using the "backspace" key followed by a space.
+- after typing a single punctuation symbol followed by a space.
+
+
+This improvement was initiated by Leonard de Ruijter (leonardder) in 2018 (see [https://github.com/nvaccess/nvda/pull/8110]) and closed in 2019 without having been implemented in NVDA.
+
+It is enabled by default, but it can be disabled to regain basic NVDA functionality by unchecking the "Enhance speak typed words" option located in the "Advanced" category of the add-on's global settings.
+
 
 + Summary of the commands provided by this extension +
 

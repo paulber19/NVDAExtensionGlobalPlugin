@@ -9,7 +9,6 @@ import addonHandler
 from logHandler import log
 import api
 import config
-import wave
 import speech
 import time
 import wx
@@ -17,116 +16,34 @@ import nvwave
 from gui import nvdaControls
 from synthDriverHandler import getSynth, setSynth
 from gui import guiHelper, mainFrame
-import os
-import threading
 import synthDrivers.oneCore
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
+from .waves import getModifiedNVDAWaveFile
 
 addonHandler.initTranslation()
+
+
 # hold the current temporary audio device, None if there is no temporary audio device
 _temporaryOutputDevice = None
 
 
-# we must patche nvwave.playWaveFile method tfor using current output audio device
-# held by synthDriverHandler instead of config.conf["speech"]["outputDevice"]
-def playWaveFileEx(fileName, asynchronous=True):
-	"""plays a specified wave file.
-	@param asynchronous: whether the wave file should be played asynchronously
-	@type asynchronous: bool
+def _maybeInitPlayerEx(self, wav):
 	"""
-	from synthDriverHandler import _audioOutputDevice
-	f = wave.open(fileName, "r")
-	if f is None:
-		raise RuntimeError("can not open file %s" % fileName)
-	if nvwave.fileWavePlayer is not None:
-		nvwave.fileWavePlayer.stop()
-	nvwave.fileWavePlayer = nvwave.WavePlayer(
-		channels=f.getnchannels(),
-		samplesPerSec=f.getframerate(),
-		bitsPerSample=f.getsampwidth() * 8,
-		# outputDevice=config.conf["speech"]["outputDevice"],
-		outputDevice=_audioOutputDevice,
-		wantDucking=False
-	)
-	nvwave.fileWavePlayer.feed(f.readframes(f.getnframes()))
-	if asynchronous:
-		if nvwave.fileWavePlayerThread is not None:
-			nvwave.fileWavePlayerThread.join()
-		nvwave.fileWavePlayerThread = threading.Thread(
-			name=f"{__name__}.playWaveFile({os.path.basename(fileName)})",
-			target=nvwave.fileWavePlayer.idle
-		)
-		nvwave.fileWavePlayerThread.start()
-	else:
-		nvwave.fileWavePlayer.idle()
-
-
-"""
 	patch for OneCore synthetizer
 	this method use config.conf["speech"]["outputDevice"] to get the output device directly
 	so if we change config.conf["speech"]["outputDevice"] after synthetizer initialization,
 	it takes it as output device.
 	but we don't that.
 	we want change the output device of a synthetizer with no configuration change, like that:
-oldOutputDevice= config.conf["speech"]["outputDevice"]
-config.conf["speech"]["outputDevice"] = newOutputDevice
-setSynth(getSynth().name)
-config.conf["speech"]["outputDevice"] = oldOutputDevice
-We use _audioOutputDevice variable set by setSynth method
-"""
-
-def playWaveFileEx_2023_1(
-		fileName: str,
-		asynchronous: bool = True,
-		isSpeechWaveFileCommand: bool = False
-):
-	"""plays a specified wave file.
-	@param fileName: the path to the wave file, usually absolute.
-	@param asynchronous: whether the wave file should be played asynchronously
-		If C{False}, the calling thread is blocked until the wave has finished playing.
-	@param isSpeechWaveFileCommand: whether this wave is played as part of a speech sequence.
+	oldOutputDevice= config.conf["speech"]["outputDevice"]
+	config.conf["speech"]["outputDevice"] = newOutputDevice
+	setSynth(getSynth().name)
+	config.conf["speech"]["outputDevice"] = oldOutputDevice
+	We use _audioOutputDevice variable set by setSynth method
 	"""
-	#global fileWavePlayer, fileWavePlayerThread
-	from synthDriverHandler import _audioOutputDevice
-	f = wave.open(fileName,"r")
-	if f is None: raise RuntimeError("can not open file %s"%fileName)
-	if nvwave.fileWavePlayer is not None:
-		nvwave.fileWavePlayer.stop()
-	if not nvwave.decide_playWaveFile.decide(
-		fileName=fileName,
-		asynchronous=asynchronous,
-		isSpeechWaveFileCommand=isSpeechWaveFileCommand
-	):
-		log.debug(
-			"Playing wave file canceled by handler registered to decide_playWaveFile extension point"
-		)
-		return
-	nvwave.fileWavePlayer = nvwave.WavePlayer(
-		channels=f.getnchannels(),
-		samplesPerSec=f.getframerate(),
-		bitsPerSample=f.getsampwidth() * 8,
-		#outputDevice=config.conf["speech"]["outputDevice"],
-		outputDevice=_audioOutputDevice,
-		wantDucking=False
-	)
-	nvwave.fileWavePlayer.feed(f.readframes(f.getnframes()))
-	if asynchronous:
-		if nvwave.fileWavePlayerThread is not None:
-			nvwave.fileWavePlayerThread.join()
-		nvwave.fileWavePlayerThread = threading.Thread(
-			name=f"{__name__}.playWaveFile({os.path.basename(fileName)})",
-			target=nvwave.fileWavePlayer.idle
-		)
-		nvwave.fileWavePlayerThread.start()
-	else:
-		nvwave.fileWavePlayer.idle()
 
-
-
-
-def _maybeInitPlayerEx(self, wav):
 	from synthDriverHandler import _audioOutputDevice
 	"""Initialize audio playback based on the wave header provided by the synthesizer.
 	If the sampling rate has not changed, the existing player is used.
@@ -334,7 +251,9 @@ class TemporaryAudioDeviceManagerDialog(
 			import tones
 			tones.terminate()
 			tones.initialize()
-		self.selectDelay = wx.CallLater(300, callback, deviceName)
+
+		# we have to wait for the device name to be said by NVDA before changing the device
+		self.selectDelay = wx.CallLater(3000, callback, deviceName)
 
 	def onSetButton(self, evt):
 		outputDevice = self.audioDevicesListBox.GetStringSelection()
@@ -426,13 +345,71 @@ def handlePostConfigProfileSwitch():
 		setOutputDevice(synth, _temporaryOutputDevice)
 
 
-def initialize():
-	config.post_configProfileSwitch.register(handlePostConfigProfileSwitch)
-	# patche playWaveFile
-	from versionInfo import version_year, version_major
-	NVDAVersion = [version_year, version_major]
+# we must patche nvwave.playWaveFile method:
+# for playing modified NVDA sound files
+#  tfor using current output audio device held by synthDriverHandler
+# use _audioDevice instead of config.conf["speech"]["outputDevice"]
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
+
+
+def myPlayWaveFile(
+	fileName: str,
+	asynchronous: bool = True,
+	isSpeechWaveFileCommand: bool = False
+):
+	"""plays a specified wave file.
+	@param fileName: the path to the wave file, usually absolute.
+	@param asynchronous: whether the wave file should be played asynchronously
+		If C{False}, the calling thread is blocked until the wave has finished playing.
+	@param isSpeechWaveFileCommand: whether this wave is played as part of a speech sequence.
+	"""
+	from synthDriverHandler import _audioOutputDevice
+	newFileName = getModifiedNVDAWaveFile(fileName)
+	if newFileName != fileName:
+		log.debug("%s file has been replaced by %s modified file" % (fileName, newFileName))
+	outputDevice = config.conf["speech"]["outputDevice"]
+	config.conf["speech"]["outputDevice"] = _audioOutputDevice
 	if NVDAVersion >= [2023, 1]:
-		nvwave.playWaveFile = playWaveFileEx_2023_1
+		ret = _nvdaPlayWaveFile(newFileName, asynchronous, isSpeechWaveFileCommand)
 	else:
-		nvwave.playWaveFile = playWaveFileEx
-	synthDrivers.oneCore.SynthDriver._maybeInitPlayer = _maybeInitPlayerEx
+		ret = _nvdaPlayWaveFile(newFileName, asynchronous)
+	config.conf["speech"]["outputDevice"] = outputDevice
+	return ret
+
+
+_nvdaPlayWaveFile = None
+
+
+def initialize():
+	global _nvdaPlayWaveFile
+	from ..settings import (
+		toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
+		toggleAllowNVDASoundGainModificationAdvancedOption,
+		isInstall
+	)
+	from ..settings.addonConfig import FCT_TemporaryAudioDevice
+	if ((
+		toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False)
+		and toggleAllowNVDASoundGainModificationAdvancedOption(False))
+		or isInstall(FCT_TemporaryAudioDevice)
+	):
+		# patche playWaveFile to use temporary audio and modified sound files
+		_nvdaPlayWaveFile = nvwave.playWaveFile
+		nvwave.playWaveFile = myPlayWaveFile
+		log.debug(
+			"nvwave.playWaveFile patched by: %s of %s module "
+			% (myPlayWaveFile.__name__, myPlayWaveFile.__module__))
+	if isInstall(FCT_TemporaryAudioDevice):
+		config.post_configProfileSwitch.register(handlePostConfigProfileSwitch)
+		synthDrivers.oneCore.SynthDriver._maybeInitPlayer = _maybeInitPlayerEx
+		log.debug(
+			"synthDrivers.oneCore.SynthDriver._maybeInitPlayer  patched by: %s of %s module"
+			% (_maybeInitPlayerEx.__name__, _maybeInitPlayerEx.__module__))
+
+
+def terminate():
+	global _nvdaPlayWaveFile
+	if _nvdaPlayWaveFile is not None:
+		nvwave.playWaveFile = _nvdaPlayWaveFile
+		_nvdaPlayWaveFile = None

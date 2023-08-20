@@ -12,7 +12,8 @@ from ..utils.informationDialog import InformationDialog
 
 addonHandler.initTranslation()
 
-def getReportFormattingOptions ():
+
+def getReportFormattingOptions():
 	NVDAVersion = [version_year, version_major]
 	if NVDAVersion >= [2023, 1]:
 		return(
@@ -353,7 +354,7 @@ def getFormatFieldText(attrs):
 	if grammarError:
 		textList.append(grammarError)
 	# cell bordertext
-	cellBorder= getCellBorderText(attrs)
+	cellBorder = getCellBorderText(attrs)
 	if cellBorder:
 		textList.append(cellBorder)
 	return textList

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2021 Paulber19
+# Copyright (C) 2016 - 2023 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -8,7 +8,6 @@ import addonHandler
 import globalPluginHandler
 from logHandler import log, _getDefaultLogFilePath
 import os
-import sys
 import globalVars
 import api
 import ui
@@ -304,11 +303,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	}
 
 	def __init__(self, *args, **kwargs):
+		log.debug("Initializing %s version %s" % (_curAddon.manifest["name"], _curAddon.manifest["version"]))
 		super(NVDAExtensionGlobalPlugin, self).__init__(*args, **kwargs)
-		self.curAddon = _curAddon
-		addonName = self.curAddon.manifest['name']
-		addonVersion = self.curAddon.manifest["version"]
-		log.info("Loaded %s version %s" % (addonName, addonVersion))
 		# update dictionaries for volume control scripts
 		self._mainScriptToGestureAndfeatureOption .update(self._volumeControlMainScriptToGestureAndfeatureOption)
 		self._shellScriptToGestureAndFeatureOption .update(self._volumeControlShellScriptToGestureAndFeatureOption)
@@ -334,14 +330,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		self._setShellGestures()
 		core.callLater(200, self.installMainAndShellScriptDocs)
 		self.switchVoiceProfileMode = "off"
-		from .computerTools import volumeControl
-		if isInstall(addonConfig.FCT_VolumeControl) and settings.toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
-			volumeControl.setSpeakerVolumeToRecoveryLevel(checkThreshold=True)
-			volumeControl.setNVDAVolumeToRecoveryLevel(checkThreshold=True)
-		volumeControl.initialize()
-		if isInstall(addonConfig.FCT_TemporaryAudioDevice):
-			from .computerTools import audioDevice
-			audioDevice.initialize()
+		from .computerTools import audioDevice
+		audioDevice.initialize()
 		if settings.toggleByPassNoDescriptionAdvancedOption(False):
 			messageBox.initialize()
 		from .scripts import scriptHandlerEx
@@ -358,9 +348,29 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		newSymbolsHandler.initialize()
 		config.post_configProfileSwitch .register(self.handlePostConfigProfileSwitch)
 		self.handlePostConfigProfileSwitch()
+		# dont't use text info to speak typed word  for winConsoleUIA
+		from NVDAObjects.UIA.winConsoleUIA import WinConsoleUIA
+		WinConsoleUIA.useTextInfoToSpeakTypedWords = False
+		# for tonalities volume changes
+		from .computerTools import tonesEx
+		tonesEx.initialize()
+		from core import postNvdaStartup
+		postNvdaStartup .register(self.handlePostNVDAStartup)
 
+	def handlePostNVDAStartup(self):
+		log.debug("Terminating initialization %s version %s" % (
+			_curAddon.manifest["name"], _curAddon.manifest["version"]))
+		from . import clipboardCommandAnnouncement
+		clipboardCommandAnnouncement .initialize()
+		from .computerTools import audioCore
+		audioCore.initialize()
 		from .utils import numlock
-		wx.CallLater(2000, numlock.reportNumLockState, winUser.getKeyState(winUser.VK_NUMLOCK))
+		# to report activated numlock and capslock state
+		wx.CallLater(
+			2000, numlock.reportActivatedLockState, winUser.getKeyState(
+				winUser.VK_NUMLOCK), winUser.getKeyState(winUser.VK_CAPITAL))
+
+		log.info("Loaded %s version %s" % (_curAddon.manifest["name"], _curAddon.manifest["version"]))
 
 	def updateSettingOfSynthSettingsRing(self):
 
@@ -568,9 +578,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		tones.beep(420, 40)
 
 	def terminate(self):
-		from .computerTools import volumeControl
-		volumeControl.terminate()
-
+		log.debug("Terminating %s" % _curAddon.manifest["name"])
 		from .scripts import scriptHandlerEx
 		scriptHandlerEx.terminate()
 		commandKeysSelectiveAnnouncementAndRemanence.terminate()
@@ -579,9 +587,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			self._repeatBeepOnAudio = None
 		from .settings import _addonConfigManager
 		_addonConfigManager.terminate()
-		if hasattr(self, "_caretMovementScriptHelper "):
-			import cursorManager
-			cursorManager.CursorManager._caretMovementScriptHelper = self._caretMovementScriptHelper
 		speechHistory.terminate()
 		for item in ["NVDAExtensionGlobalPluginSettingsMenu", ]:
 			if hasattr(self, item):
@@ -590,43 +595,40 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			self.toolsMenu .Remove(getattr(self, "exploreNVDAMenu"))
 		if hasattr(self, "manageUserConfigurationMenu"):
 			self.toolsMenu .Remove(getattr(self, "manageUserConfigurationMenu"))
-			
 		messageBox.terminate()
-		# if language has changed, we must update symbols files
-		from languageHandler import getLanguage, getWindowsLanguage
-		NVDALang = getLanguage()
-		lang = config.conf["general"]["language"]
-		if lang == "Windows":
-			lang = getWindowsLanguage()
-		if NVDALang != lang:
-			log.warning("Language change: update user symbols files")
-			# set new symbols file for new language
-			path = _curAddon.path
-			sys.path.append(path)
-			import onInstall
-			onInstall.installNewSymbols(lang)
-			del sys.path[-1]
+		from .computerTools import tonesEx, audioDevice, audioCore
+		audioCore.terminate()
+		tonesEx.terminate()
+		audioDevice.terminate()
+		config.post_configProfileSwitch .unregister(self.handlePostConfigProfileSwitch)
+		from core import postNvdaStartup
+		postNvdaStartup .unregister(self.handlePostNVDAStartup)
 		super(NVDAExtensionGlobalPlugin, self).terminate()
+	def _popupSettingsDialog(self, settingsDialog):
+		try:
+			gui.mainFrame.popupSettingsDialog(settingsDialog)
+		except AttributeError:
+			gui.mainFrame._popupSettingsDialog(settingsDialog)
 
 	def onSettingsSubMenu(self, evt):
 		from .settings.dialog import GlobalSettingsDialog
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, GlobalSettingsDialog)
+		wx.CallAfter(self._popupSettingsDialog, GlobalSettingsDialog)
 
 	def onProfileSettingsSubMenu(self, evt):
 		from .settings.dialog import ProfileSettingsDialog
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, ProfileSettingsDialog)
+		wx.CallAfter(self._popupSettingsDialog, ProfileSettingsDialog)
 
 	def script_globalSettingsDialog(self, gesture):
 		from .settings.dialog import GlobalSettingsDialog
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, GlobalSettingsDialog)
+		wx.CallAfter(self._popupSettingsDialog, GlobalSettingsDialog)
 
 	def script_profileSettingsDialog(self, gesture):
 		from .settings.dialog import ProfileSettingsDialog
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, ProfileSettingsDialog)
+		wx.CallAfter(self._popupSettingsDialog, ProfileSettingsDialog)
 
 	def onKeyboardKeysRenamingMenu(self, evt):
 		from .keyboardKeyRenaming import KeyboardKeyRenamingDialog
-		gui.mainFrame._popupSettingsDialog(KeyboardKeyRenamingDialog)
+		self._popupSettingsDialog(KeyboardKeyRenamingDialog)
 
 	def onResetConfiguration(self, evt):
 		from .settings import _addonConfigManager
@@ -665,14 +667,13 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		self.onExploreProgramFilesMenu(None)
 
 	def onCommandKeysSelectiveAnnouncementMenu(self, evt):
-		gui.mainFrame._popupSettingsDialog(
+		self._popupSettingsDialog(
 			commandKeysSelectiveAnnouncementAndRemanence.CommandKeysSelectiveAnnouncementDialog)
 
 	def chooseNVDAObjectOverlayClasses(self, obj, clsList):
 		clsList.insert(0, NVDAObjectEx)
 		from .WindowsExplorer import updateChooseNVDAOverlayClass
 		updateChooseNVDAOverlayClass(obj, clsList)
-
 		self.clipboardCommandAnnouncementChooseNVDAObjectOverlayClasses(obj, clsList)
 		if hasattr(self, "extendedNetUIHWNDChooseNVDAObjectOverlayClasses"):
 			self.extendedNetUIHWNDChooseNVDAObjectOverlayClasses(obj, clsList)
@@ -1095,9 +1096,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		speechHistory.getSpeechRecorder().displaySpeechHistory()
 
 	def script_displayFormatting(self, gesture):
-		from .reportFormatting import getReportFormattingOptions 
-		reportFormattingOptions =   getReportFormattingOptions ()
-		
+		from .reportFormatting import getReportFormattingOptions
+		reportFormattingOptions = getReportFormattingOptions()
 		# Create a dictionary to replace the config section that would normally be
 		# passed to getFormatFieldsSpeech / getFormatFieldsBraille
 		formatConfig = dict()
@@ -1136,12 +1136,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def script_keyboardKeyRenaming(self, gesture):
 		from .keyboardKeyRenaming import KeyboardKeyRenamingDialog
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, KeyboardKeyRenamingDialog)
+		wx.CallAfter(self._popupSettingsDialog, KeyboardKeyRenamingDialog)
 
 	def script_commandKeySelectiveAnnouncement(self, gesture):
 		from .commandKeysSelectiveAnnouncementAndRemanence import CommandKeysSelectiveAnnouncementDialog
 		wx.CallAfter(
-			gui.mainFrame._popupSettingsDialog, CommandKeysSelectiveAnnouncementDialog)
+			self._popupSettingsDialog, CommandKeysSelectiveAnnouncementDialog)
 
 	def script_minuteTimer(self, gesture):
 		from .minuteTimer import minuteTimer
@@ -1171,7 +1171,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	script_speakForegroundEx.removeCommandsScript = globalCommands.commands.script_speakForeground
 
 	def script_displayModuleUserGuide(self, gesture):
-		path = self.curAddon.getDocFilePath()
+		path = _curAddon.getDocFilePath()
 		ui.message(_("Please wait"))
 		os.startfile(path)
 
@@ -1260,13 +1260,15 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def script_nextVoiceProfile(self, gesture):
 		from . import switchVoiceProfile
-		switchVoiceProfile.SwitchVoiceProfilesManager().nextVoiceProfile(
-			forward=True)
+		switchManager = switchVoiceProfile.SwitchVoiceProfilesManager()
+		switchManager .updateCurrentVoiceProfilSettings()
+		switchManager.nextVoiceProfile(forward=True)
 
 	def script_previousVoiceProfile(self, gesture):
 		from . import switchVoiceProfile
-		switchVoiceProfile.SwitchVoiceProfilesManager().nextVoiceProfile(
-			forward=False)
+		switchManager = switchVoiceProfile.SwitchVoiceProfilesManager()
+		switchManager .updateCurrentVoiceProfilSettings()
+		switchManager.nextVoiceProfile(forward=False)
 
 	def _setSwitchVoiceProfileMode(self, mode=None):
 		__switchVoiceProfileModeGestures = {
@@ -1303,6 +1305,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def setVoiceProfileSelector(self, selector):
 		from . import switchVoiceProfile
 		switchManager = switchVoiceProfile.SwitchVoiceProfilesManager()
+		switchManager .updateCurrentVoiceProfilSettings()
 		switchManager.setLastSelector(selector)
 		if switchManager.isSet(selector):
 			wx.CallAfter(switchManager.switchToVoiceProfile, selector)
@@ -1341,7 +1344,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				# Translators: message to user no configuration change made.
 				_("There was no change of input gesture made by the user"))
 			return
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, UserInputGesturesDialog)
+		wx.CallAfter(self._popupSettingsDialog, UserInputGesturesDialog)
 
 	def script_toolsForAddon(self, gesture):
 		from . import tools
@@ -1645,22 +1648,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		wx.CallAfter(self.analyzeText, textInfos.UNIT_PARAGRAPH)
 
 	def script_findNextTextAnalyzerAlert(self, gesture):
-		focus = api.getFocusObject()
-		try:
-			info = focus.makeTextInfo(textInfos.POSITION_CARET)
-		except Exception:
-			return
-		from .textAnalysis.textAnalyzer import moveToLineWithAlert
-		wx.CallAfter(moveToLineWithAlert, info)
+		from .textAnalysis.textAnalyzer import moveToAlert
+		wx.CallAfter(moveToAlert, next=True),
 
 	def script_findPreviousTextAnalyzerAlert(self, gesture):
-		focus = api.getFocusObject()
-		try:
-			info = focus.makeTextInfo(textInfos.POSITION_CARET)
-		except Exception:
-			return
-		from .textAnalysis.textAnalyzer import moveToLineWithAlert
-		wx.CallAfter(moveToLineWithAlert, info, False)
+		from .textAnalysis.textAnalyzer import moveToAlert
+		wx.CallAfter(moveToAlert, next=False)
 
 	def script_toggleReportCurrentCaretPosition(self, gesture):
 		from .settings.nvdaConfig import _NVDAConfigManager

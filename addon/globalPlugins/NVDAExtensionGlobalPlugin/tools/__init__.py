@@ -726,7 +726,7 @@ class ToolsForAddonDialog(
 		self.bindHelpEvent(getHelpObj("hdr22-8"), exploreAddonFolderButton)
 		sHelper.addItem(bHelper)
 		bHelper = sHelper.addDialogDismissButtons(
-			gui.gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
+			gui.guiHelper.ButtonHelper(wx.HORIZONTAL))
 		cancelButton = bHelper.addButton(self, id=wx.ID_CANCEL)
 		mainSizer.Add(
 			sHelper.sizer, border=gui.guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)

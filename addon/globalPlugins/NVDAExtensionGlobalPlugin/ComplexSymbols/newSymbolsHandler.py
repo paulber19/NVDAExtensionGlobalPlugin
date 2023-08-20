@@ -95,6 +95,10 @@ def initialize():
 	global _NVDAChangeVoice
 	_NVDAChangeVoice = synthDriverHandler.changeVoice
 	synthDriverHandler.changeVoice = myChangeVoice
+	log.debug(
+		"synthDriverHandler.changeVoice  patched by: %s of %s module "
+		% (myChangeVoice.__name__, myChangeVoice.__module__))
+
 	getNewSymbolsForCurrentLanguage()
 	log.debug("newSymbolsHandler iinitialized")
 

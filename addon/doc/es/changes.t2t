@@ -24,6 +24,40 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v13.0 (15/08/2023) +
+Nuevas características:
+- por configuración, es posible guardar automáticamente la configuración de voz actual del selector actual antes de cambiar a otro selector.
+- mejora de la verbalización de palabras al escribir para anunciar adecuadamente las palabras corregidas o cortadas por la mitad.
+- mejora de la funcionalidad "Control de sonido" para tener en cuenta todos los dispositivos de salida de audio activos y no solo ése por defecto de Windows.
+- mejora de la funcionalidad "Analizador de texto" para ir a la siguiente o anterior irregularidad detectada por el analizador de texto.
+- posibilidad de ajustar el volumen de sonidos emitidos por NVDA cuando no se usa Wasapi.
+- posibilidad de cambiar la ganancia en los sonidos de NVDA y del complemento.
+- indicación al iniciar NVDA del estado activado del bloqueo de mayúsculas.
+- indicación al iniciar NVDA del funcionamiento del complemento Clipspeak que entra en conflicto con la funcionalidad Anuncio de la funcionalidad asociada a las órdenes de edición.
+
+
+Compatibilidad:
+- la visualización de la lista de los iconos en la bandeja del sistema ahora está operativa en las versiones de Windows 11 posterior o iguales a la versión 22h2 build 22621.1344.
+- se toma en cuenta el posible uso de Wasapi por NVDA.
+- Las versiones de NVDA anteriores a 2022.1 ya no son compatibles.
+
+
+Diversos:
+- el complemento se desactiva durante la instalación de una actualización de NVDA.
+
+
+Cambios:
+- el diálogo "Administrador de audio de NVDA y aplicaciones activas" fue renombrado en "Administrador de fuentes de audio".
+- este diálogo ahora presenta la lista de dispositivos de salida de audio activos y te permite administrar las fuentes de audio de un dispositivo en particular.
+- los dos scripts para ir a la siguiente o anterior línea que contiene una irregularidad detectada por el analizador de texto se eliminan y reemplazan por dos scripts para ir a la siguiente o anterior irregularidad.
+
+Desarrolladores:
+- el código para la funcionalidad  "Control de sonido" ha sido completamente reestructurado. Gracias al autor del complemento "volumeAdjustment" ("Oleksandr Gryshchenko) cuya estructura de su código sirvió como referencia.
+- actualización del archivo markdown2.py a la versión 2.4.9.
+- actualización de la librería pycaw a la versión v20230407.
+
+
+
 + v12.0 (22/02/2023) +
 Compatibilidad con NVDA 2023.1 y el abandono del apoyo de las versiones de NVDA anteriores a la versión 2021.1.
 

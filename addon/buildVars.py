@@ -33,7 +33,7 @@ addon_info = {
 
 
 	# version
-	"addon_version": "12.0.8",
+	"addon_version": "13.0",
 	# Author(s)
 	"addon_author": "PaulBer19",
 	# URL for the add-on documentation support
@@ -41,10 +41,10 @@ addon_info = {
 	# Documentation file name
 	"addon_docFileName": "addonUserManual.html",
 	# Minimum NVDA version supported (e.g. "2018.3")
-	"addon_minimumNVDAVersion": "2021.1",
+	"addon_minimumNVDAVersion": "2022.1",
 	# Last NVDA version supported/tested
 	# (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": "2023.1",
+	"addon_lastTestedNVDAVersion": "2023.2",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel": None,
 }

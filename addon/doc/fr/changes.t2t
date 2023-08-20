@@ -20,15 +20,50 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
 
 
+
++ v13.0 (15/08/2023) +
+Nouveautés :
+- par configuration, il est possible de faire enregistrer automatiquement les paramètres vocaux courants du sélecteur courant avant la commutation vers un autre sélecteur.
+- amélioration de l'écho clavier par mot pour annoncer correctement les mots corrigés ou coupés en deux.
+- amélioration de la fonctionnalité "Contrôle du son" pour tenir compte de tous les périphériques de sortie audio actif et non pas seulement de celui par défaut de Windows.
+- amélioration de la fonctionnalité "Analyseur de texte" pour aller à la prochaine ou précédente irrégularité détecté par l'analyseur de texte.
+- possibilité de régler le volume des sons émis par NVDA quand Wasapi n'est pas utilisé.
+- possibilité de modifier le gain des sons de NVDA et de l'extension.
+- signalement au démarrage de NVDA de l'état activé du verrouillage majuscule.
+- signalement au démarrage de NVDA du fonctionnement de l'extension clipSpeak qui entre en conflit avec la fonctionnalité Annonce de la fonction associée aux commandes d'édition.
+
+
+Compatibilité :
+- l'affichage de la liste des icônes de la zone de notification est maintenant opérationnel sous les versions de Windows 11 supérieure ou égal à la version 22h2 build 22621.1344.
+- prise en compte de l'utilisation possible de wasapi par NVDA.
+- les versions de NVDA inférieures à la 2022.1 ne sont plus supportées.
+
+
+Divers :
+- l'extension est désactivée pendant l'installation d'une mise à jour de NVDA.
+
+
+Changements :
+- le dialogue " Gestionnaire audio de NVDA et des applications actives" a été renommé en "Gestionnaire des sources audio".
+- ce dialogue présente maintenant la liste des périphériques de sortie audio actifs et permet de gérer les sources audio d'un périphérique particulier.
+- les deux scripts pour aller à la prochaine ou précédente ligne contenant une irrégularité détectée par l'analyseur de texte sont supprimés et remplacés par deux scripts pour aller à la prochaine ou précédente irrégularité.
+
+
+Développements :
+- le code pour la fonctionnalité "Contrôle du son" a été complétement restructuré. Merci à l'auteur de l'extension "volumeAdjustment" ("Oleksandr Gryshchenko) dont la structure de son code a servi de référence.
+- mise à niveau du fichier markdown2.py à la version 2.4.9.
+- mise à jour de la librairie pycaw à la version v20230407.
+
+
 + v12.0 (22/02/2023) +
 Compatibilité avec NVDA 2023.1 et abandon du support des versions de NVDA antérieures à la version 2021.1.
 
 Nouveautés :
 - compléments pour l'explorateur Windows :
  - un script pour annoncer le chemin d'accès du dossier ou du fichier qui se trouve sous le curseur de l'explorateur Windows, ou copier ce chemin dans le presse-papier.
- - un script pour annoncer, en remontant l'arborescense des dossiers, le nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur,
+ - un script pour annoncer, en remontant l'arborecense des dossiers, le nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur,
 - possibilité de bloquer les touches "Insertion" et "Verrouillage majuscule".
-- possibilité de limiter la répitition de touches
+- possibilité de limiter la répétition de touches
 
 
 Correction de bogues :
@@ -37,8 +72,8 @@ Correction de bogues :
 
 
 Changements :
-- les scripts concernant l'historique vocal ne copi plus directement l'enregistrement dans le presse-papier. Cette copie  se fait maintenant par un double appui  du geste de commande  du script pour l'annonce de l'enregistrement courant.
-- le fichier "readme.md" est supprimé pour les languages autre que l'anglais (en) et ne doit plus être traduit.
+- les scripts concernant l'historique vocal ne copient plus directement l'enregistrement dans le presse-papier. Cette copie  se fait maintenant par un double appui  du geste de commande  du script pour l'annonce de l'enregistrement courant.
+- le fichier "readme.md" est supprimé pour les langages autres que l'anglais (en) et ne doit plus être traduit.
 
 
 Mise à jour du code :

@@ -14,37 +14,72 @@ Download:
 - [Development's versions ADDON_DEV_URL]
 
 
-Sorry, but this document is an automatic translation from french language.
+Sorry, but this document is an automatic translation from French language.
 
 Only the versions of the type major.minor (for example v3.1) are listed in this history.
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
+
+
++ v13.0 (August/15/2023) +
+New:
+- by configuration, it is possible to automatically save the current voice parameters of the current selector before switching to another selector.
+- improved per-word keyboard echo to correctly announce corrected or split words.
+- improvement of the "Sound control" functionality to take into account all the active audio output devices and not only the Windows default one.
+- improved "Text Analyzer" functionality to go to the next or previous irregularity detected by the text analyzer.
+- possibility to adjust the volume of tonalités emitted by NVDA when Wasapi is not used.
+- possibility to modify the gain of the sounds of NVDA and the add-on.
+- report on NVDA startup of caps lock enabled state.
+- signaling when NVDA starts up that the clipSpeak add-on is working which conflicts with the Announce feature of the function associated with the editing commands.
+
+
+Compatibility:
+- the display of the list of icons in the notification area is now operational under versions of Windows 11 greater than or equal to version 22h2 build 22621.1344.
+- taking into account the possible use of wasapi by NVDA.
+- NVDA versions below 2022.1 are no longer supported.
+
+
+Various:
+- the add-on is disabled during the installation of an NVDA update.
+
+
+Changes:
+- "NVDA Audio Manager and Active Applications" dialog has been renamed to "Audio Source Manager".
+- this dialog now presents the list of active audio output devices and allows to manage the audio sources of a particular device.
+- the two scripts to go to the next or previous line containing an irregularity detected by the text analyzer are removed and replaced by two scripts to go to the next or previous irregularity.
+
+
+Developments:
+- the code for the "Sound Control" functionality has been completely restructured. Thanks to the author of the "volumeAdjustment" (Oleksandr Gryshchenko) add-on whose structure of his code served as a reference.
+- upgraded markdown2.py file to version 2.4.9.
+- updated pycaw library to version v20230407.
+
 
 + v12.0 (February/22/2023) +
 Compatibility with NVDA 2023.1 and dropping support for NVDA versions earlier than 2021.1.
 
 New:
 - enhancements for Windows Explorer:
- - a script to announce the access path of the folder or the file which is under the cursor of the Windows explorer, or copy this path in the clipboard.
- - a script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
-- possibility to block the "Insert" and "Caps lock" keys.
-- possibility to limit the repetition of keys
+ - A script to announce the access path of the folder or the file which is under the cursor of the Windows explorer, or copy this path in the clipboard.
+ - A script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
+- Possibility to block the "Insert" and "Caps lock" keys.
+- Possibility to limit the repetition of keys
 
 
 Bug fixes:
-- reminder: version 11.4.2 fixed the problem of regression of the automatic update of the extension. Versions prior to this version must be updated manually.
-- the "Manage user configuration" sub-menu will no longer appear several times after reloading the add-on.
+- Reminder: version 11.4.2 fixed the problem of regression of the automatic update of the extension. Versions prior to this version must be updated manually.
+- The "Manage user configuration" sub-menu will no longer appear several times after reloading the add-on.
 
 
 Changes:
-- the scripts concerning the voice history no longer directly copy the recording to the clipboard. This copy is now done by double-pressing the command gesture of the script to announce the current record.
-- the "readme.md" file is deleted for languages ​​other than English (en) and should no longer be translated.
+- The scripts concerning the voice history no longer directly copy the recording to the clipboard. This copy is now done by double-pressing the command gesture of the script to announce the current record.
+- The "readme.md" file is deleted for languages ​​other than English (en) and should no longer be translated.
 
 
 Updating the code :
-- removed the code regarding the announcement of the focused word after word deletion introduced in NVDA 2020.3.
-- removal of the code concerning the correction made in the BoxSizerHelper class of guiHelper.py from NVDA 2021.1
-- removed code supporting versions prior to NVDA 2021.1. The modules concerned are:
+- Removed the code regarding the announcement of the focused word after word deletion introduced in NVDA 2020.3.
+- Removal of the code concerning the correction made in the BoxSizerHelper class of guiHelper.py from NVDA 2021.1
+- Removed code supporting versions prior to NVDA 2021.1. The modules concerned are:
  - browseModeEx: __init__.py, documentBaseEx.py, NVDAObjectsUIA.py, virtualBuffers.py
  - commandKeysSelectiveAnnouncementAndRemanence: __init__.py
  - complexSymbols: newSymbolsHandler.py

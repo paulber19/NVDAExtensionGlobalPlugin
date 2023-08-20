@@ -22,15 +22,15 @@ systrayIconsDoc = _("Shows the list of buttons on the System Tray")
 # Translators: The name of a category of NVDA commands.
 SCRCAT_VOLUME_CONTROL = _("Volume control")
 # Translators: Input help mode message
-# for setting to x percent  the volume of current focused application command.
+# for setting to x percent the volume of current focused application command.
 _setFocusedAppVolumeToMsg = _(
 	"Set the volume of current focused application to %s percent of speakers volume")
 # Translators: Input help mode message
 # for setting to x the main volume.
 _setSpeakersVolumeToMsg = _("Set the main volume to %s")
 # Translators: Input help mode message
-# for setting to x percent  the volume of NVDA command
-_setNVDAVolumeToMsg = _("Set the NVDA volume to %s percent of  speakers volume")
+# for setting to x percent the volume of NVDA command
+_setNVDAVolumeToMsg = _("Set the NVDA volume to %s percent of speakers volume")
 
 scriptsToDocInformations = {
 	# Translators: Input help mode message
@@ -317,12 +317,12 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for find and move to next line with textanalyzer irregularity
 	"findNextTextAnalyzerAlert": (
-		_("Move to next line with irregularity detected by text analyzer"),
+		_("Move to next irregularity detected by text analyzer"),
 		None, "hdr31-3"),
 	# Translators: Input help mode message
 	# for find and move to previous line with textanalyzer irregularitiy
 	"findPreviousTextAnalyzerAlert": (
-		_("Move to previous line with irregularity detected by text analyzer"),
+		_("Move to previous irregularity detected by text analyzer"),
 		None, "hdr31-3"),
 	# Translators: Input help mode message
 	# for manageUserConfigurations script commands.
@@ -339,7 +339,7 @@ scriptsToDocInformations = {
 		"hdr7-2"),
 	# Translators: Input help mode message
 	# for addToClip script commands.
-	"addToClip": (_("Add, to  clipboard,  the selected text "), None, "hdr7-1"),
+	"addToClip": (_("Add, to clipboard, the selected text "), None, "hdr7-1"),
 	# Translators: Input help mode message
 	# for clearClipboard script commands.
 	"emptyClipboard": (_("Empty the clipboard"), globalCommands.SCRCAT_SYSTEM, "hdr7-3"),
@@ -501,5 +501,5 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for displayNVDAAndApplicationsAudioChannelsManagerDialog script command
 	"displayNVDAAndApplicationsAudioManager": (
-		_("Display NVDA and active Applications's audio manager"), SCRCAT_VOLUME_CONTROL, "hdr34"),
+		_("Display NVDA 's audio sources manager"), SCRCAT_VOLUME_CONTROL, "hdr34"),
 }

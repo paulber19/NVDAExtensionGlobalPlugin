@@ -56,6 +56,8 @@ def setInstallFeatureOption(featureID, option):
 	global _addonConfigManager
 	conf = _addonConfigManager.addonConfig
 	conf[addonConfig.SCT_InstallFeatureOptions][featureID] = option
+	log.debug("setInstallFeatureOption: feature= %s, value= %s" % (
+		featureID, conf[addonConfig.SCT_InstallFeatureOptions][featureID]))
 
 
 def isInstall(featureID):
@@ -74,6 +76,9 @@ def TOGGLE(sct, id, toggle):
 	conf = _addonConfigManager.addonConfig
 	if toggle:
 		conf[sct][id] = not conf[sct][id]
+		log.debug("toggle:  sct= %s, id= %s, value= %s" % (
+			sct, id, conf[sct][id]
+		))
 	return conf[sct][id]
 
 
@@ -188,17 +193,36 @@ def toggleReportNumlockStateAtStartAdvancedOption(toggle=True):
 	return toggleAdvancedOption(addonConfig.ID_ReportNumlockStateAtStart, toggle)
 
 
+def toggleReportCapslockStateAtStartAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_ReportCapslockStateAtStart, toggle)
+
+
 def toggleReversedPathWithLevelAdvancedOption(toggle=True):
-		return toggleAdvancedOption(addonConfig.ID_ReversedPathWithLevel, toggle)
+	return toggleAdvancedOption(addonConfig.ID_ReversedPathWithLevel, toggle)
 
 
 def toggleLimitKeyRepeatsAdvancedOption(toggle=True):
-		return toggleAdvancedOption(addonConfig.ID_LimitKeyRepeats, toggle)
+	return toggleAdvancedOption(addonConfig.ID_LimitKeyRepeats, toggle)
 
+
+def toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_RecordCurrentSettingsForCurrentSelector, toggle)
+
+
+def toggleTypedWordSpeakingEnhancementAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_TypedWordSpeakingEnhancement, toggle)
+
+
+def toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_AllowNVDATonesVolumeAdjustment, toggle)
+
+
+def toggleAllowNVDASoundGainModificationAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_AllowNVDASoundGainModification, toggle)
 
 
 class AddonConfigurationManager():
-	_currentConfigVersion = "2.9"
+	_currentConfigVersion = "3.0"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
 
@@ -207,6 +231,7 @@ class AddonConfigurationManager():
 		"2.7": addonConfig.AddonConfiguration27,
 		"2.8": addonConfig.AddonConfiguration28,
 		"2.9": addonConfig.AddonConfiguration29,
+		"3.0": addonConfig.AddonConfiguration30,
 	}
 
 	def __init__(self):
@@ -217,6 +242,7 @@ class AddonConfigurationManager():
 		self.basicLocalizedKeyLabels = localizedKeyLabels.copy()
 		self.restoreAddonProfilesConfig(self.addonName)
 		self.loadSettings()
+		log.debug("%s configuration: %s" % (self.addonName, self.addonConfig))
 		self.setIsTestVersionFlag()
 		config.post_configSave.register(self.handlePostConfigSave)
 
@@ -282,6 +308,7 @@ class AddonConfigurationManager():
 				# error on reading config file, so delete it
 				os.remove(addonConfigFile)
 				self.warnConfigurationReset()
+		self.shouldSetRecoveryDefaultVolumes = False
 		if os.path.exists(addonConfigFile):
 			self.addonConfig =\
 				self._versionToConfiguration[self._currentConfigVersion](addonConfigFile)
@@ -301,9 +328,8 @@ class AddonConfigurationManager():
 			self.addonConfig =\
 				self._versionToConfiguration[self._currentConfigVersion](None)
 			self.addonConfig.filename = addonConfigFile
-			# probably, it's an add-on installation, set default volume control parameters
-			from ..computerTools.volumeControl import setDefaultVolumeControl
-			setDefaultVolumeControl(self)
+			# probably, it's an add-on installation, set recovery default volumes
+			self.shouldSetRecoveryDefaultVolumes = True
 		# merge step
 		oldConfigFile = os.path.join(self.curAddon.path, self._configFileName)
 		if os.path.exists(oldConfigFile):
@@ -661,12 +687,10 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		return int(conf[SCT_AdvancedOptions][ID_ReducedPathItemsNumber])
 
-	def setReducedPathItemsNumber(self,nb):
+	def setReducedPathItemsNumber(self, nb):
 		from .addonConfig import SCT_AdvancedOptions, ID_ReducedPathItemsNumber
 		conf = self.addonConfig
 		conf[SCT_AdvancedOptions][ID_ReducedPathItemsNumber] = str(nb)
-
-
 
 	def getConfirmAudioDeviceChangeTimeOut(self):
 		from .addonConfig import SCT_AdvancedOptions, ID_ConfirmAudioDeviceChangeTimeOut
@@ -741,7 +765,6 @@ class AddonConfigurationManager():
 			option = self.getReportingSpellingErrorsByOption()
 		return option == addonConfig.RSE_Message
 
-
 	def getKeyRepeatDelay(self):
 		from .addonConfig import SCT_AdvancedOptions, ID_KeyRepeatDelay
 		conf = self.addonConfig
@@ -752,6 +775,15 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		conf[SCT_AdvancedOptions][ID_KeyRepeatDelay] = str(delay)
 
+	def getTonalitiesVolumeLevel(self):
+		from .addonConfig import SCT_AdvancedOptions, ID_TonalitiesVolumeLevel
+		conf = self.addonConfig
+		return conf[SCT_AdvancedOptions][ID_TonalitiesVolumeLevel]
+
+	def setTonalitiesVolumeLevel(self, level):
+		from .addonConfig import SCT_AdvancedOptions, ID_TonalitiesVolumeLevel
+		conf = self.addonConfig
+		conf[SCT_AdvancedOptions][ID_TonalitiesVolumeLevel] = int(level)
 
 
 # singleton for add-on configuration manager

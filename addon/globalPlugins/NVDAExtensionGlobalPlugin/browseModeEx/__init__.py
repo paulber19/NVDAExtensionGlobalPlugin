@@ -32,9 +32,6 @@ elif NVDAVersion > [2022, 1]:
 else:
 	# for nvda versions until 2022.1
 	from .documentBaseEx import DocumentWithTableNavigation_2022_1 as DocumentWithTableNavigationEx
-
-
-
 from .. utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
 from ..utils.NVDAStrings import NVDAString
 from ..settings import toggleLoopInNavigationModeOption

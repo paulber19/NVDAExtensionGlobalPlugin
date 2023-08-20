@@ -1,4 +1,4 @@
-# globalPlugins\NVDAExtensionGlobalPlugin\computer\shutdown_gui.py
+# globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_gui.py
 # A part of NVDAExtensionGlobalPlugin add-on
 # Copyright (C) 2019 - 2021 paulber19
 # This file is covered by the GNU General Public License.

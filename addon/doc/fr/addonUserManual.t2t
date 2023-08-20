@@ -63,8 +63,9 @@ Cette extension ajoute aux commandes globales de NVDA:
   - établir manuellement ou automatiquement le son principal et celui du flux audio de NVDA ,
   - modifier le niveau du volume principal ou celui du flux audio de l'application sous le curseur,
   - rétablissement automatique du volume principal et de NVDA au chargement de l'extension,
-  - [ utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA #hdr33],
-  - [orientation de la sortie audio de NVDA #hdr34]
+  - [utilisation temporaire  d'un périphérique de sortie audio sans impacter la configuration de NVDA #hdr33],
+  - [orientation de la sortie audio de NVDA  et des applications #hdr34],
+  -[réglage du volume des tonalités et des sons de NVDA #hdr34],
  - [Outils pour le  développement d'extensions #hdr22],
  - [Compléments concernant la date et l'heure #hdr24]:
   - copie de la date et l'heure dans le presse-papier,
@@ -85,7 +86,7 @@ Cette extension ajoute aux commandes globales de NVDA:
  - [Titrage des boites de dialogue de l'extension avec son nom #hdr302],
  - [configuration de la temporisation d'attente de répétition du même geste de commande #hdr303],
  - [utilisation possible des touches du pavé numérique de manière standard #hdr304],
- - [possibilité de limiter la répitition de touches #hdr306],
+ - [possibilité de limiter la répétition de touches #hdr306],
 - et les autres améliorations:
  - [menu pour explorer le dossier de configuration de l'utilisateur ou le dossier programme de NVDA #hdr202],
  - [présentation des informations de mise en forme du texte dans une boite de dialogue  en lieu et place d'un document HTML #hdr203],
@@ -94,12 +95,13 @@ Cette extension ajoute aux commandes globales de NVDA:
  - [script pour émuler la touche "Applications" #hdr25],
  - [script pour fermer toutes les fenêtres ouvertes #hdr26],
  - [script pour afficher la liste des extensions en fonctionnement #hdr27],
- - [possibilité d'exécution  des scripts dans le dialogue "Gestes de commandes" de NVDA #hdr205] ,
+ - [possibilité d'exécution  des scripts dans le dialogue "Gestes de commandes" de NVDA #hdr205],
  - [sélection automatique de la catégorie dans le dialogue "Gestes de commandes" #hdr206],
- - [Sélection du dernier paramètre utilisé dans la boucle des paramètres du synthétiseur #hdr207],
+ - [Sélection automatique du dernier paramètre utilisé dans la boucle des paramètres du synthétiseur #hdr207],
  - [compléments pour l'explorateur Windows#hdr208] :
   - un script pour annoncer le chemin d'accès du dossier ou du fichier qui se trouve sous le curseur de l'explorateur Windows, ou copier ce chemin dans le presse-papier.
-  - un script pour annoncer, en remontant l'arborescense des dossiers, le nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur.
+  - un script pour annoncer, en remontant l'arborescence des dossiers, le nom des dossiers composant le chemin du dossier contenant l'élément sous le curseur.
+ - [amélioration de l'écho clavier par mot #hdr209].
 
 
 ++ Menu de configuration de l'extension ++[hdr-configurationMenu]
@@ -138,7 +140,7 @@ NVDA offre l'option "Sauvegarder la configuration en quittant" (voir manuel util
 
 Cette extension suit ce mode de fonctionnement.
 
-Certaines modifications de paramètres de l'extension nécessitent la sauvegarde de la configuration et le redémarrage de NVDA. Dans ce cas, il est proposé à l'utilisateur la sauvegarde et le redémarrage immédiat comme le fait NVDA lorsqu’il y a changement du langage.
+Certaines modifications de paramètres de l'extension nécessitent la sauvegarde de la configuration et le redémarrage de NVDA. Dans ce cas, il est proposé à l'utilisateur la sauvegarde et le rerage immédiat comme le fait NVDA lorsqu’il y a changement du langage.
 
 
 Lors de la désinstallation de l'extension, son fichier de configuration est supprimé et la configuration de l'extension est effacée de tous les profils de configuration.
@@ -200,7 +202,6 @@ Certaines fonctionnalités ne sont plus disponibles, comme par exemple:
 
 ++ Compatibilité ++
 La configuration de la fonctionnalité "Commutation de profil vocal" ayant changée, celle-ci est effacée lors d'une mise à jour à partir d'une version de l'extension plus ancienne que la 9.0. Tous les sélecteurs sont libérés et les profils vocaux associés sont supprimés.
-
 
 ++ Historique ++
 L'historique des versions de cette extension est dans le fichier ["changes.html" changes.html]
@@ -554,7 +555,7 @@ Pour les navigateurs Microsoft Internet Explorer, Microsoft Edge, Mozilla Firefo
 - aller à la dernière cellule de la colonne (geste de commande KEY_MOVE_LAST_CELL_COLUMN).
 
 
-Les quatre dernier scripts sont supprimé de l'extension pour les versions supérieures ou égales à 2022.2 car ils sont maintenant fournis par NVDA.
+Les quatre derniers scripts sont supprimés de l'extension pour les versions supérieures ou égales à 2022.2 car ils sont maintenant fournis par NVDA.
 
 Tous ces scripts sont rangés dans la catégorie "Tableau" dans l'arborescence du dialogue "Gestes de commandes" de NVDA.
 
@@ -615,9 +616,9 @@ Suite à la commande, le texte sélectionné est ajouté au contenu du presse-pa
 
 Il est possible de placer un texte de séparation entre les blocs de texte ajoutés. Ce texte est configurable à l'aide du champ d'édition nommé "Texte utilisé comme séparateur entre les contenus ajoutés au presse-papier".
 
-Une demande de confirmation sera afficher avant de procéder à l'ajout si la case à cocher "Demander confirmation avant l'ajout dans le presse-papier" est cochée.
+Une demande de confirmation sera affichée avant de procéder à l'ajout si la case à cocher "Demander confirmation avant l'ajout dans le presse-papier" est cochée.
 
-Note: ce script est extrait de l'extension "ClipContentsDesigner" (Auteurs Noelia, Abdel)  qui fournit  aussi d'autres fonctionnalités intéressantes concernant le presse-papier. Il a été mis dans cette extension sur demande d'utilisateur qui voulaient en même temps l'annonce des     fonctions "copier" et "coller".
+Note: ce script est extrait de l'extension "ClipContentsDesigner" (Auteurs Noelia, Abdel) qui fournit aussi d'autres fonctionnalités intéressantes concernant le presse-papier. Il a été mis dans cette extension sur demandes d'utilisateur qui voulaient en même temps l'annonce des fonctions "copier" et "coller".
 
 +++ Annonce du texte dans le presse-papier de Windows +++[hdr7-2]
 Ce script remplace le script de base de NVDA ("NVDA+c") pour le compléter en indiquant à l'utilisateur qui a exécuté la commande que :
@@ -625,7 +626,7 @@ Ce script remplace le script de base de NVDA ("NVDA+c") pour le compléter en in
 - dans le cas où il n'y a pas de texte dans le presse-papier, le presse-papier peut ne pas être vide.
 
 
-le nombre de caractères lus n'est plus limité à 1024.
+Le nombre de caractères lus n'est plus limité à 1024.
 
 Ce nombre maximum peut être configuré à l'aide du choix "Nombre maximum de caractères à lire" du groupe "Presse-papier" de la catégorie "Compléments à NVDA".
 
@@ -647,8 +648,8 @@ Elle ajoute, pour les boites de dialogue du style "Ouvrir", "Enregistrer", "Enre
 Ces scripts sont rangés dans la catégorie "ADDON_SUMMARY" du dialogue "Gestes de commande" de NVDA.
 Ce sont:
 - "Annoncer le nom du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer. Deux appuis: annoncer son chemin complet": geste de commande "MAIN_KEY_SAY_CURRENT_FOLDER" qui lui est affecté par défaut.
-- "Annoncer le nom du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer: commande "KEY_SAY_CURRENT_FOLDERNAME" de l'interpréteur .
-- "Annoncer le chemin complet du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer: commande "KEY_SAY_CURRENT_FOLDERPATH" de l'interpréteur .
+- "Annoncer le nom du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer: commande "KEY_SAY_CURRENT_FOLDERNAME" de l'interpréteur.
+- "Annoncer le chemin complet du dossier sélectionner pour les boites de dialogue du style Ouvrir, Enregistrer: commande "KEY_SAY_CURRENT_FOLDERPATH" de l'interpréteur.
 
 
 Aucun geste de commande n'est associé aux deux derniers scripts, mais il est possible de leur en associer un à l'aide du dialogue "Geste de commandes" de NVDA.
@@ -680,7 +681,7 @@ Ce script affiche la boite de dialogue "Gestion des journaux de NVDA" présentan
 - le bouton "Fermer" pour fermer la boite de dialogue.
 
 
-Le journal s'ouvre dans le programme associé à l'extension .log. Si il n'y a pas encore l'association d'un programme avec cet extension, vous devrez la définir (choisissez le bloc-notes par exemple).
+Le journal n'est pas directement ouvert. Il est copié dans un fichier temporaire  qui est ensuite ouvert dans wordpad.
 
 +++ Ouverture des journaux de NVDA +++[hdr9-2]
 La description de ce script est: "Ouvrir le journal courant de NVDA. Deux appuis: ouvrir son ancien journal. Trois appuis: copier le chemin du journal courant dans le presse-papier".
@@ -693,7 +694,11 @@ Un double appui, l'ouverture de l'ancien journal.
 
 Un triple appui, la copie du chemin du journal courant dans le presse-papier.
 
-Le journal s'ouvre dans le programme associé à l'extension .log. Si il n'y a pas encore l'association d'un programme avec cet extension, vous devrez la définir (choisissez le bloc-notes par exemple).
+
+Le journal n'est pas directement ouvert. Il est copié auparavant dans un fichier temporaire  "NVDALog.txt" ou "oldNVDALog.txt".
+Ce fichier temporaire  s'ouvre alors dans le programme associé à l'extension .txt. Par défaut, c'est le bloc-notes.
+
+
 
 ++ Historique des annonces vocales ++[hdr10]
 Cette fonctionnalité est installée par défaut sans geste de commande.
@@ -718,7 +723,7 @@ Ce script se lance à l'aide du geste de commande, "MAIN_KEY_CURRENT_RECORD" aff
 
 Un simple appui déclenche l'annonce du dernier enregistrement annoncé.
 
-Undouble appui,  déclenche sa  copie dans le presse-papier
+Un double appui, déclenche sa copie dans le presse-papier
 
 Un triple appui, déclenche l'affichage de tout l'historique.
 
@@ -796,7 +801,7 @@ Si l'élément "aucune" de la liste des combinaisons est coché, la touche sera 
 
 Par contre, si la case à cocher "Dire les touches de commande" est cochée, le fait de cocher une touche permet de ne pas faire annoncer cette touche lorsque NVDA est configuré à les annoncer.
 
-La liste des combinaisons de touches de modification est alors accessible et tous les éléments de cette liste sont cochées par défaut. Cela signifie que la touche tapée avec ou sans combinaison ne sera pas annoncée.
+La liste des combinaisons de touches de modification est alors accessible et tous les éléments de cette liste sont cochés par défaut. Cela signifie que la touche tapée avec ou sans combinaison ne sera pas annoncée.
 
 L'action de décocher une combinaison permet alors de faire annoncer la touche avec cette combinaison.
 
@@ -964,7 +969,7 @@ Pour changer rapidement de profil vocal, le mode "Commutation de profil vocal" e
 La description de ce script est : "Activer ou désactiver le Mode commutation de profil vocal".
 
 Pour lancer ce script, deux possibilités:
-- soit en tapant la commande "KEY_VOICE_PROFIL_SWITCHING" de l'interpréteur ,
+- soit en tapant la commande "KEY_VOICE_PROFIL_SWITCHING" de l'interpréteur,
 - soit à l'aide du geste de commande "MAIN_KEY_TOGGLE_VOICE_PROFIL_SWITCHING" (non installé par défaut).
 
 
@@ -1007,6 +1012,18 @@ Leurs descriptions sont :
 - "Annoncer les paramètres vocaux actuels" : se lance avec la commande"KEY_REPORT_SPEECH_SETTINGS" de l'interpréteur de commande.
 - "Afficher les paramètres vocaux actuels": se lance avec la commande "KEY_DISPLAY_SPEECH_SETTINGS" de l'interpréteur de commande.
 - "Annoncer les paramètres vocaux actuels. Deux appuis: les afficher": aucune commande de l'interpréteur ne lui est associée.
+
+
++++ Enregistrement automatique des paramètres vocaux lors d'une commutation de profil +++[hdr17-7]
+Les paramètres vocaux courant peuvent être automatiquement enregistrés pour le sélecteur courant lors d'une commutation de profil vocal.
+
+Cela a pour but d'éviter d'être obligé de réassocier manuellement le profil vocal au même sélecteur si des paramètres vocaux ont été modifiés, comme par exemple le débit, le volume et de perdre ces modifications en basculant sur un autre profil vocal si ce n'est pas fait.
+
+Évidemment il faut que le sélecteur courant soit associé à un profil vocal. Si ce n'est pas le cas, il n'y aura pas d'enregistrement.
+
+Cette fonctionnalité est configurable et n'est pas activée par défaut.
+
+Pour l'activer, il faut cocher l'option "Enregistrer automatiquement les paramètres vocaux actuels pour le sélecteur courant avant la commutation " qui se trouve dans la catégorie "Avancé" des paramètres globaux de l'extension.
 
 
 ++ Rémanence des touches NVDA et de modification ++[hdr18]
@@ -1137,7 +1154,7 @@ L'annulation de toutes les modifications à l'aide du bouton "Supprimer tout" es
 ++ Contrôle du son ++[hdr21]
 Par défaut, cette fonctionnalité est installée sans geste de commande.
 
-Elle ne peut fonctionner que sous le système d'exploitation Windows 10.
+Elle ne peut fonctionner que sous les systèmes d'exploitation Windows 10 ou Windows 11.
 
 Si elle est installée avec ou sans geste de commande, Elle place le groupe "Contrôle du son" dans la catégorie "Ordinateur" du dialogue "Paramètres".
 
@@ -1149,7 +1166,7 @@ Ce script se lance:
 - soit à l'aide du geste de commande "MAIN_KEY_VOLUME_ON" affecté par défaut.
 
 
-Il établit le son pour le volume principal et pour le flux audio de NVDA et force les niveaux de chacun aux valeurs des niveaux de rétablissement configurées dans le groupe "Contrôle du son" de la catégorie "Ordinateur" des paramètres de l'extension.
+Il établit le volume du périphérique de sortie audio qu'utilise NVDA et celui du flux audio de NVDA et force les niveaux de chacun aux valeurs des niveaux de rétablissement configurées dans le groupe "Contrôle du son" de la catégorie "Ordinateur" des paramètres de l'extension.
 
 +++ Coupure ou établissement du son du flux audio de l'application placée sous le curseur +++[hdr21-2]
 Ce script se lance:
@@ -1171,15 +1188,16 @@ Ils se lancent à l'aide des commandes suivantes de l'interpréteur:
 
 
 Ces commandes, contrairement aux autres commandes de l'interpréteur, peuvent être répéter sans être obliger de relancer celui-ci. L'interpréteur reste toujours actif.
+
 Une fois le niveau de volume atteint, il faut taper sur la touche "Échapp" pour quitter l'interpréteur.
 
 L'augmentation ou la diminution du volume se fait par pas. Il est possible de régler la taille de ces pas dans les paramètres de l'extension sous la catégorie "Ordinateur", groupe "Contrôle du son", en choisissant la taille du pas.
 
-La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. La taille est réglée par défaut sur 5,.
+La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. La taille est réglée par défaut sur 5.
 
 Par défaut, le niveau du volume de l'application ne peut pas dépasser le niveau du volume principal.
 
-Mais cette limitation peut être outrepassée si l'option "Augmenter le volume principal si nécessaire" est cochée. Cette option se trouve dans le groupe "Modification du volume" de la catégorie "Ordinateur" du dialogue "Paramètres"de l'extension.
+Mais cette limitation peut être outrepassée si l'option "Augmenter le volume principal si nécessaire" est cochée. Cette option se trouve dans le groupe "Modification du volume" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension.
 
 +++ Modification du volume de NVDA +++[hdr21-8]
 Ces scripts permettent d'augmenter, diminuer, ou fixer le volume de NVDA.
@@ -1205,7 +1223,8 @@ Par défaut, il ne peut pas être supérieur au volume principal, mais cette lim
 
 
 +++ Modification du volume principal +++[hdr21-4]
-Ces scripts permettent d'augmenter, diminuer, ou fixer le volume principal.
+Ces scripts permettent d'augmenter, diminuer, ou fixer le volume principal du périphérique de sortie audio utilisé par l'application sous le focus (y compris NVDA) ou celui par défaut de Windows si l'application sous le focus n'en utilise aucun.
+
 
 Ils sont installés sans gestes de commandes. Mais il est toujours possible de leur en attribuer avec le dialogue "Gestes de commandes".
 
@@ -1225,11 +1244,11 @@ La taille 1 correspond au plus petit pas, la taille 20 au plus grand pas. Par d�
 Le volume principal ne peut pas devenir inférieur au seuil de rétablissement configuré.
 
 +++ Retour au précédent niveau +++[hdr21-5]
-Lors de l'utilisation des commandes précédentes, le niveau du volume est enregistré avant l'exécution de chaque commande, pour le volume principal, le volume de NVDA et pour chaque application.
+Lors de l'utilisation des commandes précédentes, le niveau du volume est enregistré avant l'exécution de chaque commande, pour le périphérique audio, pour NVDA et pour chaque application.
 
 Pour revenir à ce niveau, les commandes suivantes sont disponibles:
-- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume principal au précédent niveau.
-- "KEY_NVDA_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume de NVDA au précédent niveau.
+- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume du dernier périphérique audio utilisé au précédent niveau.
+- "KEY_NVDA_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume de NVDA à son précédent niveau.
 - "KEY_APP_VOLUME_PREVIOUS_LEVEL": pour remettre le niveau du volume de l'application sous le curseur à son précédent niveau.
 
 
@@ -1239,12 +1258,12 @@ Ces enregistrements ne sont pas conservés lors d'un redémarrage de NVDA.
 
 +++ Annonce des changements de niveau +++[hdr21-6]
 
-Les changements de niveau du volume sont annoncés par défaut.
+Les changements de niveau du volume sont annoncés par défaut. Le nom du périphérique de sortie audio est aussi annoncé lors du  premier changement de volume pour ce périphérique.
 
 Mais il est possible de désactiver cette annonce à l'aide de l'option "Annoncer les modifications de volume" du groupe "Modification du volume" de la catégorie "Ordinateur".
 
 +++ Rétablissement automatique du son principal et de NVDA au chargement de l'extension +++[hdr21-7]
-Cette fonction permet de rétablir, au chargement de cette extension, le volume principal et celui de NVDA et de positionner le niveau de chaque volume à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil minimum défini par configuration.
+Cette fonctionalité permet de rétablir, au chargement de cette extension, le volume de la source audio NVDA et celui du périphérique de sortie audio qu'elle utilise en positionnant le niveau de chacun à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil minimum défini par configuration.
 
 Pour cela, le groupe "Contrôle du son" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension, présente les éléments de configuration suivants:
 - la case à coché "Établir automatiquement le son principal et de NVDA au chargement de l'extension" qui permet d'activer ou désactiver cette option,
@@ -1254,11 +1273,11 @@ Pour cela, le groupe "Contrôle du son" de la catégorie "Ordinateur" du dialogu
 - le niveau du volume de NVDA à rétablir (en pourcentage du volume principal).
 
 
-À son lancement, cette extension vérifie que le volume principal et celui de NVDA sont au-dessus du seuil de rétablissement configuré pour chacun.
+À son lancement, cette extension vérifie que le volume du périphérique de sortie audio  et celui de NVDA sont au-dessus du seuil de rétablissement configuré pour chacun.
 
 Si ce n'est pas le cas, cette extension fixe alors le niveau du volume à la valeur du niveau à rétablir configurée.
 
-Lors de l'installation de cette extension, les niveaux courants du volume principal et de NVDA sont pris en compte pour définir les valeurs des niveaux à rétablir.
+Lors de l'installation de cette extension, les niveaux courants du volume de NVDA et du périphérique de sortie audio utilisé par NVDA  sont pris en compte pour définir les valeurs des niveaux à rétablir.
 
 ++ Scripts pour Cliquer à la position courante de l'objet navigateur ++[hdr23]
 Ces scripts permettent de faire, avec le bouton droit ou gauche de la souris, un simple ou un double clic à la position courante de l'objet navigateur.
@@ -1340,7 +1359,7 @@ L'extension installe un script pour fermer toutes les fenêtres ouvertes.
 
 Ce script est rangé dans la catégorie des scripts de l'extension et sous la description "Fermer toutes les fenêtres ouvertes".
 
-Il se lance avec la commande "KEY_CLOSE_ALL_WINDOWS" de l'interpréteur de commande . Aucun geste de commande ne lui est affecté par défaut.
+Il se lance avec la commande "KEY_CLOSE_ALL_WINDOWS" de l'interpréteur de commande. Aucun geste de commande ne lui est affecté par défaut.
 
 
 ++ Lister les extensions en fonctionnement ++[hdr27]
@@ -1355,7 +1374,7 @@ Pour cela, l'extension installe un script sous la description "Afficher la liste
 Ce script se lance avec la commande "KEY_RUNNING_ADDONS" de l'interpréteur de commande. Aucun geste de commande ne lui est affecté.
 
 Les extensions sont listées par type:
-- extension globale : c'est une extension qui apporte un complément d'accessibilité quelque soit l'application sous le curseur.
+- extension globale : c'est une extension qui apporte un complément d'accessibilité quelle que soit l'application sous le curseur.
 - extension application : c'est une extension qui apporte un complément d'accessibilité pour une application bien précise.
 - extension pilote de synthèse vocale : c'est une extension qui installe un pilote pour une synthèse vocale.
 - extension pilote d'afficheur braille : c'est une extension qui installe un pilote pour un afficheur braille.
@@ -1536,7 +1555,7 @@ L'appui sur le premier bouton affiche le dialogue "Ajout d'un nouveau dossier" q
 - une zone d'édition pour saisir l'identifiant du dossier,
 - une zone d'édition pour saisir le chemin de l'emplacement du dossier,
 - le bouton "Parcourir..." pour aller rechercher l'emplacement du dossier,
-- le bouton "Ajouter" pour valider et ajouter le dossier dans la list,
+- le bouton "Ajouter" pour valider et ajouter le dossier dans la liste,
 - le bouton "Annuler".
 
 
@@ -1569,7 +1588,7 @@ Ils ont pour objectif de fournir les outils pour importer des paramètres d'un a
 L'activation de ces boutons affiche chacun son propre dialogue qui ne se différencie que par leur titre.
 
 Dans ces dialogues, nous trouvons :
-- la liste des dossiers à partir duquel l'importation se fera (seul les dossiers de configuration sont présentés),
+- la liste des dossiers à partir duquel l'importation se fera (seuls les dossiers de configuration sont présentés),
 - le bouton "Importer des extensions",
 - le bouton "Importer les dictionnaires de parole",
 - le bouton "Importer les prononciations de symbole ou ponctuation",
@@ -1638,7 +1657,7 @@ Après les 5 premières étapes:
 
 
 ++++ Transfert de la configuration active d'un ordinateur sur un autre ordinateur via une clé USB ++++
-- sur l'ordinateur source, lancer le "Gestionnaire des configuration utilisateur" ("NVDA+j" suivi de "KEY_USER_CONFIG_MANAGEMENT"),
+- sur l'ordinateur source, lancer le "Gestionnaire des configurations utilisateur" ("NVDA+j" suivi de "KEY_USER_CONFIG_MANAGEMENT"),
 - appuyer sur le bouton "Ajouter un nouveau dossier",
 - saisir l'identifiant du dossier de configuration (par exemple "MonDossierDeConfiguration",
 - choisir le dossier racine de la clé USB comme emplacement du dossier de configuration,
@@ -1784,14 +1803,15 @@ Ces scripts sont:
 - "Analyser le paragraphe sous le curseur" : "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", commande interpréteur "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
-+++ Déplacement du curseur à la prochaine/précédente ligne contenant une irrégularité +++[hdr31-4]
-Les scripts suivants permettent de déplacer le curseur au début de la prochaine/précédente ligne contenant au moins une irrégularité:
-- déplacer le curseur à la prochaine ligne avec irrégularité: commande interpréteur "KEY_MOVETONEXTALERT_ANALYZER",
-- déplacer le curseur à la précédente ligne avec irrégularité: commande interpréteur "KEY_MOVETOPREVIOUSALERT_ANALYZER",
++++ Déplacement du curseur à la prochaine/précédente irrégularité +++[hdr31-4]
+Les scripts suivants permettent de déplacer le curseur à la prochaine/précédente  irrégularité:
+- déplacer le curseur à la prochaine irrégularité: commande interpréteur "KEY_MOVETONEXTALERT_ANALYZER",
+- déplacer le curseur à la précédente irrégularité: commande interpréteur "KEY_MOVETOPREVIOUSALERT_ANALYZER",
 
 
-Aucun geste de commande ne leur est associé, mais il est possible de le faire en utilisant le dialogue "Geste de commande". Ils sont placés dans la catégorie "ADDON_SUMMARY".
+La recherche de  l'irrégularité s'effectue dans une plage de 100 lignes. Si aucune irrégularité n'est trouvée dans cette plage, une demande est faite à l'utilisateur pour continuer la recherche dans une nouvelle plage.
 
+Aucun geste de commande n'est associé à ces deux scripts, mais il est possible de le faire en utilisant le dialogue "Geste de commande". Ils sont placés dans la catégorie "ADDON_SUMMARY".
 
 ++ Annonce de la position du curseur dans les zones d'édition ++[hdr32]
 Le script "Activer/ désactiver l'annonce de la position courante du curseur dans une zone d'édition" permet de faire annoncer ou pas la position du curseur lorsqu'il se trouve dans une zone d'édition.
@@ -1840,7 +1860,7 @@ En réponse à cette commande, s'affiche le dialogue "Gestionnaire du périphér
 
 Dans la liste, le déplacement se fait à l'aide des flèches de direction "haut" et "bas".
 
-Lorsque un périphérique est sélectionné, un double bip se fait entendre à sa sortie pour permettre de vérifier son bon fonctionnement ou raccordement et ainsi ne pas l'activer.
+Lorsqu'un périphérique est sélectionné, un double bip se fait entendre à sa sortie pour permettre de vérifier son bon fonctionnement ou raccordement et ainsi ne pas l'activer.
 
 Le basculement vers le périphérique sélectionné se fait soit en appuyant sur le bouton "Définir comme périphérique audio temporaire" (bouton par défaut), soit si le focus est dans la liste, avec la touche "Entrée".
 
@@ -1890,7 +1910,7 @@ Aucun geste de commande ne lui est affecté. Mais il est toujours possible de le
 
 Il se lance à l'aide de la commande "KEY_LEAVEUP_TEMPORARY_AUDIO_DEVICE" de l'interpréteur de commande.
 
-Le script n'a aucun effet si aucun périphérique audio temporaire est actif.
+Le script n'a aucun effet si aucun périphérique audio temporaire n'est actif.
 
 Sinon, la sortie audio de NVDA est alors dirigée vers le périphérique de sortie audio du profil de configuration actif.
 
@@ -1911,74 +1931,136 @@ Le second appui dans un temps rapproché, lance le script "Abandonner le périph
 
 
 ++ Orientation de la sortie audio de NVDA ++[hdr34]
-Cette fonctionnalité permet de séparer le son de NVDA du son des applications audio lancées et ainsi d'entendre dans une oreille, le son de NVDA et dans l'autre oreille, le son des autres applications audio.
+Cette fonctionnalité permet de séparer le son de NVDA du son émis par les autres  sources audio et ainsi d'entendre dans une oreille, le son de NVDA et dans l'autre oreille, le son des autres sources audio.
+Seuls les applications avec une source audio à deux cannaux et utilisant le même périphérique de sortie audio sont concernées.
+
+Elle permet aussi de régler le niveau du volume des tonalités émises par NVDA ( quand Wasapi n'est pas utilisé) et de modifier le gain des fichiers son de NVDA et de l'extension.
 
 Elle est installée par défaut.
 
-Techniquement, cela consiste à mettre à zéro le niveau du volume des canaux audio droits ou gauches de NVDA et des applications.
+Pour l'orientation du son, techniquement, cela consiste à mettre à zéro le niveau du volume des canaux audio droits ou gauches de NVDA et des sources audio.
 
 NVDA étant une application monophonique, le même son est joué sur les deux canaux. Il n'y a pas de perte audio phonique à mettre un canal à zéro.
 
 Mais ce n'est pas le cas pour les applications stéréophoniques.
 
 Pour orienter le son de NVDA, l'extension installe les scripts suivants :
-- Entendre NVDA à droite et l'application sous le curseur à gauche (commande : KEY_SPLIT_RIGHT_FOCUS),
-- Entendre NVDA à droite et toutes les applications à gauche (commande : KEY_SPLIT_RIGHT_ALL),
-- Entendre NVDA à gauche et l'application sous le curseur à droite (commande : KEY_SPLIT_LEFT_FOCUS),
-- Entendre NVDA à gauche et toutes les applications à droite (commande : KEY_SPLIT_LEFT_ALL),
-- Entendre NVDA et l'application sous le curseur au centre (commande : KEY_SPLIT_CENTER_FOCUS),
-- Entendre NVDA et toutes les applications au centre (commande : KEY_SPLIT_CENTER_ALL)
-- Entendre l'application sous le curseur au centre (commande : KEY_CENTER_FOCUSED_APP)
-- Afficher le Gestionnaire audio de NVDA et des applications actives (commande : KEY_SOUND_SPLIT_MANAGER)
+- Entendre NVDA à droite et le son de la source audio de l'application sous le curseur à gauche (commande : KEY_SPLIT_RIGHT_FOCUS),
+- Entendre NVDA à droite et le son de toutes les sources audio à gauche (commande : KEY_SPLIT_RIGHT_ALL),
+- Entendre NVDA à gauche et le son de la source audio de l'application sous le curseur à droite (commande : KEY_SPLIT_LEFT_FOCUS),
+- Entendre NVDA à gauche et le son de toutes les sources audio à droite (commande : KEY_SPLIT_LEFT_ALL),
+- Entendre NVDA et le son de la source audio de l'application sous le curseur au centre (commande : KEY_SPLIT_CENTER_FOCUS),
+- Entendre NVDA et le son de toutes les sources audio  au centre (commande : KEY_SPLIT_CENTER_ALL)
+- Entendre le son de la source audio de l'application sous le curseur au centre (commande : KEY_CENTER_FOCUSED_APP)
+- Afficher le Gestionnaire des sources audio (commande : KEY_SOUND_SPLIT_MANAGER)
 
 
 Aucun geste de commandes ne leur est affecté. Mais il est toujours possible de le faire en utilisant le dialogue "Gestes de commandes" de NVDA. Ces scripts se trouvent sous la catégorie "Contrôle du son" de ce dialogue.
 
 La commande "KEY_CENTER_FOCUSED_APP" est opérationnelle même si la fonctionnalité n'est pas installée afin, éventuellement, de pouvoir rééquilibrer l'audio de certaines applications restées déséquilibrées après la désinstallation de la fonctionnalité.
 
-Le dialogue "Gestionnaire audio de NVDA et des applications actives" permet aussi d'orienter le son de NVDA, mais aussi de fixer le niveau de volume des deux canaux audio de NVDA et des applications.
-Il présente :
-- la liste des applications audio,
-- le potentiomètre pour modifier le volume de l'application sélectionnée,
-- la case à cochée pour modifier l'état "muet" de l'application sélectionnée,
-- les potentiomètre pour modifier les niveaux des canaux gauche et droite de l'application sélectionnée.
 
+Le dialogue "Gestionnaire des sources audio" permet, outre l'orientation du son de NVDA, de:
+-  fixer le niveau de volume des deux canaux audio de NVDA et des sources audio,
+-  régler le volume des tonalités de NVDA quand Wasapi n'est pas utilisé,
+- modifier le gain des fichiers son de NVDA.
+
+Il présente :
+- la liste des périphériques de sortie audio,
+- la liste des sources audio pour le périphérique de sortie audio sélectionné,
+- le potentiomètre pour modifier le volume de la source sélectionnée,
+- sauf pour la source "NVDA", la case à cochée pour modifier l'état "muet" de la source sélectionnée,
+- les potentiomètres pour modifier les niveaux des canaux gauche et droite de lla source sélectionnée,
+- pour seulement la source "NVDA" et sans Wasapi, le potentiomètre pour régler le volume des tonalités émis par NVDA  et le bouton pour modifier le gain des fichiers son
+- pour seulement la source "NVDA" , le bouton pour modifier le gain des fichiers son.
+
+
+Le périphérique de sortie audio que Windows utilise par défaut est signalé.
 
 Quand la liste est focalisée, les commandes suivantes sont permises :
-- entendre l'application sélectionnée à droite : "flèche droite",
--entendre l'application sélectionnée à gauche : "flèche gauche",
-- entendre l'application sélectionnée au centre : "espace",
-- Entendre NVDA à droite et l'application sélectionnée à gauche : "majuscule + flèche droite",
-- Entendre NVDA à gauche et l'application sélectionnée à droite : "majuscule + flèche gauche",
-- Entendre NVDA et l'application sélectionnée au centre : "majuscule + espace",
-- Entendre NVDA à droite et toutes les applications à gauche : "contrôle + flèche droite",
-- Entendre NVDA à gauche et toutes les applications à droite : "contrôle + flèche gauche",
-- Entendre NVDA et toutes les applications au centre : "contrôle + espace",
-- augmenter ou diminuer d'un pas, le volume de l'application sélectionnée : "contrôle + flèche haut ou bas",
-- augmenter ou diminuer d'un double pas, le volume de l'application sélectionnée : "contrôle + page précédente ou suivante",
-- maximiser ou minimiser le volume de l'application : "contrôle + début ou fin",
-- couper ou rétablir le son de l'application : "contrôle + m",
+- entendre la source audio sélectionnée à droite : "flèche droite",
+- entendre la source audio sélectionnée à gauche : "flèche gauche",
+- entendre la source audio sélectionnée au centre : "espace",
+- Entendre NVDA à droite et lla source audio sélectionnée à gauche : "majuscule + flèche droite",
+- Entendre NVDA à gauche et la source audio sélectionnée à droite : "majuscule + flèche gauche",
+- Entendre NVDA et la source audio sélectionnée au centre : "majuscule + espace",
+- Entendre NVDA à droite et toutes les sources audio à gauche : "contrôle + flèche droite",
+- Entendre NVDA à gauche et toutes les sources audio à droite : "contrôle + flèche gauche",
+- Entendre NVDA et toutes les sources audio au centre : "contrôle + espace",
+- augmenter ou diminuer d'un pas, le volume de la source audio sélectionnée : "contrôle + flèche haut ou bas",
+- augmenter ou diminuer d'un double pas, le volume de la source audio sélectionnée : "contrôle + page précédente ou suivante",
+- maximiser ou minimiser le volume de la source audio : "contrôle + début ou fin",
+- couper ou rétablir le son de la source audio : "contrôle + m",
 - augmenter ou diminuer d'un pas le volume principal : "contrôle +majuscule + flèche haut ou bas",
 - augmenter ou diminuer d'un double pas, le volume principal : "contrôle + majuscule + page précédente ou suivante",
 - maximiser ou minimiser le volume principal : "contrôle + majuscule + début ou fin".
 
 
+Certaines commandes ne sont pas disponibles quand NVDA n'est pas dans la liste des sources audio du périphérique sélectionné.
+
 Cette liste est automatiquement rafraîchie lorsque le curseur lui est donné.
 
-Les modifications de basculement de canaux ou les changements de niveaux de volume sont appliquées immédiatement après chaque commande.
+Les modifications de basculement de canaux ou les changements de niveaux de volume sont appliquées immédiatement après chaque commande. Cependant pour les retrouver après le redémarrage de NVDA, la configuration de NVDA doit être enregistrée.
 
-Par défaut, le niveau de volume des applications ne peut pas être plus grand que le niveau du volume principal. Mais l'option "Augmenter le volume principal si nécessaire" permet de désactiver cette limitation. Cette option se trouve dans le groupe "Modification du volume" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension.
+Par défaut, le niveau de volume des sources audio ne peut pas être plus grand que le niveau du volume principal. Mais l'option "Augmenter le volume principal si nécessaire" permet de désactiver cette limitation. Cette option se trouve dans le groupe "Modification du volume" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension.
+
+Par défaut et quand wasapi n'est pas utilisé, le niveau des tonalités de NVDA est fixé à 50 qui est la valeur de base de NVDA définie en interne.
 
 Une protection est prévue pour éviter de mettre, simultanément, à zéro le niveau des canaux audio de NVDA et que son niveau de volume soit plus petit que son seuil de rétablissement configuré.
 
-Lorsqu'une application est sélectionnée, l'état de balance des canaux est annoncé ainsi que l'état de coupure du son.
+Lorsqu'une source audio est sélectionnée, l'état de balance des canaux est annoncé ainsi que l'état de coupure du son.
+
+Au redémarrage de NVDA ou si l'extension est désactivée ou désinstallée, NVDA est de nouveau entendu sur les deux canaux audio, tandis que les sources audio restent dans leur état (mémorisé par Windows).
 
 
-Au redémarrage de NVDA ou si l'extension est désactivée ou désinstallée, NVDA est de nouveau entendu sur les deux canaux audio, tandis que les applications restent dans leur état (mémorisé par Windows).
++++ Modification du gain des fichiers son de NVDA  et de l'extension +++[hdr34-1]
+L'appui sur le bouton "Changer le gain des fichiers son" ouvre le dialogue "Modification du gain des fichiers son de NVDA" qui présente:
+- la liste des sons utilisés par NVDA et l'extension,
+- le bouton "Jouer" qui permet d'écouter le son sélectionné,
+- la liste de choix du gain: une valeur positive amplifie le son, une valeur négative le réduit.
+- le bouton "Tester" qui permet d'écouter le résultat de la modification du son avec le gain sélectionné,
+- le bouton "Appliquer le gain"  pour appliquer le gain au son sélectionné,
+- le bouton "Appliquer le gain à tous les sons" pour appliquer le gain à tous les sons,
+- le bouton "Réinitialiser le son sélectionné" pour remettre le son  sélectionné comme il était à l'installation de NVDA,
+- le bouton "Réinitialiser tous les sons" pour remettre tous les sons comme ils étaient à l'installation de NVDA.
 
 
 
-Attention : pour un bon fonctionnement, il faut que NVDA et les applications audio utilisent le même périphérique de sortie audio, comme par exemple le mappeur de sons. D'ailleurs la fonctionnalité n'a d'intérêt que dans ce cas.
+Les sons de NVDA sont présentés dans la liste par une description traduisible.
+
+Les sons de l'extension sont présenté par un préfixe, un "_"  et le nom du fichier son.
+Le préfixe désigne l'origine du fichier son: NVDAExtensionGlobalPluginSounds ou NVDAExtensionGlobalPluginSoundsTextAnalyzerAlerts.
+
+
+Si le gain est à zéro, les boutons "Tester", "Appliquer le gain" et "Appliquer le gain à tous les sons" ne sont pas présents.
+
+L'appui sur le bouton "Appliquer le gain" modifie le son d'origine  et enregistre le résultat dans un autre fichier son. C'est ce fichier son qui sera alors utilisé. Le bouton "Réinitialiser le son"  permet de revenir au son d'origine en effaçant ce nouveau fichier.
+
+Les sons modifiés sont signalés dans la liste  avec l'indication "modifié".  Ils sont tous rangés dans le dossier "NVDAExtensionGlobalPlugin-NVDAWaves"  créé pour la circonstance dans le dossier de configuration utilisateur. Ce dossier n'existe pas si aucun son n'est modifié.
+
+Si le son sélectionné n'a pas était modifié, le bouton "Réinitialiser le son" n'est pas présenté.
+
+S'ils n'y a pas de sons déjà modifiés dans la liste des sons, le bouton "Réinitialiser tous les sons" n'est pas présenté.
+
+Le son du démarrage de NVDA ne peut pas être modifié car il est joué avant le chargement de l'extension.
+
+Il est possible de ne pas autoriser la modification du gain des sons en décochant  la case à cocher "Permettre la modification du gain des fichiers son" se trouvant dans la catégorie "Avancé". Cette case est  cochée par défaut.
+
+
++++ Précisions technique +++
+Pour réaliser la fonctionnalité du réglage du volume des tonalités de NVDA quand Wasapi n'est pas utilisé, l'extension a modifié le fonctionnement de la fonction "beep" du module "tones" de NVDA.
+
+Cela peut poser problème si une autre extension l'a aussi modifié.
+
+Pour éviter ce genre de conflit, l'extension donne la possibilité de ne pas activer cette fonctionnalité en décochant l'option "Permettre le réglage du volume des tonalités de NVDA" qui se situe dans la catégorie "Avancé" des paramètres de l'extension. Dans ce cas, il n'y aura pas de modification de la fonction "beep" par l'extension.
+
+Si Wasapi est utilisé, cette option n'est pas présente  car  le réglage des tonalité et des sons de NVDA se fait par NVDA lui-même.
+
+Par défaut, Cette option est cochée.
+
+Pour que les fichiers sons modifiés soient joués à la place des sons originaux,  la fonction playWaveFile du module nvwave.py de NVDA a été remplacée. Cette fonction de remplacement est commune  avec la fonctionnalité "Périphérique audio temporaire".
+
+Dans le cas où la modification de cette fonction pose problème, il faut à la fois, décocher l'option "Permettre la modification du gain"   et désinstaller cette  fonctionnalité.
 
 ++ Activation ou désactivation rapide des extensions ++[hdr35]
 Pour activer ou désactiver les extensions, NVDA propose nativement le gestionnaire d'extensions.
@@ -2059,20 +2141,20 @@ Le choix se fait dans le groupe "Signalement des fautes d'orthographe" de la cat
 
 
 ++ Blocage des touches "Insertion" et "Verrouillage" ++[hdr105]
-(disponible pour les versions de NVDA inférieurs à 2023.1 si la fonctionnalité "Annonce sélective des touches de commande " est installée)
+(Disponible pour les versions de NVDA inférieurs à 2023.1 si la fonctionnalité "Annonce sélective des touches de commande " est installée)
 
 Il peut être utile dans certains cas d'empêcher l'action des touches "Insertion" et "Verrouillage majuscule".
 
 Leur rôle initial est:
-- La touche "Insertion" peut faire passer du mode "Insertion"  au mode "Refrappe" et inversement.
+- La touche "Insertion" peut faire passer du mode "Insertion" au mode "Refrappe" et inversement.
 - La touche "Verrouillage majuscule" simule l'enfoncement permanent de la touche "Majuscule".
 
 
-NVDA permet à l'utilisateur de définir ces touches comme touche "NVDA". Mais dans ce cas, la touche "Insertion" comme  la touche "Verrouillage majuscule" ne joue leur rôle initial que si il y a un double appui rapide.
- 
-Par configuration, L'extension donne la possibilité  que ces touches  n'aient pas d'action quand elles sont dans leur rôle initial.
+NVDA permet à l'utilisateur de définir ces touches comme touche "NVDA". Mais dans ce cas, la touche "Insertion" comme la touche "Verrouillage majuscule" ne joue leur rôle initial que si il y a un double appui rapide.
 
-Cette configuration se fait par profil de configuration à l'aide d'une case à cocher par touche (Voir le groupe "Blocage de touches" de la catégorie "Clavier" du profil courant).
+Par configuration, L'extension donne la possibilité que ces touches n'aient pas d'action quand elles sont dans leur rôle initial.
+
+Cette configuration se fait par profil de configuration à l'aide d'une case à cocher pour chaque touche (Voir le groupe "Blocage de touches" de la catégorie "Clavier" du profil courant).
 
 Quand l'action de la touche est bloquée, un bip sonore se fait entendre.
 
@@ -2169,14 +2251,20 @@ Par défaut, le choix est :
 - "Ne rien faire" pour une disposition de clavier "ordinateur portable".
 
 
-++ Limitation de répétition de touches ++[hdr306]
-Lorsque une touche est enfoncée  et pas relâchée suffisamment rapidement, Windows génère une série d'appui- touches qui peuvent être gênants surtout dans une zone d'édition.
+++  Verrouillage majuscule ++[hdr306]
+Par défaut, au démarrage de NVDA, l'état du verrouillage majuscule est signalé.
+
+Ce signalement peut être désactivé en décochant l'option "Signaler l'état activé au démarrage de NVDA" du groupe "Verrouillage majuscule" de la catégorie "Clavier" des paramètres globaux de l'extension.
+
+++ Limitation de répétition de touches ++[hdr307]
+
+Lorsque une touche est enfoncée et pas relâchée suffisamment rapidement, Windows génère une série d'appui- touches qui peuvent être gênants surtout dans une zone d'édition.
 
 Cette fonctionnalité tente de limiter ce nombre d'appui-touches au minimum.
 
-Elle est contrôlée par la case à cochée  "Limiter les répétitions" qui se trouve dans le groupe "Répétition de touches" de la catégorie "Avancée" des paramètres globaux de l'extension et par le délai de répétition qui se configure dans le même groupe.
+Elle est contrôlée par la case à cochée "Limiter les répétitions" qui se trouve dans le groupe "Répétition de touches" de la catégorie "Avancée" des paramètres globaux de l'extension et par le délai de répétition qui se configure dans le même groupe.
 
-Quand cette option est cochée,  tout nouvel appui de la même touche qui arrive dans un délai inférieur au délai de répétition configuré est ignoré.
+Quand cette option est cochée, tout nouvel appui de la même touche qui arrive dans un délai inférieur au délai de répétition configuré est ignoré.
 
 Par défaut, cette case n'est pas cochée et le délai de répétition est fixé à 100 millisecondes
 
@@ -2222,7 +2310,7 @@ Donc si l'option "Annoncer la description de l'objet" de la catégorie "Présent
 Cette extension met en place l'option "Ne pas tenir compte de l'option Annoncer la description de l'objet lors de l’affichage des boite de dialogue du style confirmation" dans la catégorie "Avancés" du dialogue "Paramètres" de l'extension pour forcer, si elle est cochée, l'annonce du texte de ces boites dans tous les cas. Cette option est cochée par défaut.
 
 ++ Exécution des scripts dans le dialogue "Gestes de commandes" de NVDA++[hdr205]
-Le dialogue "Gestes de commandes" de NVDA , permet de configurer les gestes de commandes (raccourcis clavier, boutons d'un afficheur braille etc) pour les scripts (appelés commandes dans le guide utilisateur de NVDA) disponibles à cet instant. Pour plus d'informations, voir le chapitre "Gestes de commandes" de ce manuel.
+Le dialogue "Gestes de commandes" de NVDA , permet de configurer les gestes de commandes (raccourcis clavier, boutons d'un afficheur braille, etc) pour les scripts (appelés commandes dans le guide utilisateur de NVDA) disponibles à cet instant. Pour plus d'informations, voir le chapitre "Gestes de commandes" de ce manuel.
 
 L'extension rend possible l'exécution des scripts dans ce dialogue et ceci même si aucun geste de commande n'est configuré.
 
@@ -2248,7 +2336,7 @@ Pour cela, elle recherche la catégorie parmi les catégories qui fournissent de
 Cette catégorie sera alors automatiquement sélectionnée et développée.
 
 ++ Sélection du dernier paramètre utilisé dans la boucle des paramètres du synthétiseur ++[hdr207]
-Les gestes de commandes "NVDA+contrôle+flèche droite ou gauche" de NVDA permettent de passer d'un paramètres à l'autre dans la boucle des paramètres du synthétiseur.
+Les gestes de commandes "NVDA+contrôle+flèche droite ou gauche" de NVDA permettent de passer d'un paramètre à l'autre dans la boucle des paramètres du synthétiseur.
 
 Mais après un redémarrage de NVDA, le dernier paramètre utilisé est oublié.
 
@@ -2258,7 +2346,7 @@ Pour cela, l'extension enregistre, à chaque déplacement dans la boucle des par
 
 Ce paramètres sera alors de nouveau sélectionné au démarrage de NVDA pour le synthétiseur et pour le profil "configuration normale" ou lors d'un changement de profil.
 
-Attention: comme tous les paramètres de NVDA, il est nécessaire que la configuration de NVDA soit enregistrée avant le redémarrage de NVDA( soit automatiquement, soit manuellement) pour les retrouver après le redémarrage.
+Attention: comme tous les paramètres de NVDA, il est nécessaire que la configuration de NVDA soit enregistrée avant le redémarrage de NVDA (soit automatiquement, soit manuellement) pour les retrouver après le redémarrage.
 
 
 
@@ -2308,6 +2396,18 @@ Il est rangé sous la rubrique "ADDON_SUMMARY" du dialogue "Gestes de commande d
 
 Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 
+
+++ Amélioration de l'écho clavier par mot ++[hdr209]
+Dans les cas suivants, NVDA ne prononce pas le mot frappé quand l'écho clavier par mot est activé:
+- un espace est inséré au milieu d'un mot.
+- après une correction d'un mot à l'aide de la touche "retour arrière" suivi d'un espace.
+- après la frappe d'un symbole de ponctuations isolé suivi d'un espace.
+
+
+Cette amélioration a été initiée par Leonard de Ruijter (leonardder) en 2018 ([voir ici https://github.com/nvaccess/nvda/pull/8110]) et clôturée en 2019 sans avoir été mise en place dans NVDA.
+
+Elle est activée par défaut, mais elle peut être désactivée pour retrouver le fonctionnement de base de NVDA en décochant la case à cocher "Améliorer l'écho clavier par mot" située dans la catégorie "Avancé" des paramètres globaux de l'extension.
+
 + Résumé des commandes apportées par cette extension +
 ++ Gestes de commande installés systématiquement ++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
@@ -2341,7 +2441,7 @@ Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 | KEY_POSITION_REPORT | Activer/ désactiver l'annonce de la position courante du curseur dans une zone d'édition |
 | KEY_SOUND_SPLIT_MANAGER | Afficher le gestionnaire audio de NVDA et des applications actives |
 | KEY_DISPLAY_SPEECH_HISTORY | Afficher les enregistrements de l'historique vocal |
-| KEY_WINDOWS_LIST | Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
+| KEY_WINDOWS_LIST | Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 | KEY_ICONS_List | Afficher la liste des icônes de la zone de notification |
 | KEY_MINUTE_TIMER | Afficher le dialogue permettant, si la minuterie est arrêtée, de la lancer ou sinon de consulter la durée restante ou d'arrêter celle-ci |
 | KEY_MODULE_GUIDE | Afficher le manuel utilisateur de l'extension |
@@ -2378,9 +2478,9 @@ Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 | KEY_APP_VOLUME_PREVIOUS_LEVEL | Établir le volume de l'application sous le curseur au précédent niveau |
 | KEY_NVDA_VOLUME_PREVIOUS_LEVEL | Établir le volume de NVDA au précédent niveau |
 | KEY_MAIN_VOLUME_PREVIOUS_LEVEL | Établir le volume principal au précédent niveau |
-| chiffre de 1 à 9 | Établir le volume de l'application sous le curseur à x pourcent du volume principal ( x égal à 10 multiplié par le chiffre) |
-| majuscule+chiffre de 1 à 9 | Établir à x le volume de NVDA (x égal à 10 multiplié par le chiffre) |
-| contrôle+chiffre de 1 à 9 | Établir à x le volume principal (x égal à 10 multiplié par le chiffre) |
+| Chiffre de 1 à 9 | Établir le volume de l'application sous le curseur à x pourcent du volume principal (x égal à 10 multiplié par le chiffre) |
+| Majuscule+chiffre de 1 à 9 | Établir à x le volume de NVDA (x égal à 10 multiplié par le chiffre) |
+| Contrôle+chiffre de 1 à 9 | Établir à x le volume principal (x égal à 10 multiplié par le chiffre) |
 | KEY_SPLIT_LEFT_FOCUS | Entendre NVDA à gauche et l'application sous le curseur à droite |
 | KEY_SPLIT_LEFT_ALL | Entendre NVDA à gauche et toutes les applications à droite |
 | KEY_SPLIT_RIGHT_FOCUS | Entendre NVDA à droite et l'application sous le curseur à gauche |
@@ -2392,7 +2492,7 @@ Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 ++ Gestes de commande installés par les fonctionnalités ++
 +++ Affichage de la liste des icônes de la zone de notification et des fenêtres des applications lancées +++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des application lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
+| MAIN_KEY_ICONS_List | MAIN_KEY_ICONS_List | Aucune | Afficher la liste des icônes de la zone de notification. Deux appuis: Afficher la liste des fenêtres des applications lancées avec la possibilité de basculer vers l'une d'entre elles ou de la détruire |
 
 +++ Aide à la composition de symboles complexes +++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
@@ -2429,7 +2529,7 @@ Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 +++ Historique des annonces vocales +++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
 | MAIN_KEY_PREVIOUS_RECORD | MAIN_KEY_PREVIOUS_RECORD | Aucune | Annoncer le précédent enregistrement de l'historique vocal et le copier dans le presse-papier |
-| MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l' enregistrement suivant de l'historique des annonces vocales et le copier dans le presse-papier |
+| MAIN_KEY_NEXT_RECORD | MAIN_KEY_NEXT_RECORD | Aucune | Annoncer l'enregistrement suivant de l'historique des annonces vocales et le copier dans le presse-papier |
 | MAIN_KEY_CURRENT_RECORD | MAIN_KEY_CURRENT_RECORD | Aucune | Annoncer l'enregistrement courant de l'historique des annonces vocales et le copier dans le presse-papier. Deux appui: afficher tout l'historique |
 
 +++ Minuterie +++
@@ -2446,7 +2546,7 @@ Il est possible de lui associer un geste de commande à l'aide de ce dialogue.
 
 +++ Commutation de profil vocal +++
 | Ordinateur de bureau | Ordinateur portable | Tactile | Description |
-| MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur x comme sélecteur courant et définir , si possible, son profil vocal associé comme profil vocal courant(x égal chiffre 1 à 8) |
+| MAIN_KEY_VOICEPROFILE_SELECTOR | MAIN_KEY_VOICEPROFILE_SELECTOR | Aucune | Positionner le sélecteur x comme sélecteur courant et définir, si possible, son profil vocal associé comme profil vocal courant(x égal chiffre 1 à 8) |
 | MAIN_KEY_NEXT_VOICEPROFILE | MAIN_KEY_NEXT_VOICEPROFILE | Aucune | Aller au premier sélecteur suivant associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
 | MAIN_KEY_PREVIOUS_VOICEPROFILE | MAIN_KEY_PREVIOUS_VOICEPROFILE | Aucune | Aller au premier sélecteur précédent associé à un profil vocal et définir ce profil vocal comme profil vocal courant |
 | MAIN_KEY_MANAGE_SELECTOR | MAIN_KEY_MANAGE_SELECTOR | Aucune | Afficher le dialogue pour gérer les sélecteurs de profil vocal |

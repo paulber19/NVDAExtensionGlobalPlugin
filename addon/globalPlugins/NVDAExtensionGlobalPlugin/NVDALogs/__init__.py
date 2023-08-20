@@ -6,16 +6,21 @@
 
 
 import addonHandler
+from logHandler import log
 import wx
 import api
 import ui
 import gui
 import queueHandler
 import os
+import time
 import globalVars
+import tempfile
+import shutil
 from ..utils import makeAddonWindowTitle, getHelpObj
 from ..utils.NVDAStrings import NVDAString
 from ..utils import contextHelpEx
+
 addonHandler.initTranslation()
 
 
@@ -89,7 +94,15 @@ class NVDALogsManagementDialog (
 		NVDALogsManagementDialog ._instance = None
 		super(NVDALogsManagementDialog, self).Destroy()
 
-	def _openFile(self, logFile, openErrorMsg=""):
+	def _openFile(self, oldLog=False):
+		if oldLog:
+			logFile = os.path.join(os.path.dirname(globalVars.appArgs.logFileName), "nvda-old.log")
+			tempLog = "oldNVDALog.txt"
+			openErrorMsg = _("Previous log file cannot be opened")
+		else:
+			logFile = globalVars.appArgs.logFileName
+			openErrorMsg = _("Current log file cannot be opened")
+			tempLog = "NVDALog.txt"
 		if logFile is None or not os.path.exists(logFile):
 			wx.CallAfter(
 				gui.messageBox,
@@ -100,8 +113,21 @@ class NVDALogsManagementDialog (
 				wx.OK | wx.ICON_ERROR
 			)
 			return
+		tempDir = tempfile.gettempdir()
+		file = os.path.join(tempDir, "NVDAExtensionGlobalPlugin-%s" % tempLog)
+		shutil.copy(logFile, file)
+		time.sleep(0.5)
+		count = 1000
+		while count:
+			if os.path.exists(file):
+				break
+			time.sleep(0.1)
+			count -= 1
+		if count == 0:
+			log.error("cannot open file: %s" % logFile)
+			return
 		try:
-			os.startfile(logFile)
+			os.startfile(file, operation="edit")
 		except Exception:
 			wx.CallAfter(
 				gui.messageBox,
@@ -110,15 +136,11 @@ class NVDALogsManagementDialog (
 				wx.OK | wx.ICON_ERROR)
 
 	def onOpenCurrentLogButton(self, evt):
-		logFile = globalVars.appArgs.logFileName
-		openErrorMsg = _("Current log file cannot be opened")
-		self._openFile(logFile, openErrorMsg)
+		self._openFile()
 		self.Close()
 
 	def onOpenOldLogButton(self, evt):
-		logFile = os.path.join(os.path.dirname(globalVars.appArgs.logFileName), "nvda-old.log")
-		openErrorMsg = _("Previous log file cannot be opened")
-		self._openFile(logFile, openErrorMsg)
+		self._openFile(oldLog=True)
 		self.Close()
 
 	def onCopyCurrentLogPathButton(self, evt):

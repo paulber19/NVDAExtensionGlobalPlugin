@@ -41,9 +41,25 @@ def initialize():
 		return
 	_speechRecorder = SpeechRecorderManager()
 	_oldSpeak = speech.speak
+	if speech.speak.__module__ != "speech.speech":
+		log.warning(
+			"Incompatibility: speech.speech.speak method has been also patched probably by another add-on: %s."
+			"There is a risk of malfunction" % speech.speak.__module__)
 	_oldSpeakSpelling = speech.speakSpelling
+	if speech.speakSpelling.__module__ != "speech.speech":
+		log.warning(
+			"Incompatibility: speech.speech.speakSpelling method has been also patched probably by another add-on: %s."
+			"There is a risk of malfunction" % speech.speakSpelling.__module__)
 	speech.speak = mySpeak
+	log.debug(
+		"speech.speech.speak method has been replaced by %s method of %s module" % (
+			mySpeak.__name__, mySpeak.__module__)
+	)
 	speech.speakSpelling = mySpeakSpelling
+	log.debug(
+		"speech.speech.speakSpelling  method has been replaced by %s method of %s module" % (
+			mySpeakSpelling.__name__, mySpeakSpelling.__module__)
+	)
 	log.warning("speechHistory initialized")
 
 
@@ -96,7 +112,7 @@ class SpeechRecorderManager(object):
 			tones.beep(100, 40)
 		self._lastSpeechHistoryReportIndex = index
 		text = self._speechHistory[index]
-		if  not toClip:
+		if not toClip:
 			ui.message(text)
 			self._onMonitoring = oldOnMonitoring
 			return

@@ -197,6 +197,7 @@ class UserConfigurationsManager(object):
 import languageHandler
 from core import triggerNVDAExit, NewNVDAInstance
 
+
 def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
 	"""Restarts NVDA by starting a new copy."""
 	if globalVars.appArgs.launcher:

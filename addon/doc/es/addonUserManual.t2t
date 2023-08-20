@@ -63,7 +63,8 @@ Este complemento añade a las órdenes globales de NVDA:
   - Cambiar el nivel del volumen principal o del flujo audio para la aplicación bajo el cursor,
   - Restablecimiento automático del volumen principal y de NVDA al cargar el complemento,
   - [Uso temporal de un dispositivo de salida de audio sin impactar la configuración de NVDA #hdr33],
-  - [Orientación de la salida de audio de NVDA #hdr34],
+  - [Orientación de la salida de audio de NVDA y de las aplicaciones #hdr34],
+  - [Establecer el volumen de tonos y sonidos de NVDA #hdr34],
  - [Herramientas de desarrollo de complementos #hdr22],
  - [Suplementos  relativos a la fecha y hora #hdr24]:
  - Copia de la fecha y hora al portapapeles,
@@ -99,6 +100,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Suplementos para el Explorador de Windows #hdr208]:
   - un script para anunciar la ruta de acceso de la carpeta o del archivo que se encuentra bajo el cursor del Explorador de Windows, o copiar esta ruta al portapapeles.
   - un script para anunciar, subiendo la vista en árbol de las carpetas, el nombre de las carpetas que componen la ruta de la carpeta que contiene el elemento bajo el cursor.
+ - [mejora de la verbalización de palabras al escribir #hdr209].
 
 
 ++ Menú de configuración del complemento ++
@@ -625,7 +627,7 @@ Este script reemplaza el script básico de NVDA ("NVDA+c") para completarlo indi
 - en el caso de que no haya texto en el portapapeles, el portapapeles puede no estar vacío.
 
 
-el número de caracteres leídos ya no se limita a 1024.
+El número de caracteres leídos ya no se limita a 1024.
 
 Este número máximo puede configurarse utilizando la opción "Número máximo de caracteres para leer" del grupo "Portapapeles" en la categoría "Suplementos a NVDA".
 
@@ -680,7 +682,7 @@ Este script muestra el cuadro de diálogo  "Gestión de los registros de NVDA" q
 - El botón "Cerrar" para cerrar el cuadro de diálogo.
 
 
-El registro se abre en el programa asociado con la extensión .log. Si aún no existe la asociación de un programa con esta extensión, tendrá que definirlo (elija el bloc de notas, por ejemplo).
+El registro no es directamente abierto. Se copia en un archivo temporal que luego es abierto en WordPad.
 
 +++ Apertura de los registros de NVDA +++[hdr9-2]
 La descripción de este script es: "Abrir el registro actual de NVDA. Pulsando dos veces: abrir el anterior registro. Pulsando tres veces: copiar la ruta del registro actual al portapapeles".
@@ -693,7 +695,10 @@ Una doble pulsación,  la apertura del anterior registro.
 
 Una triple pulsación, la copia de la ruta del registro actual al portapapeles. 
 
-El registro se abre en el programa asociado con la extensión .log. Si aún no existe la asociación de un programa con esta extensión, tendrá que definirlo (elija el bloc de notas, por ejemplo).
+
+El registro no es directamente abierto. Previamente se copia en un archivo temporal con nombre "NVDALog.txt" o "oldNVDALog.txt".
+Este archivo temporal se abre en el programa asociado con la extensión .txt. Por defecto, es el Bloc de notas.
+
 
 ++ Historial de los anuncios del habla ++[hdr10]
 Esta funcionalidad está, por defecto, instalada sin gesto de entrada.
@@ -1010,6 +1015,18 @@ Sus descripciones son:
 - "Anunciar las opciones de voz actuales. Pulsando dos veces: los muestra": ninguna orden del intérprete está asociado con él.
 
 
++++ Guardar automáticamente la configuración de voz durante el cambio de perfil +++[hdr17-7]
+La configuración de voz actual se puede guardar automáticamente para el selector actual durante una conmutación de perfil de voz.
+
+Esto tiene como objetivo evitar estar obligado de volver a asociar manualmente el perfil de voz al mismo selector si se ha cambiado la configuración de voz, como por ejemplo la velocidad, el tono, el volumen y perder estos cambios al conmutar hacia otro perfil de voz si no se ha hecho.
+
+Obviamente, el selector actual debe estar asociado con un perfil de voz. Si no es el caso, no podría guardarse.
+
+Esta funcionalidad es configurable y no está activada de forma predeterminada.
+
+Para activarla, se debe marcar la opción "Guardar automáticamente la configuración de voz actual para el selector actual antes de conmutar" que se encuentra en la categoría "Avanzada" en "Opciones globales" del complemento.
+
+
 ++ Remanencia de las teclas NVDA y modificadoras ++[hdr18]
 Esta funcionalidad no está instalada por defecto.
 
@@ -1138,7 +1155,7 @@ La cancelación de todos los cambios con el botón "Eliminar todo" está sujeta 
 ++ Control de sonido ++[hdr21]
 De forma predeterminada, esta funcionalidad se instala sin gesto de entrada.
 
-Solo puede funcionar bajo el sistema operativo Windows 10.
+Solo puede funcionar bajo el sistema operativo Windows 10 o Windows 11.
 
 Si se instala con o sin gestos de entrada, está coloca el grupo "Control de sonido" en la categoría "Ordenador" en el cuadro de diálogo "Opciones".
 
@@ -1150,7 +1167,7 @@ Este script se lanza:
 - Ya sea mediante el gesto de entrada "MAIN_KEY_VOLUME_ON" asignado de forma predeterminada.
 
 
-Establece el sonido para el volumen principal y para el flujo audio de NVDA y fuerza los niveles de cada uno a los valores configurados en el submenú "Control de sonido" del submenú "Opciones".
+Establece el volumen del dispositivo de salida de audio que usa NVDA y el del flujo audio de NVDA y fuerza los niveles de cada uno a los valores de restablecimiento configurados en el grupo "Control de sonido" en la categoría "Ordenador" en el cuadro de diálogo "Opciones" del complemento.
 
 +++ Silenciando o reestableciendo el sonido del flujo audio para la aplicación bajo el cursor +++[hdr21-2]
 Este script se lanza:
@@ -1206,7 +1223,7 @@ De forma predeterminada, no puede ser mayor que el volumen principal, pero esta 
 
 
 +++ Cambio de volumen principal +++[hdr21-4]
-Estos scripts hacen posible aumentar, disminuir o fijar el volumen principal.
+Estos scripts hacen posible aumentar, disminuir o fijar el volumen principal del dispositivo de salida de audio utilizado por la aplicación bajo el foco (incluido NVDA) o el de forma predeterminada por Windows, si la aplicación bajo el foco no usa ninguno.
 
 Estos se instalan sin gestos de entrada. Pero siempre es posible atribuirles con el diálogo "Gestos de Entrada".
 
@@ -1227,11 +1244,11 @@ El volumen principal no puede ser menor que el umbral de restablecimiento config
 
 
 +++ Volver al nivel anterior +++[hdr21-5]
-Cuando se utiliza las órdenes anteriores, el nivel de volumen se registra antes de realizar cada órden, para el volumen principal, el volumen de NVDA y para cada aplicación.
+Cuando se utiliza las órdenes anteriores, el nivel de volumen se registra antes de realizar cada órden, para el dispositivo de audio, para NVDA y para cada aplicación.
 
 Para volver a este nivel, las siguientes órdenes están disponibles:
-- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel de volumen principal al nivel anterior.
-- "KEY_NVDA_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel de volumen de NVDA al nivel anterior.
+- "KEY_MAIN_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel de volumen del último dispositivo de audio utilizado al nivel anterior.
+- "KEY_NVDA_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel de volumen de NVDA a su nivel anterior.
 - "KEY_APP_VOLUME_PREVIOUS_LEVEL": para restablecer el nivel del volumen de la aplicación bajo el cursor a su nivel anterior.
 
 
@@ -1243,12 +1260,12 @@ Estas salvaguardas no se conservan durante un reinicio de NVDA.
 
 +++ Anuncio de cambios de nivel +++[hdr21-6]
 
-Los cambios de nivel de volumen se anuncian por defecto.
+Los cambios de nivel de volumen se anuncian por defecto. El nombre del dispositivo de salida de audio también se anuncia durante el primer cambio de volumen para este dispositivo.
 
 Pero es posible deshabilitar este anuncio usando la opción: "Anunciar los cambios de volumen" del grupo "Cambio de volumen" en la categoría "Ordenador".
 
 +++ Restablecimiento automático del volumen principal y de NVDA al cargar el complemento +++[hdr21-7]
-Esta opción, si está instalada la funcionalidad "Control de sonido", permite restablecer, al cargar este complemento, el volumen principal y el de NVDA y configurar el nivel de cada volumen a un valor definido por la configuración en caso de que Esto es menor que el umbral máximo definido por la configuración.
+Esta funcionalidad permite restablecer, al cargar este complemento, el volumen de la fuente de audio de NVDA y el del dispositivo de salida de audio que utiliza colocando el nivel de cada uno a un valor definido  por la configuración en caso de que esto es menor que el umbral mínimo definido por la configuración.
 
 Para ello, el grupo "Control de sonido" en la categoría "Ordenador" del diálogo "ADDON_SUMMARY - Opciones" del complemento presenta los siguientes elementos de configuración:
 - La casilla de verificación "Ajustar automáticamente el sonido principal y de NVDA al cargar el complemento" que permite habilitar o deshabilitar esta opción,
@@ -1258,11 +1275,11 @@ Para ello, el grupo "Control de sonido" en la categoría "Ordenador" del diálog
 - El nivel del volumen de NVDA a restablecer (como porcentaje del volumen principal).
 
 
-Cuando se inicia, este complemento comprueba que tanto el volumen principal como el de NVDA están por encima del umbral de restablecimiento configurado para cada uno.
+Cuando se inicia, este complemento comprueba que tanto el volumen del dispositivo de salida de audio como el de NVDA están por encima del umbral de restablecimiento configurado para cada uno.
 
 Si este no es el caso, este complemento luego ajusta el nivel de volumen al valor del nivel a restablecer configurado.
 
-Al instalar el complemento, los niveles actuales del volumen principal y de NVDA se tienen en cuenta para definir los niveles a restablecer.
+Al instalar el complemento, los niveles actuales del volumen de NVDA y del dispositivo de salida de audio utilizado por NVDA se tienen en cuenta para definir los niveles a restablecer.
 
 
 
@@ -1790,13 +1807,15 @@ Estos scripts son:
 - "Analizar el párrafo bajo el cursor del sistema": "MAIN_KEY_PARAGRAPH_TEXT_ANALYZER", órden del intérprete "KEY_PARAGRAPH_TEXT_ANALYZER".
 
 
-+++ Desplazamiento del cursor a la línea siguiente/anterior que contiene una irregularidad +++[hdr31-4]
-Los siguientes scripts permiten mover el cursor al comienzo de la línea siguiente/anterior que contiene al menos una irregularidad:
-- mueva el cursor a la siguiente línea con una irregularidad: órden del intérprete "KEY_MOVETONEXTALERT_ANALYZER",
-- mueva el cursor a la línea anterior con una irregularidad: órden del intérprete "KEY_MOVETOPREVIOUSALERT_ANALYZER",
++++ Desplazamiento del cursor a la siguiente/anterior irregularidad +++[hdr31-4]
+Los siguientes scripts permiten mover el cursor a la siguiente/anterior irregularidad:
+- mueva el cursor a la siguiente irregularidad: órden del intérprete "KEY_MOVETONEXTALERT_ANALYZER",
+- mueva el cursor a la anterior irregularidad: órden del intérprete "KEY_MOVETOPREVIOUSALERT_ANALYZER",
 
 
-Ningún gesto de entrada está asociado con ellos, pero es posible hacerlo utilizando el cuadro de diálogo "Gestos de Entrada". Se colocan en la categoría "ADDON_SUMMARY".
+La búsqueda de la irregularidad se lleva a cabo en un rango de 100 líneas. Si no se encuentra ninguna irregularidad en este rango, se le hace una solicitud al usuario para continuar la búsqueda en un nuevo rango.
+
+Ningún gesto de entrada está asociado con estos dos scripts, pero es posible hacerlo utilizando el cuadro de diálogo "Gestos de Entrada". Se colocan en la categoría "ADDON_SUMMARY".
 
 
 ++ Anuncio de la posición del cursor en los campos de edición ++[hdr32]
@@ -1917,73 +1936,136 @@ En la segunda pulsación en un tiempo cercano, se lanza el script "Abortar el di
 
 
 ++ Orientación de la salida de audio de NVDA ++[hdr34]
-Esta característica permite separar el sonido de NVDA del sonido de las aplicaciones de audio lanzadas y, por lo tanto, escuchar en una oreja, el sonido de NVDA y en la otra oreja, el sonido de otras aplicaciones de audio.
+Esta característica permite separar el sonido de NVDA del sonido emitido por las otras fuentes de audio y, por lo tanto, escuchar en una oreja, el sonido de NVDA y en la otra oreja, el sonido de otras fuentes de audio.
+Solo las aplicaciones con una fuente de audio con dos canales y el uso del mismo dispositivo de salida de audio se ven afectadas.
+
+También te permite ajustar el nivel del volumen de tonos emitidos por NVDA (cuando no se usa Wasapi) y cambiar la ganancia en los archivos de sonido de NVDA y del complemento.
 
 Esta característica está instalada por defecto.
 
-Técnicamente, esto consiste para poner en cero  el nivel de volumen de los canales  de audio derechos o izquierdos de NVDA y de las aplicaciones.
+Para la orientación del sonido, técnicamente, esto consiste para poner en cero  el nivel de volumen de los canales  de audio derechos o izquierdos de NVDA y de las fuentes de audio.
 
 NVDA es una aplicación monofónica, el mismo sonido se juega en ambos canales. No hay pérdida de audio fónico para poner un canal en cero.
 
 Pero este no es el caso de las aplicaciones estereofónicas.
 
 Para orientar el sonido de NVDA, el complemento instala los siguientes scripts:
-- Escucha NVDA a la derecha y la aplicación bajo el cursor a la izquierda (órdenes: "KEY_SPLIT_RIGHT_FOCUS"),
-- Escucha NVDA a la derecha y todas las aplicaciones a la izquierda (órdenes: "KEY_SPLIT_RIGHT_ALL"),
-- Escucha NVDA a la izquierda y la aplicación bajo el cursor a la derecha (órdenes: "KEY_SPLIT_LEFT_FOCUS"),
-- Escucha NVDA a la izquierda y todas las aplicaciones a la derecha (órdenes: "KEY_SPLIT_LEFT_ALL"),
-- Escucha NVDA y la aplicación bajo el cursor al centro (órdenes: "KEY_SPLIT_CENTER_FOCUS"),
-- Escucha NVDA y todas las aplicaciones al centro (órdenes: "KEY_SPLIT_CENTER_ALL")
-- Escucha la aplicación bajo el cursor al centro (órdenes: "KEY_CENTER_FOCUSED_APP")
-- Mostrar el administrador de audio de NVDA y aplicaciones activas (órdenes: "KEY_SOUND_SPLIT_MANAGER")
+- Escucha NVDA a la derecha y el sonido de la fuente de audio de la aplicación bajo el cursor a la izquierda (órdenes: "KEY_SPLIT_RIGHT_FOCUS"),
+- Escucha NVDA a la derecha y el sonido de todas las fuentes de audio a la izquierda (órdenes: "KEY_SPLIT_RIGHT_ALL"),
+- Escucha NVDA a la izquierda y el sonido de la fuente de audio de la aplicación bajo el cursor a la derecha (órdenes: "KEY_SPLIT_LEFT_FOCUS"),
+- Escucha NVDA a la izquierda y el sonido de todas las fuentes de audio a la derecha (órdenes: "KEY_SPLIT_LEFT_ALL"),
+- Escucha NVDA y el sonido de todas las fuentes de audio de la aplicación bajo el cursor al centro (órdenes: "KEY_SPLIT_CENTER_FOCUS"),
+- Escucha NVDA y el sonido de todas las fuentes de audio al centro (órdenes: "KEY_SPLIT_CENTER_ALL")
+- Escucha el sonido de la fuente de audio de la aplicación bajo el cursor al centro (órdenes: "KEY_CENTER_FOCUSED_APP")
+- Mostrar el administrador de fuentes de audio (órdenes: "KEY_SOUND_SPLIT_MANAGER")
 
 
 No se le asigna ningún gesto de entrada por defecto. Pero es siempre posible hacerlo utilizando el diálogo "Gestos de Entrada" de NVDA. Estos scripts están almacenados en la categoría "Control de sonido" de este diálogo.
 
 La órden "KEY_CENTER_FOCUSED_APP" es operacional incluso si  la funcionalidad no está instalada a fin, eventualmente, de poder reequilibrar el audio de algunas aplicaciones que permanecierón desequilibradas después de la desinstalación de la funcionalidad.
 
-El diálogo "Administrador de audio de NVDA y aplicaciones activas" también puede orientar el sonido de NVDA, pero también  establecer el nivel de volumen de los dos canales de audio de NVDA y aplicaciones.
-Él presenta:
-- La lista de las aplicaciones de audio,
-- El potenciómetro para cambiar el volumen de la aplicación seleccionada,
-- La casilla de verificación para cambiar el estado "sonido silenciado" de la aplicación seleccionada,
-- Los potenciómetro para cambiar los canales izquierdo y derecho de la aplicación seleccionada.
+El diálogo "Administrador de fuentes de audio " permite, además de la orientación del sonido de NVDA, de:
+- Fijar el nivel de volumen de los dos canales de audio de NVDA y fuentes de audio,
+- Ajustar el volumen de tonos de NVDA cuando no se usa Wasapi,
+- Cambiar la ganancia en los archivos de sonido de NVDA.
 
+Él presenta:
+- La lista de dispositivos de salida de audio,
+- La lista de fuentes de audio para el dispositivo de salida de audio seleccionado,
+- El potenciómetro para cambiar el volumen de la fuente seleccionada,
+- Excepto por la fuente "NVDA", la casilla de verificación para cambiar el estado "sonido silenciado" de la fuente seleccionada,
+- Los potenciómetros para cambiar los canales izquierdo y derecho de la fuente seleccionada,
+- Solo para la fuente "NVDA" y sin Wasapi, el potenciómetro para ajustar el volumen de los tonos emitidos por NVDA y el botón para cambiar la ganancia en los archivos de sonido,
+- Solo para la fuente "NVDA", el botón para cambiar la ganancia en los archivos de sonido.
+
+
+El dispositivo de salida de audio que Windows usa de forma predeterminada es anunciado.
 
 Cuando la lista está bajo el cursor, se permiten las siguientes órdenes:
-- Escucha la aplicación seleccionada a la derecha: "Flecha Derecha",
-- Escucha la aplicación seleccionada a la izquierda: "Flecha Izquierda",
-- Escucha la aplicación seleccionada al centro: "espacio",
-- Escucha NVDA a la derecha y la aplicación seleccionada a la izquierda: "mayúscula+Flecha Derecha",
-- Escucha NVDA a la izquierda y la aplicación seleccionada a la derecha: "mayúscula+Flecha Izquierda",
-- Escucha NVDA y la aplicación seleccionada al centro: "mayúscula+espacio",
-- Escucha NVDA a la derecha y todas las aplicaciones a la izquierda: "control+Flecha Derecha",
-- Escucha NVDA a la izquierda y todas las aplicaciones a la derecha: "control+Flecha Izquierda",
-- Escucha NVDA y todas las aplicaciones al centro: "control+espacio",
-- Aumentar o disminuir de un paso, el volumen de la aplicación seleccionada: "control+Flecha Arriba o Abajo",
-- Aumentar o disminuir de un doble paso, el volumen de la aplicación seleccionada: "control+rePág o avPág",
-- Maximizar o minimizar el volumen de la aplicación: "control+inicio o fin",
-- Silenciar o reestablecer el sonido de la aplicación: "control+m",
+- Escucha la fuente de audio seleccionada a la derecha: "Flecha Derecha",
+- Escucha la fuente de audio seleccionada a la izquierda: "Flecha Izquierda",
+- Escucha la fuente de audio seleccionada al centro: "espacio",
+- Escucha NVDA a la derecha y la fuente de audio seleccionada a la izquierda: "mayúscula+Flecha Derecha",
+- Escucha NVDA a la izquierda y la fuente de audio seleccionada a la derecha: "mayúscula+Flecha Izquierda",
+- Escucha NVDA y la fuente de audio seleccionada al centro: "mayúscula+espacio",
+- Escucha NVDA a la derecha y todas las fuentes de audio a la izquierda: "control+Flecha Derecha",
+- Escucha NVDA a la izquierda y todas las fuentes de audio a la derecha: "control+Flecha Izquierda",
+- Escucha NVDA y todas las fuentes de audio al centro: "control+espacio",
+- Aumentar o disminuir de un paso, el volumen de la fuente de audio seleccionada: "control+Flecha Arriba o Abajo",
+- Aumentar o disminuir de un doble paso, el volumen de la fuente de audio seleccionada: "control+rePág o avPág",
+- Maximizar o minimizar el volumen de la fuente de audio: "control+inicio o fin",
+- Silenciar o reestablecer el sonido de la fuente de audio: "control+m",
 - Aumentar o disminuir de un paso, el volumen principal: "control+mayúscula+Flecha Arriba o Abajo",
 - Aumentar o disminuir de un doble paso, el volumen principal: "control+mayúscula+rePág o avPág",
 - Maximizar o minimizar el volumen principal: "control+mayúscula+inicio o fin".
 
 
+Ciertas órdenes no están disponibles cuando NVDA no está en la lista de fuentes de audio del dispositivo seleccionado.
 
 Esta lista se refresca automáticamente cuando se le da el cursor.
 
-Los cambios de alternancia de canales o los cambios de nivel de volumen se aplican inmediatamente después de cada  órden.
+Los cambios de alternancia de canales o los cambios de nivel de volumen se aplican inmediatamente después de cada  órden. Sin embargo, para encontrarlos después de reiniciar NVDA, se debe guardar la configuración de NVDA.
 
-De forma predeterminada, el nivel de volumen de aplicaciones no puede ser mayor que el nivel de volumen principal. Pero la opción "Aumentar el volumen principal si es necesario" permite deshabilitar esta limitación. Esta opción está en el grupo "Cambio de volumen" en la categoría "Ordenador" en el cuadro de diálogo "Opciones" del complemento.
+De forma predeterminada, el nivel de volumen de las fuentes de audio no puede ser mayor que el nivel de volumen principal. Pero la opción "Aumentar el volumen principal si es necesario" permite deshabilitar esta limitación. Esta opción está en el grupo "Cambio de volumen" en la categoría "Ordenador" en el cuadro de diálogo "Opciones" del complemento.
+
+Por defecto y cuándo no se usa Wasapi, el nivel de tonos de NVDA se fija en 50, que es el valor básico de NVDA definido internamente.
 
 Una protección esta prevista para evitar poner, simultáneamente, en cero el nivel de los canales de audio de NVDA y que su nivel de volumen sea más pequeño que su umbral de recuperación configurado.
 
-Cuando se selecciona una aplicación, se anuncia el estado de balance de los canales, así como el estado al silenciar el sonido.
+Cuando se selecciona una fuente de audio, se anuncia el estado de balance de los canales, así como el estado al silenciar el sonido.
+
+Al reiniciar NVDA o si el complemento está deshabilitado o desinstalado, NVDA se escucha nuevamente en ambos canales de audio, mientras que las fuentes de audio permanecen en su estado (almacenadas por Windows).
 
 
-Al reiniciar NVDA o si el complemento está deshabilitado o desinstalado, NVDA se escucha nuevamente en ambos canales de audio, mientras que las aplicaciones permanecen en su estado (almacenadas por Windows).
++++ Cambiar la ganancia en los archivos de sonido de NVDA y del complemento +++[hdr34-1]
+Al pulsar el botón "Cambiar la ganancia en los archivos de sonido" abre el cuadro de diálogo "Modificación de la ganancia en los archivos de sonido de NVDA". Este cuadro de diálogo muestra:
+- La lista de sonidos utilizados por NVDA y el complemento,
+- El botón "Reproducir" que te permite escuchar el sonido seleccionado,
+- La lista para elegir la ganancia: un valor positivo amplifica el sonido, un valor negativo lo reduce.
+- El botón "Comprobar" que te permite escuchar el resultado de la modificación del sonido con la ganancia seleccionada,
+- El botón "Aplicar la ganancia" para aplicar la ganancia al sonido seleccionado,
+- El botón "Aplicar la ganancia a todos los sonidos" para aplicar la ganancia a todos los sonidos,
+- El botón "Restablecer el sonido seleccionado" para poner el sonido seleccionado como estaba en la instalación de NVDA,
+- El botón "Restablecer todos los sonidos" para poner todos los sonidos como estaban en la instalación de NVDA.
 
-Atención: Para un funcionamiento correcto, es necesario que NVDA y las aplicaciones  de audio utilicen el mismo dispositivo de salida de audio, como por ejemplo el Mapeador de sonido. Además, la funcionalidad tiene solo interés que en este caso.
+
+
+Los sonidos de NVDA se presentan en la lista mediante una descripción traducible.
+
+Los sonidos del complemento son presentados por un prefijo, un "_"  y el nombre del archivo de sonido.
+El prefijo designa el origen del archivo de sonido: NVDAExtensionGlobalPluginSounds o NVDAExtensionGlobalPluginSoundsTextAnalyzerAlerts.
+
+
+Si la ganancia es cero, los botones "Comprobar", "Aplicar la ganancia" y "aplicar la ganancia a todos los sonidos" no están presentes.
+
+Pulsando en el botón "Aplicar la ganancia" cambia el sonido original y guarda el resultado en otro archivo de sonido. Es este archivo de sonido el que se utilizará. El botón "Restablecer el sonido seleccionado" te permite volver al sonido original borrando este nuevo archivo.
+
+Los sonidos modificados serán anunciados en la lista con la indicación "modificado".  Todos están ordenados en la carpeta "NVDAExtensionGlobalPlugin-NVDAWaves"  creado para la ocasión en la carpeta de configuración del usuario. Este archivo no existe si no se modifica ningún sonido.
+
+Si no se modificó el sonido seleccionado, no se presenta el botón "Restablecer el sonido seleccionado".
+
+Si no hay aún sonidos modificados en la lista de sonido, no se presenta el botón "Restablecer todos los sonidos".
+
+El sonido de inicio de NVDA no se puede modificar porque se reproduce antes de cargar el complemento.
+
+Es posible no autorizar la modificación de la ganancia de sonidos al desmarcar la casilla de verificación "Permitir el cambio de ganancia en los archivos de sonido" que se encuentra en la categoría "Avanzadas". Esta casilla de verificación está marcada de forma predeterminada.
+
+
++++ Detalles técnicos +++
+Para llevar a cabo la funcionalidad del ajuste del volumen de tonos de NVDA cuando no se usa Wasapi, el complemento ha cambiado el funcionamiento de la función "beep" del módulo "tones" de NVDA.
+
+Esto puede ser un problema si otro complemento también lo ha cambiado.
+
+Para evitar este tipo de conflicto, el complemento da la posibilidad de no activar esta funcionalidad desactivando la opción "Permitir el ajuste de volumen de tonos" que se encuentra en la categoría "Avanzadas" del diálogo "Opciones" del complemento. En este caso, no habrá modificación de la función "beep" hecho por el complemento.
+
+Si se usa Wasapi, esta opción no está presente porque el ajuste del tono y los sonidos de NVDA se realiza por el propio NVDA.
+
+Por defecto, esta opción está marcada.
+
+Para que los archivos de sonido modificados se reproduzcan en lugar de los sonidos originales, se ha reemplazado la función  playWaveFile del módulo nvwave.py de NVDA. Esta función de reemplazo es común con la funcionalidad "Dispositivo de audio temporal".
+
+En el caso de que la modificación de esta función plantee un problema, es necesario tanto, desmarcar la opción "Permitir el cambio de ganancia en los archivos de sonido" y desinstalar esta funcionalidad.
+
 
 ++ Activación o desactivación rápida de los complementos ++[hdr35]
 Para habilitar o deshabilitar los complementos, NVDA propone nativamente el Administrador de Complementos.
@@ -2063,7 +2145,7 @@ La elección se realiza en el grupo "Informando errores de ortografía" de la ca
 
 
 ++ Bloqueo de las teclas "Insertar" y "Bloqueo mayúsculas" ++[hdr105]
-(disponible para las versiones de NVDA inferiores a la 2023.1 si la funcionalidad "Anuncio selectivo de teclas de órdenes" está instalada)
+(Disponible para las versiones de NVDA inferiores a la 2023.1 si la funcionalidad "Anuncio selectivo de teclas de órdenes" está instalada)
 
 Puede ser útil en algunos casos para evitar la acción de las teclas "Insertar" y "Bloqueo mayúsculas".
 
@@ -2076,7 +2158,7 @@ NVDA permite al usuario definir estas teclas como la tecla "NVDA". Pero en este 
  
 Por configuración, El Complemento ofrece la posibilidad de que estas teclas  no tengan acciones cuando están en su papel inicial.
 
-Esta configuración se hace por perfil de configuración utilizando una casilla de verificación  por tecla (Ver el grupo "Bloqueo de tecla" de la categoría "Teclado" del perfil actual).
+Esta configuración se hace por perfil de configuración utilizando una casilla de verificación  para cada tecla (Ver el grupo "Bloqueo de tecla" de la categoría "Teclado" del perfil actual).
 
 Cuando se bloquea la acción de la tecla, se escucha un pitido de audio.
 
@@ -2173,7 +2255,13 @@ Por defecto, la elección es:
 - "No hacer nada" para una disposición de teclado "Ordenador portátil".
 
 
-++ Limitación de repetición de teclas ++[hdr306]
+++ Bloqueo mayúsculas ++[hdr306]
+Por defecto, al iniciar NVDA, el estado del bloqueo de mayúsculas es indicado.
+
+Esta indicación se puede desactivar desmarcando la opción "Indicar el estado activado al iniciar NVDA" del grupo "Bloqueo mayúsculas" en la categoría "Teclado" en "Opciones globales" del complemento.
+
+
+++ Limitación de repetición de teclas ++[hdr307]
 Cuando se pulsa y no se suelta una tecla lo suficientemente rápido, Windows genera una serie de pulsación de teclas que pueden ser molestas especialmente en un campo de edición.
 
 Esta característica intenta limitar este número de pulsación de teclas al mínimo.
@@ -2313,6 +2401,19 @@ La descripción del script es: "Anunciar la ruta del archivo o de la carpeta baj
 Se almacena bajo la sección "ADDON_SUMMARY" del diálogo "Gestos de Entrada de NVDA".
 
 Sin embargo, es posible asignarle un gesto de entrada usando este diálogo.
+
+
+++ Mejorar la verbalización de palabras al escribir ++[hdr209]
+En los siguientes casos, NVDA no pronuncia la palabra escrita cuando  verbalizar palabras al escribir está activado:
+- Un espacio es insertado en el medio de una palabra.
+- Después de una corrección de una palabra utilizando la tecla "retroceso" seguido de un espacio.
+- Despues de escribir un símbolo de puntuación aislado seguido de un espacio.
+
+
+Esta mejora fue iniciada por Leonard de Ruijter (leonardder) en 2018 ([ver aquí https://github.com/nvaccess/nvda/pull/8110]) y cerrado en 2019 sin haber sido implementado en NVDA.
+
+Está activada de forma predeterminada, pero se puede desactivar para encontrar el funcionamiento básico de NVDA desmarcando la casilla de verificación "Mejorar la verbalización de palabras al escribir" que se encuentra en la categoría "Avanzadas" en "Opciones globales" del complemento.
+
 
 + Resumen de las órdenes proporcionados por el complemento +
 ++ Gestos de entrada instalados sistemáticamente ++

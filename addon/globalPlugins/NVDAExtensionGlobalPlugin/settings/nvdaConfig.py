@@ -152,8 +152,8 @@ _optionsConfspec = {
 	ID_ConfirmToAddToClip: "boolean(default=False)",
 	ID_ActivateNumlock: "integer(default=" + str(numLockByLayoutDefault) + ")",
 	ID_SpeakAlphaNumChars: "boolean(default=False)",
-		ID_BlockInsertKey: "boolean(default=False)",
-		ID_BlockCapslockKey: "boolean(default=False)",
+	ID_BlockInsertKey: "boolean(default=False)",
+	ID_BlockCapslockKey: "boolean(default=False)",
 }
 
 SCT_SynthSettingsRing = "SynthSettingsRing"

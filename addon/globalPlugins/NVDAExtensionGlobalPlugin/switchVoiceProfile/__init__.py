@@ -102,7 +102,7 @@ class SwitchVoiceProfilesManager(object):
 					"""with this add-on's version, All selectors have been released and the voice profiles deleted. """
 					"""Sorry for the inconvenience."""),
 				# Translators: the title of a message box dialog.
-				makeAddonWindowTitle(_("warning")),
+				makeAddonWindowTitle(_("Warning")),
 				wx.OK | wx.ICON_WARNING)
 
 	def deleteAllProfiles(self):
@@ -207,6 +207,7 @@ class SwitchVoiceProfilesManager(object):
 			tones.initialize()
 			if msg:
 				ui.message(msg)
+
 		newProfile = self.getVoiceProfile(selector)
 		synthName = None
 		for s, val in getSynthList():
@@ -285,7 +286,6 @@ class SwitchVoiceProfilesManager(object):
 
 	def getSynthDisplayInfos(self, synth, synthConf):
 		conf = synthConf
-		import driverHandler
 		id = "id"
 		import autoSettingsUtils.driverSetting
 		numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
@@ -330,7 +330,19 @@ class SwitchVoiceProfilesManager(object):
 		synthDatas[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name])
 		return synthDatas
 
-	def associateProfileToSelector(
+	def updateCurrentVoiceProfilSettings(self):
+		from ..settings import toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption
+		if not toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption(False):
+			return
+		currentSelector = self.getLastSelector()
+		if not self.isSet(currentSelector):
+			return
+		conf = config.conf[self.addonName][SCT_VoiceProfileSwitching][currentSelector]
+		voiceProfileName = conf[KEY_VoiceProfileName]
+		defaultVoiceProfileName = conf[KEY_DefaultVoiceProfileName]
+		self.setVoiceProfileSettingsToSelector(currentSelector, voiceProfileName, defaultVoiceProfileName)
+
+	def setVoiceProfileSettingsToSelector(
 		self, selector, voiceProfileName, defaultVoiceProfileName):
 		if not config.conf.get(self.addonName):
 			config.conf[self.addonName] = {}
@@ -347,6 +359,10 @@ class SwitchVoiceProfilesManager(object):
 		for key in synthDatas.keys():
 			conf[key] = synthDatas[key]
 		conf._cache.clear()
+
+	def associateProfileToSelector(
+		self, selector, voiceProfileName, defaultVoiceProfileName):
+		self.setVoiceProfileSettingsToSelector(selector, voiceProfileName, defaultVoiceProfileName)
 		self.setLastSelector(selector)
 		# Translators: message to user to report the association
 		# between selector and voice profile.
@@ -661,6 +677,7 @@ class SelectorsManagementDialog (
 		if self.useNormalConfigurationSelectorsCheckBox.HasFocus():
 			return
 		index = self.selectorListBox.GetSelection()
+		self.switchManager .updateCurrentVoiceProfilSettings()
 		self.switchManager.setVoiceProfile(str(index + 1), silent=True)
 		self.Close()
 

@@ -198,4 +198,3 @@ def setSpeechMode(mode):
 
 def setSpeechMode_off():
 	speech.setSpeechMode(speech.SpeechMode.off)
-
