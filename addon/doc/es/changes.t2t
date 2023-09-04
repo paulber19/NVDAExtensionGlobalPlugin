@@ -24,6 +24,20 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v13.1 (04/09/2023) +
+Mejoras:
+- anuncio del nombre de la aplicación Al cambiar de volumen si esta aplicación es diferente de aquélla anterior al que se le cambio de volumen.
+- en el administrador de fuentes de audio:
+ - la selección de un dispositivo de salida de audio desencadena la emisión de un tono hacia el dispositivo seleccionado (desactivable por configuración).
+ - las órdenes de cambios de volumen del dispositivo de salida de audio disponible en la lista de selección de fuentes de audio, ahora también están disponibles en la lista de selección de dispositivos de salida de audio.
+
+
+Corección de fallos:
+- se corrigió un error cuando la órden para silenciar o reestablecer el sonido (órden "s" órden del intérprete de órdenes) para una aplicación que no emite ningún sonido.
+- cuando Mejorar la verbalización de palabras al escribir se activa, el doble anunciado de palabras después de escribir un separador de palabras ya no se produce.
+- cuando "Mejorar la verbalización de palabras al escribir" se activa, el anunciado de palabras en el campo de edición del Bloc de Notas ya no incluye el separador de palabras. 
+
+
 + v13.0 (15/08/2023) +
 Nuevas características:
 - por configuración, es posible guardar automáticamente la configuración de voz actual del selector actual antes de cambiar a otro selector.

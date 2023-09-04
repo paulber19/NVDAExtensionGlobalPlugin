@@ -604,6 +604,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from core import postNvdaStartup
 		postNvdaStartup .unregister(self.handlePostNVDAStartup)
 		super(NVDAExtensionGlobalPlugin, self).terminate()
+
 	def _popupSettingsDialog(self, settingsDialog):
 		try:
 			gui.mainFrame.popupSettingsDialog(settingsDialog)

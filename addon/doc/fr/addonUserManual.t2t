@@ -1263,7 +1263,7 @@ Les changements de niveau du volume sont annoncés par défaut. Le nom du périp
 Mais il est possible de désactiver cette annonce à l'aide de l'option "Annoncer les modifications de volume" du groupe "Modification du volume" de la catégorie "Ordinateur".
 
 +++ Rétablissement automatique du son principal et de NVDA au chargement de l'extension +++[hdr21-7]
-Cette fonctionalité permet de rétablir, au chargement de cette extension, le volume de la source audio NVDA et celui du périphérique de sortie audio qu'elle utilise en positionnant le niveau de chacun à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil minimum défini par configuration.
+Cette fonctionnalité permet de rétablir, au chargement de cette extension, le volume de la source audio NVDA et celui du périphérique de sortie audio qu'elle utilise en positionnant le niveau de chacun à une valeur définie par configuration dans le cas où celui-ci est inférieur au seuil minimum défini par configuration.
 
 Pour cela, le groupe "Contrôle du son" de la catégorie "Ordinateur" du dialogue "Paramètres" de l'extension, présente les éléments de configuration suivants:
 - la case à coché "Établir automatiquement le son principal et de NVDA au chargement de l'extension" qui permet d'activer ou désactiver cette option,
@@ -1350,7 +1350,7 @@ Cette option n'est pas présente si l'état d'installation de la fonctionnalité
 
 
 ++ Émulation de la touche "Applications" ++[hdr25]
-Pour palier à l'absence de la touche "Applications" sur certains ordinateurs et ne sachant pas si le raccourci "majuscule+f10" remplit la même fonction, l'extension installe un script sans geste de commande dans la catégorie "Touches émulées du clavier du système" avec la description "Émuler l'appui de touche: Applications".
+Pour pallier l'absence de la touche "Applications" sur certains ordinateurs et ne sachant pas si le raccourci "majuscule+f10" remplit la même fonction, l'extension installe un script sans geste de commande dans la catégorie "Touches émulées du clavier du système" avec la description "Émuler l'appui de touche: Applications".
 
 Pour l'utiliser, il suffira de lui affecter un geste de commande ou une touche du clavier très peu utilisée, comme par exemple la touche "impression écran", la touche "Pause".
 
@@ -1932,9 +1932,9 @@ Le second appui dans un temps rapproché, lance le script "Abandonner le périph
 
 ++ Orientation de la sortie audio de NVDA ++[hdr34]
 Cette fonctionnalité permet de séparer le son de NVDA du son émis par les autres  sources audio et ainsi d'entendre dans une oreille, le son de NVDA et dans l'autre oreille, le son des autres sources audio.
-Seuls les applications avec une source audio à deux cannaux et utilisant le même périphérique de sortie audio sont concernées.
+Seuls les applications avec une source audio à deux canaux et utilisant le même périphérique de sortie audio sont concernées.
 
-Elle permet aussi de régler le niveau du volume des tonalités émises par NVDA ( quand Wasapi n'est pas utilisé) et de modifier le gain des fichiers son de NVDA et de l'extension.
+Elle permet aussi de régler le niveau du volume des tonalités émises par NVDA (quand Wasapi n'est pas utilisé) et de modifier le gain des fichiers son de NVDA et de l'extension.
 
 Elle est installée par défaut.
 
@@ -1960,6 +1960,8 @@ Aucun geste de commandes ne leur est affecté. Mais il est toujours possible de 
 La commande "KEY_CENTER_FOCUSED_APP" est opérationnelle même si la fonctionnalité n'est pas installée afin, éventuellement, de pouvoir rééquilibrer l'audio de certaines applications restées déséquilibrées après la désinstallation de la fonctionnalité.
 
 
+
++++ Gestionnaire des sources audio +++[hdr34-1]
 Le dialogue "Gestionnaire des sources audio" permet, outre l'orientation du son de NVDA, de:
 -  fixer le niveau de volume des deux canaux audio de NVDA et des sources audio,
 -  régler le volume des tonalités de NVDA quand Wasapi n'est pas utilisé,
@@ -1970,9 +1972,9 @@ Il présente :
 - la liste des sources audio pour le périphérique de sortie audio sélectionné,
 - le potentiomètre pour modifier le volume de la source sélectionnée,
 - sauf pour la source "NVDA", la case à cochée pour modifier l'état "muet" de la source sélectionnée,
-- les potentiomètres pour modifier les niveaux des canaux gauche et droite de lla source sélectionnée,
-- pour seulement la source "NVDA" et sans Wasapi, le potentiomètre pour régler le volume des tonalités émis par NVDA  et le bouton pour modifier le gain des fichiers son
-- pour seulement la source "NVDA" , le bouton pour modifier le gain des fichiers son.
+- les potentiomètres pour modifier les niveaux des canaux gauche et droite de la source sélectionnée,
+- pour seulement la source "NVDA" et sans Wasapi, le potentiomètre pour régler le volume des tonalités émis par NVDA  et le bouton pour modifier le gain des fichiers son,
+- pour seulement la source "NVDA", le bouton pour modifier le gain des fichiers son.
 
 
 Le périphérique de sortie audio que Windows utilise par défaut est signalé.
@@ -1981,7 +1983,7 @@ Quand la liste est focalisée, les commandes suivantes sont permises :
 - entendre la source audio sélectionnée à droite : "flèche droite",
 - entendre la source audio sélectionnée à gauche : "flèche gauche",
 - entendre la source audio sélectionnée au centre : "espace",
-- Entendre NVDA à droite et lla source audio sélectionnée à gauche : "majuscule + flèche droite",
+- Entendre NVDA à droite et la source audio sélectionnée à gauche : "majuscule + flèche droite",
 - Entendre NVDA à gauche et la source audio sélectionnée à droite : "majuscule + flèche gauche",
 - Entendre NVDA et la source audio sélectionnée au centre : "majuscule + espace",
 - Entendre NVDA à droite et toutes les sources audio à gauche : "contrôle + flèche droite",
@@ -2012,9 +2014,16 @@ Lorsqu'une source audio est sélectionnée, l'état de balance des canaux est an
 
 Au redémarrage de NVDA ou si l'extension est désactivée ou désinstallée, NVDA est de nouveau entendu sur les deux canaux audio, tandis que les sources audio restent dans leur état (mémorisé par Windows).
 
+Quand la liste des périphériques de sortie audio est focalisée, la sélection d'un périphérique déclenche l'émission d'une tonalité vers ce périphérique. Il est possible d'empêcher  cette émission en décochant l'option "Jouer une tonalité  sur le périphérique de sortie audio" du groupe "Gestionnaire des sources audio" de la catégorie "Avancé" des paramètres globaux de l'extension.
+Dans cette liste, les commandes suivantes sont disponibles:
+- augmenter ou diminuer d'un pas le volume principal : "contrôle +majuscule + flèche haut ou bas",
+- augmenter ou diminuer d'un double pas, le volume principal : "contrôle + majuscule + page précédente ou suivante",
+- maximiser ou minimiser le volume principal : "contrôle + majuscule + début ou fin".
 
-+++ Modification du gain des fichiers son de NVDA  et de l'extension +++[hdr34-1]
-L'appui sur le bouton "Changer le gain des fichiers son" ouvre le dialogue "Modification du gain des fichiers son de NVDA" qui présente:
+
+++++ Modification du gain des fichiers son de NVDA  et de l'extension ++++[hdr34-2]
+Lorsque la source NVDA est sélectionnée, le bouton "Changer le  gain des fichiers son" est alors activable.
+L'appui sur ce bouton ouvre le dialogue "Modification du gain des fichiers son de NVDA" qui présente:
 - la liste des sons utilisés par NVDA et l'extension,
 - le bouton "Jouer" qui permet d'écouter le son sélectionné,
 - la liste de choix du gain: une valeur positive amplifie le son, une valeur négative le réduit.
@@ -2054,11 +2063,11 @@ Cela peut poser problème si une autre extension l'a aussi modifié.
 
 Pour éviter ce genre de conflit, l'extension donne la possibilité de ne pas activer cette fonctionnalité en décochant l'option "Permettre le réglage du volume des tonalités de NVDA" qui se situe dans la catégorie "Avancé" des paramètres de l'extension. Dans ce cas, il n'y aura pas de modification de la fonction "beep" par l'extension.
 
-Si Wasapi est utilisé, cette option n'est pas présente  car  le réglage des tonalité et des sons de NVDA se fait par NVDA lui-même.
+Si Wasapi est utilisé, cette option n'est pas présente  car  le réglage des tonalités et des sons de NVDA se fait par NVDA lui-même.
 
 Par défaut, Cette option est cochée.
 
-Pour que les fichiers sons modifiés soient joués à la place des sons originaux,  la fonction playWaveFile du module nvwave.py de NVDA a été remplacée. Cette fonction de remplacement est commune  avec la fonctionnalité "Périphérique audio temporaire".
+Pour que les fichiers son modifiés soient joués à la place des sons originaux,  la fonction playWaveFile du module nvwave.py de NVDA a été remplacée. Cette fonction de remplacement est commune  avec la fonctionnalité "Périphérique audio temporaire".
 
 Dans le cas où la modification de cette fonction pose problème, il faut à la fois, décocher l'option "Permettre la modification du gain"   et désinstaller cette  fonctionnalité.
 
@@ -2340,7 +2349,7 @@ Les gestes de commandes "NVDA+contrôle+flèche droite ou gauche" de NVDA permet
 
 Mais après un redémarrage de NVDA, le dernier paramètre utilisé est oublié.
 
-Cette amélioration tente de palier à cet inconvénient.
+Cette amélioration tente de pallier cet inconvénient.
 
 Pour cela, l'extension enregistre, à chaque déplacement dans la boucle des paramètres du synthétiseur, le dernier paramètre utilisé pour chaque synthétiseur et pour chaque profil de configuration.
 

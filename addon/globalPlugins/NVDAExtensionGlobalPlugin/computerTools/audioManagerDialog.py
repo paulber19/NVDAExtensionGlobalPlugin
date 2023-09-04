@@ -11,6 +11,8 @@ import os
 import globalVars
 import gui
 import ui
+import config
+import time
 import braille
 import speech
 import queueHandler
@@ -176,6 +178,8 @@ class NVDAAndAudioApplicationsManagerDialog(
 		# the events
 		self.Bind(wx.EVT_ACTIVATE, self.onActivate)
 		self.devicesListBox.Bind(wx.EVT_LISTBOX, self.onSelectDevice)
+		self.devicesListBox.Bind(wx.EVT_KEY_DOWN, self.onDeviceKeyDown)
+		self.devicesListBox.Bind(wx.EVT_KEY_DOWN, self.onDeviceKeyDown)
 		self.applicationsListBox.Bind(wx.EVT_LISTBOX, self.onSelectApplication)
 		self.applicationsListBox.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
 		self.volumeBox.Bind(wx.EVT_CHOICE, self.onVolumeChoice)
@@ -400,6 +404,28 @@ class NVDAAndAudioApplicationsManagerDialog(
 				braille.handler.message,
 				info)
 
+	def playTonesOnDevice(self, deviceName):
+		# to play a tone on the selected output device if option is true
+		from ..settings import togglePlayToneOnAudioDeviceAdvancedOption
+		if not togglePlayToneOnAudioDeviceAdvancedOption(False):
+			return
+		from synthDriverHandler import _audioOutputDevice
+		curOutputDevice = _audioOutputDevice
+		config.conf["speech"]["outputDevice"] = deviceName
+		# Reinitialize the tones module to update the audio device
+		import tones
+		tones.terminate()
+		tones.initialize()
+		tones.beep(250, 100)
+		time.sleep(0.3)
+		tones.beep(350, 100)
+		time.sleep(0.3)
+		config.conf["speech"]["outputDevice"] = curOutputDevice
+		# Reinitialize the tones module to update the audio device to the current output device
+		import tones
+		tones.terminate()
+		tones.initialize()
+
 	def onSelectDevice(self, evt):
 		index = self.devicesListBox.GetSelection()
 		device = self.devices[index]
@@ -413,6 +439,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		else:
 			application = None
 		self.updateGroups(application)
+		self.playTonesOnDevice(device.nvdaDeviceName)
 
 	def onSelectApplication(self, evt):
 		index = self.applicationsListBox.GetSelection()
@@ -422,10 +449,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		if evt:
 			evt.Skip()
 
-	def onKeyDown(self, evt):
-		if self.applicationsListBox.Count == 0:
-			return
-
+	def _onDeviceKeyDown(self, evt):
 		def _changeCurrentAudioDeviceVolume(offset):
 			level = round(100 * self._currentDevice.getVolume()) + offset
 			if level > 100:
@@ -435,21 +459,11 @@ class NVDAAndAudioApplicationsManagerDialog(
 				if level < minimumLevel:
 					level = minimumLevel
 			self._currentDevice.changeVolume(action="set", value=level)
+			index = self.applicationsListBox.GetSelection()
+			application = self.applications[index]
 			self.updateVolumeGroup(application)
 			self.updateNVDASoundsGroup(application)
 
-		def changeApplicationVolume(application, offset):
-			level = int(self.volumeBox.GetStringSelection()) + offset
-			level = max(0, level)
-			level = min(100, level)
-			audioSources = self.audioSources
-			(relativeLevel, absoluteLevel) = audioSources.validateVolumeLevel(level, application)
-			self.volumeBox.SetStringSelection(str(absoluteLevel))
-			audioSources.setApplicationVolume(application, relativeLevel, True, absoluteLevel)
-			self.updateVolumeGroup(application)
-
-		index = self.applicationsListBox.GetSelection()
-		application = self.applications[index]
 		mod = evt.GetModifiers()
 		keyCode = evt.GetKeyCode()
 		if mod == wx.MOD_CONTROL | wx.MOD_SHIFT:
@@ -469,7 +483,37 @@ class NVDAAndAudioApplicationsManagerDialog(
 			elif keyCode == wx.WXK_END:
 				wx.CallLater(40, self._currentDevice.changeVolume, action="min")
 			# no more with control and shift
+			else:
+				return False
+			return True
+		return False
+
+	def onDeviceKeyDown(self, evt):
+		if self._onDeviceKeyDown(evt):
 			return
+		evt.Skip()
+
+	def onKeyDown(self, evt):
+		if self.applicationsListBox.Count == 0:
+			return
+
+		def changeApplicationVolume(application, offset):
+			level = int(self.volumeBox.GetStringSelection()) + offset
+			level = max(0, level)
+			level = min(100, level)
+			audioSources = self.audioSources
+			(relativeLevel, absoluteLevel) = audioSources.validateVolumeLevel(level, application)
+			self.volumeBox.SetStringSelection(str(absoluteLevel))
+			audioSources.setApplicationVolume(application, relativeLevel, True, absoluteLevel)
+			self.updateVolumeGroup(application)
+
+		if self._onDeviceKeyDown(evt):
+			# key down for change device volume
+			return
+		index = self.applicationsListBox.GetSelection()
+		application = self.applications[index]
+		mod = evt.GetModifiers()
+		keyCode = evt.GetKeyCode()
 		if mod == wx.MOD_CONTROL:
 			# for application volume modification
 			from ..settings import _addonConfigManager

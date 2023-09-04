@@ -88,6 +88,7 @@ _clipboardCommands = {
 _GB_taskTimer = None
 
 _taskDelay = None
+NON_BREAKING_SPACE = 160
 
 
 def getWExplorerStatusBarText(foreground):
@@ -274,7 +275,6 @@ class EditableTextEx(editableText.EditableText):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				ui.message, _msgPaste)
-			#self.processGesture(textInfos.UNIT_LINE, gesture)
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				self.processGesture, textInfos.UNIT_LINE, gesture)
@@ -401,8 +401,11 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 		# This class is a mixin that usually comes before other relevant classes in the mro.
 		# Therefore, try to call super first, and if that fails, return the default (C{True}.
 		try:
-			return super().caretMovementDetectionUsesEvents
+			res = super().caretMovementDetectionUsesEvents
+			log.debug("_get_caretMovementDetectionUsesEvents super res: %s" % res)
+			return res
 		except AttributeError:
+			log.debug("_get_caretMovementDetectionUsesEvents exception")
 			return True
 
 	def _get_useTextInfoToSpeakTypedWords(self) -> bool:
@@ -430,28 +433,47 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 			2. If the caret has moved and a new word has been typed, a TextInfo
 				expanded to the word that has just been typed.
 		"""
+		log.debug("hasNewWordBeenTyped: wordSeparator= %s" % wordSeparator)
 		if not self.useTextInfoToSpeakTypedWords:
 			return (None, None)
 		bookmark = self._cachedCaretBookmark
 		if not bookmark:
 			return (None, None)
 		self._clearCachedCaretBookmark()
+		log.debug("bookmark: %s" % bookmark)
 		caretMoved, caretInfo = self._hasCaretMoved(bookmark, retryInterval=0.005, timeout=0.030)
 		if not caretMoved or not caretInfo or not caretInfo.obj:
+			log.debug("not caret moved")
 			return (None, None)
+		info = caretInfo.copy()
+		info.expand(textInfos.UNIT_LINE)
+		log.debug("caretInfo: %s, bookmark= %s" % (info.text, info.bookmark))
 		tempInfo = caretInfo.copy()
-		tempInfo.move(textInfos.UNIT_CHARACTER, -2)
-		tempInfo.expand(textInfos.UNIT_CHARACTER)
-		ch = tempInfo.text
-		# if there is a space (but no a Non-breaking space) before last character, return no word
-		if len(ch) and ord(ch) != 160 and ch.isspace():
-			return (False, None)
+		res = tempInfo.move(textInfos.UNIT_CHARACTER, -2)
+		if res != 0:
+			tempInfo.expand(textInfos.UNIT_CHARACTER)
+			ch = tempInfo.text
+			log.debug("character caret-2: %s" % ch)
+			# if there is a space (but no a Non-breaking space) before last character, return no word
+			if len(ch) and ord(ch) != NON_BREAKING_SPACE and ch.isspace():
+				log.debug("caret-2 is a space")
+				return (False, None)
+			# if the last character typed is not a letter or number, the word has been probably already reported
+			if not ch.isalnum() and ord(ch) != NON_BREAKING_SPACE:
+				log.debug("caret-2 is not alphanumericc")
+				return (False, None)
+
 		wordInfo = self.makeTextInfo(bookmark)
+		info = wordInfo.copy()
+		info.expand(textInfos.UNIT_WORD)
+		log.debug("wordInfo: %s" % info.text)
 		# The bookmark is positioned after the end of the word.
 		# Therefore, we need to move it one character backwards.
-		wordInfo.move(textInfos.UNIT_CHARACTER, -1)
+		res = wordInfo.move(textInfos.UNIT_CHARACTER, -1)
 		wordInfo.expand(textInfos.UNIT_WORD)
+		log.debug("wordInfo moved: %s, %s" % (res, wordInfo.text))
 		diff = wordInfo.compareEndPoints(caretInfo, "endToStart")
+		log.debug("diff: %s" % diff)
 		# if diff >= 0 and not wordSeparator.isspace():
 		if diff >= 0 and wordSeparator.isalnum():
 			# This is no word boundary.
@@ -461,6 +483,15 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 			# For example, this can occur in Notepad++ when auto indentation is on.
 			log.debug("Word before caret contains only spaces")
 			return (None, None)
+		wordInfo.collapse()
+		wordInfo.expand(textInfos.UNIT_WORD)
+		log.debug("word1: %s" % wordInfo.text)
+		# with notepad editor, wordSeparator is at the end of word.  So we need to suppress it
+		# not same thing with other editor as notepad++, wordpad, word.
+		if wordInfo.text[-1] == wordSeparator:
+			# the word is before the wordSeparator
+			res = wordInfo.move(textInfos.UNIT_CHARACTER, -1, endPoint="end")
+			log.debug("word2: %s, %s" % (res, wordInfo.text))
 		return (True, wordInfo)
 
 	def _get_caret(self):

@@ -1964,6 +1964,9 @@ No se le asigna ningún gesto de entrada por defecto. Pero es siempre posible ha
 
 La órden "KEY_CENTER_FOCUSED_APP" es operacional incluso si  la funcionalidad no está instalada a fin, eventualmente, de poder reequilibrar el audio de algunas aplicaciones que permanecierón desequilibradas después de la desinstalación de la funcionalidad.
 
+
+
++++ Administrador de fuentes de audio +++[hdr34-1]
 El diálogo "Administrador de fuentes de audio " permite, además de la orientación del sonido de NVDA, de:
 - Fijar el nivel de volumen de los dos canales de audio de NVDA y fuentes de audio,
 - Ajustar el volumen de tonos de NVDA cuando no se usa Wasapi,
@@ -1974,9 +1977,10 @@ El diálogo "Administrador de fuentes de audio " permite, además de la orientac
 - La lista de fuentes de audio para el dispositivo de salida de audio seleccionado,
 - El potenciómetro para cambiar el volumen de la fuente seleccionada,
 - Excepto por la fuente "NVDA", la casilla de verificación para cambiar el estado "sonido silenciado" de la fuente seleccionada,
-- Los potenciómetros para cambiar los canales izquierdo y derecho de la fuente seleccionada,
+- Los potenciómetros para cambiar los niveles de los canales izquierdo y derecho de la fuente seleccionada,
 - Solo para la fuente "NVDA" y sin Wasapi, el potenciómetro para ajustar el volumen de los tonos emitidos por NVDA y el botón para cambiar la ganancia en los archivos de sonido,
 - Solo para la fuente "NVDA", el botón para cambiar la ganancia en los archivos de sonido.
+
 
 
 El dispositivo de salida de audio que Windows usa de forma predeterminada es anunciado.
@@ -2016,9 +2020,16 @@ Cuando se selecciona una fuente de audio, se anuncia el estado de balance de los
 
 Al reiniciar NVDA o si el complemento está deshabilitado o desinstalado, NVDA se escucha nuevamente en ambos canales de audio, mientras que las fuentes de audio permanecen en su estado (almacenadas por Windows).
 
+Cuando el foco está en la lista de dispositivos de salida de audio, la selección de un dispositivo desencadena la emisión de un tono hacia este dispositivo. Es posible evitar esta emisión desmarcando la opción "Reproducir un tono en el dispositivo de salida de audio" del grupo "Administrador de fuentes de audio" en la categoría "Avanzada" en "Opciones globales" del complemento.
+En esta lista, las siguientes órdenes están disponibles:
+- Aumentar o disminuir de un paso, el volumen principal: "control+mayúscula+Flecha Arriba o Abajo",
+- Aumentar o disminuir de un doble paso, el volumen principal: "control+mayúscula+rePág o avPág",
+- Maximizar o minimizar el volumen principal: "control+mayúscula+inicio o fin".
 
-+++ Cambiar la ganancia en los archivos de sonido de NVDA y del complemento +++[hdr34-1]
-Al pulsar el botón "Cambiar la ganancia en los archivos de sonido" abre el cuadro de diálogo "Modificación de la ganancia en los archivos de sonido de NVDA". Este cuadro de diálogo muestra:
+
++++ Cambiar la ganancia en los archivos de sonido de NVDA y del complemento +++[hdr34-2]
+Cuando se selecciona la fuente NVDA, se activa el botón "Cambiar la ganancia en los archivos de sonido".
+Al pulsar este botón abre el cuadro de diálogo "Modificación de la ganancia en los archivos de sonido de NVDA". Este cuadro de diálogo muestra:
 - La lista de sonidos utilizados por NVDA y el complemento,
 - El botón "Reproducir" que te permite escuchar el sonido seleccionado,
 - La lista para elegir la ganancia: un valor positivo amplifica el sonido, un valor negativo lo reduce.

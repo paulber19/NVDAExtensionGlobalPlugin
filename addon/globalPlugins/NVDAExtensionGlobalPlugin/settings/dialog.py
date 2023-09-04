@@ -767,7 +767,7 @@ class AdvancedSettingsPanel(
 			toggleByPassNoDescriptionAdvancedOption,
 			toggleLimitKeyRepeatsAdvancedOption, toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption,
 			toggleTypedWordSpeakingEnhancementAdvancedOption, toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
-			toggleAllowNVDASoundGainModificationAdvancedOption
+			toggleAllowNVDASoundGainModificationAdvancedOption, togglePlayToneOnAudioDeviceAdvancedOption
 		)
 		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
 		# Translators: This is the label for a choice box in the advanced settings panel.
@@ -839,28 +839,35 @@ class AdvancedSettingsPanel(
 			toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr17-7"), self.recordCurrentSettingsForCurrentSelectorOptionBox)
 		# Translators: This is the label for a group of editing options in the computer settings panel.
-		groupText = _("NVDA sounds")
+		groupText = _("Audio sources's manager")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
 		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
-		labelText = _("&Allow tonalities's volume adjustment")
+		labelText = _("Allow &NVDA tonalities's volume adjustment")
 		self.allowNVDASoundsVolumeAdjustmentOptionBox = group.addItem(
 			wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.allowNVDASoundsVolumeAdjustmentOptionBox.SetValue(
 			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False))
-		self.bindHelpEvent(getHelpObj("hdr34"), self.allowNVDASoundsVolumeAdjustmentOptionBox)
+		self.bindHelpEvent(getHelpObj("hdr34-1"), self.allowNVDASoundsVolumeAdjustmentOptionBox)
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
 		labelText = _("allow nvda sounds files's &gain modification")
 		self.allowNVDASoundGainModificationBox = group.addItem(
 			wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.allowNVDASoundGainModificationBox.SetValue(
 			toggleAllowNVDASoundGainModificationAdvancedOption(False))
-		self.bindHelpEvent(getHelpObj("hdr34-1"), self.allowNVDASoundGainModificationBox)
+		self.bindHelpEvent(getHelpObj("hdr34-2"), self.allowNVDASoundGainModificationBox)
 		from ..computerTools.audioCore import isWasapiUsed
 		if isWasapiUsed():
 			self.allowNVDASoundsVolumeAdjustmentOptionBox.Disable()
+		# Translators: This is the label for a checkbox in the Advanced settings panel.
+		labelText = _("Play tone on audio &output device")
+		self.playToneOnAudioDeviceBox = group.addItem(
+			wx.CheckBox(self, wx.ID_ANY, label=labelText))
+		self.playToneOnAudioDeviceBox.SetValue(
+			togglePlayToneOnAudioDeviceAdvancedOption(False))
+		self.bindHelpEvent(getHelpObj("hdr34?1"), self.playToneOnAudioDeviceBox)
 
 	def saveSettingChanges(self):
 		from ..settings import (
@@ -869,6 +876,7 @@ class AdvancedSettingsPanel(
 			toggleLimitKeyRepeatsAdvancedOption, toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption,
 			toggleTypedWordSpeakingEnhancementAdvancedOption, toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 			toggleAllowNVDASoundGainModificationAdvancedOption,
+			togglePlayToneOnAudioDeviceAdvancedOption,
 		)
 		self.restartNVDA = False
 		playSoundOnErrorsOption = self.playSoundOnErrorsOptionChoiceBox.GetSelection()
@@ -905,6 +913,9 @@ class AdvancedSettingsPanel(
 		if self.allowNVDASoundGainModificationBox.IsChecked() != option:
 			toggleAllowNVDASoundGainModificationAdvancedOption()
 			self.restartNVDA = True
+		option = togglePlayToneOnAudioDeviceAdvancedOption(False)
+		if self.playToneOnAudioDeviceBox.IsChecked() != option:
+			togglePlayToneOnAudioDeviceAdvancedOption()
 
 	def onSave(self):
 		self.saveSettingChanges()

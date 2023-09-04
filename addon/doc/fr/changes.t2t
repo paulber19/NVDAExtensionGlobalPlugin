@@ -19,6 +19,18 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 
 Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
 
++ v13.1 (04/09/2023) +
+Améliorations:
+- annonce du nom de l'application lors   d'un changement de volume  si cette application est différente de celle du précédent changement de volume.
+- dans le gestionnaire des sources audio:
+ - la sélection d'un périphérique de sortie audio déclenche l'émission d'une tonalité vers le périphérique sélectionné (désactivable par configuration).
+ - les commandes de modifications de volume du périphérique de sortie audio disponibles dans la liste de sélection des sources audio, sont maintenant également disponibles dans la liste de sélection du périphérique de sortie audio.
+
+
+Corrections de bogues:
+- correction de l'erreur lors de la commande pour couper ou rétablir le son (commande "s" de l'interpréteur de commande) pour une application qui n'émet aucun son.
+- lorsque l'amélioration de l'écho par mot est activée, la double  annonce du mot après la frappe d'un séparateur de mot ne se produit plus.
+- lorsque l'amélioration de l'écho par mot est activée, l'annonce du mot dans la zone d'édition du bloc-note n'inclut plus le séparateur de mot. 
 
 
 + v13.0 (15/08/2023) +
