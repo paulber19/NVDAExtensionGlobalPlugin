@@ -61,7 +61,9 @@ def speakTypedCharacters(ch: str):
 
 
 def speakPreviousWord(wordSeparator):
+	# get word when not using textInfo
 	word = "".join(speech.speech._curWordChars)
+	log.debug("speakPreviousWord: %s" % word)
 	typingIsProtected = api.isTypingProtected()
 	if not (log.isEnabledFor(log.IO) or (
 		config.conf["keyboard"]["speakTypedWords"] and not typingIsProtected)):
@@ -79,10 +81,12 @@ def speakPreviousWord(wordSeparator):
 		speech.speech.clearTypedWordBuffer()
 		return
 	if not obj.useTextInfoToSpeakTypedWords and len(word) == 0:
+		log.debug("no word and not useTextInfoToSpeakTypedWords ")
 		return
 	wordFound, wordInfo = obj.hasNewWordBeenTyped(wordSeparator)
 	if wordFound is False:
 		speech.speech._curWordChars.append(wordSeparator)
+		log.debug("no word:  wordFound is false. Just append wordSeparator)")
 		return
 	speakUsingTextInfo = wordFound is True and not speech.speech.isBlank(wordInfo.text)
 	if speakUsingTextInfo:

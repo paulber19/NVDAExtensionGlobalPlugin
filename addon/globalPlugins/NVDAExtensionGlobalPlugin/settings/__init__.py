@@ -221,8 +221,12 @@ def toggleAllowNVDASoundGainModificationAdvancedOption(toggle=True):
 	return toggleAdvancedOption(addonConfig.ID_AllowNVDASoundGainModification, toggle)
 
 
+def togglePlayToneOnAudioDeviceAdvancedOption(toggle=True):
+	return toggleAdvancedOption(addonConfig.ID_PlayToneOnAudioDevice, toggle)
+
+
 class AddonConfigurationManager():
-	_currentConfigVersion = "3.0"
+	_currentConfigVersion = "3.1"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
 
@@ -232,6 +236,7 @@ class AddonConfigurationManager():
 		"2.8": addonConfig.AddonConfiguration28,
 		"2.9": addonConfig.AddonConfiguration29,
 		"3.0": addonConfig.AddonConfiguration30,
+		"3.1": addonConfig.AddonConfiguration31,
 	}
 
 	def __init__(self):

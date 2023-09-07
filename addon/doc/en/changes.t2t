@@ -20,6 +20,19 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ v13.1 (September/04/2023) +
+Improvements:
+- announcement of the name of the application during a volume change if this application is different from that of the previous volume change.
+- in the audio sources manager:
+ - the selection of an audio output device triggers the transmission of a tone to the selected device (can be deactivated by configuration).
+ - audio output device volume change commands available in the audio source selection list, are now also available in the audio output device selection list.
+
+
+Bug fixes:
+- fixed the error when commanding to mute or restore the sound (command "s" of the shell) for an application which does not emit any sound.
+- when per-word echo enhancement is enabled, double word announcement after typing a word breaker no longer occurs.
+- when per-word echo enhancement is enabled, the word announcement in the notepad edit box no longer includes the word separator.
+
 
 + v13.0 (August/15/2023) +
 New:

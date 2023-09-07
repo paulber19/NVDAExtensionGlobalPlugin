@@ -158,6 +158,8 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 			return
 		from .audioCore import AudioSources, audioOutputDevicesManager
 		device = audioOutputDevicesManager.findDeviceFromApplicationName(appName)
+		if device is None:
+			return None
 		audioSources = AudioSources(device)
 		audioSources.toggleProcessVolumeMute(appName)
 

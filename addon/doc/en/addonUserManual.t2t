@@ -1892,6 +1892,7 @@ No input gestures are assigned to them. But it is still possible to do this usin
 
 The "KEY_CENTER_FOCUSED_APP" command is operational even if the feature is not installed in order, possibly, to be able to rebalance the audio of certain applications that remained unbalanced after uninstalling the feature.
 
++++ Audio source manager +++[hdr34-1]
 The "Audio Source Manager" dialog allows, besides NVDA sound orientation, to:
 - set the volume level of both NVDA audio channels and audio sources,
 - adjust the volume of NVDA tones when Wasapi is not used,
@@ -1940,9 +1941,17 @@ When restarting NVDA or if the add-on is disabled or uninstalled, NVDA is again 
 
 Warning: NVDA and the audio sources must use the same audio output device, such as the sound mapper, for proper operation. Besides, the functionality is of interest only in this case.
 
+When the list of audio output devices is focused, selecting a device triggers a tone to play on that device. It is possible to prevent this emission by unchecking the "Play tone on   audio output device" option of the "Audio source manager" group of the "Advanced" category of the global settings of the add-on.
 
-+++ Changed gain of NVDA and add-on sound files +++[hdr34-1]
-Pressing the "Change Sound Files Gain" button opens the "Change NVDA Sound Files Gain" dialog which shows:
+In this list, the following commands are available:
+- increase or decrease the main volume by one step: "control + shift + up or down arrow",
+- increase or decrease by a double step, the main volume: "control + shift + previous or next page",
+- maximize or minimize the main volume: "control + shift + start or end".
+
+
+++++ Changed gain of NVDA and add-on sound files ++++[hdr34-2]
+When the NVDA source is selected, the "Change Sound Files Gain"button is then activated.
+Pressing this button opens the "NVDA Sound Files's gain modification" dialog which shows:
 - the list of sounds used by NVDA and the add-on,
 - the "Play" button which allows you to listen to the selected sound,
 - the gain choice list: a positive value amplifies the sound, a negative value reduces it.

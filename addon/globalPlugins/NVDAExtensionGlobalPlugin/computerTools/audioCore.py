@@ -89,6 +89,8 @@ def getNVDASessionName():
 
 # memorize the last output audio device that was announced on volume change
 _lastSpokenOutputAudioDevice = None
+# memorize last application spoken on volume change
+_lastAppOnVolumeChange = None
 
 
 class AudioSource(object):
@@ -140,9 +142,11 @@ class AudioSource(object):
 		if silent:
 			return
 		if not self.getMute():
-			ui.message(_("Volume on"))
+			msg = _("Volume on")
 		else:
-			ui.message(_("volume off"))
+			msg = _("volume off")
+		appMsg = ".".join(self._name.split(".")[:-1])
+		ui.message("%s %s" % (appMsg, msg))
 
 	@property
 	def channelsCount(self):
@@ -280,11 +284,17 @@ class AudioSources(object):
 			relativeLevel, absoluteLevel))
 		return (relativeLevel, absoluteLevel)
 
-	def announceVolumeLevel(self, level):
+	def announceVolumeLevel(self, level, appName=None):
 		from ..settings import toggleReportVolumeChangeAdvancedOption
 		if not toggleReportVolumeChangeAdvancedOption(False):
 			return
 		msg = "%s %s" % (volumeMsg, level)
+		global _lastAppOnVolumeChange
+		if appName and appName != _lastAppOnVolumeChange:
+			appMsg = ".".join(appName.split(".")[:-1])
+
+			_lastAppOnVolumeChange = appName
+			msg = "%s %s" % (appMsg, msg)
 		wx.CallLater(40, ui.message, msg)
 
 	def getPreviousApplicationVolumeLevel(self, appName):
@@ -318,7 +328,7 @@ class AudioSources(object):
 		level = audioSource.volume
 		if report:
 			volume = reportValue if reportValue else int(round(level * 100))
-			self.announceVolumeLevel(volume)
+			self.announceVolumeLevel(volume, appName)
 		log.warning("%s volume is set to %s" % (appName, level))
 
 	def changeAppVolume(self, appName=None, action="increase", value=100, report=True, reportValue=None):
@@ -676,7 +686,7 @@ class AudioOutputDevicesManager(object):
 		return self.getDeviceFromName(_audioOutputDevice)
 
 	def findDeviceFromApplicationName(self, appName):
-		log.debug("findDeviceFromApplicationName: %s" % appName)
+		log.debug("findDeviceFromApplicationName: %s, devices= %s" % (appName, self._devices))
 		for device in self._devices:
 			audioSources = AudioSources(device)
 			if audioSources.getAudioSource(appName):
@@ -833,6 +843,8 @@ class AudioOutputDevicesManager(object):
 					log.debug("Scanning stopped")
 					return self
 				if device.name.startswith(deviceName):
+					# nvda device name are truncated if no wasapi, so memorize it in device object
+					device.nvdaDeviceName = deviceName
 					self._devices.append(device)
 		self.scanDone = True
 		log.debug("Devices scan terminated")
@@ -858,7 +870,6 @@ class AudioOutputDevicesManager(object):
 			self.setRecoveryDefaultVolumes()
 			_addonConfigManager.shouldSetRecoveryDefaultVolumes = False
 			return
-			from ..settings import isInstall, toggleSetOnMainAndNVDAVolumeAdvancedOption
 		from ..settings import toggleSetOnMainAndNVDAVolumeAdvancedOption
 		if toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
 			device = self.getCurrentNVDADevice()
