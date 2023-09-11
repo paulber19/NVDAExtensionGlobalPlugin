@@ -17,9 +17,6 @@ def _(arg):
 
 # Add-on information variables
 addon_info = {
-	# for previously unpublished addons, please follow
-	# the community guidelines at:
-	# https://bitbucket.org/nvdaaddonteam/todo/raw/master/guideLines.txt
 	# add-on Name, internal for nvda
 	"addon_name": "NVDAExtensionGlobalPlugin",
 	# Add-on summary, usually the user visible name of the addon.
@@ -33,11 +30,13 @@ addon_info = {
 
 
 	# version
-	"addon_version": "13.1",
+	"addon_version": "13.1.1",
 	# Author(s)
-	"addon_author": "PaulBer19",
+	"addon_author": "PaulBer19 (paulber19@laposte.net",
 	# URL for the add-on documentation support
-	"addon_url": "paulber19@laposte.net",
+	"addon_url": "https://github.com/paulber19/NVDAExtensionGlobalPlugin.git",
+	# URL for the add-on repository where the source code can be found
+	"addon_sourceURL": "https://github.com/paulber19/NVDAExtensionGlobalPlugin.git",
 	# Documentation file name
 	"addon_docFileName": "addonUserManual.html",
 	# Minimum NVDA version supported (e.g. "2018.3")
@@ -47,6 +46,10 @@ addon_info = {
 	"addon_lastTestedNVDAVersion": "2023.2",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel": None,
+	# Add-on license such as GPL 2
+	"addon_license": "GPL v2",
+	# URL for the license document the ad-on is licensed under
+	"addon_licenseURL": "https://www.gnu.org/licenses/gpl-2.0.html",
 }
 
 # Define the python files that are the sources of your add-on.
@@ -97,3 +100,10 @@ excludedFiles = []
 # For example:
 # set baseLanguage to "es" if your add-on is primarily written in spanish.
 baseLanguage = "en"
+
+# Markdown extensions for add-on documentation
+# Most add-ons do not require additional Markdown extensions.
+# If you need to add support for markup such as tables, fill out the below list.
+# Extensions string must be of the form "markdown.extensions.extensionName"
+# e.g. "markdown.extensions.tables" to add tables.
+markdownExtensions = []

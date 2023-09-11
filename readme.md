@@ -1,7 +1,7 @@
 # NVDA global commands extension #
 
-* Author: PaulBer19
-* URL: paulber19@laposte.net
+* Author: PaulBer19 (paulber19@laposte.net)
+* URL: [https://github.com/paulber19/NVDAExtensionGlobalPlugin.git][3]
 * Download:
 	* [stable version][1]
 	* [developpement version][2]
@@ -113,3 +113,4 @@ some features can be enabled or disabled individually.
 
 [1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-13.1.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
+[3]:https://github.com/paulber19/NVDAExtensionGlobalPlugin.git
