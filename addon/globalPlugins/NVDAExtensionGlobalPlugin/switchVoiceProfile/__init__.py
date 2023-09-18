@@ -161,7 +161,12 @@ class SwitchVoiceProfilesManager(object):
 			return {}
 		selectorCfg._cache.clear()
 		selectorCfg.spec["speech"] = speechSpec
-		return selectorCfg.dict()
+		selectorConfig = selectorCfg.dict()
+		tempDic = selectorCfg.dict()
+		for key in tempDic["speech"].keys():
+			if type(tempDic["speech"][key]) == dict and key not in ["__many__", tempDic["synthName"]]:
+				del selectorConfig["speech"][key]
+		return selectorConfig
 
 	def getVoiceProfile(self, selector):
 		if not self.isSet(selector):
