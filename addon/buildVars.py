@@ -26,11 +26,38 @@ addon_info = {
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on
 	# add-on information from add-ons manager
-	"addon_description": _("""This global add-on provides a multitude of features described in detail in its user manual (see the add-on's help for this)."""),
+	"addon_description": _("""This add-on brings to NVDA a multitude of features which can be activated or deactivated individually depending on the need.
+Here are a few:
+* Display of the list of icons in the notification area or windows of applications launched,
+* Help in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2 and possibility to add its own categories and symbols,
+* Extension of the functionality of the virtual buffer for browser:
+ * new commands for navigation mode (paragraph, division, anchor, main landmark),
+ * new types of elements for the dialog box opened by "NVDA+F7" (radio button, paragraph, frame, checkBox, etc) with the announcement of the number of items found,
+ * option to browse in a loop in search of a next or previous item,
+ * new scripts for table: cell/line/column announcement, move to the next or previous column / row with announcement of the cells composing it,
+* intelligent announcement of the function of editing commands like Copy, cut or Paste and improvement of the NVDA base script which announces the text in the clipboard("NVDA+c" ),
+* voice speechs's history,
+* renaming keyboard keys,
+* selective announcement of command keys,
+* display of visible elements making up the object in the foreground and possibility to move to or click on the elements,
+* quick voice profile switching,
+* persistence of NVDA and modification keys and specific persistence for the gmail.com site,
+* shutdown, restart or Hibernate the computer,
+* management of input gestures configured by user,
+* sound control: system/ NVDA/application's quick volume changes, audio split, temporary audio output device switching,
+* user configurations management and NVDA restarting  with precise configuration,
+* text analyser,
+* quick add-ons activation / desactivation,
+* Announcement or display of information about the application under focus, such as its version, the active configuration profile, loaded add-on,
+* possible use of numeric keypad as standard numeric keypad,
+* possibility of executing scripts from the "Input gestures" dialog,
+* and more.
 
+For the full list of the add-on's features and their description, see the user manual.
+"""),
 
 	# version
-	"addon_version": "13.1.3",
+	"addon_version": "13.2",
 	# Author(s)
 	"addon_author": "PaulBer19 (paulber19@laposte.net",
 	# URL for the add-on documentation support
@@ -43,7 +70,7 @@ addon_info = {
 	"addon_minimumNVDAVersion": "2022.1",
 	# Last NVDA version supported/tested
 	# (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": "2023.2",
+	"addon_lastTestedNVDAVersion": "2023.3",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel": None,
 	# Add-on license such as GPL 2

@@ -4,25 +4,26 @@
 
 """macOS platform implementation."""
 
-import contextlib
 import errno
 import functools
 import os
-from socket import AF_INET
 from collections import namedtuple
 
 from . import _common
 from . import _psposix
 from . import _psutil_osx as cext
 from . import _psutil_posix as cext_posix
-from ._common import AF_INET6
+from ._common import AccessDenied
+from ._common import NoSuchProcess
+from ._common import ZombieProcess
 from ._common import conn_tmap
+from ._common import conn_to_ntuple
 from ._common import isfile_strict
 from ._common import memoize_when_activated
 from ._common import parse_environ_block
-from ._common import sockfam_to_enum
-from ._common import socktype_to_enum
 from ._common import usage_percent
+from ._compat import PermissionError
+from ._compat import ProcessLookupError
 
 
 __extra__all__ = []
@@ -33,7 +34,7 @@ __extra__all__ = []
 # =====================================================================
 
 
-PAGESIZE = os.sysconf("SC_PAGE_SIZE")
+PAGESIZE = cext_posix.getpagesize()
 AF_LINK = cext_posix.AF_LINK
 
 TCP_STATUSES = {
@@ -83,13 +84,6 @@ pidtaskinfo_map = dict(
     numthreads=6,
     volctxsw=7,
 )
-
-# These objects get set on "import psutil" from the __init__.py
-# file, see: https://github.com/giampaolo/psutil/issues/1402
-NoSuchProcess = None
-ZombieProcess = None
-AccessDenied = None
-TimeoutExpired = None
 
 
 # =====================================================================
@@ -150,7 +144,7 @@ def cpu_times():
 
 
 def per_cpu_times():
-    """Return system CPU times as a named tuple"""
+    """Return system CPU times as a named tuple."""
     ret = []
     for cpu_t in cext.per_cpu_times():
         user, nice, system, idle = cpu_t
@@ -164,9 +158,9 @@ def cpu_count_logical():
     return cext.cpu_count_logical()
 
 
-def cpu_count_physical():
-    """Return the number of physical CPUs in the system."""
-    return cext.cpu_count_phys()
+def cpu_count_cores():
+    """Return the number of CPU cores in the system."""
+    return cext.cpu_count_cores()
 
 
 def cpu_stats():
@@ -180,7 +174,7 @@ def cpu_freq():
     """Return CPU frequency.
     On macOS per-cpu frequency is not supported.
     Also, the returned frequency never changes, see:
-    https://arstechnica.com/civis/viewtopic.php?f=19&t=465002
+    https://arstechnica.com/civis/viewtopic.php?f=19&t=465002.
     """
     curr, min_, max_ = cext.cpu_freq()
     return [_common.scpufreq(curr, min_, max_)]
@@ -206,7 +200,9 @@ def disk_partitions(all=False):
         if not all:
             if not os.path.isabs(device) or not os.path.exists(device):
                 continue
-        ntuple = _common.sdiskpart(device, mountpoint, fstype, opts)
+        maxfile = maxpath = None  # set later
+        ntuple = _common.sdiskpart(device, mountpoint, fstype, opts,
+                                   maxfile, maxpath)
         retlist.append(ntuple)
     return retlist
 
@@ -267,7 +263,7 @@ def net_if_stats():
     for name in names:
         try:
             mtu = cext_posix.net_if_mtu(name)
-            isup = cext_posix.net_if_flags(name)
+            flags = cext_posix.net_if_flags(name)
             duplex, speed = cext_posix.net_if_duplex_speed(name)
         except OSError as err:
             # https://github.com/giampaolo/psutil/issues/1279
@@ -276,7 +272,10 @@ def net_if_stats():
         else:
             if hasattr(_common, 'NicDuplex'):
                 duplex = _common.NicDuplex(duplex)
-            ret[name] = _common.snicstats(isup, duplex, speed, mtu)
+            output_flags = ','.join(flags)
+            isup = 'running' in flags
+            ret[name] = _common.snicstats(isup, duplex, speed, mtu,
+                                          output_flags)
     return ret
 
 
@@ -329,6 +328,14 @@ def pids():
 pid_exists = _psposix.pid_exists
 
 
+def is_zombie(pid):
+    try:
+        st = cext.proc_kinfo_oneshot(pid)[kinfo_proc_map['status']]
+        return st == cext.SZOMB
+    except OSError:
+        return False
+
+
 def wrap_exceptions(fun):
     """Decorator which translates bare OSError exceptions into
     NoSuchProcess and AccessDenied.
@@ -337,44 +344,17 @@ def wrap_exceptions(fun):
     def wrapper(self, *args, **kwargs):
         try:
             return fun(self, *args, **kwargs)
-        except OSError as err:
-            if err.errno == errno.ESRCH:
+        except ProcessLookupError:
+            if is_zombie(self.pid):
+                raise ZombieProcess(self.pid, self._name, self._ppid)
+            else:
                 raise NoSuchProcess(self.pid, self._name)
-            if err.errno in (errno.EPERM, errno.EACCES):
-                raise AccessDenied(self.pid, self._name)
-            raise
-        except cext.ZombieProcessError:
-            raise ZombieProcess(self.pid, self._name, self._ppid)
+        except PermissionError:
+            raise AccessDenied(self.pid, self._name)
     return wrapper
 
 
-@contextlib.contextmanager
-def catch_zombie(proc):
-    """There are some poor C APIs which incorrectly raise ESRCH when
-    the process is still alive or it's a zombie, or even RuntimeError
-    (those who don't set errno). This is here in order to solve:
-    https://github.com/giampaolo/psutil/issues/1044
-    """
-    try:
-        yield
-    except (OSError, RuntimeError) as err:
-        if isinstance(err, RuntimeError) or err.errno == errno.ESRCH:
-            try:
-                # status() is not supposed to lie and correctly detect
-                # zombies so if it raises ESRCH it's true.
-                status = proc.status()
-            except NoSuchProcess:
-                raise err
-            else:
-                if status == _common.STATUS_ZOMBIE:
-                    raise ZombieProcess(proc.pid, proc._name, proc._ppid)
-                else:
-                    raise AccessDenied(proc.pid, proc._name)
-        else:
-            raise
-
-
-class Process(object):
+class Process:
     """Wrapper class around underlying C implementation."""
 
     __slots__ = ["pid", "_name", "_ppid", "_cache"]
@@ -396,8 +376,7 @@ class Process(object):
     @memoize_when_activated
     def _get_pidtaskinfo(self):
         # Note: should work for PIDs owned by user only.
-        with catch_zombie(self):
-            ret = cext.proc_pidtaskinfo_oneshot(self.pid)
+        ret = cext.proc_pidtaskinfo_oneshot(self.pid)
         assert len(ret) == len(pidtaskinfo_map)
         return ret
 
@@ -416,18 +395,15 @@ class Process(object):
 
     @wrap_exceptions
     def exe(self):
-        with catch_zombie(self):
-            return cext.proc_exe(self.pid)
+        return cext.proc_exe(self.pid)
 
     @wrap_exceptions
     def cmdline(self):
-        with catch_zombie(self):
-            return cext.proc_cmdline(self.pid)
+        return cext.proc_cmdline(self.pid)
 
     @wrap_exceptions
     def environ(self):
-        with catch_zombie(self):
-            return parse_environ_block(cext.proc_environ(self.pid))
+        return parse_environ_block(cext.proc_environ(self.pid))
 
     @wrap_exceptions
     def ppid(self):
@@ -436,8 +412,7 @@ class Process(object):
 
     @wrap_exceptions
     def cwd(self):
-        with catch_zombie(self):
-            return cext.proc_cwd(self.pid)
+        return cext.proc_cwd(self.pid)
 
     @wrap_exceptions
     def uids(self):
@@ -510,8 +485,7 @@ class Process(object):
         if self.pid == 0:
             return []
         files = []
-        with catch_zombie(self):
-            rawlist = cext.proc_open_files(self.pid)
+        rawlist = cext.proc_open_files(self.pid)
         for path, fd in rawlist:
             if isfile_strict(path):
                 ntuple = _common.popenfile(path, fd)
@@ -524,20 +498,12 @@ class Process(object):
             raise ValueError("invalid %r kind argument; choose between %s"
                              % (kind, ', '.join([repr(x) for x in conn_tmap])))
         families, types = conn_tmap[kind]
-        with catch_zombie(self):
-            rawlist = cext.proc_connections(self.pid, families, types)
+        rawlist = cext.proc_connections(self.pid, families, types)
         ret = []
         for item in rawlist:
             fd, fam, type, laddr, raddr, status = item
-            status = TCP_STATUSES[status]
-            fam = sockfam_to_enum(fam)
-            type = socktype_to_enum(type)
-            if fam in (AF_INET, AF_INET6):
-                if laddr:
-                    laddr = _common.addr(*laddr)
-                if raddr:
-                    raddr = _common.addr(*raddr)
-            nt = _common.pconn(fd, fam, type, laddr, raddr, status)
+            nt = conn_to_ntuple(fd, fam, type, laddr, raddr, status,
+                                TCP_STATUSES)
             ret.append(nt)
         return ret
 
@@ -545,8 +511,7 @@ class Process(object):
     def num_fds(self):
         if self.pid == 0:
             return 0
-        with catch_zombie(self):
-            return cext.proc_num_fds(self.pid)
+        return cext.proc_num_fds(self.pid)
 
     @wrap_exceptions
     def wait(self, timeout=None):
@@ -554,13 +519,11 @@ class Process(object):
 
     @wrap_exceptions
     def nice_get(self):
-        with catch_zombie(self):
-            return cext_posix.getpriority(self.pid)
+        return cext_posix.getpriority(self.pid)
 
     @wrap_exceptions
     def nice_set(self, value):
-        with catch_zombie(self):
-            return cext_posix.setpriority(self.pid, value)
+        return cext_posix.setpriority(self.pid, value)
 
     @wrap_exceptions
     def status(self):

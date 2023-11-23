@@ -6,7 +6,6 @@
 
 """AIX platform implementation."""
 
-import errno
 import functools
 import glob
 import os
@@ -14,22 +13,25 @@ import re
 import subprocess
 import sys
 from collections import namedtuple
-from socket import AF_INET
 
 from . import _common
 from . import _psposix
 from . import _psutil_aix as cext
 from . import _psutil_posix as cext_posix
-from ._common import AF_INET6
-from ._common import get_procfs_path
-from ._common import memoize_when_activated
 from ._common import NIC_DUPLEX_FULL
 from ._common import NIC_DUPLEX_HALF
 from ._common import NIC_DUPLEX_UNKNOWN
-from ._common import sockfam_to_enum
-from ._common import socktype_to_enum
+from ._common import AccessDenied
+from ._common import NoSuchProcess
+from ._common import ZombieProcess
+from ._common import conn_to_ntuple
+from ._common import get_procfs_path
+from ._common import memoize_when_activated
 from ._common import usage_percent
 from ._compat import PY3
+from ._compat import FileNotFoundError
+from ._compat import PermissionError
+from ._compat import ProcessLookupError
 
 
 __extra__all__ = ["PROCFS_PATH"]
@@ -44,7 +46,7 @@ HAS_THREADS = hasattr(cext, "proc_threads")
 HAS_NET_IO_COUNTERS = hasattr(cext, "net_io_counters")
 HAS_PROC_IO_COUNTERS = hasattr(cext, "proc_io_counters")
 
-PAGE_SIZE = os.sysconf('SC_PAGE_SIZE')
+PAGE_SIZE = cext_posix.getpagesize()
 AF_LINK = cext_posix.AF_LINK
 
 PROC_STATUSES = {
@@ -79,13 +81,6 @@ proc_info_map = dict(
     num_threads=5,
     status=6,
     ttynr=7)
-
-# These objects get set on "import psutil" from the __init__.py
-# file, see: https://github.com/giampaolo/psutil/issues/1402
-NoSuchProcess = None
-ZombieProcess = None
-AccessDenied = None
-TimeoutExpired = None
 
 
 # =====================================================================
@@ -128,13 +123,13 @@ def swap_memory():
 
 
 def cpu_times():
-    """Return system-wide CPU times as a named tuple"""
+    """Return system-wide CPU times as a named tuple."""
     ret = cext.per_cpu_times()
     return scputimes(*[sum(x) for x in zip(*ret)])
 
 
 def per_cpu_times():
-    """Return system per-CPU times as a list of named tuples"""
+    """Return system per-CPU times as a list of named tuples."""
     ret = cext.per_cpu_times()
     return [scputimes(*x) for x in ret]
 
@@ -148,14 +143,13 @@ def cpu_count_logical():
         return None
 
 
-def cpu_count_physical():
-    cmd = "lsdev -Cc processor"
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+def cpu_count_cores():
+    cmd = ["lsdev", "-Cc", "processor"]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
     if PY3:
-        stdout, stderr = [x.decode(sys.stdout.encoding)
-                          for x in (stdout, stderr)]
+        stdout, stderr = (x.decode(sys.stdout.encoding)
+                          for x in (stdout, stderr))
     if p.returncode != 0:
         raise RuntimeError("%r command error\n%s" % (cmd, stderr))
     processors = stdout.strip().splitlines()
@@ -194,7 +188,9 @@ def disk_partitions(all=False):
             # filter by filesystem having a total size > 0.
             if not disk_usage(mountpoint).total:
                 continue
-        ntuple = _common.sdiskpart(device, mountpoint, fstype, opts)
+        maxfile = maxpath = None  # set later
+        ntuple = _common.sdiskpart(device, mountpoint, fstype, opts,
+                                   maxfile, maxpath)
         retlist.append(ntuple)
     return retlist
 
@@ -220,27 +216,17 @@ def net_connections(kind, _pid=-1):
                          % (kind, ', '.join([repr(x) for x in cmap])))
     families, types = _common.conn_tmap[kind]
     rawlist = cext.net_connections(_pid)
-    ret = set()
+    ret = []
     for item in rawlist:
         fd, fam, type_, laddr, raddr, status, pid = item
         if fam not in families:
             continue
         if type_ not in types:
             continue
-        status = TCP_STATUSES[status]
-        if fam in (AF_INET, AF_INET6):
-            if laddr:
-                laddr = _common.addr(*laddr)
-            if raddr:
-                raddr = _common.addr(*raddr)
-        fam = sockfam_to_enum(fam)
-        type_ = socktype_to_enum(type_)
-        if _pid == -1:
-            nt = _common.sconn(fd, fam, type_, laddr, raddr, status, pid)
-        else:
-            nt = _common.pconn(fd, fam, type_, laddr, raddr, status)
-        ret.add(nt)
-    return list(ret)
+        nt = conn_to_ntuple(fd, fam, type_, laddr, raddr, status,
+                            TCP_STATUSES, pid=pid if _pid == -1 else None)
+        ret.append(nt)
+    return ret
 
 
 def net_if_stats():
@@ -250,7 +236,8 @@ def net_if_stats():
     names = set([x[0] for x in net_if_addrs()])
     ret = {}
     for name in names:
-        isup, mtu = cext.net_if_stats(name)
+        mtu = cext_posix.net_if_mtu(name)
+        flags = cext_posix.net_if_flags(name)
 
         # try to get speed and duplex
         # TODO: rewrite this in C (entstat forks, so use truss -f to follow.
@@ -261,8 +248,8 @@ def net_if_stats():
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
         if PY3:
-            stdout, stderr = [x.decode(sys.stdout.encoding)
-                              for x in (stdout, stderr)]
+            stdout, stderr = (x.decode(sys.stdout.encoding)
+                              for x in (stdout, stderr))
         if p.returncode == 0:
             re_result = re.search(
                 r"Running: (\d+) Mbps.*?(\w+) Duplex", stdout)
@@ -270,8 +257,10 @@ def net_if_stats():
                 speed = int(re_result.group(1))
                 duplex = re_result.group(2)
 
+        output_flags = ','.join(flags)
+        isup = 'running' in flags
         duplex = duplex_map.get(duplex, NIC_DUPLEX_UNKNOWN)
-        ret[name] = _common.snicstats(isup, duplex, speed, mtu)
+        ret[name] = _common.snicstats(isup, duplex, speed, mtu, output_flags)
     return ret
 
 
@@ -327,26 +316,20 @@ def wrap_exceptions(fun):
     def wrapper(self, *args, **kwargs):
         try:
             return fun(self, *args, **kwargs)
-        except EnvironmentError as err:
-            # support for private module import
-            if (NoSuchProcess is None or AccessDenied is None or
-                    ZombieProcess is None):
-                raise
+        except (FileNotFoundError, ProcessLookupError):
             # ENOENT (no such file or directory) gets raised on open().
             # ESRCH (no such process) can get raised on read() if
             # process is gone in meantime.
-            if err.errno in (errno.ENOENT, errno.ESRCH):
-                if not pid_exists(self.pid):
-                    raise NoSuchProcess(self.pid, self._name)
-                else:
-                    raise ZombieProcess(self.pid, self._name, self._ppid)
-            if err.errno in (errno.EPERM, errno.EACCES):
-                raise AccessDenied(self.pid, self._name)
-            raise
+            if not pid_exists(self.pid):
+                raise NoSuchProcess(self.pid, self._name)
+            else:
+                raise ZombieProcess(self.pid, self._name, self._ppid)
+        except PermissionError:
+            raise AccessDenied(self.pid, self._name)
     return wrapper
 
 
-class Process(object):
+class Process:
     """Wrapper class around underlying C implementation."""
 
     __slots__ = ["pid", "_name", "_ppid", "_procfs_path", "_cache"]
@@ -481,8 +464,8 @@ class Process(object):
 
     @wrap_exceptions
     def cpu_times(self):
-        cpu_times = cext.proc_cpu_times(self.pid, self._procfs_path)
-        return _common.pcputimes(*cpu_times)
+        t = cext.proc_cpu_times(self.pid, self._procfs_path)
+        return _common.pcputimes(*t)
 
     @wrap_exceptions
     def terminal(self):
@@ -501,11 +484,9 @@ class Process(object):
         try:
             result = os.readlink("%s/%s/cwd" % (procfs_path, self.pid))
             return result.rstrip('/')
-        except OSError as err:
-            if err.errno == errno.ENOENT:
-                os.stat("%s/%s" % (procfs_path, self.pid))  # raise NSP or AD
-                return None
-            raise
+        except FileNotFoundError:
+            os.stat("%s/%s" % (procfs_path, self.pid))  # raise NSP or AD
+            return ""
 
     @wrap_exceptions
     def memory_info(self):
@@ -529,8 +510,8 @@ class Process(object):
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
         if PY3:
-            stdout, stderr = [x.decode(sys.stdout.encoding)
-                              for x in (stdout, stderr)]
+            stdout, stderr = (x.decode(sys.stdout.encoding)
+                              for x in (stdout, stderr))
         if "no such process" in stderr.lower():
             raise NoSuchProcess(self.pid, self._name)
         procfiles = re.findall(r"(\d+): S_IFREG.*\s*.*name:(.*)\n", stdout)

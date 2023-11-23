@@ -173,9 +173,9 @@ class NVDALogsManagementDialog (
 			)
 			return
 		if api.copyToClip(logFile):
-			ui.message(_("old log file path copied to clipboard"))
+			ui.message(_("Old log file path copied to clipboard"))
 		else:
-			ui.message(_("old log file path cannot be copied to clipboard"))
+			ui.message(_("Old log file path cannot be copied to clipboard"))
 
 	@classmethod
 	def run(cls):

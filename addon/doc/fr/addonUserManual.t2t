@@ -1362,9 +1362,9 @@ Il se lance avec la commande "KEY_CLOSE_ALL_WINDOWS" de l'interpréteur de comma
 
 
 ++ Lister les extensions en fonctionnement ++[hdr27]
-Le gestionnaire d'extensions présente la liste des extensions installées et leur état: activée ou désactivée.
+Le gestionnaire d'extensions ou l'add-on store présente la liste de toutes  les extensions installées et leur état: activée ou désactivée.
 
-Mais bien qu'étant activée, une extension peut ne pas être chargée par NVDA. En principe, le journal de NVDA signale ce fait, mais rien dans le gestionnaire d'extensions.
+Mais bien qu'étant activée, il se peut qu'une extension ne soit pas chargée par NVDA. En principe, le journal de NVDA signale ce fait, mais rien dans le gestionnaire d'extensions, ni dans l'add-on  sstore.
 
 Il peut être intéressant à un moment donné de connaître les extensions qui sont réellement en fonctionnement.
 
@@ -1448,7 +1448,7 @@ Utiliser le bouton "Mettre à jour le fichier manifest.ini" pour cela.
 +++ Création de fichier "manifest.ini" de localisation +++[hdr22-4]
 Toute modification de l'information "addon_summary" ou "addon_description" du fichier "buildVars.py" nécessite la traduction de cette description dans chaque langue supportée par l'extension (prise en compte dans le fichier nvda.po et compilation de ce fichier).
 
-Pour que le gestionnaire d'extensions présente ces informations à l'utilisateur pour la langue choisie pour NVDA, il faut créer ou mettre à jour le fichier "manifest.ini" de localisation pour cette langue.
+Pour que le gestionnaire d'extensions ou l'add-on store présente ces informations à l'utilisateur pour la langue choisie pour NVDA, il faut créer ou mettre à jour le fichier "manifest.ini" de localisation pour cette langue.
 
 Le bouton "Créer le fichier manifest.ini de localisation" permet cela. Il est possible de mettre à jour le fichier pour la langue sélectionnée ou pour toutes les langues.
 
@@ -1887,7 +1887,7 @@ Dans la liste des périphériques de sortie audio, il est possible de cocher cer
 +++ Changement de périphérique audio temporaire +++[hdr33-2]
 Pour changer de périphérique, deux moyens:
 - soit en lançant le script précédent et en choisissant un autre périphérique,
-- soit en utilisant le script (voir ci-dessous) qui permet de boucler entre les périphériques cochés de la liste des périphériques du gestionnaire du périphérique audio temporaire.
+- soit en utilisant le script (voir ci-dessous) qui permet de boucler entre les périphériques cochés de la liste des périphériques du  du périphérique audio temporaire.
 
 
 Ce script a comme description "Définir, comme périphérique audio temporaire, le périphérique suivant dans la liste des périphériques cochés du gestionnaire du périphérique audio temporaire" et est placé dans la catégorie "Parole" du dialogue "Gestes de commandes".
@@ -2071,11 +2071,11 @@ Pour que les fichiers son modifiés soient joués à la place des sons originaux
 Dans le cas où la modification de cette fonction pose problème, il faut à la fois, décocher l'option "Permettre la modification du gain"   et désinstaller cette  fonctionnalité.
 
 ++ Activation ou désactivation rapide des extensions ++[hdr35]
-Pour activer ou désactiver les extensions, NVDA propose nativement le gestionnaire d'extensions.
+Pour activer ou désactiver les extensions, NVDA propose nativement le gestionnaire d'extensions ou, depuis NVDA 2023.2, l'add-on store.
 
 Cependant dans certains cas, il peut être nécessaire de désactiver tout ou partie des extensions en ne laissant que quelques extensions activées.
 
-Avec le gestionnaire d'extensions, il est alors nécessaire de passer en revue chaque extension pour l'activer ou la désactiver.
+Avec le gestionnaire d'extensions ou l'add-on store, il est alors nécessaire de passer en revue chaque extension pour l'activer ou la désactiver à l'aide d'un bouton ou menu.
 
 Cette extension tente de rendre plus rapide cette manipulation et pour cela, elle apporte un script pour afficher le dialogue "Activation rapide des extensions".
 
@@ -2090,9 +2090,17 @@ Ce dialogue présente :
 - le bouton "Annuler" pour fermer le dialogue sans aucune modification de l'état d'activation des extensions.
 
 
-La liste ne présente que les extensions activées ou désactivées à l'affichage du dialogue. Les extensions incompatibles, à activer ou à désactiver au prochain démarrage, ne font pas partie de la liste.
+Si l'extension est installée sous une version de NVDA antérieures à la 2023.2 de NVDA, La liste ne présente que les extensions compatibles. 
+
+Seules les extensions dans un état stable sont listées. les extensions qui sont dans un état intermédiaire c'est à dire soit en attente  d'activation ou de désactivation, soit en attente d'installation ou de suppression en sont exclues.
+
+Depuis NVDA 2023.2, les extensions incompatible sont inclues aussi dans la liste, et peuvent être activées ou désactivées elles aussi.
+
+Elles sont signalées par la mention "(incompatible)" à la suite de leur identifiant.
 
 À l'affichage du dialogue, les extensions activées sont cochées.
+
+La liste est rafraichie à chaque activation de la fenêtre du dialogue affin de prendre en compte tout changement éventuel d'état des extensions.
 
 Pour changer l'état d'activation d'une extension, il suffit, soit de la cocher pour l'activer, soit de la décocher pour la désactiver.
 

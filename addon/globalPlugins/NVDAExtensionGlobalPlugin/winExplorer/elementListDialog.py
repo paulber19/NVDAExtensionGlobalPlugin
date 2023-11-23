@@ -173,7 +173,7 @@ class ElementListDialog(
 		ElementListDialog._instance = self
 		self.oParent = oParent
 		# Translators: title of dialog box.
-		dlgTitle = _("list of visible items making up the object in the foreground")
+		dlgTitle = _("List of visible items making up the object in the foreground")
 		title = ElementListDialog.title = makeAddonWindowTitle(dlgTitle)
 		super(ElementListDialog, self).__init__(parent, wx.ID_ANY, title)
 		self.allObjects = objects
@@ -191,7 +191,7 @@ class ElementListDialog(
 		self.taggedObjectsCheckBox.SetValue(True)
 		# Translators: This is the label for a listBox in
 		# the "list of visible items making up the object in the foreground" dialog.
-		typeLabelText = _("&Type: ")
+		typeLabelText = _("&Type:")
 		self.objectTypesListBox = sHelper.addLabeledControl(
 			typeLabelText, wx.ListBox,
 			id=wx.ID_ANY,

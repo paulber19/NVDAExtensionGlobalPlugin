@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2009, Giampaolo Rodola'. All rights reserved.
@@ -13,6 +13,7 @@ import os
 import re
 import subprocess
 import time
+import unittest
 
 import psutil
 from psutil import AIX
@@ -22,25 +23,27 @@ from psutil import MACOS
 from psutil import OPENBSD
 from psutil import POSIX
 from psutil import SUNOS
-from psutil.tests import APPVEYOR
-from psutil.tests import get_kernel_version
-from psutil.tests import get_test_subprocess
 from psutil.tests import HAS_NET_IO_COUNTERS
-from psutil.tests import mock
 from psutil.tests import PYTHON_EXE
-from psutil.tests import reap_children
+from psutil.tests import PsutilTestCase
+from psutil.tests import mock
 from psutil.tests import retry_on_failure
 from psutil.tests import sh
 from psutil.tests import skip_on_access_denied
-from psutil.tests import TRAVIS
-from psutil.tests import unittest
-from psutil.tests import wait_for_pid
+from psutil.tests import spawn_testproc
+from psutil.tests import terminate
 from psutil.tests import which
 
 
+if POSIX:
+    import mmap
+    import resource
+
+    from psutil._psutil_posix import getpagesize
+
+
 def ps(fmt, pid=None):
-    """
-    Wrapper for calling the ps command with a little bit of cross-platform
+    """Wrapper for calling the ps command with a little bit of cross-platform
     support for a narrow range of features.
     """
 
@@ -58,18 +61,13 @@ def ps(fmt, pid=None):
             cmd.append('ax')
 
     if SUNOS:
-        fmt_map = {'command', 'comm',
-                   'start', 'stime'}
-        fmt = fmt_map.get(fmt, fmt)
+        fmt = fmt.replace("start", "stime")
 
     cmd.extend(['-o', fmt])
 
     output = sh(cmd)
 
-    if LINUX:
-        output = output.splitlines()
-    else:
-        output = output.splitlines()[1:]
+    output = output.splitlines() if LINUX else output.splitlines()[1:]
 
     all_output = []
     for line in output:
@@ -110,7 +108,10 @@ def ps_args(pid):
     field = "command"
     if AIX or SUNOS:
         field = "args"
-    return ps(field, pid)
+    out = ps(field, pid)
+    # observed on BSD + Github CI: '/usr/local/bin/python3 -E -O (python3.9)'
+    out = re.sub(r"\(python.*?\)$", "", out)
+    return out.strip()
 
 
 def ps_rss(pid):
@@ -128,18 +129,17 @@ def ps_vsz(pid):
 
 
 @unittest.skipIf(not POSIX, "POSIX only")
-class TestProcess(unittest.TestCase):
+class TestProcess(PsutilTestCase):
     """Compare psutil results against 'ps' command line utility (mainly)."""
 
     @classmethod
     def setUpClass(cls):
-        cls.pid = get_test_subprocess([PYTHON_EXE, "-E", "-O"],
-                                      stdin=subprocess.PIPE).pid
-        wait_for_pid(cls.pid)
+        cls.pid = spawn_testproc([PYTHON_EXE, "-E", "-O"],
+                                 stdin=subprocess.PIPE).pid
 
     @classmethod
     def tearDownClass(cls):
-        reap_children()
+        terminate(cls.pid)
 
     def test_ppid(self):
         ppid_ps = ps('ppid', self.pid)
@@ -268,6 +268,12 @@ class TestProcess(unittest.TestCase):
             adjusted_ps_pathname = ps_pathname[:len(ps_pathname)]
             self.assertEqual(ps_pathname, adjusted_ps_pathname)
 
+    # On macOS the official python installer exposes a python wrapper that
+    # executes a python executable hidden inside an application bundle inside
+    # the Python framework.
+    # There's a race condition between the ps call & the psutil call below
+    # depending on the completion of the execve call so let's retry on failure
+    @retry_on_failure()
     def test_cmdline(self):
         ps_cmdline = ps_args(self.pid)
         psutil_cmdline = " ".join(psutil.Process(self.pid).cmdline())
@@ -285,50 +291,9 @@ class TestProcess(unittest.TestCase):
         psutil_nice = psutil.Process().nice()
         self.assertEqual(ps_nice, psutil_nice)
 
-    def test_num_fds(self):
-        # Note: this fails from time to time; I'm keen on thinking
-        # it doesn't mean something is broken
-        def call(p, attr):
-            args = ()
-            attr = getattr(p, name, None)
-            if attr is not None and callable(attr):
-                if name == 'rlimit':
-                    args = (psutil.RLIMIT_NOFILE,)
-                attr(*args)
-            else:
-                attr
-
-        p = psutil.Process(os.getpid())
-        failures = []
-        ignored_names = ['terminate', 'kill', 'suspend', 'resume', 'nice',
-                         'send_signal', 'wait', 'children', 'as_dict',
-                         'memory_info_ex', 'parent', 'parents']
-        if LINUX and get_kernel_version() < (2, 6, 36):
-            ignored_names.append('rlimit')
-        if LINUX and get_kernel_version() < (2, 6, 23):
-            ignored_names.append('num_ctx_switches')
-        for name in dir(psutil.Process):
-            if (name.startswith('_') or name in ignored_names):
-                continue
-            else:
-                try:
-                    num1 = p.num_fds()
-                    for x in range(2):
-                        call(p, name)
-                    num2 = p.num_fds()
-                except psutil.AccessDenied:
-                    pass
-                else:
-                    if abs(num2 - num1) > 1:
-                        fail = "failure while processing Process.%s method " \
-                               "(before=%s, after=%s)" % (name, num1, num2)
-                        failures.append(fail)
-        if failures:
-            self.fail('\n' + '\n'.join(failures))
-
 
 @unittest.skipIf(not POSIX, "POSIX only")
-class TestSystemAPIs(unittest.TestCase):
+class TestSystemAPIs(PsutilTestCase):
     """Test some system APIs."""
 
     @retry_on_failure()
@@ -346,38 +311,77 @@ class TestSystemAPIs(unittest.TestCase):
         if len(pids_ps) - len(pids_psutil) > 1:
             difference = [x for x in pids_psutil if x not in pids_ps] + \
                          [x for x in pids_ps if x not in pids_psutil]
-            self.fail("difference: " + str(difference))
+            raise self.fail("difference: " + str(difference))
 
     # for some reason ifconfig -a does not report all interfaces
     # returned by psutil
     @unittest.skipIf(SUNOS, "unreliable on SUNOS")
-    @unittest.skipIf(TRAVIS, "unreliable on TRAVIS")
     @unittest.skipIf(not which('ifconfig'), "no ifconfig cmd")
     @unittest.skipIf(not HAS_NET_IO_COUNTERS, "not supported")
     def test_nic_names(self):
         output = sh("ifconfig -a")
-        for nic in psutil.net_io_counters(pernic=True).keys():
+        for nic in psutil.net_io_counters(pernic=True):
             for line in output.split():
                 if line.startswith(nic):
                     break
             else:
-                self.fail(
+                raise self.fail(
                     "couldn't find %s nic in 'ifconfig -a' output\n%s" % (
                         nic, output))
 
-    # can't find users on APPVEYOR or TRAVIS
-    @unittest.skipIf(APPVEYOR or TRAVIS and not psutil.users(),
-                     "unreliable on APPVEYOR or TRAVIS")
+    # @unittest.skipIf(CI_TESTING and not psutil.users(), "unreliable on CI")
     @retry_on_failure()
     def test_users(self):
-        out = sh("who")
+        out = sh("who -u")
+        if not out.strip():
+            raise self.skipTest("no users on this system")
         lines = out.split('\n')
         users = [x.split()[0] for x in lines]
         terminals = [x.split()[1] for x in lines]
         self.assertEqual(len(users), len(psutil.users()))
-        for u in psutil.users():
-            self.assertIn(u.name, users)
-            self.assertIn(u.terminal, terminals)
+        with self.subTest(psutil=psutil.users(), who=out):
+            for idx, u in enumerate(psutil.users()):
+                self.assertEqual(u.name, users[idx])
+                self.assertEqual(u.terminal, terminals[idx])
+                if u.pid is not None:  # None on OpenBSD
+                    psutil.Process(u.pid)
+
+    @retry_on_failure()
+    def test_users_started(self):
+        out = sh("who -u")
+        if not out.strip():
+            raise self.skipTest("no users on this system")
+        tstamp = None
+        # '2023-04-11 09:31' (Linux)
+        started = re.findall(r"\d\d\d\d-\d\d-\d\d \d\d:\d\d", out)
+        if started:
+            tstamp = "%Y-%m-%d %H:%M"
+        else:
+            # 'Apr 10 22:27' (macOS)
+            started = re.findall(r"[A-Z][a-z][a-z] \d\d \d\d:\d\d", out)
+            if started:
+                tstamp = "%b %d %H:%M"
+            else:
+                # 'Apr 10'
+                started = re.findall(r"[A-Z][a-z][a-z] \d\d", out)
+                if started:
+                    tstamp = "%b %d"
+                else:
+                    # 'apr 10' (sunOS)
+                    started = re.findall(r"[a-z][a-z][a-z] \d\d", out)
+                    if started:
+                        tstamp = "%b %d"
+                        started = [x.capitalize() for x in started]
+
+        if not tstamp:
+            raise unittest.SkipTest(
+                "cannot interpret tstamp in who output\n%s" % (out))
+
+        with self.subTest(psutil=psutil.users(), who=out):
+            for idx, u in enumerate(psutil.users()):
+                psutil_value = datetime.datetime.fromtimestamp(
+                    u.started).strftime(tstamp)
+                self.assertEqual(psutil_value, started[idx])
 
     def test_pid_exists_let_raise(self):
         # According to "man 2 kill" possible error values for kill
@@ -415,9 +419,15 @@ class TestSystemAPIs(unittest.TestCase):
 
     # AIX can return '-' in df output instead of numbers, e.g. for /proc
     @unittest.skipIf(AIX, "unreliable on AIX")
+    @retry_on_failure()
     def test_disk_usage(self):
         def df(device):
-            out = sh("df -k %s" % device).strip()
+            try:
+                out = sh("df -k %s" % device).strip()
+            except RuntimeError as err:
+                if "device busy" in str(err).lower():
+                    raise self.skipTest("df returned EBUSY")
+                raise
             line = out.split('\n')[1]
             fields = line.split()
             total = int(fields[1]) * 1024
@@ -440,8 +450,7 @@ class TestSystemAPIs(unittest.TestCase):
                         "raw devices not supported" in err or \
                         "permission denied" in err:
                     continue
-                else:
-                    raise
+                raise
             else:
                 self.assertAlmostEqual(usage.total, total, delta=tolerance)
                 self.assertAlmostEqual(usage.used, used, delta=tolerance)
@@ -449,6 +458,16 @@ class TestSystemAPIs(unittest.TestCase):
                 self.assertAlmostEqual(usage.percent, percent, delta=1)
 
 
+@unittest.skipIf(not POSIX, "POSIX only")
+class TestMisc(PsutilTestCase):
+
+    def test_getpagesize(self):
+        pagesize = getpagesize()
+        self.assertGreater(pagesize, 0)
+        self.assertEqual(pagesize, resource.getpagesize())
+        self.assertEqual(pagesize, mmap.PAGESIZE)
+
+
 if __name__ == '__main__':
-    from psutil.tests.runner import run
-    run(__file__)
+    from psutil.tests.runner import run_from_name
+    run_from_name(__file__)

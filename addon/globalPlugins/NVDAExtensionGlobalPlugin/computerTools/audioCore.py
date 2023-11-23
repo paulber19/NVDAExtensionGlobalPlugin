@@ -15,6 +15,7 @@ from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL, CoCreateInstance, CLSCTX_INPROC_SERVER, CoInitialize
 import sys
 import wx
+import config
 import tones
 from ..utils.py3Compatibility import getUtilitiesPath, getCommonUtilitiesPath
 commonUtilitiesPath = getCommonUtilitiesPath()
@@ -718,6 +719,27 @@ class AudioOutputDevicesManager(object):
 
 	def getDevices(self):
 		return self._devices
+
+	def playTonesOnDevice(self, deviceName):
+		log.debug("playTonesOnDevice: %s" % deviceName)
+		from synthDriverHandler import _audioOutputDevice
+		curOutputDevice = _audioOutputDevice
+		config.conf["speech"]["outputDevice"] = deviceName
+
+		# Reinitialize the tones module to update the audio device
+		import tones
+		tones.terminate()
+		tones.initialize()
+		time.sleep(0.5)
+		tones.beep(250, 100)
+		time.sleep(0.3)
+		tones.beep(350, 100)
+		time.sleep(0.5)
+		config.conf["speech"]["outputDevice"] = curOutputDevice
+		# Reinitialize the tones module to update the audio device to the current output device
+		import tones
+		tones.terminate()
+		tones.initialize()
 
 	def setSpeakersVolumeLevelToPreviousLevel(self):
 		# back the volume of last modified audio device to itthe previous level

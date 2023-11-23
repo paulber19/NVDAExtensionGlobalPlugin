@@ -333,7 +333,7 @@ def _makeMainManifestIni(addon):
 	addonInfo = buildVars.addon_info.copy()
 	generateManifest(dest, addonInfo, manifest_template)
 	# Translators: message to user to report end of manifest.ini creation
-	msg = _("manifest.ini file has been updated")
+	msg = _("The manifest.ini file has been updated")
 	gui.messageBox(msg, dialogTitle, wx.OK)
 	# clean up
 	clean(addon)
@@ -605,10 +605,13 @@ def _createBuildVarsFile(addon):
 		"version": "x.y",
 		"author": str("name <name@domain.com>"),
 		"url": None,
+		"sourceURL": None,
 		"docFileName": "readme.html",
 		"minimumNVDAVersion": None,
 		"lastTestedNVDAVersion": None,
-		"updateChannel": None
+		"updateChannel": None,
+		"license": None,
+		"licenseURL": None,
 	}
 	vars = {}
 	vars.update(_buildVarsStrings)
@@ -616,7 +619,7 @@ def _createBuildVarsFile(addon):
 	for var in manifest:
 		if manifest[var] is None:
 			continue
-		if type(manifest[var]) == tuple:
+		if type(manifest[var]) is tuple:
 			tempList = [str(x) for x in manifest[var]]
 			vars[var] = ".".join(tempList)
 			continue
@@ -627,7 +630,7 @@ def _createBuildVarsFile(addon):
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(buildVars)
 	# Translators message to user to report buildVars.py has been created
-		msg = _("buildVars.py file created")
+		msg = _("The buildVars.py file has been created")
 	gui.messageBox(msg, dialogTitle, wx.OK)
 	# clean up
 	clean(addon)

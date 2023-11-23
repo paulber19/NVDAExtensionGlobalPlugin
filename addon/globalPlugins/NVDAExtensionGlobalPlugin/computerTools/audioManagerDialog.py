@@ -11,8 +11,6 @@ import os
 import globalVars
 import gui
 import ui
-import config
-import time
 import braille
 import speech
 import queueHandler
@@ -26,9 +24,9 @@ from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
 from .audioCore import isNVDA
-addonHandler.initTranslation()
-
 from . import audioCore
+
+addonHandler.initTranslation()
 
 
 class NVDAAndAudioApplicationsManagerDialog(
@@ -71,7 +69,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.deviceNames = audioOutputDevicesManager.getDeviceNames()
 		# Translators: This is the label for a listbox
 		# in NVDA and audio Applications manager dialog
-		labelText = NVDAString("Audio output  &device:")
+		labelText = _("Audio output &device:")
 		# Translators: label to indicate that the device is the default system peripheral
 		defaultDeviceText = _("Default Output")
 		choices = []
@@ -82,7 +80,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 			choices.append(name)
 		self.devicesListBox = sHelper.addLabeledControl(
 			labelText,
-			wx.ListBox,
+			wx.Choice,
 			choices=choices
 		)
 		self.devicesListBox .SetSelection(self.devices.index(self._currentDevice))
@@ -93,7 +91,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		choices = [app.split(".")[0] for app in self.applications]
 		self.applicationsListBox = sHelper.addLabeledControl(
 			labelText,
-			wx.ListBox,
+			wx.Choice,
 			choices=choices
 		)
 		if focusedAppName in self.applications:
@@ -177,7 +175,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.SetSizer(mainSizer)
 		# the events
 		self.Bind(wx.EVT_ACTIVATE, self.onActivate)
-		self.devicesListBox.Bind(wx.EVT_LISTBOX, self.onSelectDevice)
+		self.devicesListBox.Bind(wx.EVT_CHOICE, self.onSelectDevice)
 		self.devicesListBox.Bind(wx.EVT_KEY_DOWN, self.onDeviceKeyDown)
 		self.devicesListBox.Bind(wx.EVT_KEY_DOWN, self.onDeviceKeyDown)
 		self.applicationsListBox.Bind(wx.EVT_LISTBOX, self.onSelectApplication)
@@ -404,28 +402,6 @@ class NVDAAndAudioApplicationsManagerDialog(
 				braille.handler.message,
 				info)
 
-	def playTonesOnDevice(self, deviceName):
-		# to play a tone on the selected output device if option is true
-		from ..settings import togglePlayToneOnAudioDeviceAdvancedOption
-		if not togglePlayToneOnAudioDeviceAdvancedOption(False):
-			return
-		from synthDriverHandler import _audioOutputDevice
-		curOutputDevice = _audioOutputDevice
-		config.conf["speech"]["outputDevice"] = deviceName
-		# Reinitialize the tones module to update the audio device
-		import tones
-		tones.terminate()
-		tones.initialize()
-		tones.beep(250, 100)
-		time.sleep(0.3)
-		tones.beep(350, 100)
-		time.sleep(0.3)
-		config.conf["speech"]["outputDevice"] = curOutputDevice
-		# Reinitialize the tones module to update the audio device to the current output device
-		import tones
-		tones.terminate()
-		tones.initialize()
-
 	def onSelectDevice(self, evt):
 		index = self.devicesListBox.GetSelection()
 		device = self.devices[index]
@@ -439,7 +415,19 @@ class NVDAAndAudioApplicationsManagerDialog(
 		else:
 			application = None
 		self.updateGroups(application)
-		self.playTonesOnDevice(device.nvdaDeviceName)
+		from ..settings import togglePlayToneOnAudioDeviceAdvancedOption
+		from .audioCore import audioOutputDevicesManager
+		if togglePlayToneOnAudioDeviceAdvancedOption(False):
+			# we have to wait for the device name to be said by NVDA before changing the device
+			# but for bluetooth debice, we must play noise before beep
+			from .bluetoothAudio import playWhiteNoise
+			from threading import Thread
+			th = Thread(target=playWhiteNoise, args=(device.nvdaDeviceName,))
+			wx.CallAfter(th.start)
+			self.selectDelay = wx.CallLater(
+				3500,
+				audioOutputDevicesManager .playTonesOnDevice, device.nvdaDeviceName
+			)
 
 	def onSelectApplication(self, evt):
 		index = self.applicationsListBox.GetSelection()
@@ -847,7 +835,7 @@ class GainModificationDialog(
 		self.resetButton = group.addItem(wx.Button(groupBox, label=labelText))
 		self.resetButton .Bind(wx.EVT_BUTTON, self.onResetButton)
 		# translators: this is a label for a button in ModifyGain dialog.
-		labelText = _("reset all s&ounds")
+		labelText = _("Reset all s&ounds")
 		self.resetAllButton = group.addItem(wx.Button(groupBox, label=labelText))
 		self.resetAllButton .Bind(wx.EVT_BUTTON, self.onResetAllButton)
 		bHelper = sHelper.addDialogDismissButtons(

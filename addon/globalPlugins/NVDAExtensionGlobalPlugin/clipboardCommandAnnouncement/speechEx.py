@@ -11,19 +11,13 @@ import api
 import unicodedata
 import config
 import time
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.state import State
-	STATE_READONLY = State.READONLY
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import STATE_READONLY
+from controlTypes.state import State
 
 
 # this code comes from leonardder  work for issue #8110, see at:
 # Speak typed words based on TextInfo if possible #8110
-
-
 def speakTypedCharacters(ch: str):
+	log.debug("speakTypedCharacter: %s (%s)" % (ch, ord(ch)))
 	typingIsProtected = api.isTypingProtected()
 	if typingIsProtected:
 		realChar = speech.speech.PROTECTED_CHAR
@@ -52,6 +46,8 @@ def speakTypedCharacters(ch: str):
 			_speechState._suppressSpeakTypedCharactersTime = None
 	else:
 		suppress = False
+	if ch < speech.speech.FIRST_NONCONTROL_CHAR:
+		return
 	if (
 		not suppress
 		and config.conf["keyboard"]["speakTypedCharacters"]
@@ -70,16 +66,18 @@ def speakPreviousWord(wordSeparator):
 		speech.speech.clearTypedWordBuffer()
 		return
 	try:
-		obj = api.getCaretObject()
+		obj = api.getFocusObject()
 	except Exception:
 		# No caret object, nothing to report
 		return
 	# The caret object can be an NVDAObject or a TreeInterceptor.
 	# Editable caret cases inherrit from EditableText.
 	from editableText import EditableText
-	if not isinstance(obj, EditableText) or STATE_READONLY in getattr(obj, "states", set()):
+	if not isinstance(obj, EditableText) or State.READONLY in getattr(obj, "states", set()):
 		speech.speech.clearTypedWordBuffer()
 		return
+	if not hasattr(obj, "useTextInfoToSpeakTypedWords"):
+		obj.useTextInfoToSpeakTypedWords = False
 	if not obj.useTextInfoToSpeakTypedWords and len(word) == 0:
 		log.debug("no word and not useTextInfoToSpeakTypedWords ")
 		return

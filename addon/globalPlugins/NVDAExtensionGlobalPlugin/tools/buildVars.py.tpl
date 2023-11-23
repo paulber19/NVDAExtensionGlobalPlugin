@@ -30,6 +30,8 @@ def _(arg):
 	"addon_author": u"{author}",
 	# URL for the add-on documentation support
 	"addon_url": "{url}",
+	# URL for the add-on repository where the source code can be found
+	"addon_sourceURL": None,
 	# Documentation file name
 	"addon_docFileName": "{docFileName}",
 	# Minimum NVDA version supported (e.g. "2018.3")
@@ -39,6 +41,10 @@ def _(arg):
 	"addon_lastTestedNVDAVersion": "{lastTestedNVDAVersion}",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel": "{updateChannel}",
+	# Add-on license such as GPL 2
+	"addon_license": None,
+	# URL for the license document the ad-on is licensed under
+	"addon_licenseURL": None,
 {addonInfoEnd}
 
 # Define the python files that are the sources of your add-on.
@@ -58,3 +64,10 @@ excludedFiles = []
 # For example:
 # set baseLanguage to "es" if your add-on is primarily written in spanish.
 baseLanguage = "en"
+
+# Markdown extensions for add-on documentation
+# Most add-ons do not require additional Markdown extensions.
+# If you need to add support for markup such as tables, fill out the below list.
+# Extensions string must be of the form "markdown.extensions.extensionName"
+# e.g. "markdown.extensions.tables" to add tables.
+markdownExtensions = []

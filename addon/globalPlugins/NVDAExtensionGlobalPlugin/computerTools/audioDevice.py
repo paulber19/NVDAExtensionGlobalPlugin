@@ -232,28 +232,16 @@ class TemporaryAudioDeviceManagerDialog(
 			self.selectDelay.Stop()
 			self.selectDelay = None
 		deviceName = self.audioDevicesListBox.GetStringSelection()
-
-		def callback(deviceName):
-			# to send a tone on the selected output device
-			from synthDriverHandler import _audioOutputDevice
-			curOutputDevice = _audioOutputDevice
-			config.conf["speech"]["outputDevice"] = deviceName
-			# Reinitialize the tones module to update the audio device
-			import tones
-			tones.terminate()
-			tones.initialize()
-			tones.beep(250, 100)
-			time.sleep(0.3)
-			tones.beep(350, 100)
-			time.sleep(0.3)
-			config.conf["speech"]["outputDevice"] = curOutputDevice
-			# Reinitialize the tones module to update the audio device to the current output device
-			import tones
-			tones.terminate()
-			tones.initialize()
-
 		# we have to wait for the device name to be said by NVDA before changing the device
-		self.selectDelay = wx.CallLater(3000, callback, deviceName)
+		# but for bluetooth debice, we must play noise before beep
+		from .bluetoothAudio import playWhiteNoise
+		from threading import Thread
+		th = Thread(target=playWhiteNoise, args=(deviceName,))
+		th.start()
+		from .audioCore import audioOutputDevicesManager
+		self.selectDelay = wx.CallLater(
+			4000,
+			audioOutputDevicesManager .playTonesOnDevice, deviceName)
 
 	def onSetButton(self, evt):
 		outputDevice = self.audioDevicesListBox.GetStringSelection()

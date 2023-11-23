@@ -7,7 +7,7 @@
 	* [developpement version][2]
 * Compatibility:
 	* minimum supported NVDA version: 2022.1
-	* last tested NVDA version: 2023.2
+	* last tested NVDA version: 2023.3
 
 
 Traductor (s): automatic translation from french language
@@ -19,7 +19,7 @@ The add-on adds to NVDA:
 some features can be enabled or disabled individually.
 
 
-* Display of the list of icons in the notification area or windows of applications launched],
+* Display of the list of icons in the notification area or windows of applications launched,
 * Help in the composition of a symbol that is complex such as, for example, a a e related, a symbol power of 2 and possibility to add its own categories and symbols,
 * Announcement or display of information about the application under focus, such as its version, the active configuration profile, loaded add-on,
 * Extension of the functionality of the virtual buffer for browsers Mozilla Firefox, Microsoft Internet Explorer, Microsoft Edge, and Google Chrome:
@@ -36,32 +36,32 @@ some features can be enabled or disabled individually.
 		* announcement of the cells of the current column / row.
 
 
-* Announcement of the function associated with editing commands style Copy, Paste, etc with:
- * adding the selected text to the clipboard,
- * emptying the clipboard,
- * improvement of the NVDA base script "NVDA+c" which announces the text in the clipboard,
+* Announcement of the function associated with editing commands style Copy, cut or Paste with:
+	* adding the selected text to the clipboard,
+	* emptying the clipboard,
+	* improvement of the NVDA base script "NVDA+c" which announces the text in the clipboard,
 
 
 * Announcement of the pre-selected folder in the "Open, Save", "Save as" style dialog boxes,
 * Open previous or current NVDA log and copy their path to clipboard,
 * history of voice speechs,
 * renaming keyboard keys,
-* selective announcement of command keyboard keys ,
+* selective announcement of command keys,
 * simple countdown timer,
 * restarting NVDA in "debugging" logging level by simple input gesture,
-* display of visible elements making up the object in the foreground,
+* display of visible elements making up the object in the foreground and possibility to move to or click on the elements,
 * quick voice profile switching,
 * persistence of NVDA and modification keys and specific persistence for the gmail.com site,
 * shutdown, restart or Hibernate the computer,
 * management of input gestures configured by user,
-* sound control] (Windows 10 only):
+* sound control:
 	* mute or unmute volume for the focused application,
-	* manually or automatically establish the main sound and that of the NVDA audio stream,
-	* modify the level of the main volume or that of the audio stream of the application under focus,
+	* manually or automatically establish the main sound and that of the NVDA audio source,
+	* modify the level of the main volume or that of the audio source of the application under focus,
 	* automatic recovery of the main volume and NVDA when loading the extension,
 	* temporary use of an audio output device without impacting the NVDA configuration,
 	* orientation of the application and NVDA audio output,
-	* orientation of application and NVDA audio output,
+	
 
 
 * Tools for development of add-on,
@@ -103,7 +103,7 @@ some features can be enabled or disabled individually.
 * script to emulate the "Applications" key,
 * script to close all open windows,
 * script to display the list of running add-ons,
-* possibility of executing scripts in the "Input gestures" dialog,
+* possibility of executing scripts from the "Input gestures" dialog,
 * automatic selection of the category in the dialog "Input gestures",
 * Selection of the last setting  used in the synthesizer settings ring,
 * enhancements  for Windows Explorer:
@@ -111,6 +111,6 @@ some features can be enabled or disabled individually.
 	* a script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
 
 
-[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-13.1.3.nvda-addon
+[1]: https://github.com/paulber007/AllMyNVDAAddons/raw/master/NVDAExtensionGlobalPlugin/NVDAExtensionGlobalPlugin-13.2.nvda-addon
 [2]: https://github.com/paulber007/AllMyNVDAAddons/tree/master/NVDAExtensionGlobalPlugin/dev
 [3]:https://github.com/paulber19/NVDAExtensionGlobalPlugin.git

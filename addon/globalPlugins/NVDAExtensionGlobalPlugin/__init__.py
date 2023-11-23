@@ -8,8 +8,8 @@ import os
 
 def shouldLoadNVDAExtensionGlobalPlugin():
 	import sys
-	from .utils.py3Compatibility import getUtilitiesPath
-	utilitiesPath = getUtilitiesPath()
+	from .utils.py3Compatibility import getCommonUtilitiesPath
+	utilitiesPath = getCommonUtilitiesPath()
 	sysPath = sys.path
 	sys.path.append(utilitiesPath)
 	import psutil

@@ -199,7 +199,7 @@ class BaseAddonConfiguration(ConfigObj):
 		self._errors = []
 		val = Validator()
 		result = self.validate(val, copy=True, preserve_errors=True)
-		if type(result) == dict:
+		if type(result) is dict:
 			self._errors = self.getValidateErrorsText(result)
 		else:
 			self._errors = None

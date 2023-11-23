@@ -23,6 +23,24 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v13.2 (23/11/2023) +
+Nuevas características:
+- de acuerdo con la Tienda de complementos (Add-on Store) desde NVDA 2023.2:
+ - en el diálogo "Activación rápida de complementos", ahora es posible activar los complementos incompatibles.
+ - posibilidad de actualizar el complemento con una versión incompatible.
+
+
+Corección de fallos:
+- recordatorio de la corrección realizada en la 13.1.3, con respecto al problema #9: Las opciones de todos los sintetizadores se restablecen después de usar los selectores de perfil.
+
+
+Desarrolladores:
+- actualización de markdown2 a la versión 2.4.11.
+- actualización del paquete "psutil" a la versión 5.9.6.
+- actualización de la carpeta pydubEx a la versión 0.25.1 de pydub.
+- actualización de la carpeta win32 a la versión 306 de pywin32 para Python 3.11.
+
+
 + v13.1 (04/09/2023) +
 Mejoras:
 - anuncio del nombre de la aplicación Al cambiar de volumen si esta aplicación es diferente de aquélla anterior al que se le cambio de volumen.
@@ -64,11 +82,11 @@ Cambios:
 - este diálogo ahora presenta la lista de dispositivos de salida de audio activos y te permite administrar las fuentes de audio de un dispositivo en particular.
 - los dos scripts para ir a la siguiente o anterior línea que contiene una irregularidad detectada por el analizador de texto se eliminan y reemplazan por dos scripts para ir a la siguiente o anterior irregularidad.
 
+
 Desarrolladores:
 - el código para la funcionalidad  "Control de sonido" ha sido completamente reestructurado. Gracias al autor del complemento "volumeAdjustment" ("Oleksandr Gryshchenko) cuya estructura de su código sirvió como referencia.
 - actualización del archivo markdown2.py a la versión 2.4.9.
 - actualización de la librería pycaw a la versión v20230407.
-
 
 
 + v12.0 (22/02/2023) +
@@ -106,9 +124,6 @@ Actualización del código:
  - systemTrayIconsList : __init__.py
  - utils : __init__.py, contextHelpEx.py, keyboard.py
  -theGlobalPlugin.py
-
-
-
 
 
 + v11.4 (09/01/2023) +

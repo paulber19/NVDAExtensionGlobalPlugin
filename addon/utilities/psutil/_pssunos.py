@@ -18,14 +18,21 @@ from . import _psposix
 from . import _psutil_posix as cext_posix
 from . import _psutil_sunos as cext
 from ._common import AF_INET6
+from ._common import AccessDenied
+from ._common import NoSuchProcess
+from ._common import ZombieProcess
+from ._common import debug
 from ._common import get_procfs_path
 from ._common import isfile_strict
 from ._common import memoize_when_activated
 from ._common import sockfam_to_enum
 from ._common import socktype_to_enum
 from ._common import usage_percent
-from ._compat import b
 from ._compat import PY3
+from ._compat import FileNotFoundError
+from ._compat import PermissionError
+from ._compat import ProcessLookupError
+from ._compat import b
 
 
 __extra__all__ = ["CONN_IDLE", "CONN_BOUND", "PROCFS_PATH"]
@@ -36,7 +43,7 @@ __extra__all__ = ["CONN_IDLE", "CONN_BOUND", "PROCFS_PATH"]
 # =====================================================================
 
 
-PAGE_SIZE = os.sysconf('SC_PAGE_SIZE')
+PAGE_SIZE = cext_posix.getpagesize()
 AF_LINK = cext_posix.AF_LINK
 IS_64_BIT = sys.maxsize > 2**32
 
@@ -83,13 +90,6 @@ proc_info_map = dict(
     euid=9,
     gid=10,
     egid=11)
-
-# These objects get set on "import psutil" from the __init__.py
-# file, see: https://github.com/giampaolo/psutil/issues/1402
-NoSuchProcess = None
-ZombieProcess = None
-AccessDenied = None
-TimeoutExpired = None
 
 
 # =====================================================================
@@ -143,7 +143,7 @@ def swap_memory():
     p = subprocess.Popen(['/usr/bin/env', 'PATH=/usr/sbin:/sbin:%s' %
                           os.environ['PATH'], 'swap', '-l'],
                          stdout=subprocess.PIPE)
-    stdout, stderr = p.communicate()
+    stdout, _ = p.communicate()
     if PY3:
         stdout = stdout.decode(sys.stdout.encoding)
     if p.returncode != 0:
@@ -155,7 +155,7 @@ def swap_memory():
     total = free = 0
     for line in lines:
         line = line.split()
-        t, f = line[-2:]
+        t, f = line[3:5]
         total += int(int(t) * 512)
         free += int(int(f) * 512)
     used = total - free
@@ -170,13 +170,13 @@ def swap_memory():
 
 
 def cpu_times():
-    """Return system-wide CPU times as a named tuple"""
+    """Return system-wide CPU times as a named tuple."""
     ret = cext.per_cpu_times()
     return scputimes(*[sum(x) for x in zip(*ret)])
 
 
 def per_cpu_times():
-    """Return system per-CPU times as a list of named tuples"""
+    """Return system per-CPU times as a list of named tuples."""
     ret = cext.per_cpu_times()
     return [scputimes(*x) for x in ret]
 
@@ -190,9 +190,9 @@ def cpu_count_logical():
         return None
 
 
-def cpu_count_physical():
-    """Return the number of physical CPUs in the system."""
-    return cext.cpu_count_phys()
+def cpu_count_cores():
+    """Return the number of CPU cores in the system."""
+    return cext.cpu_count_cores()
 
 
 def cpu_stats():
@@ -226,9 +226,16 @@ def disk_partitions(all=False):
             # Differently from, say, Linux, we don't have a list of
             # common fs types so the best we can do, AFAIK, is to
             # filter by filesystem having a total size > 0.
-            if not disk_usage(mountpoint).total:
+            try:
+                if not disk_usage(mountpoint).total:
+                    continue
+            except OSError as err:
+                # https://github.com/giampaolo/psutil/issues/1674
+                debug("skipping %r: %s" % (mountpoint, err))
                 continue
-        ntuple = _common.sdiskpart(device, mountpoint, fstype, opts)
+        maxfile = maxpath = None  # set later
+        ntuple = _common.sdiskpart(device, mountpoint, fstype, opts,
+                                   maxfile, maxpath)
         retlist.append(ntuple)
     return retlist
 
@@ -262,6 +269,7 @@ def net_connections(kind, _pid=-1):
             continue
         if type_ not in types:
             continue
+        # TODO: refactor and use _common.conn_to_ntuple.
         if fam in (AF_INET, AF_INET6):
             if laddr:
                 laddr = _common.addr(*laddr)
@@ -285,7 +293,7 @@ def net_if_stats():
         isup, duplex, speed, mtu = items
         if hasattr(_common, 'NicDuplex'):
             duplex = _common.NicDuplex(duplex)
-        ret[name] = _common.snicstats(isup, duplex, speed, mtu)
+        ret[name] = _common.snicstats(isup, duplex, speed, mtu, '')
     return ret
 
 
@@ -341,27 +349,27 @@ def wrap_exceptions(fun):
     def wrapper(self, *args, **kwargs):
         try:
             return fun(self, *args, **kwargs)
-        except EnvironmentError as err:
+        except (FileNotFoundError, ProcessLookupError):
+            # ENOENT (no such file or directory) gets raised on open().
+            # ESRCH (no such process) can get raised on read() if
+            # process is gone in meantime.
+            if not pid_exists(self.pid):
+                raise NoSuchProcess(self.pid, self._name)
+            else:
+                raise ZombieProcess(self.pid, self._name, self._ppid)
+        except PermissionError:
+            raise AccessDenied(self.pid, self._name)
+        except OSError:
             if self.pid == 0:
                 if 0 in pids():
                     raise AccessDenied(self.pid, self._name)
                 else:
                     raise
-            # ENOENT (no such file or directory) gets raised on open().
-            # ESRCH (no such process) can get raised on read() if
-            # process is gone in meantime.
-            if err.errno in (errno.ENOENT, errno.ESRCH):
-                if not pid_exists(self.pid):
-                    raise NoSuchProcess(self.pid, self._name)
-                else:
-                    raise ZombieProcess(self.pid, self._name, self._ppid)
-            if err.errno in (errno.EPERM, errno.EACCES):
-                raise AccessDenied(self.pid, self._name)
             raise
     return wrapper
 
 
-class Process(object):
+class Process:
     """Wrapper class around underlying C implementation."""
 
     __slots__ = ["pid", "_name", "_ppid", "_procfs_path", "_cache"]
@@ -396,6 +404,9 @@ class Process(object):
     @wrap_exceptions
     @memoize_when_activated
     def _proc_basic_info(self):
+        if self.pid == 0 and not \
+                os.path.exists('%s/%s/psinfo' % (self._procfs_path, self.pid)):
+            raise AccessDenied(self.pid)
         ret = cext.proc_basic_info(self.pid, self._procfs_path)
         assert len(ret) == len(proc_info_map)
         return ret
@@ -514,11 +525,9 @@ class Process(object):
                 try:
                     return os.readlink(
                         '%s/%d/path/%d' % (procfs_path, self.pid, x))
-                except OSError as err:
-                    if err.errno == errno.ENOENT:
-                        hit_enoent = True
-                        continue
-                    raise
+                except FileNotFoundError:
+                    hit_enoent = True
+                    continue
         if hit_enoent:
             self._assert_alive()
 
@@ -531,11 +540,9 @@ class Process(object):
         procfs_path = self._procfs_path
         try:
             return os.readlink("%s/%s/path/cwd" % (procfs_path, self.pid))
-        except OSError as err:
-            if err.errno == errno.ENOENT:
-                os.stat("%s/%s" % (procfs_path, self.pid))  # raise NSP or AD
-                return None
-            raise
+        except FileNotFoundError:
+            os.stat("%s/%s" % (procfs_path, self.pid))  # raise NSP or AD
+            return ""
 
     @wrap_exceptions
     def memory_info(self):
@@ -596,12 +603,9 @@ class Process(object):
             if os.path.islink(path):
                 try:
                     file = os.readlink(path)
-                except OSError as err:
-                    # ENOENT == file which is gone in the meantime
-                    if err.errno == errno.ENOENT:
-                        hit_enoent = True
-                        continue
-                    raise
+                except FileNotFoundError:
+                    hit_enoent = True
+                    continue
                 else:
                     if isfile_strict(file):
                         retlist.append(_common.popenfile(file, int(fd)))
@@ -613,13 +617,13 @@ class Process(object):
         """Get UNIX sockets used by process by parsing 'pfiles' output."""
         # TODO: rewrite this in C (...but the damn netstat source code
         # does not include this part! Argh!!)
-        cmd = "pfiles %s" % pid
-        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+        cmd = ["pfiles", str(pid)]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
         stdout, stderr = p.communicate()
         if PY3:
-            stdout, stderr = [x.decode(sys.stdout.encoding)
-                              for x in (stdout, stderr)]
+            stdout, stderr = (x.decode(sys.stdout.encoding)
+                              for x in (stdout, stderr))
         if p.returncode != 0:
             if 'permission denied' in stderr.lower():
                 raise AccessDenied(self.pid, self._name)

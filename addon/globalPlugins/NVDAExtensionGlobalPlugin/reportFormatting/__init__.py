@@ -16,7 +16,7 @@ addonHandler.initTranslation()
 def getReportFormattingOptions():
 	NVDAVersion = [version_year, version_major]
 	if NVDAVersion >= [2023, 1]:
-		return(
+		return (
 			"reportFontName",
 			"reportFontSize",
 			"reportFontAttributes",
@@ -32,7 +32,7 @@ def getReportFormattingOptions():
 		)
 
 	else:
-		return(
+		return (
 			"reportFontName",
 			"reportFontSize",
 			"reportFontAttributes",
@@ -319,7 +319,7 @@ def getFormatFieldText(attrs):
 	textList = []
 	# style
 	style = getStyleText(attrs)
-	textList.append(_("style: %s") % style)
+	textList.append(_("Style: %s") % style)
 	# font
 	font = getFontText(attrs)
 	if font:

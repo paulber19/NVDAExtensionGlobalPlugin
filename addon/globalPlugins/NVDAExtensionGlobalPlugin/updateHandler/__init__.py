@@ -1,10 +1,9 @@
-# coding: utf-8
-# __init__.py
+﻿# __init__.py
 # common Part of all of my add-ons
 # Copyright 2019 Paulber19
 # some parts of code comes from others add-ons:
 # add-on Updater (author Joseph Lee)
-# brailleExtender (author Andr�-Abush )
+# brailleExtender (author André-Abush )
 
 import addonHandler
 import globalVars

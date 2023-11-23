@@ -74,7 +74,7 @@ _msgCopy = _("Copy")
 # Translators: message to the user on undo command activation.
 _msgUnDo = _("Undo")
 # Translators: message to the user on select all command activation.
-_msgSelectAll = _("select all")
+_msgSelectAll = _("Select all")
 
 _clipboardCommands = {
 	# associate function to: check selection, check clipboard change, check empty clipboard
@@ -176,6 +176,7 @@ class RecogResultNVDAObjectEx (contentRecog.recogUi.RecogResultNVDAObject):
 
 
 class EditableTextEx(editableText.EditableText):
+	characterTyped = False
 	_commandToScript = {
 		"copy": "copyToClipboard",
 		"cut": "cutAndCopyToClipboard",
@@ -331,6 +332,8 @@ class EditableTextEx(editableText.EditableText):
 		_taskDelay = wx.CallLater(400, analyzeText, info, speakUnit)
 
 	def _caretMovementScriptHelper(self, gesture, unit):
+		# caret move but no character is typed. moving by arrow keys for exemple
+		self.characterTyped = False
 		try:
 			info = self.makeTextInfo(textInfos.POSITION_CARET)
 		except Exception:
@@ -351,19 +354,10 @@ class EditableTextEx(editableText.EditableText):
 		self._caretScriptPostMovedHelper(unit, gesture, newInfo)
 		config.conf["speech"]["symbolLevel"] = curLevel
 
+
 # this code comes from leonardder  work for issue #8110, see at:
 # Speak typed words based on TextInfo if possible #8110
-# temporary
-
-
-try:
-	# for nvda version >= 2023.1
-	from NVDAObjects.behaviors import EditableTextBase
-except ImportError:
-	from NVDAObjects.behaviors import EditableText as EditableTextBase
-
-
-class EditableTextBaseEx(EditableTextEx, EditableTextBase):
+class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 	#: A cached bookmark for the caret.
 	#: This is cached until L{hasNewWordBeenTyped} clears it
 	_cachedCaretBookmark = None
@@ -372,11 +366,16 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 		# Forget the word currently being typed as the user has moved the caret somewhere else.
 		speech.speech.clearTypedWordBuffer()
 		# Also clear our latest cachetd caret bookmark
-		self._clearCachedCaretBookmark()
+		# log.debug("_caretScriptPostMovedHelper clear cached caret bookmark")
+		# self._clearCachedCaretBookmark()
+		self.script_preTypedCharacter(None)
 		super()._caretScriptPostMovedHelper(speakUnit, gesture, info)
+		log.debug("cached caret bookmark updated: %s" % self._cachedCaretBookmark)
 
 	def getScript(self, gesture):
+		log.debug("getScript: %s" % gesture.mainKeyName)
 		script = super().getScript(gesture)
+		log.debug("script: %s" % script)
 		if script or not self.useTextInfoToSpeakTypedWords:
 			return script
 		if gesture.isCharacter and gesture.vkCode != 231:
@@ -384,12 +383,14 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 		return None
 
 	def script_preTypedCharacter(self, gesture):
+		log.debug("script_preTypedCharacter")
 		try:
 			self._cachedCaretBookmark = self.caret.bookmark
+			log.debug("cached caret bookmark set to: %s" % self._cachedCaretBookmark)
 		except (LookupError, RuntimeError):
 			pass  # Will still be None
-
-		gesture.send()
+		if gesture:
+			gesture.send()
 
 	def _get_caretMovementDetectionUsesEvents(self) -> bool:
 		"""Returns whether or not to rely on caret and textChange events when
@@ -419,6 +420,7 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 
 	def _clearCachedCaretBookmark(self):
 		self._cachedCaretBookmark = None
+		log.debug("cached caret bookmark cleared: %s" % self._cachedCaretBookmark)
 
 	def hasNewWordBeenTyped(self, wordSeparator: str) -> Tuple[Optional[bool], textInfos.TextInfo]:
 		"""
@@ -433,36 +435,57 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 			2. If the caret has moved and a new word has been typed, a TextInfo
 				expanded to the word that has just been typed.
 		"""
-		log.debug("hasNewWordBeenTyped: wordSeparator= %s" % wordSeparator)
+		log.debug("hasNewWordBeenTyped: wordSeparator= %s (%s)" % (wordSeparator, ord(wordSeparator)))
 		if not self.useTextInfoToSpeakTypedWords:
 			return (None, None)
 		bookmark = self._cachedCaretBookmark
 		if not bookmark:
+			log.debug("no bookmark")
 			return (None, None)
-		self._clearCachedCaretBookmark()
 		log.debug("bookmark: %s" % bookmark)
+		self._clearCachedCaretBookmark()
+		# on carriage return,  we don't want to announce the word  if no  character has been typed previously.
+		if ord(wordSeparator) == 13 and not self.characterTyped:
+			return (None, None)
 		caretMoved, caretInfo = self._hasCaretMoved(bookmark, retryInterval=0.005, timeout=0.030)
 		if not caretMoved or not caretInfo or not caretInfo.obj:
 			log.debug("not caret moved")
 			return (None, None)
 		info = caretInfo.copy()
 		info.expand(textInfos.UNIT_LINE)
+		log.debug("caretInfo line: %s" % [ord(x) for x in info.text])
 		log.debug("caretInfo: %s, bookmark= %s" % (info.text, info.bookmark))
 		tempInfo = caretInfo.copy()
+		temp2Info = caretInfo.copy()
+		temp2Info.expand(textInfos.UNIT_STORY)
+		log.debug("story: %s" % temp2Info.text)
+		log.debug("story list: %s" % [ord(x) for x in temp2Info.text])
+		if ord(wordSeparator) == 13:
+			# in notepad, after return, caret bookmark is on new  line and crlf on previous line
+			# lf is the last character of previous line
+			info1 = caretInfo.copy()
+			info1.collapse()
+			# move to last character of previous line
+			res = info1.move(textInfos.UNIT_CHARACTER, -1)
+			if res:
+				info1.expand(textInfos.UNIT_CHARACTER)
+				log.debug("last character of previous line: %s" % [ord(x) for x in info1.text])
+				# in notepad++, we get 2 characters and not oly one ???
+				if len(info1.text) == 1 and ord(info1.text) == 10:  # character lf
+					tempInfo.move(textInfos.UNIT_CHARACTER, -1)
 		res = tempInfo.move(textInfos.UNIT_CHARACTER, -2)
 		if res != 0:
 			tempInfo.expand(textInfos.UNIT_CHARACTER)
 			ch = tempInfo.text
-			log.debug("character caret-2: %s" % ch)
+			log.debug("character caret-2: %s (%s)" % (ch, ord(ch)))
 			# if there is a space (but no a Non-breaking space) before last character, return no word
 			if len(ch) and ord(ch) != NON_BREAKING_SPACE and ch.isspace():
-				log.debug("caret-2 is a space")
+				log.debug("caret -2 is a space")
 				return (False, None)
 			# if the last character typed is not a letter or number, the word has been probably already reported
 			if not ch.isalnum() and ord(ch) != NON_BREAKING_SPACE:
 				log.debug("caret-2 is not alphanumericc")
 				return (False, None)
-
 		wordInfo = self.makeTextInfo(bookmark)
 		info = wordInfo.copy()
 		info.expand(textInfos.UNIT_WORD)
@@ -488,7 +511,8 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 		log.debug("word1: %s" % wordInfo.text)
 		# with notepad editor, wordSeparator is at the end of word.  So we need to suppress it
 		# not same thing with other editor as notepad++, wordpad, word.
-		if wordInfo.text[-1] == wordSeparator:
+		log.debug("word: %s, sep: %s" % (wordInfo.text, ord(wordSeparator)))
+		if len(wordInfo.text) and wordInfo.text[-1] == wordSeparator:
 			# the word is before the wordSeparator
 			res = wordInfo.move(textInfos.UNIT_CHARACTER, -1, endPoint="end")
 			log.debug("word2: %s, %s" % (res, wordInfo.text))
@@ -508,7 +532,8 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 			pass
 
 	def event_typedCharacter(self, ch: str):
-		if(
+
+		if (
 			config.conf["documentFormatting"]["reportSpellingErrors"]
 			and config.conf["keyboard"]["alertForSpellingErrors"]
 			and (
@@ -520,6 +545,8 @@ class EditableTextBaseEx(EditableTextEx, EditableTextBase):
 			self._reportErrorInPreviousWord()
 		from .speechEx import speakTypedCharacters
 		speakTypedCharacters(ch)
+		# keep trace that a character has been typed
+		self.characterTyped = True
 		import winUser
 		if (
 			config.conf["keyboard"]["beepForLowercaseWithCapslock"]
@@ -630,7 +657,7 @@ class ClipboardCommandAnnouncement(object):
 			text = NVDAString("No selection")
 		elif count == 1:
 			# Translators: no comment.
-			text = _(" one selected object")
+			text = _("One selected object")
 		elif count > 1:
 			# Translators: no comment.
 			text = _("%s selected objects") % count
@@ -703,12 +730,13 @@ _rolesToCheck = [ROLE_DOCUMENT, ROLE_EDITABLETEXT, ROLE_TERMINAL]
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
 	useRecogResultNVDAObjectEx = False
-	useEditableTextBaseEx = False
+	useEditableTextUseTextInfoToSpeakTypedWords = False
 	for cls in clsList:
 		if contentRecog.recogUi.RecogResultNVDAObject in cls.__mro__:
 			useRecogResultNVDAObjectEx = True
-		if EditableTextBase in cls.__mro__:
-			useEditableTextBaseEx = True
+		if editableText.EditableText in cls.__mro__:
+			useEditableTextUseTextInfoToSpeakTypedWords = True
+
 	if useRecogResultNVDAObjectEx:
 		clsList.insert(0, RecogResultNVDAObjectEx)
 	# to fix the Access8Math  problem with the "alt+m" virtual menu
@@ -722,8 +750,8 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 			and obj.UIAAutomationId == "Windows.Shell.InputApp.FloatingSuggestionUI.DelegationTextBox":
 			pass
 		else:
-			if toggleTypedWordSpeakingEnhancementAdvancedOption(False) and useEditableTextBaseEx:
-				clsList.insert(0, EditableTextBaseEx)
+			if toggleTypedWordSpeakingEnhancementAdvancedOption(False) and useEditableTextUseTextInfoToSpeakTypedWords:
+				clsList.insert(0, EditableTextUseTextInfoToSpeakTypedWords)
 			else:
 				clsList.insert(0, EditableTextEx)
 		return
@@ -741,13 +769,13 @@ def initialize():
 			# the clipboard command announcements feature should be disabled
 			# or not
 			_(
-				"clipspeak add-on has been detected on your system. "
+				"The clipspeak add-on has been detected on your system. "
 				"In order for Clipboard command announcement feature to work without conflicts, "
 				"clipSpeak add-on must be desactivated or uninstalled."
 				"But if you want to use clipSpeak add-on, Clipboard command announcement feature must be uninstalled."
 				" Would you like to uninstall this feature now?"),
-			# Translators: question title
-			_("clipSpeak add-on detection"),
+			# Translators: warning dialog title
+			_("Warning"),
 			wx.YES_NO | wx.ICON_QUESTION, gui.mainFrame)
 		if result == wx.NO:
 			return
@@ -757,6 +785,7 @@ def initialize():
 		from ..settings.dialog import askForNVDARestart
 		askForNVDARestart()
 	if isInstall(FCT_ClipboardCommandAnnouncement):
-		for addon in addonHandler.getAvailableAddons():
-			if addon.name == "clipspeak" and not addon.isDisabled:
+		for addon in addonHandler.getRunningAddons():
+			if addon.name == "clipspeak":
 				wx.CallAfter(callback)
+				break

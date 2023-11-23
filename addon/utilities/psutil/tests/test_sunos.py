@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright (c) 2009, Giampaolo Rodola'. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -7,15 +7,16 @@
 """Sun OS specific tests."""
 
 import os
+import unittest
 
 import psutil
 from psutil import SUNOS
+from psutil.tests import PsutilTestCase
 from psutil.tests import sh
-from psutil.tests import unittest
 
 
 @unittest.skipIf(not SUNOS, "SUNOS only")
-class SunOSSpecificTestCase(unittest.TestCase):
+class SunOSSpecificTestCase(PsutilTestCase):
 
     def test_swap_memory(self):
         out = sh('env PATH=/usr/sbin:/sbin:%s swap -l' % os.environ['PATH'])
@@ -24,10 +25,9 @@ class SunOSSpecificTestCase(unittest.TestCase):
             raise ValueError('no swap device(s) configured')
         total = free = 0
         for line in lines:
-            line = line.split()
-            t, f = line[-2:]
-            total += int(int(t) * 512)
-            free += int(int(f) * 512)
+            fields = line.split()
+            total = int(fields[3]) * 512
+            free = int(fields[4]) * 512
         used = total - free
 
         psutil_swap = psutil.swap_memory()
@@ -41,5 +41,5 @@ class SunOSSpecificTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    from psutil.tests.runner import run
-    run(__file__)
+    from psutil.tests.runner import run_from_name
+    run_from_name(__file__)

@@ -1157,7 +1157,7 @@ class AddonImportDialog(
 				# Translators: message to ask user if he want continue to delete current add-ons.
 				_("Do you really want to delete all add-ons of %s folder?") % toAddonsFolderPath,
 				# Translators: message box title
-				_("confirmation"),
+				_("Confirmation"),
 				wx.YES | wx.NO | wx.CANCEL) != wx.YES:
 				return
 		api.processPendingEvents()
@@ -1185,7 +1185,7 @@ class AddonImportDialog(
 		checkedAddons = self.addonsCheckListBox .GetChecked()
 		if len(checkedAddons) == 0:
 			# Translators: message to user to say that there is no addon checked.
-			ui.message(_("there is no add-on checked"))
+			ui.message(_("There is no add-on checked"))
 			return
 		self.addonPathsList = []
 		for index in checkedAddons:
@@ -1217,7 +1217,7 @@ class NewUserConfigurationAddingDialog(
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# Translators: This is the label of the edit field appearing
 		# on the adding new folder  dialog.
-		labelText = _("folder's userName:")
+		labelText = _("Folder's userName:")
 		self.configurationUserNameEdit = sHelper.addLabeledControl(
 			labelText, wx.TextCtrl)
 		self.configurationUserNameEdit .AppendText("")
@@ -1281,7 +1281,7 @@ class NewUserConfigurationAddingDialog(
 				queueHandler.eventQueue,
 				ui.message,
 				# Translators: message to user to ask for the username of configuration.
-				_("you must specify the username of the folder")
+				_("You must specify the username of the folder")
 			)
 			self.configurationUserNameEdit.SetFocus()
 			return
@@ -1303,14 +1303,14 @@ class NewUserConfigurationAddingDialog(
 				queueHandler.eventQueue,
 				ui.message,
 				# Translators: message to user to report folder already in the list.
-				_("""The folder with "%s" username is already in the list of configuration folders """) % (
+				_("""The folder with "%s" username is already in the list of configuration folders""") % (
 					os.path.basename(self.newUserConfigFolderPath))
 			)
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				ui.message,
 				# Translators: message to user to ask an other username.
-				_("choose another username")
+				_("Choose another username")
 			)
 			obj = api.getFocusObject()
 			eventHandler.queueEvent("gainFocus", obj)
@@ -1422,7 +1422,7 @@ class ExistingUserConfigurationAddingDialog(
 				ui.message,
 				# Translators: message to user to report folder already in the list.
 				_(
-					"""The folder with "%s" username is already in the list of configuration folders """) % (
+					"""The folder with "%s" username is already in the list of configuration folders""") % (
 						os.path.basename(self.newUserConfigFolderPath))
 			)
 		# check if it's a nvda user configuration
@@ -1559,7 +1559,7 @@ class ProfilesImportDialog(
 				# Translators: message to ask user if he want continue to delete current profiles.
 				_("Do you really want to delete all profiles of %s folder?") % toProfilesFolderPath,
 				# Translators: message box title
-				_("confirmation"),
+				_("Confirmation"),
 				wx.YES | wx.NO | wx.CANCEL) != wx.YES:
 				return
 		api.processPendingEvents()

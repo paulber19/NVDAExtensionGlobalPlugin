@@ -177,7 +177,7 @@ reportByChoiceLabels = {
 	# Translators: choice label to report analysis detection by the number of detected elements .
 	SIG_Number: _("Detections's number"),
 	# Translators: choice label to report analysis detection with description of each detected elements.
-	SIG_Description: _("detailed description")
+	SIG_Description: _("Detailed description")
 }
 anomalyLabels = {
 	# Translators: choice item for reporting extra spaces.label
@@ -193,9 +193,9 @@ anomalyLabels = {
 	# Translators: choice label for reporting symbols which need need space after it.
 	ANO_NeedSpaceAfter: _("The required space after the symbol"),
 	# Translators: choice label for reporting symbols which must not be preceded by a space.
-	ANO_NoSpaceBefore: _("unexpected space before symbol"),
+	ANO_NoSpaceBefore: _("Unexpected space before symbol"),
 	# Translators: choice label for reporting symbols which must not be followed by a space")
-	ANO_NoSpaceAfter: _("unexpected space after symbol"),
+	ANO_NoSpaceAfter: _("Unexpected space after symbol"),
 }
 formattingChangeLabels = {
 	# Translators: choice item for reporting font name change.
@@ -285,7 +285,7 @@ class NVDAConfigurationManager(object):
 					change = True
 					continue
 				mask = abs(int(d[key]))
-				if type(d[key]) == str:
+				if type(d[key]) is str:
 					d[key] = mask
 					change = True
 

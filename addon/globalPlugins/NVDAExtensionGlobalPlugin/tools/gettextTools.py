@@ -14,6 +14,7 @@ from ..utils.py3Compatibility import getCommonUtilitiesPath
 addonHandler.initTranslation()
 
 XGETTEXT_COMMON_ARGS = (
+	"--from-code=utf-8 "
 	"--msgid-bugs-address\"={gettext_package_bugs_address}\" "
 	"--package-name=\"{gettext_package_name}\" "
 	"--package-version=\"{gettext_package_version}\" "
@@ -39,7 +40,7 @@ def getI18nSources(addon, buildVarsI18nSources):
 def generatePotFile(
 	addon, potFileName, buildVarsAddonInfo, buildVarsI18nSources):
 	gettextVars = {
-		'gettext_package_bugs_address': 'nvda-translations@freelists.org',
+		'gettext_package_bugs_address': buildVarsAddonInfo['addon_author'],
 		'gettext_package_name': buildVarsAddonInfo['addon_name'],
 		'gettext_package_version': buildVarsAddonInfo['addon_version']
 	}

@@ -189,7 +189,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures = {}
 	_mainScriptToGestureAndfeatureOption = {
-		"test": (("kb:nvda+control+shift+f11",), None),
+		# "test": (("kb:nvda+control+shift+f11",), None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), addonConfig.FCT_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), addonConfig.FCT_FocusedApplicationInformations),
@@ -879,7 +879,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			if ord(ch) < 32:
 				break
 			appVersion += ch
-		return(productName, appVersion)
+		return (productName, appVersion)
 
 	def script_reportAppProductNameAndVersion(self, gesture):
 		def callback(repeatCount):
@@ -908,12 +908,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		focus = api.getFocusObject()
 		mod = focus.appModule
 		if isinstance(mod, appModuleHandler.AppModule) and\
-			type(mod) != appModuleHandler.AppModule:
+			type(mod) is not appModuleHandler.AppModule:
 			addon = fetchAddon(focus.processID, focus.appModule.appName)
 			if addon is not None:
 				# Translators: indicate name and version of active addon
 				# for current focused application.
-				msg = _("add-on: {name}, version: {version}").format(
+				msg = _("Add-on: {name}, version: {version}").format(
 					name=addon.manifest["name"], version=addon.manifest["version"])
 				ui.message(msg)
 				return
@@ -972,7 +972,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		mod = focus.appModule
 		modName = NVDAString("none")
 		if isinstance(mod, appModuleHandler.AppModule) and\
-			type(mod) != appModuleHandler.AppModule:
+			type(mod) is not appModuleHandler.AppModule:
 			modName = mod.appModuleName.split(".")[0]
 		modPath = mod.__module__.replace(".", "\\")
 		addons = []
@@ -997,7 +997,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		text = _("Active add-on: %s") % info
 		textList.append(text)
 		# Translators: path of current add-on
-		text = _("add-on's path: %s") % path
+		text = _("Add-on's path: %s") % path
 		textList.append(text)
 		if len(addons) > 1:
 			# Translators: indicate that others add-ons are installed

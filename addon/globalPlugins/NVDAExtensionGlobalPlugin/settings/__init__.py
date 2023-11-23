@@ -507,7 +507,7 @@ class AddonConfigurationManager():
 			if sect not in conf[SCT_CategoriesAndSymbols][lang]:
 				conf[SCT_CategoriesAndSymbols][lang][sect] = {}
 			for symbol in userComplexSymbols[sect]:
-				conf[SCT_CategoriesAndSymbols	][lang][sect][symbol] =\
+				conf[SCT_CategoriesAndSymbols][lang][sect][symbol] =\
 					userComplexSymbols[sect][symbol]
 
 	def deleceAllUserComplexSymbols(self):

@@ -1345,9 +1345,9 @@ It is started with the command "KEY_CLOSE_ALL_WINDOWS" from the command interpre
 
 
 ++ List of running add-on ++[hdr27]
-The add-on manager displays the list of installed add-on and their status: activated or deactivated.
+The add-on manager or Add-on store  displays the list of installed add-on and their status: activated or deactivated.
 
-But even though it is enabled, an add-on may not be loaded by NVDA. Usually the NVDA log reports this, but nothing in the Extensions Manager.
+But even though it is activated, an add-on may not be loaded by NVDA. In principle, the NVDA log reports this fact, but nothing in the add-ons manager, nor in the Add-on Store.
 
 It can be interesting at some point to know which add-on are actually running.
 
@@ -1995,9 +1995,10 @@ In order for the modified sound files to be played instead of the original sound
 If modifying this function is a problem, you must both uncheck the "Allow gain modification" option and uninstall this feature.
 
 ++ Quick activation or deactivation of extensions ++[hdr35]
-To enable or disable extensions, NVDA natively offers the Extension Manager.
+To activate or deactivate extensions, NVDA natively offers the add-ons manager or, since NVDA 2023.2, the Add-on Store.
+
 However in some cases it may be necessary to deactivate some or all of the extensions leaving only a few extensions activated.
-With the extension manager, it is then necessary to review each extension to activate or deactivate it.
+With the add-ons manager or Add-on Store, it is then necessary to review each extension to activate or deactivate it.
 
 This extension tries to make this manipulation faster and for that, it provides a script to display the "Quick add-ons activation" dialog.
 
@@ -2012,10 +2013,16 @@ This dialogue presents:
 - the "Cancel" button to close the dialog without any modification of the add-ons activation status.
 
 
-The list shows only the add-ons enabled or disabled when the dialog is displayed. Incompatible add-ons, to be activated or deactivated at the next start-up, are not included in the list.
+If the add-on is installed under a version of NVDA prior to NVDA 2023.2, the list only shows the compatible add-ons. 
+
+Only add-ons in a stable state are listed. Add-ons which are in an intermediate state, i.e. either pending activation or deactivation, or pending installation or removal, are excluded.
+Since NVDA 2023.2, incompatible add-ons are also included in the list, and can be enabled or disabled as well.
+
+They are indicated by the words "(incompatible)" following their identifier.
 
 When the dialog is displayed, the activated add-ons are checked.
 
+The list is refreshed each time the dialog window is activated in order to take into account any possible change in the state of the add-ons.
 To change the activation status of an add-on, all you have to do is check it to activate it, or uncheck it to deactivate it.
 
 The changes will only be taken into account when the "Save and restart NVDA" button is pressed.

@@ -404,7 +404,7 @@ class NVDAEnhancementSettingsPanel(
 		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
-		labelText = _("maximum number of last &used symbols recorded:")
+		labelText = _("Maximum number of last &used symbols recorded:")
 		choices = [x * 10 for x in range(1, 11)]
 		choices = list(reversed(choices))
 		self.maximumOfLastUsedSymbolsBox = group.addLabeledControl(
@@ -421,7 +421,7 @@ class NVDAEnhancementSettingsPanel(
 		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
-		labelText = _("&Number the records ")
+		labelText = _("&Number the records")
 		self.speechRecordWithNumberOptionBox = group.addItem(wx.CheckBox(groupBox, label=labelText))
 		self.speechRecordWithNumberOptionBox.SetValue(toggleSpeechRecordWithNumberOption(False))
 		self.bindHelpEvent(getHelpObj("hdr10-1"), self.speechRecordWithNumberOptionBox)
@@ -448,7 +448,7 @@ class NVDAEnhancementSettingsPanel(
 		if getInstallFeatureOption(FCT_ExtendedVirtualBuffer) == C_DoNotInstall:
 			group.sizer.Hide(0)
 		# Translators: This is the label for a group of editing options in the NVDAEnhancement settings panel.
-		groupText = _("reporting spelling errors")
+		groupText = _("Reporting spelling errors")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
 		groupBox = groupSizer.GetStaticBox()
 		group = BoxSizerHelper(self, sizer=groupSizer)
@@ -473,7 +473,7 @@ class NVDAEnhancementSettingsPanel(
 		group = BoxSizerHelper(self, sizer=groupSizer)
 		sHelper.addItem(group)
 		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
-		labelText = _("maximum number of reported characters:")
+		labelText = _("Maximum number of reported characters:")
 		choices = [x * 1024 for x in range(1, 1000)]
 		choices = list(reversed(choices))
 		choiceLabels = [str(x) for x in choices]
@@ -650,7 +650,7 @@ class ComputerSettingsPanel(
 		choice = [str(x) for x in range(1, 21)]
 		self.volumeChangeStepLevelBox = group.addLabeledControl(
 			labelText, wx.Choice, choices=list(reversed(choice)))
-		self.volumeChangeStepLevelBox.SetStringSelection(str(_addonConfigManager.getVolumeChangeStepLevel())	)
+		self.volumeChangeStepLevelBox.SetStringSelection(str(_addonConfigManager.getVolumeChangeStepLevel()))
 		self.bindHelpEvent(getHelpObj("hdr21-3"), self.volumeChangeStepLevelBox)
 		# Translators: This is the label for a checkbox in the computer settings panel.
 		labelText = _("R&eport volume changes")
@@ -678,12 +678,12 @@ class ComputerSettingsPanel(
 		self.confirmAudioDeviceChangeCheckBox.SetValue(toggleConfirmAudioDeviceChangeAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr33"), self.confirmAudioDeviceChangeCheckBox)
 		# Translators: This is a label for a choice box in computer settings panel.
-		labelText = _("ma&ximum waiting time for confirmation (in seconds):")
+		labelText = _("Ma&ximum waiting time for confirmation (in seconds):")
 		choice = [str(x) for x in range(1, 31)]
 		self.confirmAudioDeviceChangeTimeOutChoiceBox = group.addLabeledControl(
 			labelText, wx.Choice, choices=list(reversed(choice)))
 		self.confirmAudioDeviceChangeTimeOutChoiceBox.SetStringSelection(
-			str(_addonConfigManager.getConfirmAudioDeviceChangeTimeOut())	)
+			str(_addonConfigManager.getConfirmAudioDeviceChangeTimeOut()))
 		self.bindHelpEvent(getHelpObj("hdr33"), self.confirmAudioDeviceChangeTimeOutChoiceBox)
 
 	def saveSettingChanges(self):
@@ -745,7 +745,7 @@ class AdvancedSettingsPanel(
 	contextHelpEx.ContextHelpMixinEx,
 	SettingsPanel):
 	# Translators: This is the label for the Advanced settings panel.
-	title = _("advanced")
+	title = _("Advanced")
 	_playSoundOnErrorsOptionLabels = [  # becarefull: order is important
 		# Translators: This is a label for a choice item in Advanced options settings dialog.
 		_("For No NVDA's version"),  # PSOE_NoVersion
@@ -852,7 +852,7 @@ class AdvancedSettingsPanel(
 			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr34-1"), self.allowNVDASoundsVolumeAdjustmentOptionBox)
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
-		labelText = _("allow nvda sounds files's &gain modification")
+		labelText = _("Allow nvda sounds files's &gain modification")
 		self.allowNVDASoundGainModificationBox = group.addItem(
 			wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.allowNVDASoundGainModificationBox.SetValue(
@@ -1406,7 +1406,7 @@ class TextAnalyzerProfileSettingsPanel(
 		filesList = []
 		for item in itemList:
 			theFile = os.path.join(soundsDir, item)
-			if not(os.path.isdir(theFile))\
+			if not (os.path.isdir(theFile))\
 				and (os.path.splitext(theFile)[1] == ".wav"):
 				filesList.append(item)
 		return filesList

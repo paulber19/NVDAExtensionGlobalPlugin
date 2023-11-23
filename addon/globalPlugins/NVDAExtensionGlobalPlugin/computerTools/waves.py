@@ -11,11 +11,11 @@ import globalVars
 import sys
 from ..utils.py3Compatibility import getUtilitiesPath
 utilitiesPath = getUtilitiesPath()
-pydubPath = os.path.join(utilitiesPath, "pydub")
+pydubPath = os.path.join(utilitiesPath, "pydubEx")
 sysPath = sys.path
 sys.path.append(utilitiesPath)
 sys.path.append(pydubPath)
-import pydub
+import pydubEx as pydub
 sys.path = sysPath
 
 

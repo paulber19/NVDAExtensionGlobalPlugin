@@ -6,6 +6,7 @@
 
 import addonHandler
 import os
+import sys
 
 
 def getCommonUtilitiesPath():
@@ -14,8 +15,12 @@ def getCommonUtilitiesPath():
 
 
 def getUtilitiesPath():
-	# python 2 is no more supported, so there is only common utilities
-	return getCommonUtilitiesPath()
+	curAddonPath = getAddonPath()
+	if sys.version .startswith("3.11"):
+		utilities = "utilitiesPy311"
+	else:
+		utilities = "utilitiesPy37"
+	return os.path.join(curAddonPath, utilities)
 
 
 def getAddonPath(addon=None):

@@ -117,16 +117,16 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for report current folder command in open or save dialog box.
 	"reportCurrentFolder": (
-		_("report the name of current selected folder in the open or Save dialog box. Twice: report full path"),
+		_("Report the name of current selected folder in the open or Save dialog box. Twice: report full path"),
 		None, None),
 	# Translators: Input help mode message
 	# for report current folder name command in open or save dialog box.
 	"reportCurrentFolderName": (
-		_("report the name of current selected folder in the open or Save dialog box"), None, "hdr8"),
+		_("Report the name of current selected folder in the open or Save dialog box"), None, "hdr8"),
 	# Translators: Input help mode message
 	# for report current folder path command in open or save dialog box.
 	"reportCurrentFolderFullPath": (
-		_("report the full path of current selected folder in the open or Save dialog box"), None, "hdr8"),
+		_("Report the full path of current selected folder in the open or Save dialog box"), None, "hdr8"),
 	# Translators: Input help mode message
 	# for open user config folder command.
 	"exploreUserConfigFolder": (_("Explore my user configuration's folder"), None, "hdr202"),
@@ -257,7 +257,7 @@ scriptsToDocInformations = {
 		_("Displays the dialog to manage the input gestures configured by user"), None, "hdr20"),
 	# Translators: Input help mode message
 	# for tools for add-on command.
-	"toolsForAddon": (_("Display tools for add-on development dialog "), globalCommands.SCRCAT_TOOLS, "hdr22"),
+	"toolsForAddon": (_("Display tools for add-on development dialog"), globalCommands.SCRCAT_TOOLS, "hdr22"),
 	# Translators: Input help mode message
 	# for leftclick mouse button at navigator cursor position script command.
 	"leftClickAtNavigatorObjectPosition": (
@@ -301,7 +301,7 @@ scriptsToDocInformations = {
 		_("Display current speech settings"), globalCommands.SCRCAT_SPEECH, "hdr17-6"),
 	# Translators: Input help mode message
 	# for toggleTextAnalyzer script commands.
-	"toggleTextAnalyzer": (_("activate or desactivate text analyzer"), None, "hdr31-1"),
+	"toggleTextAnalyzer": (_("Activate or desactivate text analyzer"), None, "hdr31-1"),
 	# Translators: Input help mode message
 	# for analyzeCurrentWord script commands.
 	"analyzeCurrentWord": (_("Analyze the word under system cursor"), None, "hdr31-3"),
@@ -339,7 +339,7 @@ scriptsToDocInformations = {
 		"hdr7-2"),
 	# Translators: Input help mode message
 	# for addToClip script commands.
-	"addToClip": (_("Add, to clipboard, the selected text "), None, "hdr7-1"),
+	"addToClip": (_("Add, to clipboard, the selected text"), None, "hdr7-1"),
 	# Translators: Input help mode message
 	# for clearClipboard script commands.
 	"emptyClipboard": (_("Empty the clipboard"), globalCommands.SCRCAT_SYSTEM, "hdr7-3"),
@@ -423,7 +423,7 @@ scriptsToDocInformations = {
 	"maximizeNVDAVolume": (_("Maximize NVDA volume"), SCRCAT_VOLUME_CONTROL, "hdr21-3"),
 	# Translators: Input help mode message
 	# for minimize NVDA volume command.
-	"minimizeNVDAVolume": (_("Minimize NVDA volume "), SCRCAT_VOLUME_CONTROL, "hdr21-3"),
+	"minimizeNVDAVolume": (_("Minimize NVDA volume"), SCRCAT_VOLUME_CONTROL, "hdr21-3"),
 	# Translators: Input help mode message
 	# for set NVDA volume to x percent commands
 	"setNVDAVolumeTo10Percent": (_setNVDAVolumeToMsg % 10, SCRCAT_VOLUME_CONTROL, "hdr21-8"),

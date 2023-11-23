@@ -164,7 +164,7 @@ class SwitchVoiceProfilesManager(object):
 		selectorConfig = selectorCfg.dict()
 		tempDic = selectorCfg.dict()
 		for key in tempDic["speech"].keys():
-			if type(tempDic["speech"][key]) == dict and key not in ["__many__", tempDic["synthName"]]:
+			if type(tempDic["speech"][key]) is dict and key not in ["__many__", tempDic["synthName"]]:
 				del selectorConfig["speech"][key]
 		return selectorConfig
 
@@ -271,7 +271,7 @@ class SwitchVoiceProfilesManager(object):
 			return
 		if self.isSet(lastSelector):
 			# Translators: message to user to report there is no other voice profile.
-			ui.message(_("no other selector set to voice profile"))
+			ui.message(_("No other selector set to voice profile"))
 			newProfile = self.getVoiceProfile(lastSelector)
 			voiceProfileName = newProfile[KEY_VoiceProfileName]
 			msg = _("Selector {selector}: {name}").format(
@@ -279,7 +279,7 @@ class SwitchVoiceProfilesManager(object):
 			ui.message(msg)
 		else:
 			# Translators: message to user to report  there is no voice profile set.
-			ui.message(_("no selector set to voice profile"))
+			ui.message(_("No selector set to voice profile"))
 
 	def setVoiceProfile(self, selector, silent=False):
 		self.setLastSelector(selector)
@@ -328,7 +328,7 @@ class SwitchVoiceProfilesManager(object):
 		d = config.conf[SCT_Speech].dict()
 		for key in config.conf[SCT_Speech]:
 			val = config.conf[SCT_Speech][key]
-			if type(val) == config.AggregatedSection\
+			if type(val) is config.AggregatedSection\
 				and key not in [SCT_Many, synth.name]:
 				del d[key]
 		synthDatas[SCT_Speech] = d
@@ -390,7 +390,7 @@ class SwitchVoiceProfilesManager(object):
 				config.conf[self.addonName][SCT_VoiceProfileSwitching][selector] = {}
 		config.conf[self.addonName][SCT_VoiceProfileSwitching]._cache.clear()
 		# Translators: this a message to inform that all slots are not associated.
-		msg = _("all selectors are freed from their vocal profile")
+		msg = _("All selectors are freed from their vocal profile")
 		ui.message(msg)
 
 	def getUpdatedConfig(self):
@@ -418,11 +418,11 @@ class SwitchVoiceProfilesManager(object):
 	def getSynthInformations(self, selector=None):
 		def boolToText(value):
 
-			if type(value) == str and value == "True":
+			if type(value) is str and value == "True":
 				return _("yes")
-			if type(value) == str and value == "False":
+			if type(value) is str and value == "False":
 				return _("no")
-			if type(value) == bool:
+			if type(value) is bool:
 				text = _("yes") if value else _("no")
 				return text
 			log.error("boolToText: value is out of type range:  bool, str")
@@ -536,7 +536,7 @@ class SelectorsManagementDialog (
 		if not self.normalConfigurationProfile\
 			and self.switchManager.getUseNormalConfigurationSelectorsFlag():
 			# current configuration profile Nam + normal configuration profile name
-			return"%s (%s, %s):" % (
+			return "%s (%s, %s):" % (
 				text, self.configurationProfileName, NVDAString("normal configuration"))
 		else:
 			# only current configuration profile name
@@ -833,7 +833,7 @@ class ModifyVoiceProfileDialog(
 	# help in the user manual.
 	helpObj = getHelpObj("hdr17-1")
 	# Translators: This is the title of the modify voice profile dialog.
-	title = _("Modify voice profile ")
+	title = _("Modify voice profile")
 
 	def __init__(self, parent, voiceProfile):
 		super(ModifyVoiceProfileDialog, self).__init__(parent, title=self.title)
@@ -843,7 +843,7 @@ class ModifyVoiceProfileDialog(
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# Translators: This is the label of the edit field appearing
 		# on the Modify voice profile dialog.
-		voiceProfileNameEditLabelText = _("voice profile name:")
+		voiceProfileNameEditLabelText = _("Voice profile name:")
 		self.voiceProfileNameEdit = sHelper.addLabeledControl(
 			voiceProfileNameEditLabelText, wx.TextCtrl)
 		self.voiceProfileNameEdit .AppendText(voiceProfileName)
@@ -905,7 +905,7 @@ class AssociateVoiceProfileDialog(
 		sHelper = gui.guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# Translators: This is the label of the edit field appearing
 		# in the associate voice profile dialog.
-		voiceProfileNameEditLabelText = _("voice profile name:")
+		voiceProfileNameEditLabelText = _("Voice profile name:")
 		self.voiceProfileNameEdit = sHelper.addLabeledControl(
 			voiceProfileNameEditLabelText, wx.TextCtrl)
 		self.voiceProfileNameEdit .AppendText(self.defaultVoiceProfileName)

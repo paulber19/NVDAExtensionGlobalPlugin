@@ -19,6 +19,26 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
+
++ v13.2 (November/23/2023) +
+News:
+
+- in accordance with NVDA add-on store from NVDA 2023.2:
+ - possibility to update the add-on with an incompatible version.
+ - in the "Quick add-ons activation" dialog, it is now possible to activate incompatible extensions.
+
+
+Bug Fixes:
+- reminder of the correction made in 13.1.3, concerning problem #9: The parameters of all synthesizers are reset after using the profile selectors.
+
+
+Development:
+- updated markdown2 to version 2.4.11.
+- updated the "psutil" package to version 5.9.6.
+- updated pydubEx folder to pydub version 0.25.1.
+- upgrade win32 folder to pywin32 version 306 for Python 3.11.
+
+
 + v13.1 (September/04/2023) +
 Improvements:
 - announcement of the name of the application during a volume change if this application is different from that of the previous volume change.
