@@ -32,7 +32,6 @@ addonHandler.initTranslation()
 
 
 _curAddon = addonHandler.getCodeAddon()
-_curAddonName = _curAddon.manifest["name"]
 
 
 def isCompatible(minimumNVDAVersion, lastTestedNVDAVersion):
@@ -44,8 +43,7 @@ def isCompatible(minimumNVDAVersion, lastTestedNVDAVersion):
 
 
 def makeAddonWindowTitle(dialogTitle):
-	curAddon = addonHandler.getCodeAddon()
-	addonSummary = curAddon.manifest['summary']
+	addonSummary = _curAddon.manifest['summary']
 	return "%s - %s" % (addonSummary, dialogTitle)
 
 
@@ -54,17 +52,18 @@ class AddonUpdateDownloader(UpdateDownloader):
 	No hash checking for now, and URL's and temp file paths are different.
 	"""
 
-	def __init__(self, url, addonName, fileHash=None, autoUpdate=True):
+	def __init__(self, url, addon, fileHash=None, autoUpdate=True):
 		"""Constructor.
 		@param url: URLs to try for the update file.
 		@type url: str
-		@param addonName: Name of the add-on being downloaded.
+		@param addon: the add-on being downloaded.
 		@type addonName: str
 		@param fileHash: The SHA-1 hash of the file as a hex string.
 		@type fileHash: basestring
 		"""
 		self.urls = [url, ]
-		self.addonName = addonName
+		self.addon = addon
+		self.addonName = addon.manifest["name"]
 		self.destPath = tempfile.mktemp(
 			prefix="nvda_addonUpdate-", suffix=".nvda-addon")
 		self.fileHash = fileHash
@@ -113,11 +112,6 @@ class AddonUpdateDownloader(UpdateDownloader):
 			raise RuntimeError("URL Download failed: %s url cannot be opened" % url)
 		if remote.code != 200:
 			raise RuntimeError("Download failed with code %d" % remote.code)
-		# #2352: Some security scanners such as Eset NOD32 HTTP Scanner
-		# cause huge read delays while downloading.
-		# Therefore, set a higher timeout.
-		if sys.version_info.major == 2:
-			remote.fp._sock.settimeout(120)
 		size = int(remote.headers["content-length"])
 		with open(self.destPath, "wb") as local:
 			if self.fileHash:
@@ -181,6 +175,8 @@ class AddonUpdateDownloader(UpdateDownloader):
 				_("Please wait while the add-on is being updated."))
 			try:
 				if self.autoUpdate:
+					# installTask must be inform that it's an autoUpdate
+					# in this case, the current add-on configuration is automaticaly conserved
 					extraAppArgs = globalVars.appArgsExtra if hasattr(
 						globalVars, "appArgsExtra") else globalVars.unknownAppArgs
 					extraAppArgs.append("addon-auto-update")
@@ -206,10 +202,8 @@ class AddonUpdateDownloader(UpdateDownloader):
 				progressDialog.done()
 				self.addonHasBeenUpdated = True
 		finally:
-			try:
-				os.remove(self.destPath)
-			except OSError:
-				pass
+			if not self.addon.isPendingRemove:
+				self.addon.requestRemove()
 			if self.addonHasBeenUpdated:
 				if gui.messageBox(
 					NVDAString(
@@ -218,7 +212,6 @@ class AddonUpdateDownloader(UpdateDownloader):
 					NVDAString("Restart NVDA"),
 					wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
 					wx.CallAfter(core.restart)
-				return
 		self.continueUpdatingAddons()
 
 	def continueUpdatingAddons(self):
@@ -504,7 +497,7 @@ Do you want to ignore this incompatibility and still download it now?""") .forma
 		return (latestVersion, url, minimumNVDAVersion, lastTestedNVDAVersion)
 
 	def processUpdate(self, url):
-		downloader = AddonUpdateDownloader(url, _curAddonName, autoUpdate=self.auto)
+		downloader = AddonUpdateDownloader(url, _curAddon, autoUpdate=self.auto)
 		downloader.start()
 
 
