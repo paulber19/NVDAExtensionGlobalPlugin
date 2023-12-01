@@ -1,5 +1,5 @@
 # NVDA add-on template  SCONSTRUCT file
-#Copyright (C) 2018Paulber19 <paulber19@laposte.net>
+#Copyright (C) 2018 - 2023 Paulber19 <paulber19@laposte.net>
 #This file is covered by the GNU General Public License.
 #See the file COPYING.txt for more details.
 
@@ -9,12 +9,9 @@ import os
 import os.path
 import zipfile
 import sys
-py3 = sys.version.startswith("3")
 import buildVars
-if py3:
-	import txt2tags as txt2tags
-else:
-	import txt2tags25 as txt2tags
+
+import txt2tags
 import markdown2 as markdown
 
 

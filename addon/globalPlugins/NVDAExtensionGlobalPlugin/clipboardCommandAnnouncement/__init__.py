@@ -373,7 +373,6 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 		log.debug("cached caret bookmark updated: %s" % self._cachedCaretBookmark)
 
 	def getScript(self, gesture):
-		log.debug("getScript: %s" % gesture.mainKeyName)
 		script = super().getScript(gesture)
 		log.debug("script: %s" % script)
 		if script or not self.useTextInfoToSpeakTypedWords:
