@@ -455,10 +455,6 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 		log.debug("caretInfo line: %s" % [ord(x) for x in info.text])
 		log.debug("caretInfo: %s, bookmark= %s" % (info.text, info.bookmark))
 		tempInfo = caretInfo.copy()
-		temp2Info = caretInfo.copy()
-		temp2Info.expand(textInfos.UNIT_STORY)
-		log.debug("story: %s" % temp2Info.text)
-		log.debug("story list: %s" % [ord(x) for x in temp2Info.text])
 		if ord(wordSeparator) == 13:
 			# in notepad, after return, caret bookmark is on new  line and crlf on previous line
 			# lf is the last character of previous line
