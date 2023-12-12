@@ -496,8 +496,9 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 		# The bookmark is positioned after the end of the word.
 		# Therefore, we need to move it one character backwards.
 		res = wordInfo.move(textInfos.UNIT_CHARACTER, -1)
-		wordInfo.expand(textInfos.UNIT_WORD)
 		log.debug("wordInfo moved: %s, %s" % (res, wordInfo.text))
+		wordInfo.expand(textInfos.UNIT_WORD)
+		log.debug("wordInfo moved 2: %s, %s" % (res, wordInfo.text))
 		diff = wordInfo.compareEndPoints(caretInfo, "endToStart")
 		log.debug("diff: %s" % diff)
 		# if diff >= 0 and not wordSeparator.isspace():
@@ -509,13 +510,13 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 			# For example, this can occur in Notepad++ when auto indentation is on.
 			log.debug("Word before caret contains only spaces")
 			return (None, None)
-		wordInfo.collapse()
-		wordInfo.expand(textInfos.UNIT_WORD)
+		caretInfo.collapse()
+		wordInfo.setEndPoint(caretInfo, "endToStart")
 		log.debug("word1: %s" % wordInfo.text)
 		# with notepad editor, wordSeparator is at the end of word.  So we need to suppress it
 		# not same thing with other editor as notepad++, wordpad, word.
 		log.debug("word: %s, sep: %s" % (wordInfo.text, ord(wordSeparator)))
-		if len(wordInfo.text) and wordInfo.text[-1] == wordSeparator:
+		if len(wordInfo.text) and not wordInfo.text[-1].isalnum():
 			# the word is before the wordSeparator
 			res = wordInfo.move(textInfos.UNIT_CHARACTER, -1, endPoint="end")
 			log.debug("word2: %s, %s" % (res, wordInfo.text))
