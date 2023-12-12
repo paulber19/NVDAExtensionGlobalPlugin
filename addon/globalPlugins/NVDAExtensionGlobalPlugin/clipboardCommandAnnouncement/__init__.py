@@ -434,6 +434,7 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 			2. If the caret has moved and a new word has been typed, a TextInfo
 				expanded to the word that has just been typed.
 		"""
+		debug = False
 		log.debug("hasNewWordBeenTyped: wordSeparator= %s (%s)" % (wordSeparator, ord(wordSeparator)))
 		if not self.useTextInfoToSpeakTypedWords:
 			return (None, None)
@@ -450,10 +451,11 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 		if not caretMoved or not caretInfo or not caretInfo.obj:
 			log.debug("not caret moved")
 			return (None, None)
-		info = caretInfo.copy()
-		info.expand(textInfos.UNIT_LINE)
-		log.debug("caretInfo line: %s" % [ord(x) for x in info.text])
-		log.debug("caretInfo: %s, bookmark= %s" % (info.text, info.bookmark))
+		if debug:
+			info = caretInfo.copy()
+			info.expand(textInfos.UNIT_LINE)
+			log.debug("caretInfo line: %s" % [ord(x) for x in info.text])
+			log.debug("caretInfo: %s, bookmark= %s" % (info.text, info.bookmark))
 		tempInfo = caretInfo.copy()
 		if ord(wordSeparator) == 13:
 			# in notepad, after return, caret bookmark is on new  line and crlf on previous line
@@ -468,6 +470,11 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 				# in notepad++, we get 2 characters and not oly one ???
 				if len(info1.text) == 1 and ord(info1.text) == 10:  # character lf
 					tempInfo.move(textInfos.UNIT_CHARACTER, -1)
+			else:
+				# no previous line
+				return (False, None)
+
+				# let's position on the last character typed
 		res = tempInfo.move(textInfos.UNIT_CHARACTER, -2)
 		if res != 0:
 			tempInfo.expand(textInfos.UNIT_CHARACTER)
@@ -482,9 +489,10 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 				log.debug("caret-2 is not alphanumericc")
 				return (False, None)
 		wordInfo = self.makeTextInfo(bookmark)
-		info = wordInfo.copy()
-		info.expand(textInfos.UNIT_WORD)
-		log.debug("wordInfo: %s" % info.text)
+		if debug:
+			info = wordInfo.copy()
+			info.expand(textInfos.UNIT_WORD)
+			log.debug("wordInfo: %s" % info.text)
 		# The bookmark is positioned after the end of the word.
 		# Therefore, we need to move it one character backwards.
 		res = wordInfo.move(textInfos.UNIT_CHARACTER, -1)
@@ -496,7 +504,7 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 		if diff >= 0 and wordSeparator.isalnum():
 			# This is no word boundary.
 			return (False, None)
-		elif wordInfo.text.isspace():
+		if wordInfo.text.isspace():
 			# There is only space, which is not considered a word.
 			# For example, this can occur in Notepad++ when auto indentation is on.
 			log.debug("Word before caret contains only spaces")
@@ -527,7 +535,6 @@ class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
 			pass
 
 	def event_typedCharacter(self, ch: str):
-
 		if (
 			config.conf["documentFormatting"]["reportSpellingErrors"]
 			and config.conf["keyboard"]["alertForSpellingErrors"]

@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin\n"
-"Report-Msgid-Bugs-To: nvda-translations@freelists.org\n"
-"POT-Creation-Date: 2023-07-10 15:49+0200\n"
+"Report-Msgid-Bugs-To: PaulBer19 (paulber19@laposte.net\n"
+"POT-Creation-Date: 2023-11-25 17:27+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: wafiq <wafiqtaher@gmail.com>\n"
+"Last-Translator: wafiqtaher <wafiqtaher@gmail.com>\n"
 "Language-Team: وفيق طاهر <wafiqtaher@gmail.com>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Bookmarks: -1,198,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: utilities\n"
@@ -24,20 +24,97 @@ msgstr ""
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on to be shown on installation
 #. and add-on information.
-#: buildVars.py:28
+#: buildVars.py:25
 msgid "NVDA global commands extension"
-msgstr "وظائف  إضافية لnvda"
+msgstr "وظائف إضافية لnvda"
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on
 #. add-on information from add-ons manager
-#: buildVars.py:32
+#: buildVars.py:29
 msgid ""
-"This global add-on provides a multitude of features described in detail in its "
-"user manual (see the add-on's help for this)."
+"This add-on brings to NVDA a multitude of features which can be activated or "
+"deactivated individually depending on the need.\n"
+"Here are a few:\n"
+"* Display of the list of icons in the notification area or windows of "
+"applications launched,\n"
+"* Help in the composition of a symbol that is complex such as, for example, a "
+"a e related, a symbol power of 2 and possibility to add its own categories and "
+"symbols,\n"
+"* Extension of the functionality of the virtual buffer for browser:\n"
+" * new commands for navigation mode (paragraph, division, anchor, main "
+"landmark),\n"
+" * new types of elements for the dialog box opened by \"NVDA+F7\" (radio "
+"button, paragraph, frame, checkBox, etc) with the announcement of the number "
+"of items found,\n"
+" * option to browse in a loop in search of a next or previous item,\n"
+" * new scripts for table: cell/line/column announcement, move to the next or "
+"previous column / row with announcement of the cells composing it,\n"
+"* intelligent announcement of the function of editing commands like Copy, cut "
+"or Paste and improvement of the NVDA base script which announces the text in "
+"the clipboard(\"NVDA+c\" ),\n"
+"* voice speechs's history,\n"
+"* renaming keyboard keys,\n"
+"* selective announcement of command keys,\n"
+"* display of visible elements making up the object in the foreground and "
+"possibility to move to or click on the elements,\n"
+"* quick voice profile switching,\n"
+"* persistence of NVDA and modification keys and specific persistence for the "
+"gmail.com site,\n"
+"* shutdown, restart or Hibernate the computer,\n"
+"* management of input gestures configured by user,\n"
+"* sound control: system/ NVDA/application's quick volume changes, audio split, "
+"temporary audio output device switching,\n"
+"* user configurations management and NVDA restarting  with precise "
+"configuration,\n"
+"* text analyser,\n"
+"* quick add-ons activation / desactivation,\n"
+"* Announcement or display of information about the application under focus, "
+"such as its version, the active configuration profile, loaded add-on,\n"
+"* possible use of numeric keypad as standard numeric keypad,\n"
+"* possibility of executing scripts from the \"Input gestures\" dialog,\n"
+"* and more.\n"
+"\n"
+"For the full list of the add-on's features and their description, see the user "
+"manual.\n"
 msgstr ""
-"توفر هذه الوظيفة الإضافية العالمية العديد من الميزات الموضحة بالتفصيل في دليل "
-"المستخدم الخاص بها (انظر تعليمات الوظيفة الإضافية لهذا الغرض)."
+"توفر هذه الوظيفة الإضافية لـ NVDA العديد من الميزات التي يمكن تفعيلها أو إلغاء "
+"تنشيطها بشكل فردي حسب الحاجة.\n"
+"فيما يلي بعض منها:\n"
+"* عرض قائمة الرموز في منطقة الإعلام أو نوافذ التطبيقات التي تم تشغيلها،\n"
+"* المساعدة في تكوين رمز معقد مثل، على سبيل المثال، مرتبط بـ e، وقوة رمز 2 "
+"وإمكانية إضافة فئاته ورموزه الخاصة،\n"
+"* توسيع وظيفة المخزن المؤقت الظاهري للمتصفح:\n"
+" * أوامر جديدة لوضع التنقل (فقرة، قسمة، مرساة، معلم رئيسي)،\\n\n"
+" * أنواع جديدة من عناصر مربع الحوار المفتوح بواسطة \"NVDA+F7\" (زر الاختيار، "
+"الفقرة، الإطار، مربع الاختيار، إلخ) مع الإعلان عن عدد العناصر الموجودة،\n"
+" * خيار التصفح في حلقة بحثاً عن العنصر التالي أو السابق،\n"
+" * برامج نصية جديدة للجدول: إعلان الخلية/السطر/العمود، الانتقال إلى العمود/"
+"الصف التالي أو السابق مع الإعلان عن الخلايا التي تتكون منه،\n"
+"* إعلان ذكي عن وظيفة أوامر التحرير مثل النسخ أو القص أو اللصق وتحسين سكربت "
+"NVDA الأساسي الذي يعلن النص في الحافظة(\"NVDA+c\" ),\n"
+"* تاريخ الخطابات الصوتية،\n"
+"* إعادة تسمية مفاتيح لوحة المفاتيح،\n"
+"* إعلان انتقائي لمفاتيح الأوامر،\n"
+"* عرض العناصر المرئية التي تشكل الكائن في المقدمة وإمكانية الانتقال إلى "
+"العناصر أو النقر عليها،\n"
+"* التبديل السريع لملف الصوت،\n"
+"* ثبات NVDA ومفاتيح التعديل والثبات المحدد لموقع gmail.com،\n"
+"* إيقاف تشغيل الكمبيوتر أو إعادة تشغيله أو إسباته،\n"
+"* إدارة إيماءات الإدخال التي تم تكوينها من قبل المستخدم،\n"
+"* التحكم في الصوت: تغييرات سريعة في مستوى الصوت للنظام/ NVDA/التطبيق، وتقسيم "
+"الصوت، والتبديل المؤقت لجهاز إخراج الصوت،\n"
+"* إدارة تكوينات المستخدم وإعادة تشغيل NVDA بتكوين دقيق،\n"
+"*محلل النص\n"
+"* تفعيل / إلغاء تنشيط الإضافات السريعة،\n"
+"* إعلان أو عرض معلومات حول التطبيق قيد التركيز، مثل إصداره، وملف تعريف التكوين "
+"النشط، والوظيفة الإضافية المحملة،\n"
+"* إمكانية استخدام لوحة المفاتيح الرقمية كلوحة مفاتيح رقمية قياسية،\n"
+"* إمكانية تنفيذ البرامج النصية من مربع الحوار \"إيماءات الإدخال\"،\n"
+"* والمزيد.\n"
+"\n"
+"للحصول على القائمة الكاملة لميزات الوظيفة الإضافية ووصفها، راجع دليل "
+"المستخدم.\n"
 
 #. Translators: the label of a message box dialog.
 #: installTasks.py:90
@@ -67,73 +144,73 @@ msgstr ""
 "الوظيفة الإضافية"
 
 #. Translators: message for indicate shell command in input help mode.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:422
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:423
 #, python-format
 msgid "(command: %s)"
 msgstr "(الإختصار: %s)"
 
 #. Translators: the tooltip text for addon submenu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:456
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:457
 #, python-format
 msgid "%s add-on configuration menu"
 msgstr "قائمة تكوين الإضافة %s"
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:460
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:461
 msgid "Global settings..."
 msgstr "الاعدادات العامة..."
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:467
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:468
 msgid "Current configuration profile settings..."
 msgstr "إعدادات ملف تعريف التكوين الحالي ..."
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:476
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:477
 msgid "Keyboard Keys renaming..."
 msgstr "إعادة تسمية المفاتيح..."
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:486
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:487
 msgid "Command keys selective announcement..."
 msgstr "نطق المفاتيح..."
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:495
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:496
 msgid "Reset configuration to default values"
 msgstr "إعادة ضبط الإعدادات لى القيم الافتراضية"
 
 #. Translators: the name of addon submenu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:505
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:506
 msgid "Explore &NVDA"
 msgstr "استكشاف &NVDA"
 
 #. Translators: the tooltip text for addon submenu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:507
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:508
 msgid "Menu to explore the NVDA program folder or the user configuration folder"
 msgstr "قائمة لاستكشاف مجلد برنامج NVDA أو مجلد إعدادات المستخدم"
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:511
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:512
 msgid "My &configuration's folder"
 msgstr "مجلد الإ&عدادات"
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:520
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:521
 msgid "NVDA &Program folder"
 msgstr "م&جلد برنامج nvda"
 
 #. Translators: name of the option in the menu.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:529
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:530
 msgid "Manage user configurations"
 msgstr "إدارة تكوين المستخدم"
 
 #. Translators: message to user to wait.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:652
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:660
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1169
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1623
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:649
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:659
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:667
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1176
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1630
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:681
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:597
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:831
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:882
@@ -148,7 +225,7 @@ msgstr "الرجاء الإنتظار"
 #. Translators: message to report date and time copy to clipboard.
 #. Translators: message to user to report copy to clipboard
 #. Translators: message to user to report path copy to clipboard
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:741
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:748
 #: globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py:123
 #: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:128
 msgid "{0} copied to clipboard"
@@ -156,106 +233,106 @@ msgstr "{0} تم النسخ إلى الحافظة"
 
 #. Translators: Indicates the name of the configuration profile trigger
 #. for the current program.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:814
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:821
 msgid "Configuration's profile {profileName} {state}"
 msgstr "تكوين الملف الشخصي ' {profileName} {state}"
 
 #. Translators: message to report app version.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:883
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:890
 msgid "{0} version {1}"
 msgstr "{0} إصدار {1}"
 
 #. Translators: message to report that product name and version are copied to clipboard.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:889
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:896
 msgid "Product name and version has been copied to clipboard"
 msgstr "إسم الملحق وإصداره تم نسخه إلى الحافظة"
 
 #. Translators: indicate name and version of active addon
 #. for current focused application.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:909
-msgid "add-on: {name}, version: {version}"
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:916
+msgid "Add-on: {name}, version: {version}"
 msgstr "الإضافة: {name} ، الإصدار: {version}"
 
 #. Translators: indicates that there is no active addon
 #. for current focused application.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:915
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:922
 msgid "No add-on"
 msgstr "لاتوجد  إضافات"
 
 #. Translators: Indicates the name of the configuration profile trigger
 #. for the current program.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:950
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:957
 msgid "Configuration profile: {profileName} {state}"
 msgstr "تكوين الملف الشخصي: {profileName} {state}"
 
 #. Translators: Indicates the name of the current program and it version.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:960
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:967
 msgid "Application: {appName} {appVersion}"
 msgstr "البرنامج هو: {appName} والإصدار {appVersion}"
 
 #. Translators: indicates name and version of current add-on.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:985
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:992
 msgid "{summary}, version: {version}"
 msgstr "ملخص {summary}, الإصدار: {version}"
 
 #. Translators: indicates summary of current add-on.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:990
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:997
 #, python-format
 msgid "Active add-on: %s"
 msgstr "الإضافة النشطة -هي: %s"
 
 #. Translators: path of current add-on
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:993
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1000
 #, python-format
-msgid "add-on's path: %s"
-msgstr "مسار الوظيفة الإضافية:%s"
+msgid "Add-on's path: %s"
+msgstr "مسار الوظيفة الإضافية: %s"
 
 #. Translators: indicate that others add-ons are installed
 #. and activated for this application.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:998
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1005
 msgid ""
 "Warning: it seems that others add-ons are installed and activated for this "
 "application"
 msgstr "تحذير: يبدو إن الإضافة تستخدم مع تطبيقات أخرى"
 
 #. Translators: Indicates the name of the appModule for the current program.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1001
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1008
 #, python-format
 msgid "Loaded python module: %s"
 msgstr "وحدة بايثون المحملة ل %s"
 
 #. Translators: title of informationdialog box to show appModule informations.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1004
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1011
 msgid "Application context's informations"
 msgstr "معلومات سياق التطبيق"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1037
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:164
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1044
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:159
 msgid "Current log file path copied to clipboard"
 msgstr "تم نسخ مسار ملف السجلالحالي  الى الحافظة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1039
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:166
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1046
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:161
 msgid "Current log file path cannot be copied to clipboard"
 msgstr "لا يمكن نسخ مسار ملف السجل الحالي إلى الحافظة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1044
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:147
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1051
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:101
 msgid "Previous log file cannot be opened"
 msgstr "لا يمكن فتح ملف السجل السابق"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1048
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:141
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1055
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:104
 msgid "Current log file cannot be opened"
 msgstr "لا يمكن فتح ملف السجل الحالي"
 
 #. Translators: dialog title.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1056
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1063
 msgid "File open Error"
 msgstr "خطأ في فتح الملف"
 
 #. Translators: message to confirm computer shutdown.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1180
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1187
 msgid "Are you sure you want to shutdown immediately the computer ?"
 msgstr "هل أنت متأكد أنك تريد إيقاف تشغيل جهاز الكمبيوتر على الفور؟"
 
@@ -264,12 +341,13 @@ msgstr "هل أنت متأكد أنك تريد إيقاف تشغيل جهاز ا
 #. in command keys selective announcement dialog.
 #. Translators: the title of a message box dialog.
 #. Translators: dialog title.
+#. Translators: message box title
 #. Translators: the title of a message box dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1182
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1198
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1214
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1494
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:783
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1189
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1205
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1221
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1501
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:785
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:459
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:470
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:538
@@ -277,33 +355,35 @@ msgstr "هل أنت متأكد أنك تريد إيقاف تشغيل جهاز ا
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:437
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:552
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:588
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:700
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:741
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:754
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1160
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1562
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:705
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:746
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:759
 msgid "Confirmation"
 msgstr "تأكيد"
 
 #. Translators: message to confirm computer reboot.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1196
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1203
 msgid "Are you sure you want to reboot immediately the computer ?"
 msgstr "هل أنت متأكد أنك تريد إعادة تشغيل الكمبيوتر على الفور؟"
 
 #. Translators: message to confirm computer hibernation.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1212
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1219
 msgid "Are you sure you want to hibernate immediately the computer ?"
 msgstr "هل أنت متأكد أنك تريد إسبات الكمبيوتر على الفور؟"
 
 #. Translators: this is the title <of informationdialog box
 #. to show current speech settings.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1233
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1240
 msgid "Current speech settings"
 msgstr "إعدادات النطق الحالية"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1285
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1292
 msgid "Voice profile switch mode on"
 msgstr "التبديل لوضع ملف التعريف الصوتي تشغيل"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1289
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1296
 msgid "Voice profile switch mode off"
 msgstr "التبديل لوضع الملف التعريف الصوتي إيقاف"
 
@@ -311,36 +391,36 @@ msgstr "التبديل لوضع الملف التعريف الصوتي إيقا�
 #. Translators: message to user to report  the selector is not set.
 #. Translators: this is a message to inform the user
 #. that the selector is not associated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1308
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:283
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:379
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1315
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:288
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:384
 #, python-format
 msgid "Selector %s is free"
 msgstr "لم يتم تعريف أي صوت على %s"
 
 #. Translators: message to user no configuration change made.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1339
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1346
 msgid "There was no change of input gesture made by the user"
 msgstr "لم يكن هناك تغيير في إيماءة الإدخال بواسطة المستخدم"
 
 #. Translators: Reported when left mouse button is clicked.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1361
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1368
 msgid "Double left click"
 msgstr "نقرتين بزر الفأرة اليسرى"
 
 #. Translators: Reported when the object has no location
 #. for the mouse to move to it.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1377
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1420
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1384
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1427
 msgid "Object has no location"
 msgstr "ليس هناك موقع للكائن"
 
 #. Translators: Reported when right mouse button is clicked.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1404
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1411
 msgid "Double right click"
 msgstr "نقرتين بزر الفأرة الأيمن"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1451
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1458
 msgid ""
 "This functionnality is only available if \"command keys selective "
 "announcement\" functionnality or \"keys's remanence\" functionnality is "
@@ -350,121 +430,121 @@ msgstr ""
 "أو وظيفة \"إعادة المفاتيح\""
 
 #. Translators: message to user the fonctionnality is not available.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1462
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1469
 msgid "The standard use of the numeric keypad is not allowed"
 msgstr "لا يُسمح بالاستخدام القياسي للوحة المفاتيح الرقمية"
 
 #. Translators: message to confirm closing all windows
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1492
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1499
 #: globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:358
 msgid "Are you sure you want to close all windows?"
 msgstr "هل أنت متأكد أنك تريد إغلاق جميع النوافذ؟"
 
 #. Translators: extension type tag.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1513
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1520
 msgid "global"
 msgstr "عالمي"
 
 #. Translators: extension type tag.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1515
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1522
 msgid "application"
 msgstr "مفتاح التطبيقات"
 
 #. Translators: extension type tag.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1517
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1524
 msgid "speech synthesizer driver"
 msgstr "محرك الصوت"
 
 #. Translators: extension type tag.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1519
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1526
 msgid "braille display driver"
 msgstr "برنامج تشغيل شاشة برايل"
 
 #. Translators: extension type tag.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1521
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1528
 msgid "mixed"
 msgstr "مختلط"
 
 #. Translators: add-on type.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1523
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1530
 #, python-format
 msgid "%s add-on type:"
 msgstr "نوع الوظيفة الإضافية %s:"
 
 #. Translators: no add-on
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1525
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:638
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1532
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:640
 msgid "any"
 msgstr "أي"
 
 #. Translators: title of informationdialog box to show active add-ons.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1590
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1597
 msgid "Running add-ons"
 msgstr "تشغيل الوظائف الإضافية"
 
 #. Translators: message to user when text analysis is not available (for example by sentence).
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1620
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1627
 msgid "Text analysis not available"
 msgstr "تحليل النص غير متوفر"
 
 #. Translators: message to user to report no analysis alert.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1630
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1637
 msgid "Nothing to report"
 msgstr "لا شيء للإبلاغ عنه"
 
 #. Translators: message to indicate then report current caret position is on.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1657
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1664
 msgid "report current caret position on"
 msgstr "تشغيل الإبلاغ عن موضع علامة الإقحام الحالي"
 
 #. Translators: message to indicate then report current caret position is off.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1660
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1667
 msgid "report current caret position off"
 msgstr "إيقاف الإبلاغ عن موضع علامة الإقحام الحالي"
 
 #. Translators: message to report clipboard is empty
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1667
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:270
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:648
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1674
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:273
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:714
 msgid "Clipboard is empty"
 msgstr "الحافظة فارغة"
 
 #. Translators: Presented when there is no text on the clipboard, but clipboard is not empty.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1676
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1683
 msgid "but the clipboard is not empty"
 msgstr "لكن الحافظة ليست فارغة"
 
 #. Translators: message to user to report clipboard
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1707
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1714
 msgid "Clipboard cleared"
 msgstr "مسح الحافظة"
 
 #. Translators: message to user because of error on clipboard clearing
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1710
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1717
 msgid "Error: clipboard cannot cleared"
 msgstr "خطأ: لا يمكن مسح الحافظة"
 
 #. Translators: message to user when cycle is not possible
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1726
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1733
 msgid "cycle is not possible on audio output device"
 msgstr "دورة غير ممكنة على جهاز إخراج الصوت"
 
 #. Translators: this is the title of Helper dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1828
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1834
 msgid "Shell's scripts"
 msgstr "الإختصارات"
 
 #. the list box
 #. Translators: This is the label of the list appearing
 #. on HelperDialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1861
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1867
 msgid "Description: command"
 msgstr "الوصف: الإختصار"
 
 #. Translators: This is a label of a button appearing
 #. on HelperDialog
 #. Translators: The label of a button to run the script in the Input Gestures dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1876
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1882
 #: globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\inputGesturesEx.py:83
 msgid "&Execute the script"
 msgstr "&تنفيذ الإختصار"
@@ -530,6 +610,7 @@ msgid "Impossible to destroy the window"
 msgstr "لا يمكن إغلاق هذه النافذة"
 
 #. Translators: dialog title.
+#. Translators: warning dialog title
 #. Translators: the title of a message box dialog.
 #. Translators: message box title .
 #. Translators: message box dialog title.
@@ -540,6 +621,7 @@ msgstr "لا يمكن إغلاق هذه النافذة"
 #. Translators: title of message box
 #. Translators: the title of a message box dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:360
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:778
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:251
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:485
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:816
@@ -550,8 +632,8 @@ msgstr "لا يمكن إغلاق هذه النافذة"
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1005
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1334
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1604
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:282
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:363
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:287
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:368
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:105
 #: globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\__init__.py:124
 msgid "Warning"
@@ -796,44 +878,44 @@ msgid "Cannot add"
 msgstr "لا يمكن الإضافة"
 
 #. Translators: message to the user on cut command activation.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:70
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:69
 msgid "Cut"
 msgstr "قص"
 
 #. Translators: message to the user on paste command activation.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:72
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:71
 msgid "Paste"
 msgstr "لصق"
 
 #. Translators: message to the user on copy command activation.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:74
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:73
 msgid "Copy"
 msgstr "نسخ"
 
 #. Translators: message to the user on undo command activation.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:76
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:75
 msgid "Undo"
 msgstr "تراجع"
 
 #. Translators: message to the user on select all command activation.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:78
-msgid "select all"
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:77
+msgid "Select all"
 msgstr "تحديد الكل"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:594
-msgid " one selected object"
-msgstr " تحديد كائن واحد"
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:660
+msgid "One selected object"
+msgstr "تحديد كائن واحد"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:597
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:663
 #, python-format
 msgid "%s selected objects"
 msgstr "%s الكائنات المحددة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:705
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:772
 msgid ""
-"clipspeak add-on has been detected on your system. In order for Clipboard "
+"The clipspeak add-on has been detected on your system. In order for Clipboard "
 "command announcement feature to work without conflicts, clipSpeak add-on must "
 "be desactivated or uninstalled.But if you want to use clipSpeak add-on, "
 "Clipboard command announcement feature must be uninstalled. Would you like to "
@@ -844,82 +926,77 @@ msgstr ""
 "تثبيتها ، ولكن إذا كنت تريد استخدام الوظيفة الإضافية clipSpeak ، فيجب إلغاء "
 "تثبيت ميزة إعلان أمر الحافظة. هل ترغب في إلغاء تثبيت هذه الميزة الآن؟"
 
-#. Translators: question title
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:711
-msgid "clipSpeak add-on detection"
-msgstr "الكشف عن الوظيفة الإضافية ClipSpeak"
-
 #. Translators: label of anyKey item in the excluded keys list.
 #: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:94
 msgid "Any key with modifier key combination"
 msgstr "أي مفتاح مع مجموعة مفاتيح التعديل"
 
 #. Translators: message to user to report keys remanence is on.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:265
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:267
 msgid "Keys's remanence activation on"
 msgstr "تشغيل ثبات المفاتيح"
 
 #. Translators: message to user to report keys remanence is off.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:271
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:273
 msgid "Keys's remanence activation off"
 msgstr "إيقاف ثبات المفاتيح"
 
 #. Translators: message to user to report numpad navigation mode change.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:403
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:405
 msgid "Standard use of the numeric keypad enabled"
 msgstr "الاستخدام القياسي للوحة المفاتيح الرقمية مفعله"
 
 #. Translators: message to user to report numpad navigation mode change.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:406
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:408
 msgid "Standard use of the numeric keypad disabled"
 msgstr "الاستخدام القياسي للوحة المفاتيح الرقمية معطلة"
 
 #. Translators: title for the Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:598
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:600
 msgid "Command keys selective Announcement"
 msgstr "قائمة ازرار لوحة المفاتيح"
 
 #. the keyboard key list box
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:696
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:698
 msgid "Check &excluded keys:"
 msgstr "الت&حقق من من حالة المفاتيح:"
 
 #. the modifiers keys list box
 #. Translators: This is a label appearing
 #. on Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:711
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:713
 msgid "Pressed W&ith modifier key combination:"
 msgstr "ال&ضغط مع مجموعة مفاتيح التعديل:"
 
 #. Translators: This is a label of a button appearing
 #. on Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:730
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:732
 msgid "&Check all modifier combinations"
 msgstr "&تحديد كافة تركيبات المُعدِلات"
 
 #. Translators: This is a label of a button appearing
 #. on Command Keys Selective Announcement Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:736
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:738
 msgid "&Uncheck all modifier combinations"
 msgstr "&قم بإلغاء تحديد كافة تركيبات المعدلات"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:775
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:777
 msgid "Do not speak command &keys"
 msgstr "&لا تنطق أسماء المفاتيح"
 
 #. Translators: the text of a message box dialog
 #. in Command keys selective announcement dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:780
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:782
 #, python-format
 msgid "Do you want to save changes made in \"%s\" mode?"
 msgstr "هل تريد حفظ التغييرات التي تم إجراؤها في وضع \" %s\"؟"
 
 #. Translators: message to user when there is no more checked command key.
 #. Translators: message to user when there is no more checked command key .
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:913
-#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:932
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:915
+#: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:934
 msgid "No more checked command key"
 msgstr "لا يوجد المزيد من المفاتيح"
 
@@ -944,7 +1021,7 @@ msgstr "الت&صنيفات:"
 #. Translators: This is the label for a checkListBox in the TextAnalyzer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:89
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:310
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1430
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1441
 msgid "S&ymbols:"
 msgstr "الروم&ز:"
 
@@ -1191,98 +1268,98 @@ msgid "Folder %s"
 msgstr "المجلد %s"
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:43
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:44
 msgid "to left"
 msgstr "الى اليسار"
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:45
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:46
 msgid "to right"
 msgstr "إلى اليمين"
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:47
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:48
 msgid "in center"
 msgstr "في المنتصف"
 
 #. Translators: part of message to report position of application on speakers
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:49
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:50
 msgid "channels muted"
 msgstr "كتم القنوات"
 
 #. Translators: part of message for announcement of application volume level.
 #. Translators: This is the label for a group
 #. in NVDA and audio Applications manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:52
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:53
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:103
 msgid "Volume"
 msgstr "المستوى"
 
 #. Translators: part of message for announcement of speakers volume level.
 #. Translators: This is the label for a group of main volume options in the computer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:54
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:55
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:607
 msgid "Main volume"
 msgstr "مستوى الصوت الرئيسي"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:143
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:146
 msgid "Volume on"
 msgstr "تشغيل الصوت"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:145
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:148
 msgid "volume off"
 msgstr "كتم الصوت"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:184
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:189
 msgid "stronger on the right"
 msgstr "أقوى على اليمين"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:186
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:191
 msgid "stronger on the left"
 msgstr "أقوى على اليسار"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:204
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:209
 msgid "System sounds"
 msgstr "أصوات النظام"
 
 #. Translators: message to user to indicate that the application don't use any output audio device
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:330
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:341
 msgid "This application don't use any output audio device"
 msgstr "لا يستخدم هذا التطبيق أي جهاز إخراج صوتي"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:409
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:420
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:157
 msgid "Unavailable for NVDA"
 msgstr "غير متوفر لبرنامج nvda"
 
 #. Translators: message to user that NVDA is not a stereo audio source
 #. Translators: message to user that audio source is not a stereo audio source
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:422
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:497
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:523
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:433
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:508
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:534
 #, python-format
 msgid "Not available: %s is not a stereo audio source"
 msgstr "غير متوفر: %s ليس مصدر صوت ستريو"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:434
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:445
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:456
 msgid "NVDA {to}, {app} {appTo}"
 msgstr "برنامج NVDA {to}, {app} {appTo}"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:436
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:447
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:458
 msgid "NVDA {to} and all other audio sources {appTo}"
 msgstr "NVDA {to} وجميع مصادر الصوت الأخرى {appTo}"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:456
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:467
 msgid "NVDA and {app} {to}"
 msgstr "NVDA و {app} {to}"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:458
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:469
 msgid "All audio sources {appTo}"
 msgstr "كل مصادر الصوت {appTo}"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:604
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:615
 #, python-format
 msgid ""
 "Impossible, the volume level cannot be lower than the configured recovery "
@@ -1324,11 +1401,11 @@ msgid "&leave up the temporary audio device"
 msgstr "&مغادرة جهاز الصوت المؤقت"
 
 #. Translators: this is the title of ConfirmOutputDevice dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioDevice.py:297
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioDevice.py:285
 msgid "Confirm"
 msgstr "تأكيد"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioDevice.py:303
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioDevice.py:291
 #, python-format
 msgid ""
 "You have %s seconds to accept the use of this audio device for all "
@@ -1337,14 +1414,22 @@ msgstr ""
 "لديك %s ثانية لقبول استخدام جهاز الصوت هذا لكافة ملفات تعريف التكوين بغض النظر "
 "عن الاختيار الذي تم إجراؤه في إعدادات الصوت الخاصة بهم"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioDevice.py:320
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioDevice.py:308
 msgid "&Accept"
 msgstr "&قبول"
 
 #. Translators: this is the title of NVDA and Applications audio Channels manager dialog
+#. Translators: This is the label for a group of editing options in the computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:52
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:842
 msgid "Audio sources's manager"
 msgstr "مدير مصادر الصوت"
+
+#. Translators: This is the label for a listbox
+#. in NVDA and audio Applications manager dialog
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:72
+msgid "Audio output &device:"
+msgstr "جهاز الإ&خراج:"
 
 #. Translators: label to indicate that the device is the default system peripheral
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:74
@@ -1405,167 +1490,167 @@ msgstr "&حجم النغمات:"
 msgid "&change sound files's gain"
 msgstr "&تغيير معاملات ملفات الصوت"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:264
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:266
 msgid "refresh terminated"
 msgstr "تم إنهاء التحديث"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:271
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:273
 msgid "Please wait, refreshing list"
 msgstr "قائمة التحديث الرجاء الإنتظار"
 
 #. Translators: volume is mute
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:386
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:504
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:388
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:536
 msgid "mute"
 msgstr "كتم"
 
 #. Translators: volume is unmute
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:507
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:539
 msgid "unmute"
 msgstr "إلغاء الكتم"
 
 #. not available
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:526
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:534
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:549
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:556
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:570
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:558
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:566
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:581
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:588
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:602
 msgid "Not available, NVDA don't use this audio output device"
 msgstr "غير متوفر ، لا يستخدم NVDA جهاز الإخراج الصوتي هذا"
 
 #. Translators: message to user to inform
 #. hat the NVDA channel levels cannot be set to zero simultaneously
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:600
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:632
 msgid "The volume of NVDA channels cannot be zero both simultaneously"
 msgstr "لا يمكن أن يكون حجم قنوات NVDA صفرًا في نفس الوقت"
 
 #. Translators: message to user for waiting the end of audio output devices searching
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:648
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:680
 msgid "Searching for audio output devices in progress"
 msgstr "جاري البحث عن أجهزة إخراج الصوت"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:677
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:709
 msgid "Browse mode activated"
 msgstr "تم تنشيط وضع التصفح"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:678
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:710
 msgid "Focus mode activated"
 msgstr "تم تنشيط وضع التركيز"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:679
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:711
 msgid "Error"
 msgstr "خطأ"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:680
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:712
 msgid "NVDA exit"
 msgstr "الخروج من NVDA"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:681
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:713
 msgid "Screen curtain off"
 msgstr "ستارة الشاشة مغلقة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:682
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:714
 msgid "Screen curtain on"
 msgstr "ستارة الشاشة قيد التشغيل"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:683
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:715
 msgid "NVDA start"
 msgstr "بدء تشغيل NVDA"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:684
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:716
 msgid "Suggestions closed"
 msgstr "تم إغلاق الاقتراحات"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:685
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:717
 msgid "Suggestions Opened"
 msgstr "تم تشغيل الاقتراحات"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:686
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:718
 msgid "Text error"
 msgstr "خطأ نصي"
 
 #. Translators: This is the title of the ModifyGainImport dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:694
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:726
 msgid "NVDA sound files's Gain modification"
 msgstr "تعديل المعاملات لملفات NVDA الصوتية"
 
 #. Translators: This is the label of list box appearing
 #. on the ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:746
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:778
 msgid "&Sounds:"
 msgstr "ا&صوات:"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:751
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:882
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:783
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:914
 msgid "modified"
 msgstr "معدل"
 
 #. translators: this is a label for a button in ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:760
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:792
 msgid "&Play"
 msgstr "ت&شغيل"
 
 #. Translators: This is the label for a group
 #. in ModifyGaindialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:765
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:797
 msgid "Gain"
 msgstr "يكسب"
 
 #. Translators: This is the label of choice box appearing
 #. on the ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:772
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:804
 msgid "&Level:"
 msgstr "الم&ستوى:"
 
 #. translators: this is a label for a button in ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:783
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:815
 msgid "&Check"
 msgstr "&يفحص"
 
 #. translators: this is a label for a button in ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:787
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:819
 msgid "&Apply gain"
 msgstr "&تطبيق الكسب"
 
 #. translators: this is a label for a button in ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:791
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:823
 msgid "Apply gain &to all sounds"
 msgstr "تطبيق كسب & لجميع الأصوات"
 
 #. Translators: This is the label for a group
 #. in ModifyGaindialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:796
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:828
 msgid "Back to factory sounds"
 msgstr "العودة إلى أصوات المصنع"
 
 #. translators: this is a label for a button in ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:802
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:834
 msgid "R&eset selected sound"
 msgstr "إ&ضبط الصوت المحدد"
 
 #. translators: this is a label for a button in ModifyGain dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:806
-msgid "reset all s&ounds"
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:838
+msgid "Reset all s&ounds"
 msgstr "إ&عادة تعيين جميع الأصوات"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:893
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:925
 #, python-format
 msgid "The Gain has been applied to %s sound"
 msgstr "تم تطبيق الكسب على %s صوت"
 
 #. Translators: message to user to report gain modification
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:907
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:939
 msgid "Gain has been applied to all sounds"
 msgstr "تم تطبيق الكسب على جميع الأصوات"
 
 #. Translators: message to user to report reseting to factory
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:933
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:965
 #, python-format
 msgid "%s sound resets to factory sound"
 msgstr "%s إعادة الصوت للضبط الإفتراضي"
 
 #. Translators: message to user to report reseting of all sounds
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:942
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py:974
 msgid "All are have been reset to factory sounds"
 msgstr "تمت إعادة ضبط جميع الأصوات على أصوات المصنع"
 
@@ -1680,28 +1765,28 @@ msgstr "قم بتعيين حجم التطبيق المركز الحالي على
 msgid "Set the main volume to %s"
 msgstr "قم بتعيين حجم الصوت الرئيسي على %s"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:172
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:174
 msgid ""
 "The main volume and that of NVDA are established and their level sets to the "
 "one in the configuration"
 msgstr ""
 "تم ضبط مستوى الصوت الرئيسي وكل الأصوات الأخرى بما فيها nvda الى مستوى واحد"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:175
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:177
 msgid "Not available on this operating's system"
 msgstr "لا تتوفر هذه الخدمة على نظام التشغيل هذا"
 
 #. Translators: message to user to report that application and NVDA are not on same output audio device
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:399
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:401
 #, python-format
 msgid ""
 "Not available: %s and NVDA are probably not on tthe same output audio device"
 msgstr "غير متاح: ربما لا يكون %s و NVDA على نفس جهاز الإخراج الصوتي"
 
 #. Translators: message to user to indicate that is not  available because the focused application is NVDA
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:408
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:416
-#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:424
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:410
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:418
+#: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\volumeControlScripts.py:426
 msgid "Not available: focused application is NVDA"
 msgstr "غير متوفر: التطبيق المركّز هو NVDA"
 
@@ -1911,19 +1996,19 @@ msgstr "نس&خ ملف السجل الحالي و المسار إلى الحاف
 msgid "Copy &old log file path to clipboard"
 msgstr "&نسخ مسار ملف السجل القديم إلى الحافظة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:136
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:135
 msgid "Open Error"
 msgstr "خطأ في الفتح"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:181
-msgid "old log file path copied to clipboard"
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:176
+msgid "Old log file path copied to clipboard"
 msgstr "تم نسخ مسار ملف السجل القديم إلى الحافظة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:183
-msgid "old log file path cannot be copied to clipboard"
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:178
+msgid "Old log file path cannot be copied to clipboard"
 msgstr "لا يمكن نسخ مسار ملف السجل القديم إلى الحافظة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:188
+#: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:183
 #, python-format
 msgid "%s dialog is allready open"
 msgstr "%s  مربع الحوار هذا مفتوح بالفعل"
@@ -1987,7 +2072,7 @@ msgstr "المسافة البادئة للفقرة: %s"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\reportFormatting\__init__.py:322
 #, python-format
-msgid "style: %s"
+msgid "Style: %s"
 msgstr "نمط: %s"
 
 #. Translators: a type of line spacing (E.g. single line spacing).
@@ -2148,19 +2233,19 @@ msgstr ""
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:120
 msgid ""
-"report the name of current selected folder in the open or Save dialog box. "
+"Report the name of current selected folder in the open or Save dialog box. "
 "Twice: report full path"
 msgstr ""
 "الإعلان عن اسم المجلد المحدد الحالي في مربع الحوار فتح أو حفظ. مرتين: الإبلاغ "
 "عن المسار الكامل"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:125
-msgid "report the name of current selected folder in the open or Save dialog box"
+msgid "Report the name of current selected folder in the open or Save dialog box"
 msgstr "الإعلان عن اسم المجلد المحدد الحالي في مربع الحوار فتح أو حفظ"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:129
 msgid ""
-"report the full path of current selected folder in the open or Save dialog box"
+"Report the full path of current selected folder in the open or Save dialog box"
 msgstr "الإعلان عن المسار الكامل للمجلد المحدد الحالي في مربع الحوار فتح أو حفظ"
 
 #. Translators: Input help mode message
@@ -2330,8 +2415,8 @@ msgstr "عرض مربع حوار بالإختصارات التي تمت بواس
 #. Translators: Input help mode message
 #. for tools for add-on command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:260
-msgid "Display tools for add-on development dialog "
-msgstr "عرض مربع حوار تطوير الإضافات "
+msgid "Display tools for add-on development dialog"
+msgstr "عرض مربع حوار تطوير الإضافات"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:265
 msgid ""
@@ -2392,7 +2477,7 @@ msgstr "عرض لإعدادات النطق الحالية"
 #. Translators: Input help mode message
 #. for toggleTextAnalyzer script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:304
-msgid "activate or desactivate text analyzer"
+msgid "Activate or desactivate text analyzer"
 msgstr "تنشيط أو إلغاء تنشيط محلل النص"
 
 #. Translators: Input help mode message
@@ -2440,8 +2525,8 @@ msgstr "تبديل الإبلاغ عن موضع علامة الإقحام الح
 #. Translators: Input help mode message
 #. for addToClip script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:342
-msgid "Add, to clipboard, the selected text "
-msgstr "أضف النص المحدد إلى الحافظة "
+msgid "Add, to clipboard, the selected text"
+msgstr "إضافة النص المحدد إلى الحافظة"
 
 #. Translators: Input help mode message
 #. for clearClipboard script commands.
@@ -2531,8 +2616,8 @@ msgstr "الحد الأقصى لصوت nvda"
 #. Translators: Input help mode message
 #. for minimize NVDA volume command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:426
-msgid "Minimize NVDA volume "
-msgstr "الحد الأدنى لصوت nvda "
+msgid "Minimize NVDA volume"
+msgstr "الحد الأدنى لصوت nvda"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:441
 msgid "Set the NVDA volume to previous level"
@@ -2773,7 +2858,7 @@ msgstr "&جهاز الصوت المؤقت:"
 
 #. Translators: This is the label for the settings dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:380
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1214
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1225
 msgid "NVDA enhancements"
 msgstr "تحسينات NVDA"
 
@@ -2785,7 +2870,7 @@ msgstr "التحرير"
 
 #. Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:407
-msgid "maximum number of last &used symbols recorded:"
+msgid "Maximum number of last &used symbols recorded:"
 msgstr "الحد الأ&قصى للرموز المستخدمة الأخيرة:"
 
 #. Translators: This is the label for a group in NVDAEnhancement settings panel
@@ -2797,8 +2882,8 @@ msgstr "نُطق الرسائل"
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:424
-msgid "&Number the records "
-msgstr "الإ&علان عن رقم الرسائل "
+msgid "&Number the records"
+msgstr "الإ&علان عن رقم الرسائل"
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:429
@@ -2817,12 +2902,12 @@ msgstr "&تصفحفي حلقة"
 
 #. Translators: This is the label for a group of editing options in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:451
-msgid "reporting spelling errors"
+msgid "Reporting spelling errors"
 msgstr "الإبلاغ عن الأخطاء الإملائية"
 
 #. Translators: This is the label for a choice box in the TextAnalyzer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:457
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1521
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1532
 msgid "Report &by:"
 msgstr "&الإبلاغ بواسطة:"
 
@@ -2830,13 +2915,13 @@ msgstr "&الإبلاغ بواسطة:"
 #. NVDAEnhancement settings panel
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:470
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1276
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1287
 msgid "Clipboard"
 msgstr "الحافظة"
 
 #. Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:476
-msgid "maximum number of reported characters:"
+msgid "Maximum number of reported characters:"
 msgstr "الحد الأقصى لعدد الأحرف المبلغ عنها:"
 
 #. Translators: choice for no limit
@@ -2950,12 +3035,12 @@ msgstr "اطلب التأكيد"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:681
-msgid "ma&ximum waiting time for confirmation (in seconds):"
+msgid "Ma&ximum waiting time for confirmation (in seconds):"
 msgstr "الحد الأ&قصى لوقت انتظار التأكيد (بالثواني):"
 
 #. Translators: This is the label for the Advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:748
-msgid "advanced"
+msgid "Advanced"
 msgstr "متقدم"
 
 #. becarefull: order is important
@@ -3032,214 +3117,214 @@ msgid ""
 "switching"
 msgstr "&حفظ إعدادات الصوت الحالية للمحدد الحالي تلقائيًا قبل التبديل"
 
-#. Translators: This is the label for a group of editing options in the computer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:842
-msgid "NVDA sounds"
-msgstr "أصوات NVDA"
-
 #. Translators: This is the label for a checkbox in the Advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:848
-msgid "&Allow tonalities's volume adjustment"
-msgstr "& السماح بتعديل حجم النغمات"
+msgid "Allow &NVDA tonalities's volume adjustment"
+msgstr "السماح بتعديل نغمة اصوات &nvda"
 
 #. Translators: This is the label for a checkbox in the Advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:855
-msgid "allow nvda sounds files's &gain modification"
+msgid "Allow nvda sounds files's &gain modification"
 msgstr "الس&ماح بملفات أصوات nvda والحصول على تعديل"
 
+#. Translators: This is the label for a checkbox in the Advanced settings panel.
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:865
+msgid "Play tone on audio &output device"
+msgstr "تشغيل النغمة على جهاز ا&خراج الصوت"
+
 #. Translators: This is the label for the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:917
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1266
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:928
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1277
 msgid "Keyboard"
 msgstr "لوحة المفاتيح"
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:939
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:950
 msgid "Keys's remanence"
 msgstr "ثبات المفاتيح"
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:945
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:956
 msgid "&Only NVDA key in remanence"
 msgstr "تثبيت مفتاح &nvda فقط"
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:950
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:961
 msgid "Activate &remanence at NVDA's start"
 msgstr "&تفعيل ثبات المفاتيح مع  بداية تشغيل NVDA"
 
 #. Translators: This is the label for a combobox in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:955
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1296
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:966
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1307
 msgid "&Remanence's delay (in milliseconds):"
 msgstr "التأ&خير حتى المفتاح التالي (وهي بالملي ثانية):"
 
 #. Translators: This is the label for a check box in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:964
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:975
 msgid "Play &sound at the start of remanence"
 msgstr "تشغيل الصوت في بداية تفعيل ث&بات المفاتيح"
 
 #. Translators: This is the label for a check box in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:969
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:980
 msgid "Play sound at the &end of remanence"
 msgstr "&تشغيل الصوت في نهايةتفعيل  ثبات المفاتيح"
 
 #. Translators: This is the label for a check box in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:974
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:985
 msgid "Special remanence for &Gmail.com"
 msgstr "تفعيل إختصارات بريد &Gmail.com"
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:983
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:994
 msgid "Numeric keypad"
 msgstr "لوحة الأرقام"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:989
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1000
 msgid "&Allow the standard use of the numeric keypad"
 msgstr "& السماح بالاستخدام القياسي للوحة المفاتيح الرقمية"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:995
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1006
 msgid "&Enable the standard use of the numeric keypad at NVDA's start"
 msgstr "&تمكين الاستخدام القياسي للوحة المفاتيح الرقمية في بداية NVDA"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1001
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1012
 msgid "&Enable / disable numeric keypad's standard use with num lock key"
 msgstr ""
 "تمكين /أو  تعطيل الاستخدام القياسي للوحة المفاتيح الرقمية مع مفتاح &num lock"
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1007
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1298
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1018
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1309
 msgid "Numeric lock"
 msgstr "قفل الأرقام"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1013
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1024
 msgid "&Report ?he activated state at NVDA starting"
 msgstr "&إعلان؟ قم بتنشيط الحالة عند بدء تشغيل NVDA"
 
 #. Translators: This is the label for a group of editing options in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1019
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1030
 msgid "Capital lock"
 msgstr "قفل تكبير الأحرف"
 
 #. Translators: This is the label for a checkbox in the keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1025
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1036
 msgid "&Report the activated state at NVDA starting"
 msgstr "الإب&لاغ عن الحالة المفعلة عند بدء NVDA"
 
 #. Translators: This is the label for the Advanced settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1093
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:112
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1104
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:84
 msgid "Update"
 msgstr "تحديث"
 
 #. Translators: This is the label for a checkbox in the Update settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1106
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1117
 msgid "Automatically check for &updates"
 msgstr "ال&بحث عن التحديث تلقائيا"
 
 #. Translators: This is the label for a checkbox in the Update settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1111
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1122
 msgid "Update also release versions to &development versions"
 msgstr "&قم بالتحديث ألى إصدارات التطوير"
 
 #. translators: this is a label for a button in update settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1118
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1129
 msgid "&Check for update"
 msgstr "الب&حث عن التحديث"
 
 #. translators: this is a label for a button in update settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1124
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1135
 msgid "View &history"
 msgstr "&عرض السجل"
 
 #. Translators: title of add-on settings dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1201
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1212
 msgid "Settings"
 msgstr "الإعدادات"
 
 #. Translators: This is the label for a group of cursor's movement options in the
 #. NVDAEnhancement profile settings panel
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1224
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1235
 msgid "Cursor's moving"
 msgstr "تحريك المؤشر"
 
 #. Translators: This is the label for a combobox in the NVDAEnhancement settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1229
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1240
 msgid "&Punctuation/symbol level on word movement:"
 msgstr "م&ستوى رموز /علامات الترقيم أثناء الحركة:"
 
 #. Translators: This is the label for an item in combobox in the
 #. NVDAEnhancement settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1235
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1246
 msgid "Current configuration profile's level"
 msgstr "مستوى ملف تعريف التكوين الحالي"
 
 #. Translators: This is the label for a checkbox in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1282
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1293
 msgid "Text used as a &separator between contents added to the clipboard."
 msgstr "النص المستخدم كفاصل &بين المحتويات المضافة إلى الحافظة."
 
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1287
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1298
 msgid "&Add text before clipboard datas"
 msgstr "إ&ضافة النص قبل بيانات الحافظة"
 
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1292
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1303
 msgid "Ask &confirmation before adding"
 msgstr "ال&سؤال والتأكيد قبل الإضافة"
 
 #. Translators: This is the label for a combobox in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1304
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1315
 msgid "&On profile activation:"
 msgstr "&تنشيط الملف الشخصي:"
 
 #. Translators: label Choice in Activate NumLock combo box
 #. ANL_NoChange constant
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1310
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1321
 msgid "Do nothing"
 msgstr "لا شيئ"
 
 #. Translators: Choice in Activate NumLock combo box
 #. ANL_Off constant
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1313
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1324
 msgid "Desactivate"
 msgstr "تعطيل"
 
 #. Translators: Choice in Activate NumLock combo box
 #. ANL_On
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1316
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1327
 msgid "Activate"
 msgstr "تفعيل"
 
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1324
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1335
 msgid "Key blocking"
 msgstr "مفتاح المنع"
 
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1330
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1341
 msgid "Block insert key"
 msgstr "مفتاححظر  الإنسرت"
 
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1335
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1346
 msgid "Block capslock key"
 msgstr "مفتاح حظر كابسلوك"
 
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1346
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1357
 msgid "Characters echo"
 msgstr "صدى المفاتيح"
 
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1352
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1363
 msgid ""
 "Still speak &non-alphanumeric characters when keyboard echo by characters is "
 "disabled"
@@ -3248,99 +3333,99 @@ msgstr ""
 
 #. Translators: This is the label for the text analyzer profile settings panel.
 #. Translators: dialog title.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1384
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:562
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1395
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:561
 msgid "Text analysis"
 msgstr "تحليل النص"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1407
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1418
 msgid "&Activate text analyzer"
 msgstr "&تفعيل محلل النص"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1412
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1423
 msgid "Activate text analyzer at add-on's &start"
 msgstr "&قم بتنشيط محلل النص عند بدء الإضافات"
 
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1418
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1429
 msgid "Symbols match"
 msgstr "تطابق الرموز"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1424
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1435
 msgid "Report &discrepancies"
 msgstr "الإبلا&غ عن التناقضات"
 
 #. anomalies group
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1449
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1460
 msgid "Anomalies"
 msgstr "شاذة"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1455
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1466
 msgid "Report a&nomalies"
 msgstr "الإ&بلاغ عن الحالات الشاذه"
 
 #. Translators: This is the label for a checkListbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1460
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1471
 msgid "&Verify:"
 msgstr "&التحقق:"
 
 #. Translators: label for a checkListbox in TextAnalysis settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1477
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1488
 msgid "&For symbols:"
 msgstr "& للرموز:"
 
 #. formatting changes groupe
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1489
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1500
 msgid "Formatting"
 msgstr "تنسيق"
 
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1495
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1506
 msgid "Report &changes"
 msgstr "الإبلاغ عن الت&غييرات"
 
 #. Translators: This is the label for a checkListbox in the TextAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1500
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1511
 msgid "Ty&pe:"
 msgstr "&Cype:"
 
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
 #. Translators: alert message for text analysis reporting.
 #. Translators: default alert message when text analyzer detect something.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1515
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1526
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:129
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:325
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:322
 msgid "Alert"
 msgstr "تنبيه"
 
 #. Translators: This is the label for a choice box in the textAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1534
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1545
 msgid "Sounds:"
 msgstr "اصوات:"
 
 #. Translators: This is the label for a choice box in the textAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1547
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1558
 msgid "Frequency:"
 msgstr "تردد:"
 
 #. Translators: This is the label for a choice box in the textAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1552
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1563
 msgid "Length:"
 msgstr "طول:"
 
 #. Translators: This is the label for a edit box in the textAnalyzer settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1557
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1568
 msgid "Message:"
 msgstr "رسالة:"
 
 #. Translators: title of add-on settings dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1708
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1719
 #, python-format
 msgid "Profile settings's %s"
 msgstr "إعدادات ملف التعريف %s"
@@ -3357,7 +3442,7 @@ msgstr "عدد الاكتشافات"
 
 #. Translators: choice label to report analysis detection with description of each detected elements.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:180
-msgid "detailed description"
+msgid "Detailed description"
 msgstr "وصف مفصل"
 
 #. Translators: choice item for reporting extra spaces.label
@@ -3392,12 +3477,12 @@ msgstr "المساحة المطلوبة بعد الرمز"
 
 #. Translators: choice label for reporting symbols which must not be preceded by a space.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:196
-msgid "unexpected space before symbol"
+msgid "Unexpected space before symbol"
 msgstr "مسافة غير متوقعة قبل الرمز"
 
 #. Translators: choice label for reporting symbols which must not be followed by a space")
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py:198
-msgid "unexpected space after symbol"
+msgid "Unexpected space after symbol"
 msgstr "مسافة غير متوقعة بعد الرمز"
 
 #. Translators: choice item for reporting font name change.
@@ -3436,19 +3521,19 @@ msgid "Text analyzer desactivated"
 msgstr "تم إلغاء تنشيط محلل النص"
 
 #. Translators: this is the title of Temporary Audio output Device manager dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:44
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:45
 msgid "Quick addons activation"
 msgstr "سرعة تنشيط الإضافات"
 
 #. Translators: This is the label for a listbox
 #. on Addons activation dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:54
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:55
 msgid "Check to activate:"
 msgstr "فحص للإضافات النشطة:"
 
 #. Translators: This is a label of a button appearing
 #. on Addons activation dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:68
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:69
 msgid "&Check all"
 msgstr "تحديد ال&كل"
 
@@ -3456,7 +3541,7 @@ msgstr "تحديد ال&كل"
 #. on Addons activation dialog.
 #. translators: this is a label for a button in addons import dialog.
 #. translators: this is a label for a button in Profiles Import Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:73
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:74
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1085
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1487
 msgid "&Uncheck all"
@@ -3464,23 +3549,28 @@ msgstr "ال&غاء تحديد الكل"
 
 #. Translators: This is a label of a button appearing
 #. on Addons activation dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:78
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:79
 msgid "&Save and restart NVDA"
 msgstr "&حفظ وإعادة تشغيل NVDA"
 
+#. Translators: label to mark the add-on incompatible
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:142
+msgid "incompatible"
+msgstr "عدم التوافق"
+
 #. Translators: message to user to report that all add-ons have been checked.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:133
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:165
 msgid "All add-ons are checked"
 msgstr "تم فحص جميع الوظائف الإضافية"
 
 #. Translators: message to user to report that all add-ons have been unchecked.
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:140
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:172
 msgid "All add-ons unchecked"
 msgstr "لم يتم تحديد جميع الوظائف الإضافية"
 
 #. Translators: A message asking the user if they wish to restart NVDA
 #. even if there were no changes
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:150
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:182
 msgid "There is no change. Do you want to restart NVDA anyway?"
 msgstr "لا يوجد أي تغيير. هل تريد إعادة تشغيل NVDA على أي حال؟"
 
@@ -3758,7 +3848,7 @@ msgstr "استيراد الإضافات"
 #. the addons list
 #. Translators: This is a label appearing on Convert to HTML dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1070
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:673
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:676
 msgid "&Add-ons:"
 msgstr "الإ&ضافات:"
 
@@ -3799,16 +3889,10 @@ msgstr "لم يتم التحقق من جميع العناصر"
 msgid "Do you really want to delete all add-ons of %s folder?"
 msgstr "هل تريد حقًا حذف كافة الوظائف الإضافية لمجلد %s؟"
 
-#. Translators: message box title
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1160
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1562
-msgid "confirmation"
-msgstr "التأكيد"
-
 #. Translators: message to user to say that there is no addon checked.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1188
-msgid "there is no add-on checked"
-msgstr "لا توجد وظيفة إضافية تم فحصها"
+msgid "There is no add-on checked"
+msgstr "لا توجد وظيفة إضافية تم تحديدها"
 
 #. Translators: This is the title of the adding new folder dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1202
@@ -3818,7 +3902,7 @@ msgstr "إضافة مجلد جديد"
 #. Translators: This is the label of the edit field appearing
 #. on the adding new folder  dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1220
-msgid "folder's userName:"
+msgid "Folder's userName:"
 msgstr "اسم المستخدم للمجلدات:"
 
 #. Translators: This is the label of the edit field appearing
@@ -3850,7 +3934,7 @@ msgstr "اختيار المجلد"
 
 #. Translators: message to user to ask for the username of configuration.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1284
-msgid "you must specify the username of the folder"
+msgid "You must specify the username of the folder"
 msgstr "يجب عليك تحديد اسم مستخدم للمجلد"
 
 #. Translators: message to user to ask for location of the configuration.
@@ -3864,14 +3948,13 @@ msgstr "يجب عليك تحديد موقع مسار التكوين"
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1425
 #, python-format
 msgid ""
-"The folder with \"%s\" username is already in the list of configuration "
-"folders "
+"The folder with \"%s\" username is already in the list of configuration folders"
 msgstr ""
-"المجلد الذي يحمل اسم المستخدم \" %s\" موجود بالفعل في قائمة مجلدات التكوين "
+"المجلد الذي يحمل اسم المستخدم \" %s\" موجود بالفعل في قائمة مجلدات التكوين"
 
 #. Translators: message to user to ask an other username.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1313
-msgid "choose another username"
+msgid "Choose another username"
 msgstr "إختار إسم آخر"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1323
@@ -3944,7 +4027,7 @@ msgstr "ملف تعريف %s موجود. هل تريد استبدالها؟"
 msgid "Impossible to import profils"
 msgstr "لا يمكن إستيراد الإعدات والسمات لملف التعريف"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:279
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:284
 msgid ""
 "The configuration file of the add-on contains errors. The part of the "
 "configuration concerning the global parameters has been  reset to factory "
@@ -3953,8 +4036,8 @@ msgstr ""
 "يحتوي ملف التكوين الخاص بالوظيفة الإضافية على أخطاء. تم إعادة تعيين جزء "
 "التكوين المتعلق بالمعلمات العالمية إلى إعدادات المصنع الافتراضية"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:360
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:372
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:365
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:377
 #, python-format
 msgid ""
 "The old configuration file of \"%s\" add-on contains errors. It's not possible "
@@ -3963,7 +4046,7 @@ msgstr ""
 "يحتوي ملف التكوين القديم للوظيفة الإضافية \" %s\" على أخطاء. لا يمكن الاحتفاظ "
 "بالتكوين السابق"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:425
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:430
 msgid ""
 "The add-on configuration will be reset to factory values and NVDA will be "
 "restarted. Would you like to continue?"
@@ -3971,7 +4054,7 @@ msgstr ""
 "ستتم إعادة ضبط إعدادات الوظيفة الإضافية على قيم المصنع وإعادة تشغيل NVDA. هل "
 "ترغب في الاستمرار؟"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:427
+#: globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py:432
 msgid "Configuration reset"
 msgstr "إعادة ضبط الإعدادات"
 
@@ -3989,7 +4072,7 @@ msgstr ""
 "التكوين الحالي لميزة \"تبديل ملف التعريف الصوتي\" غير متوافق مع إصدار هذه "
 "الوحدة، تم تحديد جميع المحددات وحذف ملفات التعريف الصوتية. نعتذر على  الإزعاج."
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:222
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:227
 msgid ""
 "Impossible, the synthesizer of voice profile {voiceProfileName} associated to "
 "selector {selector} is not available. Do you want to free this selector?"
@@ -3998,65 +4081,65 @@ msgstr ""
 "غير متاح. هل تريد تحرير هذا المحدد؟"
 
 #. Translators: the title of a message box dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:226
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:231
 msgid "Synthesizer error"
 msgstr "خطأ في آلة النطق"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:233
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:272
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:238
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:277
 msgid "Selector {selector}: {name}"
 msgstr "التعريف رقم {selector}:والصوت هو {name}"
 
 #. Translators: message to user to report there is no other voice profile.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:269
-msgid "no other selector set to voice profile"
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:274
+msgid "No other selector set to voice profile"
 msgstr "لم يتم تعريف أي صوت آخر"
 
 #. Translators: message to user to report  there is no voice profile set.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:277
-msgid "no selector set to voice profile"
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:282
+msgid "No selector set to voice profile"
 msgstr "لم يتم تعريف أي صوت"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:301
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:417
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:421
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:306
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:422
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:426
 msgid "yes"
 msgstr "نعم"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:301
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:419
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:421
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:306
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:424
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:426
 msgid "no"
 msgstr "لا"
 
 #. Translators: message to user to report the association
 #. between selector and voice profile.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:369
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:374
 msgid "{name} voice profile set to selector {selector}"
 msgstr "الصوت هو: {name} والمعرف هورقم: {selector}"
 
 #. Translators: this a message to inform that all slots are not associated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:388
-msgid "all selectors are freed from their vocal profile"
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:393
+msgid "All selectors are freed from their vocal profile"
 msgstr "جميع المعرفات تم إعادتها إلى الإفتراضي وأصبحت بدون أي صوت"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:429
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:434
 msgid "Automatic language switching (when supported)"
 msgstr "التبديل بين اللغة تلقائيا عند دعم ذلك"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:430
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:435
 msgid "Automatic dialect switching (when supported)"
 msgstr "تبديل تلقائي للهجات عند دعم ذلك"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:431
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:436
 msgid "Punctuation/symbol level"
 msgstr "مستوى رموز/  علامات الترقيم"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:432
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:437
 msgid "Trust voice's language when processing characters and symbols"
 msgstr "الإعتماد على لغة المصدر عند معالجة الحروف والرموز"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:434
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:439
 msgid ""
 "Include Unicode Consortium data (including emoji) when processing characters "
 "and symbols"
@@ -4064,120 +4147,120 @@ msgstr ""
 "تضمين بيانات Unicode Consortium (بما في ذلك الرموز التعبيرية) عند معالجة "
 "الأحرف والرموز"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:436
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:441
 msgid "Delayed descriptions for characters on cursor movement"
 msgstr "الأوصاف المتأخرة للأحرف في حركة المؤشر"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:440
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:445
 msgid "Capital pitch change percentage"
 msgstr "نسبة التغيير عند نطق الحروف الكبيرة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:441
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:446
 msgid "Say cap before capitals"
 msgstr "نطق cap قبل الحروف الكبيرة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:442
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:447
 msgid "Beep for capitals"
 msgstr "صفير للحروف الكبيرة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:443
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:448
 msgid "Use spelling functionality if supported"
 msgstr "إستخدام خاصية تصحيح الهجاء إن كانت مدعمة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:451
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:456
 #, python-format
 msgid "selector: %s"
 msgstr "الإختيار~: %s"
 
 #. Translators: text to report voice profile name.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:454
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:459
 #, python-format
 msgid "Voice profile name: %s"
 msgstr "إسم ملف تعريف الصوت: %s"
 
 #. Translators:text to report that it is normal configuration.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:459
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:464
 #, python-format
 msgid "Associated under %s configuration profile"
 msgstr "مرتبط بملف مواصفات التكوين %s"
 
 #. Translators: text to report synthesizer name.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:463
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:468
 #, python-format
 msgid "Synthesizer: %s"
 msgstr "ألة النطق: %s"
 
 #. Translators:  label to report synthesizer output device .
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:467
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:472
 #, python-format
 msgid "Output device: %s"
 msgstr "جهاز الإخراج: %s"
 
 #. Translators: This is the title of the Selectors Management dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:521
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:526
 #, python-format
 msgid "Voice profile selectors's Management of profile %s"
 msgstr "إدارة محددات ملف تعريف الصوت لملف التعريف %s"
 
 #. Translators: part of label of selectors list.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:530
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:535
 msgid "&Selectors"
 msgstr "الم&حدد"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:554
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:768
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:559
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:773
 msgid "free"
 msgstr "فارغ"
 
 #. Translators: This is the label for a checkbox appearing
 #. in the various settings panel.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:585
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:590
 msgid "&Use selectors associated under normal cconfiguration's profile"
 msgstr "ا&ستخدم المحددات المرتبطة بملف تعريف التكوين العادي"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:605
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:610
 msgid "&Activate voice profile"
 msgstr "تن&شيط الملف الصوتي"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:609
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:614
 msgid "A&ssociate voice profile"
 msgstr "إ&ضافة تعريف صوتي"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:612
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:617
 msgid "&Modify voice profile"
 msgstr "ت&عديل الملف الصوتي"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:615
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:620
 msgid "&Free selector"
 msgstr "&مسح المعرف المحدد"
 
 #. Translators: This is a label of a button appearing
 #. on Selectors Management dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:618
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:623
 msgid "&Free all selectors"
 msgstr "م&سح كل المعرفات"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:622
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:627
 msgid "Voice profile's &informations"
 msgstr "م&علومات ملف تعريف الصوت"
 
 #. Translators: this is the title of informationdialog box
 #. to show voice profile informations.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:672
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:677
 msgid "Voice profile 's informations"
 msgstr "معلومات الملف, الصوتي"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:696
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:701
 msgid ""
 "Selector {selector} is already set to {voiceProfileName} voice profile. Do you "
 "want to replace this voice profile?"
 msgstr "تعريف {selector} معرف بالفعل {voiceProfileName} هل تريد إستبداله؟"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:737
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:742
 msgid ""
 "Do you really want to free selector {selector} associated to the voice profile "
 "\"{voiceProfileName}\"?"
@@ -4186,42 +4269,42 @@ msgstr ""
 "\"{voiceProfileName}\"؟"
 
 #. Translators: the label of a message box dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:752
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:757
 msgid ""
 "Do you really want to free all selectors set to this configuration profile?"
 msgstr "هل تريد حقًا تحرير كافة المحددات المعينة لملف تعريف التكوين هذا؟"
 
 #. Translators: This is the title of the modify voice profile dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:831
-msgid "Modify voice profile "
-msgstr "تعديل الملف الصوتي "
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:836
+msgid "Modify voice profile"
+msgstr "تعديل الملف الصوتي"
 
 #. Translators: This is the label of the edit field appearing
 #. on the Modify voice profile dialog.
 #. Translators: This is the label of the edit field appearing
 #. in the associate voice profile dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:841
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:903
-msgid "voice profile name:"
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:846
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:908
+msgid "Voice profile name:"
 msgstr "إسم ملف تعريف الصوت:"
 
 #. Translators: This is a label of a button appearing
 #. on modify voice profile Dialog.
 #. Translators: This is a label of a button appearing
 #. on associate voice profile dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:848
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:910
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:853
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:915
 msgid "&Default"
 msgstr "الا&فتراضي"
 
 #. Translators: message to user: profile's name must be set.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:874
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:957
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:879
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:962
 msgid "You must set the name of voice profile"
 msgstr "يجب عليك تعين إسم للملف الصوتي"
 
 #. Translators: This is the title of the Associate voice profile dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:885
+#: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:890
 msgid "Voice profile association"
 msgstr "الملف الصوتي الشخصي"
 
@@ -4259,70 +4342,69 @@ msgstr "نقرة ي&سرى"
 msgid "Dou&ble left click"
 msgstr "انقر مرتين على الي&سار"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:28
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:27
 msgid "color"
 msgstr "اللون"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:29
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:28
 msgid "background color"
 msgstr "لون الخلفية"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:283
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:280
 msgid "unexpected space"
 msgstr "مساحة غير متوقعة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:285
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:282
 msgid "missing space"
 msgstr "مساحة مفقودة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:287
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:284
 msgid "missing uppercase"
 msgstr "الأحرف الكبيرة مفقودة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:289
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:286
 msgid "inversed uppercase"
 msgstr "أحرف كبيرة مقلوبة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:291
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:288
 #, python-format
 msgid "unexpected %s"
 msgstr "%s غير متوقع"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:293
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:290
 msgid "multiple contigous spaces"
 msgstr "مسافات متجاورة متعددة"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:295
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:292
 msgid "tab at end"
 msgstr "علامة التبويب في النهاية"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:297
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:294
 msgid "space at end"
 msgstr "المسافة في النهاية"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:299
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:296
 #, python-format
 msgid "change in %s"
 msgstr "التغيير في %s"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:304
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:301
 msgid "At {pos}: {anomaly}"
 msgstr "في{pos}: {anomaly}"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:328
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:325
 #, python-format
 msgid "%s analyzis's detections"
 msgstr "%sاكتشافات التحليل"
 
-#. Translators: message to indicate the no alert found by scanning 1000 lines
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:560
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:558
 #, python-format
 msgid ""
 "No irregularities were found on %s lines scanned. Do you want to continue the "
 "analysis?"
 msgstr "لم يتم العثور على مخالفات في %s سطور تم فحصها. هل تريد متابعة التحليل؟"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:667
+#: globalPlugins\NVDAExtensionGlobalPlugin\textAnalysis\textAnalyzer.py:669
 msgid "No more irregularity"
 msgstr "لا مزيد من المخالفات"
 
@@ -4334,8 +4416,8 @@ msgstr "لا مزيد من المخالفات"
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:355
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:423
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:466
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:831
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:881
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:834
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:884
 msgid "Error: buildVars.py file is not found"
 msgstr "خطأ:  لم يتم العثور على ملف buildVars.py"
 
@@ -4389,7 +4471,7 @@ msgstr "ملف manifest.ini موجود بالفعل. هل تريد حقا تحد
 
 #. Translators: message to user to report end of manifest.ini creation
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:336
-msgid "manifest.ini file has been updated"
+msgid "The manifest.ini file has been updated"
 msgstr "تم تحديث ملف manifest.ini"
 
 #. Translators: title of dialog
@@ -4519,63 +4601,63 @@ msgid "Warning: buildVars.py already exists. Do you want to replace it?"
 msgstr "تحذير: buildVars.py موجود بالفعل. هل تريد استبدالها؟"
 
 #. Translators message to user to report buildVars.py has been created
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:630
-msgid "buildVars.py file created"
-msgstr "إنشاء ملف buildVars.py"
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:633
+msgid "The buildVars.py file has been created"
+msgstr "تم تحديث إصدار ملف buildVars.py"
 
 #. Translators: This is the title of the dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:654
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:657
 msgid "Tools for add-on development"
 msgstr "أدوات لتطوير الإضافات"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:684
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:687
 msgid "Update add-on &version"
 msgstr "ت&حديث إصدار الوظيفة الإضافية"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:689
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:692
 msgid "&Update manifest.ini file"
 msgstr "تحديث ملف &manifest.ini"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:694
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:697
 msgid "Create P&OT file"
 msgstr "إنشاء ملف PO&T"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:699
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:702
 msgid "&Prepare addon"
 msgstr "&قم بتحضير الملحق"
 
 #. Translators: This is a label appearing on Convert to HTML dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:703
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:706
 msgid "&Languages:"
 msgstr "الل&غات:"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:713
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:716
 msgid "Create &localization manifest.ini file"
 msgstr "إنشاء ملف &manifest.ini للإعدادات  المحلية"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:717
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:720
 msgid "Create &HTML documentation files"
 msgstr "إنشاء ملفات مساعدة &HTML"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:721
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:724
 msgid "Create &buildVars file"
 msgstr "إن&شاء ملف buildVars"
 
 #. Translators: this is a label appearing on tools for add-on dialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:725
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:728
 msgid "&Explore add-on folder"
 msgstr "م&ستكشف مجلد الوظيفة الإضافية"
 
 #. Translators: The label of a list item to select the type of object
 #. in the Element List Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:763
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:766
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:162
 msgid "All"
 msgstr "كل"
@@ -4583,33 +4665,75 @@ msgstr "كل"
 #. Translators: title of dialog
 #. Translators: This is a title of text control
 #. in dialog box in Manage Symbols Dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:826
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:869
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:892
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:829
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:872
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:895
 msgid "Update add-on version"
 msgstr "تحديث إصدار  الوظيفة الإضافية"
 
 #. Translators: message to user add-on version line not found
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:848
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:851
 msgid "Error: buildVars.py file has no add-on version line"
 msgstr "خطأ: ملف buildVars.py لا يحتوي على سطر إصدار الإضافة"
 
 #. Translators: message to user  updating add-on's version
 #. of buildVars.py file.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:861
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:864
 msgid "Version of buildVars.py file has been updated"
 msgstr "تم تحديث إصدار ملف buildVars.py"
 
 #. Translators: Message to show on the dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:889
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:892
 msgid "Entry add-on version:"
 msgstr "أدخل إصدار الإضافة:"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:906
+#: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:909
 msgid "No add-on installed"
 msgstr "لا -توجد إضافات مثبته"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:63
+#. Translators: The progress message
+#. indicating the name of the add-on being downloaded.
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:87
+msgid "Downloading {name}"
+msgstr "تنزيل {name}"
+
+#. Translators: A message indicating that an error occurred
+#. while downloading an update to NVDA.
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:102
+msgid "Error downloading update for {name}."
+msgstr "حدث خطأ أثناء تنزيل التحديث لـ {name}."
+
+#. Translators: message to user
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:156
+msgid "Cannot update {name} - missing file or invalid file format"
+msgstr "لا يمكن تحديث {name} - ملف مفقود أو تنسيق ملف غير صالح"
+
+#. Translators: The title of the dialog
+#. presented while an Addon is being updated.
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:173
+msgid "Updating"
+msgstr "تحديث"
+
+#. Translators: The message displayed while an addon is being updated.
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:175
+msgid "Please wait while the add-on is being updated."
+msgstr "الرجاء الانتظار حتى يتم تحديث الوظيفة الإضافية."
+
+#. Translators: The message displayed when an error occurs
+#. when installing an add-on package.
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:196
+msgid "Failed to update {name} add-on"
+msgstr "أخفق تحديث الوظيفة الإضافية {name}"
+
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:248
+msgid "{summary} - update"
+msgstr "{summary} - التحديث"
+
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:258
+msgid "The service is temporarily under maintenance. Please, try again later."
+msgstr "الخدمة قيد الصيانة مؤقتًا. الرجاء معاودة المحاولة في وقت لاحق."
+
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:286
 msgid ""
 "The update is not compatible with this version of NVDA. Minimum NVDA version: "
 "{minYear}.{minMajor}, last tested: {testedYear}.{testedMajor}."
@@ -4617,83 +4741,53 @@ msgstr ""
 "التحديث غير متوافق مع هذا الإصدار من NVDA. Minimum إصدار NVDA:{minYear}."
 "{minMajor}, آخر اختبار: {testedYear}.{testedMajor}."
 
-#. Translators: The progress message
-#. indicating the name of the add-on being downloaded.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:115
-msgid "Downloading {name}"
-msgstr "تنزيل {name}"
-
-#. Translators: A message indicating that an error occurred
-#. while downloading an update to NVDA.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:130
-msgid "Error downloading update for {name}."
-msgstr "حدث خطأ أثناء تنزيل التحديث لـ {name}."
-
-#. Translators: message to user
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:189
-msgid "Cannot update {name} - missing file or invalid file format"
-msgstr "لا يمكن تحديث {name} - ملف مفقود أو تنسيق ملف غير صالح"
-
-#. Translators: The title of the dialog
-#. presented while an Addon is being updated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:225
-msgid "Updating"
-msgstr "تحديث"
-
-#. Translators: The message displayed while an addon is being updated.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:227
-msgid "Please wait while the add-on is being updated."
-msgstr "الرجاء الانتظار حتى يتم تحديث الوظيفة الإضافية."
-
-#. Translators: The message displayed when an error occurs
-#. when installing an add-on package.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:246
-msgid "Failed to update {name} add-on"
-msgstr "أخفق تحديث الوظيفة الإضافية {name}"
-
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:306
-msgid "{summary} - update"
-msgstr "{summary} - التحديث"
-
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:316
-msgid "The service is temporarily under maintenance. Please, try again later."
-msgstr "الخدمة قيد الصيانة مؤقتًا. الرجاء معاودة المحاولة في وقت لاحق."
-
 #. Translators: message to user to report a new version.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:369
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:330
 #, python-format
 msgid "New version%s is available. Do you want to download it now?"
 msgstr "يتوفر إصدار جديد %s. هل تريد التحميل الآن؟"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:386
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:334
+msgid ""
+"New version{0} is available.\n"
+"But it is not compatible with this version of NVDA: minimum version requred = "
+"{1}, last version tested  = {2}.\n"
+"Do you want to ignore this incompatibility and still download it now?"
+msgstr ""
+"الإصدار الجديد{0} متوفر.\n"
+"ولكنه غير متوافق مع هذا الإصدار من NVDA: الحد الأدنى للإصدار المطلوب = {1}، "
+"الإصدار الأخير الذي تم اختباره = {2}.\n"
+"هل تريد تجاهل عدم التوافق هذا والاستمرار في تنزيله الآن؟"
+
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:354
 #, python-format
 msgid "You are up-to-date. %s is the latest version."
 msgstr "إصدار %s . هو أحدث إصدار حتى الآن."
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:393
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:361
 msgid "Oops! There was a problem checking for updates. Please retry later"
 msgstr ""
 "يا الله! حدثت مشكلة في التحقق من وجود تحديثات. الرجاء إعادة المحاولة لاحقًا"
 
 #. Translators: This is a label of a button appearing
 #. on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:548
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:516
 msgid "&Yes"
 msgstr "&نعم"
 
 #. Translators: This is a label of a button appearing
 #. on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:553
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:521
 msgid "&No"
 msgstr "&لا"
 
 #. Translators: The label of a button to remind the user later
 #. about performing some action.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:558
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:526
 msgid "&Later"
 msgstr "لا &حقا"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:562
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:530
 msgid "Wha&t's new"
 msgstr "ما هو ا&لجديد"
 
@@ -4828,7 +4922,7 @@ msgstr "عنصر القائمة"
 
 #. Translators: title of dialog box.
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:176
-msgid "list of visible items making up the object in the foreground"
+msgid "List of visible items making up the object in the foreground"
 msgstr "قائمة من العناصر المرئية التي تشكل الكائن في المقدمة"
 
 #. Translators: This is the label for a checkBox in
@@ -4840,8 +4934,8 @@ msgstr "تجاهل العناصر غير المميزة"
 #. Translators: This is the label for a listBox in
 #. the "list of visible items making up the object in the foreground" dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:194
-msgid "&Type: "
-msgstr "&النوع: "
+msgid "&Type:"
+msgstr "&النوع:"
 
 #. Translators: This is the label for a listBox in
 #. the "list of visible items making up the object in the foreground" dialog.
@@ -4856,6 +4950,28 @@ msgstr "ن&قل الحركة الى الكائن"
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\__init__.py:135
 msgid "Elements's searching"
 msgstr "عناصر البحث"
+
+#~ msgid ""
+#~ "This global add-on provides a multitude of features described in detail in "
+#~ "its user manual (see the add-on's help for this)."
+#~ msgstr ""
+#~ "توفر هذه الوظيفة الإضافية العالمية العديد من الميزات الموضحة بالتفصيل في "
+#~ "دليل المستخدم الخاص بها (انظر تعليمات الوظيفة الإضافية لهذا الغرض)."
+
+#~ msgid "clipSpeak add-on detection"
+#~ msgstr "الكشف عن الوظيفة الإضافية ClipSpeak"
+
+#~ msgid "confirmation"
+#~ msgstr "التأكيد"
+
+#~ msgid "Modify voice profile "
+#~ msgstr "تعديل الملف الصوتي "
+
+#~ msgid "buildVars.py file created"
+#~ msgstr "إنشاء ملف buildVars.py"
+
+#~ msgid "NVDA sounds"
+#~ msgstr "أصوات NVDA"
 
 #~ msgid "NVDA and all applications {appTo}"
 #~ msgstr "NVDA وكافة التطبيقات {appTo}"

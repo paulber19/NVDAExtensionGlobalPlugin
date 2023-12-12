@@ -13,6 +13,7 @@ import api
 import ui
 import speech
 import braille
+from keyLabels import localizedKeyLabels 
 import time
 import gui
 import wx
@@ -1505,14 +1506,33 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			windowsList = getactiveWindows()
 			closeAllWindows(windowsList)
 		wx.CallAfter(closeAll)
-
-	def script_EmulateApplicationsKey(self, gesture):
+	@scriptHandler.script(
+		description=NVDAString("Emulate key press: {emulateGesture}").format(
+			emulateGesture=localizedKeyLabels ["applications"]),
+		category=inputCore.SCRCAT_KBEMU
+	)
+	def script_EmulateApplicationsCommand(self, gesture):
 		from keyboardHandler import KeyboardInputGesture
 		KeyboardInputGesture.fromName("Applications").send()
 		# Translators: Input help mode message for a keyboard command.
-	script_EmulateApplicationsKey.__doc__ = NVDAString("Emulate key press: {emulateGesture}").format(
-		emulateGesture="Applications")
-	script_EmulateApplicationsKey.category = inputCore.SCRCAT_KBEMU
+
+	@scriptHandler.script(
+		description=NVDAString("Emulate key press: {emulateGesture}").format(
+			emulateGesture=localizedKeyLabels ["shift"] + "+" + localizedKeyLabels ["applications"]),
+		category=inputCore.SCRCAT_KBEMU
+	)
+	def script_EmulateShiftPlusApplicationsCommand(self, gesture):
+		from keyboardHandler import KeyboardInputGesture
+		KeyboardInputGesture.fromName("shift+Applications").send()
+
+	@scriptHandler.script(
+		description=NVDAString("Emulate key press: {emulateGesture}").format(
+			emulateGesture=localizedKeyLabels ["shift"] + "+" + "F10"),
+		category=inputCore.SCRCAT_KBEMU
+	)
+	def script_EmulateShiftPlusF10Command(self, gesture):
+		from keyboardHandler import KeyboardInputGesture
+		KeyboardInputGesture.fromName("shift+f10").send()
 
 	def script_displayRunningAddonsList(self, gesture):
 		from locale import strxfrm
