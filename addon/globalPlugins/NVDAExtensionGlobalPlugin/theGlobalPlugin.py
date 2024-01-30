@@ -355,6 +355,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# for tonalities volume changes
 		from .computerTools import tonesEx
 		tonesEx.initialize()
+		# the rest of the initialization will be done when NVDA is initialized.
+		if hasattr(globalVars, "NVDAExtensionGlobalPluginInitialized"):
+			# it's a plugin reloading, so nvda is already initialized
+			self.handlePostNVDAStartup()
+			return
+		# now wait for nvda initialization end
 		from core import postNvdaStartup
 		postNvdaStartup .register(self.handlePostNVDAStartup)
 
@@ -370,7 +376,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		wx.CallLater(
 			2000, numlock.reportActivatedLockState, winUser.getKeyState(
 				winUser.VK_NUMLOCK), winUser.getKeyState(winUser.VK_CAPITAL))
-
+		globalVars.NVDAExtensionGlobalPluginInitialized = True
 		log.info("Loaded %s version %s" % (_curAddon.manifest["name"], _curAddon.manifest["version"]))
 
 	def updateSettingOfSynthSettingsRing(self):
