@@ -57,7 +57,7 @@ For the full list of the add-on's features and their description, see the user m
 """),
 
 	# version
-	"addon_version": "13.2.6",
+	"addon_version": "13.2.7",
 	# Author(s)
 	"addon_author": "PaulBer19 (paulber19@laposte.net",
 	# URL for the add-on documentation support
