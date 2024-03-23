@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -13,96 +13,45 @@ import api
 import wx
 import gui
 from ..utils import contextHelpEx
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import _roleLabels as roleLabels
-	from controlTypes.role import Role
-	ROLE_EDITABLETEXT = Role.EDITABLETEXT
-	from controlTypes.state import _stateLabels as stateLabels
-	from controlTypes.state import State
-	STATE_PRESSED = State.PRESSED
-	STATE_CHECKED = State.CHECKED
-	STATE_HALFCHECKED = State.HALFCHECKED
-	STATE_READONLY = State.READONLY
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import (
-		roleLabels, stateLabels,
-		ROLE_EDITABLETEXT,
-		STATE_PRESSED, STATE_CHECKED, STATE_HALFCHECKED,
-		STATE_READONLY)
+from controlTypes.role import Role
+from controlTypes.state import State
 import core
 from ..utils import PutWindowOnForeground, mouseClick, makeAddonWindowTitle, getHelpObj
 from ..utils import getSpeechMode, setSpeechMode, setSpeechMode_off
 from ..utils.NVDAStrings import NVDAString
 addonHandler.initTranslation()
 
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import Role
-	_rolesByType = {
-		"button": (
-			Role.BUTTON, Role.SPINBUTTON,
-			Role.DROPDOWNBUTTON, Role.RADIOBUTTON,
-			Role.TOGGLEBUTTON, Role.MENUBUTTON,
-			Role.TREEVIEWBUTTON),
-		"checkBox": (Role.CHECKBOX,),
-		"edit": (Role.EDITABLETEXT, Role.PASSWORDEDIT,),
-		"text": (Role.STATICTEXT, Role.TEXTFRAME,),
-		"list": (Role.LIST, Role.LISTITEM),
-		"comboBox": (Role.COMBOBOX,),
-		"slider": (Role.SLIDER,),
-		"link": (Role.LINK,),
-		"table": (
-			Role.TABLE, Role.TABLECELL,
-			Role.TABLEROW),
-		"menu": (
-			Role.MENU, Role.MENUITEM,
-			Role.RADIOMENUITEM, Role.CHECKMENUITEM,
-			Role.MENUBAR, Role.POPUPMENU,
-			Role.TEAROFFMENU),
-		"container": (
-			Role.APPLICATION, Role.DESKTOPPANE,
-			Role.DIALOG, Role.DIRECTORYPANE,
-			Role.FRAME, Role.GLASSPANE,
-			Role.OPTIONPANE, Role.PANE,
-			Role.PANEL, Role.TOOLBAR,
-			Role.WINDOW),
-		"treeView": (Role.TREEVIEW, Role.TREEVIEWITEM),
-		"tab": (Role.TAB,)
-	}
-except (ModuleNotFoundError, AttributeError):
-	import controlTypes
-	_rolesByType = {
-		"button": (
-			controlTypes.ROLE_BUTTON, controlTypes.ROLE_SPINBUTTON,
-			controlTypes.ROLE_DROPDOWNBUTTON, controlTypes.ROLE_RADIOBUTTON,
-			controlTypes.ROLE_TOGGLEBUTTON, controlTypes.ROLE_MENUBUTTON,
-			controlTypes.ROLE_TREEVIEWBUTTON),
-		"checkBox": (controlTypes.ROLE_CHECKBOX,),
-		"edit": (controlTypes.ROLE_EDITABLETEXT, controlTypes.ROLE_PASSWORDEDIT,),
-		"text": (controlTypes.ROLE_STATICTEXT, controlTypes.ROLE_TEXTFRAME,),
-		"list": (controlTypes.ROLE_LIST, controlTypes.ROLE_LISTITEM),
-		"comboBox": (controlTypes.ROLE_COMBOBOX,),
-		"slider": (controlTypes.ROLE_SLIDER,),
-		"link": (controlTypes.ROLE_LINK,),
-		"table": (
-			controlTypes.ROLE_TABLE, controlTypes.ROLE_TABLECELL,
-			controlTypes.ROLE_TABLEROW),
-		"menu": (
-			controlTypes.ROLE_MENU, controlTypes.ROLE_MENUITEM,
-			controlTypes.ROLE_RADIOMENUITEM, controlTypes.ROLE_CHECKMENUITEM,
-			controlTypes.ROLE_MENUBAR, controlTypes.ROLE_POPUPMENU,
-			controlTypes.ROLE_TEAROFFMENU),
-		"container": (
-			controlTypes.ROLE_APPLICATION, controlTypes.ROLE_DESKTOPPANE,
-			controlTypes.ROLE_DIALOG, controlTypes.ROLE_DIRECTORYPANE,
-			controlTypes.ROLE_FRAME, controlTypes.ROLE_GLASSPANE,
-			controlTypes.ROLE_OPTIONPANE, controlTypes.ROLE_PANE,
-			controlTypes.ROLE_PANEL, controlTypes.ROLE_TOOLBAR,
-			controlTypes.ROLE_WINDOW),
-		"treeView": (controlTypes.ROLE_TREEVIEW, controlTypes.ROLE_TREEVIEWITEM),
-		"tab": (controlTypes.ROLE_TAB,)
-	}
+_rolesByType = {
+	"button": (
+		Role.BUTTON, Role.SPINBUTTON,
+		Role.DROPDOWNBUTTON, Role.RADIOBUTTON,
+		Role.TOGGLEBUTTON, Role.MENUBUTTON,
+		Role.TREEVIEWBUTTON),
+	"checkBox": (Role.CHECKBOX,),
+	"edit": (Role.EDITABLETEXT, Role.PASSWORDEDIT,),
+	"text": (Role.STATICTEXT, Role.TEXTFRAME,),
+	"list": (Role.LIST, Role.LISTITEM),
+	"comboBox": (Role.COMBOBOX,),
+	"slider": (Role.SLIDER,),
+	"link": (Role.LINK,),
+	"table": (
+		Role.TABLE, Role.TABLECELL,
+		Role.TABLEROW),
+	"menu": (
+		Role.MENU, Role.MENUITEM,
+		Role.RADIOMENUITEM, Role.CHECKMENUITEM,
+		Role.MENUBAR, Role.POPUPMENU,
+		Role.TEAROFFMENU),
+	"container": (
+		Role.APPLICATION, Role.DESKTOPPANE,
+		Role.DIALOG, Role.DIRECTORYPANE,
+		Role.FRAME, Role.GLASSPANE,
+		Role.OPTIONPANE, Role.PANE,
+		Role.PANEL, Role.TOOLBAR,
+		Role.WINDOW),
+	"treeView": (Role.TREEVIEW, Role.TREEVIEWITEM),
+	"tab": (Role.TAB,)
+}
 
 
 class ElementListDialog(
@@ -315,7 +264,7 @@ class ElementListDialog(
 			self.lastKeyDownTime = 0
 			self.lastTypedKeys = ""
 		if not (30 <= keyCode <= 255):
-			# no alphanumeric character, so  ignore it
+			# no alphanumeric character, so ignore it
 			self.lastTypedKeys = ""
 			return False
 		key = chr(keyCode).lower()
@@ -336,7 +285,7 @@ class ElementListDialog(
 					ui.message,
 					self.objectListBox .GetStringSelection())
 				return True
-			# set selection on next object  with name starting with lastTypedKeys
+			# set selection on next object with name starting with lastTypedKeys
 			if self.selectNextObject():
 				wx.CallLater(
 					50,
@@ -427,20 +376,20 @@ class ElementListDialog(
 		if withRole:
 			name = "%s, %s" % (
 				name,
-				roleLabels.get(obj.role))
+				obj.role.displayString)
 		return name
 
 	def getStateLabel(self, obj):
 		states = obj.states
-		if STATE_PRESSED in states:
-			return stateLabels.get(STATE_PRESSED)
-		if STATE_CHECKED in states:
-			return stateLabels.get(STATE_CHECKED)
-		if STATE_HALFCHECKED in states:
-			return stateLabels.get(STATE_HALFCHECKED)
-		if obj.role in [ROLE_EDITABLETEXT, ]:
-			if STATE_READONLY in states:
-				return stateLabels.get(STATE_READONLY)
+		if State.PRESSED in states:
+			return State.PRESSED.displayString
+		if State.CHECKED in states:
+			return State.CHECKED.displayString
+		if State.HALFCHECKED in states:
+			return State.HALFCHECKED.displayString
+		if obj.role in [Role.EDITABLETEXT, ]:
+			if State.READONLY in states:
+				return State.READONLY.displayString
 
 	def getElementsForType(self, elementType):
 		labelAndObjList = []

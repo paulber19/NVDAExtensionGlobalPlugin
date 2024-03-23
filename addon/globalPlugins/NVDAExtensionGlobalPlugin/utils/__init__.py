@@ -17,6 +17,14 @@ import queueHandler
 import config
 import core
 from ..settings import toggleDialogTitleWithAddonSummaryAdvancedOption
+import speech.speech
+try:
+	# NVDA >= 2024.1
+	speakOnDemand = speech.speech.SpeechMode.onDemand
+except AttributeError:
+	# NVDA <= 2023.3
+	speakOnDemand = None
+
 
 addonHandler.initTranslation()
 
@@ -198,3 +206,17 @@ def setSpeechMode(mode):
 
 def setSpeechMode_off():
 	speech.setSpeechMode(speech.SpeechMode.off)
+
+
+def executeWithSpeakOnDemand(func, *args, **kwargs):
+	from speech.speech import _speechState, SpeechMode
+	if not speakOnDemand or _speechState.speechMode != SpeechMode.onDemand:
+		return func(*args, **kwargs)
+	_speechState.speechMode = SpeechMode.talk
+	ret = func(*args, **kwargs)
+	_speechState.speechMode = SpeechMode.onDemand
+	return ret
+
+
+def messageWithSpeakOnDemand(msg):
+	executeWithSpeakOnDemand(ui.message, msg)

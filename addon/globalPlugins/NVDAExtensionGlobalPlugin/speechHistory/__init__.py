@@ -1,12 +1,10 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2023 paulber19
+# Copyright (C) 2016 - 2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
-from logHandler import log
-from speech import speech as speech
 import tones
 import ui
 import api
@@ -20,56 +18,8 @@ addonHandler.initTranslation()
 MAX_RECORD = 200
 # global variables
 _speechRecorder = None
-_oldSpeak = None
-_oldSpeakSpelling = None
-
-
-def mySpeak(sequence, *args, **kwargs):
-	_oldSpeak(sequence, *args, **kwargs)
-	text = " ".join([x for x in sequence if isinstance(x, str)])
-	_speechRecorder.record(text)
-
-
-def mySpeakSpelling(text, *args, **kwargs):
-	_oldSpeakSpelling(text, *args, **kwargs)
-	_speechRecorder.record(text)
-
-
-def initialize():
-	global _speechRecorder, _oldSpeak, _oldSpeakSpelling
-	if _speechRecorder is not None:
-		return
-	_speechRecorder = SpeechRecorderManager()
-	_oldSpeak = speech.speak
-	if speech.speak.__module__ != "speech.speech":
-		log.warning(
-			"Incompatibility: speech.speech.speak method has been also patched probably by another add-on: %s."
-			"There is a risk of malfunction" % speech.speak.__module__)
-	_oldSpeakSpelling = speech.speakSpelling
-	if speech.speakSpelling.__module__ != "speech.speech":
-		log.warning(
-			"Incompatibility: speech.speech.speakSpelling method has been also patched probably by another add-on: %s."
-			"There is a risk of malfunction" % speech.speakSpelling.__module__)
-	speech.speak = mySpeak
-	log.debug(
-		"speech.speech.speak method has been replaced by %s method of %s module" % (
-			mySpeak.__name__, mySpeak.__module__)
-	)
-	speech.speakSpelling = mySpeakSpelling
-	log.debug(
-		"speech.speech.speakSpelling  method has been replaced by %s method of %s module" % (
-			mySpeakSpelling.__name__, mySpeakSpelling.__module__)
-	)
-	log.warning("speechHistory initialized")
-
-
-def terminate():
-	global _speechRecorder
-	if _speechRecorder is None:
-		return
-	speech.speak = _oldSpeak
-	speech.speakSpelling = _oldSpeakSpelling
-	_speechRecorder = None
+_NVDASpeak = None
+_NVDASpeakSpelling = None
 
 
 def getSpeechRecorder():
@@ -145,3 +95,26 @@ class SpeechRecorderManager(object):
 		informationLabel = _("Records:")
 		InformationDialog.run(
 			None, dialogTitle, informationLabel, text, insertionPointOnLastLine)
+
+
+def initialize():
+	from . import speechHistoryPatches
+	from ..settings import isInstall
+	from ..settings.addonConfig import FCT_SpeechHistory, FCT_TemporaryAudioDevice
+	global _NVDASpeak, _NVDASpeakSpelling
+	global _speechRecorder
+	if _speechRecorder is not None:
+		return
+	if not isInstall(FCT_SpeechHistory) and not isInstall(FCT_TemporaryAudioDevice):
+		return
+	_speechRecorder = SpeechRecorderManager()
+	speechHistoryPatches.patche(install=True)
+
+
+def terminate():
+	global _speechRecorder
+	if _speechRecorder is None:
+		return
+	from . import speechHistoryPatches
+	speechHistoryPatches.patche(install=False)
+	_speechRecorder = None

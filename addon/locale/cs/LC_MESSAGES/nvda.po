@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: NVDAExtensionGlobalPlugin\n"
 "Report-Msgid-Bugs-To: PaulBer19 (paulber19@laposte.net\n"
 "POT-Creation-Date: 2023-11-21 08:57+0100\n"
-"PO-Revision-Date: 2024-02-22 05:53+0100\n"
+"PO-Revision-Date: 2024-03-02 19:42+0100\n"
 "Last-Translator: paulber19 <paulber19@laposte.net>\n"
 "Language-Team: Partyka Pavel <ppartyka@email.cz>\n"
 "Language: cs\n"
@@ -91,7 +91,8 @@ msgstr ""
 "exponentu 2 a možnost přidat vlastní kategorie a symboly,\\n\n"
 "* Rozšíření funkce režimu kontroly NVDA (virtuální vyrovnávací paměti) pro "
 "prohlížeč:\\n\n"
-" * Nové příkazy pro režim průzkumu (odstavec, divize, kotva, oblast),\\n\n"
+" * Nové příkazy pro režim průzkumu (odstavec, divize, pevný bod, oblast),"
+"\\n\n"
 " * Nové typy prvků pro dialogové okno otevřené pomocí \"NVDA+F7\" (přepínač, "
 "odstavce, rámeček, zaškrtávací políčka atd.) s oznámením počtu nalezených "
 "prvků,\\n\n"
@@ -609,7 +610,7 @@ msgstr "&odstranit"
 #. on active windows list display dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:188
 msgid "Destro&y all"
-msgstr "odstraňte & vše"
+msgstr "odstranit & vše"
 
 #. it is desktop window, destroy is not possible
 #. Translators: a message announced in active windows list display dialog.
@@ -706,7 +707,7 @@ msgstr "Nahlásit aktuální pozici buňky tabulky"
 #. Translators: Input help mode message for move To  First Cell Of Row
 #: globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:229
 msgid "Move to first cell of table row"
-msgstr "Přesuňte se na první buňku řádku tabulky"
+msgstr "Přesunout se na první buňku řádku tabulky"
 
 #. Translators: Input help mode message for move To  last Cell Of Row
 #. Translators: Input help mode message for move To last cell of row command.
@@ -719,7 +720,7 @@ msgstr "Přejít na poslední buňku řádku tabulky"
 #. Translators: Input help mode message for move To  first Cell Of column
 #: globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:248
 msgid "Move to first cell of table column"
-msgstr "Přesuňte se na první buňku sloupce tabulky"
+msgstr "Přesunout se na první buňku sloupce tabulky"
 
 #. Translators: Input help mode message for move To  last Cell Of column
 #: globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\documentBaseEx.py:256
@@ -731,7 +732,7 @@ msgstr "Přejít na poslední buňku sloupce tabulky"
 #: globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\elementsList.py:81
 #: globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\elementsList.py:518
 msgid "Anchor"
-msgstr "Kotva"
+msgstr "Pevný bod"
 
 #. Translators: message to the user to report number of elements.
 #: globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\elementsList.py:268
@@ -976,7 +977,7 @@ msgstr "Příkazové klávesy selektivní oznámení"
 #. on Command Keys Selective Announcement Dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:698
 msgid "Check &excluded keys:"
-msgstr "Zkontrolujte &vyloučené klíče:"
+msgstr "Zkontrolovat &vyloučené klíče:"
 
 #. the modifiers keys list box
 #. Translators: This is a label appearing
@@ -989,17 +990,17 @@ msgstr "Stisknuto & s kombinací kláves modifikátoru:"
 #. on Command Keys Selective Announcement Dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:732
 msgid "&Check all modifier combinations"
-msgstr "&Zaškrtněte všechny kombinace modifikátorů"
+msgstr "&Zaškrtnout všechny kombinace modifikátorů"
 
 #. Translators: This is a label of a button appearing
 #. on Command Keys Selective Announcement Dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:738
 msgid "&Uncheck all modifier combinations"
-msgstr "&Zrušte zaškrtnutí všech kombinací modifikátorů"
+msgstr "&Zrušení zaškrtnutí všech kombinací modifikátorů"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:777
 msgid "Do not speak command &keys"
-msgstr "Nevyslovujte příkaz &klávesy"
+msgstr "Nevyslovovat příkaz &klávesy"
 
 #. Translators: the text of a message box dialog
 #. in Command keys selective announcement dialog.
@@ -1059,7 +1060,7 @@ msgstr "&Vložit"
 #. on complex symbols dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:116
 msgid "&Manage your symbols"
-msgstr "&Spravujte své symboly"
+msgstr "&Spravovat své symboly"
 
 #. Translators: This is a message announced in complex symbols dialog.
 #. Translators: This is a message announced in Manage Symbols Dialog.
@@ -1257,7 +1258,7 @@ msgstr "Není zaznamenán žádný symbol"
 #. Translators: this is title of classic Window to manage file.
 #: globalPlugins\NVDAExtensionGlobalPlugin\currentFolder\__init__.py:25
 msgid "Open"
-msgstr "OTEVŘENO"
+msgstr "OTEVŘít"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\currentFolder\__init__.py:25
 msgid "Save"
@@ -1295,7 +1296,7 @@ msgstr "doprava"
 #. Translators: part of message to report position of application on speakers
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:48
 msgid "in center"
-msgstr "v centru"
+msgstr "v středu"
 
 #. Translators: part of message to report position of application on speakers
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py:50
@@ -1679,7 +1680,7 @@ msgstr "Vypnutí počítače"
 #. on Computer shutdown dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_gui.py:50
 msgid "&Hibernate"
-msgstr "&Hibernace"
+msgstr "&Spánek"
 
 #. Translators: This is a label of a button appearing
 #. on Computer shutdowndialog.
@@ -1713,7 +1714,7 @@ msgstr "Restartování počítače"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_gui.py:152
 msgid "Computer hibernation"
-msgstr "Hibernace počítače"
+msgstr "Uspání počítače"
 
 #. Translators: This is a label for a edit box in Shutdown processing Dialog
 #. to show remaining duration for shutdown action.
@@ -1731,7 +1732,7 @@ msgstr "Počet sekund čekání před restartem:"
 #. to show remaining duration for hibernate action.
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_gui.py:173
 msgid "Number of seconds to wait before hibernation:"
-msgstr "Počet sekund čekání před hibernací:"
+msgstr "Počet sekund čekání před uspáním:"
 
 #. Translators: This is a label of a button appearing
 #. on ShutdownProcessingDialog.
@@ -1756,7 +1757,7 @@ msgstr "Počítač se restartuje..."
 #. Translators: message to user to report hibernate mode is not available.
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_util.py:79
 msgid "Hibernate isn't available. So, sleep mode is activated."
-msgstr "Hibernace není k dispozici. Režim spánku je tedy aktivován."
+msgstr "Uspání není k dispozici. je již aktivovaný režim spánku."
 
 #. Translators: The name of a category of NVDA commands.
 #. Translators: This is the label for a group in computer settings panel.
@@ -1888,7 +1889,7 @@ msgstr "Ukončení trvání za jednu minutu"
 #. Translators: the title of a message box dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:83
 msgid "End of minutetimer"
-msgstr "Konec minutky"
+msgstr "Konec minutníku"
 
 #. Translators: This is the label for the MinuteTimer dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:118
@@ -1905,7 +1906,7 @@ msgstr "Zadejte čas minutníku a dobu trvání (v minutách):"
 #. (an edit box to define the text to be spoken at then end of duration).
 #: globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:136
 msgid "Enter the &announce to be spoken at the end of duration:"
-msgstr "Zadejte &oznámení, které se má vyslovit na konci trvání:"
+msgstr "Zadání &oznámení, které se má vyslovit na konci trvání:"
 
 #. Translators: This is a label for a setting in MinuteTimer dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py:142
@@ -2008,13 +2009,13 @@ msgstr "Otevřít &předchozí protokol"
 #. on NVDA Logs Management Dialog .
 #: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:69
 msgid "Copy current log file &path to clipboard"
-msgstr "Zkopírujte &cestu aktuálního souboru protokolu do schránky"
+msgstr "Zkopírování &cesty aktuálního souboru protokolu do schránky"
 
 #. Translators: This is a label of a button appearing
 #. on NVDA Logs Management Dialog .
 #: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:73
 msgid "Copy &old log file path to clipboard"
-msgstr "Zkopírujte &starou cestu k souboru protokolu do schránky"
+msgstr "Zkopírování &staré cesty k souboru protokolu do schránky"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\NVDALogs\__init__.py:135
 msgid "Open Error"
@@ -2125,7 +2126,7 @@ msgid ""
 "Display the running application windows's list with opportunity to put one "
 "of them on the foreground or destroy it"
 msgstr ""
-"Zobrazte seznam běžících oken aplikací s možností umístit jedno z nich do "
+"Zobrazení seznamu běžících oken aplikací s možností umístit jedno z nich do "
 "popředí nebo jej odstranit"
 
 #. Translators: Input help mode message
@@ -2140,7 +2141,7 @@ msgid ""
 "Set the volume of current focused application to %s percent of speakers "
 "volume"
 msgstr ""
-"Nastavte hlasitost aktuálně zaměřené aplikace na %s procenta hlasitosti "
+"Nastavení hlasitosti aktuálně zaměřené aplikace na %s procenta hlasitosti "
 "reproduktorů"
 
 #. Translators: Input help mode message
@@ -2148,30 +2149,30 @@ msgstr ""
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:33
 #, python-format
 msgid "Set the NVDA volume to %s percent of speakers volume"
-msgstr "Nastavte hlasitost NVDA na %s procenta hlasitosti reproduktorů"
+msgstr "Nastavení hlasitosti NVDA na %s procenta hlasitosti reproduktorů"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:39
 msgid "Display the dialog to shutdown, reboot or hibernate the computer"
 msgstr ""
-"Zobrazte dialogové okno pro vypnutí, restartování nebo hibernaci počítače"
+"Zobrazení dialogového okna pro vypnutí, restartování nebo uspání počítače"
 
 #. Translators: Input help mode message
 #. for shutdown computer command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:42
 msgid "Shutdown the computer"
-msgstr "Vypněte počítač"
+msgstr "Vypnout počítač"
 
 #. Translators: Input help mode message
 #. for reboot computer command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:45
 msgid "Reboot the computer"
-msgstr "Restartujte počítač"
+msgstr "Restartovat počítač"
 
 #. Translators: Input help mode message
 #. for hibernate computer command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:48
 msgid "Hibernate the computer"
-msgstr "Hibernujte počítač"
+msgstr "Uspat počítač"
 
 #. Translators: Input help mode message
 #. for display complex symbols help dialog command.
@@ -2203,7 +2204,7 @@ msgid ""
 "Report the application 's name and version. Twice: copy these informations "
 "to clipboard"
 msgstr ""
-"Nahlaste název a verzi aplikace. Dvakrát: zkopírujte tyto informace do "
+"Nahlasit název a verzi aplikace. Dvakrát: zkopírovat tyto informace do "
 "schránky"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:83
@@ -2221,7 +2222,7 @@ msgid ""
 "Report the name and version number of add-on activated for focused "
 "application"
 msgstr ""
-"Nahlaste název a číslo verze doplňku aktivovaného pro konkrétní aplikaci"
+"Nahlašení názvu a čísla verze doplňku aktivovaného pro konkrétní aplikaci"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:95
 msgid "Display informations about the focused application"
@@ -2232,8 +2233,8 @@ msgid ""
 "Display dialog to start the minute timer. If minute timer already started, "
 "display dialog to report duration"
 msgstr ""
-"Zobrazte dialog pro spuštění minutníku. Pokud je minutník již spuštěn, "
-"zobrazte dialog pro nahlášení trvání"
+"Zobrazení dialogu pro spuštění minutníku. Pokud je minutník již spuštěn, "
+"zobrazení dialogu pro nahlášení trvání"
 
 #. Translators: Input help mode message
 #. for display addon user guide command.
@@ -2251,15 +2252,15 @@ msgstr "Zobrazí seznam příkazů interpretu příkazů"
 #. for display log management dialog command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:110
 msgid "Open a dialog to manage NVDA logs"
-msgstr "Otevřete dialog pro správu protokolů NVDA"
+msgstr "Otevření dialogu pro správu protokolů NVDA"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:115
 msgid ""
 "Open current NVDA log file. Pressing this key twice, open the old NVDA log "
 "file. Pressing third, copy current log path to the clipboard"
 msgstr ""
-"Otevřete aktuální soubor protokolu NVDA. Dvojím stisknutím této klávesy "
-"otevřete starý soubor protokolu NVDA. Třetím stisknutím zkopírujte aktuální "
+"Otevření aktuálního soubor protokolu NVDA. Dvojím stisknutím této klávesy "
+"otevře starý soubor protokolu NVDA. Třetím stisknutím zkopíruje aktuální "
 "cestu protokolu do schránky"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:120
@@ -2267,21 +2268,21 @@ msgid ""
 "Report the name of current selected folder in the open or Save dialog box. "
 "Twice: report full path"
 msgstr ""
-"Nahlaste název aktuálně vybrané složky v dialogovém okně Otevřít nebo "
+"Nahlašení názvu aktuálně vybrané složky v dialogovém okně Otevřít nebo "
 "Uložit. Dvakrát: nahlásit celou cestu"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:125
 msgid ""
 "Report the name of current selected folder in the open or Save dialog box"
 msgstr ""
-"Nahlaste název aktuálně vybrané složky v dialogovém okně Otevřít nebo Uložit"
+"Nahlasit název aktuálně vybrané složky v dialogovém okně Otevřít nebo Uložit"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:129
 msgid ""
 "Report the full path of current selected folder in the open or Save dialog "
 "box"
 msgstr ""
-"Oznamte úplnou cestu k aktuálně vybrané složce v dialogovém okně Otevřít "
+"Oznamit úplnou cestu k aktuálně vybrané složce v dialogovém okně Otevřít "
 "nebo Uložit"
 
 #. Translators: Input help mode message
@@ -2294,7 +2295,7 @@ msgstr "Prozkoumat složku mé uživatelské konfigurace"
 #. for open NVDA program files folder command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:135
 msgid "Explore NVDA program's folder"
-msgstr "Prozkoumejte složku programu NVDA"
+msgstr "Prozkoumat složku programu NVDA"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:139
 msgid "Display speech history records"
@@ -2309,8 +2310,8 @@ msgid ""
 "Report current record of the speech history.Pressing Twice: copy it to "
 "clipboard. Pressing three: display speech history"
 msgstr ""
-"Zpráva o aktuálním záznamu historie řeči. Dvojité stisknutí: zkopírujte jej "
-"do schránky. Stisknutí tři: zobrazení historie řeči"
+"Zpráva o aktuálním záznamu historie řeči. Dvojité stisknutí: zkopírování "
+"zprávy do schránky. Stisknutí tři: zobrazení historie řeči"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:154
 msgid "Report next record of the speech history"
@@ -2321,7 +2322,7 @@ msgstr "Nahlásit další záznam historie řeči"
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:158
 msgid "Restart NVDA. Twice: restart with log level set to debug"
 msgstr ""
-"Restartujte NVDA. Dvakrát: restartujte s úrovní protokolu nastavenou na "
+"Restartovat NVDA. Dvakrát: restartování s úrovní protokolu nastavenou na "
 "ladění"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:162
@@ -2337,7 +2338,7 @@ msgid ""
 "Go backward to the first selector associated to a voice profile and set this "
 "voice profile as current voice profile"
 msgstr ""
-"Přejděte zpět na první volič spojený s hlasovým profilem a nastavte tento "
+"Přejít zpět na první volič spojený s hlasovým profilem a nastavit tento "
 "hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:177
@@ -2345,7 +2346,7 @@ msgid ""
 "Go to forward to the first selector associated to a voice profile and set "
 "this voice profile as current voice profile"
 msgstr ""
-"Přejděte dopředu na první volič spojený s hlasovým profilem a nastavte tento "
+"Přejít dopředu na první volič spojený s hlasovým profilem a nastavit tento "
 "hlasový profil jako aktuální hlasový profil"
 
 #. Translators: Input help mode message
@@ -2365,35 +2366,35 @@ msgid ""
 "Report the current time. Twice: report the current date. Third: copy date "
 "and time to the clipboard"
 msgstr ""
-"Nahlaste aktuální čas. Dvakrát: nahlaste aktuální datum. Za třetí: "
-"zkopírujte datum a čas do schránky"
+"Nahlásit aktuální čas. Dvakrát: nahlásit aktuální datum. Za třetí: "
+"zkopírovat datum a čas do schránky"
 
 #. Translators: Input help mode message
 #. for copy date and time to clipboard command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:194
 msgid "Copy date and time to the clipboard"
-msgstr "Zkopírujte datum a čas do schránky"
+msgstr "Zkopírovat datum a čas do schránky"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:199
 msgid ""
 "Display, in dialog box, formatting informations for the current review "
 "cursor position within a document"
 msgstr ""
-"Zobrazte v dialogovém okně informace o formátování pro aktuální pozici "
+"Zobrazit v dialogovém okně informace o formátování pro aktuální pozici "
 "kurzoru pro prohlížení v dokumentu"
 
 #. Translators: Input help mode message
 #. for launch module layer command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:204
 msgid "Launch commands's interpreter of add-on"
-msgstr "Spusťte interpret doplňku příkazů"
+msgstr "Spustit interpret doplňku příkazů"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:209
 msgid ""
 "Set selector 1 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 1 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 1 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:215
@@ -2401,7 +2402,7 @@ msgid ""
 "Set selector 2 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 2 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 2 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:221
@@ -2409,7 +2410,7 @@ msgid ""
 "Set selector 3 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 3 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 3 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:227
@@ -2417,7 +2418,7 @@ msgid ""
 "Set selector 4 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 4 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 4 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:233
@@ -2425,7 +2426,7 @@ msgid ""
 "Set selector 5 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 5 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 5 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:239
@@ -2433,7 +2434,7 @@ msgid ""
 "Set selector 6 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 6 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 6 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:245
@@ -2441,7 +2442,7 @@ msgid ""
 "Set selector 7 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 7 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 7 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:251
@@ -2449,7 +2450,7 @@ msgid ""
 "Set selector 8 as current selector and set, if possible, its associated "
 "voice profile as current voice profile"
 msgstr ""
-"Nastavte volič 8 jako aktuální volič a nastavte, pokud je to možné, jeho "
+"Nastavit volič 8 jako aktuální volič a nastavit, pokud je to možné, jeho "
 "přidružený hlasový profil jako aktuální hlasový profil"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:257
@@ -2523,31 +2524,31 @@ msgstr "Zobrazit aktuální nastavení řeči"
 #. for toggleTextAnalyzer script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:304
 msgid "Activate or desactivate text analyzer"
-msgstr "Aktivujte nebo deaktivujte textový analyzátor"
+msgstr "Aktivovat nebo deaktivovat textový analyzátor"
 
 #. Translators: Input help mode message
 #. for analyzeCurrentWord script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:307
 msgid "Analyze the word under system cursor"
-msgstr "Analyzujte slovo pod systémovým kurzorem"
+msgstr "Analyzovat slovo pod systémovým kurzorem"
 
 #. Translators: Input help mode message
 #. for analyzeCurrentLine script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:310
 msgid "Analyze the line under system cursor"
-msgstr "Analyzujte řádek pod systémovým kurzorem"
+msgstr "Analyzovat řádek pod systémovým kurzorem"
 
 #. Translators: Input help mode message
 #. for analyzeCurrentSentence script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:313
 msgid "Analyze the sentence under system cursor"
-msgstr "Analyzujte větu pod systémovým kurzorem"
+msgstr "Analyzovat větu pod systémovým kurzorem"
 
 #. Translators: Input help mode message
 #. for analyzeCurrentParagraph script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:316
 msgid "Analyze the paragraph under system cursor"
-msgstr "Analyzujte odstavec pod systémovým kurzorem"
+msgstr "Analyzovat odstavec pod systémovým kurzorem"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:320
 msgid "Move to next irregularity detected by text analyzer"
@@ -2561,7 +2562,7 @@ msgstr "Přejít na předchozí nesrovnalost zjištěnou textovým analyzátorem
 #. for manageUserConfigurations script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:329
 msgid "Display the dialog to manage user configurations"
-msgstr "Zobrazte dialogové okno pro správu uživatelských konfigurací"
+msgstr "Zobrazit dialogové okno pro správu uživatelských konfigurací"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:333
 msgid "Toggle reporting of current caret position in edit box"
@@ -2571,21 +2572,21 @@ msgstr "Přepnout hlášení aktuální pozice stříšky v editačním poli"
 #. for addToClip script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:342
 msgid "Add, to clipboard, the selected text"
-msgstr "Přidejte do schránky vybraný text"
+msgstr "Přidat do schránky vybraný text"
 
 #. Translators: Input help mode message
 #. for clearClipboard script commands.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:345
 msgid "Empty the clipboard"
-msgstr "Vyprázdněte schránku"
+msgstr "Vyprázdnit schránku"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:349
 msgid "Display the temporary audio device manager"
-msgstr "Zobrazte dočasného správce zvukových zařízení"
+msgstr "Zobrazit dočasného správce zvukových zařízení"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:353
 msgid "Leave up the temporary audio device"
-msgstr "Ponechte dočasné zvukové zařízení"
+msgstr "Ponechat dočasné zvukové zařízení"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:358
 msgid ""
@@ -2607,14 +2608,14 @@ msgstr ""
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:371
 msgid "Activate quick Addons Activation Dialog"
-msgstr "Aktivujte rychlé dialogové okno pro aktivaci doplňků"
+msgstr "Aktivovat rychlé dialogové okno pro aktivaci doplňků"
 
 #. volumeControlScripts To DocInformations
 #. Translators: Input help mode message
 #. for set on main and NVDA volume command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:376
 msgid "Set on main and NVDA volume"
-msgstr "Nastavte na hlavní a NVDA svazek"
+msgstr "Nastavit na hlavní a NVDA svazek"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:380
 msgid "Toggle current focused application volume mute"
@@ -2622,7 +2623,7 @@ msgstr "Přepnout ztlumení hlasitosti aktuálně zaměřené aplikace"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:385
 msgid "Increase volume of current focused application"
-msgstr "Zvyšte hlasitost aktuálně zaměřené aplikace"
+msgstr "Zvýšit hlasitost aktuálně zaměřené aplikace"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:389
 msgid "Decrease volume of current focused application"
@@ -2630,22 +2631,22 @@ msgstr "Snížit hlasitost aktuálně zaměřené aplikace"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:393
 msgid "Maximize volume of current focused application"
-msgstr "Maximalizujte hlasitost aktuálně zaměřené aplikace"
+msgstr "Maximalizovat hlasitost aktuálně zaměřené aplikace"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:397
 msgid "Minimize volume of current focused application"
-msgstr "Minimalizujte hlasitost aplikace pod kurzorem"
+msgstr "Minimalizovat hlasitost aplikace pod kurzorem"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:412
 msgid "Set the volume of current focused application to previous level"
-msgstr "Nastavte hlasitost aktuálně zaměřené aplikace na předchozí úroveň"
+msgstr "Nastavit hlasitost aktuálně zaměřené aplikace na předchozí úroveň"
 
 #. scripts for nvda volume
 #. Translators: Input help mode message
 #. for increase NVDA volume command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:417
 msgid "Increase NVDA volume"
-msgstr "Zvyšte hlasitost NVDA"
+msgstr "Zvýšit hlasitost NVDA"
 
 #. Translators: Input help mode message
 #. for decrease NVDA volume command.
@@ -2657,74 +2658,74 @@ msgstr "Snížit hlasitost NVDA"
 #. for maximize NVDA volume command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:423
 msgid "Maximize NVDA volume"
-msgstr "Maximalizujte hlasitost NVDA"
+msgstr "Maximalizovat hlasitost NVDA"
 
 #. Translators: Input help mode message
 #. for minimize NVDA volume command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:426
 msgid "Minimize NVDA volume"
-msgstr "Minimalizujte hlasitost NVDA"
+msgstr "Minimalizovat hlasitost NVDA"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:441
 msgid "Set the NVDA volume to previous level"
-msgstr "Nastavte hlasitost NVDA na předchozí úroveň"
+msgstr "Nastavit hlasitost NVDA na předchozí úroveň"
 
 #. scripts for speakers volume
 #. Translators: Input help mode message
 #. for increase volume of speakers command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:446
 msgid "Increase volume of speakers"
-msgstr "Zvyšte hlasitost reproduktorů"
+msgstr "Zvýšit hlasitost reproduktorů"
 
 #. Translators: Input help mode message
 #. for decrease volume of speakers command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:449
 msgid "Decrease volume of speakers"
-msgstr "Snižte hlasitost reproduktorů"
+msgstr "Snížit hlasitost reproduktorů"
 
 #. Translators: Input help mode message
 #. for maximize volume of speakers command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:452
 msgid "Maximize volume of speakers"
-msgstr "Maximalizujte hlasitost reproduktorů"
+msgstr "Maximalizovat hlasitost reproduktorů"
 
 #. Translators: Input help mode message
 #. for minimize volume of speakers command.
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:455
 msgid "Minimize volume of speakers"
-msgstr "Minimalizujte hlasitost reproduktorů"
+msgstr "Minimalizovat hlasitost reproduktorů"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:470
 msgid "Set the main volume to previous level"
-msgstr "Nastavte hlavní hlasitost na předchozí úroveň"
+msgstr "Nastavit hlavní hlasitost na předchozí úroveň"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:476
 msgid "Hear NVDA to right and focused application to left"
-msgstr "Poslouchejte NVDA vpravo a zaměřenou aplikaci vlevo"
+msgstr "Slyšet NVDA vpravo a zaměřenou aplikaci vlevo"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:480
 msgid "Hear NVDA to left and focused application to right"
-msgstr "Poslouchejte NVDA vlevo a zaměřenou aplikaci vpravo"
+msgstr "Slyšet NVDA vlevo a zaměřenou aplikaci vpravo"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:484
 msgid "Hear NVDA and focused application on center"
-msgstr "Poslouchejte NVDA a zaměřenou aplikaci na střed"
+msgstr "Slyšet NVDA a zaměřenou aplikaci na střed"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:488
 msgid "Hear NVDA to right and all audio applications to left"
-msgstr "Poslouchejte NVDA vpravo a všechny aplikace vlevo"
+msgstr "Slyšet NVDA vpravo a všechny aplikace vlevo"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:492
 msgid "Hear NVDA to left and all audio applications to right"
-msgstr "Poslouchejte NVDA vlevo a všechny aplikace vpravo"
+msgstr "Slyšet NVDA vlevo a všechny aplikace vpravo"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:496
 msgid "Hear NVDA and all audio applications on center"
-msgstr "Poslouchejte NVDA a všechny aplikace ve středu"
+msgstr "Slyšet NVDA a všechny aplikace ve středu"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:500
 msgid "Hear focused application on center"
-msgstr "Poslouchejte aplikaci pod kurzorem uprostřed"
+msgstr "Slyšet aplikaci pod kurzorem uprostřed"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\scripts\scriptInfos.py:504
 msgid "Display NVDA 's audio sources manager"
@@ -2761,7 +2762,7 @@ msgstr "nic"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:30
 msgid "Press F1 for help"
-msgstr "Pro nápovědu stiskněte F1"
+msgstr "Pro nápovědu stisknout F1"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:38
 msgid ""
@@ -2929,7 +2930,7 @@ msgstr "Historie řeči"
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:424
 msgid "&Number the records"
-msgstr "&Očíslujte záznamy"
+msgstr "&Očíslovat záznamy"
 
 #. Translators: This is the label for a checkbox in the NVDAEnhancement settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:429
@@ -3023,7 +3024,7 @@ msgstr "Hlavní svazek a svazek NVDA"
 #. Translators: This is the label for a checkbox in the computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:602
 msgid "Set on &volume at the loading of the add-on"
-msgstr "Nastavte na &hlasitost při načítání doplňku"
+msgstr "Nastavit na &hlasitost při načítání doplňku"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:613
@@ -3077,7 +3078,7 @@ msgstr "Dočasné zvukové zařízení"
 #. Translators: This is the label for a checkbox in the Computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:676
 msgid "Ask for confirmation"
-msgstr "Požádejte o potvrzení"
+msgstr "Požádat o potvrzení"
 
 #. Translators: This is a label for a choice box in computer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:681
@@ -3133,8 +3134,8 @@ msgid ""
 "&Do not take account of the option called \"Report object descriptions\" "
 "during the display of the dialog box same as confirmation"
 msgstr ""
-"&Neberte v úvahu možnost nazvanou \"Nahlásit popisy objektů\" během "
-"zobrazení dialogového okna stejně jako potvrzení"
+"&Nebrat v úvahu možnost nazvanou \"Nahlásit popisy objektů\" během zobrazení "
+"dialogového okna stejně jako potvrzení"
 
 #. Translators: This is the label for a checkbox in the Advanced settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:804
@@ -3199,7 +3200,7 @@ msgstr "&Pouze klíč NVDA je remanentní"
 #. Translators: This is the label for a checkbox in the Keyboard settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:961
 msgid "Activate &remanence at NVDA's start"
-msgstr "Aktivujte &remanence při startu NVDA"
+msgstr "Aktivovat &remanence při startu NVDA"
 
 #. Translators: This is the label for a combobox in the Keyboard settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:966
@@ -3279,7 +3280,7 @@ msgstr "Automaticky kontrolovat &aktualizace"
 #. Translators: This is the label for a checkbox in the Update settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1122
 msgid "Update also release versions to &development versions"
-msgstr "Aktualizujte také vydané verze na &vývojové verze"
+msgstr "Aktualizovat také vydané verze na &vývojové verze"
 
 #. translators: this is a label for a button in update settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1129
@@ -3359,12 +3360,12 @@ msgstr "zámek"
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1341
 msgid "Block insert key"
-msgstr "Zamkněte klávesu Insert"
+msgstr "Zamknout klávesu Insert"
 
 #. Translators: This is the label for a checkBox in the Keyboard profile settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1346
 msgid "Block capslock key"
-msgstr "Uzamkněte klávesu Caps Lock"
+msgstr "Uzamknout klávesu Caps Lock"
 
 #. Translators: This is the label for a group of editing options in the Keyboard profile settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1357
@@ -3395,7 +3396,7 @@ msgstr "&Aktivovat textový analyzátor"
 #. Translators: This is the label for a checkbox in the TextAnalyzer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1423
 msgid "Activate text analyzer at add-on's &start"
-msgstr "Aktivujte textový analyzátor na &startu doplňku"
+msgstr "Aktivovat textový analyzátor na &startu doplňku"
 
 #. Translators: This is the label for a group of editing options in the TextAnalyzer settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\dialog.py:1429
@@ -3594,13 +3595,13 @@ msgstr "&Zkontrolovat vše"
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1085
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:1487
 msgid "&Uncheck all"
-msgstr "&Zrušte zaškrtnutí všech"
+msgstr "&Zrušit zaškrtnutí všech"
 
 #. Translators: This is a label of a button appearing
 #. on Addons activation dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:79
 msgid "&Save and restart NVDA"
-msgstr "&Uložte a restartujte NVDA"
+msgstr "&Uložit a restartovat NVDA"
 
 #. Translators: label to mark the add-on incompatible
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py:142
@@ -3644,7 +3645,7 @@ msgstr "&složky konfigurace:"
 #. in the User configuration management dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:285
 msgid "&Restart NVDA with this configuration's folder"
-msgstr "&Restartujte NVDA s touto konfigurační složkou"
+msgstr "&Restartovat NVDA s touto konfigurační složkou"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
@@ -3654,7 +3655,7 @@ msgstr "&Restartujte NVDA s touto konfigurační složkou"
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:292
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:363
 msgid "&Prepare this folder"
-msgstr "&Připravte tuto složku"
+msgstr "&Připravit tuto složku"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
@@ -3666,7 +3667,7 @@ msgstr "&Smazat tuto složku"
 #. in the User configuration management dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:303
 msgid "Empt&y this folder"
-msgstr "&Vyprázdněte tuto složku"
+msgstr "&Vyprázdnit tuto složku"
 
 #. translators: this is a label for a button
 #. in the User configuration management dialog.
@@ -3777,7 +3778,7 @@ msgstr "Importovat řečové &slovníky"
 #. translators: a label for a button in the update or Prepare folder dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:685
 msgid "Import ponctuation/symbol &pronunciations"
-msgstr "Importujte &výslovnosti mluvnice/symbolu"
+msgstr "Importovat &výslovnosti mluvnice/symbolu"
 
 #. translators: a label for a button in the update or Prepare folder dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:689
@@ -3796,7 +3797,7 @@ msgstr "Importovat parametry &NVDA (normální konfigurace)"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:700
 msgid "Import all the &configuration"
-msgstr "Importujte veškerou &konfiguraci"
+msgstr "Importovat veškerou &konfiguraci"
 
 #. Translators: message to user to report end of import.
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:734
@@ -4213,7 +4214,7 @@ msgstr "Procentuální změna výšky pro velká písmena"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:446
 msgid "Say cap before capitals"
-msgstr "Před velkými písmeny řekněte velké"
+msgstr "Před velkými písmeny říct velké"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:447
 msgid "Beep for capitals"
@@ -4221,7 +4222,7 @@ msgstr "Pípnutí pro velká písmena"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:448
 msgid "Use spelling functionality if supported"
-msgstr "Používejte funkci pravopisu, pokud je podporována"
+msgstr "Používat funkci pravopisu, pokud je podporována"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:456
 #, python-format
@@ -4272,7 +4273,7 @@ msgstr "volný, uvolnit"
 #. in the various settings panel.
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:590
 msgid "&Use selectors associated under normal cconfiguration's profile"
-msgstr "&Použijte přidružené selektory v normálním konfiguračním profilu"
+msgstr "&Použít přidružené selektory v normálním konfiguračním profilu"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:610
 msgid "&Activate voice profile"
@@ -4298,7 +4299,7 @@ msgstr "&Volný výběr"
 #. on Selectors Management dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:623
 msgid "&Free all selectors"
-msgstr "Uvolněte všechny voliče"
+msgstr "Uvolnit všechny voliče"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py:627
 msgid "Voice profile's &informations"
@@ -4600,12 +4601,12 @@ msgstr "Nelze vytvořit soubor POT"
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:455
 #, python-format
 msgid "Prepare %s add-on"
-msgstr "Připravte %s doplněk"
+msgstr "Připravit %s doplněk"
 
 #. start
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:470
 msgid "Prepare add-on start"
-msgstr "Připravte start doplňku"
+msgstr "Připravit start doplňku"
 
 #. Translators: part of message to report update of manifest.ini file
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:482
@@ -4733,7 +4734,7 @@ msgstr "Všechno"
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:872
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:895
 msgid "Update add-on version"
-msgstr "Aktualizujte verzi doplňku"
+msgstr "Aktualizovat verzi doplňku"
 
 #. Translators: message to user add-on version line not found
 #: globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py:851
@@ -4952,16 +4953,16 @@ msgid ""
 "Report the short path of focused folder or file  of Windows Explorer. Twice: "
 "report the full path. Three time: copy the full path  to the clipboard"
 msgstr ""
-"Oznamte zkrácenou cestu ke složce nebo souboru pod kurzorem v Průzkumníku "
+"Oznámit zkrácenou cestu ke složce nebo souboru pod kurzorem v Průzkumníku "
 "Windows. Dvojité stisknutí: pro ohlášení celé trasy. Stisknutím třikrát: "
-"zkopírujete celou cestu do schránky"
+"zkopírovat celou cestu do schránky"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py:139
 msgid ""
 "Report the path of the file or folder under the cursor of Windows Explorer "
 "by going up the folders tree"
 msgstr ""
-"Nahlaste cestu k souboru nebo složce pod kurzorem Průzkumníka Windows tím, "
+"Nahlásit cestu k souboru nebo složce pod kurzorem Průzkumníka Windows tím, "
 "že přejdete nahoru ve stromu složek"
 
 #. Translators: The label of a list item to select the type of object
@@ -5013,7 +5014,7 @@ msgstr "prvky:"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\elementListDialog.py:225
 msgid "Move &navigator object to it"
-msgstr "Otevřete &objektový navigátor a ukazatel myši"
+msgstr "Otevřít &objektový navigátor a ukazatel myši"
 
 #: globalPlugins\NVDAExtensionGlobalPlugin\winExplorer\__init__.py:135
 msgid "Elements's searching"

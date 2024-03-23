@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2023 paulber19
+# Copyright (C) 2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -10,30 +10,70 @@ from logHandler import log
 import os
 from threading import Thread
 import time
+import gui
 import ui
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL, CoCreateInstance, CLSCTX_INPROC_SERVER, CoInitialize
 import sys
 import wx
-import config
 import tones
-from ..utils.py3Compatibility import getUtilitiesPath, getCommonUtilitiesPath
-commonUtilitiesPath = getCommonUtilitiesPath()
-utilitiesPath = getUtilitiesPath()
-pycawPath = os.path.join(utilitiesPath, "pycawEx")
-sysPath = sys.path
-sys.path.append(commonUtilitiesPath)
-sys.path.append(utilitiesPath)
-sys.path.append(pycawPath)
-from pycawEx.pycaw import (
-	AudioUtilities, IAudioEndpointVolume, AudioDeviceState, IChannelAudioVolume,
-	IMMDeviceEnumerator, CLSID_MMDeviceEnumerator, MMNotificationClient
-)
-from pycawEx.constants import (
-	DEVICE_STATE, EDataFlow,
-)
-sys.path = sysPath
-
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
+if NVDAVersion >= [2024, 2]:
+	# for nvda version >= 2024.2
+	from pycaw.utils import (
+		AudioDevice,
+		AudioSession,
+	)
+	from pycaw.api.audioclient import IChannelAudioVolume
+	from pycaw.api.endpointvolume import IAudioEndpointVolume
+	from pycaw.api.mmdeviceapi import (
+		IMMDeviceEnumerator,
+		IMMNotificationClient,
+	)
+	from pycaw.constants import (
+		DEVICE_STATE,
+		AudioDeviceState,
+		EDataFlow,
+		ERole,
+		CLSID_MMDeviceEnumerator,
+	)
+	from pycaw.callbacks import MMNotificationClient
+else:
+	# for nvda version < 2024.2
+	sysPath = list(sys.path)
+	if "pycaw" in sys.modules:
+		log.warning("Potential incompatibility: pycaw module is also used and loaded probably by other add-on")
+		del sys.modules["pycaw"]
+	sys.path = [sys.path[0]]
+	from ..utils.py3Compatibility import getCommonUtilitiesPath
+	commonUtilitiesPath = getCommonUtilitiesPath()
+	pycawPath = os.path.join(commonUtilitiesPath, "pycawEx")
+	psutilPath = os.path.join(commonUtilitiesPath, "psutilEx")
+	sys.path.append(commonUtilitiesPath)
+	sys.path.append(psutilPath)
+	sys.path.append(pycawPath)
+	from pycawEx.pycaw.utils import (
+		AudioDevice,
+		AudioSession,
+	)
+	from pycawEx.pycaw.api.audioclient import IChannelAudioVolume
+	from pycawEx.pycaw.api.endpointvolume import IAudioEndpointVolume
+	from pycawEx.pycaw.api.mmdeviceapi import (
+		IMMDeviceEnumerator,
+		IMMNotificationClient,
+	)
+	from pycawEx.pycaw.constants import (
+		DEVICE_STATE,
+		AudioDeviceState,
+		EDataFlow,
+		ERole,
+		CLSID_MMDeviceEnumerator,
+	)
+	from pycawEx.pycaw.callbacks import MMNotificationClient
+	# restore sys.path
+	sys.path = sysPath
+from .pycawUtils import MyAudioUtilities as AudioUtilities
 
 addonHandler.initTranslation()
 
@@ -54,9 +94,6 @@ volumeMsg = _("Volume")
 # Translators: part of message for announcement of speakers volume level.
 mainVolumeMsg = _("Main volume")
 
-# save nvda channel volume levels (only if no wasapi use)
-_NVDAChannelsVolume = (1.0, 1.0)
-
 _previousAppVolumeLevels = {}
 _levelLimitationBeep = (400, 30)
 
@@ -71,10 +108,6 @@ def isWasapiUsed():
 	except Exception:
 		pass
 	return False
-
-
-def getCurrentNVDAChannelsVolume():
-	return _NVDAChannelsVolume
 
 
 def isNVDA(appName):
@@ -195,6 +228,7 @@ class AudioSource(object):
 
 
 class AudioSources(object):
+	
 	def __init__(self, device=None):
 		self._device = device
 		self._audioSources = self._getAudioSources()
@@ -273,7 +307,7 @@ class AudioSources(object):
 			minLevel = round(speakersRecoveryLevel * NVDAMinLevel / 100)
 			# perhaps, minLevel is higher then current speakers volume
 			if maxLevel < minLevel:
-				# set minLevel to  current speakers volume
+				# set minLevel to current speakers volume
 				minLevel = maxLevel
 			relativeMinLevel = round(minLevel / (100 * speakersVolume) * 100)
 			log.debug("relativeMinLevel: %s, minLevel: %s" % (relativeMinLevel, minLevel))
@@ -354,7 +388,7 @@ class AudioSources(object):
 			level = 0
 		elif action == "set":
 			# value = percent of speakers volume
-			level = int(round(100 * speakersVolume) * value / 100)
+			level = int(round((100 * speakersVolume) * value / 100))
 		else:
 			# unknown action
 			log.warning("changeFocusedAppVolume: %s action is not known" % action)
@@ -404,9 +438,7 @@ class AudioSources(object):
 		minLevel = float(NVDAMinLevel / 100)
 		channels = (1.0, 1.0)
 		audioSource.setChannels(channels)
-		global _NVDAChannelsVolume
-		_NVDAChannelsVolume = channels
-		log.warning("NVDA  channels are set to 1.0")
+		log.warning("NVDA channels are set to 1.0")
 		if not checkThreshold or (checkThreshold and volumeLevel <= minLevel):
 			NVDARecoveryLevel = float(_addonConfigManager.getNVDAVolumeLevel() / 100)
 			audioSource.setVolume(NVDARecoveryLevel)
@@ -426,78 +458,83 @@ class AudioSources(object):
 
 	def splitChannels(self, NVDAChannel=None, application=None):
 		log.debug("splitChannels: %s, %s" % (NVDAChannel, application))
-		audioSource = None
 		nvdaAudioSource = self.getNVDAAudioSource()
 		if not nvdaAudioSource.isStereo:
 			# Translators: message to user that NVDA is not a stereo audio source
 			wx.CallLater(40, ui.message, _("Not available: %s is not a stereo audio source") % nvdaAudioSource.name)
 			return
+		(left, right) = nvdaAudioSource.channelsVolume
+		nvdaLeftOrRightMax = max(left, right)
+		audioSource = None
+		otherSources = []
 		if application:
 			audioSource = self.getAudioSource(application)
+			otherSources = [audioSource, ]
+			appMsgList = application.split(".")
+			appMsg = ".".join(appMsgList[:-1]) if len(appMsgList) > 1 else application
+			if isNVDA(application) or not audioSource:
+				# split only NVDA
+				otherSources = []
+			else:
+			# split application and NVDA
+				otherSources  = [audioSource, ]
+		else:
+			for source in self.sources:
+				audioSource = self.sources[source]
+				if not audioSource.isStereo or audioSource.isNVDAProcess():
+					continue
+				otherSources.append(audioSource)
+		
 		if NVDAChannel == "left":
-			NVDALevels = (1.0, 0.0)
-			appLevels = (0.0, 1.0)
+			NVDALevels = (nvdaLeftOrRightMax, 0.0)
+			appChannels = (0, 1)
 			if application:
 				if isNVDA(application) or not audioSource:
 					msg = "NVDA %s" % toLeftMsg
 				else:
-					appMsg = ".".join(application.split(".")[:-1])
 					msg = _("NVDA {to}, {app} {appTo}") .format(to=toLeftMsg, app=appMsg, appTo=toRightMsg)
 			else:
 				msg = _("NVDA {to} and all other audio sources {appTo}") .format(to=toLeftMsg, appTo=toRightMsg)
 		elif NVDAChannel == "right":
-			NVDALevels = (0.0, 1.0)
-			appLevels = (1.0, 0.0)
+			NVDALevels = (0.0, nvdaLeftOrRightMax)
+			appChannels = (1, 0)
 			if application:
 				if isNVDA(application) or not audioSource:
 					msg = "NVDA %s" % toRightMsg
 				else:
-					appMsg = ".".join(application.split(".")[:-1])
 					msg = _("NVDA {to}, {app} {appTo}") .format(to=toRightMsg, app=appMsg, appTo=toLeftMsg)
 			else:
 				msg = _("NVDA {to} and all other audio sources {appTo}") .format(to=toRightMsg, appTo=toLeftMsg)
 		else:
-			NVDALevels = (1.0, 1.0)
-			appLevels = (1.0, 1.0)
+			NVDALevels = (nvdaLeftOrRightMax, nvdaLeftOrRightMax)
+			appChannels = (1, 1)
 			if application:
 				if isNVDA(application) or not audioSource:
 					msg = "NVDA%s" % inCenterMsg
 				else:
-					appMsg = ".".join(application.split(".")[:-1])
 					msg = _("NVDA and {app} {to}") .format(app=appMsg, to=inCenterMsg)
 			else:
 				msg = _("All audio sources {appTo}") .format(appTo=inCenterMsg)
-		if application:
-			if not isNVDA(application):
-				# split audio only for this application
-				if not audioSource or not audioSource.isStereo:
-					return
-				audioSource.setChannels(appLevels)
-				for source in self.sources:
-					audioSource = self.sources[source]
-					if not audioSource.isStereo:
-						continue
-					if audioSource.isNVDAProcess():
-						audioSource.setChannels(NVDALevels)
-		else:
-			# split channel of all audio applications
-			for source in self.sources:
-				audioSource = self.sources[source]
-				if not audioSource.isStereo:
-					continue
-				if audioSource.isNVDAProcess():
-					audioSource.setChannels(NVDALevels)
-					global _NVDAChannelsVolume
-					_NVDAChannelsVolume = NVDALevels
-				else:
-					audioSource.setChannels(appLevels)
+		# first set channeles for NVDA
+		nvdaAudioSource.setChannels(NVDALevels)
+
+		# now set  channel for other application
+		for audioSource in otherSources:
+			#audioSource = self.sources[source]
+			(left, right) = audioSource.channelsVolume
+			leftOrRightMax = max(left, right)
+			appLevels = (leftOrRightMax * appChannels[0], leftOrRightMax * appChannels[1])
+			audioSource.setChannels(appLevels)
+
+
 		from speech import cancelSpeech
 		wx.CallLater(40, cancelSpeech)
 		wx.CallLater(80, ui.message, msg)
 		log.warning(msg)
 
+
 	def toggleChannels(self, balance="center", application=None, silent=False):
-		log.debug("toggleChannels:  %s, %s, %s" % (balance, application, silent))
+		log.debug("toggleChannels: %s, %s, %s" % (balance, application, silent))
 		processName = application
 		if processName not in self.sources.keys():
 			return
@@ -507,14 +544,16 @@ class AudioSources(object):
 			# Translators: message to user that audio source is not a stereo audio source
 			wx.CallLater(40, ui.message, _("Not available: %s is not a stereo audio source") % audioSource.name)
 			return
+		(left, right) = audioSource.channelsVolume
+		leftOrRightMax = max(left, right)
 		if balance == "left":
-			levels = (1.0, 0.0)
+			levels = (leftOrRightMax, 0.0)
 			toMsg = toLeftMsg
 		elif balance == "right":
-			levels = (0.0, 1.0)
+			levels = (0.0, leftOrRightMax)
 			toMsg = toRightMsg
 		else:
-			levels = (1.0, 1.0)
+			levels = (leftOrRightMax, leftOrRightMax)
 			toMsg = inCenterMsg
 		audioSource.setChannels(levels)
 		appMsg = audioSource.name.replace(".exe", "")
@@ -526,6 +565,7 @@ class AudioSources(object):
 		log.warning(msg)
 
 	def centerAudioSources(self, onlyNVDA=True):
+		log.debug("centerAudioSources: onlyNVDA= %s" % onlyNVDA)
 		if onlyNVDA:
 			audioSource = self.getNVDAAudioSource()
 			if audioSource:
@@ -533,12 +573,16 @@ class AudioSources(object):
 					# Translators: message to user that audio source is not a stereo audio source
 					wx.CallLater(40, ui.message, _("Not available: %s is not a stereo audio source") % audioSource.name)
 					return
-				audioSource.setChannels((1.0, 1.0))
+				(left, right) = audioSource.channelsVolume
+				leftOrRightMax = max(left, right)
+				audioSource.setChannels((leftOrRightMax, leftOrRightMax))
 		else:
 			for source in self.sources:
 				audioSource = self.sources[source]
 				if audioSource.isStereo:
-					audioSource.setChannels((1.0, 1.0))
+					(left, right) = audioSource.channelsVolume
+					leftOrRightMax = max(left, right)
+					audioSource.setChannels((leftOrRightMax, leftOrRightMax))
 
 
 class AudioDevice(object):
@@ -654,7 +698,7 @@ class AudioDevice(object):
 		mute = self.volumeObj.GetMute()
 		if mute:
 			self.volumeObj.SetMute(0, None)
-			log.warning("%s  master volume unmuted" % self.name)
+			log.warning("%s master volume unmuted" % self.name)
 		minLevel = float(_addonConfigManager .getMinMasterVolumeLevel()) / 100
 		if not checkThreshold or (checkThreshold and volumeLevel < minLevel):
 			level = float(_addonConfigManager .getMasterVolumeLevel()) / 100
@@ -676,7 +720,6 @@ _deviceEnumerator = None
 class AudioOutputDevicesManager(object):
 	def __init__(self):
 		super().__init__()
-		self.initialized = False
 
 	def getDeviceFromName(self, deviceName):
 		global _audioOutputDevice
@@ -720,27 +763,6 @@ class AudioOutputDevicesManager(object):
 	def getDevices(self):
 		return self._devices
 
-	def playTonesOnDevice(self, deviceName):
-		log.debug("playTonesOnDevice: %s" % deviceName)
-		from synthDriverHandler import _audioOutputDevice
-		curOutputDevice = _audioOutputDevice
-		config.conf["speech"]["outputDevice"] = deviceName
-
-		# Reinitialize the tones module to update the audio device
-		import tones
-		tones.terminate()
-		tones.initialize()
-		time.sleep(0.5)
-		tones.beep(250, 100)
-		time.sleep(0.3)
-		tones.beep(350, 100)
-		time.sleep(0.5)
-		config.conf["speech"]["outputDevice"] = curOutputDevice
-		# Reinitialize the tones module to update the audio device to the current output device
-		import tones
-		tones.terminate()
-		tones.initialize()
-
 	def setSpeakersVolumeLevelToPreviousLevel(self):
 		# back the volume of last modified audio device to itthe previous level
 		global _lastSpokenOutputAudioDevice
@@ -765,7 +787,7 @@ class AudioOutputDevicesManager(object):
 		minThreshold = 0 if volume == 10 else 10
 		_addonConfigManager.setMinMasterVolumeLevel(minThreshold)
 		log.warning(
-			"For speakers, the min Threshold is set to %s and  recovery volume  is set to %s" % (minThreshold, volume))
+			"For speakers, the min Threshold is set to %s and recovery volume is set to %s" % (minThreshold, volume))
 		audioSources = AudioSources(nvdaAudioDevice)
 		curNVDAVolume = audioSources.getNVDAVolume()
 		if curNVDAVolume is None:
@@ -777,7 +799,7 @@ class AudioOutputDevicesManager(object):
 		minThreshold = 0 if volume == 10 else 10
 		_addonConfigManager.setMinNVDAVolumeLevel(minThreshold)
 		log.warning(
-			"For NVDA, the min Threshold is set to %s and  recovery volume  is set to %s" % (minThreshold, volume))
+			"For NVDA, the min Threshold is set to %s and recovery volume is set to %s" % (minThreshold, volume))
 
 	def runNewDevicesScan(self):
 		# perhaps scan is running. Try to stop it
@@ -791,10 +813,24 @@ class AudioOutputDevicesManager(object):
 		self.runNewDevicesScan()
 
 	def installAudioDeviceChangesMonitoring(self):
-		self.deviceEnumerator = CoCreateInstance(
-			CLSID_MMDeviceEnumerator, IMMDeviceEnumerator, CLSCTX_INPROC_SERVER)
+		self.deviceEnumerator  = AudioUtilities.GetDeviceEnumerator()
 		self.callback = AudioDeviceChangesNotification()
 		self.deviceEnumerator.RegisterEndpointNotificationCallback(self.callback)
+
+	def getDeviceNameByID(self, id):
+		"""Get the name of the audio device by its ID.
+		@param id: audio device ID
+		@type id: Optional[str]
+		@return: human friendly name of audio device or empty string
+		@rtype: str
+		"""
+		try:
+			mixers: List[pycaw.AudioDevice] = [mx for mx in ExtendedAudioUtilities.GetAllDevices() if mx]
+		except Exception:
+			mixers = []
+		mixer = next(filter(lambda m: m.id == id, mixers), None)
+		return mixer.FriendlyName if mixer else ' '
+
 
 	def scan(self):
 		log.debug("Starting devices scan")
@@ -819,7 +855,7 @@ class AudioOutputDevicesManager(object):
 			if self.shouldStopScan:
 				log.debug("Scanning stopped")
 				return self
-			if mixer.state != AudioDeviceState.Active:
+			if not (mixer.state.value == AudioDeviceState.Active.value):
 				continue
 			immDevice = AudioUtilities.GetSpeakers(mixer.id)
 			try:
@@ -844,16 +880,16 @@ class AudioOutputDevicesManager(object):
 		# Insert to the list the default audio output device if it is not listed
 		# for some reason on some systems it is not determined in the standard way
 		if not defaultDeviceDecected:
+			log.debug("no default device detected")
 			device = AudioDevice(
 				id=defaultDevice.GetId() or '',
 				name=self.getDeviceNameByID(defaultDevice.GetId()) or '',
-				volume=cast(
+				interface=cast(
 					defaultDevice.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None),
 					POINTER(IAudioEndpointVolume))
 			)
 			device._default = True
 			devices.insert(0, device)
-
 		# we want the same devices that NVDA
 		from nvwave import _getOutputDevices
 		nvdaAudioDevices = _getOutputDevices()
@@ -895,17 +931,20 @@ class AudioOutputDevicesManager(object):
 		from ..settings import toggleSetOnMainAndNVDAVolumeAdvancedOption
 		if toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
 			device = self.getCurrentNVDADevice()
+			if not device:
+				log.error("No nvda audio output device found")
+				return
 			device.setVolumeToRecoveryLevel(checkThreshold=True)
 			audioSources = AudioSources(device)
 			audioSources.setNVDAVolumeToRecoveryLevel(checkThreshold=True)
 
 	def terminate(self):
-		if self.initialized:
-			nvdaDevice = audioOutputDevicesManager.getCurrentNVDADevice()
-			audioSources = AudioSources(nvdaDevice)
-			audioSources.centerAudioSources()
-			self.deviceEnumerator.UnRegisterEndpointNotificationCallback(audioOutputDevicesManager.callback)
-			del self.deviceEnumerator
+		log.debug("terminating audioCoreManager")
+		nvdaDevice = audioOutputDevicesManager.getCurrentNVDADevice()
+		audioSources = AudioSources(nvdaDevice)
+		audioSources.centerAudioSources()
+		self.deviceEnumerator.UnregisterEndpointNotificationCallback(audioOutputDevicesManager.callback)
+		del self.deviceEnumerator
 
 
 class AudioDeviceChangesNotification(MMNotificationClient):
@@ -935,9 +974,21 @@ class AudioDeviceChangesNotification(MMNotificationClient):
 
 def initialize():
 	wx.CallAfter(audioOutputDevicesManager.initialize)
+	import nvwave
+	if nvwave.WavePlayer.open.__module__ == "globalPlugins.soundSplitter":
+		log.debug("Potential incompatibility: nvwave.WavePlayer function patched by soundSplitter add-on")
+		wx.CallAfter(
+			gui.messageBox,
+			# Translators: message to warn the user of a potential incompatibility with the soundSplitter add-on
+			_(
+				"The soundSplitter add-on may cause the add-on to malfunction. It is better to uninstall it."),
+			# Translators: warning dialog title
+			_("Warning"),
+			wx.CANCEL | wx.ICON_WARNING, gui.mainFrame)
 
 
 def terminate():
+
 	audioOutputDevicesManager.terminate()
 
 

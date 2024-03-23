@@ -63,7 +63,7 @@ This add-on adds to NVDA's global commands:
   - mute or unmute volume for the focused application,
   - manually or automatically establish the main sound and that of the NVDA audio stream,
   - modify the level of the main volume or that of the audio stream of the application under focus,
-  - automatic recovery of the main volume and NVDA when loading the extension,
+  - automatic recovery of the main volume and NVDA when loading the add-on,
   - [temporary use of an audio output device without impacting the NVDA configuration # hdr33],
   [NVDA audio output orientation and applications #hdr34],
   -[NVDA tones and sounds volume adjustment #hdr34],
@@ -102,7 +102,6 @@ This add-on adds to NVDA's global commands:
  - [Enhancements for Windows Explorer#hdr208]:
   - a script to announce the access path of the folder or the file which is under the cursor of the Windows explorer, or copy this path in the clipboard.
   - a script to announce, going up the folder tree, the name of the folders making up the path of the folder containing the element under the cursor.
- - [Speak typed word enhancement #hdr209].
 
 
 ++ Add-on configuration menu ++[hdr-configurationMenu]
@@ -157,7 +156,7 @@ This allows you to start from scratch without having to uninstall and reinstall 
 
 
 ++ Contextual help ++
-In most of the extension's dialogs, it is possible using the "F1" key to open the extension user manual to the most appropriate chapter.
+In most of the add-on's dialogs, it is possible using the "F1" key to open the add-on user manual to the most appropriate chapter.
 ++ update ++[hdr-update]
 The update of the add-on is, by default, automatically a short time after the start of NVDA (between 20 and 600 seconds) and a maximum of once per day.
 It is possible to disable this update by unchecking the option "automatically check for updates" of "Update" category in the add-on's settings.
@@ -464,7 +463,7 @@ The description of this script is: "Announce the name and version number of the 
 
 By default, no input gesture is assigned to it, nor any interpreter command.
 
-++ Enhancement of virtual buffer features ++[hdr5]
+é++ Enhancement of virtual buffer features ++[hdr5]
 This feature is installed by default.
 
 It concerns Mozilla Firefox, Microsoft Internet Explorer, Google Chrome, Microsoft Edge (partially) browsers and provides:
@@ -585,7 +584,7 @@ By default, this option is not checked. The basic operation of NVDA is retained.
 ++ Announcement of the function associated with the "copy", "Paste" style editing commands ++[hdr7]
 This feature is installed by default.
 
-The functions triggered by the shortcuts "control + v", "control + c", "control + x", "control + z" are not vocalized by NVDA, this extension takes care of them.
+The functions triggered by the shortcuts "control + v", "control + c", "control + x", "control + z" are not vocalized by NVDA, this add-on takes care of them.
 
 No check on the result of the function is done.
 
@@ -595,7 +594,7 @@ But:
 - for the "control+v" shortcut, the empty state of the clipboard is signaled.
 
 
-It is strongly advised not to install extensions that provide the same kind of functionality.
+It is strongly advised not to install add-on that provide the same kind of functionality.
 
 If this feature is installed, the following scripts are installed.
 +++ Add selected text to clipboard +++[hdr7-1]
@@ -741,6 +740,13 @@ By default:
 - the records are presented in descending order. The "Display records in ascending order" option for this same grouping allows you to display them in reverse order.
 
 
++++ Technical details +++
+To achieve this functionality, the "speak" and "speakSpelling" functions of the NVDA "speech.speech.py" module have been replaced. Replacement functions are common with the "Temporary audio output device " feature.
+
+This may cause problems if other add-ons have also done this.
+
+To keep the other add-ons working properly, you must uninstall these two features.
+
 ++ Keyboard keys renaming ++[hdr12]
 This feature is installed by default.
 
@@ -818,6 +824,11 @@ The "OK" button saves the choices made for the current configuration profile, wh
 In the lists, the "F2" key and the "shift + F2" key combination allow you to move respectively to the next or previous checked item.
 
 It is possible to not install this functionality by selecting, in the "Installed functionalities" category and for the "Selective announcement of command keys" functionality, the "Do not install" status.
+
++++ Technical details +++
+To achieve this functionality, the "executeGesture" function of "inputCore.manager" has been replaced. This change is common with the “NVDA and modifier keys's remanence ” feature.
+
+If this change causes a conflict with other add-ons, both features should be uninstalled.
 
 ++ Minute timer ++[hdr14]
 This feature is installed by default.
@@ -1173,7 +1184,7 @@ This script is launched:
 - or using the "MAIN_KEY_VOLUME_ON" input gesture assigned by default.
 
 
-It sets the volumes of the audio output device that NVDA uses and that of the audio stream from NVDA and forces the levels of each to the values ​​of the undo levels configured in the "Sound Control" group of the "Computer" category of the settings. the extension.
+It sets the volumes of the audio output device that NVDA uses and that of the audio stream from NVDA and forces the levels of each to the values ​​of the undo levels configured in the "Sound Control" group of the "Computer" category of the add-on settings.
 
 +++ Mute or establish the volume of the audio stream of the application placed under the focus +++[hdr21-2]
 This script is launched:
@@ -1201,7 +1212,7 @@ The increase or decrease in volume is done in steps.It is possible to adjust the
 
 Size 1 is the smallest step, size 20 is the largest step. The size is set to 5 by default.
 
-By default, the app volume level cannot exceed the master volume level. But this limitation can be overridden if the option "Increase speakers volume if necessary" is checked. This option can be found in the "Volume modification" group of the "Computer" category of the global settings of the extension.
+By default, the app volume level cannot exceed the master volume level. But this limitation can be overridden if the option "Increase speakers volume if necessary" is checked. This option can be found in the "Volume modification" group of the "Computer" category of the global settings of the add-on.
 
 
 
@@ -1220,12 +1231,12 @@ These commands, unlike other interpreter commands, can be repeated without havin
 
 Once the volume level is reached, press the "Escape" key to exit the interpreter.
 
-The increase or decrease in volume is done in steps. It is possible to adjust the size of these steps in the parameters of the extension under the category "Computer", group "Sound control", by choosing the size of the step.
+The increase or decrease in volume is done in steps. It is possible to adjust the size of these steps in the settings of the add-on under the category "Computer", group "Sound control", by choosing the size of the step.
 Size 1 corresponds to the smallest step, size 20 to the largest step. By default, the size is set to 5, which corresponds to 5 steps of varying the volume in the Windows mixer.
 
 NVDA volume cannot fall below the configured recovery threshold.
 
-By default, it cannot be greater than the primary volume, but this limitation can be overridden if the option "Increase speakers volume if necessary" is checked. This option can be found in the "Volume modification" group of the "Computer" category of the global settings of the extension.
+By default, it cannot be greater than the primary volume, but this limitation can be overridden if the option "Increase speakers volume if necessary" is checked. This option can be found in the "Volume modification" group of the "Computer" category of the global settings of the add-on.
 
 +++ Modify main volume +++[hdr21-4]
 These scripts allow to increase, decrease, or fix the main volume of the audio output device used by the application under focus (including NVDA) or the Windows default one if the application under focus does not use one .
@@ -1281,7 +1292,7 @@ When launched, this add-on verifies that the primary volume and the NVDA volume 
 
 If this is not the case, this add-on then fixes the volume level to the value of the level to restore configured.
 
-When installing this extension, the current NVDA volume levels and the audio output device used by NVDA are taken into account to set the values ​​of the levels to be restored.
+When installing this add-on, the current NVDA volume levels and the audio output device used by NVDA are taken into account to set the values ​​of the levels to be restored.
 
 
 +++ Copy date and time to clipboard +++[hdr24-1]
@@ -1296,13 +1307,13 @@ As its description indicates, it allows you to copy the date and time to the cli
 
 
 +++ Script to replace the base script "NVDA + f12" +++[hdr24-2]
-The extension installs a script whose description is: "Reports the current time. Twice, reports the current date. Third: copy date and time to the clipboard".
+The add-on installs a script whose description is: "Reports the current time. Twice, reports the current date. Third: copy date and time to the clipboard".
 
 This script is stored in the "System status" category of the "input gestures" NVDA dialog.
 
 No interpreter command is associated with it.
 
-If the extension's install status is "Install", this script replaces the NVDA script and is started using the "NVDA + f12" input gesture.
+If the add-on's install status is "Install", this script replaces the NVDA script and is started using the "NVDA + f12" input gesture.
 
 Otherwise no input gesture is assigned to it, but it is still possible to assign it using the NVDA "input gestures" dialog.
 
@@ -1343,7 +1354,7 @@ It is started with the command "KEY_CLOSE_ALL_WINDOWS" from the command interpre
 
 
 ++ List of running add-on ++[hdr27]
-The add-on manager or Add-on store  displays the list of installed add-on and their status: activated or deactivated.
+The add-on manager or Add-on store displays the list of installed add-on and their status: activated or deactivated.
 
 But even though it is activated, an add-on may not be loaded by NVDA. In principle, the NVDA log reports this fact, but nothing in the add-ons manager, nor in the Add-on Store.
 
@@ -1423,7 +1434,7 @@ The "manifest.ini" file must be updated as soon as the "buildVars.py" file is mo
 Use the "Update manifest.ini file" button for this.
 
 +++ Creation of localization "manifest.ini" file +++[hdr22-4]
-Any modification of the "addon_summary" or "addon_description" information of the "buildVars.py" file requires the translation of this description into each language supported by the extension (taken into account in the nvda.po file and compilation of this file) .
+Any modification of the "addon_summary" or "addon_description" information of the "buildVars.py" file requires the translation of this description into each language supported by the add-on (taken into account in the nvda.po file and compilation of this file) .
 
 In order for the add-ons' Manager to present this information to the user for the language chosen for NVDA, you must create or update the localization "manifest.ini" file for that language.
 
@@ -1441,7 +1452,7 @@ Opened in the browser, these HTML files need style files (style.css for Markdown
 +++ Creation of the catalog file +++[hdr22-6]
 The "Create POT file" button is used to create the catalog file for the selected add-on.
 
-Once created, this file is placed in the add-on's "locale\en" folder and is named "version-name.pot" where "name" is the name of the extension and "version" is its version.
+Once created, this file is placed in the add-on's "locale\en" folder and is named "version-name.pot" where "name" is the name of the add-on and "version" is its version.
 
 +++ Preparation of the add-on +++[hdr22-7]
 The "Prepare add-on" button launches, for the selected add-on, the execution of the following actions:
@@ -1477,7 +1488,7 @@ Otherwise, NVDA starts using the settings in this configuration folder.
 
 It is therefore possible to have several user configurations with the same NVDA.
 
-This allows for example to have, in addition to the basic configuration, either a test configuration to try new extensions, or a configuration with a very precise setting for a particular situation.
+This allows for example to have, in addition to the basic configuration, either a test configuration to try new add-on, or a configuration with a very precise setting for a particular situation.
 
 This functionality therefore provides the means to:
 - define the user configurations that will be used,
@@ -1488,7 +1499,7 @@ This functionality therefore provides the means to:
 +++ Manage user configuration folders +++[hdr30-1]
 First of all, you must define the configurations that will be used.
 
-For this, the extension installs the script "Display the dialog to manage user configurations" which is launched using the interpreter command "KEY_USER_CONFIG_MANAGEMENT".
+For this, the add-on installs the script "Display the dialog to manage user configurations" which is launched using the interpreter command "KEY_USER_CONFIG_MANAGEMENT".
 
 No input gestures is assigned to it, but it is still possible to do so using the NVDA "Input gestures" dialog.
 
@@ -1504,11 +1515,11 @@ This command is used to display the "User configuration management" dialog which
 - the "Close" button to close the dialog.
 
 
-The list contains all the folders added by the user and this added automatically by the extension.
+The list contains all the folders added by the user and this added automatically by the add-on.
 
 The active configuration folder is signaled by voice and by the "checked" symbol in front of its name.
 
-When this dialog is displayed for the first time, the extension automatically places it in the list and saves it.
+When this dialog is displayed for the first time, the add-on automatically places it in the list and saves it.
 
 For this folder, the "Delete this folder" and "Empty this folder" buttons are not present.
 
@@ -1649,7 +1660,7 @@ The analysis is broken down into three research groups:
 
 It is possible to deactivate a search group as well as, individually, each action of a group.
 
-To do this, the "Text analysis" category is added in the extension settings dialog.
+To do this, the "Text analysis" category is added in the add-on settings dialog.
 
 The settings in this category are specific to the active profile that is announced when the category is selected.
 
@@ -1657,13 +1668,13 @@ The settings in this category are specific to the active profile that is announc
 +++ Activation / deactivation of the analyzer +++[hdr31-1]
 The analyzer can be turned on or off in three ways:
 - using the "KEY_TEXT_ANALYZER" command of the interpreter,
-- using the "Activate text analyzer" checkbox located in the "Text analysis" category of the extension settings dialog,
+- using the "Activate text analyzer" checkbox located in the "Text analysis" category of the add-on settings dialog,
 - using the script "Activate or deactivate the text analyzer": no input gesture is assigned to it, but it is possible to do so using the NVDA "input gestures" dialog.
 
 
 Enabling and disabling the analyzer only affects the active configuration profile.
 
-The checkbox "Activate the text analyzer when starting the extension" in the "Text analysis" category fixes, for each profile, the activation state of the text analyzer when the extension is launched. 'extension.
+The checkbox "Activate the text analyzer when starting the add-on" in the "Text analysis" category fixes, for each profile, the activation state of the text analyzer when the add-on is launched.
 
 The analiser activated, it is analyzed each time the cursor is moved from word to word, or from line to line in the text edit zones.
 
@@ -1727,7 +1738,7 @@ The formatting changes concern:
 They can be included or excluded individually from the search by checking or unchecking them in the "Types" list of the same group.
 
 +++ On-demand scan +++[hdr31-3]
-The extension installs scripts to analyze text at the cursor position on demand.
+The add-on installs scripts to analyze text at the cursor position on demand.
 These scripts are:
 - "Analyze the word under the cursor": "MAIN_KEY_WORD_TEXT_ANALYZER", command of the "KEY_WORD_TEXT_ANALYZER" interpreter,
 - "Analyze the line under the cursor": "MAIN_KEY_LINE_TEXT_ANALYZER", interpreter command "KEY_LINE_TEXT_ANALYZER",
@@ -1774,7 +1785,7 @@ Since nothing is changed in NVDA's configuration, automatic or manual registrati
 
 To return to normal operation, ie the use of the audio output devices of the configuration profiles, it will suffice to abandon the temporary audio device.
 
-To achieve all this, the extension installs several scripts.
+To achieve all this, the add-on installs several scripts.
 
 +++ Temporary audio device manager +++[hdr33-1]
 This script has the description "Display the temporary audio device manager" and is placed in the "Speech" category of NVDA's "Input gestures" dialog.
@@ -1801,10 +1812,10 @@ This device becomes the temporary audio device.
 
 Audio from NVDA is then routed to the output of that device.
 
-In order not to end up with a device that emits no sound,the extension asks the user if they confirm the use of this device.
+In order not to end up with a device that emits no sound,the add-on asks the user if they confirm the use of this device.
 This request is made after failover to this device and is timed out.
 
-It can be prevented using the "Ask for confirmation" option in the "Temporary audio device" group of the "computer" category of the "Global settings" dialog of the extension.
+It can be prevented using the "Ask for confirmation" option in the "Temporary audio device" group of the "computer" category of the "Global settings" dialog of the add-on.
 
 This confirmation request consists of displaying a dialog box for a limited time and asking the user to accept the use of the new audio output device.
 
@@ -1821,7 +1832,7 @@ In the list of audio output devices, it is possible to check certain devices. Th
 +++ Temporary audio device change +++[hdr33-2]
 There are two ways to change the device:
 - either by launching the previous script and choosing another device,
-- or by using the script (see below) which allows to loop between the checked devices of the "devices" list of the temporary audio device manager.
+- either by using the script (see below) which allows you to loop between the devices checked in the temporary audio device manager.
 
 
 This script has the description "Set, as temporary audio device, the next device in the list of checked devices of the temporary audio device manager " and is placed in the "Speech" category of the "input gestures" dialog.
@@ -1834,7 +1845,7 @@ Each time the script is started, a new audio output device is set as a temporary
 
 This device is chosen from the devices that were previously checked in the list of audio output devices in the "Temporary audio device manager" dialog (see above). The one selected is the one following in the list, the current audio output device.
 
-After changing the device,a timed confirmation request (optional) is requested (see chapter "Temporary audio device manager").
+After changing the device, no confirmation is requested.
 
 +++ Leave up the Temporary audio device +++[hdr33-3]
 This script has the description "Leave up Temporary Audio Device" and is placed in the "Speech" category of the "Input gestures" dialog.
@@ -1854,12 +1865,22 @@ No input gesture is assigned to it. But it is still possible to do this using th
 
 No interpreter command is assigned to it either.
 
-
 This script combines the two previous scripts under one script.
 
 The first press of the input gesture launches the script "Set, as temporary audio device, the next device in the list of checked devices of the temporary audio device manager".
 
 The second press in a short time, launches the script "Leave up the temporary audio device".
+
++++ Technical details +++
+To achieve this functionality, the "speak" and "speakSpelling" functions of the NVDA "speech.speech.py" module have been replaced. The replacement functions are common with the “Speech history” feature.
+This may cause problems if other add-ons have also done this.
+To keep the other add-ons working properly, you must uninstall these two features.
+
+To achieve this functionality, the playWaveFile function of the NVDA nvwave.py module has been replaced. This modification is common with the "Changing the gain of NVDA sound files" functionality.
+If replacing this function poses a problem, you must both uninstall this functionality and uncheck the “Allow nvda sounds files's gain modification ” option.
+
+Finally, to achieve this functionality, the functions "initialize" of the "tones" module, "setSynth" of the "synthDriverHandler" module and "_maybeInitPlayer" of the "SynthDriver" class of the "synthDrivers.oneCore" module have been modified.
+In case these modifications cause problems or conflict with other add-ons, you must uninstall this feature.
 
 ++ NVDA audio output orientation ++[hdr34]
 This feature makes it possible to separate the sound from NVDA from the sound emitted by the other audio sources and thus to hear in one ear, the sound from NVDA and in the other ear, the sound from the other audio sources.
@@ -1869,13 +1890,16 @@ It also allows you to adjust the volume level of tonalities played by NVDA (when
 
 It is installed by default.
 
-For audio direction, technically this means zeroing out the volume level of NVDA's right or left audio channels and audio sources.
+For audio steering, technically, tilting audio right or left involves zeroing the volume level of the right or left audio channels of NVDA and audio sources.
+To refocus an audio source, both channels are put at the same level. This level is the strongest level of the two channels.
+To switch a source from one side to the other, the level of the channel being set to zero is taken as the level for the other channel if it is at zero.
+
 
 NVDA being a monophonic application, the same sound is played on both channels. There is no phonic audio loss in zeroing a channel.
 
 But this is not the case for stereophonic applications.
 
-To direct NVDA's sound, the extension installs the following scripts:
+To direct NVDA's sound, the add-on installs the following scripts:
 - Hear NVDA on the right and the sound of the audio source of the application under the cursor on the left (command: KEY_SPLIT_RIGHT_FOCUS),
 - Hear NVDA on the right and the sound of all audio sources on the left (command: KEY_SPLIT_RIGHT_ALL),
 - Hear NVDA on the left and the sound of the audio source of the application under the cursor on the right (command: KEY_SPLIT_LEFT_FOCUS),
@@ -1925,9 +1949,8 @@ When the list is focused, the following commands are allowed:
 
 This list is automatically refreshed when the cursor is given to it.
 
-Channel toggle changes or volume level changes are applied immediately after each command. However, to find them after restarting NVDA, the NVDA configuration must be saved.
-
-By default, the audio source volume level cannot be set higher than the main volume level. But the option "Raise master volume if necessary" can disable this limitation. This option can be found in the "Volume change" group of the "Computer" category of the extension's "Settings" dialog.
+Channel toggle changes or volume level changes are applied immediately after each command.
+By default, the audio source volume level cannot be set higher than the main volume level. But the option "Raise master volume if necessary" can disable this limitation. This option can be found in the "Volume change" group of the "Computer" category of the add-on's "Settings" dialog.
 
 By default and when wasapi is not used, NVDA's tone level is set to 50 which is NVDA's internally set base value.
 
@@ -1939,7 +1962,7 @@ When restarting NVDA or if the add-on is disabled or uninstalled, NVDA is again 
 
 Warning: NVDA and the audio sources must use the same audio output device, such as the sound mapper, for proper operation. Besides, the functionality is of interest only in this case.
 
-When the list of audio output devices is focused, selecting a device triggers a tone to play on that device. It is possible to prevent this emission by unchecking the "Play tone on   audio output device" option of the "Audio source manager" group of the "Advanced" category of the global settings of the add-on.
+When the list of audio output devices is focused, selecting a device triggers a tone to play on that device. It is possible to prevent this emission by unchecking the "Play tone on audio output device" option of the "Audio source manager" group of the "Advanced" category of the global settings of the add-on.
 
 In this list, the following commands are available:
 - increase or decrease the main volume by one step: "control + shift + up or down arrow",
@@ -1978,11 +2001,9 @@ If there are no already modified sounds in the list of sounds, the "Reset all so
 NVDA's startup sound cannot be changed because it is played before the add-on loads.It is possible to not authorize the modification of the gain of the sounds by unchecking the checkbox "Allow the modification of the gain" found in the "Advanced" category. This box is checked by default.
 
 +++ Technical details +++
-To achieve the functionality of adjusting the volume of NVDA tones when Wasapi is not used, the add-on has changed the operation of the "beep" function of the "tones" module of NVDA.
-
+To achieve the functionality of adjusting the volume of NVDA tonalities when Wasapi is not used, the add-on has changed the operation of the "beep" function of the "tones" module of NVDA.
 This can be a problem if another add-on has also modified it.
-
-To avoid this kind of conflict, the add-on gives the possibility to not activate this feature by unchecking the "Allow tonalities's volume adjustment" option which is located in the "Advanced" category of the add-on' settings. . In this case, there will be no modification of the "beep" function by the extension.
+To avoid this kind of conflict, the add-on gives the possibility to not activate this feature by unchecking the "Allow tonalities's volume adjustment" option which is located in the "Advanced" category of the add-on' settings. . In this case, there will be no modification of the "beep" function by the add-on.
 
 If Wasapi is used, this option is not present because NVDA's tonalities and sounds adjustment is done by NVDA itself.
 
@@ -1990,15 +2011,15 @@ By default, This option is checked.
 
 In order for the modified sound files to be played instead of the original sounds, the playWaveFile function of the nvwave.py module of NVDA has been replaced. This replacement feature is common with the "Temporary Audio Device" feature.
 
-If modifying this function is a problem, you must both uncheck the "Allow gain modification" option and uninstall this feature.
+If modifying this function is a problem, you must both uncheck the "Allow gain modification" option and uninstall the "Temporary Audio Device" feature.
 
-++ Quick activation or deactivation of extensions ++[hdr35]
-To activate or deactivate extensions, NVDA natively offers the add-ons manager or, since NVDA 2023.2, the Add-on Store.
+++ Quick activation or deactivation of add-ons ++[hdr35]
+To activate or deactivate add-on, NVDA natively offers the add-ons manager or, since NVDA 2023.2, the Add-on Store.
 
-However in some cases it may be necessary to deactivate some or all of the extensions leaving only a few extensions activated.
-With the add-ons manager or Add-on Store, it is then necessary to review each extension to activate or deactivate it.
+However in some cases it may be necessary to deactivate some or all of the add-ons leaving only a few add-ons activated.
+With the add-ons manager or Add-on Store, it is then necessary to review each add-on to activate or deactivate it.
 
-This extension tries to make this manipulation faster and for that, it provides a script to display the "Quick add-ons activation" dialog.
+This add-on tries to make this manipulation faster and for that, it provides a script to display the "Quick add-ons activation" dialog.
 
 This script is started using the "KEY_QUICK_ADDONS_ACTIVATION" command of the command interpreter. No input gesture is associated with it. But it is possible to do this using NVDA's "input Gestures" dialog.
 It can be found in the "ADDON_SUMMARY" category with the description "Activate quick add-ons activation dialog".
@@ -2064,7 +2085,7 @@ When the "Spelling error" option in the "Document information" group of the "Doc
 
 This sound is emitted just after the hit on the space bar ending the word.
 
-Some users find this sound unpleasant, the extension brings the possibility of replacing this sound either by a double beep, or by the voice announcement "Spelling error".
+Some users find this sound unpleasant, the add-on brings the possibility of replacing this sound either by a double beep, or by the voice announcement "Spelling error".
 
 The choice is made in the group "Reporting spelling errors" of the category "NVDA enhancements" of the global settings of the add-on.
 
@@ -2239,7 +2260,7 @@ This add-on implements the "Do not take account of the option called Report obje
 ++ Running scripts in the "Input gestures" dialog ++[hdr205]
 The NVDA "Input gestures" dialog allows you to configure the input gestures (keyboard shortcuts, braille display buttons, etc.) for the scripts (called commands in the NVDA user manual) available at this time. For more information, see the "Input gestures" chapter of this manual.
 
-The extension makes it possible to execute scripts in this dialog, even if no input gesture is configured.
+The add-on makes it possible to execute scripts in this dialog, even if no input gesture is configured.
 
 
 It modifies this dialog by adding the "Execute the script" button when a script is selected in the tree view.
@@ -2252,16 +2273,22 @@ The script can be executed using one of the following three actions:
 
 By repeating the action several times quickly, the script will be executed as many times.
 
++++ Technical details +++
+To achieve this functionality, the "onInputGesturesCommand" function of "gui.mainFrame" and the action triggered by the "Input Gestures" submenu have been replaced (Common change with the next functionality). It is not possible to prevent this.
+
 ++ Automatic selection of the category in the "Input gestures" dialog ++[hdr206]
-It may happen that we need to open the "Input gestures" dialog to know the input gestures provided by the active extension for the application under focus.
+It may happen that we need to open the "Input gestures" dialog to know the input gestures provided by the active add-on for the application under focus.
 
-Without extension, the first category is selected by default.
+Without add-on, the first category is selected by default.
 
-In order to save time, the extension brings the selection of the category associated with the active extension for the application under focus.
+In order to save time, the add-on brings the selection of the category associated with the active add-on for the application under focus.
 
-It does this by looking for the category among the categories that provide scripts belonging to the active extension. But the latter can set up scripts in any category.
+It does this by looking for the category among the categories that provide scripts belonging to the active add-on. But the latter can set up scripts in any category.
 
 This category will then be automatically selected and expanded.
+
++++ Technical details +++
+To achieve this functionality, the "onInputGesturesCommand" function of "gui.mainFrame" and the action triggered by the "Input Gestures" submenu have been replaced (Common change with the previous functionality). It is not possible to prevent this.
 
 ++ Selection of the last setting used in the synthesizer settings ring ++[hdr207]
 NVDA's "NVDA + control + right or left arrow" input gestures allow you to jump from one setting to another in the synthesizer's settings ring.
@@ -2310,7 +2337,7 @@ For example, if the selected item is in folder n, NVDA will announce in the foll
 - and so on up to the reader's identifier followed by the last level in brackets.
 
 
-The option "Report   folder name of  reversed path with level" makes it possible not to announce the level of the folders. It is in the "Windows Explorer" group of the "Computer" category.
+The option "Report folder name of reversed path with level" makes it possible not to announce the level of the folders. It is in the "Windows Explorer" group of the "Computer" category.
 
 No input gesture or interpreter command is assigned by default to this script.
 
@@ -2320,20 +2347,7 @@ It is stored under the "ADDON_SUMMARY" section of the "Input Gestures" NVDA dial
 
 It is possible to associate a input gesture to it using this dialog.
 
-
-++ Speak typed words enhancement ++[hdr209]
-In the following cases, NVDA does not speak the typed word when the "Speak typed words" option is enabled:
-- a space is inserted in the middle of a word.
-- after correcting a word using the "backspace" key followed by a space.
-- after typing a single punctuation symbol followed by a space.
-
-
-This improvement was initiated by Leonard de Ruijter (leonardder) in 2018 (see [https://github.com/nvaccess/nvda/pull/8110]) and closed in 2019 without having been implemented in NVDA.
-
-It is enabled by default, but it can be disabled to regain basic NVDA functionality by unchecking the "Enhance speak typed words" option located in the "Advanced" category of the add-on's global settings.
-
-
-+ Summary of the commands provided by this extension +
++ Summary of the commands provided by this add-on +
 
 ++ input gestures installed systematically ++
 | Desktop computer | Laptop | Touch | Description |
@@ -2413,7 +2427,7 @@ It is enabled by default, but it can be disabled to regain basic NVDA functional
 | KEY_SPLIT_CENTER_ALL | Hear NVDA and all applications at the center |
 | KEY_CENTER_FOCUSED_APP | Hear focused application at the center |
 
-++ input gestures installed by the functionalities ++
+2++ input gestures installed by the functionalities ++
 
 +++ Display of the list of icons in the notification area and windows of the applications launched +++
 | Desktop computer | Laptop | Touch | Description |

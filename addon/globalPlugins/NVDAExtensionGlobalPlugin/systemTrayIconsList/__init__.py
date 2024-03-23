@@ -16,10 +16,9 @@ from gui import guiHelper, mainFrame
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
+import windowUtils
 
 addonHandler.initTranslation()
-
-import windowUtils
 
 
 def findWindow(windowClassPath):

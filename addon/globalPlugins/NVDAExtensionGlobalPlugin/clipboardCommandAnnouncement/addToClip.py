@@ -11,12 +11,7 @@
 import addonHandler
 import api
 import textInfos
-try:
-	# for NVDA version >= 2021.2
-	from controlTypes.role import Role
-	ROLE_MATH = Role.MATH
-except ImportError:
-	from controlTypes import ROLE_MATH
+from controlTypes.role import Role
 import ui
 import browseMode
 import core
@@ -55,7 +50,7 @@ def getMath():
 	mathMl = mathPres.getMathMlFromTextInfo(api.getReviewPosition())
 	if not mathMl:
 		obj = api.getNavigatorObject()
-		if obj.role == ROLE_MATH:
+		if obj.role == Role.MATH:
 			try:
 				mathMl = obj.mathMl
 			except (NotImplementedError, LookupError):

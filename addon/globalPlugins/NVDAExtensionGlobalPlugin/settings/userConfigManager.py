@@ -25,7 +25,6 @@ import shutil
 from configobj import ConfigObj
 from configobj.validate import Validator, VdtTypeError
 from io import StringIO
-from versionInfo import version_year, version_major
 from ..utils import makeAddonWindowTitle, isOpened, getHelpObj
 from ..utils.secure import inSecureMode
 from ..utils.NVDAStrings import NVDAString
@@ -33,7 +32,6 @@ from ..utils import contextHelpEx
 
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
 
 _configSpec = ""
 # section Ids
@@ -209,8 +207,7 @@ def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode
 	paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
 	if configPath is not None:
 		paramsToRemove += ("--config-path",)
-	if NVDAVersion >= [2022, 1]:
-		paramsToRemove += languageHandler.getLanguageCliArgs()
+	paramsToRemove += languageHandler.getLanguageCliArgs()
 	for paramToRemove in paramsToRemove:
 		for p in sys.argv:
 			if p.startswith(paramToRemove):

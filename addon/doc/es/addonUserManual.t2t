@@ -99,7 +99,6 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Suplementos para el Explorador de Windows #hdr208]:
   - un script para anunciar la ruta de acceso de la carpeta o del archivo que se encuentra bajo el cursor del Explorador de Windows, o copiar esta ruta al portapapeles.
   - un script para anunciar, subiendo la vista en árbol de las carpetas, el nombre de las carpetas que componen la ruta de la carpeta que contiene el elemento bajo el cursor.
- - [mejora de la verbalización de palabras al escribir #hdr209].
 
 
 ++ Menú de configuración del complemento ++
@@ -739,6 +738,14 @@ Por defecto:
 - Los registros se presentan en orden descendente. La opción "Mostrar los registros del historial de los anuncios del habla en órden ascendente" de este mismo grupo permite mostrarlos en orden inverso.
 
 
++++ Detalles técnicos +++
+Para lograr esta funcionalidad, se han reemplazado las funciones "speak" y "speakSpelling" del módulo "speech.speech.py" de NVDA. Las funciones de reemplazo son comunes con la función "Dispositivo de salida de audio temporal".
+
+Esto puede causar problemas si otros complementos también lo han hecho.
+
+Para que los otros complementos sigan funcionando correctamente, debes desinstalar estas dos funciones.
+
+
 ++ Renombrar teclas del teclado ++[hdr12]
 Esta funcionalidad está instalada por defecto.
 
@@ -816,6 +823,13 @@ El botón "Aceptar" guarda las elecciones realizadas para el perfil de configura
 En las listas, las teclas "F2" y la combinación de teclas  "Mayúscula+F2" te permite desplazarte respectivamente al siguiente elemento marcado  o al elemento anterior marcado.
 
 Es posible no instalar Esta funcionalidad seleccionando, en la categoría "Funcionalidades instaladas" y para la funcionalidad "Anuncio selectivo de teclas de órdenes", el estado "No instalar".
+
+
++++ Detalles técnicos +++
+Para lograr esta funcionalidad, se ha reemplazado la función "executeGesture"  de "inputCore.manager". Este cambio es común con la función "Remanencia de las teclas NVDA y modificadoras".
+
+Si esta modificación causa un conflicto con otros complementos, se deben desinstalar ambas funciones.
+
 
 ++ Temporizador de minutos ++[hdr14]
 Esta funcionalidad está instalada por defecto.
@@ -1905,7 +1919,7 @@ A cada lanzamiento del script, un nuevo dispositivo de salida de audio se establ
 
 Este dispositivo se selecciona de los dispositivos que se marcaron previamente en la lista de dispositivos de salida de audio en el cuadro de diálogo  "Administrador de dispositivos de audio temporal" (ver arriba). El que se selecciona es el que sigue en la lista, el dispositivo de salida de audio actual.
 
-Después del cambio de dispositivo, se solicita una solicitud de confirmación temporizada (opcional) (ver la sección "Administrador de dispositivos de audio temporal").
+Después del cambio de dispositivo, no se solicita una solicitud de confirmación.
 
 +++ Abortando el dispositivo de audio temporal. +++[hdr33-3]
 Este script tiene como descripción "Abortar el dispositivo de audio temporal" y se coloca en la categoría "Voz" en el cuadro de diálogo "Gestos de Entrada".
@@ -1934,6 +1948,19 @@ En la primera pulsación del gesto de entrada, se lanza el script "Establezca, c
 En la segunda pulsación en un tiempo cercano, se lanza el script "Abortar el dispositivo de audio temporal".
 
 
++++ Detalles técnicos +++
+Para lograr esta funcionalidad, las funciones "speak" y "speakSpelling" del módulo "speech.speech.py" de NVDA fueron reemplazados. Las funciones de reemplazo son comunes con la funcionalidad "Historial de los anuncios del habla".
+Esto puede causar problemas si otros complementos también lo han hecho.
+Para que otros complementos sigan funcionando correctamente, debe desinstalar estas dos funciones.
+
+
+Para lograr esta funcionalidad, se reemplazó la función playWaveFile del módulo NVDA nvwave.py. Esta modificación es común con la funcionalidad "Modificación de la ganancia en los archivos de sonido de NVDA".
+En el caso de que la modificación de esta función plantee un problema, debes desinstalar esta funcionalidad y desmarcar la opción "Permitir el cambio de ganancia en los archivos de sonido".
+
+Finalmente, para lograr esta funcionalidad, las funciones "initialize" del módulo "tones", "setSynth" del módulo  "synthDriverHandler" y "_maybeInitPlayer" de la clase "SynthDriver" del módulo  "synthDrivers.oneCore" han sido modificados.
+En caso de que estos cambios causen problemas o entren en conflicto con otros complementos, debes desinstalar esta función.
+
+
 ++ Orientación de la salida de audio de NVDA ++[hdr34]
 Esta característica permite separar el sonido de NVDA del sonido emitido por las otras fuentes de audio y, por lo tanto, escuchar en una oreja, el sonido de NVDA y en la otra oreja, el sonido de otras fuentes de audio.
 Solo las aplicaciones con una fuente de audio con dos canales y el uso del mismo dispositivo de salida de audio se ven afectadas.
@@ -1942,7 +1969,10 @@ También te permite ajustar el nivel del volumen de tonos emitidos por NVDA (cua
 
 Esta característica está instalada por defecto.
 
-Para la orientación del sonido, técnicamente, esto consiste para poner en cero  el nivel de volumen de los canales  de audio derechos o izquierdos de NVDA y de las fuentes de audio.
+Para la orientación del sonido, técnicamente, cambiar el sonido hacia la derecha o hacia la izquierda implica poner en cero  el nivel de volumen de los canales  de audio derechos o izquierdos de NVDA y de las fuentes de audio.
+Para mover hacia el centro una fuente de audio, ambos canales se ponen al mismo nivel. Este nivel es el nivel más fuerte de los dos canales.
+Para cambiar una fuente de un lado a otro, el nivel del canal que se está poniendo a cero se toma como el nivel del otro canal si está en cero.
+
 
 NVDA es una aplicación monofónica, el mismo sonido se juega en ambos canales. No hay pérdida de audio fónico para poner un canal en cero.
 
@@ -2007,7 +2037,7 @@ Ciertas órdenes no están disponibles cuando NVDA no está en la lista de fuent
 
 Esta lista se refresca automáticamente cuando se le da el cursor.
 
-Los cambios de alternancia de canales o los cambios de nivel de volumen se aplican inmediatamente después de cada  órden. Sin embargo, para encontrarlos después de reiniciar NVDA, se debe guardar la configuración de NVDA.
+Los cambios de alternancia de canales o los cambios de nivel de volumen se aplican inmediatamente después de cada  órden.
 
 De forma predeterminada, el nivel de volumen de las fuentes de audio no puede ser mayor que el nivel de volumen principal. Pero la opción "Aumentar el volumen principal si es necesario" permite deshabilitar esta limitación. Esta opción está en el grupo "Cambio de volumen" en la categoría "Ordenador" en el cuadro de diálogo "Opciones" del complemento.
 
@@ -2346,6 +2376,8 @@ El script se puede ejecutar con una de las siguientes tres acciones:
 
 Al repetir la acción varias veces rápidamente, el script se ejecutará tantas veces.
 
++++ Detalles técnicos +++
+Para lograr esta funcionalidad, la función "onInputGesturesCommand " de "gui.mainFrame" y la acción desencadenada por el submenú "Gestos de Entrada" han sido reemplazados (cambio común con la siguiente funcionalidad). No es posible evitar esto.
 
 ++ Selección automática de categoría en el cuadro de diálogo "Gestos de Entrada" ++[hdr206]
 Puede suceder que necesitemos abrir el cuadro de diálogo "Gestos de Entrada" de NVDA para conocer los gestos de entrada proporcionados por el complemento activo para la aplicación bajo el cursor.
@@ -2358,6 +2390,8 @@ Para esto, está buscando la categoría entre las categorías que proporcionan s
 
 Esta categoría será entonces seleccionada automáticamente y expandida.
 
++++ Detalles técnicos +++
+Para lograr esta funcionalidad, la función "onInputGesturesCommand " de "gui.mainFrame" y la acción desencadenada por el submenú "Gestos de Entrada" han sido reemplazados (cambio común con la funcionalidad anterior). No es posible evitar esto.
 
 ++ Selección de la última opción utilizada en el Anillo de Opciones de Sintetizador ++[hdr207]
 Los gestos de entrada "NVDA+control+Flecha derecha o izquierda"   de NVDA te permiten moverte a través de las opciones de voz en el Anillo de Opciones de Sintetizador.
@@ -2419,18 +2453,6 @@ La descripción del script es: "Anunciar la ruta del archivo o de la carpeta baj
 Se almacena bajo la sección "ADDON_SUMMARY" del diálogo "Gestos de Entrada de NVDA".
 
 Sin embargo, es posible asignarle un gesto de entrada usando este diálogo.
-
-
-++ Mejorar la verbalización de palabras al escribir ++[hdr209]
-En los siguientes casos, NVDA no pronuncia la palabra escrita cuando  verbalizar palabras al escribir está activado:
-- Un espacio es insertado en el medio de una palabra.
-- Después de una corrección de una palabra utilizando la tecla "retroceso" seguido de un espacio.
-- Despues de escribir un símbolo de puntuación aislado seguido de un espacio.
-
-
-Esta mejora fue iniciada por Leonard de Ruijter (leonardder) en 2018 ([ver aquí https://github.com/nvaccess/nvda/pull/8110]) y cerrado en 2019 sin haber sido implementado en NVDA.
-
-Está activada de forma predeterminada, pero se puede desactivar para encontrar el funcionamiento básico de NVDA desmarcando la casilla de verificación "Mejorar la verbalización de palabras al escribir" que se encuentra en la categoría "Avanzadas" en "Opciones globales" del complemento.
 
 
 + Resumen de las órdenes proporcionados por el complemento +

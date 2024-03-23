@@ -1493,7 +1493,7 @@ class AddonConfiguration31(BaseAddonConfiguration):
 	{limitKeyRepeats} = boolean(default=False)
 	{keyRepeatDelay} =integer(default=100)
 	{recordCurrentSettingsForCurrentSelector} = boolean(default=False)
-	{typedWordSpeakingEnhancement} = boolean(default=True)
+	{typedWordSpeakingEnhancement} = boolean(default=False)
 	{tonalitiesVolumeLevel} = integer(default=50)
 	{allowNVDATonesVolumeAdjustment} = boolean(default=True)
 	{allowNVDASoundGainModification} = boolean(default=True)

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 -2022 Paulber19
+# Copyright (C) 2016 -2024 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -55,14 +55,15 @@ def get_all_file_paths(directory):
 
 def createAddonBundleFromPath(addon):
 	file_paths = get_all_file_paths(addon.path)
+	sysPath = list(sys.path)
 	sys.path.append(addon.path)
 	try:
 		import buildVars
 		from importlib import reload
 		reload(buildVars)
-		del sys.path[-1]
+		sys.path = sysPath
 	except ImportError:
-		del sys.path[-1]
+		sys.path = sysPath
 		gui.messageBox(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -157,12 +158,19 @@ def writeHTMLFile(dest, htmlText, title, cssFileName):
 
 
 def md2html(source):
+	sysPath = list(sys.path)
+	if "markdown" in sys.modules:
+		log.warning("Potential incompatibility: markdown module is also used and loaded probably by other add-on")
+		del sys.modules["markdown"]
+	sys.path = [sys.path[0]]
 	from ..utils.py3Compatibility import getCommonUtilitiesPath
 	commonUtilitiesPath = getCommonUtilitiesPath()
-	markdownPath = os.path.join(commonUtilitiesPath, "markdown")
-	sys.path.append(markdownPath)
+	markdownExPath = os.path.join(commonUtilitiesPath, "markdownEx")
+	sys.path.append(commonUtilitiesPath)
+	sys.path.append(markdownExPath)
 	from markdown2 import markdown
-	del sys.path[-1]
+	# restore sys.path
+	sys.path = sysPath
 	headerDic = {
 		"[[!meta title=\"": "# ",
 		"\"]]": " #",
@@ -202,10 +210,15 @@ def getHTMLBody(dest):
 
 
 def t2t2html(source, dest):
-	from ..utils.py3Compatibility import getUtilitiesPath
-	sys.path.append(getUtilitiesPath())
+	sysPath = list(sys.path)
+	if "txt2tags" in sys.modules:
+		log.warning("Potential incompatibility: txt2tags module is also used and loaded probably by other add-on")
+		del sys.modules["txt2tags"]
+	sys.path = [sys.path[0]]
+	from ..utils.py3Compatibility import getCommonUtilitiesPath
+	sys.path.append(getCommonUtilitiesPath())
 	import txt2tags
-	del sys.path[-1]
+	sys.path = sysPath
 	txt2tags.exec_command_line(["%s" % (source), ])
 	# we don't want the footer
 	htmlText = getHTMLBody(dest)
@@ -306,14 +319,15 @@ def _makeHTML(addon, lang):
 def _makeMainManifestIni(addon):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of manifest.ini file")
+	sysPath = list(sys.path)
 	sys.path.append(addon.path)
 	try:
 		import buildVars
 		from importlib import reload
 		reload(buildVars)
-		del sys.path[-1]
+		sys.path = sysPath
 	except ImportError:
-		del sys.path[-1]
+		sys.path = sysPath
 		gui.messageBox(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -342,14 +356,15 @@ def _makeMainManifestIni(addon):
 def _makeLocaleManifestIni(addon, lang):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of localization manifest.ini file")
+	sysPath = list(sys.path)
 	sys.path.append(addon.path)
 	try:
 		import buildVars
 		from importlib import reload
 		reload(buildVars)
-		del sys.path[-1]
+		sys.path = sysPath
 	except ImportError:
-		del sys.path[-1]
+		sys.path = sysPath
 		gui.messageBox(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -409,14 +424,15 @@ def _generatePOTFile(addon):
 	addonSummary = addon.manifest["summary"]
 	# Translators: title of dialog
 	dialogTitle = _("Creation of POT file of %s add-on") % addonSummary
+	sysPath = list(sys.path)
 	sys.path.append(addon.path)
 	try:
 		import buildVars
 		from importlib import reload
 		reload(buildVars)
-		del sys.path[-1]
+		sys.path = sysPath
 	except ImportError:
-		del sys.path[-1]
+		sys.path = sysPath
 
 		gui.messageBox(
 			# Translators: message to user.
@@ -453,14 +469,15 @@ def _prepareAddon(addon):
 	addonSummary = addon.manifest["summary"]
 	# Translators: title of dialog
 	dialogTitle = _("Prepare %s add-on") % addonSummary
+	sysPath = list(sys.path)
 	sys.path.append(addon.path)
 	try:
 		import buildVars
 		from importlib import reload
 		reload(buildVars)
-		del sys.path[-1]
+		sys.path = sysPath
 	except ImportError:
-		del sys.path[-1]
+		sys.path = sysPath
 		gui.messageBox(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -870,14 +887,15 @@ class ToolsForAddonDialog(
 		addon = self.addonsList[index]
 		# Translators: title of dialog
 		dialogTitle = _("Update add-on version")
+		sysPath = list(sys.path)
 		sys.path.append(addon.path)
 		try:
 			import buildVars
 			from importlib import reload
 			reload(buildVars)
-			del sys.path[-1]
+			sys.path = sysPath
 		except ImportError:
-			del sys.path[-1]
+			sys.path = sysPath
 			# Translators: message to user.
 			gui.messageBox(
 				# Translators: message to user buildVars.py file is not found.

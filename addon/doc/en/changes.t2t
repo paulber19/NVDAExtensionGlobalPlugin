@@ -20,9 +20,37 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
 
++ v13.3 (March/20/2024) +
+What's new:
+- taking into account the "Speech on demand" mode introduced in nvda 2024.1: all scripts announcing information will vocalize this information. In this mode, all other scripts will remain silent.
+- the volume level is announced when an application is selected in the "Audio Source Manager" dialog.
+- the "Improvement of echo per word" functionality is removed due to reported slowdowns and problems with editing notes in Braille with Musescore.
+- the installation of the "soundSplitter" add-on is reported because it risks causing the add-on to malfunction.
+
+
+Summary of changes made in versions 13.2.x:
+- the extension now correctly completes its initialization when extensions are reloaded.
+- fixed bug causing per word echo slowdown.
+- updated translations: AR, UK,
+
+
+Bug Fixes:
+- the scripts which allow you to restore the volume to the previous level now work correctly (no more lag).
+- in the "Shell's scripts" dialog, it is now possible to execute scripts which are associated with a command containing a number.
+
+
+Development:
+- removed code supporting versions prior to version 2022.1
+- renaming of the "psutil" library to "psutilEx" to avoid import conflicts of the same library between extensions.
+- renaming of the "win32" library to "win32Ex" to avoid import conflicts of the same library between extensions.
+- update of the pycaw library to version v20240210 (Used for NVDA versions lower than 2024.2).
+- use of the pycaw library integrated into NVDA from version 2024.2.
+- updated markdown2 to version 2.4.13.
+- resumption of the code to highlight in separate modules the parts of NVDA code which have been modified to achieve the functionalities and indications in the user manual of these modifications.
+
+
 + v13.2 (November/23/2023) +
 News:
-
 - in accordance with NVDA add-on store from NVDA 2023.2:
  - possibility to update the add-on with an incompatible version.
  - in the "Quick add-ons activation" dialog, it is now possible to activate incompatible extensions.

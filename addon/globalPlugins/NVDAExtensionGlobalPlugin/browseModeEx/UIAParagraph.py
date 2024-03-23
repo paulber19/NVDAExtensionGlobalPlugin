@@ -1,18 +1,13 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\UIAParagraph.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2021 paulber19
+# Copyright (C) 2018 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import browseMode
 import textInfos
-try:
-	# for nvda version >= 22.1
-	from UIAHandler import UIA_StyleIdAttributeId, StyleId_Normal
-	from UIAHandler.utils import getUIATextAttributeValueFromRange
-except ImportError:
-	from UIAHandler import UIA_StyleIdAttributeId, StyleId_Normal
-	from UIAUtils import getUIATextAttributeValueFromRange
+from UIAHandler import UIA_StyleIdAttributeId, StyleId_Normal
+from UIAHandler.utils import getUIATextAttributeValueFromRange
 
 
 def UIAParagraphQuicknavIterator(document, position, direction="next"):

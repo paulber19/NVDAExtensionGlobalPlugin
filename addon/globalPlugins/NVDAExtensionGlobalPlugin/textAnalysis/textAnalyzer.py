@@ -252,7 +252,7 @@ def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPosition
 			if ch in symbolsAndSpaceDic["NeedSpaceAfter"] and (
 				index != len(text) - 1) and not text[index + 1].isspace():
 				if text[index + 1] not in [".", ","]:
-					if position + 1not in errorPositions:
+					if (position + 1) not in errorPositions:
 						errorPositions[position + 1] = []
 					errorPositions[position + 1].append(("neededSpace", None))
 			if ch in symbolsAndSpaceDic["NoSpaceBefore"] and index and text[index - 1].isspace():
@@ -260,7 +260,7 @@ def checkUppercaseMissingAndStrayOrUnSpacedPunctuation(info, unit, errorPosition
 					errorPositions[position - 1] = []
 				errorPositions[position - 1].append(("unexpectedSpace", None))
 			if ch in symbolsAndSpaceDic["NoSpaceAfter"] and (index < len(text) - 1) and text[index + 1].isspace():
-				if position + 1not in errorPositions:
+				if (position + 1) not in errorPositions:
 					errorPositions[position + 1] = []
 				errorPositions[position + 1].append(("unexpectedSpace", None))
 

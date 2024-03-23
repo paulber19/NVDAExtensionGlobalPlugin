@@ -1,29 +1,14 @@
 # NVDAExtensionGlobalPlugin/winExplorer/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2023 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 import ui
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import Role
-	ROLE_TABLEROW = Role.TABLEROW
-	ROLE_TREEVIEWITEM = Role.TREEVIEWITEM
-	ROLE_TREEVIEW = Role.TREEVIEW,
-	ROLE_LIST = Role.LIST
-	ROLE_LISTITEM = Role.LISTITEM
-	ROLE_DOCUMENT = Role.DOCUMENT
-	ROLE_UNKNOWN = Role.UNKNOWN
-	from controlTypes.state import State
-	STATE_INVISIBLE = State.INVISIBLE
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import (
-		ROLE_TABLEROW, ROLE_TREEVIEWITEM,
-		ROLE_TREEVIEW, ROLE_LIST, ROLE_LISTITEM,
-		ROLE_DOCUMENT, ROLE_UNKNOWN,
-		STATE_INVISIBLE)
+from controlTypes.role import Role
+from controlTypes.state import State
+
 import api
 import queueHandler
 import itertools
@@ -77,7 +62,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 		except Exception:
 			continue
 		role = child.role
-		invisible = STATE_INVISIBLE in child.states
+		invisible = State.INVISIBLE in child.states
 		try:
 			childParent = child.parent
 			try:
@@ -87,7 +72,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 		except Exception:
 			childParent = None
 			parentChildCount = 0
-		if role == ROLE_TABLEROW:
+		if role == Role.TABLEROW:
 			if childParent and parentChildCount > 500:
 				break
 			if invisible:
@@ -97,10 +82,10 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			listCount = 0
 			if rowCount > 40:
 				break
-		if role == ROLE_TREEVIEWITEM:
+		if role == Role.TREEVIEWITEM:
 			if childParent and (
 				parentChildCount > 500
-				or childParent.role not in [ROLE_TREEVIEW, ROLE_LIST]
+				or childParent.role not in [Role.TREEVIEW, Role.LIST]
 			):
 				break
 			if invisible:
@@ -110,7 +95,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			listCount = 0
 			if treeCount > 40:
 				break
-		if role == ROLE_LISTITEM:
+		if role == Role.LISTITEM:
 			if childParent and parentChildCount > 500:
 				break
 			if invisible:
@@ -121,7 +106,7 @@ def generateObjectSubtreeGetObject(obj, indexGen, th):
 			if listCount > 40:
 				break
 
-		if role in [ROLE_DOCUMENT, ]:
+		if role in [Role.DOCUMENT, ]:
 			continue
 		childGetObject = generateObjectSubtreeGetObject(child, indexGen, th)
 		for r in childGetObject:
@@ -149,8 +134,8 @@ def getObjectsHelper_generator(oParent):
 		try:
 			o, lastSentIndex = next(getObjectGen)
 			# Consider only objects that are visible on screen and with known role
-			if o.role != ROLE_UNKNOWN\
-				and STATE_INVISIBLE not in o.states:
+			if o.role != Role.UNKNOWN\
+				and State.INVISIBLE not in o.states:
 				objectList.append(o)
 		except StopIteration:
 			break

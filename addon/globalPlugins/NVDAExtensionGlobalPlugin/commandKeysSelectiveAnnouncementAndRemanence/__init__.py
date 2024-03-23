@@ -13,43 +13,35 @@ import speech
 import gui
 import winUser
 import tones
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.state import _stateLabels as stateLabels
-	from controlTypes.state import _negativeStateLabels as negativeStateLabels
-	from controlTypes.state import State
-	STATE_CHECKED = State.CHECKED
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import (
-		stateLabels, negativeStateLabels,
-		STATE_CHECKED)
-import inputCore
+from controlTypes.state import State
 import watchdog
 import queueHandler
 import api
 import wx
 import config
-
 from speech.sayAll import SayAllHandler as sayAllHandler
-
 import time
 from vkCodes import byName
 import core
 from inputCore import NoInputGestureAction
+import inputCore
 from ..utils.NVDAStrings import NVDAString
 from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
 from ..settings import (
 	_addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption,
-	toggleBeepAtRemanenceEndAdvancedOption, isInstall)
-from ..settings.addonConfig import FCT_KeyRemanence
+	toggleBeepAtRemanenceEndAdvancedOption, isInstall
+)
+from ..settings import addonConfig
+
 from ..utils.keyboard import getKeyboardKeys
 from keyboardHandler import KeyboardInputGesture
 from . import specialForGmail
 from ..utils import contextHelpEx
+
 addonHandler.initTranslation()
 _curAddon = addonHandler.getCodeAddon()
 
-_NVDA_InputManager = None
+_NVDA_InputManager = inputCore.manager
 _myInputManager = None
 _NVDA_ExecuteGesture = None
 WITHOUT_MODIFIER_BIT_POSITION = 63
@@ -117,7 +109,6 @@ def myExecuteGesture(gesture):
 		if isinstance(gesture, KeyboardInputGesture):
 			log.debug("gesture: vkCode= %s, scanCode= %s, isextended= %s, modifiers= %s" % (
 				gesture.vkCode, gesture.scanCode, gesture.isExtended, gesture.modifiers))
-
 			_myInputManager.executeKeyboardGesture(gesture)
 		else:
 			log.debug("Gesture executed by: %s.%s" % (_NVDA_ExecuteGesture.__module__, _NVDA_ExecuteGesture.__name__))
@@ -161,7 +152,7 @@ def shouldExecuteGesture(gesture):
 		# trap this gesture
 		return False
 	from ..settings.nvdaConfig import _NVDAConfigManager
-	# A part of  Tony's Enhancements addon for NVDA
+	# A part of Tony's Enhancements addon for NVDA
 	# Copyright (C) 2019 Tony Malykh
 	if (
 		_NVDAConfigManager .toggleBlockInsertKeyOption(False)
@@ -313,7 +304,7 @@ class MyInputManager (object):
 		return False
 
 	def manageRemanence(self, currentGesture):
-		if not isInstall(FCT_KeyRemanence):
+		if not isInstall(addonConfig.FCT_KeyRemanence):
 			return None
 		delayBetweenGestures = time.time() - self.lastGestureTime\
 			if self.lastGestureTime else time.time()
@@ -374,7 +365,7 @@ class MyInputManager (object):
 	def executeNewGesture(self, gesture):
 		try:
 			self.executeKeyboardGesture(gesture, bypassRemanence=True)
-		except inputCore.NoInputGestureAction:
+		except NoInputGestureAction:
 			gesture.send()
 		except Exception:
 			log.error("internal_keyDownEvent", exc_info=True)
@@ -406,7 +397,7 @@ class MyInputManager (object):
 		else:
 			# Translators: message to user to report numpad navigation mode change.
 			msg = _("Standard use of the numeric keypad disabled")
-		queueHandler.queueFunction(queueHandler.eventQueue, ui.message, msg)
+		ui.message(msg)
 
 	def getNumpadKeyReplacement(self, gesture):
 		if not self.enableNumpadNnavigationKeys:
@@ -765,8 +756,8 @@ class CommandKeysSelectiveAnnouncementDialog(
 				queueHandler.eventQueue,
 				speech.speakMessage,
 				stateText)
-		stateText = stateLabels[STATE_CHECKED] if checked\
-			else negativeStateLabels[STATE_CHECKED]
+		stateText = State.CHECKED.displayString if checked\
+			else State.CHECKED.negativeDisplayString
 		if self.speakTimer is not None:
 			self.speakTimer.Stop()
 		self.speakTimer = wx.CallLater(300, callback, stateText)
@@ -978,32 +969,19 @@ class CommandKeysSelectiveAnnouncementDialog(
 
 
 def initialize():
-	global _NVDA_InputManager, _myInputManager, _NVDA_ExecuteGesture
-	from inputCore import manager
-	_NVDA_InputManager = manager
-	if _NVDA_InputManager .__module__ != "inputCore":
-		log.warning(
-			"Incompatibility: manager of inputCore has been also patched probably by another add-on: %s of %s module. "
-			"There is a risk of malfunction" % (_NVDA_InputManager.__name__, _NVDA_InputManager.__module__))
-	_NVDA_ExecuteGesture = manager.executeGesture
-	if _NVDA_ExecuteGesture .__module__ != "inputCore":
-		log.warning(
-			"Incompatibility: executeGesture of inputCore manager has been also patched probably by another add-on:"
-			" %s of %s. There is a risk of malfunction" % (
-				_NVDA_ExecuteGesture .__name__, _NVDA_ExecuteGesture .__module__))
-	manager.executeGesture = myExecuteGesture
-	log.debug("NVDA core manager executeGesture method has been replaced by %s method of %s module" % (
-		manager.executeGesture.__name__, manager.executeGesture .__module__))
+	if not (
+		isInstall(addonConfig.FCT_CommandKeysSelectiveAnnouncement)
+		or isInstall(addonConfig.FCT_KeyRemanence)):
+		return
+	global _myInputManager
 	_myInputManager = MyInputManager()
-	log.warning("commandKeysSelectiveAnnouncementAndRemanence initialized")
+	from . import patchs
+	patchs.patche(install=True)
 
 
 def terminate():
-	global _NVDA_InputManager, _myInputManager, _NVDA_ExecuteGesture
-	if _NVDA_ExecuteGesture is not None:
-		from inputCore import manager
-		manager.executeGesture = _NVDA_ExecuteGesture
-		_NVDA_ExecuteGesture = None
+	from . import patchs
+	patchs.patche(install=False)
 	specialForGmail.terminate()
-	_NVDA_InputManager = None
+	global _myInputManager
 	_myInputManager = None

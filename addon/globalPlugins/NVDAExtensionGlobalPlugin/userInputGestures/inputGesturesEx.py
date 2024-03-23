@@ -1,6 +1,6 @@
-# globalPlugins\NVDAExtensionGlobalPlugin\userConfig\inputGestures.py
+# globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\inputGesturesEx.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2023 Paulber19
+# Copyright (C) 2021-2024 Paulber19
 # This file is covered by the GNU General Public License.
 # from a Javi Dominguez's idea  and some code  of it "commandHelper" add-on
 
@@ -18,31 +18,9 @@ import inputCore
 from gui.inputGestures import InputGesturesDialog, _InputGesturesViewModel, _GesturesTree
 from ..utils.NVDAStrings import NVDAString
 from ..utils import getHelpObj, contextHelpEx
-
+from . import inputGesturesExPatches
 
 addonHandler.initTranslation()
-
-
-def onInputGesturesCommandEx(evt):
-	gui.mainFrame._popupSettingsDialog(InputGesturesDialogEx)
-
-
-def initialize():
-	gui.mainFrame.onInputGesturesCommand = onInputGesturesCommandEx
-	log.debug(
-		"gui.mainFrame.onInputGesturesCommand patched by: %s of %s module "
-		% (onInputGesturesCommandEx.__name__, onInputGesturesCommandEx.__module__))
-
-	menus = gui.mainFrame.sysTrayIcon.preferencesMenu.GetMenuItems()
-	item = None
-	for menuItem in menus:
-		if menuItem.GetItemLabel() == NVDAString("I&nput gestures..."):
-			item = menuItem
-			break
-	if item is not None:
-		gui.mainFrame.sysTrayIcon.Bind(wx.EVT_MENU, onInputGesturesCommandEx, item)
-		log.debug("%s of %s module is now the action for the  Input gestures  sub-menu " % (
-			onInputGesturesCommandEx.__name__, onInputGesturesCommandEx.__module__))
 
 
 class InputGesturesDialogEx(
@@ -79,6 +57,7 @@ class InputGesturesDialogEx(
 		settingsSizer.AddSpacer(guiHelper.SPACE_BETWEEN_ASSOCIATED_CONTROL_VERTICAL)
 
 		bHelper = guiHelper.ButtonHelper(wx.HORIZONTAL)
+
 		# Translators: The label of a button to run the script in the Input Gestures dialog.
 		self.executeScriptButton = bHelper.addButton(self, label=_("&Execute the script"))
 		self.executeScriptButton.Bind(wx.EVT_BUTTON, self.onExecuteScriptButton)
@@ -144,10 +123,9 @@ class InputGesturesDialogEx(
 	def getScript(self, item):
 
 		def smallBeep():
-			if False:
-				from tones import beep
-				beep(300, 30)
 			return
+			from tones import beep
+			beep(300, 30)
 
 		if not item or not hasattr(item, "scriptInfo"):
 			return
@@ -285,3 +263,11 @@ class InputGesturesDialogEx(
 		from ..settings import _addonConfigManager
 		delay = _addonConfigManager.getMaximumDelayBetweenSameScript()
 		self._executeScriptWaitingTimer = wx.CallLater(delay, callback, script, gestureOrGestureCls)
+
+
+def initialize():
+	inputGesturesExPatches.patche(install=True)
+
+
+def terminate():
+	inputGesturesExPatches.patche(install=False)

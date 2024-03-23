@@ -735,7 +735,7 @@ class ComputerSettingsPanel(
 		if self.confirmAudioDeviceChangeCheckBox.IsChecked() != option:
 			toggleConfirmAudioDeviceChangeAdvancedOption(True)
 		timeOut = self.confirmAudioDeviceChangeTimeOutChoiceBox.GetStringSelection()
-		_addonConfigManager.setConfirmAudioDeviceChangeTimeOut(timeOut)
+		_addonConfigManager.setConfirmAudioDeviceChangeTimeOut(int(timeOut))
 
 	def onSave(self):
 		self.saveSettingChanges()
@@ -766,7 +766,7 @@ class AdvancedSettingsPanel(
 			toggleDialogTitleWithAddonSummaryAdvancedOption,
 			toggleByPassNoDescriptionAdvancedOption,
 			toggleLimitKeyRepeatsAdvancedOption, toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption,
-			toggleTypedWordSpeakingEnhancementAdvancedOption, toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
+			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 			toggleAllowNVDASoundGainModificationAdvancedOption, togglePlayToneOnAudioDeviceAdvancedOption
 		)
 		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
@@ -800,12 +800,14 @@ class AdvancedSettingsPanel(
 		if inSecureMode():
 			self.MaximumDelayBetweenSameScriptBox .Hide()
 			self.byPassNoDescriptionOptionBox.Hide()
+		"""
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
 		labelText = _("&Enhance speak typed words")
 		self.typedWordSpeakingEnhancementOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.typedWordSpeakingEnhancementOptionBox .SetValue(
 			toggleTypedWordSpeakingEnhancementAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr209"), self.typedWordSpeakingEnhancementOptionBox)
+		"""
 		# Translators: This is the label for a group of editing options in the computer settings panel.
 		groupText = _("Key Repeat")
 		groupSizer = wx.StaticBoxSizer(wx.HORIZONTAL, self, label=groupText)
@@ -874,7 +876,7 @@ class AdvancedSettingsPanel(
 			toggleDialogTitleWithAddonSummaryAdvancedOption,
 			toggleByPassNoDescriptionAdvancedOption,
 			toggleLimitKeyRepeatsAdvancedOption, toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption,
-			toggleTypedWordSpeakingEnhancementAdvancedOption, toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
+			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 			toggleAllowNVDASoundGainModificationAdvancedOption,
 			togglePlayToneOnAudioDeviceAdvancedOption,
 		)
@@ -902,9 +904,10 @@ class AdvancedSettingsPanel(
 		option = toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption(False)
 		if self.recordCurrentSettingsForCurrentSelectorOptionBox.IsChecked() != option:
 			toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption()
-		option = toggleTypedWordSpeakingEnhancementAdvancedOption(False)
+		"""option = toggleTypedWordSpeakingEnhancementAdvancedOption(False)
 		if self.typedWordSpeakingEnhancementOptionBox.IsChecked() != option:
 			toggleTypedWordSpeakingEnhancementAdvancedOption()
+		"""
 		option = toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False)
 		if self.allowNVDASoundsVolumeAdjustmentOptionBox.IsChecked() != option:
 			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption()

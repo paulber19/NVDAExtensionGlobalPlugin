@@ -8,35 +8,13 @@ import addonHandler
 from ctypes import byref
 from comtypes import COMError
 from comtypes.automation import VARIANT
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import _roleLabels as roleLabels
-	from controlTypes.role import Role
-	ROLE_CHECKBOX = Role.CHECKBOX
-	from controlTypes.state import _stateLabels as stateLabels
-	from controlTypes.state import _negativeStateLabels as negativeStateLabels
-	from controlTypes.state import State
-	STATE_CHECKED = State.CHECKED
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import roleLabels
-	from controlTypes import stateLabels
-	from controlTypes import ROLE_CHECKBOX
-	from controlTypes import STATE_CHECKED
-	from controlTypes import negativeStateLabels
-try:
-	# for nvda version >= 2022.1
-	import UIAHandler.browseMode as UIABrowseMode
-	from UIAHandler.utils import isUIAElementInWalker, getDeepestLastChildUIAElementInWalker
-	from UIAHandler.browseMode import UIABrowseModeDocument
-except ImportError:
-	import UIABrowseMode
-	from UIAUtils import isUIAElementInWalker, getDeepestLastChildUIAElementInWalker
-	from UIABrowseMode import UIABrowseModeDocument
-
+from controlTypes.role import Role
+from controlTypes.state import State
+import UIAHandler.browseMode as UIABrowseMode
+from UIAHandler.utils import isUIAElementInWalker, getDeepestLastChildUIAElementInWalker
+from UIAHandler.browseMode import UIABrowseModeDocument
 import UIAHandler
-
-
-from .__init__ import BrowseModeDocumentTreeInterceptorEx
+from .browseMode import BrowseModeDocumentTreeInterceptorEx
 from . import elementsList
 from . import UIAParagraph
 from ..utils.NVDAStrings import NVDAString
@@ -53,19 +31,19 @@ class UIATextRangeQuickNavItemEx(UIABrowseMode .UIATextRangeQuickNavItem):
 		name = obj.name if obj.name else _("No label")
 		if (self.itemType == "edit"):
 			value = str("{name} {role} {value}") .format(
-				name=name, role=roleLabels[obj.role], value=value)
+				name=name, role=obj.role.displayString, value=value)
 		elif self.itemType == "checkBox":
-			if STATE_CHECKED in obj.states:
-				state = stateLabels[STATE_CHECKED]
+			if State.CHECKED in obj.states:
+				state = State.CHECKED.displayString
 			else:
-				state = negativeStateLabels[STATE_CHECKED]
+				state = State.CHECKED.negativeDisplayString
 			value = str("{name} {state}") .format(name=name, state=state)
 		elif self.itemType == "formField":
-			if obj.role == ROLE_CHECKBOX:
-				if STATE_CHECKED in obj.states:
-					state = stateLabels[STATE_CHECKED]
+			if obj.role == Role.CHECKBOX:
+				if State.CHECKED in obj.states:
+					state = State.CHECKED.displayString
 				else:
-					state = negativeStateLabels[STATE_CHECKED]
+					state = State.CHECKED.negativeDisplayString
 				value = str("{name} {state}") .format(name=name, state=state)
 		return value
 

@@ -20,6 +20,36 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 Les versions du type majeure.mineure.x (par exemple v3.1.2)  sont des mises à jour de traductions.
 
 
+
++ v13.3 (20/03/2024) +
+Nouveautés:
+- prise en compte du mode "Parole à la demande" introduit dans nvda 2024.1:   tous les scripts annonçant une information vocaliseront cette informations. Dans ce mode, tous Les autres scripts resteront muet.
+- le niveau du volume est annoncé lorsque une application est sélectionnée dans le dialogue "Gestionnaire des sources audio".
+- la fonctionnalité "Amélioration de l'écho par mot" est supprimée pour cause de ralentissements signalés et problème d'édition de note en braille avec Musescore.
+- l'installation de l'extension "soundSplitter" est signalée car elle risque de provoquer un disfonctionnement de l'extension.
+
+
+Récapitulatif des changements faits dans les versions 13.2.x:
+- l'extension termine maintenant correctement son initialisation lorsque les extensions sont rechargées.
+- correction du bogue provoquant un ralentissement en écho par mot.
+- mise à jour des traductions: AR, UK, 
+
+
+Correttions de bogues:
+- les scripts qui permettent de rétablir le volume au précédent niveau fonctionnent maintenant correctement(plus de décalage).
+- dans le dialogue "Scripts de l'interpréteur", il est maintenant possible d'exécuter les scripts qui sont associés à une commande contenant un chiffre.
+
+
+Développement:
+- suppression du code prenant en charge les versions antérieure à la version 2022.1
+- renomage de la librairie "psutil" en "psutilEx"  pour éviter les conflits d'importation de la même librairie entre extensions.
+- renomage de la librairie "win32" en "win32Ex"  pour éviter les conflits d'importation de la même librairie entre extensions.
+- mise à jour de la librairie pycaw à la version  v20240210 (Utilisée pour les versions de NVDA inférieures à 2024.2).
+- utilisation de la librairie pycaw intégrée dans NVDA à partir de la version 2024.2 .
+- mise à jour de markdown2 à la version 2.4.13.
+- reprise du code pour mettre en évidence dans des modules séparés les parties de code de NVDA qui ont été modifiées pour réaliser les fonctionnalités et indications dans le manuel utilisateur de ces modification.
+
+
 + v13.2 (23/11/2023) +
 Nouveautés:
 - conformément à l'addon store depuis NVDA 2023.2:

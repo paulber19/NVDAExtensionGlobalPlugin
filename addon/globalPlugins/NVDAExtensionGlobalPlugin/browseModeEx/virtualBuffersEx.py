@@ -5,16 +5,9 @@
 # See the file COPYING for more details.
 
 import addonHandler
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import _roleLabels as roleLabels
-	from controlTypes.role import Role
-	ROLE_CHECKBOX = Role.CHECKBOX
-	from controlTypes.state import State
-	STATE_CHECKED = State.CHECKED
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import roleLabels, ROLE_CHECKBOX
-	from controlTypes import STATE_CHECKED
+
+from controlTypes.role import Role
+from controlTypes.state import State
 import NVDAHelper
 import ctypes
 import aria
@@ -33,7 +26,7 @@ from comtypes import COMError
 from comInterfaces import IAccessible2Lib as IA2
 from ..utils.NVDAStrings import NVDAString
 from . import elementsList
-from .__init__ import BrowseModeDocumentTreeInterceptorEx
+from .browseMode import BrowseModeDocumentTreeInterceptorEx
 
 addonHandler.initTranslation()
 
@@ -190,20 +183,20 @@ class VirtualBufferQuickNavItemEx(virtualBuffers.VirtualBufferQuickNavItem):
 		if (self.itemType == "edit"):
 			name = attrs.get("name", "")
 			return str("{name} {role} {value}").format(
-				name=self.getLabel(name), role=roleLabels[role], value=value)
+				name=self.getLabel(name), role=role.displayString, value=value)
 		if self.itemType == "checkBox":
 			states = attrs.get("states", "")
-			state = NVDAString("checked") if STATE_CHECKED in states\
+			state = NVDAString("checked") if State.CHECKED in states\
 				else NVDAString("not checked")
 			name = attrs.get("name", "")
 			return str("%s %s") % (self.getLabel(name), state)
 		if self.itemType in ["formField"]:
-			if role == ROLE_CHECKBOX:
+			if role == Role.CHECKBOX:
 				states = attrs.get("states", "")
-				state = NVDAString("checked") if STATE_CHECKED in states\
+				state = NVDAString("checked") if State.CHECKED in states\
 					else NVDAString("not checked")
 				name = attrs.get("name", "")
 				return str("{name} {role} {state}") .format(
-					name=name, role=roleLabels[role], state=state)
+					name=name, role=role.displayString, state=state)
 			return value
 		return self.getLabel(value)

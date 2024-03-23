@@ -7,10 +7,10 @@
 import addonHandler
 import documentBase
 from scriptHandler import script
-
-from ..utils.NVDAStrings import NVDAString
 import config
 from controlTypes import OutputReason
+from ..utils.NVDAStrings import NVDAString
+from ..scripts.scriptHandlerEx import speakOnDemand
 
 
 addonHandler.initTranslation()
@@ -88,6 +88,7 @@ class _DocumentWithTableNavigationBase(documentBase.DocumentWithTableNavigation)
 		# Translators: Input help mode message for report current table row cells command
 		description=_("Report current table row's cells"),
 		category=SCRCAT_TABLE,
+		**speakOnDemand,
 	)
 	def script_reportCurrentRow(self, gesture):
 		from scriptHandler import isScriptWaiting
@@ -99,6 +100,7 @@ class _DocumentWithTableNavigationBase(documentBase.DocumentWithTableNavigation)
 		# Translators: Input help mode message for report current table column cells command
 		description=_("Report current table column's cells"),
 		category=SCRCAT_TABLE,
+		**speakOnDemand,
 	)
 	def script_reportCurrentColumn(self, gesture):
 		from scriptHandler import isScriptWaiting
@@ -182,6 +184,7 @@ class _DocumentWithTableNavigationBase(documentBase.DocumentWithTableNavigation)
 		# Translators: Input help mode message for report current cell position command
 		description=_("Report current table cell position"),
 		category=SCRCAT_TABLE,
+		**speakOnDemand,
 	)
 	def script_reportCurrentCellPosition(self, gesture):
 		from scriptHandler import isScriptWaiting

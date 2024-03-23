@@ -11,14 +11,9 @@ from comtypes.client import CreateObject as COMCreate
 import ui
 import api
 import os
-from ..utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import Role
-	ROLE_LISTITEM = Role.LISTITEM
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import ROLE_LISTITEM
-
+from ..utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask, messageWithSpeakOnDemand
+from ..scripts.scriptHandlerEx import speakOnDemand
+from controlTypes.role import Role
 
 addonHandler.initTranslation()
 
@@ -99,7 +94,8 @@ class ScriptsForWindowsExplorer(ScriptableObject):
 		description=_(
 			"Report the short path of focused folder or file  of Windows Explorer."
 			" Twice: report the full path. Three time: copy the full path  to the clipboard"),
-		category=_addonSummary
+		category=_addonSummary,
+		**speakOnDemand
 	)
 	def script_reportFocusedExplorerItemPath(self, gesture):
 		def callback(count):
@@ -113,14 +109,13 @@ class ScriptsForWindowsExplorer(ScriptableObject):
 				from ..settings import _addonConfigManager
 				nbOfFolders = _addonConfigManager.getReducedPathItemsNumber()
 				if len(pathList) <= nbOfFolders + 1:
-					ui.message(path)
+					messageWithSpeakOnDemand(path)
 					return
 				text = pathList[0] + "\\...\\" + "\\".join(pathList[- nbOfFolders:])
-
-				ui.message(text)
+				messageWithSpeakOnDemand(text)
 			elif count == 1:
 				# report full path
-				ui.message(path)
+				messageWithSpeakOnDemand(path)
 			else:
 				# copy path to clipboard
 				api.copyToClip(path)
@@ -137,7 +132,8 @@ class ScriptsForWindowsExplorer(ScriptableObject):
 		# Translators: Message presented in input help mode.
 		description=_(
 			"Report the path of the file or folder under the cursor of Windows Explorer by going up the folders tree"),
-		category=_addonSummary
+		category=_addonSummary,
+		**speakOnDemand
 	)
 	def script_reportFocusedExplorerItemFolderPath(self, gesture):
 		stopDelayScriptTask()
@@ -168,6 +164,6 @@ def updateChooseNVDAOverlayClass(obj, clsList):
 		obj.appModule
 		and obj.appModule.appName
 		and obj.appModule.appName == "explorer"
-		and obj.role == ROLE_LISTITEM
+		and obj.role == Role.LISTITEM
 	):
 		clsList.insert(0, ScriptsForWindowsExplorer)

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2023 Paulber19
+# Copyright (C) 2016 - 2024 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -10,45 +10,26 @@ import wx
 import gui
 import api
 import textInfos
+import os
+import globalVars
 import speech
 import speech.speech
 import ui
 import time
-from typing import Tuple, Optional
-try:
-	# for nvda version >= 2021.2
-	from controlTypes.role import Role
-	ROLE_DOCUMENT = Role.DOCUMENT
-	ROLE_EDITABLETEXT = Role.EDITABLETEXT
-	ROLE_TERMINAL = Role.TERMINAL
-	ROLE_TREEVIEWITEM = Role.TREEVIEWITEM
-	ROLE_LISTITEM = Role.LISTITEM
-	from controlTypes.state import State
-	STATE_READONLY = State.READONLY
-	STATE_EDITABLE = State.EDITABLE
-	STATE_MULTILINE = State.MULTILINE
-	STATE_SELECTED = State.SELECTED
-except (ModuleNotFoundError, AttributeError):
-	from controlTypes import (
-		ROLE_DOCUMENT, ROLE_EDITABLETEXT, ROLE_TERMINAL,
-		ROLE_TREEVIEWITEM, ROLE_LISTITEM,
-		STATE_READONLY, STATE_EDITABLE,
-		STATE_MULTILINE, STATE_SELECTED)
+from controlTypes.role import Role
+from controlTypes.state import State
 import editableText
+import NVDAObjects.behaviors
 import braille
 import config
-try:
-	# for nvda version >= 2021.2
-	from characterProcessing import SymbolLevel
-	SYMLVL_SOME = SymbolLevel.SOME
-except ImportError:
-	from characterProcessing import SYMLVL_SOME
+from characterProcessing import SymbolLevel
 from IAccessibleHandler import accNavigate
 from oleacc import (
 	STATE_SYSTEM_SELECTED,
 	NAVDIR_PREVIOUS, NAVDIR_NEXT,
 )
 import UIAHandler
+from NVDAObjects import NVDAObject
 from NVDAObjects.UIA import UIA
 import queueHandler
 import eventHandler
@@ -56,13 +37,14 @@ import core
 import contentRecog.recogUi
 from ..utils.NVDAStrings import NVDAString
 from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
-from ..settings import isInstall, toggleTypedWordSpeakingEnhancementAdvancedOption
+from ..settings import isInstall
 from ..settings.addonConfig import (
 	FCT_ClipboardCommandAnnouncement,
 )
 from ..utils.keyboard import getEditionKeyCommands
 from . import clipboard
-
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
 addonHandler.initTranslation()
 
 # Translators: message to the user on cut command activation.
@@ -234,9 +216,9 @@ class EditableTextEx(editableText.EditableText):
 	def script_cutAndCopyToClipboard(self, gesture):
 		def callback():
 			clearDelayScriptTask()
-			if STATE_READONLY in self.states or (
-				STATE_EDITABLE not in self.states
-				and STATE_MULTILINE not in self.states):
+			if State.READONLY in self.states or (
+				State.EDITABLE not in self.states
+				and State.MULTILINE not in self.states):
 				gesture.send()
 				return
 			info = self.getSelectionInfo()
@@ -261,9 +243,9 @@ class EditableTextEx(editableText.EditableText):
 		def callback():
 			clearDelayScriptTask()
 			if (
-				STATE_READONLY in self.states or (
-				STATE_EDITABLE not in self.states
-				and not STATE_MULTILINE)):
+				State.READONLY in self.states or (
+				State.EDITABLE not in self.states
+				and not State.MULTILINE)):
 				gesture.send()
 				return
 			cm = clipboard.ClipboardManager()
@@ -303,9 +285,9 @@ class EditableTextEx(editableText.EditableText):
 		def callback():
 			clearDelayScriptTask()
 			if (
-				STATE_READONLY in self.states or (
-				STATE_EDITABLE not in self.states
-				and not STATE_MULTILINE)):
+				State.READONLY in self.states or (
+				State.EDITABLE not in self.states
+				and not State.MULTILINE)):
 				gesture.send()
 				return
 			queueHandler.queueFunction(
@@ -357,207 +339,64 @@ class EditableTextEx(editableText.EditableText):
 
 # this code comes from leonardder  work for issue #8110, see at:
 # Speak typed words based on TextInfo if possible #8110
-class EditableTextUseTextInfoToSpeakTypedWords(EditableTextEx):
-	#: A cached bookmark for the caret.
-	#: This is cached until L{hasNewWordBeenTyped} clears it
-	_cachedCaretBookmark = None
 
-	def _caretScriptPostMovedHelper(self, speakUnit, gesture, info=None):
-		# Forget the word currently being typed as the user has moved the caret somewhere else.
-		speech.speech.clearTypedWordBuffer()
-		# Also clear our latest cachetd caret bookmark
-		# log.debug("_caretScriptPostMovedHelper clear cached caret bookmark")
-		# self._clearCachedCaretBookmark()
-		self.script_preTypedCharacter(None)
-		super()._caretScriptPostMovedHelper(speakUnit, gesture, info)
-		log.debug("cached caret bookmark updated: %s" % self._cachedCaretBookmark)
 
-	def getScript(self, gesture):
-		script = super().getScript(gesture)
-		log.debug("script: %s" % script)
-		if script or not self.useTextInfoToSpeakTypedWords:
-			return script
-		if gesture.isCharacter and gesture.vkCode != 231:
-			return self.script_preTypedCharacter
-		return None
-
-	def script_preTypedCharacter(self, gesture):
-		log.debug("script_preTypedCharacter")
+class NVDAObjectEx(NVDAObject):
+	def _reportErrorInPreviousWord(self):
 		try:
-			self._cachedCaretBookmark = self.caret.bookmark
-			log.debug("cached caret bookmark set to: %s" % self._cachedCaretBookmark)
-		except (LookupError, RuntimeError):
-			pass  # Will still be None
-		if gesture:
-			gesture.send()
-
-	def _get_caretMovementDetectionUsesEvents(self) -> bool:
-		"""Returns whether or not to rely on caret and textChange events when
-		finding out whether the caret position has changed after pressing a caret movement gesture.
-		Note that if L{_useEvents_maxTimeoutMs} is elapsed,
-		relying on events is no longer reliable in most situations.
-		Therefore, any event should occur before that timeout elapses.
-		"""
-		# This class is a mixin that usually comes before other relevant classes in the mro.
-		# Therefore, try to call super first, and if that fails, return the default (C{True}.
-		try:
-			res = super().caretMovementDetectionUsesEvents
-			log.debug("_get_caretMovementDetectionUsesEvents super res: %s" % res)
-			return res
-		except AttributeError:
-			log.debug("_get_caretMovementDetectionUsesEvents exception")
-			return True
-
-	def _get_useTextInfoToSpeakTypedWords(self) -> bool:
-		"""Returns whether or not to use textInfo to announce newly typed words."""
-		# This class is a mixin that usually comes before other relevant classes in the mro.
-		# Therefore, try to call super first, and if that fails, return the default (C{True}.
-		try:
-			return super().useTextInfoToSpeakTypedWords
-		except AttributeError:
-			return True
-
-	def _clearCachedCaretBookmark(self):
-		self._cachedCaretBookmark = None
-		log.debug("cached caret bookmark cleared: %s" % self._cachedCaretBookmark)
-
-	def hasNewWordBeenTyped(self, wordSeparator: str) -> Tuple[Optional[bool], textInfos.TextInfo]:
-		"""
-		Returns whether a new word has been typed during this core cycle.
-		It relies on self._cachedCaretBookmark, which is cleared after every core cycle.
-		@param wordSeparator: The word seperator that has just been typed.
-		@returns: a tuple containing the following two values:
-			1. Whether a new word has been typed. This could be:
-				* False if a caret move has been detected, but no word has been typed.
-				* True if a caret move has been detected and a new word has been typed.
-				* None if no caret move could be detected.
-			2. If the caret has moved and a new word has been typed, a TextInfo
-				expanded to the word that has just been typed.
-		"""
-		debug = False
-		log.debug("hasNewWordBeenTyped: wordSeparator= %s (%s)" % (wordSeparator, ord(wordSeparator)))
-		if not self.useTextInfoToSpeakTypedWords:
-			return (None, None)
-		bookmark = self._cachedCaretBookmark
-		if not bookmark:
-			log.debug("no bookmark")
-			return (None, None)
-		log.debug("bookmark: %s" % bookmark)
-		self._clearCachedCaretBookmark()
-		# on carriage return,  we don't want to announce the word  if no  character has been typed previously.
-		if ord(wordSeparator) == 13 and not self.characterTyped:
-			return (None, None)
-		caretMoved, caretInfo = self._hasCaretMoved(bookmark, retryInterval=0.005, timeout=0.030)
-		if not caretMoved or not caretInfo or not caretInfo.obj:
-			log.debug("not caret moved")
-			return (None, None)
-		if debug:
-			info = caretInfo.copy()
-			info.expand(textInfos.UNIT_LINE)
-			log.debug("caretInfo line: %s" % [ord(x) for x in info.text])
-			log.debug("caretInfo: %s, bookmark= %s" % (info.text, info.bookmark))
-		tempInfo = caretInfo.copy()
-		if ord(wordSeparator) == 13:
-			# in notepad, after return, caret bookmark is on new  line and crlf on previous line
-			# lf is the last character of previous line
-			info1 = caretInfo.copy()
-			info1.collapse()
-			# move to last character of previous line
-			res = info1.move(textInfos.UNIT_CHARACTER, -1)
-			if res:
-				info1.expand(textInfos.UNIT_CHARACTER)
-				log.debug("last character of previous line: %s" % [ord(x) for x in info1.text])
-				# in notepad++, we get 2 characters and not oly one ???
-				if len(info1.text) == 1 and ord(info1.text) == 10:  # character lf
-					tempInfo.move(textInfos.UNIT_CHARACTER, -1)
-			else:
-				# no previous line
-				return (False, None)
-
-				# let's position on the last character typed
-		res = tempInfo.move(textInfos.UNIT_CHARACTER, -2)
-		if res != 0:
-			tempInfo.expand(textInfos.UNIT_CHARACTER)
-			ch = tempInfo.text
-			log.debug("character caret-2: %s (%s)" % (ch, ord(ch)))
-			# if there is a space (but no a Non-breaking space) before last character, return no word
-			if len(ch) and ord(ch) != NON_BREAKING_SPACE and ch.isspace():
-				log.debug("caret -2 is a space")
-				return (False, None)
-			# if the last character typed is not a letter or number, the word has been probably already reported
-			if not ch.isalnum() and ord(ch) != NON_BREAKING_SPACE:
-				log.debug("caret-2 is not alphanumericc")
-				return (False, None)
-		wordInfo = self.makeTextInfo(bookmark)
-		if debug:
-			info = wordInfo.copy()
-			info.expand(textInfos.UNIT_WORD)
-			log.debug("wordInfo: %s" % info.text)
-		# The bookmark is positioned after the end of the word.
-		# Therefore, we need to move it one character backwards.
-		res = wordInfo.move(textInfos.UNIT_CHARACTER, -1)
-		log.debug("wordInfo moved: %s, %s" % (res, wordInfo.text))
-		wordInfo.expand(textInfos.UNIT_WORD)
-		log.debug("wordInfo moved 2: %s, %s" % (res, wordInfo.text))
-		diff = wordInfo.compareEndPoints(caretInfo, "endToStart")
-		log.debug("diff: %s" % diff)
-		# if diff >= 0 and not wordSeparator.isspace():
-		if diff >= 0 and wordSeparator.isalnum():
-			# This is no word boundary.
-			return (False, None)
-		if wordInfo.text.isspace():
-			# There is only space, which is not considered a word.
-			# For example, this can occur in Notepad++ when auto indentation is on.
-			log.debug("Word before caret contains only spaces")
-			return (None, None)
-		caretInfo.collapse()
-		wordInfo.setEndPoint(caretInfo, "endToStart")
-		log.debug("word1: %s" % wordInfo.text)
-		# with notepad editor, wordSeparator is at the end of word.  So we need to suppress it
-		# not same thing with other editor as notepad++, wordpad, word.
-		log.debug("word: %s, sep: %s" % (wordInfo.text, ord(wordSeparator)))
-		if len(wordInfo.text) and not wordInfo.text[-1].isalnum():
-			# the word is before the wordSeparator
-			res = wordInfo.move(textInfos.UNIT_CHARACTER, -1, endPoint="end")
-			log.debug("word2: %s, %s" % (res, wordInfo.text))
-		return (True, wordInfo)
-
-	def _get_caret(self):
-		return self.makeTextInfo(textInfos.POSITION_CARET)
-
-	def _updateSelectionAnchor(self, oldInfo, newInfo):
-		# Only update the value if the selection changed.
-		try:
-			if newInfo.compareEndPoints(oldInfo, "startToStart") != 0:
-				self.isTextSelectionAnchoredAtStart = False
-			elif newInfo.compareEndPoints(oldInfo, "endToEnd") != 0:
-				self.isTextSelectionAnchoredAtStart = True
+			# self might be a descendant of the text control; e.g. Symphony.
+			# We want to deal with the entire text, so use the caret object.
+			info = api.getCaretObject().makeTextInfo(textInfos.POSITION_CARET)
+			# This gets called for characters which might end a word; e.g. space.
+			# The character before the caret is the word end.
+			# The one before that is the last of the word, which is what we want.
+			info.move(textInfos.UNIT_CHARACTER, -2)
+			info.expand(textInfos.UNIT_CHARACTER)
 		except Exception:
-			pass
+			# Focus probably moved.
+			log.debugWarning("Error fetching last character of previous word", exc_info=True)
+			return
+		# Fetch the formatting for the last word to see if it is marked as a spelling error,
+		# However perform the fetch and check in a future core cycle
 
-	def event_typedCharacter(self, ch: str):
-		if (
-			config.conf["documentFormatting"]["reportSpellingErrors"]
-			and config.conf["keyboard"]["alertForSpellingErrors"]
-			and (
-				# Not alpha, apostrophe or control.
-				ch.isspace() or (ch >= " " and ch not in "'\x7f" and not ch.isalpha())
-			)
-		):
-			# Reporting of spelling errors is enabled and this character ends a word.
-			self._reportErrorInPreviousWord()
-		from .speechEx import speakTypedCharacters
-		speakTypedCharacters(ch)
-		# keep trace that a character has been typed
-		self.characterTyped = True
-		import winUser
-		if (
-			config.conf["keyboard"]["beepForLowercaseWithCapslock"]
-			and ch.islower()
-			and winUser.getKeyState(winUser.VK_CAPITAL) & 1
-		):
-			import tones
-			tones.beep(3000, 40)
+		# To give the content control more time to detect and mark the error itself.
+		# #12161: MS Word's UIA implementation certainly requires this delay.
+		def _delayedDetection():
+			try:
+				fields = info.getTextWithFields()
+			except Exception:
+				log.debugWarning("Error fetching formatting for last character of previous word", exc_info=True)
+				return
+			for command in fields:
+				if (
+					isinstance(command, textInfos.FieldCommand)
+					and command.command == "formatChange"
+					and command.field.get("invalid-spelling")
+				):
+					break
+			else:
+				# No error.
+				return
+			#  to report  error depending user configuration: wav, beep, or message
+
+			def reportSpellingError():
+				from ..settings import _addonConfigManager
+				if _addonConfigManager.reportingSpellingErrorsByBeep():
+					from tones import beep
+					hz = 150
+					length = 50
+					beep(hz, length)
+					from time import sleep
+					sleep(2 * length / 1000)
+					beep(hz, length)
+				elif _addonConfigManager.reportingSpellingErrorsBySound():
+					import nvwave
+					nvwave.playWaveFile(os.path.join(globalVars.appDir, "waves", "textError.wav"))
+				elif _addonConfigManager.reportingSpellingErrorsByMessage():
+					ui.message(NVDAString("spelling error"))
+
+			reportSpellingError()
+		core.callLater(50, _delayedDetection)
 
 
 class ClipboardCommandAnnouncement(object):
@@ -620,7 +459,7 @@ class ClipboardCommandAnnouncement(object):
 		count = 0
 		o = obj
 		while o:
-			if STATE_SELECTED in o.states:
+			if State.SELECTED in o.states:
 				count += 1
 			try:
 				o = o._get_next()
@@ -631,7 +470,7 @@ class ClipboardCommandAnnouncement(object):
 		while o:
 			try:
 				o = o.previous
-				if STATE_SELECTED in o.states:
+				if State.SELECTED in o.states:
 					count += 1
 			except Exception:
 				o = None
@@ -641,12 +480,12 @@ class ClipboardCommandAnnouncement(object):
 		obj = api.getFocusObject()
 		o = obj
 		while o:
-			if STATE_SELECTED in o.states:
+			if State.SELECTED in o.states:
 				return True
 			o = o._get_next()
 		o = obj.previous
 		while o:
-			if STATE_SELECTED in o.states:
+			if State.SELECTED in o.states:
 				return True
 			o = o.previous
 		return False
@@ -676,7 +515,7 @@ class ClipboardCommandAnnouncement(object):
 			text = self.getSelectionInfo()
 			if text != "":
 				queueHandler.queueFunction(
-					queueHandler.eventQueue, speech.speakText, text, symbolLevel=SYMLVL_SOME)
+					queueHandler.eventQueue, speech.speakText, text, symbolLevel=SymbolLevel.SOME)
 
 		if _GB_taskTimer:
 			_GB_taskTimer.Stop()
@@ -728,18 +567,24 @@ _classNamesToCheck = [
 	"Edit", "RichEdit", "RichEdit20", "REComboBox20W", "RICHEDIT50W", "RichEditD2DPT",
 	"Scintilla", "TScintilla", "AkelEditW", "AkelEditA", "_WwG", "_WwN", "_WwO",
 	"SALFRAME", "ConsoleWindowClass"]
-_rolesToCheck = [ROLE_DOCUMENT, ROLE_EDITABLETEXT, ROLE_TERMINAL]
+_rolesToCheck = [Role.DOCUMENT, Role.EDITABLETEXT, Role.TERMINAL]
 
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
 	useRecogResultNVDAObjectEx = False
-	useEditableTextUseTextInfoToSpeakTypedWords = False
+	useEditableTextBaseEx = False
 	for cls in clsList:
 		if contentRecog.recogUi.RecogResultNVDAObject in cls.__mro__:
 			useRecogResultNVDAObjectEx = True
-		if editableText.EditableText in cls.__mro__:
-			useEditableTextUseTextInfoToSpeakTypedWords = True
+		if NVDAVersion >= [2023, 1]:
+			c = NVDAObjects.behaviors.EditableTextBase
+		else:
+			c = NVDAObjects.behaviors.EditableText
+		if c in cls.__mro__:
+			useEditableTextBaseEx = True
 
+	if useEditableTextBaseEx:
+		clsList.insert(0, NVDAObjectEx)
 	if useRecogResultNVDAObjectEx:
 		clsList.insert(0, RecogResultNVDAObjectEx)
 	# to fix the Access8Math  problem with the "alt+m" virtual menu
@@ -753,15 +598,12 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 			and obj.UIAAutomationId == "Windows.Shell.InputApp.FloatingSuggestionUI.DelegationTextBox":
 			pass
 		else:
-			if toggleTypedWordSpeakingEnhancementAdvancedOption(False) and useEditableTextUseTextInfoToSpeakTypedWords:
-				clsList.insert(0, EditableTextUseTextInfoToSpeakTypedWords)
-			else:
-				clsList.insert(0, EditableTextEx)
+			clsList.insert(0, EditableTextEx)
 		return
 	elif isInstall(FCT_ClipboardCommandAnnouncement):
 		clsList.insert(0, ClipboardCommandAnnouncement)
 		obj.checkSelection = False
-		if obj.role in (ROLE_TREEVIEWITEM, ROLE_LISTITEM):
+		if obj.role in (Role.TREEVIEWITEM, Role.LISTITEM):
 			obj.checkSelection = True
 
 

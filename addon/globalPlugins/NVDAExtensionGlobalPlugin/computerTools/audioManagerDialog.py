@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2023 paulber19
+# Copyright (C) 2021-2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -25,6 +25,10 @@ from ..utils import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
 from .audioCore import isNVDA
 from . import audioCore
+from ..settings import (
+	toggleAllowNVDATonesVolumeAdjustmentAdvancedOption, toggleAllowNVDASoundGainModificationAdvancedOption,
+	togglePlayToneOnAudioDeviceAdvancedOption
+)
 
 addonHandler.initTranslation()
 
@@ -35,8 +39,9 @@ class NVDAAndAudioApplicationsManagerDialog(
 	_instance = None
 	# help in the user manual.
 	helpObj = getHelpObj("hdr34")
-	selectDelay = None
+
 	refreshApplicationsListTimer = None
+	playSoundTimer = None
 
 	def __new__(cls, *args, **kwargs):
 		if NVDAAndAudioApplicationsManagerDialog._instance is None:
@@ -56,8 +61,8 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.devices = audioOutputDevicesManager.getDevices()
 		self._currentDevice = audioOutputDevicesManager.getDefaultDevice()
 		self.audioSources = audioCore.AudioSources(self._currentDevice)
-		self.doGui()
 		self.backToForeground = False
+		self.doGui()
 
 	def doGui(self):
 		focus = api.getFocusObject()
@@ -178,7 +183,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.devicesListBox.Bind(wx.EVT_CHOICE, self.onSelectDevice)
 		self.devicesListBox.Bind(wx.EVT_KEY_DOWN, self.onDeviceKeyDown)
 		self.devicesListBox.Bind(wx.EVT_KEY_DOWN, self.onDeviceKeyDown)
-		self.applicationsListBox.Bind(wx.EVT_LISTBOX, self.onSelectApplication)
+		self.applicationsListBox.Bind(wx.EVT_CHOICE, self.onSelectApplication)
 		self.applicationsListBox.Bind(wx.EVT_KEY_DOWN, self.onKeyDown)
 		self.volumeBox.Bind(wx.EVT_CHOICE, self.onVolumeChoice)
 		self.volumeMuteCheckBox.Bind(wx.EVT_CHECKBOX, self.onVolumeMute)
@@ -192,15 +197,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.applicationsListBox.Bind(wx.EVT_SET_FOCUS, self.onFocusApplicationsList)
 		index = self.applicationsListBox.GetSelection()
 		application = self.applications[index]
-		info = self.formatApplicationInfo(application, name=False, mute=True)
-		if info:
-			wx.CallLater(100, ui.message, info)
-		info = self.formatApplicationInfo(application, name=True, mute=True)
-		if info:
-			wx.CallLater(
-				40,
-				braille.handler.message,
-				info)
+		self.reportState(application)
 
 	def Destroy(self):
 		if self.refreshApplicationsListTimer is not None:
@@ -217,10 +214,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		isActive = evt.GetActive()
 		self.isActive = isActive
 		if isActive:
-			if not hasattr(self, "delay"):
-				self.backToForeground = True
-			else:
-				self.backToForeground = False
+			self.backToForeground = True
 			self.applicationsListBox.SetFocus()
 		else:
 			del self.backToForeground
@@ -256,7 +250,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		application = self.applications[index]
 		self.updateGroups(application)
 		if speakEnd:
-			info = self.formatApplicationInfo(application, name=True, mute=True)
+			info = self.formatApplicationInfo(application, name=True, mute=True, volume=True)
 			if not info:
 				return
 			wx.CallLater(40, ui.message, info)
@@ -268,12 +262,17 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.reportState(application)
 
 	def onFocusApplicationsList(self, evt):
+		if self.refreshApplicationsListTimer  is not None:
+			self.refreshApplicationsListTimer .Stop()
+			self.refreshApplicationsListTimer  = None
 		if hasattr(self, "backToForeground") and self.backToForeground:
+			print("onFocusApplicationList: backToForeground = True")
 			delay = 5000
 			wx.CallLater(50, ui.message, _("Please wait, refreshing list"))
 			speakEnd = True
 			self.backToForeground = False
 		else:
+			print("onFocusApplicationList: no backToForeground")
 			delay = 50
 			speakEnd = False
 		self.refreshApplicationsListTimer = wx.CallLater(delay, self.focusApplicationsList, speakEnd)
@@ -290,15 +289,13 @@ class NVDAAndAudioApplicationsManagerDialog(
 			for item in range(0, self.NVDASoundsGroup.sizer.GetItemCount()):
 				self.NVDASoundsGroup.sizer.Hide(item)
 			return
-		from ..settings import toggleAllowNVDATonesVolumeAdjustmentAdvancedOption
 		if application is None:
 			index = self.applicationsListBox.GetSelection()
 			application = self.applications[index]
 		if isNVDA(application):
-			from ..settings import toggleAllowNVDASoundGainModificationAdvancedOption
 			if (
 				not toggleAllowNVDASoundGainModificationAdvancedOption(False)
-				and not toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False)
+				and (not isWasapiUsed() and not toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False))
 			):
 				for item in range(0, self.NVDASoundsGroup.sizer.GetItemCount()):
 					self.NVDASoundsGroup.sizer.Hide(item)
@@ -312,7 +309,6 @@ class NVDAAndAudioApplicationsManagerDialog(
 				self.tonalitiesLevelBox.SetStringSelection(str(level))
 			else:
 				self.tonalitiesLevelBox.Disable()
-			from ..settings import toggleAllowNVDASoundGainModificationAdvancedOption
 			if toggleAllowNVDASoundGainModificationAdvancedOption(False):
 				self.modifyGainButton.Enable()
 			else:
@@ -323,7 +319,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 
 	def updateVolumeGroup(self, application=None):
 		if self.applicationsListBox.Count == 0:
-			# hide volume  choice box
+			# hide volume choice box
 			self.volumeBox.Disable()
 			self.volumeMuteCheckBox.Disable()
 			return
@@ -391,11 +387,10 @@ class NVDAAndAudioApplicationsManagerDialog(
 		return ", ".join(textList)
 
 	def reportState(self, application):
-		info = self.formatApplicationInfo(application, mute=True)
+		info = self.formatApplicationInfo(application, mute=True, volume=True)
 		if info:
-
 			wx.CallLater(40, speech.speakMessage, info)
-		info = self.formatApplicationInfo(application, name=True, mute=True)
+		info = self.formatApplicationInfo(application, name=True, mute=True, volume=True)
 		if info:
 			wx.CallLater(
 				40,
@@ -403,6 +398,9 @@ class NVDAAndAudioApplicationsManagerDialog(
 				info)
 
 	def onSelectDevice(self, evt):
+		if self.playSoundTimer is not None:
+			self.playSoundTimer.Stop()
+			self.playSoundTimer = None
 		index = self.devicesListBox.GetSelection()
 		device = self.devices[index]
 		self._currentDevice = device
@@ -415,8 +413,6 @@ class NVDAAndAudioApplicationsManagerDialog(
 		else:
 			application = None
 		self.updateGroups(application)
-		from ..settings import togglePlayToneOnAudioDeviceAdvancedOption
-		from .audioCore import audioOutputDevicesManager
 		if togglePlayToneOnAudioDeviceAdvancedOption(False):
 			# we have to wait for the device name to be said by NVDA before changing the device
 			# but for bluetooth debice, we must play noise before beep
@@ -424,9 +420,10 @@ class NVDAAndAudioApplicationsManagerDialog(
 			from threading import Thread
 			th = Thread(target=playWhiteNoise, args=(device.nvdaDeviceName,))
 			wx.CallAfter(th.start)
-			self.selectDelay = wx.CallLater(
+			from .beep import playTonesOnDevice
+			self.playSoundTimer = wx.CallLater(
 				3500,
-				audioOutputDevicesManager .playTonesOnDevice, device.nvdaDeviceName
+				playTonesOnDevice, device.nvdaDeviceName
 			)
 
 	def onSelectApplication(self, evt):
@@ -967,7 +964,6 @@ class GainModificationDialog(
 	def onResetAllButton(self, evt):
 		for index in range(0, self.soundFilesListBox .Count):
 			self._resetSound(index)
-		os.rmdir(self.modifiedWavesPath)
 		self.updateButtons()
 		self.soundFilesListBox .SetFocus()
 		# Translators: message to user to report reseting of all sounds

@@ -11,7 +11,6 @@ import os
 import globalVars
 import time
 import api
-import sys
 import gui
 import config
 import wx

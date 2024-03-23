@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\bluetoothAudio.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2023 paulber19
+# Copyright (C) 2023-2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 

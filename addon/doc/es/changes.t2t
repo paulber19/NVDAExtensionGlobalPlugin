@@ -23,6 +23,36 @@ Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de 
 
 
 
++ v13.3 (20/03/2024) +
+Nuevas características:
+- se toma en cuenta un nuevo modo de "voz a petición" introducido en nvda 2024.1:   todos los scripts que anuncien información verbalizarán esta información. En este modo, todos los demás scripts permanecerán en silencio.
+- el nivel de volumen se anuncia cuando se selecciona una aplicación en el cuadro de diálogo "Administrador de fuentes de audio".
+- la funcionalidad "Mejorar la verbalización de palabras al escribir" se elimina debido a ralentizaciones reportadas y problemas al editar notas braille con Musescore.
+- la instalación del complemento "soundSplitter" se indica porque existe el riesgo de que el complemento no funcione correctamente.
+
+
+Resumen de cambios realizados en las versiones 13.2.x:
+- el complemento ahora completa correctamente su inicialización cuando se recargan los complementos.
+- se corrige un fallo que provocaba una desaceleración al verbalizar palabras al escribir.
+- traducciones actualizadas: AR, UK, 
+
+
+Corección de fallos:
+- los scripts que te permiten restaurar el volumen al nivel anterior ahora funcionan correctamente (no más desfases).
+- en el dialogo "Scripts del intérprete de órdenes", Ahora es posible ejecutar scripts asociados con una  órden que contiene un número.
+
+
+Desarrolladores:
+- se ha eliminado el código que admitan las versiones anteriores a la versión 2022.1
+- se ha renombrado la librería "psutil" en "psutilEx"  para evitar conflictos de importación de la misma librería entre complementos.
+- se ha renombrado la librería "win32" en "win32Ex"  para evitar conflictos de importación de la misma librería entre complementos.
+- actualización de la librería pycaw a la versión  v20240210 (Utilizado para versiones de NVDA inferiores a la 2024.2).
+- uso de la librería pycaw integrada en NVDA a partir de la versión 2024.2 .
+- actualización de markdown2 a la versión 2.4.13.
+- reanudación del código para resaltar en módulos separados las partes del código NVDA que han sido modificadas para lograr las funcionalidades e indicaciones en el manual de usuario de estas modificaciones.
+
+
+
 + v13.2 (23/11/2023) +
 Nuevas características:
 - de acuerdo con la Tienda de complementos (Add-on Store) desde NVDA 2023.2:

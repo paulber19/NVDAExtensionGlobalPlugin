@@ -1,19 +1,30 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\shutdown_util.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2019 - 2020 paulber19
+# Copyright (C) 2019 - 2024 paulber19
 # This file is covered by the GNU General Public License.
 
 import addonHandler
+from logHandler import log
 import os
 import sys
 import ctypes
 from ..utils.py3Compatibility import getUtilitiesPath
+sysPath = list(sys.path)
+if "win32security" in sys.modules:
+	log.warning(
+		"Potential incompatibility: win32security module is also used and loaded probably by other add-on")
+	del sys.modules["win32security"]
+if "win32api" in sys.modules:
+	log.warning("Potential incompatibility: win32apimodule is also used and loaded probably by other add-on")
+	del sys.modules["win32api"]
+sys.path = [sys.path[0]]
 utilitiesPath = getUtilitiesPath()
-win32Path = os.path.join(utilitiesPath, "win32")
+win32Path = os.path.join(utilitiesPath, "win32Ex")
+sys.path.append(utilitiesPath)
 sys.path.append(win32Path)
-import win32security
-import win32api
-del sys.path[-1]
+from win32Ex import win32security
+from win32Ex import win32api
+sys.path = sysPath
 
 addonHandler.initTranslation()
 

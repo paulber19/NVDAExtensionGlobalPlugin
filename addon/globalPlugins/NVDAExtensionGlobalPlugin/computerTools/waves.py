@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\waves.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2023 paulber19
+# Copyright (C) 2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,13 +9,18 @@ from logHandler import log
 import os
 import globalVars
 import sys
-from ..utils.py3Compatibility import getUtilitiesPath
-utilitiesPath = getUtilitiesPath()
-pydubPath = os.path.join(utilitiesPath, "pydubEx")
-sysPath = sys.path
-sys.path.append(utilitiesPath)
+sysPath = list(sys.path)
+if "pydub" in sys.modules:
+	log.warning("Potential incompatibility: pydub module used and loaded probably by other add-on")
+	del sys.modules["pycaw"]
+sys.path = [sys.path[0]]
+from ..utils.py3Compatibility import getCommonUtilitiesPath
+commonUtilitiesPath = getCommonUtilitiesPath()
+pydubPath = os.path.join(commonUtilitiesPath, "pydubEx")
+sys.path.append(commonUtilitiesPath)
 sys.path.append(pydubPath)
 import pydubEx as pydub
+# restore sys.path
 sys.path = sysPath
 
 
