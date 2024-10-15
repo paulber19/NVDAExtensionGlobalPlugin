@@ -337,10 +337,6 @@ class EditableTextEx(editableText.EditableText):
 		config.conf["speech"]["symbolLevel"] = curLevel
 
 
-# this code comes from leonardder  work for issue #8110, see at:
-# Speak typed words based on TextInfo if possible #8110
-
-
 class NVDAObjectEx(NVDAObject):
 	def _reportErrorInPreviousWord(self):
 		try:

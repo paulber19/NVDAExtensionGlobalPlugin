@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2022 paulber19
+# Copyright (C) 2021-2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,6 +8,7 @@ import addonHandler
 from logHandler import log
 import config
 import ui
+from . import addonConfig
 from ..textAnalysis.symbols import (
 	SMBL_NeedSpaceBefore,
 	SMBL_NeedSpaceAfter,
@@ -219,6 +220,14 @@ documentSettingsIDsToOptions = {
 	"reportStyle": ID_Style,
 }
 
+from ..switchVoiceProfile import SCT_VoiceProfileSwitching
+_featureToSection = {
+	addonConfig.FCT_ComplexSymbols: [SCT_LastUsedSymbols,],
+	addonConfig.FCT_CommandKeysSelectiveAnnouncement: [SCT_CommandKeysAnnouncement,],
+	addonConfig.FCT_VoiceProfileSwitching: [SCT_VoiceProfileSwitching,],
+	addonConfig.FCT_TextAnalysis: [SCT_TextAnalyzer,]
+}
+
 
 class NVDAConfigurationManager(object):
 	def __init__(self):
@@ -246,6 +255,31 @@ class NVDAConfigurationManager(object):
 			config.conf.save()
 			return True
 		return False
+
+	def deleteFeatureConfiguration(self, featureID):
+		log.debug("deleteFeatureConfiguration: %s" % featureID)
+		scts = _featureToSection.get(featureID)
+		if scts is None:
+			return
+		log.debug("feature  configuration deletion: feature = %s, section = %s" % (featureID, scts))
+		conf = config.conf
+		profileNames = []
+		profileNames.extend(config.conf.listProfiles())
+		for sct in scts:
+			if self.addonName in conf.profiles[0] and (
+				sct in conf.profiles[0][self.addonName]):
+				log.debug("[%s][%s] section deleted from profile: %s" % (
+					self.addonName, sct, "normal configuration"))
+				conf.profiles[0][self.addonName][sct].clear()
+				del conf.profiles[0][self.addonName][sct]
+
+			for name in profileNames:
+				profile = config.conf._getProfile(name)
+				if profile.get(self.addonName) and profile[self.addonName].get(sct):
+					log.debug("[%s][%s] section deleted from profile: %s" % (
+						self.addonName, sct, profile.name))
+					del profile[self.addonName][sct]
+					config.conf._dirtyProfiles.add(name)
 
 	def saveCommandKeysSelectiveAnnouncement(
 		self, keysDic, speakCommandKeysOption):
@@ -296,21 +330,6 @@ class NVDAConfigurationManager(object):
 					d, speakCommandKeysOption)
 			return d
 		return {}
-
-	def deleceCommandKeyAnnouncementConfiguration(self):
-		# delete configuration for all profils
-		conf = config.conf
-		if self.addonName in conf.profiles[0]\
-			and SCT_CommandKeysAnnouncement in conf.profiles[0][self.addonName]:
-			del conf.profiles[0][self.addonName][SCT_CommandKeysAnnouncement]
-		profileNames = []
-		profileNames.extend(config.conf.listProfiles())
-		for name in profileNames:
-			profile = config.conf._getProfile(name)
-			if profile.get(self.addonName)\
-				and SCT_CommandKeysAnnouncement in profile[self.addonName]:
-				del profile[self.addonName][SCT_CommandKeysAnnouncement]
-				config.conf._dirtyProfiles.add(name)
 
 	def getLastUsedSymbolsSection(self, profileName):
 		if profileName is None:
@@ -392,21 +411,6 @@ class NVDAConfigurationManager(object):
 	def cleanLastUsedSymbolsList(self):
 		self.saveLastUsedSymbols([])
 
-	def deleceAllLastUserComplexSymbols(self):
-		conf = config.conf
-		if self.addonName in conf.profiles[0]\
-			and SCT_LastUsedSymbols in conf.profiles[0][self.addonName]:
-			del conf.profiles[0][self.addonName][SCT_LastUsedSymbols]
-		profileNames = []
-		profileNames.extend(config.conf.listProfiles())
-		sct = "%s-pro" % SCT_LastUsedSymbols
-		for name in profileNames:
-			profile = config.conf._getProfile(name)
-			if profile.get(self.addonName)\
-				and sct in profile[self.addonName]:
-				del profile[self.addonName][sct]
-				config.conf._dirtyProfiles.add(name)
-
 	def toggleOption(self, ID, toggle=True):
 		conf = config.conf[self.addonName][SCT_Options]
 		if toggle:
@@ -443,6 +447,11 @@ class NVDAConfigurationManager(object):
 					# due to a bug , we must reset to default value
 					conf[self.addonName][SCT_Options][ID_SymbolLevelOnWordCaretMovement] = None
 		return None
+
+	def deleteTextAnalyzerConfiguration(self):
+		log.debug("deleteTextAnalysisConfiguration")
+		if self.addonName in config.conf and SCT_TextAnalyzer in config.conf[self.addonName]:
+			config.conf[self.addonName][SCT_TextAnalyzer] = {}
 
 	def toggleTextAnalyzerOption(self, option, toggle):
 		conf = config.conf[self.addonName][SCT_TextAnalyzer]

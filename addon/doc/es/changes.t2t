@@ -1,4 +1,4 @@
- ADDON_SUMMARY- Historial
+ADDON_SUMMARY - Historial
 Autor: ADDON_AUTHOR_NAME
 
 
@@ -21,6 +21,28 @@ Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este h
 
 Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
 
+
++ v13.4 (11/10/2024) +
+Compatibilidad con NVDA 2024.2, NVDA 2024.3 y NVDA 2024.4.
+
+Cambios:
+- en el modo de Navegación en documentos HTML, la letra "j" reemplaza a la letra "p" para pasar de un párrafo a otro, esta última ahora utilizada por NVDA 2024.2.
+- se toma en cuenta las nuevas opciones "Normalización Unicode" y "Anunciar 'Normalizado' al navegar por carácter" introducidos en NVDA 2024.3.
+- la configuración del retardo de espera de repetición para el mismo gesto de entrada en la categoría "Avanzadas" se elimina para versiones de NVDA superiores a NVDA 2024.4. Esto ahora está incluido en la categoría "Teclado" de NVDA.
+
+
+Corrección de fallos:
+- se actualizó el script que extiende el script de anuncio del portapapeles de NVDA (gesto de entrada "NVDA+c") que se cambió en NVDA 2024.1.
+- funcionalidad de "análisis de texto":
+ - no se muestra el menú de configuración cuando la funcionalidad no está instalada.
+ - borrar la configuración de la funcionalidad cuando se desinstala.
+
+
+Desarrolladores:
+- uso de las bibliotecas pycaw y psutil ahora integradas en NVDA 2024.2.
+- reanudación del código para eliminar la configuración de las funcionalidades al desinstalarlas.
+- reanudación del código para cargar el módulo audioCore.py si es necesario.
+- uso del punto de extensión "pre_speech" introducido en NVDA 2024.2 para evitar parchear el método "speech.speak" de NVDA.
 
 
 + v13.3 (20/03/2024) +

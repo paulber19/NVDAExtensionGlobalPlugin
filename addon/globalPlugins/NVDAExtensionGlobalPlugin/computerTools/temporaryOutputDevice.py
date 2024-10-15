@@ -223,6 +223,9 @@ class TemporaryAudioDeviceManagerDialog(
 			self.setButton.Disable()
 
 	def Destroy(self):
+		if self.selectDelay:
+			self.selectDelay.Stop()
+			self.selectDelay = None
 		TemporaryAudioDeviceManagerDialog._instance = None
 		super(TemporaryAudioDeviceManagerDialog, self).Destroy()
 
@@ -335,13 +338,3 @@ class ConfirmOutputDevice(
 		self.timer.Stop()
 		wx.EvtHandler.Unbind(self.timer, wx.EVT_TIMER)
 		super(ConfirmOutputDevice, self).Destroy()
-
-
-def initialize():
-	from . import temporaryOutputDevicePatches
-	temporaryOutputDevicePatches.patche()
-
-
-def terminate():
-	from . import temporaryOutputDevicePatches
-	temporaryOutputDevicePatches.patche(install=False)

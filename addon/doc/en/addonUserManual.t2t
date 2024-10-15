@@ -85,7 +85,7 @@ This add-on adds to NVDA's global commands:
 - advanced options:
  - [Signaling by a sound of the entry of an error in the log of NVDA #hdr300],
  - [Title of the add-on's dialog boxes with the add-on's summary #hdr302],
- - [configuration of the wait time delay for repeating the same input gesture #hdr303],
+ - [configuration of the wait time delay for repeating the same input gesture #hdr303] (for NVDA versions lower than 2024,
  - [possible use of numeric keypad keys as standard #hdr304].
  - [possibility to limit the repetition of keys #hdr306],
 - and the other improvements:
@@ -463,15 +463,15 @@ The description of this script is: "Announce the name and version number of the 
 
 By default, no input gesture is assigned to it, nor any interpreter command.
 
-é++ Enhancement of virtual buffer features ++[hdr5]
+++ Enhancement of virtual buffer features ++[hdr5]
 This feature is installed by default.
 
 It concerns Mozilla Firefox, Microsoft Internet Explorer, Google Chrome, Microsoft Edge (partially) browsers and provides:
 
 +++ New navigation commands +++[hdr5-1]
 This add-on adds the following commands for the browse mode:
-- "p" to go to the next paragraph,
-- Shift + p "to go to the previous paragraph,
+- "j" ("p"until NVDA versions 2024.1) to go to the next paragraph,
+- "shift + j" ("shift + p" until NVDA versions 2024.1) to go to the previous paragraph,
 - ";" to go to the next main region,
 - "uppercase +;" to go to the previous main region,
 - "y" to go to the next division,

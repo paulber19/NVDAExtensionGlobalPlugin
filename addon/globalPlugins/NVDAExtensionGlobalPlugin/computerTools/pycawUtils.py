@@ -13,7 +13,7 @@ NVDAVersion = [version_year, version_major]
 if NVDAVersion >= [2024, 2]:
 	# for nvda version >= 2024.2
 	from pycaw.api.audiopolicy import IAudioSessionControl2, IAudioSessionManager2
-	from pycaw.api.mmdeviceapi import IMMDeviceEnumerator, IMMEndpoint
+	from pycaw.api.mmdeviceapi import IMMDeviceEnumerator
 	from pycaw.constants import (
 		DEVICE_STATE,
 		CLSID_MMDeviceEnumerator,
@@ -38,7 +38,7 @@ else:
 	sys.path.append(psutilPath)
 	sys.path.append(pycawPath)
 	from pycawEx.pycaw.api.audiopolicy import IAudioSessionControl2, IAudioSessionManager2
-	from pycawEx.pycaw.api.mmdeviceapi import IMMDeviceEnumerator, IMMEndpoint
+	from pycawEx.pycaw.api.mmdeviceapi import IMMDeviceEnumerator
 	from pycawEx.pycaw.constants import (
 		DEVICE_STATE,
 		CLSID_MMDeviceEnumerator,
@@ -53,19 +53,19 @@ class MyAudioUtilities(AudioUtilities):
 
 	@staticmethod
 	def GetSpeakers(audioDeviceID=None):
-				"""
-				get the speakers (1st render + multimedia) device
-				"""
-				deviceEnumerator = comtypes.CoCreateInstance(
-						CLSID_MMDeviceEnumerator,
-						IMMDeviceEnumerator,
-						comtypes.CLSCTX_INPROC_SERVER)
-				if audioDeviceID is None:
-					speakers = deviceEnumerator.GetDefaultAudioEndpoint(
-										EDataFlow.eRender.value, ERole.eMultimedia.value)
-				else:
-					speakers = deviceEnumerator.GetDevice(audioDeviceID)
-				return speakers
+		"""
+		get the speakers (1st render + multimedia) device
+		"""
+		deviceEnumerator = comtypes.CoCreateInstance(
+			CLSID_MMDeviceEnumerator,
+			IMMDeviceEnumerator,
+			comtypes.CLSCTX_INPROC_SERVER)
+		if audioDeviceID is None:
+			speakers = deviceEnumerator.GetDefaultAudioEndpoint(
+				EDataFlow.eRender.value, ERole.eMultimedia.value)
+		else:
+			speakers = deviceEnumerator.GetDevice(audioDeviceID)
+		return speakers
 
 	@staticmethod
 	def GetAudioSessionManager(audioDeviceID=None):

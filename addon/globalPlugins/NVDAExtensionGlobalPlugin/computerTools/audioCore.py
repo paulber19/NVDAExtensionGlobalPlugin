@@ -10,33 +10,23 @@ from logHandler import log
 import os
 from threading import Thread
 import time
-import gui
 import ui
 from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL, CoCreateInstance, CLSCTX_INPROC_SERVER, CoInitialize
+from comtypes import CLSCTX_ALL, CoInitialize
 import sys
 import wx
 import tones
 from versionInfo import version_year, version_major
 NVDAVersion = [version_year, version_major]
+log.debug("importing pycaw library")
 if NVDAVersion >= [2024, 2]:
 	# for nvda version >= 2024.2
-	from pycaw.utils import (
-		AudioDevice,
-		AudioSession,
-	)
 	from pycaw.api.audioclient import IChannelAudioVolume
 	from pycaw.api.endpointvolume import IAudioEndpointVolume
-	from pycaw.api.mmdeviceapi import (
-		IMMDeviceEnumerator,
-		IMMNotificationClient,
-	)
 	from pycaw.constants import (
 		DEVICE_STATE,
 		AudioDeviceState,
 		EDataFlow,
-		ERole,
-		CLSID_MMDeviceEnumerator,
 	)
 	from pycaw.callbacks import MMNotificationClient
 else:
@@ -53,22 +43,12 @@ else:
 	sys.path.append(commonUtilitiesPath)
 	sys.path.append(psutilPath)
 	sys.path.append(pycawPath)
-	from pycawEx.pycaw.utils import (
-		AudioDevice,
-		AudioSession,
-	)
 	from pycawEx.pycaw.api.audioclient import IChannelAudioVolume
 	from pycawEx.pycaw.api.endpointvolume import IAudioEndpointVolume
-	from pycawEx.pycaw.api.mmdeviceapi import (
-		IMMDeviceEnumerator,
-		IMMNotificationClient,
-	)
 	from pycawEx.pycaw.constants import (
 		DEVICE_STATE,
 		AudioDeviceState,
 		EDataFlow,
-		ERole,
-		CLSID_MMDeviceEnumerator,
 	)
 	from pycawEx.pycaw.callbacks import MMNotificationClient
 	# restore sys.path
@@ -228,7 +208,6 @@ class AudioSource(object):
 
 
 class AudioSources(object):
-	
 	def __init__(self, device=None):
 		self._device = device
 		self._audioSources = self._getAudioSources()
@@ -476,15 +455,14 @@ class AudioSources(object):
 				# split only NVDA
 				otherSources = []
 			else:
-			# split application and NVDA
-				otherSources  = [audioSource, ]
+				# split application and NVDA
+				otherSources = [audioSource, ]
 		else:
 			for source in self.sources:
 				audioSource = self.sources[source]
 				if not audioSource.isStereo or audioSource.isNVDAProcess():
 					continue
 				otherSources.append(audioSource)
-		
 		if NVDAChannel == "left":
 			NVDALevels = (nvdaLeftOrRightMax, 0.0)
 			appChannels = (0, 1)
@@ -518,20 +496,18 @@ class AudioSources(object):
 		# first set channeles for NVDA
 		nvdaAudioSource.setChannels(NVDALevels)
 
-		# now set  channel for other application
+		# now set channel for other application
 		for audioSource in otherSources:
-			#audioSource = self.sources[source]
+			# audioSource = self.sources[source]
 			(left, right) = audioSource.channelsVolume
 			leftOrRightMax = max(left, right)
 			appLevels = (leftOrRightMax * appChannels[0], leftOrRightMax * appChannels[1])
 			audioSource.setChannels(appLevels)
 
-
 		from speech import cancelSpeech
 		wx.CallLater(40, cancelSpeech)
 		wx.CallLater(80, ui.message, msg)
 		log.warning(msg)
-
 
 	def toggleChannels(self, balance="center", application=None, silent=False):
 		log.debug("toggleChannels: %s, %s, %s" % (balance, application, silent))
@@ -813,7 +789,7 @@ class AudioOutputDevicesManager(object):
 		self.runNewDevicesScan()
 
 	def installAudioDeviceChangesMonitoring(self):
-		self.deviceEnumerator  = AudioUtilities.GetDeviceEnumerator()
+		self.deviceEnumerator = AudioUtilities.GetDeviceEnumerator()
 		self.callback = AudioDeviceChangesNotification()
 		self.deviceEnumerator.RegisterEndpointNotificationCallback(self.callback)
 
@@ -825,12 +801,11 @@ class AudioOutputDevicesManager(object):
 		@rtype: str
 		"""
 		try:
-			mixers: List[pycaw.AudioDevice] = [mx for mx in ExtendedAudioUtilities.GetAllDevices() if mx]
+			mixers = [mx for mx in AudioUtilities.GetAllDevices() if mx]
 		except Exception:
 			mixers = []
 		mixer = next(filter(lambda m: m.id == id, mixers), None)
 		return mixer.FriendlyName if mixer else ' '
-
 
 	def scan(self):
 		log.debug("Starting devices scan")
@@ -974,21 +949,9 @@ class AudioDeviceChangesNotification(MMNotificationClient):
 
 def initialize():
 	wx.CallAfter(audioOutputDevicesManager.initialize)
-	import nvwave
-	if nvwave.WavePlayer.open.__module__ == "globalPlugins.soundSplitter":
-		log.debug("Potential incompatibility: nvwave.WavePlayer function patched by soundSplitter add-on")
-		wx.CallAfter(
-			gui.messageBox,
-			# Translators: message to warn the user of a potential incompatibility with the soundSplitter add-on
-			_(
-				"The soundSplitter add-on may cause the add-on to malfunction. It is better to uninstall it."),
-			# Translators: warning dialog title
-			_("Warning"),
-			wx.CANCEL | wx.ICON_WARNING, gui.mainFrame)
 
 
 def terminate():
-
 	audioOutputDevicesManager.terminate()
 
 

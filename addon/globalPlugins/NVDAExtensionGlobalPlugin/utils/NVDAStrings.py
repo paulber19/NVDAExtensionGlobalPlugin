@@ -1,5 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\utils\NVDAStrings.py
-# Copyright (C) 2017 - 2020 Paulber19
+# A part of NVDAExtensionGlobalPlugin add-on
+# Copyright (C) 2017 - 2024 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,3 +15,7 @@ def NVDAString(s):
 
 def NVDAString_pgettext(c, s):
 	return pgettext(c, s)
+
+
+def NVDAString_ngettext(s, p, c):
+	return ngettext(s, p, c)

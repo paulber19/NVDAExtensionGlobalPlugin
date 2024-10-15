@@ -1,15 +1,11 @@
 # -*- coding: UTF-8 -*-
 # onInstall.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
-from logHandler import log
-import os
-import sys
-import globalVars
 import gui
 import winUser
 

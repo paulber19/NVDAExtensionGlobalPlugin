@@ -179,7 +179,8 @@ class AddonUpdateDownloader(UpdateDownloader):
 					extraAppArgs = globalVars.appArgsExtra if hasattr(
 						globalVars, "appArgsExtra") else globalVars.unknownAppArgs
 					extraAppArgs.append("addon-auto-update")
-				gui.ExecAndPump(addonHandler.installAddonBundle, bundle)
+				from systemUtils  import ExecAndPump
+				ExecAndPump(addonHandler.installAddonBundle, bundle)
 				if self.autoUpdate:
 					extraAppArgs.remove("addon-auto-update")
 			except Exception:

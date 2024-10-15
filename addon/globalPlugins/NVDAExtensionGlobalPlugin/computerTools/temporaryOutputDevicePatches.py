@@ -5,10 +5,13 @@
 # See the file COPYING for more details.
 
 
+import addonHandler
 from logHandler import log
 import tones
 import synthDriverHandler
 import config
+import wx
+import gui
 import nvwave
 import synthDrivers.oneCore
 from .waves import getModifiedNVDAWaveFile
@@ -18,7 +21,10 @@ from ..settings import (
 	toggleAllowNVDASoundGainModificationAdvancedOption,
 	isInstall
 )
-from .audioCore import isWasapiUsed
+from .utils import isWasapiUsed
+addonHandler.initTranslation()
+
+
 # to save original NVDA patched functions
 _NVDAOneCoreSynthDriverMaybeInitPlayer = None
 _nvdaPlayWaveFile = None
@@ -112,6 +118,16 @@ def _patcePlayWaveFile(install=True):
 			log.warning(
 				"Incompatibility: nvwave.playWaveFile method has also been patched probably by another add-on: %s."
 				"There is a risk of malfunction" % nvwave.playWaveFile.__module__)
+		if nvwave.WavePlayer.open.__module__ == "globalPlugins.soundSplitter":
+			log.debug("Potential incompatibility: nvwave.WavePlayer function patched by soundSplitter add-on")
+			wx.CallAfter(
+				gui.messageBox,
+				# Translators: message to warn the user of a potential incompatibility with the soundSplitter add-on
+				_(
+					"The soundSplitter add-on may cause the add-on to malfunction. It is better to uninstall it."),
+				# Translators: warning dialog title
+				_("Warning"),
+				wx.CANCEL | wx.ICON_WARNING, gui.mainFrame)
 		nvwave.playWaveFile = _myPlayWaveFile
 		log.debug(
 			"To allow use of temporary output device or NVDA file gain modification,"

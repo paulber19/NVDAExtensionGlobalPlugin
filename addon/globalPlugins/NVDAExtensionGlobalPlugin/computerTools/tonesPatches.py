@@ -7,8 +7,6 @@
 
 from logHandler import log
 import tones
-from .audioCore import isWasapiUsed
-from ..settings import toggleAllowNVDATonesVolumeAdjustmentAdvancedOption
 from .beep import myBeep
 
 # global variable to save nvda patched method
@@ -16,7 +14,8 @@ _NVDATonesBeep = None
 
 
 def initialize():
-	if isWasapiUsed() or not toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False):
+	from .utils import isWasapiUsed
+	if isWasapiUsed():
 		return
 	# patche tones.beep
 	global _NVDATonesBeep

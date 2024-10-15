@@ -19,7 +19,7 @@ import wx
 from gui.guiHelper import BoxSizerHelper
 from gui import guiHelper, mainFrame
 from . import waves
-from .audioCore import isWasapiUsed
+from .utils import isWasapiUsed
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
@@ -200,6 +200,9 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.reportState(application)
 
 	def Destroy(self):
+		if self.playSoundTimer is not None:
+			self.playSoundTimer.Stop()
+			self.playSoundTimer = None
 		if self.refreshApplicationsListTimer is not None:
 			self.refreshApplicationsListTimer.Stop()
 		self.Unbind(wx.EVT_ACTIVATE)
@@ -262,9 +265,9 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.reportState(application)
 
 	def onFocusApplicationsList(self, evt):
-		if self.refreshApplicationsListTimer  is not None:
+		if self.refreshApplicationsListTimer is not None:
 			self.refreshApplicationsListTimer .Stop()
-			self.refreshApplicationsListTimer  = None
+			self.refreshApplicationsListTimer = None
 		if hasattr(self, "backToForeground") and self.backToForeground:
 			print("onFocusApplicationList: backToForeground = True")
 			delay = 5000

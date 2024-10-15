@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 Paulber19
+# Copyright (C) 2016 - 2024 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -58,6 +58,13 @@ def setInstallFeatureOption(featureID, option):
 	conf[addonConfig.SCT_InstallFeatureOptions][featureID] = option
 	log.debug("setInstallFeatureOption: feature= %s, value= %s" % (
 		featureID, conf[addonConfig.SCT_InstallFeatureOptions][featureID]))
+	if not isInstall(featureID):
+		deleteFeatureConfiguration(featureID)
+
+
+def deleteFeatureConfiguration(featureID):
+	from .nvdaConfig import _NVDAConfigManager
+	_NVDAConfigManager.deleteFeatureConfiguration(featureID)
 
 
 def isInstall(featureID):
@@ -399,9 +406,17 @@ class AddonConfigurationManager():
 
 	def saveSettings(self, force=False):
 		# We never want to save config if runing securely
-		if inSecureMode():
+		try:
+			# for NVDA version >= 2023.2
+			from NVDAState import shouldWriteToDisk
+			writeToDisk = shouldWriteToDisk()
+		except ImportError:
+			# for NVDA version < 2023.2
+			writeToDisk = (globalVars.appArgs.secure or globalVars.appArgs.launcher)
+		if not writeToDisk:
+			log.debug("Not writing profile, either --secure or --launcher args present")
 			return
-		# We save the configuration,
+		# We can save the configuration
 			# in case the user would not have checked the "Save configuration on exit"
 			# checkbox in General settings or force is is True
 		if not force\
@@ -515,9 +530,6 @@ class AddonConfigurationManager():
 		conf = self.addonConfig
 		if SCT_CategoriesAndSymbols in conf:
 			del conf[SCT_CategoriesAndSymbols]
-			# delece All User Complex Symbols in configuration profiles
-		from .nvdaConfig import _NVDAConfigManager
-		_NVDAConfigManager.deleceAllLastUserComplexSymbols()
 
 	def getMaximumOfLastUsedSymbols(self):
 		from .addonConfig import SCT_AdvancedOptions, ID_MaximumOfLastUsedSymbols

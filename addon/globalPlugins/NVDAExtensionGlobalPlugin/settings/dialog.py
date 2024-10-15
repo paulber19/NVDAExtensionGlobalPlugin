@@ -26,6 +26,7 @@ from ..utils import contextHelpEx
 
 
 addonHandler.initTranslation()
+NVDAVersion = [version_year, version_major]
 
 _helpMsg = _("Press F1 for help")
 
@@ -40,7 +41,7 @@ def askForNVDARestart():
 			"Would you like to do it now?"),
 		makeAddonWindowTitle(NVDAString("Restart NVDA")),
 		wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
-		_addonConfigManager.saveSettings(True)
+		config.conf.save()
 		queueHandler.queueFunction(queueHandler.eventQueue, core.restart)
 		return
 	gui.messageBox(
@@ -306,10 +307,6 @@ class FeaturesInstallationSettingsPanel(
 				FCT_CommandKeysSelectiveAnnouncement,
 				self.installCommandKeysSelectiveAnnouncementFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(FCT_CommandKeysSelectiveAnnouncement) == C_DoNotInstall:
-				# delete all command selective announcement feature configuration
-				from .nvdaConfig import _NVDAConfigManager
-				_NVDAConfigManager.deleceCommandKeyAnnouncementConfiguration()
 		if self.installMinuteTimerFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_MinuteTimer):
 			setInstallFeatureOption(FCT_MinuteTimer, self.installMinuteTimerFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
@@ -323,10 +320,6 @@ class FeaturesInstallationSettingsPanel(
 			setInstallFeatureOption(
 				FCT_VoiceProfileSwitching, self.installVoiceProfileSwitchingFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-			if getInstallFeatureOption(FCT_VoiceProfileSwitching) == C_DoNotInstall:
-				from ..switchVoiceProfile import SwitchVoiceProfilesManager
-				SwitchVoiceProfilesManager().deleteAllProfiles()
-
 		if self.installKeyRemanenceFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_KeyRemanence):
 			setInstallFeatureOption(FCT_KeyRemanence, self.installKeyRemanenceFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
@@ -349,7 +342,6 @@ class FeaturesInstallationSettingsPanel(
 		if self.installSplitAudioFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_SplitAudio):
 			setInstallFeatureOption(FCT_SplitAudio, self.installSplitAudioFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
-
 		if self.installDevToolsFeatureOptionBox.GetSelection() != getInstallFeatureOption(FCT_Tools):
 			setInstallFeatureOption(FCT_Tools, self.installDevToolsFeatureOptionBox.GetSelection())
 			self.restartNVDA = True
@@ -781,15 +773,16 @@ class AdvancedSettingsPanel(
 		self.dialogTitleWithAddonSummaryOptionBox = sHelper.addItem(wx.CheckBox(self, wx.ID_ANY, label=labelText))
 		self.dialogTitleWithAddonSummaryOptionBox.SetValue(toggleDialogTitleWithAddonSummaryAdvancedOption(False))
 		self.bindHelpEvent(getHelpObj("hdr302"), self.dialogTitleWithAddonSummaryOptionBox)
-		# Translators: This is the label for a comboBox in the advanced settings panel.
-		labelText = _("&Delay between repeat of same gesture:")
-		choice = [x for x in range(100, 3050, 50)]
-		choice = list(reversed(choice))
-		self.MaximumDelayBetweenSameScriptBox = sHelper.addLabeledControl(
-			labelText, wx.Choice, choices=[str(x) for x in choice])
-		self.MaximumDelayBetweenSameScriptBox.SetSelection(
+		if NVDAVersion < [2024, 4]:
+			# Translators: This is the label for a comboBox in the advanced settings panel.
+			labelText = _("&Delay between repeat of same gesture:")
+			choice = [x for x in range(100, 3050, 50)]
+			choice = list(reversed(choice))
+			self.MaximumDelayBetweenSameScriptBox = sHelper.addLabeledControl(
+				labelText, wx.Choice, choices=[str(x) for x in choice])
+			self.MaximumDelayBetweenSameScriptBox.SetSelection(
 			choice.index(_addonConfigManager.getMaximumDelayBetweenSameScript()))
-		self.bindHelpEvent(getHelpObj("hdr303"), self.MaximumDelayBetweenSameScriptBox)
+			self.bindHelpEvent(getHelpObj("hdr303"), self.MaximumDelayBetweenSameScriptBox)
 		# Translators: This is the label for a checkbox in the Advanced settings panel.
 		labelText = _(
 			"""&Do not take account of the option called "Report object descriptions" """
@@ -886,11 +879,12 @@ class AdvancedSettingsPanel(
 		option = toggleDialogTitleWithAddonSummaryAdvancedOption(False)
 		if self.dialogTitleWithAddonSummaryOptionBox.IsChecked() != option:
 			toggleDialogTitleWithAddonSummaryAdvancedOption()
-		maximumDelayBetweenSameScript = int(
-			self.MaximumDelayBetweenSameScriptBox.GetString(self.MaximumDelayBetweenSameScriptBox.GetSelection()))
-		if maximumDelayBetweenSameScript != _addonConfigManager.getMaximumDelayBetweenSameScript():
-			_addonConfigManager.setMaximumDelayBetweenSameScript(maximumDelayBetweenSameScript)
-			self.restartNVDA = True
+		if NVDAVersion < [2024, 4]:
+			maximumDelayBetweenSameScript = int(
+				self.MaximumDelayBetweenSameScriptBox.GetString(self.MaximumDelayBetweenSameScriptBox.GetSelection()))
+			if maximumDelayBetweenSameScript != _addonConfigManager.getMaximumDelayBetweenSameScript():
+				_addonConfigManager.setMaximumDelayBetweenSameScript(maximumDelayBetweenSameScript)
+				self.restartNVDA = True
 		if self.byPassNoDescriptionOptionBox.IsChecked() != toggleByPassNoDescriptionAdvancedOption(False):
 			toggleByPassNoDescriptionAdvancedOption()
 			self.restartNVDA = True
@@ -1264,9 +1258,7 @@ class NVDAEnhancementProfileSettingsPanel(SettingsPanel):
 		else:
 			index = self.symbolLevelList.GetSelection()
 			level = characterProcessing.CONFIGURABLE_SPEECH_SYMBOL_LEVELS[index - 1]
-
-			if version_year >= 2022 or (version_year == 2021 and version_major >= 2):
-				level = level.value
+			level = level.value
 			_NVDAConfigManager .saveSymbolLevelOnWordCaretMovement(level)
 
 	def onSave(self):
@@ -1706,7 +1698,6 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 	baseCategoryClasses = [
 		NVDAEnhancementProfileSettingsPanel,
 		KeyboardProfileSettingsPanel,
-		TextAnalyzerProfileSettingsPanel,
 	]
 	# if in secur mode, some panels must be disabled
 	inSecureModeCategoryClasses = [
@@ -1724,6 +1715,10 @@ class ProfileSettingsDialog(MultiCategorySettingsDialogEx):
 		if inSecureMode():
 			self.categoryClasses = self.inSecureModeCategoryClasses[:]
 		else:
+			from ..settings.addonConfig import C_DoNotInstall, FCT_TextAnalysis
+			from ..settings import getInstallFeatureOption
+			if getInstallFeatureOption(FCT_TextAnalysis) != C_DoNotInstall:
+				self.baseCategoryClasses.append(TextAnalyzerProfileSettingsPanel)
 			self.categoryClasses = self.baseCategoryClasses[:]
 		super(ProfileSettingsDialog, self).__init__(parent, initialCategory)
 		from speech.speech import speakMessage

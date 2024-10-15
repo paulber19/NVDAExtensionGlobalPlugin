@@ -8,19 +8,24 @@ from logHandler import log
 
 
 def shouldLoadNVDAExtensionGlobalPlugin():
-	import sys
-	from .utils.py3Compatibility import getCommonUtilitiesPath
-	sysPath = list(sys.path)
-	if "psutil" in sys.modules:
-		log.warning("Potential incompatibility: psutil module is also used and loaded probably by other add-on")
-		del sys.modules["psutil"]
-	sys.path = [sys.path[0]]
-	commonUtilitiesPath = getCommonUtilitiesPath()
-	psutilPath = os.path.join(commonUtilitiesPath, "psutilEx")
-	sys.path.append(commonUtilitiesPath)
-	sys.path.append(psutilPath)
-	import psutilEx as psutil
-	sys.path = sysPath
+	from versionInfo import version_year, version_major
+	NVDAVersion = [version_year, version_major]
+	if NVDAVersion < [2024, 3]:
+		import sys
+		from .utils.py3Compatibility import getCommonUtilitiesPath
+		sysPath = list(sys.path)
+		if "psutil" in sys.modules:
+			log.warning("Potential incompatibility: psutil module is also used and loaded probably by other add-on")
+			del sys.modules["psutil"]
+		sys.path = [sys.path[0]]
+		commonUtilitiesPath = getCommonUtilitiesPath()
+		psutilPath = os.path.join(commonUtilitiesPath, "psutilEx")
+		sys.path.append(commonUtilitiesPath)
+		sys.path.append(psutilPath)
+		import psutilEx as psutil
+		sys.path = sysPath
+	else:
+		import psutil
 	process = psutil.Process(os.getpid())
 	if process.name() == "nvda.exe":
 		return True

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin/utils/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016-2023  paulber19
+# Copyright (C) 2016-2024  paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -29,10 +29,6 @@ except AttributeError:
 addonHandler.initTranslation()
 
 _curAddon = addonHandler.getCodeAddon()
-# addon informations
-_addonSummary = _curAddon.manifest['summary']
-_addonDocFile = _curAddon.getDocFilePath()
-
 
 # winuser.h constant
 SC_MAXIMIZE = 0xF030
@@ -60,6 +56,10 @@ _speakTimer = None
 GB_scriptTaskTimer = None
 
 _audioOutputDevice = None
+
+
+def getAddonSummary():
+	return _curAddon.manifest['summary']
 
 
 def delayScriptTask(func, *args, **kwargs):
@@ -160,13 +160,13 @@ def isOpened(dialog):
 def makeAddonWindowTitle(dialogTitle):
 	if not toggleDialogTitleWithAddonSummaryAdvancedOption(False):
 		return dialogTitle
-	return "%s - %s" % (_addonSummary, dialogTitle)
+	return "%s - %s" % (getAddonSummary(), dialogTitle)
 
 
 def getHelpObj(helpId):
 	if helpId is None:
 		return None
-	return (helpId, _addonDocFile)
+	return (helpId, _curAddon.getDocFilePath())
 
 
 def getPositionXY(obj):

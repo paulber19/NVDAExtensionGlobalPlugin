@@ -11,14 +11,16 @@ from comtypes.client import CreateObject as COMCreate
 import ui
 import api
 import os
-from ..utils import delayScriptTask, stopDelayScriptTask, clearDelayScriptTask, messageWithSpeakOnDemand
+from ..utils import (
+	delayScriptTask, stopDelayScriptTask, clearDelayScriptTask,
+	messageWithSpeakOnDemand, getAddonSummary,
+)
 from ..scripts.scriptHandlerEx import speakOnDemand
 from controlTypes.role import Role
 
 addonHandler.initTranslation()
 
 _curAddon = addonHandler.getCodeAddon()
-_addonSummary = _curAddon.manifest['summary']
 
 
 _shell = None
@@ -94,7 +96,7 @@ class ScriptsForWindowsExplorer(ScriptableObject):
 		description=_(
 			"Report the short path of focused folder or file  of Windows Explorer."
 			" Twice: report the full path. Three time: copy the full path  to the clipboard"),
-		category=_addonSummary,
+		category=getAddonSummary(),
 		**speakOnDemand
 	)
 	def script_reportFocusedExplorerItemPath(self, gesture):
@@ -132,7 +134,7 @@ class ScriptsForWindowsExplorer(ScriptableObject):
 		# Translators: Message presented in input help mode.
 		description=_(
 			"Report the path of the file or folder under the cursor of Windows Explorer by going up the folders tree"),
-		category=_addonSummary,
+		category=getAddonSummary(),
 		**speakOnDemand
 	)
 	def script_reportFocusedExplorerItemFolderPath(self, gesture):

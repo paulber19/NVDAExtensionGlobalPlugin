@@ -334,7 +334,11 @@ scriptsToDocInformations = {
 	# Translators: Input help mode message
 	# for reportClipboardTextEx script commands.
 	"reportClipboardTextEx": (
-		NVDAString("Reports the text on the Windows clipboard"),
+		NVDAString(
+			"Reports the text on the Windows clipboard. "
+			"Pressing twice spells this information. "
+			"Pressing three times spells it using character descriptions."
+		),
 		globalCommands.SCRCAT_SYSTEM,
 		"hdr7-2"),
 	# Translators: Input help mode message

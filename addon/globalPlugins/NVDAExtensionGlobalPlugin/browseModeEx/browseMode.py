@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\browseMode.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2023 paulber19
+# Copyright (C) 2024 paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -10,6 +10,8 @@ import browseMode
 from inputCore import SCRCAT_BROWSEMODE
 from scriptHandler import getLastScriptRepeatCount, willSayAllResume, script
 import winsound
+import re
+from typing import Generator
 import speech
 import ui
 import textInfos
@@ -33,9 +35,13 @@ from ..scripts.scriptHandlerEx import speakOnDemand
 
 addonHandler.initTranslation()
 # Add new quick navigation keys and scripts.
+if NVDAVersion < [2024, 2]:
+	_PARAGRAPH_KEY = "p"
+else:
+	_PARAGRAPH_KEY = "j"
 qn = browseMode.BrowseModeTreeInterceptor.addQuickNav
 qn(
-	"paragraph", key="p",
+	"paragraph", key=_PARAGRAPH_KEY,
 	# Translators: Input help message for a quick navigation command
 	# in browse mode.
 	nextDoc=_("moves to the next paragraph"),
@@ -47,6 +53,7 @@ qn(
 	# Translators: Message presented when the browse mode element is not found.
 	prevError=_("no previous paragraph"),
 	readUnit=textInfos.UNIT_PARAGRAPH)
+
 qn(
 	"division", key="y",
 	# Translators: Input help message for a quick navigation command
@@ -156,13 +163,71 @@ class BrowseModeDocumentTreeInterceptorEx(
 		else:
 			callback(True)
 
-	def _quickNavScript(
-		self, gesture, itemType, direction, errorMessage, readUnit):
+	def _getIterFactory(
+		self, itemType, direction):
+		if NVDAVersion >= [2024, 2]:
+			return self._getIterFactory_2024_2(itemType, direction)
+		else:
+			return self._getIterFactory_2024_1(itemType, direction, )
+
+	def _getIterFactory_2024_1(
+		self, itemType, direction):
 		if itemType == "notLinkBlock":
 			iterFactory = self._iterNotLinkBlock
 		else:
 			iterFactory = lambda direction, info: self._iterNodesByType(
 				itemType, direction, info)
+		return iterFactory
+
+	def _getIterFactory_2024_2(self, itemType, direction):
+		from browseMode import TextInfoQuickNavItem
+		from documentBase import _Movement
+		if itemType == "notLinkBlock":
+			iterFactory = self._iterNotLinkBlock
+		elif itemType == "textParagraph":
+			punctuationMarksRegex = re.compile(
+				config.conf["virtualBuffers"]["textParagraphRegex"],
+			)
+
+			def paragraphFunc(info: textInfos.TextInfo) -> bool:
+				return punctuationMarksRegex.search(info.text) is not None
+
+			def iterFactory(direction: str, pos: textInfos.TextInfo) -> Generator[TextInfoQuickNavItem, None, None]:
+				return self._iterSimilarParagraph(
+					kind="textParagraph",
+					paragraphFunction=paragraphFunc,
+					desiredValue=True,
+					direction=_Movement(direction),
+					pos=pos,
+				)
+		elif itemType == "verticalParagraph":
+			def paragraphFunc(info: textInfos.TextInfo) -> int | None:
+				try:
+					return info.location[0]
+				except (AttributeError, TypeError):
+					return None
+
+			def iterFactory(direction: str, pos: textInfos.TextInfo) -> Generator[TextInfoQuickNavItem, None, None]:
+				return self._iterSimilarParagraph(
+					kind="verticalParagraph",
+					paragraphFunction=paragraphFunc,
+					desiredValue=None,
+					direction=_Movement(direction),
+					pos=pos,
+				)
+		elif itemType in ["sameStyle", "differentStyle"]:
+			def iterFactory(
+				direction: _Movement,
+				info: textInfos.TextInfo | None,
+			) -> Generator[TextInfoQuickNavItem, None, None]:
+				return self._iterTextStyle(itemType, direction, info)
+		else:
+			iterFactory = lambda direction, info: self._iterNodesByType(itemType, direction, info)
+		return iterFactory
+
+	def _quickNavScript(
+		self, gesture, itemType, direction, errorMessage, readUnit):
+		iterFactory = self._getIterFactory(itemType, direction)
 		info = self.selection
 		try:
 			item = next(iterFactory(direction, info))
@@ -183,7 +248,8 @@ class BrowseModeDocumentTreeInterceptorEx(
 				# to the bottom of the page.
 				msg = _("Return to bottom of page")
 			else:
-				info = None
+				info = api.getReviewPosition().obj.makeTextInfo(textInfos.POSITION_FIRST)
+				self._set_selection(info, reason="quickNav")
 				# Translators: message to user which indicates the return
 				# to the top of the page.
 				msg = _("Return to top of page")

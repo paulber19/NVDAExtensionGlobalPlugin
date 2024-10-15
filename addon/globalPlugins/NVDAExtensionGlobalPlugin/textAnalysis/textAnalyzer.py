@@ -84,6 +84,10 @@ _profiles = []
 
 
 def updateProfileConfiguration():
+	from ..settings.addonConfig import C_DoNotInstall, FCT_TextAnalysis
+	from ..settings import getInstallFeatureOption
+	if getInstallFeatureOption(FCT_TextAnalysis) == C_DoNotInstall:
+		return
 	global _profiles
 	# call when profile is triggered.
 	# activate text analyzer  for this profile ,
@@ -352,6 +356,10 @@ def getAnalyze(textInfo, unit, reportFormatted=True):
 
 def analyzeText(info, unit):
 	global _previousAnalyzedText
+	from ..settings.addonConfig import C_DoNotInstall, FCT_TextAnalysis
+	from ..settings import getInstallFeatureOption
+	if getInstallFeatureOption(FCT_TextAnalysis) == C_DoNotInstall:
+		return
 	if not _NVDAConfigManager.toggleTextAnalyzerActivationOption(False):
 		return
 	if unit in [None, textInfos.UNIT_CHARACTER]:

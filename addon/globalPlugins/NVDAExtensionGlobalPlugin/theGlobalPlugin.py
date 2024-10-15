@@ -7,6 +7,7 @@
 import addonHandler
 import globalPluginHandler
 from logHandler import log, _getDefaultLogFilePath
+from versionInfo import version_year, version_major
 import os
 import globalVars
 import api
@@ -50,20 +51,21 @@ from .utils import (
 	messageWithSpeakOnDemand, executeWithSpeakOnDemand,
 	getSpeechMode, setSpeechMode, setSpeechMode_off,
 	delayScriptTask, stopDelayScriptTask, clearDelayScriptTask,
+	getAddonSummary
 )
 from .utils import messageBox
 from .utils.informationDialog import InformationDialog
 from .utils import contextHelpEx
+from . import computerTools
 from .computerTools.volumeControlScripts import ScriptsForVolume
 from .scripts.scriptInfos import scriptsToDocInformations
 from .scripts.scriptHandlerEx import speakOnDemand
 
 addonHandler.initTranslation()
-
+NVDAVersion = [version_year, version_major]
 _curAddon = addonHandler.getCodeAddon()
-_addonSummary = _curAddon.manifest['summary']
 # add-on script categories
-SCRCAT_MODULE = str(_addonSummary)
+SCRCAT_MODULE = str(getAddonSummary())
 
 
 # Below toggle code came from Tyler Spivey's code, with enhancements by Joseph Lee.
@@ -262,8 +264,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		self.switchVoiceProfileMode = "off"
 		if settings.toggleByPassNoDescriptionAdvancedOption(False):
 			messageBox.initialize()
-		from .scripts import scriptHandlerEx
-		scriptHandlerEx.initialize()
+		if NVDAVersion < [2024, 4]:
+			from .scripts import scriptHandlerEx
+			scriptHandlerEx.initialize()
 		# start update check if not in secur mode and option is set
 		if not inSecureMode():
 			from .settings import toggleAutoUpdateGeneralOptions
@@ -298,13 +301,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from . import clipboardCommandAnnouncement
 		clipboardCommandAnnouncement .initialize()
 		speechHistory.initialize()
-		# for tonalities volume changes
-		from .computerTools import tonesPatches
-		tonesPatches.initialize()
-		from .computerTools import temporaryOutputDevice
-		temporaryOutputDevice.initialize()
-		from .computerTools import audioCore
-		audioCore.initialize()
+		computerTools.initialize()
 		from .utils import numlock
 		# to report activated numlock and capslock state
 		wx.CallLater(
@@ -354,6 +351,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def installMainAndShellScriptDocs(self):
 		for script in scriptsToDocInformations:
+			if script == "moduleLayer":
+				continue
 			(doc, category, helpId) = self._getScriptDocAndCategory(script)
 			commandText = None
 			if script in self._shellScriptToGestureAndFeatureOption:
@@ -392,9 +391,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		menu = wx.Menu()
 		self.NVDAExtensionGlobalPluginSettingsMenu = self.prefsMenu .AppendSubMenu(
 			menu,
-			"%s..." % _addonSummary,
+			"%s..." % getAddonSummary(),
 			# Translators: the tooltip text for addon submenu.
-			_("%s add-on configuration menu") % _addonSummary)
+			_("%s add-on configuration menu") % getAddonSummary())
 		settingsSubMenu = menu.Append(
 			wx.ID_ANY,
 			# Translators: name of the option in the menu.
@@ -479,6 +478,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_manageUserConfigurations(self, gesture):
 		self.onManageUserConfigurationsMenu(None)
 
+	@scriptHandler.script(description=scriptsToDocInformations["moduleLayer"][0] + " " + getAddonSummary())
 	def script_moduleLayer(self, gesture):
 		# A run-time binding will occur
 		# from which we can perform various layered script commands
@@ -538,10 +538,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		if hasattr(self, "manageUserConfigurationMenu"):
 			self.toolsMenu .Remove(getattr(self, "manageUserConfigurationMenu"))
 		messageBox.terminate()
-		from .computerTools import tonesPatches, temporaryOutputDevice, audioCore
-		audioCore.terminate()
-		tonesPatches.terminate()
-		temporaryOutputDevice.terminate()
+		computerTools.terminate()
 		config.post_configProfileSwitch .unregister(self.handlePostConfigProfileSwitch)
 		from core import postNvdaStartup
 		postNvdaStartup .unregister(self.handlePostNVDAStartup)
@@ -941,7 +938,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# Translators: indicates summary of current add-on.
 		text = _("Active add-on: %s") % info
 		textList.append(text)
-		# Translators: path of current add-on
+		# Translators: path of current add-on.
 		text = _("Add-on's path: %s") % path
 		textList.append(text)
 		if len(addons) > 1:
@@ -1477,7 +1474,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	def script_closeAllWindows(self, gesture):
 		def closeAll():
 			if gui.messageBox(
-				# Translators: message to confirm closing all windows
+				# Translators: message to confirm closing all windows.
 				_("Are you sure you want to close all windows?"),
 				# Translators: dialog title.
 				_("Confirmation"),
@@ -1530,7 +1527,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		mixedTag = _("mixed")
 		# Translators: add-on type.
 		addonTypeLabel = _("%s add-on type:")
-		# Translators: no add-on
+		# Translators: no add-on.
 		noAddonText = _("any")
 		globalPlugins = []
 		mixes = []
@@ -1689,21 +1686,35 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			ui.message("%s, %s" % (noTextMsg, noEmptyMsg))
 			return
 		from .settings import _addonConfigManager
-		max = _addonConfigManager.getMaximumClipboardReportedCharacters()
-		if not max or (max and len(text) < max):
-			brailleText = text
-			while len(text) / 1024:
-				speech.speakMessage(text[:1025])
-				text = text[1025:]
-			if len(text):
-				speech.speakMessage(text)
-			braille.handler.message(brailleText)
+		maxLength = _addonConfigManager.getMaximumClipboardReportedCharacters()
+		textLength = len(text)
+		if not maxLength or (maxLength and textLength < maxLength):
+			repeatCount = scriptHandler.getLastScriptRepeatCount()
+			if repeatCount == 0:
+				tempText = text
+				while len(tempText) / 1024:
+					speech.speakMessage(tempText[:1025])
+					tempText = tempText[1025:]
+				if len(tempText):
+					speech.speakMessage(tempText)
+				braille.handler.message(text)
+			else:
+				speech.speakSpelling(text, useCharacterDescriptions=repeatCount > 1)
 		else:
-			# Translators: If the number of characters on the clipboard is greater than about 1000,
-			# it reports this message and gives number of characters on the clipboard.
-			# Example output: The clipboard contains a large portion of text. It is 2300 characters long.
-			ui.message(
-				NVDAString("The clipboard contains a large portion of text. It is %s characters long") % len(text))
+			from .utils.NVDAStrings import NVDAString_ngettext
+			if NVDAVersion >= [2024, 1]:
+				msg = NVDAString_ngettext(
+					"The clipboard contains a large amount of text. It is %s character long",
+					"The clipboard contains a large amount of text. It is %s characters long",
+					textLength
+				)
+			else:
+				msg = NVDAString(
+					# Translators: If the number of characters on the clipboard is greater than about 1000, it reports this
+					# message and gives number of characters on the clipboard.
+					# Example output: The clipboard contains a large amount of text. It is 2300 characters long.
+					"The clipboard contains a large portion of text. It is %s characters long")
+			ui.message(msg % textLength)
 
 	script_reportClipboardTextEx.removeCommandsScript = globalCommands.commands.script_reportClipboardText
 
@@ -1715,10 +1726,10 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .clipboardCommandAnnouncement import clipboard
 		cm = clipboard.ClipboardManager()
 		if cm.clear():
-			# Translators: message to user to report clipboard
+			# Translators: message to user to report clipboard.
 			ui.message(_("Clipboard cleared"))
 		else:
-			# Translators: message to user because of error on clipboard clearing
+			# Translators: message to user because of error on clipboard clearing.
 			ui.message(_("Error: clipboard cannot cleared"))
 
 	def script_temporaryAudioOutputDeviceManager(self, gesture):
@@ -1730,7 +1741,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		from .settings import _addonConfigManager
 		deviceNames = _addonConfigManager.getAudioDevicesForCycle()
 		if not deviceNames or len(deviceNames) == 1:
-			# Translators: message to user when cycle is not possible
+			# Translators: message to user when cycle is not possible.
 			messageWithSpeakOnDemand(_("cycle is not possible on audio output device"))
 			return
 		from synthDriverHandler import _audioOutputDevice
@@ -1883,8 +1894,7 @@ class HelperDialog(
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
 		# the list box
-		# Translators: This is the label of the list appearing
-		# on HelperDialog
+		# Translators: This is the label of the list appearing on HelperDialog.
 		labelText = _("Description: command")
 		self.scriptsListBox = sHelper.addLabeledControl(
 			labelText,
@@ -1898,8 +1908,7 @@ class HelperDialog(
 		bHelper = guiHelper.ButtonHelper(wx.HORIZONTAL)
 		runScriptButton = bHelper.addButton(
 			self,
-			# Translators: This is a label of a button appearing
-			# on HelperDialog
+			# Translators: This is a label of a button appearing on HelperDialog
 			label=_("&Execute the script"))
 		runScriptButton.SetDefault()
 		sHelper.addItem(bHelper)

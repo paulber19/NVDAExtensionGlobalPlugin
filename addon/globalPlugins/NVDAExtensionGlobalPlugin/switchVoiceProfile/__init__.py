@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2023 paulber19
+# Copyright (C) 2018 - 2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -20,6 +20,8 @@ from ..utils.informationDialog import InformationDialog
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import contextHelpEx
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
 
 addonHandler.initTranslation()
 
@@ -55,13 +57,14 @@ class SwitchVoiceProfilesManager(object):
 	_configVersion = 2
 	# minimum configuration version for compatibility
 	_minConfigVersion = 2
-	NVDASpeechSettings = [
+	oldNVDASpeechSettings = [
 		"autoLanguageSwitching",
 		"autoDialectSwitching",
 		"symbolLevel",
 		"trustVoiceLanguage",
 		"includeCLDR",
 		"delayedCharacterDescriptions"]
+
 	NVDASpeechManySettings = [
 		"capPitchChange",
 		"sayCapForCapitals",
@@ -90,6 +93,7 @@ class SwitchVoiceProfilesManager(object):
 			config.conf.profiles[0][self.addonName][SCT_VoiceProfileSwitching] = {}
 			config.conf.profiles[0][self.addonName][SCT_VoiceProfileSwitching][KEY_ConfigVersion] = str(
 				self._configVersion)
+		log.debug("SwitchVoiceProfilesManager initialized")
 
 	def deletePreviousVoiceProfileSelectorsConfiguration(self):
 		# check if this add-on version is not compatible with previous voice profile selectors configuration
@@ -416,8 +420,53 @@ class SwitchVoiceProfilesManager(object):
 		return conf[selector][KEY_VoiceProfileName]
 
 	def getSynthInformations(self, selector=None):
-		def boolToText(value):
+		def get_NVDASpeechSettings():
+			if NVDAVersion < [2024, 3]:
+				return [
+					"autoLanguageSwitching",
+					"autoDialectSwitching",
+					"symbolLevel",
+					"trustVoiceLanguage",
+					"includeCLDR",
+					"delayedCharacterDescriptions"]
+			else:
+				return [
+					"autoLanguageSwitching",
+					"autoDialectSwitching",
+					"symbolLevel",
+					"trustVoiceLanguage",
+					"unicodeNormalization",
+					"reportNormalizedForCharacterNavigation",
+					"includeCLDR",
+					"delayedCharacterDescriptions"]
 
+		def getNVDASpeechSettingsInfos():
+			if NVDAVersion < [2024, 3]:
+				return [
+					(_("Automatic language switching (when supported)"), boolToText),
+					(_("Automatic dialect switching (when supported)"), boolToText),
+					(_("Punctuation/symbol level"), punctuationLevelToText),
+					(_("Trust voice's language when processing characters and symbols"), boolToText),
+					(_(
+						"Include Unicode Consortium data (including emoji) when processing characters and symbols"),
+						boolToText),
+					(_("Delayed descriptions for characters on cursor movement"), boolToText),
+				]
+			else:
+				return [
+					(_("Automatic language switching (when supported)"), boolToText),
+					(_("Automatic dialect switching (when supported)"), boolToText),
+					(_("Punctuation/symbol level"), punctuationLevelToText),
+					(_("Trust voice's language when processing characters and symbols"), boolToText),
+					(_("Unicode normalization"), featureFlagToText),
+					(_("Report 'Normalized' when navigating by character"), boolToText),
+					(_(
+						"Include Unicode Consortium data (including emoji) when processing characters and symbols"),
+						boolToText),
+					(_("Delayed descriptions for characters on cursor movement"), boolToText),
+				]
+
+		def boolToText(value):
 			if type(value) is str and value == "True":
 				return _("yes")
 			if type(value) is str and value == "False":
@@ -430,16 +479,9 @@ class SwitchVoiceProfilesManager(object):
 
 		def punctuationLevelToText(level):
 			return characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS[int(level)]
-		NVDASpeechSettingsInfos = [
-			(_("Automatic language switching (when supported)"), boolToText),
-			(_("Automatic dialect switching (when supported)"), boolToText),
-			(_("Punctuation/symbol level"), punctuationLevelToText),
-			(_("Trust voice's language when processing characters and symbols"), boolToText),
-			(_(
-				"Include Unicode Consortium data (including emoji) when processing characters and symbols"),
-				boolToText),
-			(_("Delayed descriptions for characters on cursor movement"), boolToText),
-		]
+
+		def featureFlagToText(value):
+			return NVDAString(value.value.displayString)
 
 		NVDASpeechManySettingsInfos = [
 			(_("Capital pitch change percentage"), None),
@@ -474,10 +516,12 @@ class SwitchVoiceProfilesManager(object):
 		for i in synthDisplayInfos:
 			item = synthDisplayInfos[i]
 			textList.append("%s: %s" % (item[0], item[1]))
-		for setting in SwitchVoiceProfilesManager.NVDASpeechSettings:
-			val = selectorConfig[SCT_Speech][setting]
-			index = SwitchVoiceProfilesManager.NVDASpeechSettings.index(setting)
-			(name, f) = NVDASpeechSettingsInfos[index]
+		for setting in get_NVDASpeechSettings():
+			val = selectorConfig[SCT_Speech].get(setting, None)
+			if val is None:
+				continue
+			index = get_NVDASpeechSettings().index(setting)
+			(name, f) = getNVDASpeechSettingsInfos()[index]
 			if f is not None:
 				res = f(val)
 			textList.append("%s: %s" % (name, res))

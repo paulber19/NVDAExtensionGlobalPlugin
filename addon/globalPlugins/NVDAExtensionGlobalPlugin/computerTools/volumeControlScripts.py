@@ -11,7 +11,7 @@ import wx
 import api
 import appModuleHandler
 from ..settings.addonConfig import FCT_VolumeControl, FCT_SplitAudio
-from .audioCore import isNVDA
+
 
 addonHandler.initTranslation()
 
@@ -124,7 +124,6 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		"setNVDAVolumeTo80Percent": ("kb:shift+8", FCT_VolumeControl),
 		"setNVDAVolumeTo90Percent": ("kb:shift+9", FCT_VolumeControl),
 		"setNVDAVolumeToPreviousLevel": ("kb:shift+backspace", FCT_VolumeControl),
-		"setNVDAVolumeToPreviousLevel": ("kb:shift+backspace", FCT_VolumeControl),
 		# for speakers volume
 		"increaseSpeakersVolume": ("kb:control+upArrow", FCT_VolumeControl),
 		"decreaseSpeakersVolume": ("kb:control+downArrow", FCT_VolumeControl),
@@ -153,6 +152,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 
 	def script_toggleCurrentAppVolumeMute(self, gesture):
 		appName = getFocusedApplicationName()
+		from .audioCore import isNVDA
 		if isNVDA(appName):
 			ui.message(_("Unavailable for NVDA"))
 			return
@@ -325,6 +325,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 			# choose the output audio device that the focused application uses, else the nvda output audio device.
 			from .audioCore import audioOutputDevicesManager
 			appName = getFocusedApplicationName()
+			from .audioCore import isNVDA
 			if isNVDA(appName):
 				device = audioOutputDevicesManager.getCurrentNVDADevice()
 			else:
@@ -405,6 +406,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 
 	def script_setNVDAToRightAndFocusedApplicationToLeft(self, gesture):
 		appName = getFocusedApplicationName()
+		from .audioCore import isNVDA
 		if isNVDA(appName):
 			# Translators: message to user to indicate that is not  available because the focused application is NVDA
 			ui.message(_("Not available: focused application is NVDA"))
@@ -413,6 +415,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 
 	def script_setNVDAToLeftAndFocusedApplicationToRight(self, gesture):
 		appName = getFocusedApplicationName()
+		from .audioCore import isNVDA
 		if isNVDA(appName):
 			# Translators: message to user to indicate that is not  available because the focused application is NVDA
 			ui.message(_("Not available: focused application is NVDA"))
@@ -421,6 +424,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 
 	def script_centerNVDAAndFocusedApplication(self, gesture):
 		appName = getFocusedApplicationName()
+		from .audioCore import isNVDA
 		if isNVDA(appName):
 			# Translators: message to user to indicate that is not  available because the focused application is NVDA
 			ui.message(_("Not available: focused application is NVDA"))
