@@ -205,9 +205,12 @@ class SwitchVoiceProfilesManager(object):
 
 	def switchToVoiceProfile(self, selector, silent=False):
 		def finish(synthName, synthspeechConfig, msg):
+			log.debug("switch to synth: %s" %synthName)
 			# stop previous synth because oneCore voice switch don't work without it
 			config.conf[SCT_Speech] = synthSpeechConfig.copy()
-			setSynth(synthName)
+			curSynth = getSynth()
+			if curSynth.name != synthName:
+				setSynth(synthName)
 			config.conf[SCT_Speech][synthName] = synthSpeechConfig[synthName].copy()
 			getSynth().loadSettings()
 			# Reinitialize the tones module to update the audio device
