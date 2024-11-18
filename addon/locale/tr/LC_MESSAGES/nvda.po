@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NVDAGenişletilmişGlobalKomutlar\n"
 "Report-Msgid-Bugs-To: PaulBer19 (paulber19@laposte.net\n"
-"POT-Creation-Date: 2024-08-30 10:48+0200\n"
+"POT-Creation-Date: 2024-10-11 12:41+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Umut KORKMAZ <umutkork@gmail.com>\n"
 "Language-Team: cagrid@hotmail.com\n"
@@ -292,7 +292,7 @@ msgstr "{summary}, sürüm: {version}"
 msgid "Active add-on: %s"
 msgstr "Aktif eklenti: %s"
 
-#. Translators: path of current add-on
+#. Translators: path of current add-on.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:942
 #, python-format
 msgid "Add-on's path: %s"
@@ -448,6 +448,7 @@ msgstr ""
 msgid "The standard use of the numeric keypad is not allowed"
 msgstr "Numaratörün standart kullanımına izin verilmiyor"
 
+#. Translators: message to confirm closing all windows.
 #. Translators: message to confirm closing all windows
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1478
 #: globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:358
@@ -485,7 +486,7 @@ msgstr "karışık"
 msgid "%s add-on type:"
 msgstr "%s işlevli eklentiler:"
 
-#. Translators: no add-on
+#. Translators: no add-on.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1531
 #: globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py:631
 msgid "any"
@@ -519,7 +520,7 @@ msgstr "geçerli imleç konumunu bildirme"
 #. Translators: message to report clipboard is empty
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1676
 #: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:255
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:556
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:552
 msgid "Clipboard is empty"
 msgstr "Pano boş"
 
@@ -528,17 +529,17 @@ msgstr "Pano boş"
 msgid "but the clipboard is not empty"
 msgstr "ama pano boş değil"
 
-#. Translators: message to user to report clipboard
+#. Translators: message to user to report clipboard.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1730
 msgid "Clipboard cleared"
 msgstr "Pano temizlendi"
 
-#. Translators: message to user because of error on clipboard clearing
+#. Translators: message to user because of error on clipboard clearing.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1733
 msgid "Error: clipboard cannot cleared"
 msgstr "Hata: pano temizlenemiyor"
 
-#. Translators: message to user when cycle is not possible
+#. Translators: message to user when cycle is not possible.
 #: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1745
 msgid "cycle is not possible on audio output device"
 msgstr "ses çıkış aygıtında döngü mümkün değil"
@@ -549,16 +550,14 @@ msgid "Shell's scripts"
 msgstr "Katman komutları"
 
 #. the list box
-#. Translators: This is the label of the list appearing
-#. on HelperDialog
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1899
+#. Translators: This is the label of the list appearing on HelperDialog.
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1898
 msgid "Description: command"
 msgstr "Açıklama: komut"
 
-#. Translators: This is a label of a button appearing
-#. on HelperDialog
+#. Translators: This is a label of a button appearing on HelperDialog
 #. Translators: The label of a button to run the script in the Input Gestures dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1914
+#: globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py:1912
 #: globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures\inputGesturesEx.py:62
 msgid "&Execute the script"
 msgstr "&Komutu çalıştır"
@@ -636,7 +635,7 @@ msgstr "Pencere kapatılamıyor"
 #. Translators: title of message box
 #. Translators: the title of a message box dialog.
 #: globalPlugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py:360
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:623
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:619
 #: globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py:251
 #: globalPlugins\NVDAExtensionGlobalPlugin\computerTools\temporaryOutputDevicePatches.py:129
 #: globalPlugins\NVDAExtensionGlobalPlugin\settings\userConfigManager.py:482
@@ -919,17 +918,17 @@ msgid "Select all"
 msgstr "Tümünü seç"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:502
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:498
 msgid "One selected object"
 msgstr "Bir nesne seçili"
 
 #. Translators: no comment.
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:505
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:501
 #, python-format
 msgid "%s selected objects"
 msgstr "%s seçili nesne"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:617
+#: globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py:613
 msgid ""
 "The clipspeak add-on has been detected on your system. In order for "
 "Clipboard command announcement feature to work without conflicts, clipSpeak "
@@ -4805,19 +4804,19 @@ msgstr "Eklenti güncellenirken lütfen bekleyin."
 
 #. Translators: The message displayed when an error occurs
 #. when installing an add-on package.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:195
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:196
 msgid "Failed to update {name} add-on"
 msgstr "{name} eklenti güncellemesi başarısız"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:247
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:248
 msgid "{summary} - update"
 msgstr "{summary} - güncelleme"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:257
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:258
 msgid "The service is temporarily under maintenance. Please, try again later."
 msgstr "Servis geçici olarak bakımda. Lütfen daha sonra tekrar deneyiniz."
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:285
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:286
 msgid ""
 "The update is not compatible with this version of NVDA. Minimum NVDA "
 "version: {minYear}.{minMajor}, last tested: {testedYear}.{testedMajor}."
@@ -4826,12 +4825,12 @@ msgstr ""
 "{minYear}.{minMajor}, son test edilen: {testedYear}.{testedMajor}."
 
 #. Translators: message to user to report a new version.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:329
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:330
 #, python-format
 msgid "New version%s is available. Do you want to download it now?"
 msgstr "Yeni sürüm mevcut, sürüm %s. Şimdi indirmek ister misiniz?"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:333
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:334
 msgid ""
 "New version{0} is available.\n"
 "But it is not compatible with this version of NVDA: minimum version requred "
@@ -4844,12 +4843,12 @@ msgstr ""
 "Bu uyumsuzluğu göz ardı edip uygulamayı şimdi indirmeye devam etmek istiyor "
 "musunuz?"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:353
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:354
 #, python-format
 msgid "You are up-to-date. %s is the latest version."
 msgstr "Güncelsiniz. %s en son sürüm."
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:360
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:361
 msgid "Oops! There was a problem checking for updates. Please retry later"
 msgstr ""
 "Hata! Güncellemeleri kontrol ederken bir sorun oluştu. Lütfen daha sonra "
@@ -4857,23 +4856,23 @@ msgstr ""
 
 #. Translators: This is a label of a button appearing
 #. on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:515
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:516
 msgid "&Yes"
 msgstr "&Evet"
 
 #. Translators: This is a label of a button appearing
 #. on UpdateCheckResult dialog.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:520
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:521
 msgid "&No"
 msgstr "&Hayır"
 
 #. Translators: The label of a button to remind the user later
 #. about performing some action.
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:525
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:526
 msgid "&Later"
 msgstr "&Daha sonra"
 
-#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:529
+#: globalPlugins\NVDAExtensionGlobalPlugin\updateHandler\update_check.py:530
 msgid "Wha&t's new"
 msgstr "Ne &Yeni"
 
