@@ -412,7 +412,7 @@ class AddonConfigurationManager():
 			writeToDisk = shouldWriteToDisk()
 		except ImportError:
 			# for NVDA version < 2023.2
-			writeToDisk = (globalVars.appArgs.secure or globalVars.appArgs.launcher)
+			writeToDisk = not (globalVars.appArgs.secure or globalVars.appArgs.launcher)
 		if not writeToDisk:
 			log.debug("Not writing profile, either --secure or --launcher args present")
 			return
