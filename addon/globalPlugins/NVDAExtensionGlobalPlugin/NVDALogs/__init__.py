@@ -114,7 +114,7 @@ class NVDALogsManagementDialog (
 			)
 			return
 		tempDir = tempfile.gettempdir()
-		file = os.path.join(tempDir, "NVDAExtensionGlobalPlugin-%s" % tempLog)
+		file = os.path.join(tempDir, r"NVDAExtensionGlobalPlugin-%s" % tempLog)
 		shutil.copy(logFile, file)
 		time.sleep(0.5)
 		count = 1000
@@ -128,7 +128,13 @@ class NVDALogsManagementDialog (
 			return
 		try:
 			os.startfile(file, operation="edit")
+			return
 		except Exception:
+			import shellapi
+			from winUser import SW_SHOWNORMAL
+			shellapi.ShellExecute(hwnd=None, operation="open", file="notepad.exe", parameters=file, directory=tempDir , showCmd=SW_SHOWNORMAL,)
+			return
+
 			wx.CallAfter(
 				gui.messageBox,
 				openErrorMsg,
