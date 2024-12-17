@@ -179,11 +179,11 @@ class AddonUpdateDownloader(UpdateDownloader):
 					extraAppArgs = globalVars.appArgsExtra if hasattr(
 						globalVars, "appArgsExtra") else globalVars.unknownAppArgs
 					extraAppArgs.append("addon-auto-update")
-				if nvdaVersion >= (2024,1):
+				try:
 					# for nvda version >= 2024.1
 					from systemUtils  import ExecAndPump
 					ExecAndPump(addonHandler.installAddonBundle, bundle)
-				else:
+				except ImportError:
 					# for nvda version < 2024.1
 					gui.ExecAndPump(addonHandler.installAddonBundle, bundle)
 				if self.autoUpdate:
