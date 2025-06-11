@@ -10,16 +10,17 @@ from logHandler import log
 import api
 import tones
 import synthDriverHandler
-import config
 import speech
 import time
 import wx
-import nvwave
 from gui import nvdaControls
 from synthDriverHandler import getSynth
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
 from gui import guiHelper, mainFrame
+from .audioUtils import getOutputDevice
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
 
 addonHandler.initTranslation()
@@ -35,17 +36,10 @@ def getTemporaryOutputDevice():
 	return _temporaryOutputDevice
 
 
-def getDeviceNames():
-	deviceNames = nvwave.getOutputDeviceNames()
-	# #11349: On Windows 10 20H1 and 20H2, Microsoft Sound Mapper returns an empty string.
-	if deviceNames[0] in ("", "Microsoft Sound Mapper"):
-		# Translators: name for default (Microsoft Sound Mapper) audio output device.
-		deviceNames[0] = NVDAString("Microsoft Sound Mapper")
-	return deviceNames
-
-
 def updateSynthetizerAndTones(synth):
-	log.debug("updateSynthetizerAndTones: temporaryOutputDevice= %s" % _temporaryOutputDevice)
+	log.debug(
+		"updateSynthetizerAndTones: temporaryOutputDevice= %s" % _temporaryOutputDevice[0]
+		if _temporaryOutputDevice else "")
 	import speech
 	speech.cancelSpeech()
 	res = synthDriverHandler .setSynth(synth.name)
@@ -60,11 +54,9 @@ def updateSynthetizerAndTones(synth):
 
 def setTemporaryAudioOutputDevice(outputDevice):
 	global _temporaryOutputDevice
+	log.debug("setTemporaryAudioOutputDevice: %s, %s" % (outputDevice[0], outputDevice[1]))
 	synth = getSynth()
 	currentTemporaryOutputDevice = _temporaryOutputDevice
-	prevOutputDevice = config.conf["speech"]["outputDevice"]
-	if _temporaryOutputDevice:
-		prevOutputDevice = _temporaryOutputDevice
 	temporary = bool(_temporaryOutputDevice)
 	_temporaryOutputDevice = outputDevice
 	ret = updateSynthetizerAndTones(synth)
@@ -77,7 +69,7 @@ def setTemporaryAudioOutputDevice(outputDevice):
 		obj = api.getFocusObject()
 		speech.speakObject(obj)
 
-	def confirm(synth, prevOutputDevice, temporary):
+	def confirm(synth, currentTemporaryOutputDevice, temporary):
 		global _temporaryOutputDevice, confirmDialog
 		from ..settings import _addonConfigManager
 		timeToLive = _addonConfigManager.getConfirmAudioDeviceChangeTimeOut()
@@ -90,20 +82,20 @@ def setTemporaryAudioOutputDevice(outputDevice):
 		if res != wx.ID_OK:
 			# return to previous output device
 			if temporary:
-				_temporaryOutputDevice = prevOutputDevice
+				_temporaryOutputDevice = currentTemporaryOutputDevice
 			else:
 				_temporaryOutputDevice = None
 			updateSynthetizerAndTones(synth)
 			wx.CallLater(100, reportFocus)
 		else:
-			log.debug("Temporary output device set to: %s" % _temporaryOutputDevice)
+			log.debug("Temporary output device set to: %s" % _temporaryOutputDevice[0])
 
 	from ..settings import toggleConfirmAudioDeviceChangeAdvancedOption
 	if toggleConfirmAudioDeviceChangeAdvancedOption(False):
-		wx.CallLater(10, confirm, synth, prevOutputDevice, temporary)
+		wx.CallLater(10, confirm, synth, currentTemporaryOutputDevice, temporary)
 		return
 	reportFocus()
-	log.debug("Temporary output device set to: %s" % _temporaryOutputDevice)
+	log.debug("Temporary output device set to: %s" % _temporaryOutputDevice[0])
 
 
 def cancelTemporaryAudioOutputDevice():
@@ -111,7 +103,7 @@ def cancelTemporaryAudioOutputDevice():
 	if not _temporaryOutputDevice:
 		return
 	# back to speech configuration output device
-	outputDevice = config.conf["speech"]["outputDevice"]
+	outputDevice = getOutputDevice()
 	log.debug("Cancel temporary output device: current output device= %s" % outputDevice)
 	synth = getSynth()
 	_temporaryOutputDevice = None
@@ -126,9 +118,12 @@ def checkOutputDeviceChange():
 	if not isInstall(FCT_TemporaryAudioDevice):
 		return
 	from synthDriverHandler import _audioOutputDevice
-	if _temporaryOutputDevice and _temporaryOutputDevice != _audioOutputDevice:
-		# log.debug("back to temporary output device: %s" %_temporaryOutputDevice)
-		updateSynthetizerAndTones(getSynth())
+
+	if _temporaryOutputDevice:
+		device = _temporaryOutputDevice[0] if NVDAVersion < [2025, 1] else _temporaryOutputDevice[1]
+		if device != _audioOutputDevice:
+			# log.debug("back to temporary output device: %s" % _temporaryOutputDevice[0])
+			updateSynthetizerAndTones(getSynth())
 
 
 class TemporaryAudioDeviceManagerDialog(
@@ -153,23 +148,27 @@ class TemporaryAudioDeviceManagerDialog(
 		dialogTitle = _("Temporary Audio device manager")
 		title = TemporaryAudioDeviceManagerDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(TemporaryAudioDeviceManagerDialog, self).__init__(parent, wx.ID_ANY, title)
+		from .audioUtils import get_outputDevices
+		self.deviceIds, self.deviceNames = get_outputDevices()
 		self.doGui()
 
 	def doGui(self):
 		global _temporaryOutputDevice
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
-		self.deviceNames = getDeviceNames()
 		from synthDriverHandler import _audioOutputDevice
 		self.curOutputDevice = _audioOutputDevice
-		if _temporaryOutputDevice and _temporaryOutputDevice != _audioOutputDevice:
-			# audio output device has been changed by setsynth, so reset temporary audio output device
-			_temporaryOutputDevice = None
-			updateSynthetizerAndTones(getSynth())
+		if _temporaryOutputDevice:
+			device = _temporaryOutputDevice[0] if NVDAVersion < [2025, 1] else _temporaryOutputDevice[1]
+			if device != _audioOutputDevice:
+				# audio output device has been changed by setsynth, so reset temporary audio output device
+				_temporaryOutputDevice = None
+				updateSynthetizerAndTones(getSynth())
 		# Translators: temporary output device text
 		# on Temporary audio output device manager dialog.
 		labelText = _(
-			"Current temporary audio device: %s") % (_temporaryOutputDevice if _temporaryOutputDevice else _("None"))
+			"Current temporary audio device: %s") % (
+			_temporaryOutputDevice[0] if _temporaryOutputDevice else _("None"))
 		self.currentTemporaryOutputDeviceTextCtrl = sHelper.addItem(wx.StaticText(
 			self,
 			label=labelText)
@@ -177,16 +176,21 @@ class TemporaryAudioDeviceManagerDialog(
 		# Translators: This is the label for a listbox
 		# on Temporary audio device manager dialog.
 		labelText = _("Select a &device:")
-		deviceNames = getDeviceNames()
+
 		self.audioDevicesListBox = sHelper.addLabeledControl(
 			labelText,
 			nvdaControls.CustomCheckListBox,
-			choices=deviceNames)
-		self.audioDevicesListBox.SetStringSelection(self.curOutputDevice)
+			choices=self.deviceNames)
+		if NVDAVersion < [2025, 1]:
+			deviceName = _audioOutputDevice
+		else:
+			i = self.deviceIds.index(_audioOutputDevice)
+			deviceName = self.deviceNames[i]
+		self.audioDevicesListBox.SetStringSelection(deviceName)
 		from ..settings import _addonConfigManager
 		devicesForCycle = _addonConfigManager.getAudioDevicesForCycle()
-		for device in deviceNames:
-			index = deviceNames.index(device)
+		for device in self.deviceNames:
+			index = self.deviceNames.index(device)
 			if device in devicesForCycle:
 				self.audioDevicesListBox.Check(index)
 		# the buttons
@@ -219,8 +223,10 @@ class TemporaryAudioDeviceManagerDialog(
 		if not _temporaryOutputDevice:
 			quitTemporaryAudioDeviceButton.Disable()
 			self.setButton.Bind(wx.EVT_BUTTON, self.onSetButton)
-		elif _temporaryOutputDevice == self.curOutputDevice:
-			self.setButton.Disable()
+		else:
+			device = _temporaryOutputDevice[0] if NVDAVersion < [2025, 1] else _temporaryOutputDevice[1]
+			if device == _audioOutputDevice:
+				self.setButton.Disable()
 
 	def Destroy(self):
 		if self.selectDelay:
@@ -233,8 +239,10 @@ class TemporaryAudioDeviceManagerDialog(
 		if self.selectDelay:
 			self.selectDelay.Stop()
 			self.selectDelay = None
+		index = self.audioDevicesListBox.GetSelection()
+		deviceId = self.deviceIds[index]
 		deviceName = self.audioDevicesListBox.GetStringSelection()
-		if deviceName == _temporaryOutputDevice:
+		if _temporaryOutputDevice and deviceName == _temporaryOutputDevice[0]:
 			# disable set button
 			self.setButton.Disable()
 			self.setButton.Unbind(wx.EVT_BUTTON)
@@ -250,14 +258,16 @@ class TemporaryAudioDeviceManagerDialog(
 		from .beep import playTonesOnDevice
 		self.selectDelay = wx.CallLater(
 			4000,
-			playTonesOnDevice, deviceName)
+			playTonesOnDevice, (deviceName, deviceId))
 
 	def onSetButton(self, evt):
 		if self.selectDelay is not None:
 			self.selectDelay .Stop()
 			self.selectDelay = None
-		outputDevice = self.audioDevicesListBox.GetStringSelection()
-		setTemporaryAudioOutputDevice(outputDevice)
+		index = self.audioDevicesListBox.GetSelection()
+		outputDeviceId = self.deviceIds[index]
+		outputDeviceName = self.audioDevicesListBox.GetStringSelection()
+		setTemporaryAudioOutputDevice((outputDeviceName, outputDeviceId))
 		self.Close()
 
 	def onQuitTemporaryAudioDevice(self, evt):
@@ -268,7 +278,7 @@ class TemporaryAudioDeviceManagerDialog(
 		# save checked device list
 		checkedDevices = self.audioDevicesListBox.GetCheckedStrings()
 		devicesForLoop = {}
-		for device in getDeviceNames():
+		for device in self.deviceNames:
 			isChecked = device in checkedDevices
 			devicesForLoop[device] = isChecked
 		from ..settings import _addonConfigManager

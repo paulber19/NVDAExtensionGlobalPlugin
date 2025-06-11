@@ -1,12 +1,11 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\reportFormating\__init__
 # A part of NvDAextensionGlobalPlugin
-# Copyright (C) 2016 - 2023 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 import colors
-from versionInfo import version_year, version_major
 from ..utils.NVDAStrings import NVDAString
 from ..utils.informationDialog import InformationDialog
 
@@ -14,40 +13,26 @@ addonHandler.initTranslation()
 
 
 def getReportFormattingOptions():
+
+	from versionInfo import version_year, version_major
 	NVDAVersion = [version_year, version_major]
-	if NVDAVersion >= [2023, 1]:
-		return (
-			"reportFontName",
-			"reportFontSize",
-			"reportFontAttributes",
-			"reportSuperscriptsAndSubscripts",
-			"reportColor",
-			"reportStyle",
-			"reportAlignment",
-			"reportSpellingErrors",
-			"reportLineIndentation",
-			"reportParagraphIndentation",
-			"reportLineSpacing",
-			"reportCellBorders",
-		)
-
-	else:
-		return (
-			"reportFontName",
-			"reportFontSize",
-			"reportFontAttributes",
-			"reportSuperscriptsAndSubscripts",
-			"reportColor",
-			"reportStyle",
-			"reportAlignment",
-			"reportSpellingErrors",
-			"reportLineIndentation",
-			"reportParagraphIndentation",
-			"reportLineSpacing",
-			"reportBorderStyle",
-			"reportBorderColor",
-		)
-
+	reportFontAttributes = "reportFontAttributes" if NVDAVersion < [2025, 1] else "fontAttributeReporting"
+	formatConfigOptions = [
+		"reportFontName",
+		"reportFontSize",
+		reportFontAttributes,
+		"reportSuperscriptsAndSubscripts",
+		"reportHighlight",
+		"reportColor",
+		"reportStyle",
+		"reportAlignment",
+		"reportSpellingErrors",
+		"reportLineIndentation",
+		"reportParagraphIndentation",
+		"reportLineSpacing",
+		"reportCellBorders",
+	]
+	return formatConfigOptions
 
 def getFontText(attrs):
 	font = None

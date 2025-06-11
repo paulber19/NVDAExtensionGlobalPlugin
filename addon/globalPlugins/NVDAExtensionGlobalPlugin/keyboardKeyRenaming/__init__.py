@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\keyboardKeyRenaming\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,7 +14,7 @@ import queueHandler
 from ..settings import _addonConfigManager
 
 from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 addonHandler.initTranslation()
 
 

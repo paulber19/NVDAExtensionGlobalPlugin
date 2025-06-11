@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioCore.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2024 paulber19
+# Copyright (C) 2024-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -16,6 +16,7 @@ from comtypes import CLSCTX_ALL, CoInitialize
 import sys
 import wx
 import tones
+import config
 from versionInfo import version_year, version_major
 NVDAVersion = [version_year, version_major]
 log.debug("importing pycaw library")
@@ -78,18 +79,6 @@ _previousAppVolumeLevels = {}
 _levelLimitationBeep = (400, 30)
 
 
-def isWasapiUsed():
-	# wasapi can be used since nvda 2023.2
-	# by checking the advanced option: use wasapi for audio output
-	try:
-		from nvwave import WasapiWavePlayer, WavePlayer
-		if WavePlayer == WasapiWavePlayer:
-			return True
-	except Exception:
-		pass
-	return False
-
-
 def isNVDA(appName):
 	return (
 		appName.lower() == nvdaProcessName
@@ -105,6 +94,17 @@ def getNVDASessionName():
 _lastSpokenOutputAudioDevice = None
 # memorize last application spoken on volume change
 _lastAppOnVolumeChange = None
+
+
+def getNVDAAudioOuputDevices():
+	try:
+		# for nvda versions >= 2025.1
+		from utils.mmdevice import getOutputDevices
+		return [(device.id, device.friendlyName) for device in getOutputDevices()]
+	except ImportError:
+		# for NVDA version < 2025.1
+		from nvwave import _getOutputDevices
+		return [device for device in _getOutputDevices()]
 
 
 class AudioSource(object):
@@ -320,14 +320,12 @@ class AudioSources(object):
 
 	def setPreviousApplicationVolumeLevel(self, appName, level):
 		global _previousAppVolumeLevels
-		global _previousAppVolumeLevels
 		deviceName = self._device.name
 		if deviceName not in _previousAppVolumeLevels:
 			_previousAppVolumeLevels[deviceName] = {}
 		_previousAppVolumeLevels[deviceName][appName] = level
 
 	def setApplicationVolume(self, appName, level=100, report=True, reportValue=None):
-		global _previousAppVolumeLevels
 		global _previousAppVolumeLevels
 		log.debug("setApplicationVolume: %s, level= %s, report: %s, reportValue: %s" % (
 			appName, level, report, reportValue))
@@ -412,12 +410,24 @@ class AudioSources(object):
 		if mute:
 			audioSource.setMute(False)
 			log.warning("NVDA volume is unmuted")
+
+		try:
+			# for nvda version > 2024.2
+			splitAudioMode = config.conf["audio"]["soundSplitState"]
+		except Exception:
+			splitAudioMode = 0
+		from ..settings import toggleNVDAOnBothChannelsAdvancedOption
+		if not splitAudioMode and toggleNVDAOnBothChannelsAdvancedOption(False):
+			(l, r) = audioSource.channelsVolume
+			channelVolume = max(l, r)
+			if channelVolume == 0.0:
+				channelVolume = 1.0
+			channels = (channelVolume, channelVolume)
+			audioSource.setChannels(channels)
+			log.warning("NVDA on both channels channel volume = %s" % channelVolume)
 		volumeLevel = audioSource.volume
 		NVDAMinLevel = _addonConfigManager.getMinNVDAVolumeLevel()
 		minLevel = float(NVDAMinLevel / 100)
-		channels = (1.0, 1.0)
-		audioSource.setChannels(channels)
-		log.warning("NVDA channels are set to 1.0")
 		if not checkThreshold or (checkThreshold and volumeLevel <= minLevel):
 			NVDARecoveryLevel = float(_addonConfigManager.getNVDAVolumeLevel() / 100)
 			audioSource.setVolume(NVDARecoveryLevel)
@@ -647,6 +657,8 @@ class AudioDevice(object):
 			msg = "%s, %s" % (self.name, msg)
 			_lastSpokenOutputAudioDevice = self
 		self.volumeObj.SetMasterVolumeLevelScalar(level, None)
+		global _lastAppOnVolumeChange
+		_lastAppOnVolumeChange = None
 		if reportValue and toggleReportVolumeChangeAdvancedOption(False):
 			ui.message(msg)
 			log.warning("Master volume is set to %s" % level)
@@ -697,14 +709,6 @@ class AudioOutputDevicesManager(object):
 	def __init__(self):
 		super().__init__()
 
-	def getDeviceFromName(self, deviceName):
-		global _audioOutputDevice
-		for device in self._devices:
-			if device.name.startswith(deviceName):
-				return device
-		return None
-		return self.getDeviceFromName(_audioOutputDevice)
-
 	def findDeviceFromApplicationName(self, appName):
 		log.debug("findDeviceFromApplicationName: %s, devices= %s" % (appName, self._devices))
 		for device in self._devices:
@@ -718,8 +722,14 @@ class AudioOutputDevicesManager(object):
 		if _audioOutputDevice is None:
 			return None
 		for device in self._devices:
-			if device.name.startswith(_audioOutputDevice):
-				return device
+			if NVDAVersion >= [2025, 1]:
+				# for nvda version  >= 2025.1
+				#  audio output device is stored by it id
+				if device.id == _audioOutputDevice:
+					return device
+			else:
+				if device.name.startswith(_audioOutputDevice):
+					return device
 		return self.getDefaultDevice()
 
 	def getDefaultDevice(self):
@@ -866,8 +876,7 @@ class AudioOutputDevicesManager(object):
 			device._default = True
 			devices.insert(0, device)
 		# we want the same devices that NVDA
-		from nvwave import _getOutputDevices
-		nvdaAudioDevices = _getOutputDevices()
+		nvdaAudioDevices = getNVDAAudioOuputDevices()
 		for deviceID, deviceName in nvdaAudioDevices:
 			for device in devices:
 				time.sleep(0.05)
@@ -903,6 +912,11 @@ class AudioOutputDevicesManager(object):
 			self.setRecoveryDefaultVolumes()
 			_addonConfigManager.shouldSetRecoveryDefaultVolumes = False
 			return
+		from ..settings.addonConfig import FCT_VolumeControl
+		from ..settings import getInstallFeatureOption
+		if not getInstallFeatureOption(FCT_VolumeControl):
+			return
+
 		from ..settings import toggleSetOnMainAndNVDAVolumeAdvancedOption
 		if toggleSetOnMainAndNVDAVolumeAdvancedOption(False):
 			device = self.getCurrentNVDADevice()
@@ -915,9 +929,9 @@ class AudioOutputDevicesManager(object):
 
 	def terminate(self):
 		log.debug("terminating audioCoreManager")
-		nvdaDevice = audioOutputDevicesManager.getCurrentNVDADevice()
-		audioSources = AudioSources(nvdaDevice)
-		audioSources.centerAudioSources()
+		# nvdaDevice = audioOutputDevicesManager.getCurrentNVDADevice()
+		# audioSources = AudioSources(nvdaDevice)
+		# audioSources.centerAudioSources()
 		self.deviceEnumerator.UnregisterEndpointNotificationCallback(audioOutputDevicesManager.callback)
 		del self.deviceEnumerator
 

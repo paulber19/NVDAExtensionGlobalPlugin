@@ -1,9 +1,9 @@
-﻿# __init__.py
+# __init__.py
 # common Part of all of my add-ons
-# Copyright 2019 Paulber19
+# Copyright 2019-2024 Paulber19
 # some parts of code comes from others add-ons:
 # add-on Updater (author Joseph Lee)
-# brailleExtender (author André-Abush )
+# brailleExtender (author Andre-Abush )
 
 import addonHandler
 import globalVars
@@ -19,6 +19,9 @@ updateChecker = None
 
 
 def autoUpdateCheck(releaseToDev):
+	from . update_check import shouldCheckForUpdate
+	if not shouldCheckForUpdate():
+		return
 	# But not when NVDA itself is updating.
 	if globalVars.appArgs.install or globalVars.appArgs.minimal:
 		return
@@ -44,7 +47,7 @@ def addonUpdateCheck(auto, releaseToDev):
 		updateChecker = None
 	from .update_check import CheckForAddonUpdate
 	wx.CallAfter(
-		CheckForAddonUpdate, addonName=None,
+		CheckForAddonUpdate,
 		updateInfosFile=None,
 		auto=auto,
 		releaseToDev=releaseToDev)

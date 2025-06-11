@@ -1,11 +1,10 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\minuteTimer\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-pon
-# Copyright (C) 2016 -2022 paulber19
+# Copyright (C) 2016 -2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
-import os
 import time
 import ui
 import gui
@@ -16,7 +15,16 @@ import threading
 from ..settings import _addonConfigManager
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isInteger, speakLater, isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import warn
+del sys.path[-1]
+del sys.modules["messages"]
+
 
 addonHandler.initTranslation()
 
@@ -77,11 +85,11 @@ class MinuteTimer(object):
 		th = Ring(self.ringCount, self.delayBetweenRings / 1000, self.ringFile)
 		th.start()
 		wx.CallAfter(
-			gui.messageBox,
+			warn,
 			self.announce,
 			# Translators: the title of a message box dialog.
 			_("End of minutetimer"),
-			wx.OK)
+		)
 
 	def getRemainingTime(self):
 		curTime = int(time.time())

@@ -22,6 +22,60 @@ Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este h
 Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
 
 
++ v14.0 (05/06/2025) +
+Compatibilidad con NVDA 2025.1.
+
+Las versiones de NVDA anteriores a 2024.1 ya no son soportadas.
+
+Nuevas características:
+- se añadió un script para mostrar el texto del portapapeles en una ventana de información. No tiene gesto de entrada asignado y se lanza con la órden "mayúscula + x" del intérprete de órdenes.
+- concerniente la información de errores de ortografía:
+ - el anunciado de errores de ortografía ahora puede ser diferente dependiendo de la situación "Mientras esté leyendo" o "Mientras se escribe".
+ - para cada situación, el complemento permite la elección entre:
+  - emitir un doble pitido,
+  - reproducir el sonido predeterminado de NVDA.
+  - el anunciado de "Errores de ortografía",
+  - el anunciado de palabra mal escrita bajo un perfil de configuración dedicado.
+ - se añadió un nuevo perfil de configuración "Anuncio de la palabra mal escrita". Es con las opciones de voz de este perfil qué se anunciará la palabra mal escrita.
+- se añadió la posibilidad de detectar errores de ortografía por el analizador de texto.
+- se añadió una opción para no decir "en blanco" al moverse por línea (configurable por perfil).
+- supresión  automática de archivos temporales con la extensión ".delete" que NVDA no puede eliminar y que causa un error en el registro de NVDA en cada inicio.
+- hasta esta versión del complemento, éste volviá a colocar automáticamente a NVDA en ambos canales a su inicio. Ahora es posible desactivar este funcionamiento por configuración.
+
+
+Cambios:
+- El cuadro de diálogo Gestión de los registros de NVDA se cambió para presentar en un  cuadro combinado, la elección, Actual o Anterior, del registro para abrir o de la ruta del registro que debe copiarse al portapapeles.
+- cuando se detiene, el complemento deja como es el estado de los canales de NVDA.
+
+
+Corección de fallos:
+- corrección del error que ocurriá durante la órden "alt+f6" del intérprete de órdenes cuando se colocaba el cursor al final del documento.
+- el último parámetro utilizado en el anillo de opciones del sintetizador ahora se guarda correctamente después de usar el intérprete de órdenes.
+- los scripts del complementos que no están en funcionamiento ya no se presentan en el diálogo "Gestos de entrada del usuario".
+- la remanencia específica para Gmail.com vuelve a funcionar correctamente.
+- la búsqueda de actualización ya no se realiza cuando la opción "Buscar automáticamente actualizaciones" esta sin marcar justo después de iniciar NVDA.
+- la categoría "Análisis de texto" ya no aparece varias veces en el diálogo de configuración de perfil actual.
+- la lista desplegable "Número máximo de caracteres para leer" de la categoría "Suplementos a NVDA" ya no aparece cuando la funcionalidad "Anuncio de la funcionalidad asociada a las órdenes de edición" no está instalada.
+
+
+Desarrolladores:
+- durante un cambio de perfil de voz, solo se recargan los nuevos parámetros de voz (sin llamar a setSynth).
+- el compilador python markdown (incorporado en el complemento) Con todas sus extensiones reemplaza el compilador markdown2 Para compilar los documentos markdown. Este se usa para versiones de NVDA antes de la 2025.1.  Para las siguientes, es el compilador incorporado en NVDA que es usado.
+- al instalar el complemento, la configuración actual ya no se guarda en la carpeta del complemento pero ahora se guarda en la carpeta de configuración del usuario. Esto permite si una instalación sale mal de conservar de todos modos la configuración actual.
+- las carpetas "utilitiesPy37" y "utilitiesPy311" han sido eliminadas.
+
+
+Puesta en conformidad con la API de NVDA:
+- Uso del método "ExecAndPump" del módulo "systemUtils".
+- se toma en cuenta el desplazamiento del parámetro "outpuDevice" de la sección "speech" a la sección "audio" de la configuración de NVDA.
+- se toma en cuenta la memorización del dispositivo de salida de audio por su identificador en lugar de su nombre.
+- se toma en cuenta el cambio de tipo de las claves de configuración "speakTypedCharacters" y "speakTypedWords".
+- se toma en cuenta la eliminación de la función "_getOuputDevices" del módulo "nvwave".
+- se toma en cuenta la obsolescencia de gui.messageBox y gui.message.messageBox, reemplazado por MessageDialog:
+ -  MessageDialog ahora se usa para todas las versiones de NVDA superiores a 2025.1.
+ - la opción "No tomar en cuenta la opción "Anunciar descripciones de objeto" al mostrar los diálogos de estilo de confirmación" está operativo en el diálogos utilizando el método showModal de la class MessageDialog.
+
+
 + v13.4 (11/10/2024) +
 Compatibilidad con NVDA 2024.2, NVDA 2024.3 y NVDA 2024.4.
 
@@ -122,7 +176,7 @@ Nuevas características:
 Compatibilidad:
 - la visualización de la lista de los iconos en la bandeja del sistema ahora está operativa en las versiones de Windows 11 posterior o iguales a la versión 22h2 build 22621.1344.
 - se toma en cuenta el posible uso de Wasapi por NVDA.
-- Las versiones de NVDA anteriores a 2022.1 ya no son compatibles.
+- Las versiones de NVDA anteriores a 2022.1 ya no son soportadas.
 
 
 Diversos:

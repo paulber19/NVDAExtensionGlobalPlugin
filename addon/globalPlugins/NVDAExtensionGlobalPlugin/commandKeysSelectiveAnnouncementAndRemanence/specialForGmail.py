@@ -1,10 +1,11 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\specialForGmail.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2019 - 2023 paulber19
+# Copyright (C) 2019 - 2024 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import keyboardHandler
+from logHandler import log
 import queueHandler
 import tones
 import wx
@@ -21,9 +22,34 @@ _winInputHookKeyDownCallback = None
 _remanenceCharacter = None
 _taskTimer = None
 _trapNextKey = False
+_shouldProcessRemanence = False
 
 
-def manageRemanenceForGmail(vkCode, scanCode, extended, injected):
+def setShouldProcessRemanence():
+	global _shouldProcessRemanence
+	try:
+		obj = api.getFocusObject()
+		ti = obj.treeInterceptor
+	except Exception:
+		ti = None
+	if (
+		obj.role == Role.EDITABLETEXT
+		or State.EDITABLE in obj.states
+		or ti is None
+		or not ti.passThrough):
+		_shouldProcessRemanence = False
+		return
+
+	dci = ti.documentConstantIdentifier
+	gmail = "https://mail.google.com/mail/"
+	if dci[: len(gmail)] != gmail:
+		_shouldProcessRemanence = False
+		return
+	_shouldProcessRemanence = True
+
+
+def manageRemanenceForGmail(vkCode, scanCode, extended):
+	log.debug("manageRemanenceForGmail:  _shouldProcessRemanence = %s" % _shouldProcessRemanence)
 	global _remanenceCharacter, _taskTimer, _trapNextKey
 	if _taskTimer:
 		_taskTimer.Stop()
@@ -58,23 +84,9 @@ def manageRemanenceForGmail(vkCode, scanCode, extended, injected):
 		queueHandler.queueFunction(
 			queueHandler.eventQueue,
 			keyboardHandler.KeyboardInputGesture.fromName(ch).send)
-
+		log.debug("sending: %s" % ch)
 		tones.beep(3000, 20)
-
-	try:
-		obj = api.getFocusObject()
-		ti = obj.treeInterceptor
-	except Exception:
-		ti = None
-	if (
-		obj.role == Role.EDITABLETEXT
-		or State.EDITABLE in obj.states
-		or ti is None
-		or not ti.passThrough):
-		return False
-	dci = ti.documentConstantIdentifier
-	gmail = "https://mail.google.com/mail/"
-	if dci[: len(gmail)] != gmail:
+	if not _shouldProcessRemanence:
 		return False
 	if _remanenceCharacter is None and ch in ["g", "h", "*"]:
 		_remanenceCharacter = ch
@@ -87,31 +99,54 @@ def manageRemanenceForGmail(vkCode, scanCode, extended, injected):
 		queueHandler.queueFunction(
 			queueHandler.eventQueue,
 			keyboardHandler.KeyboardInputGesture.fromName(ch0).send)
-		queueHandler	.queueFunction(queueHandler.eventQueue, startTrapNextKey)
+		log.debug("sending ch0: %s" % ch0)
+		queueHandler.queueFunction(queueHandler.eventQueue, startTrapNextKey)
 		queueHandler.queueFunction(
 			queueHandler.eventQueue,
 			keyboardHandler.KeyboardInputGesture.fromName(ch).send)
+		log.debug("sending after ch0: %s" % ch)
 		return True
 	return False
 
 
 def internal_keyDownEventEx(vkCode, scanCode, extended, injected):
-	if manageRemanenceForGmail(vkCode, scanCode, extended, injected):
+	if manageRemanenceForGmail(vkCode, scanCode, extended):
 		return False
 	else:
 		return _winInputHookKeyDownCallback(vkCode, scanCode, extended, injected)
 
 
+def handleRawKey(vkCode, scanCode, extended, pressed):
+	log.debug("handleRawKey: %s, pressed= %s" % (vkCode, pressed))
+	if pressed and manageRemanenceForGmail(vkCode, scanCode, extended):
+		return False
+	return True
+
+
 def initialize():
-	global _winInputHookKeyDownCallback
+	log.debug("specialForGMail initialization")
 	if not toggleRemanenceForGmailAdvancedOption(False):
 		return
-	_winInputHookKeyDownCallback = winInputHook.keyDownCallback
-	winInputHook.setCallbacks(keyDown=internal_keyDownEventEx)
+	try:
+		# for nvda version >= 2025.1
+		from inputCore import decide_handleRawKey
+		decide_handleRawKey.register(handleRawKey)
+		return
+	except ImportError:
+		global _winInputHookKeyDownCallback
+		_winInputHookKeyDownCallback = winInputHook.keyDownCallback
+		winInputHook.setCallbacks(keyDown=internal_keyDownEventEx)
 
 
 def terminate():
-	global _winInputHookKeyDownCallback
-	if _winInputHookKeyDownCallback is not None:
-		winInputHook.setCallbacks(keyDown=_winInputHookKeyDownCallback)
-		_winInputHookKeyDownCallback = None
+	log.debug("specialForGMail terminate")
+	try:
+		# for nvda version >= 2025.1
+		from inputCore import decide_handleRawKey
+		decide_handleRawKey.unregister(handleRawKey)
+		return
+	except ImportError:
+		global _winInputHookKeyDownCallback
+		if _winInputHookKeyDownCallback is not None:
+			winInputHook.setCallbacks(keyDown=_winInputHookKeyDownCallback)
+			_winInputHookKeyDownCallback = None

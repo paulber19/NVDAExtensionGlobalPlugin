@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2023 Paulber19
+# Copyright (C) 2016 - 2025 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -8,7 +8,6 @@ import addonHandler
 import globalPluginHandler
 from logHandler import log, _getDefaultLogFilePath
 from versionInfo import version_year, version_major
-import os
 import globalVars
 import api
 import ui
@@ -53,13 +52,21 @@ from .utils import (
 	delayScriptTask, stopDelayScriptTask, clearDelayScriptTask,
 	getAddonSummary
 )
-from .utils import messageBox
+from .utils import messageBoxPatches
 from .utils.informationDialog import InformationDialog
 from .utils import contextHelpEx
 from . import computerTools
 from .computerTools.volumeControlScripts import ScriptsForVolume
 from .scripts.scriptInfos import scriptsToDocInformations
 from .scripts.scriptHandlerEx import speakOnDemand
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, alert, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
 
 addonHandler.initTranslation()
 NVDAVersion = [version_year, version_major]
@@ -69,7 +76,6 @@ SCRCAT_MODULE = str(getAddonSummary())
 
 
 # Below toggle code came from Tyler Spivey's code, with enhancements by Joseph Lee.
-
 def finally_(func, final):
 	"""Calls final after func, even if it fails."""
 	@wraps(func)
@@ -126,12 +132,13 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures = {}
 	_mainScriptToGestureAndfeatureOption = {
+		# "test": (("kb:NVDA+control+shift+f11",), None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), addonConfig.FCT_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), addonConfig.FCT_FocusedApplicationInformations),
 		"ComplexSymbolHelp": (("kb:nvda+shift+f4",), addonConfig.FCT_ComplexSymbols),
 		"lastUsedComplexSymbolsList": (None, addonConfig.FCT_ComplexSymbols),
-		"report_SystrayIconsOrWindowsList": (("kb:nvda+F11",), addonConfig.FCT_SystrayIconsAndActiveWindowsList),
+		"report_SystrayIconsOrWindowsList": (("kb:nvda+f11",), addonConfig.FCT_SystrayIconsAndActiveWindowsList),
 		"reportCurrentFolder": (("kb:nvda+o",), addonConfig.FCT_CurrentFolderReport),
 		"reportPreviousSpeechHistoryRecord": (("kb:nvda+control+f8",), addonConfig.FCT_SpeechHistory),
 		"reportCurrentSpeechHistoryRecord": (("kb:nvda+control+f9",), addonConfig.FCT_SpeechHistory),
@@ -182,11 +189,20 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"reportClipboardTextEx": (("kb:nvda+c",), addonConfig.FCT_ClipboardCommandAnnouncement),
 		"addToClip": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
 		"emptyClipboard": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
+		"displayClipboardText": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
 		"temporaryAudioOutputDeviceManager": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"cancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"setTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"setOrCancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"activateAddonsActivationDialog": (None, addonConfig.FCT_VariousOutSecureMode),
+		"increaseSynthSetting": (
+			("kb(desktop): NVDA+control+upArrow", "kb(laptop):NVDA+shift+control+upArrow"), None),
+		"decreaseSynthSetting": (
+			("kb(desktop):NVDA+control+downArrow", "kb(laptop):NVDA+control+shift+downArrow"), None),
+		"nextSynthSetting": (
+			("kb(desktop):NVDA+control+rightArrow", "kb(laptop):NVDA+shift+control+rightArrow"), None),
+		"previousSynthSetting": (
+			("kb(desktop):NVDA+control+leftArrow", "kb(laptop):NVDA+shift+control+leftArrow"), None),
 	}
 
 	# a dictionnary to map shell script to gesture and fonctionality IDs
@@ -234,6 +250,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"manageVoiceProfileSelectors": ("kb:v", addonConfig.FCT_VoiceProfileSwitching),
 		"addToClip": ("kb:x", addonConfig.FCT_ClipboardCommandAnnouncement),
 		"emptyClipboard": ("kb:control+x", addonConfig.FCT_ClipboardCommandAnnouncement),
+		"displayClipboardText": ("kb:shift+x", addonConfig.FCT_ClipboardCommandAnnouncement),
 		"reportCurrentSpeechSettings": ("kb:z", None),
 		"displayCurrentSpeechSettings": ("kb:control+z", None),
 	}
@@ -263,18 +280,19 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		core.callLater(200, self.installMainAndShellScriptDocs)
 		self.switchVoiceProfileMode = "off"
 		if settings.toggleByPassNoDescriptionAdvancedOption(False):
-			messageBox.initialize()
+			messageBoxPatches.initialize()
 		if NVDAVersion < [2024, 4]:
 			from .scripts import scriptHandlerEx
 			scriptHandlerEx.initialize()
 		# start update check if not in secur mode and option is set
+		from .settings import toggleAutoUpdateGeneralOptions
+		from .updateHandler.update_check import setCheckForUpdate
+		setCheckForUpdate(toggleAutoUpdateGeneralOptions(False))
 		if not inSecureMode():
-			from .settings import toggleAutoUpdateGeneralOptions
-			if toggleAutoUpdateGeneralOptions(False):
-				from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
-				from . updateHandler import autoUpdateCheck
-				autoUpdateCheck(
-					toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
+			from .settings import toggleUpdateReleaseVersionsToDevVersionsGeneralOptions
+			from . updateHandler import autoUpdateCheck
+			autoUpdateCheck(
+				toggleUpdateReleaseVersionsToDevVersionsGeneralOptions(False))
 		from .ComplexSymbols import newSymbolsHandler
 		newSymbolsHandler.initialize()
 		config.post_configProfileSwitch .register(self.handlePostConfigProfileSwitch)
@@ -307,6 +325,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		wx.CallLater(
 			2000, numlock.reportActivatedLockState, winUser.getKeyState(
 				winUser.VK_NUMLOCK), winUser.getKeyState(winUser.VK_CAPITAL))
+
+		from .speech import speechEx
+		speechEx.initialize()
+		# after a faulty installation of an add-on,
+		# nvda cannot delete .delete files
+		self._removeFailedDeletion()
 		globalVars.NVDAExtensionGlobalPluginInitialized = True
 		log.info("Loaded %s version %s" % (_curAddon.manifest["name"], _curAddon.manifest["version"]))
 
@@ -519,6 +543,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def terminate(self):
 		log.debug("Terminating %s" % _curAddon.manifest["name"])
+		from .speech import speechEx
+		speechEx.terminate()
 		from .userInputGestures import inputGesturesEx
 		inputGesturesEx.terminate()
 		from .scripts import scriptHandlerEx
@@ -537,7 +563,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			self.toolsMenu .Remove(getattr(self, "exploreNVDAMenu"))
 		if hasattr(self, "manageUserConfigurationMenu"):
 			self.toolsMenu .Remove(getattr(self, "manageUserConfigurationMenu"))
-		messageBox.terminate()
+		messageBoxPatches.terminate()
 		computerTools.terminate()
 		config.post_configProfileSwitch .unregister(self.handlePostConfigProfileSwitch)
 		from core import postNvdaStartup
@@ -635,17 +661,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		oForeground = api.getForegroundObject()
 		maximizeWindow(oForeground.windowHandle)
 
-	def event_typedCharacter(self, obj, nextHandler, ch):
-		from .settings.nvdaConfig import _NVDAConfigManager
-		if ch.isalnum() or ch.isspace():
-			nextHandler()
-			return
-		speakCharacter = config.conf["keyboard"]["speakTypedCharacters"]
-		if _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False):
-			config.conf["keyboard"]["speakTypedCharacters"] = True
-		nextHandler()
-		config.conf["keyboard"]["speakTypedCharacters"] = speakCharacter
-
 	def event_foreground(self, obj, nextHandler):
 		if settings.toggleAutomaticWindowMaximizationOption(False):
 			if self.maximizeWindowTimer is not None:
@@ -655,6 +670,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		nextHandler()
 
 	def event_gainFocus(self, obj, nextHandler):
+		if isInstall(addonConfig.FCT_KeyRemanence):
+			from .commandKeysSelectiveAnnouncementAndRemanence import specialForGmail
+			specialForGmail.setShouldProcessRemanence()
 		if self._trapNextGainFocus:
 			self._trapNextGainFocus = False
 			return
@@ -1008,11 +1026,11 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				os.startfile(logFile)
 			except Exception:
 				wx.CallAfter(
-					gui.messageBox,
+					alert,
 					errorMsg,
 					# Translators: dialog title.
 					_("File open Error"),
-					wx.OK | wx.ICON_ERROR)
+				)
 		stopDelayScriptTask()
 		count = scriptHandler.getLastScriptRepeatCount()
 		if count == 0:
@@ -1146,48 +1164,45 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def script_shutdownComputer(self, gesture):
 		def callback():
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to confirm computer shutdown.
 				_("Are you sure you want to shutdown immediately the computer ?"),
 				# Translators: dialog title.
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+			) != ReturnCode.YES:
 				return
 			from .computerTools.shutdown_util import shutdown as shutdown
 			forceClose = True
 			timeout = 0
 			shutdown(timeout, forceClose)
-		# we must delay script execution cause messageBox
 		wx.CallAfter(callback)
 
 	def script_rebootComputer(self, gesture):
 		def callback():
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to confirm computer reboot.
 				_("Are you sure you want to reboot immediately the computer ?"),
 				# Translators: dialog title.
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+			) != ReturnCode.YES:
 				return
 			from .computerTools.shutdown_util import reboot as reboot
 			forceClose = True
 			timeout = 0
 			reboot(timeout, forceClose)
-		# we must delay script execution cause messageBox
 		wx.CallAfter(callback)
 
 	def script_hibernateComputer(self, gesture):
 		def callback():
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to confirm computer hibernation.
 				_("Are you sure you want to hibernate immediately the computer ?"),
 				# Translators: dialog title.
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+			) != ReturnCode.YES:
 				return
 			from .computerTools.shutdown_util import suspend as suspend
 			suspend(hibernate=True)
-		# we must delay script execution cause messageBox
 		wx.CallAfter(callback)
 
 	def _reportOrDisplayCurrentSpeechSettings(self, display=False):
@@ -1473,12 +1488,12 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 
 	def script_closeAllWindows(self, gesture):
 		def closeAll():
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to confirm closing all windows.
 				_("Are you sure you want to close all windows?"),
 				# Translators: dialog title.
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+			) != ReturnCode.YES:
 				return
 			from .activeWindowsListReport import getactiveWindows, closeAllWindows
 			windowsList = getactiveWindows()
@@ -1702,18 +1717,11 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				speech.speakSpelling(text, useCharacterDescriptions=repeatCount > 1)
 		else:
 			from .utils.NVDAStrings import NVDAString_ngettext
-			if NVDAVersion >= [2024, 1]:
-				msg = NVDAString_ngettext(
-					"The clipboard contains a large amount of text. It is %s character long",
-					"The clipboard contains a large amount of text. It is %s characters long",
-					textLength
-				)
-			else:
-				msg = NVDAString(
-					# Translators: If the number of characters on the clipboard is greater than about 1000, it reports this
-					# message and gives number of characters on the clipboard.
-					# Example output: The clipboard contains a large amount of text. It is 2300 characters long.
-					"The clipboard contains a large portion of text. It is %s characters long")
+			msg = NVDAString_ngettext(
+				"The clipboard contains a large amount of text. It is %s character long",
+				"The clipboard contains a large amount of text. It is %s characters long",
+				textLength
+			)
 			ui.message(msg % textLength)
 
 	script_reportClipboardTextEx.removeCommandsScript = globalCommands.commands.script_reportClipboardText
@@ -1732,32 +1740,74 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			# Translators: message to user because of error on clipboard clearing.
 			ui.message(_("Error: clipboard cannot cleared"))
 
+	def script_displayClipboardText(self, gesture):
+		from .clipboardCommandAnnouncement import clipboard
+		cm = clipboard.ClipboardManager()
+		if cm.isEmpty:
+			ui.message(_("Clipboard is empty"))
+			return
+		try:
+			text = api.getClipData()
+		except Exception:
+			text = None
+		if not text or not isinstance(text, str) or text.isspace():
+			noTextMsg = NVDAString("There is no text on the clipboard")
+			# Translators: Presented when there is no text on the clipboard, but clipboard is not empty.
+			noEmptyMsg = _("but the clipboard is not empty")
+			ui.message("%s, %s" % (noTextMsg, noEmptyMsg))
+			return
+		from .settings import _addonConfigManager
+		maxLength = _addonConfigManager.getMaximumClipboardReportedCharacters()
+		textLength = len(text)
+		if not maxLength or (maxLength and textLength < maxLength):
+			from .utils.informationDialog import InformationDialog
+			InformationDialog.run(
+				None, _("Clipboard text"), "", text, insertionPointOnLastLine=False, copyButton=False)
+		else:
+			from .utils.NVDAStrings import NVDAString_ngettext
+			msg = NVDAString_ngettext(
+				"The clipboard contains a large amount of text. It is %s character long",
+				"The clipboard contains a large amount of text. It is %s characters long",
+				textLength
+			)
+			ui.message(msg % textLength)
+
 	def script_temporaryAudioOutputDeviceManager(self, gesture):
 		from .computerTools.temporaryOutputDevice import TemporaryAudioDeviceManagerDialog
 		TemporaryAudioDeviceManagerDialog.run()
 
 	def _setTemporaryAudioOutputDevice(self):
-		from .computerTools.temporaryOutputDevice import setTemporaryAudioOutputDevice
+		from .computerTools.audioUtils import get_outputDevices
+		from .computerTools.temporaryOutputDevice import (
+			setTemporaryAudioOutputDevice, getTemporaryOutputDevice)
 		from .settings import _addonConfigManager
-		deviceNames = _addonConfigManager.getAudioDevicesForCycle()
-		if not deviceNames or len(deviceNames) == 1:
+		deviceNamesForCycle = _addonConfigManager.getAudioDevicesForCycle()
+		if not deviceNamesForCycle or (getTemporaryOutputDevice() is not None and len(deviceNamesForCycle) == 1):
 			# Translators: message to user when cycle is not possible.
 			messageWithSpeakOnDemand(_("cycle is not possible on audio output device"))
 			return
 		from synthDriverHandler import _audioOutputDevice
-		curOutputDevice = _audioOutputDevice
+		# from nvda 2025.1, current audio output device is stored by it id instead of it name
+		self.deviceIds, self.deviceNames = get_outputDevices()
+		curOutputDeviceName = _audioOutputDevice if (
+			NVDAVersion < [2025, 1]) else self.deviceNames[self.deviceIds.index(_audioOutputDevice)]
 		try:
-			selection = deviceNames.index(curOutputDevice)
+			curSelection = deviceNamesForCycle.index(curOutputDeviceName)
 		except ValueError:
-			selection = 0
-		selection = (selection + 1) % len(deviceNames)
-		audioDevice = deviceNames[selection]
+			curSelection = 0
+		selection = (curSelection + 1) % len(deviceNamesForCycle)
+		outputDeviceName = deviceNamesForCycle[selection]
+		self.deviceIds, self.deviceNames = get_outputDevices()
+		index = self.deviceNames.index(outputDeviceName)
+		outputDeviceId = self.deviceIds[index]
 		# we don't want a confirm dialog
 		from .settings import toggleConfirmAudioDeviceChangeAdvancedOption
 		option = toggleConfirmAudioDeviceChangeAdvancedOption(False)
 		if option:
 			toggleConfirmAudioDeviceChangeAdvancedOption(True)
-		executeWithSpeakOnDemand(setTemporaryAudioOutputDevice, audioDevice)
+		executeWithSpeakOnDemand(
+			setTemporaryAudioOutputDevice,
+			(outputDeviceName, outputDeviceId))
 		if option:
 			toggleConfirmAudioDeviceChangeAdvancedOption(True)
 
@@ -1800,7 +1850,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# Translators: Input help mode message for increase synth setting value command.
 		description=NVDAString("Increases the currently active setting in the synth settings ring"),
 		category=globalCommands.SCRCAT_SPEECH,
-		gestures=("kb(desktop):NVDA+control+upArrow", "kb(laptop):NVDA+shift+control+upArrow")
 	)
 	def script_increaseSynthSetting(self, gesture):
 		globalCommands.commands.script_increaseSynthSetting(gesture)
@@ -1810,7 +1859,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# Translators: Input help mode message for decrease synth setting value command.
 		description=NVDAString("Decreases the currently active setting in the synth settings ring"),
 		category=globalCommands.SCRCAT_SPEECH,
-		gestures=("kb(desktop):NVDA+control+downArrow", "kb(laptop):NVDA+control+shift+downArrow")
 	)
 	def script_decreaseSynthSetting(self, gesture):
 		globalCommands.commands.script_decreaseSynthSetting(gesture)
@@ -1820,7 +1868,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# Translators: Input help mode message for next synth setting command.
 		description=NVDAString("Moves to the next available setting in the synth settings ring"),
 		category=globalCommands.SCRCAT_SPEECH,
-		gestures=("kb(desktop):NVDA+control+rightArrow", "kb(laptop):NVDA+shift+control+rightArrow")
 	)
 	def script_nextSynthSetting(self, gesture):
 		globalCommands.commands.script_nextSynthSetting(gesture)
@@ -1830,14 +1877,29 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		# Translators: Input help mode message for previous synth setting command.
 		description=NVDAString("Moves to the previous available setting in the synth settings ring"),
 		category=globalCommands.SCRCAT_SPEECH,
-		gestures=("kb(desktop):NVDA+control+leftArrow", "kb(laptop):NVDA+shift+control+leftArrow")
 	)
 	def script_previousSynthSetting(self, gesture):
 		globalCommands.commands.script_previousSynthSetting(gesture)
 		self.saveCurrentSettingRing()
 
+	def _removeFailedDeletion(self):
+		log.debug("removing .delete files that NVDA was unable to delete")
+		from addonHandler import DELETEDIR_SUFFIX
+		userConfigPath = globalVars.appArgs.configPath
+		path = os.path.join(userConfigPath, "addons")
+		for p in os.listdir(path):
+			file = os.path.join(path, p)
+			if not os.path.isfile(file):
+				continue
+			if not p.endswith(DELETEDIR_SUFFIX):
+				continue
+			try:
+				os.remove(file)
+				log.debug("removing file: %s" % file)
+			except Exception:
+				log.error(f"Failed to delete file {file}, try removing manually")
+
 	@scriptHandler.script(
-		gesture="kb:nvda+shift+control+f11",
 		**speakOnDemand,
 	)
 	def script_test(self, gesture):

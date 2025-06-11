@@ -56,22 +56,19 @@ def myBeep(
 	if right is None:
 		right = tonalitiesVolumeLevel
 	log.io("Beep at pitch %s, for %s ms, left volume %s, right volume %s" % (hz, length, left, right))
-	try:
-		# for nvda version >= 2023.1
-		if not tones.decide_beep.decide(
-			hz=hz,
-			length=length,
-			left=left,
-			right=right,
-			isSpeechBeepCommand=isSpeechBeepCommand
-		):
-			log.debug(
-				"Beep canceled by handler registered to decide_beep extension point"
-			)
-			return
-	except Exception:
-		# for nvda version < 2023.1
-		pass
+
+	if not tones.decide_beep.decide(
+		hz=hz,
+		length=length,
+		left=left,
+		right=right,
+		isSpeechBeepCommand=isSpeechBeepCommand
+	):
+		log.debug(
+			"Beep canceled by handler registered to decide_beep extension point"
+		)
+		return
+
 	global _player
 	_player = getPlayer(device)
 	if not _player:
@@ -84,8 +81,14 @@ def myBeep(
 	_player.feed(buf.raw)
 
 
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
+
+
 def playTonesOnDevice(outputDevice):
-	log.debug("playTonesOnDevice: %s" % outputDevice)
-	myBeep(hz=250, length=100, device=outputDevice)
+	outputDeviceName, outputDeviceId = outputDevice
+	log.debug("playTonesOnDevice: %s" % outputDeviceName)
+	device = outputDeviceName if NVDAVersion < [2025, 1] else outputDeviceId
+	myBeep(hz=250, length=100, device=device)
 	time.sleep(0.3)
-	myBeep(hz=350, length=100, device=outputDevice)
+	myBeep(hz=350, length=100, device=device)

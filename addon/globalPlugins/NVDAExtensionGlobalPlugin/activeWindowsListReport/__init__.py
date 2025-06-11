@@ -1,6 +1,6 @@
 # globalplugins\NVDAExtensionGlobalPlugin\activeWindowsListReport\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2020 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -17,14 +17,21 @@ import NVDAObjects.window
 import queueHandler
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 from .user32 import (
 	SW_SHOWMAXIMIZED, SW_SHOWMINIMIZED, getWindowPlacement, enumWindows,
 	getParent, getExtendedWindowStyle,
 	WS_EX_APPWINDOW, WS_EX_TOOLWINDOW,
 	WS_EX_NOACTIVATE, WS_EX_NOREDIRECTIONBITMAP
 )
-
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
 addonHandler.initTranslation()
 
 # Translators: this is the list of windows titles which do not be displayed.
@@ -352,13 +359,12 @@ class ActiveWindowsListDisplay(
 		maximizeWindow(hwnd)
 
 	def onDestroyAllButton(self, evt):
-		from gui import messageBox
-		if messageBox(
+		if confirm_YesNo(
 			# Translators: message to confirm closing all windows
 			_("Are you sure you want to close all windows?"),
 			# Translators: dialog title.
 			_("Warning"),
-			wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+		) != ReturnCode.YES:
 			return
 		closeAllWindows(self.windowsList)
 		self.Close()

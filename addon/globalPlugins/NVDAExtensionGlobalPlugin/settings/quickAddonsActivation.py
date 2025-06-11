@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\quickAddonsActivation.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2023 paulber19
+# Copyright (C) 2021-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -10,19 +10,23 @@ from logHandler import log
 import wx
 import ui
 import core
-import gui
 from gui import nvdaControls
 from gui import guiHelper, mainFrame
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
 from locale import strxfrm
-from addonHandler import addonVersionCheck
-import addonAPIVersion
-from versionInfo import version_year, version_major
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
 
 
 class QuickAddonsActivationDialog(
@@ -102,25 +106,11 @@ class QuickAddonsActivationDialog(
 		self.curActivatedAddons = []
 		self.curAddons = []
 		for addon in sorted(addonHandler.getAvailableAddons(), key=lambda a: strxfrm(a.manifest['summary'])):
-			if NVDAVersion < [2023, 2]:
-				# for compatibility with nvda versions higher then 2023.2
-				addon.isCompatible = addonVersionCheck.isAddonCompatible(
-					addon,
-					currentAPIVersion=addonAPIVersion.CURRENT,
-					backwardsCompatToVersion=addonAPIVersion.BACK_COMPAT_TO
-				)
-				print("addon: %s, isCompatible= %s, isBlocked= %s" % (addon.name, addon.isCompatible, addon.isBlocked))
-				if (
-					not addon.isCompatible
-					or addon.isBlocked):
-					continue
-			else:
-				# for NVDA version >= 2023.2
-				if (
-					not addon.isInstalled
-					or addon.requiresRestart):
-					continue
-			# common for all NVDA versions
+			if (
+				not addon.isInstalled
+				or addon.requiresRestart):
+				continue
+
 			if (
 				addon.isPendingDisable
 				or addon.isPendingEnable
@@ -180,12 +170,10 @@ class QuickAddonsActivationDialog(
 			# Translators: A message asking the user if they wish to restart NVDA
 			# even if there were no changes
 			restartMessage = _("There is no change. Do you want to restart NVDA anyway?")
-			result = gui.messageBox(
-				message=restartMessage,
-				caption=restartTitle,
-				style=wx.YES | wx.NO | wx.ICON_WARNING
-			)
-			if wx.YES == result:
+			if confirm_YesNo(
+				restartMessage,
+				restartTitle,
+			) == ReturnCode.YES:
 				core.restart()
 			return
 		# there is  change, so set state of all cur addons
@@ -196,10 +184,8 @@ class QuickAddonsActivationDialog(
 				continue
 			addon = self.curAddons[index]
 			shouldEnable = index in checkedItems
-			if NVDAVersion >= [2022, 1]:
-				# since version 2023.2, incompatible add-ons can be enabled
-				if shouldEnable and not addon.isCompatible:
-					addon.enableCompatibilityOverride()
+			if shouldEnable and not addon.isCompatible:
+				addon.enableCompatibilityOverride()
 			try:
 				addon.enable(shouldEnable)
 			except addonHandler.AddonError:

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\speechHistory\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2024 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -39,8 +39,11 @@ class SpeechRecorderManager(object):
 	def record(self, text):
 		if not text or not self._onMonitoring:
 			return
-		text = text.replace("\r", "")
-		text = text.replace("\n", "")
+		while len(text):
+			if text[-1] not in ["\n", "\r"]:
+				break
+			text = text[:-1]
+
 		if len(text.strip()) == 0:
 			return
 		self._speechHistory.append(text)

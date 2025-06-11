@@ -1,6 +1,6 @@
 # NVDAExtensionGlobalPlugin/winExplorer/elementListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2023 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -12,7 +12,7 @@ import time
 import api
 import wx
 import gui
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 from controlTypes.role import Role
 from controlTypes.state import State
 import core

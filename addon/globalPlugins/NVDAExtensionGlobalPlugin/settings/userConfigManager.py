@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\configsSwitchingDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2023 paulber19
+# Copyright (C) 2021-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,8 +9,6 @@ import addonHandler
 from logHandler import log
 import globalVars
 import config
-import os
-import sys
 import os.path
 import eventHandler
 import queueHandler
@@ -28,8 +26,15 @@ from io import StringIO
 from ..utils import makeAddonWindowTitle, isOpened, getHelpObj
 from ..utils.secure import inSecureMode
 from ..utils.NVDAStrings import NVDAString
-from ..utils import contextHelpEx
-
+from ..gui import contextHelpEx
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import ask, confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
 
 addonHandler.initTranslation()
 
@@ -192,40 +197,26 @@ class UserConfigurationsManager(object):
 
 # code from nvda core.py  modified to restart nvda with a config-path option
 
-import languageHandler
 from core import triggerNVDAExit, NewNVDAInstance
+import NVDAState
 
 
-def restart(disableAddons=False, debugLogging=False, configPath=None, secureMode=False):
+def restart(configPath=None):
 	"""Restarts NVDA by starting a new copy."""
 	if globalVars.appArgs.launcher:
-		globalVars.exitCode = 3
+		NVDAState._setExitCode(3)
 		if not triggerNVDAExit():
 			log.error("NVDA already in process of exiting, this indicates a logic error.")
 		return
 	import subprocess
-	paramsToRemove = ("--disable-addons", "--debug-logging", "--ease-of-access", "--secure")
-	if configPath is not None:
-		paramsToRemove += ("--config-path",)
-	paramsToRemove += languageHandler.getLanguageCliArgs()
-	for paramToRemove in paramsToRemove:
-		for p in sys.argv:
-			if p.startswith(paramToRemove):
-				sys.argv.remove(p)
 	options = []
 	if not hasattr(sys, "frozen"):
 		options.append(os.path.basename(sys.argv[0]))
-	if disableAddons:
-		options.append('--disable-addons')
-	if debugLogging:
-		options.append('--debug-logging')
 	if configPath:
 		options.append('--config-path=%s' % configPath)
-	if secureMode:
-		options.append('--secure')
 	if not triggerNVDAExit(NewNVDAInstance(
 		sys.executable,
-		subprocess.list2cmdline(options + sys.argv[1:]),
+		subprocess.list2cmdline(options),
 		globalVars.appDir
 	)):
 		log.error("NVDA already in process of exiting, this indicates a logic error.")
@@ -427,12 +418,13 @@ class UserConfigManagementDialog(
 	def onRestartNVDAButton(self, evt):
 		index = self.configurationsListBox .GetSelection()
 		path = self.configurations[index]
-		if gui.messageBox(
+
+		if confirm_YesNo(
 			# Translators: message to confirm nvda restarting with this configuration.
 			_("Do you really want to restart NVDA with this user configuration's folder: %s?") % path,
 			# Translators: dialog title.
 			_("Confirmation"),
-			wx.YES | wx.NO) != wx.YES:
+		) != ReturnCode.YES:
 			return
 
 		queueHandler.queueFunction(queueHandler.eventQueue, restart, configPath=path)
@@ -475,12 +467,12 @@ class UserConfigManagementDialog(
 		index = self.configurationsListBox .GetSelection()
 		path = self.configurations[index]
 		if path == _UserConfigurationsManager.activeUserConfigPath:
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to ask user to continue.
 				_("You are going to modify the active configuration's folder. Do you want to continue?"),
 				# Translators: message box title .
 				_("Warning"),
-				wx.YES | wx.NO | wx.CANCEL | wx.NO_DEFAULT) != wx.YES:
+			) != ReturnCode.YES:
 				return
 		dlg = ModifyFolderDialog(self, path)
 		dlg.ShowModal()
@@ -542,12 +534,12 @@ class UserConfigManagementDialog(
 			# Translators: message to user to say that active configuration path cannot be deleted.
 			ui.message(_("Active configuration path cannot be deleted"))
 			return
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: message to confirm folder deletion.
 			_("""Do you really want to delete the "%s" folder?""") % os.path.basename(path),
 			# Translators: dialog title.
 			_("Confirmation"),
-			wx.YES | wx.NO | wx.CANCEL | wx.YES_DEFAULT) != wx.YES:
+		) != ReturnCode.YES:
 			focus.SetFocus()
 			return
 		if not self.deleteUserConfig(path):
@@ -577,13 +569,13 @@ class UserConfigManagementDialog(
 			# Translators: message to user to report that the folder is emppty.
 			ui.message(_("The folder %s is already empty") % os.path.basename(userConfigPath))
 			return
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: message to user to confirm the dump of the folder.
 			_("""Do you really want to delete all the content of the "%s" folder?""") % (
 				os.path.basename(userConfigPath)),
 			# Translators: dialog title.
 			_("Confirmation"),
-			wx.YES | wx.NO | wx.CANCEL | wx.YES_DEFAULT) != wx.YES:
+		) != ReturnCode.YES:
 			return
 		api.processPendingEvents()
 		time.sleep(0.5)
@@ -806,12 +798,12 @@ class UpdateFolderDialog(
 					th.stop()
 					th = runInThread.RepeatBeep(
 						delay=2.0, beep=(200, 200))
-					if gui.messageBox(
+					if confirm_YesNo(
 						# Translators: message to report that add-on already exists and ask user to replace it.
 						_("%s add-on exists. Do you want to replace it?") % name,
 						# Translators: message box dialog title.
 						_("Warning"),
-						wx.YES | wx.NO | wx.ICON_WARNING) != wx.YES:
+					) != ReturnCode.YES:
 						th.start()
 						continue
 					th.start()
@@ -867,12 +859,12 @@ class UpdateFolderDialog(
 			return
 		toSpeechDictsPath = os.path.join(toPath, "speechDicts")
 		if os.path.exists(toSpeechDictsPath):
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message when speechDicts folder exists and will be replaced.
 				_("The configuration folder contains already speech dictionaries. Do you want to replace them?"),
-				# Translators: messageBox dialog.
+				# Translators: caption of dialog
 				_("Warning"),
-				wx.YES | wx.NO | wx.CANCEL | wx.NO_DEFAULT) != wx.YES:
+			) != ReturnCode.YES:
 				return
 			shutil.rmtree(toSpeechDictsPath)
 		# Translators: message to user to wait.
@@ -918,18 +910,18 @@ class UpdateFolderDialog(
 			break
 		replace = True
 		if exist:
-			ret = gui.messageBox(
+			ret = ask(
 				# Translators: message to report that there are already symbols pronunciations in configuration.
 				_(
 					"The configuration folder already contains symbol/punctuation pronunciations. "
 					"Do you want to replace it?"),
-				# Translators: message box dialog title.
+				# Translators: caption of dialog
 				_("Warning"),
-				wx.YES | wx.NO | wx.CANCEL | wx.NO_DEFAULT)
-			if ret == wx.CANCEL:
+			)
+			if ret == ReturnCode.CANCEL:
 				self.importSymbolPrononciationsButton.SetFocus()
 				return
-			elif ret == wx.NO:
+			elif ret == ReturnCode.NO:
 				replace = False
 
 		for name in fileNames:
@@ -952,13 +944,12 @@ class UpdateFolderDialog(
 			return
 		toGesturesIniPath = os.path.join(toPath, "gestures.ini")
 		if os.path.exists(toGesturesIniPath):
-			ret = gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to inform user that there are already input gesture changes.
 				_("The configuration folder already contains input gesture changes. Do you want to replace them?"),
 				# Translators: message box title.
 				_("Warning"),
-				wx.YES | wx.NO | wx.CANCEL | wx.NO_DEFAULT)
-			if ret != wx.YES:
+			) != ReturnCode.YES:
 				self.importGesturesButton.SetFocus()
 				return
 		shutil.copy(fromGesturesIniPath, toPath)
@@ -976,13 +967,12 @@ class UpdateFolderDialog(
 			return
 		toNVDAIniPath = os.path.join(toPath, "nvda.ini")
 		if os.path.exists(toNVDAIniPath):
-			ret = gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to inform user that there is already NVDA normal configuration .
 				_("The configuration folder already contains NVDA normal configuration. Do you want to replace it?"),
 				# Translators: message box title.
 				_("Warning"),
-				wx.YES | wx.NO | wx.CANCEL | wx.NO_DEFAULT)
-			if ret != wx.YES:
+			) != ReturnCode.YES:
 				self.importNormalConfigurationButton.SetFocus()
 				return
 		shutil.copy(fromNVDAIniPath, toPath)
@@ -992,7 +982,7 @@ class UpdateFolderDialog(
 	def onImportConfigurationButton(self, evt):
 		if os.path.exists(self.preparedFolderPath):
 			if os.listdir(self.preparedFolderPath):
-				if gui.messageBox(
+				if confirm_YesNo(
 					# Translators: message to warn datas deletion.
 					_(
 						"""The "%s" folder contains data that will be erased during copying. """
@@ -1000,7 +990,7 @@ class UpdateFolderDialog(
 						os.path.basename(self.preparedFolderPath)),
 					# Translators: message box dialog title.
 					_("Warning"),
-					wx.YES | wx.NO | wx.ICON_WARNING) != wx.YES:
+				) != ReturnCode.YES:
 					return
 		time.sleep(0.5)
 		api.processPendingEvents()
@@ -1150,12 +1140,12 @@ class AddonImportDialog(
 		toAddonsFolderPath = os.path.join(self.toFolderPath, "addons")
 		addons = os.listdir(toAddonsFolderPath)
 		if len(addons):
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to ask user if he want continue to delete current add-ons.
 				_("Do you really want to delete all add-ons of %s folder?") % toAddonsFolderPath,
 				# Translators: message box title
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL) != wx.YES:
+			) != ReturnCode.YES:
 				return
 		api.processPendingEvents()
 		time.sleep(0.5)
@@ -1325,11 +1315,11 @@ class NewUserConfigurationAddingDialog(
 				msg = _(
 					"""The "%s" folder already exists and it's not a nvda configuration folder. """
 					"""Do you want to add it anyway?""")
-			if gui.messageBox(
+			if confirm_YesNo(
 				msg % os.path.basename(self.newUserConfigFolderPath),
 				# Translators: message box dialog title.
 				_("Warning"),
-				wx.YES | wx.NO | wx.ICON_WARNING) != wx.YES:
+			) != ReturnCode.YES:
 				return
 		_UserConfigurationsManager .setLastSelectedUserConfigLocation(folderPath)
 		self.EndModal(True)
@@ -1552,12 +1542,12 @@ class ProfilesImportDialog(
 		toProfilesFolderPath = os.path.join(self.toFolderPath, "profiles")
 		profiles = os.listdir(toProfilesFolderPath)
 		if len(profiles):
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: message to ask user if he want continue to delete current profiles.
 				_("Do you really want to delete all profiles of %s folder?") % toProfilesFolderPath,
 				# Translators: message box title
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL) != wx.YES:
+			) != ReturnCode.YES:
 				return
 		api.processPendingEvents()
 		time.sleep(0.5)
@@ -1594,12 +1584,12 @@ class ProfilesImportDialog(
 			name = os.path.basename(path)
 			to = os.path.join(self.toFolderPath, "profiles", name)
 			if os.path.exists(to):
-				if gui.messageBox(
+				if confirm_YesNo(
 					# Translators: message to report that profile already exists and ask user to replace it.
 					_("%s profile exists. Do you want to replace it?") % name.split(".")[0],
 					# Translators: message box dialog title.
 					_("Warning"),
-					wx.YES | wx.NO | wx.ICON_WARNING) != wx.YES:
+				) != ReturnCode.YES:
 					continue
 			if not os.path.exists(toProfilesPath):
 				try:

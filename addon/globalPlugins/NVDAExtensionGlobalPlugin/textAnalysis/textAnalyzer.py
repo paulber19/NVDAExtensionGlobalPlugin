@@ -1,15 +1,13 @@
 # globalPlugins/NVDAextensionGlobalPlugin\textAnalysis\textAnalyzer.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright 2021-2022 paulber19
+# Copyright 2021-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
-import os
 import wx
 import api
-import gui
 import config
 import ui
 import speech
@@ -20,6 +18,15 @@ import nvwave
 from ..settings.nvdaConfig import _NVDAConfigManager
 from . import symbols
 from ..utils.textInfo import getStartOffset, getEndOffset
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
 
 addonHandler.initTranslation()
 
@@ -298,6 +305,8 @@ def getReportText(errorPositions):
 				tempList.add(_("space at end"))
 			elif errorType == "formatChange":
 				tempList.add(_("change in %s") % ", ".join(errorValue))
+			elif errorType == "spellingError":
+				tempList.add(NVDAString("spelling error"))
 		text = ", ".join(tempList)
 		if pos == 0:
 			textList.append(text)
@@ -339,7 +348,7 @@ def getAlertCount(errorPositions):
 
 
 def getAnalyze(textInfo, unit, reportFormatted=True):
-	log.debug("getAnalyse: %s, %s" % (unit, textInfo.text))
+	log.debug("getAnalyse: unit= %s, text=%s" % (unit, textInfo.text))
 	errorPositions = {}
 	if _NVDAConfigManager.toggleReportSymbolMismatchAnalysisOption(False):
 		checkSymbolsDiscrepancies(textInfo, errorPositions)
@@ -347,6 +356,10 @@ def getAnalyze(textInfo, unit, reportFormatted=True):
 		checkAnomalies(textInfo, unit, errorPositions)
 	if _NVDAConfigManager.toggleReportFormattingChangesOption(False):
 		checkFormatingChanges(textInfo, unit, errorPositions)
+	if _NVDAConfigManager.toggleReportSpellingErrorsOption(False):
+		findSpellingErrors(textInfo, unit, errorPositions)
+
+	log.debug("errorPositions: %s" % errorPositions)
 	alertCount = getAlertCount(errorPositions)
 	if not reportFormatted:
 		return (alertCount, errorPositions)
@@ -560,14 +573,14 @@ _maxNumberOfLinesToScan = 100
 
 def askToContinueSearching(textInfo, next):
 	textInfo.updateCaret()
-	if gui.messageBox(
+	if confirm_YesNo(
 		# Translators: message to indicate the no alert found by scanning 1000 lines
 		_(
 			"No irregularities were found on %s lines scanned."
 			" Do you want to continue the analysis?") % _maxNumberOfLinesToScan,
 		# Translators: dialog title.
 		_("Text analysis"),
-		wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING) != wx.YES:
+	) != ReturnCode.YES:
 		return
 
 	def callback(textInfo, next):
@@ -592,7 +605,6 @@ def getLineText(textInfo):
 def moveToAlert(next=True):
 	log.debug("moveToLineWithAlert: next= %s" % next)
 	focus = api.getFocusObject()
-	info = focus.makeTextInfo(textInfos.POSITION_CARET)
 	try:
 		info = focus.makeTextInfo(textInfos.POSITION_CARET)
 	except Exception:
@@ -601,11 +613,12 @@ def moveToAlert(next=True):
 	textInfo = info.copy()
 	direction = 1 if next else -1
 	i = _maxNumberOfLinesToScan
-	th = runInThread.RepeatBeep(delay=1.5, beep=(200, 200))
+	th = runInThread.RepeatBeep(delay=2.0, beep=(200, 200))
 	th.start()
 	global _newLine
 	_newLine = False
 	while i:
+		log.debug("newLine: % s" % i)
 		i -= 1
 		# check if no character on the line
 		lineText = getLineText(textInfo)
@@ -636,28 +649,46 @@ def moveToAlert(next=True):
 			ui.message("%s%s %s" % (lineNumberMsg, positionMsg, textInfo.text))
 			return
 		# not alert found, so  go to next or prior line
+		log.debug("No error on the line, go to next or prior line")
 		textInfo.collapse()
-		textInfo.expand(textInfos.UNIT_LINE)
-		oldStart = getStartOffset(textInfo)
-		textInfo.collapse()
-		result = textInfo.move(textInfos.UNIT_LINE, direction)
-		textInfo.expand(textInfos.UNIT_LINE)
-		newStart = getStartOffset(textInfo)
+		origLine = textInfo.copy()
+		origLine.expand(textInfos.UNIT_LINE)
+		log.debug("curLine: %s" % origLine.text)
+		origLine.collapse()
+		info = origLine.copy()
+		if direction == 1:
+			info.expand(textInfos.UNIT_LINE)
+			# with Word , if cursor is at the end of document, a runTime error occurs
+			try:
+				info.collapse(True)
+				info.move(textInfos.UNIT_CHARACTER, -1)
+			except RuntimeError:
+				pass
+		result = info.move(textInfos.UNIT_LINE, direction)
+		log.debug("result on moving: %s" % result)
+		newLine = info.copy()
+		newLine.expand(textInfos.UNIT_LINE)
+		log.debug("newLine: %s" % newLine.text)
 		log.debug("after move to line:result= %s, direction= %s,  newStart= %s, oldStart= %s" % (
-			result, direction, newStart, oldStart))
+			result, direction, getStartOffset(newLine), getStartOffset(origLine)))
 		# with word, move don't return 0. So checks start of textinfo.
-		if result == 0 or oldStart == newStart:
+		lineHasChanged = (newLine.start > origLine.start) if direction == 1 else (newLine.start < origLine.start)
+		if result == 0 or not lineHasChanged:
 			# on first or last line of document, so stop search
+			log.debug("end of search, no more line")
 			break
 		#  we are on new line
+		log.debug("we are on new line")
+		textInfo = info.copy()
 		textInfo.collapse()
 		curPos = getStartOffset(textInfo)
-		textInfo.expand(textInfos.UNIT_LINE)
-		lineStart = getStartOffset(textInfo)
-		lineEnd = getEndOffset(textInfo)
+		info = textInfo.copy()
+		info.expand(textInfos.UNIT_LINE)
+		lineStart = getStartOffset(info)
+		lineEnd = getEndOffset(info)
 		log.debug("On new line: curPos: %s, start: %s, end: %s" % (curPos, lineStart, lineEnd))
-		lineText = textInfo.text.replace("\n", "")
-		lineText = lineText.replace("\r", "")
+		lineText = info.text.replace("\n", "")
+		lineText = info.text.replace("\r", "")
 		if len(lineText) != 0 and not next:
 			# move to last character of line
 			offset = len(lineText) - 1
@@ -678,9 +709,13 @@ def moveToAlert(next=True):
 
 
 def findAlertOnTheLine(info, next=True):
+	log.debug("findAlertOnTheLine: direction= %s, %s" % (next, info.text))
 	textInfo = info.copy()
 	from ..utils.textInfo import getRealPosition
 	curPosition = getRealPosition(info)
+	if curPosition is None:
+		# end of document
+		return None
 	lineText = getLineText(textInfo)
 	log.debug("findAlertOnTheLine: next= %s, curPosition= %s" % (next, curPosition))
 	global _newLine
@@ -730,3 +765,25 @@ def findAlertOnTheLine(info, next=True):
 			return (offset, alertMessages[position])
 	log.debug("no alert")
 	return None
+
+
+def findSpellingErrors(info, unit, errorPositions):
+	log.debug("findSpellingErrorOnTheLine")
+	textList = []
+	textInfo = info.copy()
+	formatConfig = config.conf["documentFormatting"].copy()
+	formatConfig["reportSpellingErrors"] = True
+	fields = textInfo.getTextWithFields(formatConfig=formatConfig)
+	for command in fields:
+		if isinstance(command, str):
+			textList.append(command)
+			continue
+		if not isinstance(command, textInfos.FieldCommand):
+			continue
+		field = command.field
+		if "invalid-spelling" in field and field["invalid-spelling"]:
+			text = "".join(textList)
+			position = len(text) + 1
+			if position not in errorPositions:
+				errorPositions[position] = []
+			errorPositions[position].append(("spellingError", None))

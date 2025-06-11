@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\ComplexSymbols\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2021 paulber19
+# Copyright (C) 2018 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -19,7 +19,16 @@ from . import symbols
 from api import copyToClip
 from ..utils.NVDAStrings import NVDAString
 from ..utils import speakLater, isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode, alert
+del sys.path[-1]
+del sys.modules["messages"]
+
 
 addonHandler.initTranslation()
 
@@ -244,12 +253,12 @@ class complexSymbolsDialog(
 			return
 		symbolsManager = symbols.SymbolsManager()
 		if not symbolsManager.isReady():
-			gui.messageBox(
+			alert(
 				# Translators: the label of a message box dialog.
 				_("Error: no basic symbols installed"),
 				# Translators: the title of a message box dialog.
 				_("Warning"),
-				wx.OK | wx.ICON_WARNING)
+			)
 			return
 		gui.mainFrame.prePopup()
 		d = cls(gui.mainFrame, symbolsManager)
@@ -450,17 +459,18 @@ class ManageSymbolsDialog(
 			if symbol in symbolList:
 				description = descriptionList[symbolList.index(symbol)]
 				if cat == categoryName:
-					if gui.messageBox(
+
+					if confirm_YesNo(
 						# Translators: the label of a message box dialog.
 						_(
 							"""The symbol is already in this category """
 							"""under "%s" description. Do you want to replace it?""") % description,
 						# Translators: the title of a message box dialog.
 						_("Confirmation"),
-						wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+					) != ReturnCode.YES:
 						return False
 				else:
-					if gui.messageBox(
+					if confirm_YesNo(
 						# Translators: the label of a message box dialog.
 						_(
 							"""The symbol is allready in "{oldCat}" category. """
@@ -468,7 +478,7 @@ class ManageSymbolsDialog(
 								oldCat=cat, newCat=categoryName),
 						# Translators: the title of a message box dialog.
 						_("Confirmation"),
-						wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+					) != ReturnCode.YES:
 						return False
 		return True
 
@@ -531,12 +541,12 @@ class ManageSymbolsDialog(
 				_("You cannot delete this basic category."))
 			return
 		index = self.categoryNamesList.index(categoryName)
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: the label of a message box dialog.
 			_("Do you really want to delete this category and all its symbols?"),
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
-			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+		) != ReturnCode.YES:
 			return
 
 		if index == len(self.categoryNamesList) - 1:
@@ -714,12 +724,12 @@ class LastUsedComplexSymbolsDialog(
 		self.Close()
 
 	def onCleanButton(self, event):
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: the label of a message box dialog.
 			_("Do you really want to delete all symbols of the list?"),
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
-			wx.YES | wx.NO) == wx.YES:
+		) == ReturnCode.YES:
 			from ..settings.nvdaConfig import _NVDAConfigManager
 			_NVDAConfigManager.cleanLastUsedSymbolsList()
 		self.Close()

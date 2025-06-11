@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\settings\nvdaConfig.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2024 paulber19
+# Copyright (C) 2021-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -37,6 +37,7 @@ ID_ActivateNumlock = "ActivateNumlOck"
 ID_SpeakAlphaNumChars = "SpeakAlphaNumChars"
 ID_BlockInsertKey = "BlockinsertKey"
 ID_BlockCapslockKey = "BlockCapslockKey"
+ID_SayBlank = "SayBlank"
 
 # activateNumlock values
 ANL_NoChange = 0
@@ -53,6 +54,7 @@ ID_ReportBy = "ReportBy"
 ID_ReportSymbolMismatchAnalysis = "ReportSymbolMismatchAnalysis"
 ID_ReportAnomalies = "ReportAnomalies"
 ID_ReportFormattingChanges = "ReportFormattingChanges"
+ID_ReportSpellingErrors = "ReportSpellingErrors"
 # sections in TextAnalyzer section
 SCT_Symbols = "Symbols"
 SCT_Anomalies = "Anomalies"
@@ -138,6 +140,7 @@ _textAnalyzerConfspec = {
 	ID_ReportSymbolMismatchAnalysis: "boolean(default=True)",
 	ID_ReportAnomalies: "boolean(default=True)",
 	ID_ReportFormattingChanges: "boolean(default=False)",
+	ID_ReportSpellingErrors: "boolean(default=True)",
 	SCT_Anomalies: _anomaliesConfspec,
 	SCT_SymbolsAndSpace: _symbolsAndSpaceConfspec,
 	SCT_Formatting: _formattingConfspec,
@@ -155,6 +158,7 @@ _optionsConfspec = {
 	ID_SpeakAlphaNumChars: "boolean(default=False)",
 	ID_BlockInsertKey: "boolean(default=False)",
 	ID_BlockCapslockKey: "boolean(default=False)",
+	ID_SayBlank: "boolean(default=True)",
 }
 
 SCT_SynthSettingsRing = "SynthSettingsRing"
@@ -506,6 +510,9 @@ class NVDAConfigurationManager(object):
 	def toggleReportFormattingChangesOption(self, toggle=True):
 		return self.toggleTextAnalyzerOption(ID_ReportFormattingChanges, toggle)
 
+	def toggleReportSpellingErrorsOption(self, toggle=True):
+		return self.toggleTextAnalyzerOption(ID_ReportSpellingErrors, toggle)
+
 	def getAnomaliesOptions(self):
 		conf = config.conf[self.addonName][SCT_TextAnalyzer]
 		return conf[SCT_Anomalies].copy()
@@ -741,6 +748,9 @@ class NVDAConfigurationManager(object):
 
 	def toggleBlockCapslockKeyOption(self, toggle=True):
 		return self.toggleOption(ID_BlockCapslockKey, toggle)
+
+	def toggleSayBlankOption(self, toggle=True):
+		return self.toggleOption(ID_SayBlank, toggle)
 
 
 # singleton for addon configuration manager

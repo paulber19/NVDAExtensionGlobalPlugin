@@ -13,7 +13,7 @@ import config
 import ui
 import speech
 
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 addonHandler.initTranslation()
 
 

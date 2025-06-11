@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\addToClip.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2023 Paulber19
+# Copyright (C) 2021-2025 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -15,9 +15,16 @@ from controlTypes.role import Role
 import ui
 import browseMode
 import core
-import wx
-import gui
 from ..settings.nvdaConfig import _NVDAConfigManager
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
 
 addonHandler.initTranslation()
 
@@ -92,13 +99,13 @@ def confirmAdd():
 	text = getTextToAdd()
 	if not text:
 		return
-	if gui.messageBox(
+
+	if confirm_YesNo(
 		# Translators: Label of a dialog.
 		_("Do you want realy add the selected text to the clipboard?"),
 		# Translators: Title of a dialog.
 		_("Adding text to clipboard"),
-		wx.YES | wx.NO | wx.CANCEL
-	) == wx.YES:
+	) == ReturnCode.YES:
 		if api.copyToClip(text):
 			# Translators: message presented when the text has been added to the clipboard.
 			core.callLater(200, ui.message, _("Added"))

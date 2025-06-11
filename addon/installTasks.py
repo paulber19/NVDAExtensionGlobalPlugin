@@ -1,15 +1,30 @@
 # -*- coding: UTF-8 -*-
 # installTasks.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 Paulber19
+# Copyright (C) 2016 - 2025 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 from logHandler import log
+import os
+
+PREVIOUSCONFIGURATIONFILE_SUFFIX = ".prev"
+DELETECONFIGURATIONFILE_SUFFIX = ".delete"
 
 
 _addonName = "NVDAExtensionGlobalPlugin"
 curConfigFileName = "%sAddon.ini" % _addonName
+
+
+def renameFile(file, dest):
+	log.debug("renaming file:  %s to %s" % (file, dest))
+	try:
+		if os.path.exists(dest):
+			os.remove(dest)
+		os.rename(file, dest)
+		log.debug("current configuration file: %s renamed to : %s" % (file, dest))
+	except Exception:
+		log.error("current configuration file: %s  cannot be renamed to: %s" % (file, dest))
 
 
 def saveCurAddonConfigurationProfiles(addonName):
@@ -59,13 +74,37 @@ def deleteAddonProfilesConfig(addonName):
 		config.conf.save()
 
 
+def keepPreviousSettingsConfirmation(addonSummary):
+	import os
+	import sys
+	curPath = os.path.dirname(__file__)
+	sharedPath = os.path.join(curPath, "shared")
+	sys.path.append(curPath)
+	sys.path.append(sharedPath)
+	from messages import confirm_YesNo, ReturnCode
+	del sys.path[-1]
+	del sys.path[-1]
+	del sys.modules["messages"]
+
+	if confirm_YesNo(
+		# Translators: the label of a message box dialog.
+		_("Do you want to keep current add-on configuration settings ?"),
+		# Translators: the title of a message box dialog.
+		_("%s - installation") % addonSummary,
+	) == ReturnCode.YES or confirm_YesNo(
+		# Translators: the label of a message box dialog.
+		_("Are you sure you don't want to keep the current add-on configuration settings?"),
+		# Translators: the title of a message box dialog.
+		_("%s - installation") % addonSummary,
+	) != ReturnCode.YES:
+		return True
+	return False
+
+
 def onInstall():
 	import addonHandler
 	addonHandler.initTranslation()
-	import gui
-	import wx
 	import os
-	import shutil
 	import globalVars
 	import sys
 	curPath = os.path.dirname(__file__)
@@ -77,35 +116,23 @@ def onInstall():
 	addonName = addon.manifest["name"]
 	addonSummary = addon.manifest["summary"]
 	checkWindowListAddonInstalled()
-
 	# save old configuration if user wants it
 	userConfigPath = globalVars.appArgs.configPath
 	addonConfigFile = os.path.join(userConfigPath, curConfigFileName)
 	if os.path.exists(addonConfigFile):
-		# existing previous addon config
+		# existing current addon config
 		extraAppArgs = globalVars.appArgsExtra if hasattr(globalVars, "appArgsExtra") else globalVars.unknownAppArgs
+		# this configuration is automatically preserved during an automatic update
 		keep = True if "addon-auto-update" in extraAppArgs else False
-		if keep or gui.messageBox(
-			# Translators: the label of a message box dialog.
-			_("Do you want to keep previous add-on configuration settings?"),
-			# Translators: the title of a message box dialog.
-			_("%s - installation") % addonSummary,
-			wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES or gui.messageBox(
-				# Translators: the label of a message box dialog.
-				_("Are you sure you don't want to keep the current add-on configuration settings?"),
-				# Translators: the title of a message box dialog.
-				_("%s - installation") % addonSummary,
-				wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
-			dest = os.path.join(curPath, curConfigFileName)
-			try:
-				shutil.copy(addonConfigFile, dest)
-				saveCurAddonConfigurationProfiles(addonName)
-			except:  # noqa:E722
-				log.error("Addon configuration cannot be saved: %s" % addonConfigFile)
-
-		os.remove(addonConfigFile)
-		if os.path.exists(addonConfigFile):
-			log.error("Error on deletion of addon settings file: %s" % addonConfigFile)  # noqa:E501
+		if keep or keepPreviousSettingsConfirmation(addonSummary):
+			dest = addonConfigFile + PREVIOUSCONFIGURATIONFILE_SUFFIX
+			renameFile(addonConfigFile, dest)
+			saveCurAddonConfigurationProfiles(addonName)
+		else:
+			log.debug("user don't want to keep configuration")
+			# add-on configuration should not be kept
+			dest = addonConfigFile + DELETECONFIGURATIONFILE_SUFFIX
+			renameFile(addonConfigFile, dest)
 	# in all cases, clean up all add-on configuration
 	deleteAddonProfilesConfig(addonName)
 

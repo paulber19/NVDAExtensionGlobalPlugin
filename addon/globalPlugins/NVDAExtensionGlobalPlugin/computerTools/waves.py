@@ -10,18 +10,23 @@ import os
 import globalVars
 import sys
 sysPath = list(sys.path)
+pydubModulePath = None
 if "pydub" in sys.modules:
 	log.warning("Potential incompatibility: pydub module used and loaded probably by other add-on")
-	del sys.modules["pycaw"]
+	pydubModulePath = sys.modules["pydub"]
+	del sys.modules["pydub"]
 sys.path = [sys.path[0]]
 from ..utils.py3Compatibility import getCommonUtilitiesPath
 commonUtilitiesPath = getCommonUtilitiesPath()
 pydubPath = os.path.join(commonUtilitiesPath, "pydubEx")
 sys.path.append(commonUtilitiesPath)
 sys.path.append(pydubPath)
-import pydubEx as pydub
+from pydubEx import AudioSegment
 # restore sys.path
 sys.path = sysPath
+del sys.modules["pydubEx"]
+if pydubModulePath is not None:
+	sys.modules["pydub"] = pydubModulePath
 
 
 # NVDA application path
@@ -88,7 +93,7 @@ def isAddonSoundFile(fileName):
 
 def applyGain(gain, source, target=None):
 	try:
-		song = pydub.AudioSegment.from_wav(source)
+		song = AudioSegment.from_wav(source)
 		mod = song + gain
 		if target:
 			mod.export(target, format="wav")

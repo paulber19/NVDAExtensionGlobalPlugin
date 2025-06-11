@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\browseModeEx\elementsListDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -16,7 +16,7 @@ import speech
 import itertools
 from ..utils.NVDAStrings import NVDAString
 from ..utils import runInThread
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 
 addonHandler.initTranslation()
 

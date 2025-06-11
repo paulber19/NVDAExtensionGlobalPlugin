@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\audioManagerDialog.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2021-2024 paulber19
+# Copyright (C) 2021-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -19,9 +19,9 @@ import wx
 from gui.guiHelper import BoxSizerHelper
 from gui import guiHelper, mainFrame
 from . import waves
-from .utils import isWasapiUsed
+from .audioUtils import isWasapiUsed
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
 from .audioCore import isNVDA
 from . import audioCore
@@ -269,13 +269,11 @@ class NVDAAndAudioApplicationsManagerDialog(
 			self.refreshApplicationsListTimer .Stop()
 			self.refreshApplicationsListTimer = None
 		if hasattr(self, "backToForeground") and self.backToForeground:
-			print("onFocusApplicationList: backToForeground = True")
 			delay = 5000
 			wx.CallLater(50, ui.message, _("Please wait, refreshing list"))
 			speakEnd = True
 			self.backToForeground = False
 		else:
-			print("onFocusApplicationList: no backToForeground")
 			delay = 50
 			speakEnd = False
 		self.refreshApplicationsListTimer = wx.CallLater(delay, self.focusApplicationsList, speakEnd)
@@ -426,7 +424,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 			from .beep import playTonesOnDevice
 			self.playSoundTimer = wx.CallLater(
 				3500,
-				playTonesOnDevice, device.nvdaDeviceName
+				playTonesOnDevice, (device.nvdaDeviceName, device.id)
 			)
 
 	def onSelectApplication(self, evt):

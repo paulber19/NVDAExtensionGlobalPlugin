@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\switchVoiceProfile\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2024 paulber19
+# Copyright (C) 2018 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -16,16 +16,35 @@ import queueHandler
 import core
 import characterProcessing
 from synthDriverHandler import getSynth, setSynth, getSynthList
+from ..computerTools.audioUtils import get_outputDevices
 from ..utils.informationDialog import InformationDialog
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 from versionInfo import version_year, version_major
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, warn, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
+
 NVDAVersion = [version_year, version_major]
 
 addonHandler.initTranslation()
 
 # constants
+if NVDAVersion >= [2025, 1]:
+	# since NVDA 2025.1,
+	# outputDevice is stored in "audio" section of NVDA configuration instead of "speech" section.
+	# also this outputDevice is  stored by its id instead of its name
+	# so all switch voice profile are no compatible with previous configuration
+	CFG_SWITCHVOICEPROFILES = 3
+else:
+	CFG_SWITCHVOICEPROFILES = 2
 
 # keys and sections of "voiceProfileSwitching" section
 SCT_VoiceProfileSwitching = "voiceProfileSwitching"
@@ -42,8 +61,13 @@ KEY_SynthDisplayInfos = "synthDisplayInfos"
 
 # NVDA sections and keys confSpec definition
 SCT_Speech = "speech"
+SCT_Audio = "audio"
 SCT_Many = "__many__"
+# key to store output device in "speech" or "audio" nvda configuration section
+# if stored in speech (until nvda version 2025.1), it's the name of output device.
+# if stored in "audio" section, it's the id of output device.
 KEY_OutputDevice = "outputDevice"
+
 # switching profile configuration version
 
 _MAX_SELECTORS = 8
@@ -54,9 +78,11 @@ GB_SwitchToTimer = None
 
 
 class SwitchVoiceProfilesManager(object):
-	_configVersion = 2
+	_configVersion = CFG_SWITCHVOICEPROFILES
+
 	# minimum configuration version for compatibility
-	_minConfigVersion = 2
+	_minConfigVersion = CFG_SWITCHVOICEPROFILES
+
 	oldNVDASpeechSettings = [
 		"autoLanguageSwitching",
 		"autoDialectSwitching",
@@ -99,7 +125,7 @@ class SwitchVoiceProfilesManager(object):
 		# check if this add-on version is not compatible with previous voice profile selectors configuration
 		# If so we must delete all previous associations
 		if self.deleteAllProfiles():
-			gui.messageBox(
+			warn(
 				# Translators: the label of a message box dialog.
 				_(
 					"""The current configuration of the "Voice profile switching"feature is not compatible """
@@ -107,19 +133,14 @@ class SwitchVoiceProfilesManager(object):
 					"""Sorry for the inconvenience."""),
 				# Translators: the title of a message box dialog.
 				makeAddonWindowTitle(_("Warning")),
-				wx.OK | wx.ICON_WARNING)
+			)
 
 	def deleteAllProfiles(self):
 		conf = config.conf
 		save = False
 		deleteAll = False
 		if self.addonName in conf.profiles[0]:
-			if OLD_SCT_VoiceProfileSwitching in conf.profiles[0][self.addonName]:
-				log.warning("%s section deleted from profile: %s" % (
-					OLD_SCT_VoiceProfileSwitching, "normal configuration"))
-				del conf.profiles[0][self.addonName][OLD_SCT_VoiceProfileSwitching]
-				save = True
-			elif SCT_VoiceProfileSwitching in conf.profiles[0][self.addonName]:
+			if SCT_VoiceProfileSwitching in conf.profiles[0][self.addonName]:
 				configVersion = conf.profiles[0][self.addonName][SCT_VoiceProfileSwitching].get(KEY_ConfigVersion)
 				if configVersion is None\
 					or int(configVersion) < int(self._minConfigVersion)\
@@ -136,13 +157,7 @@ class SwitchVoiceProfilesManager(object):
 		for name in profileNames:
 			profile = config.conf._getProfile(name)
 			if profile.get(self.addonName):
-				if OLD_SCT_VoiceProfileSwitching in profile[self.addonName]:
-					log.warning("%s section deleted from profile: %s" % (
-						OLD_SCT_VoiceProfileSwitching, profile.name))
-					del profile[self.addonName][OLD_SCT_VoiceProfileSwitching]
-					config.conf._dirtyProfiles.add(name)
-					save = True
-				elif SCT_VoiceProfileSwitching in profile[self.addonName] and deleteAll:
+				if SCT_VoiceProfileSwitching in profile[self.addonName] and deleteAll:
 					log.warning("%s section deleted from profile: %s" % (
 						SCT_VoiceProfileSwitching, profile.name))
 					del profile[self.addonName][SCT_VoiceProfileSwitching]
@@ -204,14 +219,29 @@ class SwitchVoiceProfilesManager(object):
 		conf[KEY_LastSelector] = selector
 
 	def switchToVoiceProfile(self, selector, silent=False):
+		def canSwitchToOutputDevice(outputDevice):
+			deviceIds, deviceNames = get_outputDevices()
+			return (outputDevice in deviceIds) or (outputDevice in deviceNames)
+
 		def finish(synthName, synthspeechConfig, msg):
-			log.debug("switch to synth: %s" %synthName)
 			# stop previous synth because oneCore voice switch don't work without it
-			config.conf[SCT_Speech] = synthSpeechConfig.copy()
 			curSynth = getSynth()
-			if curSynth.name != synthName:
+			newOutputDevice = synthSpeechConfig["outputDevice"]
+			# for nvda version >= 2025.1, outputDevice is now in audio section
+			if "outputDevice" in config.conf[SCT_Audio]:
+				curOutputDevice = config.conf[SCT_Audio]["outputDevice"]
+				config.conf[SCT_Audio]["outputDevice"] = newOutputDevice
+				del synthSpeechConfig["outputDevice"]
+			else:
+				curOutputDevice = config.conf[SCT_Speech]["outputDevice"]
+			config.conf[SCT_Speech] = synthSpeechConfig.copy()
+			if curSynth.name != synthName or curOutputDevice != newOutputDevice:
 				setSynth(synthName)
 			config.conf[SCT_Speech][synthName] = synthSpeechConfig[synthName].copy()
+			# for nvda version >= 2025.1, outputDevice is now in audio section
+			if "outputDevice" in config.conf[SCT_Audio]:
+				config.conf[SCT_Audio]["outputDevice"] = newOutputDevice
+
 			getSynth().loadSettings()
 			# Reinitialize the tones module to update the audio device
 			import tones
@@ -221,26 +251,34 @@ class SwitchVoiceProfilesManager(object):
 				ui.message(msg)
 
 		newProfile = self.getVoiceProfile(selector)
+		# nvda 2024.4: include CLDR check box is replaced by symbolDictionnaries list
+		# so we exclude from setting to keep and restore
+		if "includeCLDR" in newProfile[SCT_Speech]:
+			del newProfile[SCT_Speech]["includeCLDR"]
+		if "symbolDictionaries" in newProfile[SCT_Speech]:
+			del newProfile[SCT_Speech]["symbolDictionaries"]
+		synthSpeechConfig = config.conf[SCT_Speech].dict()
+		synthSpeechConfig.update(newProfile[SCT_Speech])
 		synthName = None
 		for s, val in getSynthList():
 			if s == newProfile[KEY_SynthName]:
 				synthName = s
 				break
 		voiceProfileName = newProfile[KEY_VoiceProfileName]
-		if synthName is None:
-			if gui.messageBox(
+		newOutputDevice = synthSpeechConfig["outputDevice"]
+		if synthName is None or not canSwitchToOutputDevice(newOutputDevice):
+			if confirm_YesNo(
 				# Translators: the label of a message box dialog.
 				_(
-					"Impossible, the synthesizer of voice profile {voiceProfileName} associated to selector {selector} "
+					"Impossible, the synthesizer or audio output device of voice profile {voiceProfileName}"
+					" associated to selector {selector} "
 					"is not available. Do you want to free this selector?").format(
 						selector=selector, voiceProfileName=voiceProfileName),
 				# Translators: the title of a message box dialog.
 				_("Synthesizer error"),
-				wx.YES | wx.NO | wx.ICON_WARNING) == wx.YES:
+			) == ReturnCode.YES:
 				core.callLater(200, self.freeSelector, selector)
 			return
-		synthSpeechConfig = config.conf[SCT_Speech].dict()
-		synthSpeechConfig.update(newProfile[SCT_Speech].copy())
 		self.setLastSelector(selector)
 		msg = None if silent else _("Selector {selector}: {name}").format(
 			selector=selector, name=voiceProfileName)
@@ -296,36 +334,40 @@ class SwitchVoiceProfilesManager(object):
 			return
 		wx.CallAfter(self.switchToVoiceProfile, selector, silent)
 
-	def getSynthDisplayInfos(self, synth, synthConf):
+	def getSynthDisplayInfos(self, synth, synthConf, outputDeviceName):
 		conf = synthConf
 		id = "id"
 		import autoSettingsUtils.driverSetting
 		numericSynthSetting = [autoSettingsUtils.driverSetting.NumericDriverSetting, ]
 		booleanSynthSetting = [autoSettingsUtils.driverSetting.BooleanDriverSetting, ]
 
-		infos = []
+		textList = []
 		for setting in synth.supportedSettings:
 			settingID = getattr(setting, id)
 			if type(setting) in numericSynthSetting:
 				info = str(conf[settingID])
-				infos.append((setting.displayName, info))
+				textList.append((setting.displayName, info))
 			elif type(setting) in booleanSynthSetting:
 				info = _("yes") if conf[settingID] else _("no")
-				infos.append((setting.displayName, info))
+				textList.append((setting.displayName, info))
 			else:
 				if hasattr(synth, "available%ss" % settingID.capitalize()):
 					tempList = list(getattr(
 						synth, "available%ss" % settingID.capitalize()).values())
 					cur = conf[settingID]
-					# for nvda =>2019.3
 					i = [x.id for x in tempList].index(cur)
 					v = tempList[i].displayName
 					info = v
-					infos.append((setting.displayName, info))
+					textList.append((setting.displayName, info))
 		d = {}
-		for i in range(0, len(infos)):
-			item = infos[i]
-			d[str(i + 1)] = [item[0], item[1]]
+		i = 1
+		if NVDAVersion >= [2025, 1]:
+			# Translators:  label to report synthesizer output device .
+			d[str(1)] = [_("Audio output device"), outputDeviceName]
+		i += 1
+		for label, val in textList:
+			d[str(i)] = (label, val)
+			i += 1
 		return d
 
 	def getCurrentSynthDatas(self):
@@ -338,8 +380,26 @@ class SwitchVoiceProfilesManager(object):
 			if type(val) is config.AggregatedSection\
 				and key not in [SCT_Many, synth.name]:
 				del d[key]
+		# delet
 		synthDatas[SCT_Speech] = d
-		synthDatas[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name])
+		outputDeviceName = ""
+		# for nvda >= 2025.1, outputDevice is stored in "audio" section instead of "speech" section
+		# and it is stored by its id instead its name
+		if "outputDevice" in config.conf[SCT_Audio]:
+			outputDevice = config.conf[SCT_Audio]["outputDevice"]
+			synthDatas[SCT_Speech]["outputDevice"] = outputDevice
+			deviceIds, deviceNames = get_outputDevices()
+			try:
+				outputDeviceName = deviceNames[deviceIds.index(outputDevice)]
+			except ValueError:
+				pass
+		synthDatas[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name], outputDeviceName)
+		# nvda 2024.4: include CLDR check box is replaced by symbolDictionnaries list
+		# so we exclude from setting to keep and restore
+		if "includeCLDR" in synthDatas[SCT_Speech]:
+			del synthDatas[SCT_Speech]["includeCLDR"]
+		if "symbolDictionaries" in synthDatas[SCT_Speech]:
+			del synthDatas[SCT_Speech]["symbolDictionaries"]
 		return synthDatas
 
 	def updateCurrentVoiceProfilSettings(self):
@@ -384,17 +444,21 @@ class SwitchVoiceProfilesManager(object):
 
 	def freeSelector(self, selector):
 		if self.isSet(selector):
-			config.conf[self.addonName][SCT_VoiceProfileSwitching][selector] = {}
+			d = config.conf[self.addonName][SCT_VoiceProfileSwitching].dict()
+			del d[selector]
+			config.conf[self.addonName][SCT_VoiceProfileSwitching] = d
 			config.conf[self.addonName][SCT_VoiceProfileSwitching]._cache.clear()
 		# Translators: this is a message to inform the user
 			# that the selector is not associated.
 		ui.message(_("Selector %s is free") % selector)
 
 	def freeAllSelectors(self):
+		d = config.conf[self.addonName][SCT_VoiceProfileSwitching].dict()
 		for index in range(1, 8):
 			selector = str(index)
-			if self.isSet(selector):
-				config.conf[self.addonName][SCT_VoiceProfileSwitching][selector] = {}
+			if selector in d:
+				del d[selector]
+		config.conf[self.addonName][SCT_VoiceProfileSwitching] = d
 		config.conf[self.addonName][SCT_VoiceProfileSwitching]._cache.clear()
 		# Translators: this a message to inform that all slots are not associated.
 		msg = _("All selectors are freed from their vocal profile")
@@ -430,7 +494,6 @@ class SwitchVoiceProfilesManager(object):
 					"autoDialectSwitching",
 					"symbolLevel",
 					"trustVoiceLanguage",
-					"includeCLDR",
 					"delayedCharacterDescriptions"]
 			else:
 				return [
@@ -440,7 +503,6 @@ class SwitchVoiceProfilesManager(object):
 					"trustVoiceLanguage",
 					"unicodeNormalization",
 					"reportNormalizedForCharacterNavigation",
-					"includeCLDR",
 					"delayedCharacterDescriptions"]
 
 		def getNVDASpeechSettingsInfos():
@@ -450,9 +512,6 @@ class SwitchVoiceProfilesManager(object):
 					(_("Automatic dialect switching (when supported)"), boolToText),
 					(_("Punctuation/symbol level"), punctuationLevelToText),
 					(_("Trust voice's language when processing characters and symbols"), boolToText),
-					(_(
-						"Include Unicode Consortium data (including emoji) when processing characters and symbols"),
-						boolToText),
 					(_("Delayed descriptions for characters on cursor movement"), boolToText),
 				]
 			else:
@@ -463,9 +522,6 @@ class SwitchVoiceProfilesManager(object):
 					(_("Trust voice's language when processing characters and symbols"), boolToText),
 					(_("Unicode normalization"), featureFlagToText),
 					(_("Report 'Normalized' when navigating by character"), boolToText),
-					(_(
-						"Include Unicode Consortium data (including emoji) when processing characters and symbols"),
-						boolToText),
 					(_("Delayed descriptions for characters on cursor movement"), boolToText),
 				]
 
@@ -484,7 +540,7 @@ class SwitchVoiceProfilesManager(object):
 			return characterProcessing.SPEECH_SYMBOL_LEVEL_LABELS[int(level)]
 
 		def featureFlagToText(value):
-			return NVDAString(value.value.displayString)
+			return value.calculated().displayString
 
 		NVDASpeechManySettingsInfos = [
 			(_("Capital pitch change percentage"), None),
@@ -501,7 +557,7 @@ class SwitchVoiceProfilesManager(object):
 			textList.append(_("selector: %s") % selector)
 			textList.append(
 				# Translators: text to report voice profile name.
-				_("Voice profile name: %s") % selectorConfig[KEY_VoiceProfileName])
+				"%s = %s" % (_("Voice profile name"), selectorConfig[KEY_VoiceProfileName]))
 			updatedConf = self.getUpdatedConfig()
 			if selector not in updatedConf:
 				textList.append(
@@ -510,15 +566,17 @@ class SwitchVoiceProfilesManager(object):
 		synthName = selectorConfig[KEY_SynthName]
 		textList.append(
 			# Translators: text to report synthesizer name.
-			_("Synthesizer: %s") % synthName)
+			"%s = %s" % (_("Synthesizer"), synthName))
 		synthSettings = selectorConfig[SCT_Speech][synthName].copy()
-		textList.append(
-			# Translators:  label to report synthesizer output device .
-			_("Output device: %s") % selectorConfig[SCT_Speech][KEY_OutputDevice])
 		synthDisplayInfos = selectorConfig[KEY_SynthDisplayInfos]
+		if NVDAVersion < [2025, 1]:
+			outputDeviceName = selectorConfig[SCT_Speech][KEY_OutputDevice]
+			textList.append(
+				# Translators:  label to report synthesizer output device .
+				"%s = %s" % (_("Output device"), outputDeviceName))
 		for i in synthDisplayInfos:
-			item = synthDisplayInfos[i]
-			textList.append("%s: %s" % (item[0], item[1]))
+			label, val = synthDisplayInfos[i]
+			textList.append("%s = %s" % (label, val))
 		for setting in get_NVDASpeechSettings():
 			val = selectorConfig[SCT_Speech].get(setting, None)
 			if val is None:
@@ -527,7 +585,7 @@ class SwitchVoiceProfilesManager(object):
 			(name, f) = getNVDASpeechSettingsInfos()[index]
 			if f is not None:
 				res = f(val)
-			textList.append("%s: %s" % (name, res))
+			textList.append("%s = %s" % (name, res))
 		for setting in SwitchVoiceProfilesManager.NVDASpeechManySettings:
 			val = selectorConfig[SCT_Speech][SCT_Many][setting]
 			if setting in synthSettings:
@@ -538,7 +596,7 @@ class SwitchVoiceProfilesManager(object):
 			(name, f) = NVDASpeechManySettingsInfos[index]
 			if f is not None:
 				val = f(val)
-			textList.append("%s: %s" % (name, val))
+			textList.append("%s = %s" % (name, val))
 		return textList
 
 
@@ -742,7 +800,7 @@ class SelectorsManagementDialog (
 		if self.switchManager.isSet(selector, not self.switchManager.getUseNormalConfigurationSelectorsFlag()):
 			conf = self.switchManager.getConfig()
 			voiceProfileName = conf[selector][KEY_VoiceProfileName]
-			if gui.messageBox(
+			if confirm_YesNo(
 				# Translators: the label of a message box dialog.
 				_(
 					"Selector {selector} is already set to {voiceProfileName} voice profile. "
@@ -750,7 +808,7 @@ class SelectorsManagementDialog (
 				) .format(selector=selector, voiceProfileName=voiceProfileName),
 				# Translators: the title of a message box dialog.
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+			) != ReturnCode.YES:
 				return
 		with AssociateVoiceProfileDialog(
 			self, selector) as associateVoiceProfileDialog:
@@ -783,7 +841,7 @@ class SelectorsManagementDialog (
 			return
 		conf = self.switchManager.getConfig()
 		voiceProfileName = conf[selector][KEY_VoiceProfileName]
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: the label of a message box dialog.
 			_(
 				"""Do you really want to free selector {selector} """
@@ -791,28 +849,27 @@ class SelectorsManagementDialog (
 			).format(selector=selector, voiceProfileName=voiceProfileName),
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
-			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+		) != ReturnCode.YES:
 			return
 		self.switchManager.freeSelector(selector)
 		self.updateSelectorsList(selector)
 		self.updateButtons()
-		self.selectorListBox.SetFocus()
+		wx.CallLater(50, self.selectorListBox.SetFocus)
 
 	def onFreeAllButton(self, evt):
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: the label of a message box dialog.
 			_("Do you really want to free all selectors set to this configuration profile?"),
 			# Translators: the title of a message box dialog.
 			_("Confirmation"),
-			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+		) != ReturnCode.YES:
 			return
 
 		self.switchManager.freeAllSelectors()
-		index = self.selectorListBox.GetSelection()
-		selector = str(index + 1)
-		self.updateSelectorsList(selector)
+		self.switchManager.setLastSelector("1")
+		self.updateSelectorsList()
 		self.updateButtons()
-		self.selectorListBox.SetFocus()
+		wx.CallLater(50, self.selectorListBox.SetFocus)
 
 	def updateButtons(self):
 		def isSet(selector):

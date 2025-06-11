@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin/utils/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016-2024  paulber19
+# Copyright (C) 2016-2025  paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,7 +14,6 @@ import time
 from keyboardHandler import KeyboardInputGesture
 from logHandler import log
 import queueHandler
-import config
 import core
 from ..settings import toggleDialogTitleWithAddonSummaryAdvancedOption
 import speech.speech
@@ -84,17 +83,6 @@ def stopDelayScriptTask():
 def clearDelayScriptTask():
 	global GB_scriptTaskTimer
 	GB_scriptTaskTimer = None
-
-
-def setAudioOutputDevice(device):
-	global _audioOutputDevice
-	_audioOutputDevice = device
-
-
-def getAudioOutputDevice():
-	if _audioOutputDevice is None:
-		return config.conf["speech"]["outputDevice"]
-	return _audioOutputDevice
 
 
 def isMaximized(hWnd):

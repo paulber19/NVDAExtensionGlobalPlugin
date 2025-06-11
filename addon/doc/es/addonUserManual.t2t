@@ -32,9 +32,9 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Extensión de la funcionalidad del modo exploración #hdr5] para los navegadores Mozilla Firefox, Microsoft Internet Explorer , Microsoft Edge y Google Chrome:
   - Nuevas órdenes para el modo de navegación: (párrafo, división, ancla, región principal),
   - Nuevos tipos de elementos presentado como una lista en el cuadro de diálogo "Lista de Elementos" abierto por NVDA+f7: (botón de opción, párrafos, marco, casillas de verificación, ...) y anuncio  del número de elementos correspondientes al tipo seleccionado,
-  - Anunciar la dirección URL del documento,
+  - Anunciar la dirección (URL) del documento,
   - Opción para navegar en bucle para la búsqueda de un elemento siguiente o anterior,
-  - [Scripts para hacer clic en la posición actual   del navegador de objetos  #hdr23],
+  - [Scripts para hacer clic en la posición actual   del navegador de objetos,
   - Script para las tablas:
    - Anunciar la posición de la celda actual,
    - Ir a la columna / línea siguiente o anterior con la lectura de las celdas que la componen,
@@ -43,6 +43,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7] con:
   - adición  al portapapeles del texto seleccionado,
   - vaciado del portapapeles,
+  - mostrar el texto contenido en el portapapeles en una ventana de información,
   - mejora  del script básico  de NVDA "NVDA+c" que anuncia el texto en el portapapeles,
  - [Anuncio de la carpeta preseleccionada en cuadros de diálogo de estilo Abrir, Guardar, Guardar como #hdr8],
  - [Abrir el registro anterior o actual de NVDA y copiar la ruta de estos al portapapeles #hdr9],
@@ -56,7 +57,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Remanencia de las teclas (NVDA y modificadoras) y remanencia específica para el sitio gmail.com #hdr18],
  - [Apagar, reiniciar o hibernar el ordenador #hdr19],
  - [Administrar los gestos de entrada configurados por el usuario #hdr20],
- - [Control de sonido #hdr21] (solo Windows 10):
+ - [Control de sonido #hdr21]:
   - Silenciar o reestablecer el sonido  del flujo audio para la aplicación bajo el cursor,
   - Establecer  manualmente o automáticamente el sonido principal y el flujo audio de NVDA,
   - Cambiar el nivel del volumen principal o del flujo audio para la aplicación bajo el cursor,
@@ -76,7 +77,7 @@ Este complemento añade a las órdenes globales de NVDA:
  - [Eliminar el anuncio de la descripción de los objetos en las cintas de Windows #hdr100],
  - [Maximizar automáticamente las ventanas #hdr102],
  - [Anunciar sistemáticamente la puntuación al moverse por palabras #hdr103],
- - [Posibilidad de informar errores de ortografía con un doble pitido o con un anuncio de voz en vez del sonido emitido por NVDA #hdr104],
+ - [Posibilidad de informar errores de ortografía con un doble pitido, con un anuncio de voz o con un anuncio de la palabra mal escrita bajo un perfil de configuración dedicado en vez del anuncio predeterminado de NVDA #hdr104],
  - [Posibilidad de bloquear las teclas "Insertar" y "Bloqueo mayúsculas" #hdr105],
  - [Pronunciación de caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado #hdr106].
 - Las opciones avanzadas:
@@ -324,7 +325,7 @@ Por defecto, el gesto de entrada "MAIN_KEY_ICONS_List" se le asigna.
 
 No se le asigna ninguna órden  al intérprete.
 
-Una simple pulsación del gesto de entrada "MAIN_KEY_ICONS_List" lanza  el script "Mostrar la lista de iconos en la bandeja del sistema" (ver más arriba).
+Una simple pulsación del gesto de entrada lanza  el script "Mostrar la lista de iconos en la bandeja del sistema" (ver más arriba).
 
 Una doble pulsación lanza el script "Mostrar la lista de ventanas de las aplicaciones lanzadas" (ver más arriba).
 
@@ -565,7 +566,7 @@ El complemento también mueve en esta categoría los scripts básicos de NVDA qu
 - Moverse a la fila siguiente: "NVDA+control+ Flecha Abajo",
 
 
-+++ Anuncio de la dirección (URL) del documento +++[hdr5-4]
++++ Anuncio de la dirección del documento +++[hdr5-4]
 El gesto de entrada "KEY1_DOCUMENT_ADDRESS",  (en la disposición de escritorio) o "KEY2_DOCUMENT_ADDRESS"  (en la disposición de portátil) tecleado en los navegadores Mozilla FireFox, Microsoft Internet Explorer, Microsoft  Edge o Gooble Chrome, anuncia la dirección (URL) del documento. Con una doble pulsación, esta dirección se copia al portapapeles.
 
 +++ Navegar en bucle +++[hdr5-5]
@@ -586,6 +587,22 @@ Por defecto, esta opción no está marcada. El funcionamiento básico de NVDA se
 
 
 
+++ Scripts para hacer clic en la posición actual del navegador de objetos ++[hdr5-6]
+Estos scripts permiten hacer, con el botón derecho o izquierdo del ratón, un simple o un doble clic en la posición actual del navegador de objetos.
+
+Estos encadenan dos tipos de scripts de NVDA:
+- El script "Desplaza el puntero del ratón al navegador de objetos actual": atajo "NVDA+Dividir teclado numérico" (ordenador de escritorio) o "NVDA+mayúscula+m" (ordenador Portátil),
+- y los scripts para hacer un Clic con el botón del ratón:
+ - Simple clic izquierdo: "Dividir teclado numérico" (ordenador de escritorio) o "NVDA+ù" (ordenador Portátil y idioma NVDA en francés) o "NVDA+[" (ordenador Portátil y otro idioma)
+ - Simple clic derecho: "Multiplicar teclado numérico" (ordenador de escritorio) o "NVDA+*" (ordenador Portátil y idioma NVDA en francés) o "NVDA+]" (ordenador Portátil y otro idioma).
+
+
+Los gestos de entrada de estos scripts son:
+- "MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR": hacer un simple clic izquierdo a la posición del navegador de objetos. Una segunda pulsación hace un doble clic.
+- "MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR": hacer un simple clic derecho a la posición del navegador de objetos. Una segunda pulsación hace un doble clic.
+
+
+Estos gestos de entrada pueden ser modificados y están en la categoría "Ratón" del cuadro de diálogo "Gestos de Entrada" de NVDA.
 
 ++ Anuncio de la funcionalidad asociada a las órdenes de edición de estilo  "Copiar", "Pegar" ++[hdr7]
 Esta funcionalidad se instala de forma predeterminada.
@@ -639,6 +656,17 @@ Su función es borrar completamente el contenido del portapapeles de Windows. Te
 
 Este script se lanza mediante la órden del intérprete  "KEY_CLEAR_CLIP".
 
+
++++ Mostrar el texto contenido en el portapapeles en una ventana de información +++[hdr7-4]
+Este script está instalado sin gesto de entrada, pero siempre es posible atribuirle uno con el diálogo "Gestos de Entrada" de NVDA.
+
+Su descripción es "Mostrar el contenido del portapapeles en una ventana de información" y se almacena en la categoría "Estado del sistema".
+
+Su función es presentar el texto contenido en el portapapeles en un cuadro de diálogo. Se comporta como el script que anuncia este texto ("NVDA+c").
+
+Este script se lanza mediante la órden del intérprete "KEY_DISPLAY_CLIP".
+
+
 ++ Anuncio de la carpeta seleccionada en los cuadros de diálogo de estilo "Abrir", "Guardar", "Guardar como" ++[hdr8]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
 
@@ -672,15 +700,15 @@ La descripción de este script es: "Mostrar el diálogo para administrar los reg
 El se lanza mediante la órden "KEY_LOG_VIEW" del intérprete. No se le asigna ningún gesto de   entrada por defecto.
 
 Este script muestra el cuadro de diálogo  "Gestión de los registros de NVDA" que presenta:
-
-- Un botón para abrir el registro actual de NVDA,
-- Un botón para abrir el anterior registro de NVDA,
-- Un botón para copiar al portapapeles la ruta del registro actual de NVDA,
-- Un botón para copiar al portapapeles la ruta del registro anterior de NVDA,
-- El botón "Cerrar" para cerrar el cuadro de diálogo.
+- El cuadro combinado para seleccionar el registro de NVDA: Actual o Anterior.
+- El botón para abrir el registro seleccionado.
+- El botón para copiar al portapapeles la ruta del registro seleccionado.
+- El botón para cerrar el diálogo.
 
 
-El registro no es directamente abierto. Se copia en un archivo temporal que luego es abierto en WordPad.
+El registro no es directamente abierto. Previamente se copia en un archivo temporal con nombre "NVDALog.txt" o "oldNVDALog.txt".
+Este archivo temporal se abre en el programa asociado con la extensión .txt. Por defecto, es el Bloc de notas.
+
 
 +++ Apertura de los registros de NVDA +++[hdr9-2]
 La descripción de este script es: "Abrir el registro actual de NVDA. Pulsando dos veces: abrir el anterior registro. Pulsando tres veces: copiar la ruta del registro actual al portapapeles".
@@ -826,7 +854,7 @@ Es posible no instalar Esta funcionalidad seleccionando, en la categoría "Funci
 
 
 +++ Detalles técnicos +++
-Para lograr esta funcionalidad, se ha reemplazado la función "executeGesture"  de "inputCore.manager". Este cambio es común con la función "Remanencia de las teclas NVDA y modificadoras".
+Para lograr esta funcionalidad, se ha reemplazado la función "executeGesture" de "inputCore.manager". Este cambio es común con la función "Remanencia de las teclas NVDA y modificadoras".
 
 Si esta modificación causa un conflicto con otros complementos, se deben desinstalar ambas funciones.
 
@@ -1281,39 +1309,25 @@ Pero es posible deshabilitar este anuncio usando la opción: "Anunciar los cambi
 Esta funcionalidad permite restablecer, al cargar este complemento, el volumen de la fuente de audio de NVDA y el del dispositivo de salida de audio que utiliza colocando el nivel de cada uno a un valor definido  por la configuración en caso de que esto es menor que el umbral mínimo definido por la configuración.
 
 Para ello, el grupo "Control de sonido" en la categoría "Ordenador" del diálogo "ADDON_SUMMARY - Opciones" del complemento presenta los siguientes elementos de configuración:
-- La casilla de verificación "Ajustar automáticamente el sonido principal y de NVDA al cargar el complemento" que permite habilitar o deshabilitar esta opción,
+- La casilla de verificación "Ajustar automáticamente el sonido al cargar el complemento" que permite habilitar o deshabilitar esta opción,
 - El humbral de restablecimiento del volumen principal debajo de que nivel será restablecido,
 - El nivel del volumen principal a restablecer,
 - El humbral de restablecimiento del volumen de NVDA debajo de que nivel será restablecido (como porcentaje de la del volumen principal),
 - El nivel del volumen de NVDA a restablecer (como porcentaje del volumen principal).
+- La casilla de verificación "Al iniciar, poner NVDA en ambos canales".
 
 
-Cuando se inicia, este complemento comprueba que tanto el volumen del dispositivo de salida de audio como el de NVDA están por encima del umbral de restablecimiento configurado para cada uno.
+Cuando la casilla de verificación "Ajustar automáticamente el sonido al cargar el complemento" está marcada, el complemento comprueba, cuando se inicia que tanto el volumen del dispositivo de salida de audio como el de NVDA están por encima del umbral de restablecimiento configurado para cada uno.
 
 Si este no es el caso, este complemento luego ajusta el nivel de volumen al valor del nivel a restablecer configurado.
 
 Al instalar el complemento, los niveles actuales del volumen de NVDA y del dispositivo de salida de audio utilizado por NVDA se tienen en cuenta para definir los niveles a restablecer.
 
+Por defecto, el complemento pone al mismo tiempo NVDA en ambos canales y al mismo nivel de volumen. El nivel de volumen fijado es el más fuerte de los volúmenes entre los dos canales.
 
+Es posible desactivar este funcionamiento mediante la casilla de verificación "Al iniciar, poner NVDA en ambos canales".
 
-++ Scripts para hacer clic en la posición actual del navegador de objetos ++[hdr23]
-Estos scripts permiten hacer, con el botón derecho o izquierdo del ratón, un simple o un doble clic en la posición actual del navegador de objetos.
-
-Estos encadenan dos tipos de scripts de NVDA:
-- El script "Desplaza el puntero del ratón al navegador de objetos actual": atajo "NVDA+Dividir teclado numérico" (ordenador de escritorio) o "NVDA+mayúscula+m" (ordenador Portátil),
-- y los scripts para hacer un Clic con el botón del ratón:
- - Simple clic izquierdo: "Dividir teclado numérico" (ordenador de escritorio) o "NVDA+ù" (ordenador Portátil y idioma NVDA en francés) o "NVDA+[" (ordenador Portátil y otro idioma).
- - Simple clic derecho: "Multiplicar teclado numérico" (ordenador de escritorio) o "NVDA+*" (ordenador Portátil y idioma NVDA en francés) o "NVDA+]" (ordenador Portátil y otro idioma).
-
-
-Los gestos de entrada de estos scripts son:
-- "MAIN_KEY_CLIC_LEFT_MOUSE_BUTTON_At_NAVIGATOR": hacer un simple clic izquierdo a la posición del navegador de objetos. Una segunda pulsación hace un doble clic.
-- "MAIN_KEY_CLIC_RIGHT_MOUSE_BUTTON_At_NAVIGATOR": hacer un simple clic derecho a la posición del navegador de objetos. Una segunda pulsación hace un doble clic.
-
-
-Estos gestos de entrada pueden ser modificados y están en la categoría "Ratón" del cuadro de diálogo "Gestos de Entrada" de NVDA.
-
-
+Para las versiones de NVDA superiores a 2024.2, este funcionamiento también está deshabilitado automáticamente si el modo de separación de sonido de NVDA no está desactivado, cualquiera que sea el estado de esta casilla de verificación. En este caso, es NVDA el que administra los canales para NVDA al iniciar dependiendo del modo de separación de sonido configurado.
 
 ++ Suplementos  concerniente a la fecha y hora ++[hdr24]
 Esta funcionalidad se instala de forma predeterminada sin ningún gesto de entrada.
@@ -1324,6 +1338,7 @@ Esta funcionalidad trae:
 
 +++ Copia de fecha y hora al portapapeles +++[hdr24-1]
 La descripción de este script es: "Copiar fecha y hora al portapapeles".
+
  Este script está almacenado en la categoría "Estado del sistema" del diálogo "Gestos de Entrada" de NVDA.
 
 Este se lanza mediante la órden "KEY_COPY_DATETIME" del intérprete.
@@ -1341,7 +1356,7 @@ Ninguna orden del intérprete está asociado con él.
 
 Si el estado de instalación del complemento está en "Instalar", este script reemplaza el script de NVDA y se lanza con la ayuda del gesto de entrada "NVDA+f12".
 
-Si no ningún gesto de entrada no se le asigna, pero siempre es posible asignarle uno mediante el diálogo "Gesto de Entrada" de NVDA.
+De lo contrario no se le asigna ningún gesto de entrada, pero siempre es posible asignarle uno mediante el diálogo "Gesto de Entrada" de NVDA.
 
 Este script permite:
 - una primera pulsación del gesto de entrada: anuncia la hora actual.
@@ -1728,6 +1743,7 @@ El análisis se divide en tres grupos de búsqueda:
 - Búsqueda de no concordancias entre los símbolos,
 - Búsqueda de anomalías: Múltiples espacios contiguos, espacio o tabulación al final de línea, puntuaciones aisladas o mal espaciadas, mayúsculas faltantes o mal colocadas, espacios  faltantes o inesperados" antes o después de una puntuación,
 - Búsqueda de cambios de formato: Nombre de fuente, color, tamaño, atributos, estilo.
+- Búsqueda de errores de ortografía.
 
 
 Es posible desactivar un grupo de búsqueda, así como, individualmente, cada acción de un grupo.
@@ -1754,8 +1770,8 @@ El resultado del análisis se informa de acuerdo con la elección realizada, por
 - un pitido: La frecuencia y la duración del pitido es configurable.
 - Un mensaje de voz: De forma predeterminada, está "Alerta", pero se puede cambiar.
 - Un sonido elegido de una lista.
-- Un mensaje vocal que da la cantidad de irregularidades encontradas.
-- Un mensaje vocal que da la descripción detallada de las irregularidades encontradas.
+- Un mensaje de voz que da la cantidad de irregularidades encontradas.
+- Un mensaje de voz que da la descripción detallada de las irregularidades encontradas.
 
 
 Para la configuración de alerta, consulta el grupo "Alerta" en la categoría "Análisis de texto".
@@ -1809,6 +1825,10 @@ Los cambios de formato conciernen:
 
 
 Pueden ser incluidos o excluidos individualmente de la búsqueda marcandolos o desmarcandolos en la lista "Tipos" del mismo grupo.
+
+++++ Búsqueda de errores de ortografía ++++[hdr31-2-4]
+Esta búsqueda está habilitada de forma predeterminada.
+
 
 +++ Análisis a la demanda +++[hdr31-3]
 El complemento instala scripts para analizar a la demanda el texto que se encuentra a la posición del cursor.
@@ -1965,7 +1985,7 @@ En caso de que estos cambios causen problemas o entren en conflicto con otros co
 Esta característica permite separar el sonido de NVDA del sonido emitido por las otras fuentes de audio y, por lo tanto, escuchar en una oreja, el sonido de NVDA y en la otra oreja, el sonido de otras fuentes de audio.
 Solo las aplicaciones con una fuente de audio con dos canales y el uso del mismo dispositivo de salida de audio se ven afectadas.
 
-También te permite ajustar el nivel del volumen de tonos emitidos por NVDA (cuando no se usa Wasapi) y cambiar la ganancia en los archivos de sonido de NVDA y del complemento.
+También te permite ajustar el nivel del volumen de tonos emitidos por NVDA (cuando no se usa Wasapi, posible con las versiones de NVDA antes de la 2025.1) y cambiar la ganancia en los archivos de sonido de NVDA y del complemento.
 
 Esta característica está instalada por defecto.
 
@@ -1998,7 +2018,7 @@ La órden "KEY_CENTER_FOCUSED_APP" es operacional incluso si  la funcionalidad n
 +++ Administrador de fuentes de audio +++[hdr34-1]
 El diálogo "Administrador de fuentes de audio " permite, además de la orientación del sonido de NVDA, de:
 - Fijar el nivel de volumen de los dos canales de audio de NVDA y fuentes de audio,
-- Ajustar el volumen de tonos de NVDA cuando no se usa Wasapi,
+- Ajustar el volumen de tonos de NVDA cuando no se usa Wasapi (posible con las versiones de NVDA antes de la 2025.1),
 - Cambiar la ganancia en los archivos de sonido de NVDA.
 
 Él presenta:
@@ -2047,8 +2067,6 @@ Una protección esta prevista para evitar poner, simultáneamente, en cero el ni
 
 Cuando se selecciona una fuente de audio, se anuncia el estado de balance de los canales, así como el estado al silenciar el sonido.
 
-Al reiniciar NVDA o si el complemento está deshabilitado o desinstalado, NVDA se escucha nuevamente en ambos canales de audio, mientras que las fuentes de audio permanecen en su estado (almacenadas por Windows).
-
 Cuando el foco está en la lista de dispositivos de salida de audio, la selección de un dispositivo desencadena la emisión de un tono hacia este dispositivo. Es posible evitar esta emisión desmarcando la opción "Reproducir un tono en el dispositivo de salida de audio" del grupo "Administrador de fuentes de audio" en la categoría "Avanzada" en "Opciones globales" del complemento.
 En esta lista, las siguientes órdenes están disponibles:
 - Aumentar o disminuir de un paso, el volumen principal: "control+mayúscula+Flecha Arriba o Abajo",
@@ -2092,7 +2110,7 @@ Es posible no autorizar la modificación de la ganancia de sonidos al desmarcar 
 
 
 +++ Detalles técnicos +++
-Para llevar a cabo la funcionalidad del ajuste del volumen de tonos de NVDA cuando no se usa Wasapi, el complemento ha cambiado el funcionamiento de la función "beep" del módulo "tones" de NVDA.
+Para llevar a cabo la funcionalidad del ajuste del volumen de tonos de NVDA cuando no se usa Wasapi (posible solo con las versiones de NVDA antes de la 2025.1), el complemento ha cambiado el funcionamiento de la función "beep" del módulo "tones" de NVDA.
 
 Esto puede ser un problema si otro complemento también lo ha cambiado.
 
@@ -2162,8 +2180,8 @@ Por defecto, está habilitado.
 
 Puedes desactivarlo desmarcando la opción "Maximizar automáticamente las ventanas" en la categoría "Ordenador" del diálogo "ADDON_SUMMARY - Opciones" del complemento.
 
-
-++ Anunciar la puntuación y los símbolos al moverse por palabras ++[hdr103]
+++ Desplazamiento del cursor ++
++++ Anunciar la puntuación al moverse por palabras +++[hdr103-1]
 NVDA permite, en los documentos, de moverse  palabra por palabra con las órdenes de teclado "control+Flecha derecha" y "control+Flecha izquierda". 
 
 Los símbolos y las puntuaciones se verbalizarán entonces según el nivel de puntuación y símbolos configurados para el perfil de configuración actual.
@@ -2181,15 +2199,48 @@ Este se presenta en forma de una lista que te permite elegir:
 - Ya sea uno de los niveles de símbolos y puntuación de NVDA (ninguna, alguna, la mayoría, toda).
 
 
-++ Informando errores de ortografía por pitido o anuncio de voz ++[hdr104]
-Cuando la opción "Errores de ortografía" del grupo "Información de documento" de la categoría "Formateado de Documentos" encontrada en el cuadro de diálogo Opciones de NVDA está marcada, NVDA reproducirá una breve señal acústica particular cuando una palabra que estés escribiendo contenga un error de ortografía.
++++ No decir en blanco al moverse por línea +++[hdr103-2]
+Cuando se mueve por línea y cuando NVDA se encuentra con una línea sin un carácter anunciable, dice "en blanco".
 
-Este sonido se emite justo después de haber pulsado en la barra espaciadora terminando la palabra.
+Esta opción te permite modificar este comportamiento y no anunciar nada.
 
-Algunos usuarios encuentran este sonido desagradable, el complemento trae la posibilidad de reemplazar este sonido, ya sea por un doble pitido o por el anuncio de voz "Errores de ortografía".
+Esta opción es configurable por perfil de configuración.
 
-La elección se realiza en el grupo "Informando errores de ortografía" de la categoría "Suplementos a NVDA" en las "Opciones globales..." del complemento.
+Esta no está habilitada de forma predeterminada.
 
+++ Informando errores de ortografía ++[hdr104]
+NVDA puede informar errores de ortografía:
+- Mientras se escribe un texto y mientras se escribe una palabra.
+- Mientras esté leyendo: desplazamiento por línea, por palabra o en Verbalizar Todo.
+
+Para esto, están involucradas dos opciones de NVDA:
+- La opción "Errores de ortografía" del grupo "Información de documento" de la categoría "Formateado de Documentos".
+- La opción "Reproducir sonido para errores de ortografía mientras se escribe" de la categoría "Teclado".
+
+Para que NVDA indique los errores de Ortografía mientras esté leyendo y mientras se escribe, se debe activar la opción "Errores de ortografía". Los Errores  se indican mediante el mensaje de voz "Errores de ortografía".
+
+Para que los errores sean más bien indicados mediante un sonido mientras se escribe, la opción "Reproducir sonido para errores de ortografía mientras se escribe" debería estar activada.
+
+El complemento modifica este comportamiento de NVDA de la siguiente manera:
+- El anunciado de errores de ortografía mientras esté leyendo y mientras se escribe son independientes. Si la opción "Errores de ortografía" no está habilitada, pero que la opción "Reproducir sonido para errores de ortografía mientras se escribe" lo está, los errores se indicarán mientras se escribe.
+- Para cada situación, mientras esté leyendo o mientras se escribe, es posible configurar cómo los errores serán indicados: por un doble pitido, por el sonido de NVDA, por el mensaje de voz "Errores de ortografía" o por el anunciado de palabra mal escrita bajo un perfil de configuración dedicado.
+
+
+La elección del anunciado de los errores de ortografía se hace en el grupo "Informando errores de ortografía" en la categoría "Suplementos a NVDA" en "Opciones globales" del complemento, utilizando las listas desplegables "Mientras se escribe, informar por" y "Mientras esté leyendo, informar por".
+
+Las posibles opciones de estas listas desplegables son:
+- Pitido: Se emitirá un doble pitido.
+- Sonido: El sonido de NVDA se reproducirá.
+- Mensaje: El mensaje de voz "Errores de ortografía" se escuchará.
+- Anuncio de la palabra mal escrita: La palabra mal escrita se escuchará con los ajustes de voz  del perfil de configuración "Anuncio de la palabra mal escrita" dedicado y añadido por el complemento. Este perfil se activará automáticamente cuando se anuncie una palabra mal escrita. Este perfil te permite modificar, por ejemplo, el sintetizador o la voz que se utilizará para el anuncio de la palabra mal escrita.
+
+
+El perfil "Anuncio de la palabra mal escrita" está asociado con un disparador dedicado y no presente en la lista de los disparadores. No se debería asociarlo con otro disparador.
+
+Nota:
+- Si borras el perfil "Anuncio de la palabra mal escrita", el complemento lo recreará en el próximo inicio de NVDA, pero los ajustes de este perfil serán los mismos que los del perfil "configuración normal".
+- El nombre de este perfil es la traducción en el lenguaje de NVDA del término "Spelling errors announcement". Entonces, si has lanzado en otro idioma NVDA, el complemento creará otro perfil como nombre, de la traducción de este término en este idioma. El perfil anterior no se elimina.
+- En el caso de que el anunciado de errores de ortografía se haga verbalmente, es preferible de desactivar la opción "Interrupción de voz para caracteres escritos" de la categoría "Teclado" en las Opciones de NVDA porque cualquier escritura rápida de caracteres Después de una palabra, detiene el anuncio vocal.
 
 
 ++ Bloqueo de las teclas "Insertar" y "Bloqueo mayúsculas" ++[hdr105]
@@ -2208,8 +2259,7 @@ Por configuración, El Complemento ofrece la posibilidad de que estas teclas  no
 
 Esta configuración se hace por perfil de configuración utilizando una casilla de verificación  para cada tecla (Ver el grupo "Bloqueo de tecla" de la categoría "Teclado" del perfil actual).
 
-Cuando se bloquea la acción de la tecla, se escucha un pitido de audio.
-
+Cuando se bloquea la acción de la tecla, se escucha un pitido.
 
 ++ Pronunciación de caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado ++[hdr106]
 Esta opción permite pronunciar caracteres no alfanuméricos cuando verbalizar caracteres al escribir está desactivado.
@@ -2244,9 +2294,10 @@ Por defecto, esta opción está marcada y el título de los cuadros de diálogo 
 ++ Configuración del retardo de espera de repetición para el mismo gesto de entrada ++[hdr303]
 Algunos de los scripts del complemento realizan diferentes acciones dependiendo de la cantidad de veces que se compone el gesto de entrada asociado con el script.
 La repetición del gesto de entrada debe realizarse dentro de poco tiempo (500 ms de forma predeterminada).
+
 Para un script que realiza tres acciones diferentes, el mecanismo es:
 - En la primera pulsación, se inicia el temporizador, 
-- Si no hay una segunda pulsación antes de la expiración del temporizador, se realiza la primera acción. De lo contrario se reinicia el temporizador,
+- Si no hay una segunda pulsación antes de la expiración del temporizador, se realiza la primera acción. De lo contrario el temporizador se reinicia a esta segunda pulsación.
 - Si no hay una tercera pulsación antes de la expiración del temporizador, se realiza la segunda acción. De lo contrario, el temporizador se detiene y se realiza la tercera acción.
 
 
@@ -2377,7 +2428,7 @@ El script se puede ejecutar con una de las siguientes tres acciones:
 Al repetir la acción varias veces rápidamente, el script se ejecutará tantas veces.
 
 +++ Detalles técnicos +++
-Para lograr esta funcionalidad, la función "onInputGesturesCommand " de "gui.mainFrame" y la acción desencadenada por el submenú "Gestos de Entrada" han sido reemplazados (cambio común con la siguiente funcionalidad). No es posible evitar esto.
+Para lograr esta funcionalidad, la función "onInputGesturesCommand" de "gui.mainFrame" y la acción desencadenada por el submenú "Gestos de Entrada" han sido reemplazados (cambio común con la siguiente funcionalidad). No es posible evitar esto.
 
 ++ Selección automática de categoría en el cuadro de diálogo "Gestos de Entrada" ++[hdr206]
 Puede suceder que necesitemos abrir el cuadro de diálogo "Gestos de Entrada" de NVDA para conocer los gestos de entrada proporcionados por el complemento activo para la aplicación bajo el cursor.
@@ -2391,7 +2442,7 @@ Para esto, está buscando la categoría entre las categorías que proporcionan s
 Esta categoría será entonces seleccionada automáticamente y expandida.
 
 +++ Detalles técnicos +++
-Para lograr esta funcionalidad, la función "onInputGesturesCommand " de "gui.mainFrame" y la acción desencadenada por el submenú "Gestos de Entrada" han sido reemplazados (cambio común con la funcionalidad anterior). No es posible evitar esto.
+Para lograr esta funcionalidad, la función "onInputGesturesCommand" de "gui.mainFrame" y la acción desencadenada por el submenú "Gestos de Entrada" han sido reemplazados (cambio común con la funcionalidad anterior). No es posible evitar esto.
 
 ++ Selección de la última opción utilizada en el Anillo de Opciones de Sintetizador ++[hdr207]
 Los gestos de entrada "NVDA+control+Flecha derecha o izquierda"   de NVDA te permiten moverte a través de las opciones de voz en el Anillo de Opciones de Sintetizador.

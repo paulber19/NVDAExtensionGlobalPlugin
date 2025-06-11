@@ -13,17 +13,9 @@ from logHandler import log
 import time
 import weakref
 from speech.sayAll import SayAllHandler as sayAllHandler
-import speech.speech
 import scriptHandler
 
-# to preserv compatibility with nvda version < 2024.1
-try:
-	# NVDA >= 2024.1
-	speech.speech.SpeechMode.onDemand
-	speakOnDemand = {"speakOnDemand": True}
-except AttributeError:
-	# NVDA <= 2023.3
-	speakOnDemand = {}
+speakOnDemand = {"speakOnDemand": True}
 
 
 def _getMaxTimeBetweenSameScript():

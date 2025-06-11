@@ -1,19 +1,17 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2024 Paulber19
+# Copyright (C) 2016 - 2025 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
 import wx
-import gui
 import api
 import textInfos
-import os
-import globalVars
 import speech
 import speech.speech
+from speech.priorities import SpeechPriority
 import ui
 import time
 from controlTypes.role import Role
@@ -35,6 +33,8 @@ import queueHandler
 import eventHandler
 import core
 import contentRecog.recogUi
+import unicodedata
+from versionInfo import version_year, version_major
 from ..utils.NVDAStrings import NVDAString
 from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
 from ..settings import isInstall
@@ -43,9 +43,17 @@ from ..settings.addonConfig import (
 )
 from ..utils.keyboard import getEditionKeyCommands
 from . import clipboard
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
 addonHandler.initTranslation()
+NVDAVersion = [version_year, version_major]
 
 # Translators: message to the user on cut command activation.
 _msgCut = _("Cut")
@@ -258,28 +266,29 @@ class EditableTextEx(editableText.EditableText):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				ui.message, _msgPaste)
-			queueHandler.queueFunction(
-				queueHandler.eventQueue,
-				self.processGesture, textInfos.UNIT_LINE, gesture)
+			gesture.send()
+			wx.CallLater(400, self.reportCurrentLine)
 
 		stopDelayScriptTask()
 		# to filter out too fast script calls while holding down the command gesture.
 		delayScriptTaskWithDelay(80, callback)
 
-	def processGesture(self, unit, gesture):
+	def reportCurrentLine(self):
+		import treeInterceptorHandler
+		import controlTypes
+		obj = api.getFocusObject()
+		treeInterceptor = obj.treeInterceptor
+		if (
+			isinstance(treeInterceptor, treeInterceptorHandler.DocumentTreeInterceptor)
+			and not treeInterceptor.passThrough
+		):
+			obj = treeInterceptor
 		try:
-			info = self.makeTextInfo(textInfos.POSITION_CARET)
-		except Exception:
-			gesture.send()
-			return
-		bookmark = info.bookmark
-		info.expand(textInfos.UNIT_WORD)
-		word = info.text
-		gesture.send()
-		# We'll try waiting for the caret to move, but we don't care if it doesn't.
-		caretMoved, newInfo = self._hasCaretMoved(bookmark, retryInterval=0.01, timeout=2.0, origWord=word)
-		self._caretScriptPostMovedHelper(unit, gesture, newInfo)
-		braille.handler.handleCaretMove(self)
+			info = obj.makeTextInfo(textInfos.POSITION_CARET)
+		except (NotImplementedError, RuntimeError):
+			info = obj.makeTextInfo(textInfos.POSITION_FIRST)
+		info.expand(textInfos.UNIT_LINE)
+		ui.message(info.text)
 
 	def script_undo(self, gesture):
 		def callback():
@@ -338,7 +347,8 @@ class EditableTextEx(editableText.EditableText):
 
 
 class NVDAObjectEx(NVDAObject):
-	def _reportErrorInPreviousWord(self):
+	def _reportErrorInPreviousWord(self, typedWord):
+		self.typedWordSpoken = False
 		try:
 			# self might be a descendant of the text control; e.g. Symphony.
 			# We want to deal with the entire text, so use the caret object.
@@ -352,14 +362,16 @@ class NVDAObjectEx(NVDAObject):
 			# Focus probably moved.
 			log.debugWarning("Error fetching last character of previous word", exc_info=True)
 			return
+
 		# Fetch the formatting for the last word to see if it is marked as a spelling error,
 		# However perform the fetch and check in a future core cycle
-
 		# To give the content control more time to detect and mark the error itself.
 		# #12161: MS Word's UIA implementation certainly requires this delay.
-		def _delayedDetection():
+		def _detection(ch):
 			try:
-				fields = info.getTextWithFields()
+				formatConfig = config.conf["documentFormatting"].copy()
+				formatConfig["reportSpellingErrors"] = True
+				fields = info.getTextWithFields(formatConfig=formatConfig)
 			except Exception:
 				log.debugWarning("Error fetching formatting for last character of previous word", exc_info=True)
 				return
@@ -372,27 +384,100 @@ class NVDAObjectEx(NVDAObject):
 					break
 			else:
 				# No error.
-				return
-			#  to report  error depending user configuration: wav, beep, or message
+				return False
 
-			def reportSpellingError():
+			#  to warn  error depending user configuration: wav, beep, message or error reporting
+			def warnSpellingError(typedWord):
 				from ..settings import _addonConfigManager
-				if _addonConfigManager.reportingSpellingErrorsByBeep():
-					from tones import beep
-					hz = 150
-					length = 50
-					beep(hz, length)
-					from time import sleep
-					sleep(2 * length / 1000)
-					beep(hz, length)
-				elif _addonConfigManager.reportingSpellingErrorsBySound():
-					import nvwave
-					nvwave.playWaveFile(os.path.join(globalVars.appDir, "waves", "textError.wav"))
-				elif _addonConfigManager.reportingSpellingErrorsByMessage():
+				from ..speech.sayError import getErrorSpeechSequence
+				if _addonConfigManager.reportingSpellingErrorsByMessage():
 					ui.message(NVDAString("spelling error"))
+					return
+				if _addonConfigManager.reportingSpellingErrorsByErrorReporting():
+					if typedWord is None:
+						return
+					seq = getErrorSpeechSequence(typedWord)
+					self.typedWordSpoken = True
+				else:
+					seq = getErrorSpeechSequence(reading=False)
+				if seq:
+					speech.speech.speak(seq, priority=SpeechPriority.NOW)
 
-			reportSpellingError()
-		core.callLater(50, _delayedDetection)
+			warnSpellingError(typedWord)
+		_detection(typedWord)
+
+	def _delayedReportErrorInPreviousWord(self, ch):
+		typingEchoMode = config.conf["keyboard"]["speakTypedWords"]
+		typedWord = self.hasWordTyped(ch)
+		self._reportErrorInPreviousWord(typedWord)
+		from ..settings import _addonConfigManager
+		if _addonConfigManager.reportingSpellingErrorsByErrorReporting() and self.typedWordSpoken:
+			if NVDAVersion < [2025, 1]:
+				# for nvda versions < 2025.1
+				config.conf["keyboard"]["speakTypedWords"] = False
+			else:
+				# for nvda versions >= 2025.1
+				from config.configFlags import TypingEcho
+				config.conf["keyboard"]["speakTypedWords"] = TypingEcho.OFF.value
+		self.NVDAObject_event_typedCharacter(ch)
+		config.conf["keyboard"]["speakTypedWords"] = typingEchoMode
+
+	def event_typedCharacter(self, ch: str):
+		if (
+			config.conf["keyboard"]["alertForSpellingErrors"]
+			# Not alpha, apostrophe or control.
+			and ch.isspace() or (ch >= " " and ch not in "'\x7f" and not ch.isalpha())
+		):
+			# Reporting of spelling errors is enabled and this character ends a word.
+			core.callLater(50, self._delayedReportErrorInPreviousWord, ch)
+			return
+		self.NVDAObject_event_typedCharacter(ch)
+
+	def hasWordTyped(self, ch: str):
+
+		typingIsProtected = api.isTypingProtected()
+		if typingIsProtected:
+			realChar = speech.speech.PROTECTED_CHAR
+		else:
+			realChar = ch
+		curWordChars = speech.speech._curWordChars[:]
+		if unicodedata.category(ch)[0] in "LMN":
+			curWordChars.append(realChar)
+		elif ch == "\b":
+			# Backspace, so remove the last character from our buffer.
+			del curWordChars[-1:]
+		elif ch == "\u007f":
+			# delete character produced in some apps with control+backspace
+			pass
+		elif len(curWordChars) > 0:
+			return "".join(curWordChars)
+		return None
+
+	def NVDAObject_event_typedCharacter(self, ch):
+		from ..settings.nvdaConfig import _NVDAConfigManager
+		if not (ch.isalnum() or ch.isspace()):
+			typingEchoMode = config.conf["keyboard"]["speakTypedCharacters"]
+			if _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False):
+				if NVDAVersion < [2025, 1]:
+					# for nvda versions < 2025.1
+					config.conf["keyboard"]["speakTypedCharacters"] = True
+				else:
+					# for nvda versions >= 2025.1
+					from config.configFlags import TypingEcho
+					config.conf["keyboard"]["speakTypedCharacters"] = TypingEcho.ALWAYS.value
+			speech.speakTypedCharacters(ch)
+			config.conf["keyboard"]["speakTypedCharacters"] = typingEchoMode
+		else:
+			speech.speakTypedCharacters(ch)
+		import winUser
+
+		if (
+			config.conf["keyboard"]["beepForLowercaseWithCapslock"]
+			and ch.islower()
+			and winUser.getKeyState(winUser.VK_CAPITAL) & 1
+		):
+			import tones
+			tones.beep(3000, 40)
 
 
 class ClipboardCommandAnnouncement(object):
@@ -572,11 +657,7 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	for cls in clsList:
 		if contentRecog.recogUi.RecogResultNVDAObject in cls.__mro__:
 			useRecogResultNVDAObjectEx = True
-		if NVDAVersion >= [2023, 1]:
-			c = NVDAObjects.behaviors.EditableTextBase
-		else:
-			c = NVDAObjects.behaviors.EditableText
-		if c in cls.__mro__:
+		if NVDAObjects.behaviors.EditableTextBase in cls.__mro__:
 			useEditableTextBaseEx = True
 
 	if useEditableTextBaseEx:
@@ -604,11 +685,11 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 
 
 def initialize():
+
 	def callback():
-		result = gui.messageBox(
+		if confirm_YesNo(
 			# Translators: message asking the user wether
-			# the clipboard command announcements feature should be disabled
-			# or not
+			# the clipboard command announcements feature should be disabled or not
 			_(
 				"The clipspeak add-on has been detected on your system. "
 				"In order for Clipboard command announcement feature to work without conflicts, "
@@ -617,8 +698,7 @@ def initialize():
 				" Would you like to uninstall this feature now?"),
 			# Translators: warning dialog title
 			_("Warning"),
-			wx.YES_NO | wx.ICON_QUESTION, gui.mainFrame)
-		if result == wx.NO:
+		) != ReturnCode.YES:
 			return
 		from ..settings.addonConfig import C_DoNotInstall
 		from ..settings import setInstallFeatureOption

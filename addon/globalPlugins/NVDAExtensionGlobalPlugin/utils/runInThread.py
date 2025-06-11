@@ -34,7 +34,7 @@ class RepeatTask(threading.Thread):
 		if self._delay is None:
 			log.error("Cannot start repeatTask thread because not delay")
 			return
-		while not self._stopevent.isSet():
+		while not self._stopevent.is_set():
 			self._stopevent.wait(self._delay)
 			if self.isRunning is not None and not self.isRunning():
 				# interrupted before stop
@@ -54,7 +54,7 @@ class RepeatBeep(RepeatTask):
 		super(RepeatBeep, self).__init__(isRunning)
 
 	def task(self):
-		if self._stopevent.isSet():
+		if self._stopevent.is_set():
 			return
 		(frequence, length) = self.beep
 		tones.beep(frequence, length)

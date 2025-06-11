@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\commandKeysSelectiveAnnouncementAndRemanence\__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2018 - 2023 paulber19
+# Copyright (C) 2018 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -25,7 +25,7 @@ from vkCodes import byName
 import core
 from inputCore import NoInputGestureAction
 import inputCore
-from ..utils.NVDAStrings import NVDAString
+from versionInfo import version_year, version_major
 from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
 from ..settings import (
 	_addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption,
@@ -36,9 +36,19 @@ from ..settings import addonConfig
 from ..utils.keyboard import getKeyboardKeys
 from keyboardHandler import KeyboardInputGesture
 from . import specialForGmail
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
 
 addonHandler.initTranslation()
+NVDAVersion = [version_year, version_major]
+
 _curAddon = addonHandler.getCodeAddon()
 
 _NVDA_InputManager = inputCore.manager
@@ -84,21 +94,7 @@ _availableModifierKeysCombination = {
 CHECKED_KEY_BIT_POSITION = 63
 # Translators: label of anyKey item in the excluded keys list.
 ANYKEY_LABEL = _("Any key with modifier key combination")
-try:
-	# for nvda version >= 2023.1
-	from inputCore import decide_executeGesture
-except ImportError:
-	import extensionPoints
-	decide_executeGesture = extensionPoints.Decider()
-	"""
-	Notifies when a gesture is about to be executed,
-	and allows components or add-ons to decide whether or not to execute a gesture.
-	For example, when controlling a remote system with a connected local braille display,
-	braille display gestures should not be executed locally.
-	Handlers are called with one argument:
-	@param gesture: The gesture that is about to be executed.
-	@type gesture: L{InputGesture}
-	"""
+from inputCore import decide_executeGesture
 
 _numpadKeyNames = ["numpad%s" % str(x) for x in range(1, 10)]
 
@@ -465,9 +461,33 @@ class MyInputManager (object):
 			wasInSayAll = sayAllHandler.isRunning()
 		if wasInSayAll:
 			gesture.wasInSayAll = True
+
+		immediate = getattr(gesture, "_immediate", True)
 		speechEffect = gesture.speechEffectWhenExecuted
 		if speechEffect == gesture.SPEECHEFFECT_CANCEL:
-			queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech)
+			if NVDAVersion >= [2024, 2]:
+				# Import late to avoid circular import.
+				import braille
+				if braille.handler:
+
+					@braille.handler.suppressClearBrailleRegions(script)
+					def suppressCancelSpeech():
+						speech.cancelSpeech()
+					queueHandler.queueFunction(
+						queueHandler.eventQueue,
+						suppressCancelSpeech,
+						_immediate=immediate,
+					)
+				else:
+					queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech, _immediate=immediate)
+			else:
+				# for nvda versions < 2024.2
+				queueHandler.queueFunction(
+					queueHandler.eventQueue,
+					speech.cancelSpeech,
+					_immediate=immediate,
+				)
+
 		elif speechEffect in (gesture.SPEECHEFFECT_PAUSE, gesture.SPEECHEFFECT_RESUME):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
@@ -515,7 +535,11 @@ class MyInputManager (object):
 		if self.commandKeysFilter.forceSpeakGesture(gesture):
 			log.warning("Gesture display name spoken: %s" % gesture.displayName)
 			queueHandler.queueFunction(
-				queueHandler.eventQueue, speech.speakMessage, gesture.displayName)
+				queueHandler.eventQueue,
+				speech.speakMessage,
+				gesture.displayName,
+				_immediate=True
+			)
 
 
 class CommandKeysFilter(object):
@@ -676,7 +700,7 @@ class CommandKeysSelectiveAnnouncementDialog(
 		# gui
 		sHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# the speak command key flag
-		labelText = NVDAString("Speak c&ommand keys")
+		labelText = _("Speak &command keys")
 		self.commandKeysCheckBox = sHelper.addItem(wx.CheckBox(
 			self,
 			wx.ID_ANY,
@@ -764,18 +788,17 @@ class CommandKeysSelectiveAnnouncementDialog(
 
 	def onCheckCommandKeysCheckBox(self, evt):
 		self.speakCommandKeysOption = self.commandKeysCheckBox.GetValue()
-		modeText = NVDAString("Speak command &keys")\
+		modeText = _("Speak command keys")\
 			if not self.speakCommandKeysOption else _("Do not speak command &keys")
 		if not self.noChange:
-			res = gui.messageBox(
+			if confirm_YesNo(
 				# Translators: the text of a message box dialog
 				# in Command keys selective announcement dialog.
 				_("""Do you want to save changes made in "%s" mode?""") % modeText,
 				# Translators: the title of a message box dialog
 				# in command keys selective announcement dialog.
 				_("Confirmation"),
-				wx.YES | wx.NO | wx.CANCEL | wx.ICON_WARNING)
-			if res == wx.YES:
+			) == ReturnCode.YES:
 				_myInputManager.commandKeysFilter.updateCommandKeysSelectiveAnnouncement(
 					self.keysDic, not self.speakCommandKeysOption)
 		self.listInit()

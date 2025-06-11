@@ -18,4 +18,4 @@ def NVDAString_pgettext(c, s):
 
 
 def NVDAString_ngettext(s, p, c):
-	return ngettext(s, p, c)
+	return ngettext(s, p, c)  # noqa:F82

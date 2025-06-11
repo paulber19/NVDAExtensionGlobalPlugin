@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\temporaryOutputDevicePatches.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2024 paulber19
+# Copyright (C) 2024-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -9,19 +9,31 @@ import addonHandler
 from logHandler import log
 import tones
 import synthDriverHandler
-import config
 import wx
-import gui
 import nvwave
+from versionInfo import version_year, version_major
+NVDAVersion = [version_year, version_major]
 import synthDrivers.oneCore
 from .waves import getModifiedNVDAWaveFile
+from .audioUtils import (
+	isWasapiUsed,
+	getOutputDevice, setOutputDevice)
 from ..settings.addonConfig import FCT_TemporaryAudioDevice
 from ..settings import (
 	toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 	toggleAllowNVDASoundGainModificationAdvancedOption,
 	isInstall
 )
-from .utils import isWasapiUsed
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import warn
+del sys.path[-1]
+del sys.modules["messages"]
+
+
 addonHandler.initTranslation()
 
 
@@ -38,7 +50,8 @@ def _myOneCoreSynthDriverMaybeInitPlayer(*args, **kwargs):
 	this method use config.conf["speech"]["outputDevice"] to get the output device directly
 	to reinitialize player after synthetizer initialization.
 	To set temporary output device,"
-	" we want change the output device of a synthetizer with no configuration change, like that:
+	" we want change the output device of a synthetizer with no configuration change.
+	Since NVDA 2025.1, "speech" must be replaced by "audio"
 	currentOutputDevice= config.conf["speech"]["outputDevice"]
 	config.conf["speech"]["outputDevice"] = temporaryOutputDevice
 	synthDriverHandler .setSynth(getSynth().name)
@@ -49,10 +62,10 @@ def _myOneCoreSynthDriverMaybeInitPlayer(*args, **kwargs):
 	"""
 	global _NVDAOneCoreSynthDriverMaybeInitPlayer
 	from synthDriverHandler import _audioOutputDevice
-	currentOutputDevice = config.conf["speech"]["outputDevice"]
-	config.conf["speech"]["outputDevice"] = _audioOutputDevice
+	currentOutputDevice = getOutputDevice()
+	setOutputDevice(_audioOutputDevice)
 	_NVDAOneCoreSynthDriverMaybeInitPlayer(*args, **kwargs)
-	config.conf["speech"]["outputDevice"] = currentOutputDevice
+	setOutputDevice(currentOutputDevice)
 
 
 def _myPlayWaveFile(fileName, *args, **kwargs):
@@ -65,10 +78,10 @@ def _myPlayWaveFile(fileName, *args, **kwargs):
 	newFileName = getModifiedNVDAWaveFile(fileName)
 	if newFileName != fileName:
 		log.debug("%s file has been replaced by %s modified file" % (fileName, newFileName))
-	outputDevice = config.conf["speech"]["outputDevice"]
-	config.conf["speech"]["outputDevice"] = _audioOutputDevice
+	outputDevice = getOutputDevice()
+	setOutputDevice(_audioOutputDevice)
 	_nvdaPlayWaveFile(newFileName, *args, **kwargs)
-	config.conf["speech"]["outputDevice"] = outputDevice
+	setOutputDevice(outputDevice)
 	return
 
 
@@ -76,29 +89,37 @@ def _myTonesInitialize():
 	"""
 	NVDA tones initialize must be patched to use temporary output device instead of:
 	config.conf["speech"]["outputDevice"]
+	or for nvda versions >= 2025.1
+	config.conf["audio"]["outputDevice"]
+
 	"""
 	from .temporaryOutputDevice import getTemporaryOutputDevice
-	currentOutputDevice = config.conf["speech"]["outputDevice"]
+	currentOutputDevice = getOutputDevice()
 	temporaryOutputDevice = getTemporaryOutputDevice()
 	if temporaryOutputDevice:
-		config.conf["speech"]["outputDevice"] = temporaryOutputDevice
-	log.debug("myTonesInitialize: device= %s" % config.conf["speech"]["outputDevice"])
+		device = temporaryOutputDevice[0] if NVDAVersion < [2025, 1] else temporaryOutputDevice[1]
+		setOutputDevice(device)
+	log.debug("myTonesInitialize: device= %s" % getOutputDevice())
 	_NVDATonesInitialize()
-	config.conf["speech"]["outputDevice"] = currentOutputDevice
+	setOutputDevice(currentOutputDevice)
 
 
 def _mySetSynth(*args, **kwargs):
 	"""
 	synthDriverHandler.setSynth must be patched to use temporary output device instead of:
-	config.conf["speech"]["outputDevice"] device
+	config.conf["speech"]["outputDevice"]
+	or for nvda versions >= 2025.1
+	config.conf["audio"]["outputDevice"]
 	"""
 	log.debug("mySetSynth")
-	currentOutputDevice = config.conf["speech"]["outputDevice"]
-	from .temporaryOutputDevice import _temporaryOutputDevice
-	if _temporaryOutputDevice:
-		config.conf["speech"]["outputDevice"] = _temporaryOutputDevice
+	currentOutputDevice = getOutputDevice()
+	from .temporaryOutputDevice import getTemporaryOutputDevice
+	temporaryOutputDevice = getTemporaryOutputDevice()
+	if temporaryOutputDevice:
+		device = temporaryOutputDevice[0] if NVDAVersion < [2025, 1] else temporaryOutputDevice[1]
+		setOutputDevice(device)
 	res = _NVDASetSynth(*args, **kwargs)
-	config.conf["speech"]["outputDevice"] = currentOutputDevice
+	setOutputDevice(currentOutputDevice)
 	return res
 
 
@@ -121,13 +142,13 @@ def _patcePlayWaveFile(install=True):
 		if nvwave.WavePlayer.open.__module__ == "globalPlugins.soundSplitter":
 			log.debug("Potential incompatibility: nvwave.WavePlayer function patched by soundSplitter add-on")
 			wx.CallAfter(
-				gui.messageBox,
+				warn,
 				# Translators: message to warn the user of a potential incompatibility with the soundSplitter add-on
 				_(
 					"The soundSplitter add-on may cause the add-on to malfunction. It is better to uninstall it."),
 				# Translators: warning dialog title
 				_("Warning"),
-				wx.CANCEL | wx.ICON_WARNING, gui.mainFrame)
+			)
 		nvwave.playWaveFile = _myPlayWaveFile
 		log.debug(
 			"To allow use of temporary output device or NVDA file gain modification,"

@@ -348,6 +348,10 @@ scriptsToDocInformations = {
 	# for clearClipboard script commands.
 	"emptyClipboard": (_("Empty the clipboard"), globalCommands.SCRCAT_SYSTEM, "hdr7-3"),
 	# Translators: Input help mode message
+	# for displayClipboardText script commands.
+	"displayClipboardText": (
+		_("Display clipboard text in a information windows"), globalCommands.SCRCAT_SYSTEM, "hdr7-3"),
+	# Translators: Input help mode message
 	# for temporary audio device manager script commands.
 	"temporaryAudioOutputDeviceManager": (
 		_("Display the temporary audio device manager"), globalCommands.SCRCAT_SPEECH, "hdr33-1"),

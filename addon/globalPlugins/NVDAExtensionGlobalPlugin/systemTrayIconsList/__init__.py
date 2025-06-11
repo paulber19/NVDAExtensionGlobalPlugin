@@ -15,7 +15,7 @@ import ctypes
 from gui import guiHelper, mainFrame
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
 import windowUtils
 
 addonHandler.initTranslation()

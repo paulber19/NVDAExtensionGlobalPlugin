@@ -19,6 +19,59 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ V14.0 (June/05/2025) +
+Compatibility with NVDA 2025.1.
+
+NVDA versions prior to 2024.1 are no longer supported.
+
+News:
+- Addition of a script to display the clipboard's text text in an information window. It is without assigned input gesture and launches with the "shift + X" command of the interpreter.
+- Regarding the reporting of spelling errors:
+ - The report of spelling errors can now be different depending on the situation "in reading" or "While typing".
+ - For each situation, the add-on allows the choice between:
+  - Emit a double beep,
+  - Playing NVDA's default sound.
+  - to announce "Spelling error",
+  - to announce the spelling error under a dedicated configuration profile.
+ - A new configuration profile "Spelling errors Announcement" is added. It is with the speech parameters of this profile that the word poorly spelled will be announced.
+- Addition of the possibility of detecting spelling errors by the text analyzer.
+- Addition of an option not to say "empty" when moving by line (configurable by profile).
+- Automatic deletion of temporary files with the ".delete" extension that NVDA cannot delete and which causes an error in the NVDA journal with each start -up.
+- Until this version of the add-on, it automatically put NVDA back on the two channels when it started. It is now possible to deactivate this operation by configuration.
+
+
+Change :
+- The "NVDA logs management" dialogue is changed to present in a drop-down list, the choice, current or previous, of the log to open or the one whose path must be copied in the clipboard.
+- When it is stopped, the add-on leaves NVDA channels.
+
+
+Bogs corrections:
+- Correction of the error that occurred during the "Alt+F6" order of the interpreter when the cursor was placed at the end of the document.
+- The last parameter used in the synthesizer settings loop is now correctly saved after using the control interpreter.
+- The scripts of add-ons which are not in operation are no longer presented in the "User input gestures" dialogue.
+- Special persistence for Gmail rekindles properly.
+- The update search is no longer done when the "automatically search updates" option is unclogged just after starting NVDA.
+- The "text analysis" category no longer appears several times in the current profile setting dialogue.
+- The  "Maximum number of characters to read" combobox of the  "Complements to NVDA" category no longer appears when the "Announcement of the function associated with publishing commands" functionality is not installed.
+
+
+Development :
+- during a vocal profile switch,Only the new vocal parameters are recharged (no call to setsynth).
+- The Python Markdown compiler (embedded in the add-on) with all its extensions replaces the Markdown2 compiler to compile the Markdown documents. It is used for NVDA versions prior to 2025.1.  For the following, the compiler on board in NVDA is used.
+- When installing the add-on, the current configuration is no longer saved in the add-on folder but is now saved in the user configuration folder. This allows if an installation goes wrong to keep the current configuration anyway.
+- The "UtilitiPy37" and "UtilitiPy311" folders are deleted.
+
+
+Compliance with the NVDA API:
+- Use of the "ExecandPump" method of the "Systemutils" module.
+- Taking into account the displacement of the "OUTPUDEVICE" parameter of the "Speech" section in the "Audio" section of the NVDA configuration.
+- Taking into account the memorization of the audio output device by its ID instead of its name.
+- Taking into account the change of type of configuration keys "Speaktypedcharacters" and "Speaktypedwords".
+- Taking into account the deletion of the "_GetouputDevices" function of the "NVWAVE" module.
+Take into account the obsolescence of Gui.messagebox and Gui.message.messagebox, replaced by messagedialog:
+ - Messagedialog is now used for all NVDA versions greater than 2025.1.
+ - The option "Do not take into account the option" Announce the description of the object "when displaying the" Confirmation "style dialog box is operational in the dialogues using the Showmodal method of the Class MistiSdialog.
+
 
 + v13.4 (October/11/2024) +
 Compatibility with NVDA 2024.2 and NVDA 2024.3.

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\computerTools\tonesPatches.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2024 paulber19
+# Copyright (C) 2024-2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -14,7 +14,7 @@ _NVDATonesBeep = None
 
 
 def initialize():
-	from .utils import isWasapiUsed
+	from .audioUtils import isWasapiUsed
 	if isWasapiUsed():
 		return
 	# patche tones.beep

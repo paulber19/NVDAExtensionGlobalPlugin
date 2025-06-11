@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 -2024 Paulber19
+# Copyright (C) 2016 -2025 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -8,22 +8,30 @@ import addonHandler
 from logHandler import log
 import ui
 import codecs
-import os
 # from ctypes import *
 import zipfile
 import gui
 import wx
-import sys
 import languageHandler
+from versionInfo import version_year, version_major
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import runInThread
 from .generate import generateManifest, generateTranslatedManifest
 from .gettextTools import generatePotFile, compilePoFiles
 import shutil
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, warn, alert, inform, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
 
 addonHandler.initTranslation()
-
+NVDAVersion = [version_year, version_major]
 
 _curModuleFilePath = os.path.dirname(__file__)
 
@@ -62,14 +70,15 @@ def createAddonBundleFromPath(addon):
 		from importlib import reload
 		reload(buildVars)
 		sys.path = sysPath
+		del sys.modules["buildVars"]
 	except ImportError:
 		sys.path = sysPath
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
 			# Translators: dialog title on errorr.
 			_("error"),
-			wx.OK)
+		)
 		return None
 	addonFileName = "%s-%s.nvda-addon" % (
 		buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
@@ -130,58 +139,153 @@ def getMmanifestInfos(addon, lang):
 			except Exception:
 				# Translators: dialog title on errorr.
 				dialogTitle = _("error")
-				gui.messageBox(
+				alert(
 					# Translators: message to the user on getting addon manifest.
 					_("Cannot get add-on translated manifest of %s language") % lang,
-					dialogTitle, wx.OK | wx.ICON_ERROR)
+					dialogTitle,
+				)
 	return addonHandler.AddonManifest(manifest_path)
 
 
-def writeHTMLFile(dest, htmlText, title, cssFileName):
-	cssFile = cssFileName if cssFileName is not None else "style.css"
+HTML_HEADERS = """
+<!DOCTYPE html>
+<html lang="{lang}" dir="{dir}">
+<head>
+<meta charset="utf-8">
+<title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href={styles}>
+{extraStylesheet}
+</head>
+""".strip()
+
+RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
+
+
+def writeHTMLFile(dest, htmlText, title, stylesCss, extraStylesCss=""):
 	lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
+	extraStylesheet = ""
+	if extraStylesCss != "":
+		extraStylesheet = """<link rel="stylesheet" href=%s""" % extraStylesCss
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			+ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
-			+ "    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
-			+ "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang)
-			+ "<head>\n"
-			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n"
-			+ "<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n" % cssFile
-			+ "<title>%s</title>\n" % title
-			+ "</head>\n"
+			HTML_HEADERS.format(
+				lang=lang,
+				dir="rtl" if lang in RTL_LANG_CODES else "ltr",
+				title=title,
+				styles=stylesCss,
+				extraStylesheet=extraStylesheet,
+			)
 		)
 		f.write(htmlText)
 		f.write("\n</html>\n")
 	f.close()
 
 
-def md2html(source):
-	sysPath = list(sys.path)
-	if "markdown" in sys.modules:
-		log.warning("Potential incompatibility: markdown module is also used and loaded probably by other add-on")
-		del sys.modules["markdown"]
-	sys.path = [sys.path[0]]
-	from ..utils.py3Compatibility import getCommonUtilitiesPath
-	commonUtilitiesPath = getCommonUtilitiesPath()
-	markdownExPath = os.path.join(commonUtilitiesPath, "markdownEx")
-	sys.path.append(commonUtilitiesPath)
-	sys.path.append(markdownExPath)
-	from markdown2 import markdown
-	# restore sys.path
-	sys.path = sysPath
-	headerDic = {
-		"[[!meta title=\"": "# ",
-		"\"]]": " #",
-	}
-	with codecs.open(source, "r", "utf-8") as f:
-		mdText = f.read()
-		for k, v in headerDic.items():
-			mdText = mdText.replace(k, v, 1)
-		htmlText = markdown(mdText)
-	htmlText = "<body>\n" + htmlText + "\n</body>"
-	return htmlText
+markdown_extensions = [
+	"abbr",
+	"admonition",
+	"attr_list",
+	"def_list",
+	# "extra",
+	"fenced_code",
+	"footnotes",
+	"legacy_attrs",
+	"legacy_em",
+	"md_in_html",
+	"meta",
+	"nl2br",
+	"sane_lists",
+	"smarty",
+	"tables",
+	"toc",
+	"wikilinks",
+]
+
+if NVDAVersion >= [2025, 1]:
+	# for nvda versions >= 2025.1
+	def md2html(source):
+		import markdown
+		headerDic = {
+			"[[!meta title=\"": "# ",
+			"\"]]": " #",
+		}
+		extensions = []
+		for ext in markdown_extensions:
+			extensions.append("markdown.extensions.%s" % ext)
+		with codecs.open(source, "r", "utf-8") as f:
+			mdText = f.read()
+			for k, v in headerDic.items():
+				mdText = mdText.replace(k, v, 1)
+			htmlText = markdown.markdown(mdText, extensions=extensions)
+		htmlText = "<body>\n" + htmlText + "\n</body>"
+		return htmlText
+
+elif NVDAVersion >= [2024, 2]:
+	# for nvda versions >= 2024.2
+	def md2html(source):
+		sysPath = list(sys.path)
+		sys.path = [sys.path[0]]
+		from ..utils.py3Compatibility import getCommonUtilitiesPath
+		commonUtilitiesPath = getCommonUtilitiesPath()
+		markdownExPath = os.path.join(commonUtilitiesPath, "markdownEx")
+		sys.path.append(commonUtilitiesPath)
+		sys.path.append(markdownExPath)
+		from markdownEx import markdown
+		# restore sys.path
+		sys.path = sysPath
+		del sys.modules["markdownEx"]
+
+		headerDic = {
+			"[[!meta title=\"": "# ",
+			"\"]]": " #",
+		}
+		extensions = []
+		for ext in markdown_extensions:
+			if ext in ["legacy_attrs",]:
+				continue
+			extensions.append("markdownEx.markdown.extensions.%s" % ext)
+		with codecs.open(source, "r", "utf-8") as f:
+			mdText = f.read()
+			for k, v in headerDic.items():
+				mdText = mdText.replace(k, v, 1)
+			htmlText = markdown.markdown(mdText, extensions=extensions)
+		htmlText = "<body>\n" + htmlText + "\n</body>"
+		return htmlText
+
+else:
+	# for versions < 2024.2
+	def md2html(source):
+		sysPath = list(sys.path)
+		markdownModulePath = None
+		if "markdown" in sys.modules:
+			log.warning("Potential incompatibility: markdown module is also used and loaded probably by other add-on")
+			markdownModulePath = sys.modules["markdown"]
+			del sys.modules["markdown"]
+		sys.path = [sys.path[0]]
+		from ..utils.py3Compatibility import getCommonUtilitiesPath
+		commonUtilitiesPath = getCommonUtilitiesPath()
+		markdownExPath = os.path.join(commonUtilitiesPath, "markdownEx")
+		sys.path.append(commonUtilitiesPath)
+		sys.path.append(markdownExPath)
+		from markdown2 import markdown
+		# restore sys.path
+		sys.path = sysPath
+		del sys.modules["markdown2"]
+		if markdownModulePath is not None:
+			sys.modules["markdown"] = markdownModulePath
+
+		headerDic = {
+			"[[!meta title=\"": "# ",
+			"\"]]": " #",
+		}
+		with codecs.open(source, "r", "utf-8") as f:
+			mdText = f.read()
+			for k, v in headerDic.items():
+				mdText = mdText.replace(k, v, 1)
+			htmlText = markdown(mdText)
+		htmlText = "<body>\n" + htmlText + "\n</body>"
+		return htmlText
 
 
 def getHTMLBody(dest):
@@ -211,19 +315,43 @@ def getHTMLBody(dest):
 
 def t2t2html(source, dest):
 	sysPath = list(sys.path)
+	txt2TagsModulePath = None
 	if "txt2tags" in sys.modules:
 		log.warning("Potential incompatibility: txt2tags module is also used and loaded probably by other add-on")
+		txt2TagsModulePath = sys.modules["txt2tags"]
 		del sys.modules["txt2tags"]
 	sys.path = [sys.path[0]]
 	from ..utils.py3Compatibility import getCommonUtilitiesPath
 	sys.path.append(getCommonUtilitiesPath())
 	import txt2tags
-	sys.path = sysPath
+	sys.path = list(sysPath)
+	del sys.modules["txt2tags"]
+	if txt2TagsModulePath is not None:
+		sys.modules["txt2tags"] = txt2TagsModulePath
 	txt2tags.exec_command_line(["%s" % (source), ])
 	# we don't want the footer
 	htmlText = getHTMLBody(dest)
 	os.remove(dest)
 	return htmlText
+
+
+def getStylesCss(fileDir, fileType="t2t"):
+	# the default styles css files are in doc folder
+	# but translators can adapte these files for convenience
+	# so the file modified must be placed in the language folder.
+	if fileType == "t2t":
+		stylesCss = "style_t2t.css"
+		if not os.path.exists(os.path.join(fileDir, stylesCss)):
+			stylesCss = "..\\style_t2t.css"
+		extraStylesCss = ""
+	elif fileType == "md":
+		stylesCss = "styles.css"
+		if not os.path.exists(os.path.join(fileDir, stylesCss)):
+			stylesCss = "..\\%s" % stylesCss
+		extraStylesCss = "numberedHeadings.css"
+		if not os.path.exists(os.path.join(fileDir, extraStylesCss)):
+			extraStylesCss = "..\\%s" % extraStylesCss
+	return (stylesCss, extraStylesCss)
 
 
 def generateHTMLFiles(addon, docDirs):
@@ -244,15 +372,14 @@ def generateHTMLFiles(addon, docDirs):
 			dest = os.path.join(d, base + ".html")
 			manifest = getMmanifestInfos(addon, lang)
 			title = "%s %s" % (manifest["summary"], manifest["version"])
+			(stylesCss, extraStylesCss) = getStylesCss(d, ext)
 			if ext == "t2t":
 				htmlText = t2t2html(theFile, dest)
-				cssFileName = "style_t2t.css"
 				t2tCount += 1
 			elif ext == "md":
 				htmlText = md2html(theFile)
-				cssFileName = "style.css"
 				mdCount += 1
-			writeHTMLFile(dest, htmlText, title, cssFileName)
+			writeHTMLFile(dest, htmlText, title, stylesCss, extraStylesCss)
 	return (mdCount, t2tCount)
 
 
@@ -267,10 +394,11 @@ def _makeHTML(addon, lang):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of HTML documentation files")
 	if "doc" not in os.listdir(addon.path):
-		gui.messageBox(
+		alert(
 			# Translators: message to user no doc folder
 			_("No documentation file to convert"),
-			dialogTitle, wx.OK | wx.ICON_ERROR)
+			dialogTitle
+		)
 		return
 	docFolder = os.path.join(addon.path, "doc")
 	dirList = getDocLanguages(addon)
@@ -287,10 +415,11 @@ def _makeHTML(addon, lang):
 	(mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
 	n = mdCount + t2tCount
 	if n == 0:
-		gui.messageBox(
+		inform(
 			# Translators: message to user no converted document
 			_("No file converted"),
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 	else:
 		# copy css style file
 		curAddon = addonHandler.getCodeAddon()
@@ -308,10 +437,11 @@ def _makeHTML(addon, lang):
 				shutil.copy(source, dest)
 			except Exception:
 				pass
-		gui.messageBox(
+		inform(
 			# Translators: message to user to report number of converted documents
 			_("%s files converted") % n,
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 	# clean up
 		clean(addon)
 
@@ -326,19 +456,22 @@ def _makeMainManifestIni(addon):
 		from importlib import reload
 		reload(buildVars)
 		sys.path = sysPath
+		del sys.modules["buildVars"]
 	except ImportError:
 		sys.path = sysPath
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	dest = os.path.join(addon.path, "manifest.ini")
 	if os.path.exists(dest):
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: message to user to confirm the update of manifest.ini.
 			_("The manifest.ini file already exists. Do you really want to update it?"),
-			dialogTitle, wx.YES | wx.NO) == wx.NO:
+			dialogTitle
+		) != ReturnCode.YES:
 			return
 	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
@@ -348,7 +481,7 @@ def _makeMainManifestIni(addon):
 	generateManifest(dest, addonInfo, manifest_template)
 	# Translators: message to user to report end of manifest.ini creation
 	msg = _("The manifest.ini file has been updated")
-	gui.messageBox(msg, dialogTitle, wx.OK)
+	inform(msg, dialogTitle)
 	# clean up
 	clean(addon)
 
@@ -363,12 +496,14 @@ def _makeLocaleManifestIni(addon, lang):
 		from importlib import reload
 		reload(buildVars)
 		sys.path = sysPath
+		del sys.modules["buildVars"]
 	except ImportError:
 		sys.path = sysPath
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	templateFile = os.path.join(
 		_curModuleFilePath, "manifest-translated.ini.tpl")
@@ -377,10 +512,11 @@ def _makeLocaleManifestIni(addon, lang):
 	from .generate import generateTranslatedManifest
 	localeDir = os.path.join(addon.path, "locale")
 	if not os.path.exists(localeDir):
-		gui.messageBox(
+		warn(
 			# Translators: message to user
 			_("No language for this add-on"),
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	if lang == "all":
 		langs = os.listdir(localeDir)
@@ -388,10 +524,11 @@ def _makeLocaleManifestIni(addon, lang):
 		langs = [lang, ]
 	manifest = getManifest(addon)
 	if manifest is None:
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: %s file is not found") % addonHandler.MANIFEST_FILENAME,
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	count = 0
 	noTranslation = []
@@ -407,7 +544,7 @@ def _makeLocaleManifestIni(addon, lang):
 		dialogTitle = _("Creation of localization manifest.ini file")
 		# Translators: message to user.
 		missingTranslationMsg = _("Some translation strings are missing for \"%s\" language") % lang
-		gui.messageBox(missingTranslationMsg, dialogTitle, wx.OK)
+		warn(missingTranslationMsg, dialogTitle)
 	if count:
 		# Translators: message to user
 		# to report number of translated manifest.ini files.
@@ -415,7 +552,7 @@ def _makeLocaleManifestIni(addon, lang):
 	else:
 		# Translators: message to user to report no translated manifest.ini file .
 		msg = _("No localization manifest.ini file created")
-	gui.messageBox(msg, dialogTitle, wx.OK)
+	inform(msg, dialogTitle)
 	# clean up
 	clean(addon)
 
@@ -431,13 +568,15 @@ def _generatePOTFile(addon):
 		from importlib import reload
 		reload(buildVars)
 		sys.path = sysPath
+		del sys.modules["buildVars"]
 	except ImportError:
 		sys.path = sysPath
 
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	potFileName = "%s-%s.pot" % (
 		buildVars.addon_info["addon_name"], buildVars.addon_info["addon_version"])
@@ -446,12 +585,14 @@ def _generatePOTFile(addon):
 		addon, potFileName, buildVars.addon_info, buildVars.i18nSources)
 	if retval == 0:
 		msg = _("%s file created") % potFileName
+		inform(msg, dialogTitle)
 	else:
 		if retval == -1:
 			msg = _("Impossible to create POT file: no source file defined in buildVars.py")
 		else:
+			# Translators: message to user pot file canot be created
 			msg = _("Impossible to create POT file")
-	gui.messageBox(msg, dialogTitle, wx.OK)
+		alert(msg, dialogTitle)
 	# clean up
 	clean(addon)
 
@@ -476,12 +617,14 @@ def _prepareAddon(addon):
 		from importlib import reload
 		reload(buildVars)
 		sys.path = sysPath
+		del sys.modules["buildVars"]
 	except ImportError:
 		sys.path = sysPath
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	# start
 	ui.message(_("Prepare add-on start"))
@@ -504,10 +647,11 @@ def _prepareAddon(addon):
 	localeDir = os.path.join(addon.path, "locale")
 	manifest = getManifest(addon)
 	if manifest is None:
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: %s file is not found") % addonHandler.MANIFEST_FILENAME,
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 	else:
 		if os.path.exists(localeDir):
 			langs = os.listdir(localeDir)
@@ -587,7 +731,7 @@ def _prepareAddon(addon):
 	# Translators: message to user
 	msg = _("Completed") + "\r\n\r\n" + text
 	th.stop()
-	wx.CallAfter(gui.messageBox, msg, dialogTitle, wx.OK)
+	wx.CallAfter(warn, msg, dialogTitle)
 	# clean up
 	clean(addon)
 
@@ -601,10 +745,11 @@ def _createBuildVarsFile(addon):
 	manifest_path = os.path.join(addon.path, addonHandler.MANIFEST_FILENAME)
 	if not os.path.exists(manifest_path):
 
-		gui.messageBox(
+		alert(
 			# Translators: message to user.
 			_("Error: %s file is not found") % addonHandler.MANIFEST_FILENAME,
-			dialogTitle, wx.OK)
+			dialogTitle
+		)
 		return
 	with open(manifest_path) as f:
 		manifest = addonHandler.AddonManifest(f)
@@ -612,7 +757,9 @@ def _createBuildVarsFile(addon):
 	if os.path.exists(dest):
 		# Translators: message to user.
 		msg = _("Warning: buildVars.py already exists. Do you want to replace it?")
-		if gui.messageBox(msg, dialogTitle, wx.YES | wx.NO) == wx.NO:
+		if confirm_YesNo(
+			msg, dialogTitle
+		) != ReturnCode.YES:
 			return
 
 	default_vars = {
@@ -648,7 +795,7 @@ def _createBuildVarsFile(addon):
 		f.write(buildVars)
 	# Translators message to user to report buildVars.py has been created
 		msg = _("The buildVars.py file has been created")
-	gui.messageBox(msg, dialogTitle, wx.OK)
+	inform(msg, dialogTitle)
 	# clean up
 	clean(addon)
 
@@ -846,10 +993,11 @@ class ToolsForAddonDialog(
 		dialogTitle = _("Update add-on version")
 		buildVarsFile = os.path.join(addon.path, "buildVars.py")
 		if not os.path.exists(buildVarsFile):
-			gui.messageBox(
+			alert(
 				# Translators: no comment
 				_("Error: buildVars.py file is not found"),
-				dialogTitle, wx.OK)
+				dialogTitle
+			)
 			return
 		buildVarsList = []
 		buildVars = codecs.open(buildVarsFile, "r", "utf_8", errors="replace")
@@ -863,10 +1011,11 @@ class ToolsForAddonDialog(
 				found = True
 				break
 		if not found:
-			gui.messageBox(
+			alert(
 				# Translators: message to user add-on version line not found
 				_("Error: buildVars.py file has no add-on version line"),
-				dialogTitle, wx.OK)
+				dialogTitle
+			)
 			return
 		index = buildVarsList.index(line)
 		buildVarsList[index] = line.replace(oldVersion, newVersion)
@@ -875,12 +1024,12 @@ class ToolsForAddonDialog(
 			dest.write(line)
 		dest.close()
 		# Translators: message to user add-on version has been updated.
-		gui.messageBox(
+		inform(
 			# Translators: message to user  updating add-on's version
 			# of buildVars.py file.
 			_("Version of buildVars.py file has been updated"),
-			dialogTitle,
-			wx.OK)
+			dialogTitle
+		)
 
 	def onUpdateVersionButton(self, evt):
 		index = self.addonsListBox.GetSelection()
@@ -894,14 +1043,15 @@ class ToolsForAddonDialog(
 			from importlib import reload
 			reload(buildVars)
 			sys.path = sysPath
+			del sys.modules["buildVars"]
 		except ImportError:
 			sys.path = sysPath
-			# Translators: message to user.
-			gui.messageBox(
+			# Translators: jmessage to user.
+			alert(
 				# Translators: message to user buildVars.py file is not found.
 				_("Error: buildVars.py file is not found"),
-				dialogTitle,
-				wx.OK)
+				dialogTitle
+			)
 			return
 		version = buildVars.addon_info["addon_version"]
 		with wx.TextEntryDialog(

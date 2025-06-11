@@ -17,7 +17,8 @@ from keyboardHandler import KeyboardInputGesture
 import inputCore
 from gui.inputGestures import InputGesturesDialog, _InputGesturesViewModel, _GesturesTree
 from ..utils.NVDAStrings import NVDAString
-from ..utils import getHelpObj, contextHelpEx
+from ..gui import contextHelpEx
+from ..utils import getHelpObj
 from . import inputGesturesExPatches
 
 addonHandler.initTranslation()

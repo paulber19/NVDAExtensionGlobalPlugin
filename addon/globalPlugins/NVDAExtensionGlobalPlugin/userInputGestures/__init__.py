@@ -1,20 +1,27 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\userInputGestures/__init__.py
 # A part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2022 paulber19
+# Copyright (C) 2016 - 2025 paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 import addonHandler
 from logHandler import log
-import os
 import globalVars
 import wx
-import sys
 import gui
 import inputCore
 from ..utils.NVDAStrings import NVDAString
 from ..utils import makeAddonWindowTitle, getHelpObj
-from ..utils import contextHelpEx
+from ..gui import contextHelpEx
+import os
+import sys
+_curAddon = addonHandler.getCodeAddon()
+sharedPath = os.path.join(_curAddon.path, "shared")
+sys.path.append(sharedPath)
+from messages import confirm_YesNo, alert, ReturnCode
+del sys.path[-1]
+del sys.modules["messages"]
+
 addonHandler.initTranslation()
 
 
@@ -117,12 +124,12 @@ class UserInputGesturesDialog(
 		self.onTreeSelect(evt)
 
 	def onRemoveAll(self, evt):
-		if gui.messageBox(
+		if confirm_YesNo(
 			# Translators: the label of a message box dialog.
 			_("Do you really want to erase all the modifications of input gesture that have been made?"),
 			# Translators: the title of a message box dialog.
 			_("Warning"),
-			wx.YES | wx.NO | wx.ICON_WARNING) == wx.NO:
+		) != ReturnCode.YES:
 			return
 		inputCore.manager.userGestureMap.clear()
 		inputCore.manager.userGestureMap.save()
@@ -146,9 +153,10 @@ class UserInputGesturesDialog(
 				log.debugWarning("", exc_info=True)
 				# Translators: An error displayed
 				# when saving user defined input gestures fails.
-				gui.messageBox(
+				alert(
 					NVDAString("Error saving user defined gestures - probably read only file system."),
-					NVDAString("Error"), wx.OK | wx.ICON_ERROR)
+					NVDAString("Error")
+				)
 		inputCore.manager.loadUserGestureMap()
 		super(UserInputGesturesDialog, self).onOk(evt)
 
@@ -170,6 +178,9 @@ class _UserGestureMappingsRetriever(inputCore._AllGestureMappingsRetriever):
 		self.addGlobalMap(self.userGestureMap)
 
 	def addToResults(self, scriptInfo):
+		# for add-on scripts that are not launched
+		if scriptInfo.cls is None:
+			return
 		if scriptInfo.category not in self.results:
 			self.results[scriptInfo.category] = {}
 		self.results[scriptInfo.category][scriptInfo.displayName] = scriptInfo

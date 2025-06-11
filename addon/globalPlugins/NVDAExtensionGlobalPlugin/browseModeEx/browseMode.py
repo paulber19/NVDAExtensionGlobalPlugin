@@ -18,22 +18,14 @@ import textInfos
 import api
 import config
 from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
-if NVDAVersion >= [2022, 4]:
-	# for nvda version >= 2022.4
-	from .documentBaseEx import DocumentWithTableNavigation_2022_4 as DocumentWithTableNavigationEx
-elif NVDAVersion > [2022, 1]:
-	# for nvda version >= 2022.2
-	from .documentBaseEx import DocumentWithTableNavigation_2022_2 as DocumentWithTableNavigationEx
-else:
-	# for nvda versions until 2022.1
-	from .documentBaseEx import DocumentWithTableNavigation_2022_1 as DocumentWithTableNavigationEx
+from .documentBaseEx import DocumentWithTableNavigation_2022_4 as DocumentWithTableNavigationEx
 from .. utils import stopDelayScriptTask, clearDelayScriptTask
 from ..utils.NVDAStrings import NVDAString
 from ..settings import toggleLoopInNavigationModeOption
 from ..scripts.scriptHandlerEx import speakOnDemand
 
 addonHandler.initTranslation()
+NVDAVersion = [version_year, version_major]
 # Add new quick navigation keys and scripts.
 if NVDAVersion < [2024, 2]:
 	_PARAGRAPH_KEY = "p"

@@ -37,7 +37,7 @@ This add-on adds to NVDA's global commands:
   - new types of elements presented in list form in the "List of elements" dialog box opened by NVDA + f7: (radio button, paragraph, frame, checkbox, ...) and announcement of the number of elements corresponding to the selected type,
   - announcement of the address (URL) of the document,
   - option to browse in a loop in search of a next or previous item,
-  - [scripts to click at the current position of the browser object #hdr23],
+  - scripts to click at the current position of the browser object,
   - scripts for tables:
    - announcement of the position of the current cell,
    - move to the next or previous column / row with reading of the cells composing it,
@@ -46,6 +46,7 @@ This add-on adds to NVDA's global commands:
  - [Announcement of the function associated with the keyboard editing commands #hdr7] with:
   - adding the selected text to the clipboard,
   - emptying the clipboard,
+  - display of the text contained in the clipboard in an information window,
   - improvement of the NVDA base script "NVDA+c" which announces the text in the clipboard,
  - [Announcement of the pre-selected folder in the "Open, Save", "Save as" style dialog boxes #hdr8],
  - [Open previous or current NVDA log and copy their path to clipboard # hdr9],
@@ -58,8 +59,8 @@ This add-on adds to NVDA's global commands:
  - [quick voice profile switching #hdr17],
  - [persistence of NVDA and modification keys and specific persistence for the gmail.com site #hdr18],
  - [Shutdown, restart or hibernate computer #hdr19],
- - management of input gestures configured by user,
- - [sound control #hdr21] (Windows 10 only):
+ - [management of input gestures configured by user #hdr20],
+ - [sound control #hdr21]:
   - mute or unmute volume for the focused application,
   - manually or automatically establish the main sound and that of the NVDA audio stream,
   - modify the level of the main volume or that of the audio stream of the application under focus,
@@ -72,14 +73,14 @@ This add-on adds to NVDA's global commands:
   - copy of the date and time to the clipboard,
   - Announce the time on the Windows clock with seconds,
   - announcement of the time independent of the punctuation level.
- - [user configurations management and NVDA restarting with precise configuration #HDR23],
+ - [user configurations management and NVDA restarting with precise configuration #HDR30],
  - [text analyzer # hdr31],
  - [ quick add-ons activation or desactivation #hdr35],
 - The options:
  - [removal of the announcement of the description of objects in Windows ribbons #hdr100],
  - [automatic window maximization #hdr102],
  - [systematic announcement of punctuation marks when moving by word #hdr103],
- - [possibility of signaling spelling errors by a double beep or by a voice announcement instead of the sound emitted by NVDA # hdr104],
+  - [possibility of reporting spelling errors by a double beep, by a voice announcement or by announcing the misspelled word under a dedicated configuration profile, instead of the default reporting of NVDA #hdr104],
  - [possibility to block the "Insert" and "Caps lock" keys #hdr105],
  - [Pronunciation of non-alphanumeric characters when per-character keyboard echo is disabled #hdr106].
 - advanced options:
@@ -319,11 +320,11 @@ Pressing the "Destroy all" button closes all the windows and the dialog box.
 +++ Display of the list of icons of the notification area or of the windows of the launched applications +++[hdr1-3]
 The description of this script is: "Shows the list of buttons on the System Tray. Twice, Display the running application windows's list with opportunity to put one of ".
 
-By default, the "MAIN_KEY_ICONS_List" input gesture is assigned to it.
+By default, the input gesture "Main_Key_icons_List" is affected.
 
 No interpreter command is assigned to it.
 
-A simple press of the "MAIN_KEY_ICONS_List" input gesture launches the "Display of the list of icons in the notification zone" script (see above).
+A simple press of the input gesture launches the "Display of the list of icons in the notification zone" script (see above).
 
 Pressing twice launches the script "Displaying the list of windows of the applications launched" (see above).
 
@@ -581,6 +582,26 @@ The "Loop navigation" option in the "NVDA Add-ons" category of the add-on's "Set
 This option is only shown if the "Extend virtual buffer functionality" feature is installed.
 
 By default, this option is not checked. The basic operation of NVDA is retained.
+
+
+++ scripts to click on the current position of the browser object ++[hdr5-6]
+These scripts make it possible to make, right or left the mouse, a simple or double click in the current position of the browser object.
+
+They actually chain two types of NVDA scripts:
+- The script "Move the mouse pointer to the current browser object: shortcut" NVDA + / of the digital pavement "(desktop computer) or" NVDA + capital + m "(laptop),
+- and the scripts to click with the mouse button:
+ - Simple left click: "/ Digital pavement" (desktop computer) or "NVDA + ù" (laptop and French NVDA language) or "NVDA + [" (laptop and other language).
+ - Simple right click: "* of the digital pavement" (desktop computer) or "NVDA+*" (laptop and French NVDA language) or "NVDA+]" (laptop and other language).
+
+
+The input gestures of these scripts are:
+- "Main_Key_Clic_left_Mouse_Button_at_Navigator": Make a single left click in the position of the browser object. The second support is a double click.
+- "Main_Key_Clic_right_Mouse_Button_at_Navigator": Rightly click the position of the Board Object. The second support is a double click.
+
+
+These input gestures can be modified and are in the "mouse" category of the  "Input gestures" dialog of NVDA.
+
+
 ++ Announcement of the function associated with the "copy", "Paste" style editing commands ++[hdr7]
 This feature is installed by default.
 
@@ -633,6 +654,15 @@ Its description is "Empty the clipboard" and is placed under the "System status"
 Its function is to completely erase the contents of the Windows clipboard. Attention, this does not concern the history of the Windows clipboard.
 
 It is launched using the "KEY_CLEAR_CLIP" interpreter command.
++++ Displaying the text contained in the clipboard in an information window +++[hdr7-4]
+This script is installed without a input gesture, but it is possible to assign one to it using the NVDA "Input Gestures" dialog.
+
+Its description is "Display clipboard text in an information window" and is placed in the "System Status" category.
+
+Its function is to present the text contained in the clipboard in a dialog box. It behaves like the script that announces this text ("NVDA+c").
+
+It is launched using the interpreter command "KEY_DISPLAY_CLIP".
+
 
 ++ Announcement of the selected folder in the "Open", "Save", "Save as" style dialog boxes ++[hdr8]
 This feature is installed by default without input gesture.
@@ -660,29 +690,20 @@ It adds the scripts:
 
 
 These Scripts are stored in the "Tools" category of the NVDA "input gestures" dialog.
-
 +++ Management of NVDA logs +++[hdr9-1]
 The description of this script is: "Open a dialog to manage NVDA logs".
 
 It is started using the "KEY_LOG_VIEW" command of the interpreter. No input gesture is assigned to it by default.
 
 This script displays the "NVDA Log Management" dialog box showing:
-- a button to open the current NVDA log,
-- a button to open the old NVDA log,
-- a button to copy the path of the current NVDA log to the clipboard,
-- a button to copy the path of the old NVDA log to the clipboard,
-- the "Close" button to close the dialog box.
+- The drop -down list to select the NVDA journal: current or previous.
+- The button to open the selected journal.
+- The button to copy the selected newspaper in the selected newspaper.
 
 
+The newspaper is not directly open. It is copied in a temporary file which is then open to WordPad.
 The log is not directly opened. It is previously copied to a temporary "NVDALog.txt file" or "oldNVDALog.txt".
-This temporary file then opens in the program associated with the .txt extension. Default is notepad.
-On Windows 11, for some unknown reason, opening this file like NVDA's "contributors.txt" causes an error.
-This only happens with an installed version of NVDA. Portable versions are not affected.
-To solve this problem pending a future correction from Microsoft, you must ask Windows to launch NVDA in administrator mode, as follows:
-- go to the NVDA folder and to the "nvda.exe" file.
-- open the properties of this file.
-- in the "Compatibility" tab, check the box "Run this program as an administrator".
-- confirm with "OK".
+
 
 
 +++ Opening NVDA logs +++[hdr9-2]
@@ -1277,24 +1298,35 @@ Volume level changes are announced by default. The name of the audio output devi
 
 But it is possible to disable this announcement using the "Announce volume changes" option in the "Volume change" group of the "Computer" category.
 
-+++ Automatically restore main sound and NVDA when plugin loads +++[hdr21-7]
++++ Automatically restore main sound and NVDA when add-on loads +++[hdr21-7]
 This feature allows you to restore, when loading this add-on, the volume of the NVDA audio source and that of the audio output device it uses by setting the level of each to a value defined by configuration in the event that it is lower than the minimum threshold defined by configuration.
 
 For this, the "Sound control" group of the "Computer" category of the "Parameters" dialog of the add-on, presents the following configuration elements:
-- the checkbox "Automatically set the main sound and NVDA when loading the add-on" which enables or disables this option,
+- the checkbox "Automatically set the sound when loading the add-on" which enables or disables this option,
 - the restoration threshold of the main volume below which its level will be automatically restored,
 - the level of the main volume to restore,
 - the recovery threshold of the NVDA volume below which its level will be restored (as a percentage of that of the main volume),
 - the volume level of NVDA to restore (as a percentage of the main volume).
+- The check box "at start -up, put NVDA on the two channels".
 
 
-When launched, this add-on verifies that the primary volume and the NVDA volume are above the recovery threshold configured for each.
+When the  "automatically establish the  sound to loading the extension"check box  is checked, the extension checks, at its launch, that the volume of the audio output device and that of NVDA are above the recovery threshold configured for each.
 
 If this is not the case, this add-on then fixes the volume level to the value of the level to restore configured.
 
 When installing this add-on, the current NVDA volume levels and the audio output device used by NVDA are taken into account to set the values ​​of the levels to be restored.
 
+By default, the add-on puts NVDA at the same time on the two channels and at the same volume level. The fixed volume level is the largest of volumes between the two channels.
 
+It is possible to deactivate this operation using the check box "at start -up, put NVDA on the two channels".
+
+For NVDA versions greater than 2024.2, this operation is also automatically deactivated if the NVDA sound separation mode is not deactivated, whatever the state of this check box. In this case, it is NVDA which manages the canals for NVDA at its start -up according to the method of separation of the configured sound.
+++ supplements concerning the date and time ++ [HDR24]
+This feature is installed by default without input gesture.
+
+Please note: installed with input gesture, this feature can be in conflict with the "Clock" extension because the "NVDA+F12" input gesture is in common.
+
+This feature brings:
 +++ Copy date and time to clipboard +++[hdr24-1]
 The description of this script is: "Copy date and time to clipboard".
 This script is stored in the "System Status" category of the NVDA "input gestures" dialog.
@@ -1643,6 +1675,47 @@ After the first 5 steps:
 
 By combining the previous example and this one and using a USB drive as a medium, you can find the same configuration on different machines.
 
+++++ Active configuration transfer of a computer on another computer via a USB key ++++
+- On the source computer, launch the "user configuration manager" ("NVDA+J" followed by "Key_user_config_Management"),
+- Press the "Add a new folder" button,
+- Enter the identifier of the configuration folder (for example "Mondossierdeconfiguration",
+- Choose the root folder of the USB key as a location of the configuration folder,
+- Press the "Add" button: the folder appears in the list with a question mark and is selected.
+- Press the "Prepare this folder" button to reveal the dialogue "Preparation of the NVDAUSERCONFIG-MONDOSSIEREDIFIGUIGEGIGEURTIGE file.
+- in the "Import from the file" list of this dialogue, select the active configuration folder (the one that is checked),
+- Press the "Import all the configuration" button and wait for the end of the import. This can take some time. The copy of the active configuration is then on the USB key.
+
+
+In the target computer, place the USB key and note your reader letter.
+We will now launch the NVDA of the target computer with this configuration folder.
+Two solutions:
+- either using the "User Configuration Manager" dialogue if this extension is installed, (see the previous example).
+- either using the option that allows you to launch with another configuration folder (see below).
+
+
+To use the option:
+- On the desktop of this computer is the NVDA icon installed.
+- Copy this icon and rename it, for example, to "NVDA - Mondossierdeconfiguration". It is with him that NVDA will be relaunched.
+- Open the properties of this icon and modify its target by adding after a space: -C "e: \ mondossierdeconfiguration" (e being the reader of the USB key). Validate by "OK".
+- Finally, launch NVDA with this icon.
+
+
+
+At this stage, NVDA therefore instructed the configuration of the configuration folder of the USB key.
+It is then possible before replacing the old configuration, carrying out tests to ensure its proper functioning.
+Then, to install this configuration:
+- Launch the "User Configuration Manager" dialogue ("NVDA+J" followed by "Key_user_Config_Management").
+- In the "Configuration folders" list, choose the NVDA native configuration folder: "NVDA".
+- Press the "Modify this folder" button to display the "Modification of the NVDA" dialogue.
+- In the list "Import from the file" of this dialogue, choose the active configuration folder (the one that is checked).
+- Press the "import configuration" button and confirm.
+- Press the "Prepare this folder" button to make the dialogue appear "Preparation of the NVDAUSERCONFIG-MONDOSSIEREDIFIGUIGEGIGEURTIGE file".
+- in the list "import from the file" of this dialogue,Select the active configuration folder (the one that is checked).
+- Press the "import configuration" button, confirm the import and wait for the end of it. This can take some time.
+
+
+It only remains to launch the NVDA installed either by its office icon, or by "Alt+Control+N".
+
 ++ Text analysis ++[hdr31]
 This functionality is currently being tested.
 
@@ -1656,6 +1729,7 @@ The analysis is broken down into three research groups:
 - search for mismatches between symbols,
 - search for anomalies: multiple contiguous spaces, space or tabulation at the end of the line, isolated or badly spaced punctuations, missing or misplaced capitals, missing or unexpected spaces before or after a punctuation.
 - search for formatting changes: font name, color, size, attributes, style.
+- search for spelling errors.
 
 
 It is possible to deactivate a search group as well as, individually, each action of a group.
@@ -1737,7 +1811,10 @@ The formatting changes concern:
 
 They can be included or excluded individually from the search by checking or unchecking them in the "Types" list of the same group.
 
-+++ On-demand scan +++[hdr31-3]
+++++ Check for spelling errors ++++[hdr31-2-4]
+This search is enabled by default.
+
++++ Analyze On-demand scan +++[hdr31-3]
 The add-on installs scripts to analyze text at the cursor position on demand.
 These scripts are:
 - "Analyze the word under the cursor": "MAIN_KEY_WORD_TEXT_ANALYZER", command of the "KEY_WORD_TEXT_ANALYZER" interpreter,
@@ -1886,7 +1963,7 @@ In case these modifications cause problems or conflict with other add-ons, you m
 This feature makes it possible to separate the sound from NVDA from the sound emitted by the other audio sources and thus to hear in one ear, the sound from NVDA and in the other ear, the sound from the other audio sources.
 
 Only applications with a two-channel audio source and using the same audio output device are affected.
-It also allows you to adjust the volume level of tonalities played by NVDA (when Sasapi is not used) and change the gain of sound files from NVDA and the add-on.
+It also allows you to adjust the volume level of tonalities played by NVDA (when Wasapi is not used, possible with the versions of NVDA prior to 2025.1) and change the gain of sound files from NVDA and the add-on.
 
 It is installed by default.
 
@@ -1917,7 +1994,7 @@ The "KEY_CENTER_FOCUSED_APP" command is operational even if the feature is not i
 +++ Audio source manager +++[hdr34-1]
 The "Audio Source Manager" dialog allows, besides NVDA sound orientation, to:
 - set the volume level of both NVDA audio channels and audio sources,
-- adjust the volume of NVDA tones when Wasapi is not used,
+- adjust the volume of NVDA tones when Wasapi is not used( possible with the versions of NVDA prior to 2025.1),
 - change the gain of NVDA sound files.
 
 He introduces :
@@ -1957,8 +2034,6 @@ By default and when wasapi is not used, NVDA's tone level is set to 50 which is 
 A protection is provided to avoid putting, simultaneously,to zero the level of NVDA's audio channels and that its volume level is lower than its configured undo threshold.
 
 When an audio source is selected, the channel balance status is announced as well as the mute status.
-
-When restarting NVDA or if the add-on is disabled or uninstalled, NVDA is again heard on both audio channels, while the audio sources remain in their state (remembered by Windows).
 
 Warning: NVDA and the audio sources must use the same audio output device, such as the sound mapper, for proper operation. Besides, the functionality is of interest only in this case.
 
@@ -2000,6 +2075,8 @@ If there are no already modified sounds in the list of sounds, the "Reset all so
 
 NVDA's startup sound cannot be changed because it is played before the add-on loads.It is possible to not authorize the modification of the gain of the sounds by unchecking the checkbox "Allow the modification of the gain" found in the "Advanced" category. This box is checked by default.
 
+For NVDA versions greater than 2024.2, this operation is also automatically deactivated if the NVDA split audio mode is not deactivated, whatever the state of this check box. In this case, it is NVDA which manages the channel for NVDA at its start -up according to the method of separation of the configured sound.
+
 +++ Technical details +++
 To achieve the functionality of adjusting the volume of NVDA tonalities when Wasapi is not used, the add-on has changed the operation of the "beep" function of the "tones" module of NVDA.
 This can be a problem if another add-on has also modified it.
@@ -2012,6 +2089,7 @@ By default, This option is checked.
 In order for the modified sound files to be played instead of the original sounds, the playWaveFile function of the nvwave.py module of NVDA has been replaced. This replacement feature is common with the "Temporary Audio Device" feature.
 
 If modifying this function is a problem, you must both uncheck the "Allow gain modification" option and uninstall the "Temporary Audio Device" feature.
+
 
 ++ Quick activation or deactivation of add-ons ++[hdr35]
 To activate or deactivate add-on, NVDA natively offers the add-ons manager or, since NVDA 2023.2, the Add-on Store.
@@ -2064,7 +2142,8 @@ By default, it is enabled.
 
 You can deactivate it by unchecking the option "Automatically maximize windows " in the "Computer" category of the "Settings" dialog of the add-on.
 
-++ Announcement of punctuation when moving by word ++[hdr103]
+++ Cursor movement ++
+++ Announcement of punctuation when moving by word ++[hdr103-1]
 NVDA allows you to move word by word in documents using the "control + right arrow" and "control + left arrow" keyboard commands.
 
 The symbols and punctuation marks are then said according to the level of punctuation and symbols configured for the current configuration profile.
@@ -2080,14 +2159,49 @@ It is presented in the form of a combobox which allows you to choose:
 - or one of NVDA's symbol and punctuation levels (None, some one, most, all).
 
 
-++ Reporting spelling errors by beep or voice announcement ++[hdr104]
-When the "Spelling error" option in the "Document information" group of the "Document formatting" category of NVDA settings is checked, NVDA will sound a special sound for the spelling error that comes from be made.
++++ Do not say blank when moving by line +++ [HDR103-2]
+When traveling by line and when NVDA meets a line without a announced character, he says "blank".
 
-This sound is emitted just after the hit on the space bar ending the word.
+This option makes it possible to modify this behavior and not to announce anything.
 
-Some users find this sound unpleasant, the add-on brings the possibility of replacing this sound either by a double beep, or by the voice announcement "Spelling error".
+This option is configurable by configuration profile.
 
-The choice is made in the group "Reporting spelling errors" of the category "NVDA enhancements" of the global settings of the add-on.
+It is not activated by default.
+
+++ Reporting spelling errors ++[hdr104]
+NVDA can flag spelling errors:
+- when typing text and when a word is typed.
+- in reading: movement by line, by word or say everything.
+
+For this, two NVDA options are involved:
+- the "Spelling mistake" option in the "Document information" group in the "Document formatting" category.
+- the “Play sound for spelling mistakes while typing” option from the “Keyboard” category.
+
+For NVDA to report errors when reading and typing, the "Spelling errors" option must be activated. Errors are then indicated by the voice message “Spelling mistake”.
+
+For errors to be indicated instead by a sound when typing, the "Play sound for spelling errors while typing" option must be activated.
+
+The add-on modifies this behavior of NVDA in the following way:
+- reporting of spelling errors when reading and typing are independent. If the "Spelling errors" option is not active, but the "Play sound for spelling errors while typing" option is, the errors will be reported as you type.
+- for each situation, when reading or when typing, it is possible to configure how errors will be signaled: by a double beep, by the sound of NVDA, by the voice message "Spelling error" or by the announcement of the misspelled word under a dedicated configuration profile.
+
+
+The choice of reporting spelling errors is made in the "Reporting spelling errors" group in the "NVDA supplements" category of the add-on's global settings, using the two combo box: "When typing" warn by" and "Reading, warn by".
+
+The possible choices from these combo box  are:
+- beep: a double beep will be emitted.
+- sound: NVDA sound will be played.
+- message: "the spelling mistake voice message will be heard.
+- Announcement of the wrong word: the misspelled word will be heard with the voice parameters of the dedicated “Announcement of misspelled words” configuration profile added by the add-on. This profile will be automatically activated when announcing a misspelled word. This profile allows you to modify, for example, the synthesizer or the voice that will be used to announce the misspelled word.
+
+
+The "spelling errors reporting" profile is associated with a dedicated trigger and not present in the list of triggers. It should not be associated with another trigger.
+
+Note:
+- if you delete the "Spelling errors reporting" profile, the add-on will recreate it the next time you start NVDA, but the parameters of this profile will be the same as those of the "Normal configuration" profile.
+-The name of this profile is the NVDA language translation of the term "Spelling errors announcement". So if you launch NVDA in another language, the add-on will create another profile with the name, the translation of this term in this language. The previous profile is not deleted.
+- in the case where the reporting of spelling errors is done vocally, it is preferable to deactivate the option "Speech interrupt for typed characters" in the "Keyboard" category of the NVDA settings because any Quick typed character after a word stops the voice announcement.
+
 
 ++ Blocking "Insert" and "Capslock" keys ++[hdr105]
 (available for NVDA versions lower than 2023.1 if the "Selective announcement of command keys" feature is installed)
