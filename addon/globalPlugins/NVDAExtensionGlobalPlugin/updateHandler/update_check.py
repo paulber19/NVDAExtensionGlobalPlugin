@@ -14,7 +14,6 @@ import api
 import gui
 import config
 import wx
-from .NVDAStrings import NVDAString
 import core
 import hashlib
 try:
@@ -25,14 +24,15 @@ from updateCheck import UpdateDownloader
 import tempfile
 import threading
 import addonAPIVersion
-from versionInfo import version_year, version_major
-import sys
-_curAddon = addonHandler.getCodeAddon()
-sharedPath = os.path.join(_curAddon.path, "shared")
-sys.path.append(sharedPath)
-from messages import confirm_YesNo, alert, warn, inform, ReturnCode
-del sys.path[-1]
-del sys.modules["messages"]
+from .NVDAStrings import NVDAString
+try:
+	# for nvda versions < 2026.1
+	from versionInfo import version_year, version_major
+except ImportError:
+	# for nvda versions >= 2026.1
+	from buildVersion import version_year, version_major
+
+from .messages import confirm_YesNo, alert, warn, inform, ReturnCode
 
 addonHandler.initTranslation()
 
@@ -280,11 +280,10 @@ class CheckForAddonUpdate(object):
 			self.upToDateDialog(self.auto)
 			return
 		(version, url, minimumNVDAVersion, lastTestedNVDAVersion) = newUpdate
-		import versionInfo
 		if minimumNVDAVersion is None:
-			minimumNVDAVersion = [versionInfo.version_year, versionInfo.version_major]
+			minimumNVDAVersion = [version_year, version_major]
 		if lastTestedNVDAVersion is None:
-			lastTestedNVDAVersion = [versionInfo.version_year, versionInfo.version_major]
+			lastTestedNVDAVersion = [version_year, version_major]
 		# For NVDA version, only version_year.version_major will be checked.
 		minimumYear, minimumMajor = minimumNVDAVersion[:2]
 		lastTestedYear, lastTestedMajor = lastTestedNVDAVersion[:2]

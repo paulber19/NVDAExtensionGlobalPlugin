@@ -7,7 +7,7 @@
 import addonHandler
 import globalPluginHandler
 from logHandler import log, _getDefaultLogFilePath
-from versionInfo import version_year, version_major
+from .utils.nvdaInfos import NVDAVersion
 import globalVars
 import api
 import ui
@@ -64,12 +64,11 @@ import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import confirm_YesNo, alert, ReturnCode
+from negp_messages import confirm_YesNo, alert, ReturnCode
 del sys.path[-1]
-del sys.modules["messages"]
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
+
 _curAddon = addonHandler.getCodeAddon()
 # add-on script categories
 SCRCAT_MODULE = str(getAddonSummary())
@@ -132,7 +131,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures = {}
 	_mainScriptToGestureAndfeatureOption = {
-		# "test": (("kb:NVDA+control+shift+f11",), None),
+		"test": (("kb:NVDA+control+shift+f11",), None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), addonConfig.FCT_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), addonConfig.FCT_FocusedApplicationInformations),
@@ -186,10 +185,10 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"findPreviousTextAnalyzerAlert": (None, addonConfig.FCT_TextAnalysis),
 		"manageUserConfigurations": (None, None),
 		"toggleReportCurrentCaretPosition": (None, None),
-		"reportClipboardTextEx": (("kb:nvda+c",), addonConfig.FCT_ClipboardCommandAnnouncement),
-		"addToClip": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
-		"emptyClipboard": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
-		"displayClipboardText": (None, addonConfig.FCT_ClipboardCommandAnnouncement),
+		"reportClipboardTextEx": (("kb:nvda+c",), None),
+		"addToClip": (None, None),
+		"emptyClipboard": (None, None),
+		"displayClipboardText": (None, None),
 		"temporaryAudioOutputDeviceManager": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"cancelTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
 		"setTemporaryAudioOutputDevice": (None, addonConfig.FCT_TemporaryAudioDevice),
@@ -248,9 +247,9 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		"toolsForAddon": ("kb:t", addonConfig.FCT_Tools),
 		"activateUserInputGesturesDialog": ("kb:u", addonConfig.FCT_VariousOutSecureMode),
 		"manageVoiceProfileSelectors": ("kb:v", addonConfig.FCT_VoiceProfileSwitching),
-		"addToClip": ("kb:x", addonConfig.FCT_ClipboardCommandAnnouncement),
-		"emptyClipboard": ("kb:control+x", addonConfig.FCT_ClipboardCommandAnnouncement),
-		"displayClipboardText": ("kb:shift+x", addonConfig.FCT_ClipboardCommandAnnouncement),
+		"addToClip": ("kb:x", None),
+		"emptyClipboard": ("kb:control+x", None),
+		"displayClipboardText": ("kb:shift+x", None),
 		"reportCurrentSpeechSettings": ("kb:z", None),
 		"displayCurrentSpeechSettings": ("kb:control+z", None),
 	}
@@ -346,6 +345,30 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		for s in settings:
 			if s.setting.id == id:
 				globalVars.settingsRing._current = settings.index(s)
+
+	def updateVolumeMuteKeyBinding(self):
+		try:
+			self.removeGestureBinding("kb:volumeMute")
+			log.debug("volumeMute key is unbound")
+		except KeyError:
+			pass
+		from .settings.nvdaConfig import (
+			_NVDAConfigManager, VMKC_Never, VMKC_WithoutBrailleDisplay, VMKC_WithOrWithoutBrailleDisplay
+		)
+		volumeMuteKeyControlOption = _NVDAConfigManager .getVolumeMuteKeyControlOption()
+		if volumeMuteKeyControlOption == VMKC_Never:
+			return
+		import braille
+		if (
+			volumeMuteKeyControlOption == VMKC_WithOrWithoutBrailleDisplay
+			or (
+				volumeMuteKeyControlOption == VMKC_WithoutBrailleDisplay
+				and braille.handler.display.name == "noBaille"
+			)
+		):
+			# bind volume mute key
+			self.bindGesture("kb:volumeMute", "volumeMuteKey")
+			log.debug("volumeMute key bound to volumeMute script")
 
 	def handlePostConfigProfileSwitch(self):
 		from .utils import numlock
@@ -662,6 +685,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		maximizeWindow(oForeground.windowHandle)
 
 	def event_foreground(self, obj, nextHandler):
+		self.updateVolumeMuteKeyBinding()
 		if settings.toggleAutomaticWindowMaximizationOption(False):
 			if self.maximizeWindowTimer is not None:
 				self.maximizeWindowTimer.Stop()
@@ -1900,10 +1924,58 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 				log.error(f"Failed to delete file {file}, try removing manually")
 
 	@scriptHandler.script(
+	)
+	def script_volumeMuteKey(self, gesture):
+		from .settings.nvdaConfig import _NVDAConfigManager
+		from .computerTools.audioCore import audioOutputDevicesManager
+		device = audioOutputDevicesManager .getDefaultDevice()
+		mute = device.volumeObj.GetMute()
+		if mute:
+			gesture.send()
+			return
+		option = _NVDAConfigManager.getSendVolumeMuteKeyOption()
+		from .settings.nvdaConfig import SMK_WithConfirmation, SMK_InSecondPress, SMK_Never
+		if option == SMK_Never:
+			return
+		if option == SMK_InSecondPress:
+			count = scriptHandler.getLastScriptRepeatCount()
+			if count == 0:
+				pass
+			else:
+				gesture.send()
+			return
+		if option == SMK_WithConfirmation:
+			def callback():
+				if confirm_YesNo(
+					# Translators: message to confirm sending key
+					_("Are you sure you want to send the volume mute key?"),
+					# Translators: dialog title.
+					_("Confirmation"),
+				) == ReturnCode.YES:
+					gesture.send()
+			wx.CallLater(40, callback)
+
+	@scriptHandler.script(
 		**speakOnDemand,
 	)
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin test")
+		self.essai()
+
+	def essai(self):
+		from pycaw.utils import (
+			AudioDevice, AudioSession, AudioUtilities
+		)
+		sessions = AudioUtilities.GetAllSessions()
+		for session in sessions:
+			name = session.Process.name() if session.Process else None
+			print("name: %s, pid = %s, displayName: %s" % (name, session.ProcessId, session.DisplayName))
+
+
+
+
+
+
 
 
 class HelperDialog(

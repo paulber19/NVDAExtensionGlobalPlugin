@@ -13,7 +13,7 @@ import zipfile
 import gui
 import wx
 import languageHandler
-from versionInfo import version_year, version_major
+from ..utils.nvdaInfos import NVDAVersion
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import runInThread
 from .generate import generateManifest, generateTranslatedManifest
@@ -25,13 +25,10 @@ import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import confirm_YesNo, warn, alert, inform, ReturnCode
+from negp_messages import confirm_YesNo, warn, alert, inform, ReturnCode
 del sys.path[-1]
-del sys.modules["messages"]
-
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
 
 _curModuleFilePath = os.path.dirname(__file__)
 

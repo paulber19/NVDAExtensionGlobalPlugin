@@ -43,7 +43,8 @@ This add-on adds to NVDA's global commands:
    - move to the next or previous column / row with reading of the cells composing it,
    - move to the first / last cell of the row / column (keep for NVDA versions lower than 2022.2),
    - announcement of the cells of the current column / row.
- - [Announcement of the function associated with the keyboard editing commands #hdr7] with:
+ - [Announcement of the function associated with the keyboard editing commands #hdr7],
+ - [supplements for the clipboard #hdr7-1]:
   - adding the selected text to the clipboard,
   - emptying the clipboard,
   - display of the text contained in the clipboard in an information window,
@@ -617,7 +618,8 @@ But:
 
 It is strongly advised not to install add-on that provide the same kind of functionality.
 
-If this feature is installed, the following scripts are installed.
+++ supplements for the clipboard ++
+The following scripts are systematically installed by the extension:
 +++ Add selected text to clipboard +++[hdr7-1]
 This feature adds the script that allows you to add the selected text to the clipboard.
 
@@ -2182,7 +2184,8 @@ For NVDA to report errors when reading and typing, the "Spelling errors" option 
 For errors to be indicated instead by a sound when typing, the "Play sound for spelling errors while typing" option must be activated.
 
 The add-on modifies this behavior of NVDA in the following way:
-- reporting of spelling errors when reading and typing are independent. If the "Spelling errors" option is not active, but the "Play sound for spelling errors while typing" option is, the errors will be reported as you type.
+- The "Play sound for spelling error when typing" is renamed in "When typing, report spelling errors".
+- reporting of spelling errors when reading and typing are independent. If the "Spelling errors" option is not checked, but the "When typing, report spelling error" option is, the errors will be reported as you type.
 - for each situation, when reading or when typing, it is possible to configure how errors will be signaled: by a double beep, by the sound of NVDA, by the voice message "Spelling error" or by the announcement of the misspelled word under a dedicated configuration profile.
 
 
@@ -2203,6 +2206,9 @@ Note:
 - in the case where the reporting of spelling errors is done vocally, it is preferable to deactivate the option "Speech interrupt for typed characters" in the "Keyboard" category of the NVDA settings because any Quick typed character after a word stops the voice announcement.
 
 
+Please note: this feature is incompatible with the "SpeaktypingWords" addd-on. If it is installed, the functionality concerning the reporting of spelling errors when typing is restricted:
+- The option "When typing, repot spelling errors" is no longer available if the "spelling error" option is not checked (Basic operation of NVDA).
+- If the choice of the reporting of spelling errors when typing fell on "Announcement of the misspelled word", it will be the classic NVDA error sound which will be played if an error is detected.
 ++ Blocking "Insert" and "Capslock" keys ++[hdr105]
 (available for NVDA versions lower than 2023.1 if the "Selective announcement of command keys" feature is installed)
 
@@ -2334,6 +2340,33 @@ By default, this box is unchecked and the snooze delay is set to 100 millisecond
 It is not possible to keep only the first key press because the delay with the following key press is too great (around 500 milliseconds).
 
 Modifier keys are not affected by this limitation.
+
+++ control of the "mute" key ++ [HDR308]
+On certain keyboard there are multimedia keys and in particular the "silent" key.
+
+Support on this cut button or restores the volume of the Windows default audio output device (basic operation).
+
+If NVDA uses this device, involuntary support can be very annoying.
+
+To prevent this possible problem, the add-on proposes, by configuration and by configuration profile, to control or not the support on this key. 
+
+In the "Keyboard" category of the configuration profile settings, the "Mute key control" group contains:
+- The drop -down list "Enable control:" whose possible choices are:
+ - "Yes": any key support is controlled.
+ - "Yes, but only if no Braille display is used: any touch support will be checked provided that there is no braille display used. The sound cut is less embarrassing for users using the Braille and in this case, the support will not be controled.
+ - "Never": no press support will be controled.
+- The drop -down list "Press the key:" which offers the following choices:
+ - "Confirmation learning": the key action will be processed by Windows after the user's agreement.
+ - "On double support": the action of the key will be processed by Windows following a double support on the key.
+ - "Never": the action on the key will not be treated by Windows.
+
+
+In the event that the volume is already cut, any support on the "mute" key is treated by Windows without any control.
+
+Note:
+To carry out this control, a script was associated with the hidden control gesture (without description) "KB: volumemute" which is installed with each loading of a configuration profile, but provided that the control is authorized.
+
+If an application or an extension for an application also uses this "silent" key, just create a configuration profile for this application and not authorize control for this profile. The key will no longer be an order gesture.
 
 + Other improvements +
 ++ Exploring the user configuration folder or nvda program folder ++[hdr202]

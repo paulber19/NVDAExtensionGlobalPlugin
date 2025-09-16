@@ -19,6 +19,30 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 
 Les versions du type majeure.mineure.x (par exemple v3.1.2) sont des mises à jour de traductions.
 
+
++ v14.1 (16/09/2025) +
+Nouveautés:
+- ajout du contrôle de la touche "muet" qui coupe ou rétablit le volume du périphérique de sortie audio par défaut de Windows.
+
+
+Changements :
+- Les scripts suivants ne dépendent plus de la fonctionnalité "Annonce de la fonction associée aux commandes d'édition" (Ils sont installés systématiquement.) :
+ - Ajout du texte sélectionné dans le presse-papier
+ - Annonce du texte dans le presse-papier
+ - Vidage du presse-papier
+ - Affichage du texte contenu dans le presse-papier dans une fenêtre d'information
+- pour éviter l'incompatibilité avec l'extension "speakTypingWords", la fonctionnalité concernant le signalement des fautes d'orthographe pendant la frappe est restreinte (voir le manuel utilisateur).
+
+
+Rappels de corrections de bogue :
+- les sélecteur associés à des profils vocaux utilisant le périphérique de sortie audio par défaut de Windows ne sortent plus en erreur (corrigé dans la version 14.0.2).
+- l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " est configurable même si l'option "Faute d'orthographe" de la catégorie "Mise en forme des documents" de NVDA n'est pas cochée.
+- NVDA ne devient plus muet lorsque le synthétiseur WorldVoice est chargé (corrigé dans la version 14.0.3).Bogue provoqué par le synthétiseur qui ne se conforme pas à l'API de NVDA. Lorsque ce synthétiseur est chargé, les annonces vocales ne peuvent pas être enregistrées dans l'historique vocal.
+- quand le synthétiseur WorldVoice est chargé, il n'est pas possible de préparer une extension à l'aide de l'outils de développement. Le module "getopt" ne plus être importé. Impossible à corriger.
+- la rémanence spéciale pour gmail ne provoque plus d'erreur sous Excell quand la rémanence normale est installée(corrigé dans la version 14.0.4).
+- l'appui permanent sur la touche "espace" dans une zone d'édition ne provoque plus l'annonce d'une série du mot "espace". La correction doit aussi résoudre le problème de latence à la frappe.
+
+
 + v14.0 (05/06/2025) +
 Compatibilité avec NVDA 2025.1.
 

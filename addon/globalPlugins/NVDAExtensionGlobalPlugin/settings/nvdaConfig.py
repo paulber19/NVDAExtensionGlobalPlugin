@@ -38,11 +38,24 @@ ID_SpeakAlphaNumChars = "SpeakAlphaNumChars"
 ID_BlockInsertKey = "BlockinsertKey"
 ID_BlockCapslockKey = "BlockCapslockKey"
 ID_SayBlank = "SayBlank"
+ID_VolumeMuteKeyControl = "VolumeMuteKeyControl"
+ID_SendVolumeMuteKey = "SendMuteKey"
+ID_EvenIfBraille = "EvenIfBraille"
 
 # activateNumlock values
 ANL_NoChange = 0
 ANL_Off = 1
 ANL_On = 2
+# volumeMuteKeyControl values
+VMKC_WithOrWithoutBrailleDisplay = 0
+VMKC_WithoutBrailleDisplay = 1
+VMKC_Never = 2
+
+# sendVolumeMuteKey values
+SMK_WithConfirmation = 0
+SMK_InSecondPress = 1
+SMK_Never = 2
+
 
 # text analyzer section
 SCT_TextAnalyzer = "textAnalyzer"
@@ -159,6 +172,9 @@ _optionsConfspec = {
 	ID_BlockInsertKey: "boolean(default=False)",
 	ID_BlockCapslockKey: "boolean(default=False)",
 	ID_SayBlank: "boolean(default=True)",
+	ID_VolumeMuteKeyControl: "integer(default=" + str(VMKC_Never) + ")",
+	ID_SendVolumeMuteKey: "integer(default=" + str(SMK_WithConfirmation) + ")",
+	ID_EvenIfBraille: "boolean(default=False)",
 }
 
 SCT_SynthSettingsRing = "SynthSettingsRing"
@@ -751,6 +767,18 @@ class NVDAConfigurationManager(object):
 
 	def toggleSayBlankOption(self, toggle=True):
 		return self.toggleOption(ID_SayBlank, toggle)
+
+	def setVolumeMuteKeyControlOption(self, option):
+		config.conf[self.addonName][SCT_Options][ID_VolumeMuteKeyControl] = option
+
+	def getVolumeMuteKeyControlOption(self):
+		return config.conf[self.addonName][SCT_Options][ID_VolumeMuteKeyControl]
+
+	def setSendVolumeMuteKeyOption(self, option):
+		config.conf[self.addonName][SCT_Options][ID_SendVolumeMuteKey] = option
+
+	def getSendVolumeMuteKeyOption(self):
+		return config.conf[self.addonName][SCT_Options][ID_SendVolumeMuteKey]
 
 
 # singleton for addon configuration manager

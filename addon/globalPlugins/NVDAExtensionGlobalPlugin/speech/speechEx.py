@@ -5,7 +5,7 @@
 
 import addonHandler
 from logHandler import log
-from versionInfo import version_year, version_major
+from ..utils.nvdaInfos import NVDAVersion
 import config
 import textInfos
 from config.configFlags import ReportLineIndentation
@@ -47,7 +47,6 @@ from ..settings import _addonConfigManager
 from .sayError import getErrorSpeechSequence
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
 
 
 # NVDA getTextInfoSpeech is patched for spelling errors functionnality and no speak blank option.

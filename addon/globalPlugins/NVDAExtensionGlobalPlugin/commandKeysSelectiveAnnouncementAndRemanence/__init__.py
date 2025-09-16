@@ -25,7 +25,7 @@ from vkCodes import byName
 import core
 from inputCore import NoInputGestureAction
 import inputCore
-from versionInfo import version_year, version_major
+from ..utils.nvdaInfos import NVDAVersion
 from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
 from ..settings import (
 	_addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption,
@@ -42,12 +42,10 @@ import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import confirm_YesNo, ReturnCode
+from negp_messages import confirm_YesNo, ReturnCode
 del sys.path[-1]
-del sys.modules["messages"]
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
 
 _curAddon = addonHandler.getCodeAddon()
 

@@ -21,18 +21,14 @@ from ..utils.informationDialog import InformationDialog
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..gui import contextHelpEx
-from versionInfo import version_year, version_major
+from ..utils.nvdaInfos import NVDAVersion
 import os
 import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import confirm_YesNo, warn, ReturnCode
+from negp_messages import confirm_YesNo, warn, ReturnCode
 del sys.path[-1]
-del sys.modules["messages"]
-
-
-NVDAVersion = [version_year, version_major]
 
 addonHandler.initTranslation()
 
@@ -363,10 +359,13 @@ class SwitchVoiceProfilesManager(object):
 					tempList = list(getattr(
 						synth, "available%ss" % settingID.capitalize()).values())
 					cur = conf[settingID]
-					i = [x.id for x in tempList].index(cur)
-					v = tempList[i].displayName
-					info = v
-					textList.append((setting.displayName, info))
+					if cur is None or cur not in tempList:
+						textList.append((setting.displayName, "%s" % ("" if cur is None else cur)))
+					else:
+						i = [x.id for x in tempList].index(cur)
+						v = tempList[i].displayName
+						info = v
+						textList.append((setting.displayName, info))
 		d = {}
 		i = 1
 		# Translators:  label to report synthesizer output device .

@@ -18,7 +18,6 @@ from controlTypes.role import Role
 from controlTypes.state import State
 import editableText
 import NVDAObjects.behaviors
-import braille
 import config
 from characterProcessing import SymbolLevel
 from IAccessibleHandler import accNavigate
@@ -34,8 +33,7 @@ import eventHandler
 import core
 import contentRecog.recogUi
 import unicodedata
-from . import settingsDialogsPatche
-from versionInfo import version_year, version_major
+from ..utils.nvdaInfos import NVDAVersion
 from ..utils.NVDAStrings import NVDAString
 from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
 from ..settings import isInstall
@@ -49,12 +47,10 @@ import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import confirm_YesNo, ReturnCode
+from negp_messages import confirm_YesNo, ReturnCode
 del sys.path[-1]
-del sys.modules["messages"]
 
 addonHandler.initTranslation()
-NVDAVersion = [version_year, version_major]
 
 # Translators: message to the user on cut command activation.
 _msgCut = _("Cut")
@@ -349,8 +345,8 @@ class EditableTextEx(editableText.EditableText):
 		config.conf["speech"]["symbolLevel"] = curLevel
 
 
-class NVDAObjectEx(NVDAObject):
-	def _reportErrorInPreviousWord(self, typedWord):
+class NVDAObjectExBase(NVDAObject):
+	def _reportErrorInPreviousWord(self, typedWord=None):
 		try:
 			# self might be a descendant of the text control; e.g. Symphony.
 			# We want to deal with the entire text, so use the caret object.
@@ -391,7 +387,7 @@ class NVDAObjectEx(NVDAObject):
 			#  to warn  error depending user configuration: wav, beep, message or error reporting
 			def warnSpellingError(typedWord):
 				from ..settings import _addonConfigManager
-				from ..speech.sayError import getErrorSpeechSequence
+				from ..speech.sayError import getErrorSpeechSequence, getErrorSoundSpeechSequence
 				if _addonConfigManager.reportingSpellingErrorsByMessage():
 					queueHandler.queueFunction(
 						queueHandler.eventQueue,
@@ -399,8 +395,9 @@ class NVDAObjectEx(NVDAObject):
 					return
 				if _addonConfigManager.reportingSpellingErrorsByErrorReporting():
 					if typedWord is None:
-						return
-					seq = getErrorSpeechSequence(typedWord)
+						seq = getErrorSoundSpeechSequence(typedWord)
+					else:
+						seq = getErrorSpeechSequence(typedWord)
 				else:
 					seq = getErrorSpeechSequence(reading=False)
 				if seq:
@@ -416,18 +413,6 @@ class NVDAObjectEx(NVDAObject):
 	def _delayedReportErrorInPreviousWord(self, ch):
 		typedWord = self.hasWordTyped(ch)
 		self._reportErrorInPreviousWord(typedWord)
-
-	def event_typedCharacter(self, ch: str):
-		if (
-			config.conf["keyboard"]["alertForSpellingErrors"]
-			and (
-			# Not alpha, apostrophe or control.
-				ch.isspace() or (ch >= " " and ch not in "'\x7f" and not ch.isalpha())
-			)
-		):
-			# Reporting of spelling errors is enabled and this character ends a word.
-			self._delayedReportErrorInPreviousWord(ch)
-		self.NVDAObject_event_typedCharacter(ch)
 
 	def hasWordTyped(self, ch: str):
 		typingIsProtected = api.isTypingProtected()
@@ -447,6 +432,21 @@ class NVDAObjectEx(NVDAObject):
 		elif len(curWordChars) > 0:
 			return "".join(curWordChars)
 		return None
+
+
+class NVDAObjectEx(NVDAObjectExBase):
+
+	def event_typedCharacter(self, ch: str):
+		if (
+			config.conf["keyboard"]["alertForSpellingErrors"]
+			and (
+			# Not alpha, apostrophe or control.
+				ch.isspace() or (ch >= " " and ch not in "'\x7f" and not ch.isalpha())
+			)
+		):
+			# Reporting of spelling errors is enabled and this character ends a word.
+			self._delayedReportErrorInPreviousWord(ch)
+		self.NVDAObject_event_typedCharacter(ch)
 
 	def NVDAObject_event_typedCharacter(self, ch):
 		from ..settings.nvdaConfig import _NVDAConfigManager
@@ -656,18 +656,28 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 			useEditableTextBaseEx = True
 
 	if useEditableTextBaseEx:
-		clsList.insert(0, NVDAObjectEx)
+		if canInstallSpellingAtTypingFunctionnality:
+			clsList.insert(0, NVDAObjectEx)
+		else:
+			clsList.insert(0, NVDAObjectExBase)
 	if useRecogResultNVDAObjectEx:
 		clsList.insert(0, RecogResultNVDAObjectEx)
 	# to fix the Access8Math  problem with the "alt+m" virtual menu
 	# for the obj, the informations are bad: role= Window, className= Edit, not states
 	#  tand with no better solution, we check the length of obj.states
-	elif (obj.role in _rolesToCheck or obj.windowClassName in _classNamesToCheck) and len(obj.states):
+	elif (
+		obj.role in _rolesToCheck
+		or hasattr(obj, "windowClassName")
+		and obj.windowClassName in _classNamesToCheck
+		and len(obj.states)
+	):
 		# newer revisions of Windows 11 build 22000 moves focus to emoji search field.
 		# However this means NVDA's own edit field scripts will override emoji panel commands.
 		# Therefore remove text field movement commands so emoji panel commands can be used directly.
-		if hasattr(obj, "UIAAutomationId")\
-			and obj.UIAAutomationId == "Windows.Shell.InputApp.FloatingSuggestionUI.DelegationTextBox":
+		if (
+			hasattr(obj, "UIAAutomationId")
+			and obj.UIAAutomationId == "Windows.Shell.InputApp.FloatingSuggestionUI.DelegationTextBox"
+		):
 			pass
 		else:
 			clsList.insert(0, EditableTextEx)
@@ -680,6 +690,7 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 
 
 def initialize():
+	setCanInstallSpellingAtTypingFunctionnality()
 
 	def callback():
 		if confirm_YesNo(
@@ -705,3 +716,20 @@ def initialize():
 			if addon.name == "clipspeak":
 				wx.CallAfter(callback)
 				break
+
+
+canInstallSpellingAtTypingFunctionnality = None
+
+
+def setCanInstallSpellingAtTypingFunctionnality():
+	global canInstallSpellingAtTypingFunctionnality
+	try:
+		# if speakTypingWords add-on is running, spelling at typing functionnality can not be installed
+		m = next(filter (lambda a: a.name == "speakTypingWords", addonHandler.getRunningAddons ()))
+		canInstallSpellingAtTypingFunctionnality = False
+		log.info(
+			"""The add-on "%s" being running, the functionality concerning the reporting of spelling errors when typing is restricted (see the "NVDAExtensionGlobalPlugin" user manual).""" % m.manifest["name"])
+	except Exception:
+		# speakTypingWords add-on is not running
+		canInstallSpellingAtTypingFunctionnality = True
+	from . import settingsDialogsPatche

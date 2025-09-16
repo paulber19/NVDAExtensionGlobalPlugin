@@ -42,7 +42,6 @@ def setShouldProcessRemanence():
 		_shouldProcessRemanence = False
 		return
 
-
 	dci = ti.get("documentConstantIdentifier", None)
 	if dci is None:
 		return

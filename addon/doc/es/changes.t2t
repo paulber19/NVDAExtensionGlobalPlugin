@@ -22,6 +22,29 @@ Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este h
 Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
 
 
++ v14.1 (16/09/2025) +
+Nuevas características:
+- se añadió el control de la tecla "Silencio" que silencia o reestablece el sonido del dispositivo de salida de audio predeterminado de Windows.
+
+
+Cambios:
+- Los siguientes scripts ya no dependen de la funcionalidad "Anuncio de la funcionalidad asociada a las órdenes de edición" (Están instalados sistemáticamente.) :
+ - Añadir, al portapapeles, el texto seleccionado
+ - Anuncio del texto en el portapapeles
+ - Vaciar el portapapeles
+ - Mostrar el contenido del portapapeles en una ventana de información
+- para evitar la incompatibilidad con el complemento "speakTypingWords", la funcionalidad concerniente el anunciado de errores de ortografía mientras se escribe  está restringido (véase el manual del usuario).
+
+
+Recordatorios de corrección de errores:
+- Los selectores asociado con perfiles de voz utilizando el dispositivo de salida de audio predeterminado de Windows ya no sale en error (corregido en la versión 14.0.2).
+- la opción "Reproducir sonido para errores de ortografía mientras se escribe" es configurable incluso si la opción "Errores de ortografía" de la categoría "Formateado de Documentos" de NVDA no está marcada.
+- NVDA ya no queda en silencio cuando el sintetizador WorldVoice está cargado (corregido en la versión 14.0.3). Error causado por el sintetizador que no cumple con la API de NVDA. Cuando se carga este sintetizador, los anuncios del habla no se pueden registrar en el historial de los anuncios del habla.
+- cuando el sintetizador WorldVoice está cargado, no es posible preparar un complemento utilizando las herramientas de desarrollo. El módulo "getopt" no puede  ser importado. Imposible de corregir.
+- La remanencia específica para  gmail.com ya no causa un error en Excell cuando se instala la persistencia normal (corregido en la versión 14.0.4).
+- una pulsación permanente en la tecla "espacio" en un campo de edición ya no causa el anuncio de una serie de la palabra "espacio". La corrección también debe resolver el problema de latencia al escribir.
+
+
 + v14.0 (05/06/2025) +
 Compatibilidad con NVDA 2025.1.
 

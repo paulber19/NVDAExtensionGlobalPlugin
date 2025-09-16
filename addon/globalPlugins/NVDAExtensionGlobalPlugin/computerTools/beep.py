@@ -10,6 +10,7 @@ import tones
 import time
 import nvwave
 from ctypes import create_string_buffer
+from ..utils.nvdaInfos import NVDAVersion
 
 # temporary wave player
 _player = None
@@ -79,10 +80,6 @@ def myBeep(
 	generateBeep(buf, hz, length, left, right)
 	_player.stop()
 	_player.feed(buf.raw)
-
-
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
 
 
 def playTonesOnDevice(outputDevice):

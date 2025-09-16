@@ -9,8 +9,7 @@ Extension points for prevent new speech
 """
 
 from extensionPoints import Action
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
 if NVDAVersion >= [2024, 2]:
 	# we use NVDA pre_speech speech extensionPoint
 	from speech.extensions import pre_speech

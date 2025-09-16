@@ -81,10 +81,9 @@ def keepPreviousSettingsConfirmation(addonSummary):
 	sharedPath = os.path.join(curPath, "shared")
 	sys.path.append(curPath)
 	sys.path.append(sharedPath)
-	from messages import confirm_YesNo, ReturnCode
+	from negp_messages import confirm_YesNo, ReturnCode
 	del sys.path[-1]
 	del sys.path[-1]
-	del sys.modules["messages"]
 
 	if confirm_YesNo(
 		# Translators: the label of a message box dialog.

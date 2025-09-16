@@ -9,10 +9,8 @@ import gui.message
 import config
 import wx
 from typing import Optional
-from versionInfo import version_year, version_major
+from ..utils.nvdaInfos import NVDAVersion
 
-
-NVDAVersion = [version_year, version_major]
 _NVDAGuiMessageBox = None
 _NVDAGuiMessageMessageBox = None
 

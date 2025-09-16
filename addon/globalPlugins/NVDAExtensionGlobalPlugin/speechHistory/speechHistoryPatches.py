@@ -11,8 +11,7 @@ from ..settings import isInstall
 from ..settings.addonConfig import FCT_SpeechHistory, FCT_TemporaryAudioDevice
 from ..computerTools.temporaryOutputDevice import checkOutputDeviceChange
 from ..speechHistory import getSpeechRecorder
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
 
 # global variables to save original NVDA patched functions
 _NVDASpeechSpeak = None

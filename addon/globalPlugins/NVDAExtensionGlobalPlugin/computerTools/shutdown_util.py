@@ -16,7 +16,7 @@ if "win32security" in sys.modules:
 		"Potential incompatibility: win32security module is also used and loaded probably by other add-on")
 	win32securityModulePath = sys.modules["win32security"]
 	del sys.modules["win32security"]
-win32apiModulePath  = None
+win32apiModulePath = None
 if "win32api" in sys.modules:
 	log.warning("Potential incompatibility: win32apimodule is also used and loaded probably by other add-on")
 	win32apiModulePath = sys.modules["win32api"]

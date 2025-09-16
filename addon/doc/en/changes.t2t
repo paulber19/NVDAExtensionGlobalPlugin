@@ -19,6 +19,30 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
+
++ V14.1 (September/16/2025) +
+News:
+- Adding the "mute" key control which cuts or restores the volume of the Windows default audio output device.
+
+
+Changes:
+- The following scripts no longer depend on the functionality "Announcement of the function associated with editing commands" (They are systematically installed):
+ - Addition of the selected text in the clipboard
+ - Announcement of the text in the clipboard
+ - emptying of the clipboard
+ - Display of the text contained in the clipboard in an information window
+- To avoid incompatibility with the  "Speaktypingwords" add-on, the functionality concerning the reporting of spelling errors whenn typing is restricted (see the user manual).
+
+
+Bug correction reminders:
+- The selector associated with voice profiles using the Windows default audio output device are no longer mistaken (corrected in version 14.0.2).
+- The "Playing sound for spelling mistakes during strike" option is configurable even if the "spelling lack" option of the category "formatting of documents" of NVDA is not checked.
+- NVDA does not become silent when the Worldvoice synthesizer is loaded (corrected in version 14.0.3). Bogue caused by the synthesizer who does not comply with the API of NVDA. When this synthesizer is loaded, speech cannot be recorded in vocal history.
+- When the Worldvoice synthesizer is loaded, it is not possible to prepare an add-on using the development tools. The "Getopt" module is no longer imported. Impossible to correct.
+- Special persistence for Gmail no longer causes an error under Excell when normal remanence is installed (corrected in version 14.0.4).
+- Permanent support on the "space" key in an editing area no longer causes the announcement of a series of the word "space". The correction must also solve the latency problem with the shot.
+
+
 + V14.0 (June/05/2025) +
 Compatibility with NVDA 2025.1.
 

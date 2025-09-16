@@ -21,9 +21,8 @@ import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import warn
+from negp_messages import warn
 del sys.path[-1]
-del sys.modules["messages"]
 
 
 addonHandler.initTranslation()

@@ -8,8 +8,8 @@ from logHandler import log
 
 
 def shouldLoadNVDAExtensionGlobalPlugin():
-	from versionInfo import version_year, version_major
-	NVDAVersion = [version_year, version_major]
+
+	from .utils.nvdaInfos import NVDAVersion
 	if NVDAVersion < [2024, 3]:
 		import sys
 		from .utils.py3Compatibility import getCommonUtilitiesPath

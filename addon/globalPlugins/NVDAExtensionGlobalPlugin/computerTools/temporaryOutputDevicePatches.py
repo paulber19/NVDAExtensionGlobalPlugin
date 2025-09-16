@@ -11,8 +11,7 @@ import tones
 import synthDriverHandler
 import wx
 import nvwave
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
 import synthDrivers.oneCore
 from .waves import getModifiedNVDAWaveFile
 from .audioUtils import (
@@ -29,9 +28,8 @@ import sys
 _curAddon = addonHandler.getCodeAddon()
 sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
-from messages import warn
+from negp_messages import warn
 del sys.path[-1]
-del sys.modules["messages"]
 
 
 addonHandler.initTranslation()

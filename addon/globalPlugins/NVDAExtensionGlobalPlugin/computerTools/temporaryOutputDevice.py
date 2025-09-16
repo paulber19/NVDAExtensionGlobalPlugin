@@ -15,8 +15,7 @@ import time
 import wx
 from gui import nvdaControls
 from synthDriverHandler import getSynth
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
 from gui import guiHelper, mainFrame
 from .audioUtils import getOutputDevice
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj

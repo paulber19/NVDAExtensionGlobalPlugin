@@ -8,14 +8,13 @@ import addonHandler
 import colors
 from ..utils.NVDAStrings import NVDAString
 from ..utils.informationDialog import InformationDialog
+from ..utils.nvdaInfos import NVDAVersion
 
 addonHandler.initTranslation()
 
 
 def getReportFormattingOptions():
 
-	from versionInfo import version_year, version_major
-	NVDAVersion = [version_year, version_major]
 	reportFontAttributes = "reportFontAttributes" if NVDAVersion < [2025, 1] else "fontAttributeReporting"
 	formatConfigOptions = [
 		"reportFontName",
@@ -33,6 +32,7 @@ def getReportFormattingOptions():
 		"reportCellBorders",
 	]
 	return formatConfigOptions
+
 
 def getFontText(attrs):
 	font = None

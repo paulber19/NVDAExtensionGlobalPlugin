@@ -17,8 +17,7 @@ import sys
 import wx
 import tones
 import config
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
 log.debug("importing pycaw library")
 if NVDAVersion >= [2024, 2]:
 	# for nvda version >= 2024.2
@@ -108,21 +107,22 @@ def getNVDAAudioOuputDevices():
 
 
 class AudioSource(object):
-	def __init__(self, pycawSession, name=None):
-		self.session = pycawSession
+	def __init__(self, pycawSessions, name=None):
+		log.debug("audioSource: name: %s, sessions: %s" % (name, pycawSessions))
+		self.sessions = pycawSessions
 		self._name = name
 
 	@property
 	def volumeObj(self):
-		return self.session.SimpleAudioVolume
+		return self.sessions[0].SimpleAudioVolume
 
 	@property
 	def channelVolumeObj(self):
-		return self.session._ctl.QueryInterface(IChannelAudioVolume)
+		return self.sessions[0]._ctl.QueryInterface(IChannelAudioVolume)
 
 	def getProcessName(self):
-		if self.session.Process:
-			return self.session.Process.name()
+		if self.sessions[0].Process:
+			return self.sessions[0].Process.name()
 		return None
 
 	@property
@@ -132,7 +132,7 @@ class AudioSource(object):
 		return self._name
 
 	def isNVDAProcess(self):
-		if self.session.Process and self.session.Process.name() == nvdaProcessName:
+		if self.sessions[0].Process and self.sessions[0].Process.name() == nvdaProcessName:
 			return True
 		return False
 
@@ -142,14 +142,16 @@ class AudioSource(object):
 
 	def setVolume(self, level):
 		log.debug("%s set volume to %s" % (self.name, level))
-		self.volumeObj.SetMasterVolume(level, None)
+		for session in self.sessions:
+			session.SimpleAudioVolume.SetMasterVolume(level, None)
 
 	def getMute(self):
 		return self.volumeObj.GetMute()
 
 	def setMute(self, muteState):
 		log.debug("%s set mute: %s " % (self.name, muteState))
-		self.volumeObj.SetMute(muteState, None)
+		for session in self.sessions:
+			session.SimpleAudioVolume.SetMute(muteState, None)
 
 	def toggleMute(self, silent=True):
 		self.setMute(not self.getMute())
@@ -183,8 +185,10 @@ class AudioSource(object):
 			log.debug("%s audio source is not stereo:channels count= %s" % (self.name, self.channelsCount))
 			return
 		log.debug("%s set Channels: left= %s, right= %s" % (self.name, channels[0], channels[1]))
-		self.channelVolumeObj.SetChannelVolume(0, channels[0], None)
-		self.channelVolumeObj.SetChannelVolume(1, channels[1], None)
+		for session in self.sessions:
+			channelVolumeObj = session._ctl.QueryInterface(IChannelAudioVolume)
+			channelVolumeObj.SetChannelVolume(0, channels[0], None)
+			channelVolumeObj.SetChannelVolume(1, channels[1], None)
 
 	def getApplicationVolumeInfo(self):
 		if not self.isStereo:
@@ -211,11 +215,23 @@ class AudioSources(object):
 	def __init__(self, device=None):
 		self._device = device
 		self._audioSources = self._getAudioSources()
+	def getApplications(self, deviceId=None):
+		deviceId = self._device.id if self._device else None
+		for session in AudioUtilities.GetAllSessions(deviceId):
+			pid = session.ProcessId
+			print("pid: %s" %pid)
 
 	def _getAudioSources(self):
 		audioSources = {}
 		deviceId = self._device.id if self._device else None
-		for session in AudioUtilities.GetAllSessions(deviceId):
+		sessions = AudioUtilities.GetAllSessions(deviceId)
+		pids = {}
+		for session in sessions:
+			if not pids.get(session.ProcessId, None):
+				pids[session.ProcessId] = []
+			pids[session.ProcessId].append(session)
+		print("pids: %s" %pids)
+		for session in sessions:
 			sourceName = session.DisplayName
 			if "AudioSrv.Dll" in session.DisplayName:
 				if self._device._default:
@@ -225,15 +241,14 @@ class AudioSources(object):
 			elif session.Process:
 				processName = session.Process.name()
 				if sourceName == "":
-					if not isNVDA(processName):
-						sourceName = processName
-					else:
-						sourceName = processName
+					sourceName = processName
 				elif sourceName != "" and not isNVDA(processName):
 					sourceName = processName
 			if not sourceName:
 				continue
-			audioSources[sourceName] = AudioSource(session, sourceName)
+			if audioSources.get(sourceName):
+				continue
+			audioSources[sourceName] = AudioSource(pids[session.ProcessId], sourceName)
 		log.debug("audioSources %s: id: %s, %s" % (
 			self._device.name if self._device else "",
 			self._device.id if self._device else "",

@@ -41,7 +41,8 @@ Cette extension ajoute aux commandes globales de NVDA:
    - déplacement à la colonne/ligne suivante ou précédente avec lecture des cellules la composant,
    - déplacement à la première /dernière cellule de la ligne/colonne (conserver pour les versions de NVDA inférieures à la 2022.2),
    - annonce des cellules de la colonne/ligne courante.
- - [Annonce de la fonction associée aux commandes clavier d'édition #hdr7] avec :
+ - [Annonce de la fonction associée aux commandes clavier d'édition #hdr7],
+ - [Compléments pour le presse-papier #hdr-1] :
   - ajout dans le presse-papier du texte sélectionné,
   - vidage du presse-papier,
   - affichage du texte contenu dans le presse-papier dans une fenêtre d'information,
@@ -617,7 +618,9 @@ Mais :
 
 Il est fortement conseillé de ne pas installer des extensions qui fournissent le même genre de fonctionnalités.
 
-Si cette fonctionnalité est installée, les scripts ci-après sont installés.
+++ Compléments pour le presse-papier ++
+Les scripts suivants sont installés systématiquement par l'extension :
+
 +++ Ajout du texte sélectionné dans le presse-papier +++[hdr7-1]
 Ce script permet d'ajouter le texte sélectionné dans le presse-papier.
 
@@ -2209,7 +2212,8 @@ Pour que NVDA signale les fautes en lecture et lors de la frappe, il faut que l'
 Pour que les fautes soient signalées plutôt par un son lors de la frappe, il faut que l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " soit activée.
 
 L'extension modifie ce comportement de NVDA de la manière suivante :
-- le signalement des fautes d'orthographe en lecture et lors de la frappe sont indépendants. Si l'option "Fautes d'orthographe" n'est pas active, mais que l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " l'est, les fautes seront signalées lors de la frappe.
+- l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " est renommée en "Pendant la frappe, signaler les fautes d'orthographe".
+- le signalement des fautes d'orthographe en lecture et lors de la frappe sont indépendants. Si l'option "Fautes d'orthographe" n'est pas active, mais que l'option "Pendant la frappe, signaler les fautes d'orthographe" l'est, les fautes seront signalées lors de la frappe.
 - pour chaque situation, en lecture ou lors de la frappe, il est possible de configurer comment seront signalées les fautes : par un double bip, par le son de NVDA, par le message vocal "Faute d'orthographe" ou par l'annonce du mot mal orthographié sous un profil de configuration dédié.
 
 
@@ -2228,6 +2232,12 @@ Note :
 - si vous effacé le profil "Annonce des mots mal orthographiés", l'extension le recréera au prochain démarrage de NVDA, mais les paramètres de ce profil seront les mêmes que ceux du profil "Configuration normale".
 - Le nom de ce profil est la traduction dans la langue de NVDA du terme "Spelling errors announcement". Donc si vous lancer dans une autre langue NVDA, l'extension créera un autre profil ayant comme nom, la traduction de ce terme dans cette langue. Le précédent profil n'est pas supprimé.
 - dans le cas où le signalement des fautes d'orthographe se fait vocalement, il est préférable de désactiver l'option "Interruption de la parole à la frappe d'un caractère " de la catégorie "Clavier" des paramètres de NVDA car toute frappe rapide de caractère après un mot arrête l'annonce vocale.
+
+
+Attention: cette fonctionnalité est incompatible avec l'extension "speakTypingWords". Si celle-ci est installé, la fonctionalité concernant le signalement des fautes d'orthographe pendant la frappe est restreinte:
+- l'option "Pendant la frappe, Signaler les fautes d'orthographe " n'est plus disponible si l'option "Faute d'orthographe"  n'est pas cochée (fonctionnement de base de NVDA).
+- si le choix du signalement des fautes d'orthographe pendant la frappe s'est porté sur "annonce du mot mal orthographié", ce sera le son d'erreur classique de NVDA qui sera joué si une faute est détectée. 
+
 
 
 ++ Blocage des touches "Insertion" et "Verrouillage" ++[hdr105]
@@ -2362,6 +2372,32 @@ Il n'est pas possible de ne garder que le seul premier appui-touche car le déla
 
 Les touches de modifications ne sont pas concernées par cette limitation.
 
+++ Contrôle de la touche "Muet" ++[hdr308]
+Sur certain clavier existe des touches multimédia et en particulier la touche "Muet".
+
+Un appui sur cette touche coupe ou rétablit le volume du périphérique de sortie audio par défaut de Windows (fonctionnement de base).
+
+Si NVDA utilise ce périphérique, un appui involontaire peut être très gênant.
+
+Pour empêcher cet éventuel problème, l'extension propose, par configuration et par profil de configuration, de contrôler ou non les appuis sur cette touche. 
+
+Dans la catégorie "Clavier" des paramètres du profil de configuration, le groupe "Contrôle de la touche Muet" contient :
+- la liste déroulante "Autoriser le contrôle :" dont les choix possibles sont :
+ - "Oui" : tout appui sur la touche est contrôlé.
+ - "Oui, mais seulement si aucun afficheur braille est utilisé :   tout appui touche sera contrôlé à condition qu'il n'y ait pas d'afficheur braille utilisé. La coupure du son est moins gênante  pour les utilisateurs  utilisant le braille et dans ce cas, l'appui ne sera pas  contrôlé.
+ - "Jamais" : aucun appui sur la touche sera contrôlé.
+- la liste déroulante "Actionner la touche :" qui propose les choix suivants :
+ - "apprès confirmation" : l'action de la touche  sera traitée par Windows après accord de l'utilisateur.
+ - "Sur double appui" : l'action de la touche sera traitée par Windows suite à un double appui sur la touche.
+ - "Jamais" : l'action sur la touche ne sera pas traitée par Windows.
+
+
+Dans le cas où le volume est déjà coupé, tout appui sur la touche "Muet" est traité par Windows sans aucun contrôle.
+
+Note:
+Pour réaliser ce contrôle, un script a été associé au geste de commande caché (sans description) "kb:volumeMute" qui est installé à chaque chargement d'un profil de configuration, mais à condition que le contrôle soit autorisé.
+
+Si une application ou une extension pour une application utilise aussi cette touche "Muet", il suffit de créer un profil de configuration pour cette application et de ne pas autoriser le contrôle pour ce profil. La touche ne sera plus un geste de commande.
 
 + Autres améliorations +
 

@@ -7,8 +7,7 @@
 from logHandler import log
 import config
 from ..utils.NVDAStrings import NVDAString
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
 
 
 def isWasapiUsed():

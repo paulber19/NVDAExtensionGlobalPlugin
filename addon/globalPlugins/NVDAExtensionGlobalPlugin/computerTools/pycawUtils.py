@@ -8,8 +8,8 @@
 
 from logHandler import log
 import comtypes
-from versionInfo import version_year, version_major
-NVDAVersion = [version_year, version_major]
+from ..utils.nvdaInfos import NVDAVersion
+
 if NVDAVersion >= [2024, 2]:
 	# for nvda version >= 2024.2
 	from pycaw.api.audiopolicy import IAudioSessionControl2, IAudioSessionManager2
