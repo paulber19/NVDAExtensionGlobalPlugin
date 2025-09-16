@@ -34,6 +34,7 @@ import eventHandler
 import core
 import contentRecog.recogUi
 import unicodedata
+from . import settingsDialogsPatche
 from versionInfo import version_year, version_major
 from ..utils.NVDAStrings import NVDAString
 from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
@@ -266,7 +267,9 @@ class EditableTextEx(editableText.EditableText):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				ui.message, _msgPaste)
-			gesture.send()
+			queueHandler.queueFunction(
+				queueHandler.eventQueue,
+				gesture.send)
 			wx.CallLater(400, self.reportCurrentLine)
 
 		stopDelayScriptTask()
@@ -348,7 +351,6 @@ class EditableTextEx(editableText.EditableText):
 
 class NVDAObjectEx(NVDAObject):
 	def _reportErrorInPreviousWord(self, typedWord):
-		self.typedWordSpoken = False
 		try:
 			# self might be a descendant of the text control; e.g. Symphony.
 			# We want to deal with the entire text, so use the caret object.
@@ -391,50 +393,43 @@ class NVDAObjectEx(NVDAObject):
 				from ..settings import _addonConfigManager
 				from ..speech.sayError import getErrorSpeechSequence
 				if _addonConfigManager.reportingSpellingErrorsByMessage():
-					ui.message(NVDAString("spelling error"))
+					queueHandler.queueFunction(
+						queueHandler.eventQueue,
+						ui.message, NVDAString("spelling error"))
 					return
 				if _addonConfigManager.reportingSpellingErrorsByErrorReporting():
 					if typedWord is None:
 						return
 					seq = getErrorSpeechSequence(typedWord)
-					self.typedWordSpoken = True
 				else:
 					seq = getErrorSpeechSequence(reading=False)
 				if seq:
-					speech.speech.speak(seq, priority=SpeechPriority.NOW)
+					queueHandler.queueFunction(
+						queueHandler.eventQueue,
+						speech.speech.speak, seq, priority=SpeechPriority.NORMAL)
 
 			warnSpellingError(typedWord)
-		_detection(typedWord)
+
+		# #12161: MS Word's UIA implementation certainly requires this delay.
+		core.callLater(50, _detection, typedWord)
 
 	def _delayedReportErrorInPreviousWord(self, ch):
-		typingEchoMode = config.conf["keyboard"]["speakTypedWords"]
 		typedWord = self.hasWordTyped(ch)
 		self._reportErrorInPreviousWord(typedWord)
-		from ..settings import _addonConfigManager
-		if _addonConfigManager.reportingSpellingErrorsByErrorReporting() and self.typedWordSpoken:
-			if NVDAVersion < [2025, 1]:
-				# for nvda versions < 2025.1
-				config.conf["keyboard"]["speakTypedWords"] = False
-			else:
-				# for nvda versions >= 2025.1
-				from config.configFlags import TypingEcho
-				config.conf["keyboard"]["speakTypedWords"] = TypingEcho.OFF.value
-		self.NVDAObject_event_typedCharacter(ch)
-		config.conf["keyboard"]["speakTypedWords"] = typingEchoMode
 
 	def event_typedCharacter(self, ch: str):
 		if (
 			config.conf["keyboard"]["alertForSpellingErrors"]
+			and (
 			# Not alpha, apostrophe or control.
-			and ch.isspace() or (ch >= " " and ch not in "'\x7f" and not ch.isalpha())
+				ch.isspace() or (ch >= " " and ch not in "'\x7f" and not ch.isalpha())
+			)
 		):
 			# Reporting of spelling errors is enabled and this character ends a word.
-			core.callLater(50, self._delayedReportErrorInPreviousWord, ch)
-			return
+			self._delayedReportErrorInPreviousWord(ch)
 		self.NVDAObject_event_typedCharacter(ch)
 
 	def hasWordTyped(self, ch: str):
-
 		typingIsProtected = api.isTypingProtected()
 		if typingIsProtected:
 			realChar = speech.speech.PROTECTED_CHAR

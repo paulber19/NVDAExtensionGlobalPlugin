@@ -27,6 +27,8 @@ _shouldProcessRemanence = False
 
 def setShouldProcessRemanence():
 	global _shouldProcessRemanence
+	if not toggleRemanenceForGmailAdvancedOption(False):
+		return
 	try:
 		obj = api.getFocusObject()
 		ti = obj.treeInterceptor
@@ -40,7 +42,10 @@ def setShouldProcessRemanence():
 		_shouldProcessRemanence = False
 		return
 
-	dci = ti.documentConstantIdentifier
+
+	dci = ti.get("documentConstantIdentifier", None)
+	if dci is None:
+		return
 	gmail = "https://mail.google.com/mail/"
 	if dci[: len(gmail)] != gmail:
 		_shouldProcessRemanence = False

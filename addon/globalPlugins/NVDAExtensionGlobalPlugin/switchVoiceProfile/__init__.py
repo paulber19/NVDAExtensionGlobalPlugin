@@ -16,7 +16,7 @@ import queueHandler
 import core
 import characterProcessing
 from synthDriverHandler import getSynth, setSynth, getSynthList
-from ..computerTools.audioUtils import get_outputDevices
+from ..computerTools.audioUtils import get_outputDevices, getOutputDevice, getOutputDeviceName
 from ..utils.informationDialog import InformationDialog
 from ..utils.NVDAStrings import NVDAString
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
@@ -220,8 +220,16 @@ class SwitchVoiceProfilesManager(object):
 
 	def switchToVoiceProfile(self, selector, silent=False):
 		def canSwitchToOutputDevice(outputDevice):
+			# on w11, it's not possible to know if outputDevice is the default output (sound mapper)
+			return True
 			deviceIds, deviceNames = get_outputDevices()
-			return (outputDevice in deviceIds) or (outputDevice in deviceNames)
+			if outputDevice in deviceIds or outputDevice == "default":
+				return True
+			for name in deviceNames:
+				if type(outputDevice) is str and outputDevice.lower() == name.lower():
+					return True
+			# return (outputDevice in deviceIds) or (outputDevice in deviceNames)
+					return False
 
 		def finish(synthName, synthspeechConfig, msg):
 			# stop previous synth because oneCore voice switch don't work without it
@@ -361,9 +369,8 @@ class SwitchVoiceProfilesManager(object):
 					textList.append((setting.displayName, info))
 		d = {}
 		i = 1
-		if NVDAVersion >= [2025, 1]:
-			# Translators:  label to report synthesizer output device .
-			d[str(1)] = [_("Audio output device"), outputDeviceName]
+		# Translators:  label to report synthesizer output device .
+		d[str(1)] = [_("Audio output device"), outputDeviceName]
 		i += 1
 		for label, val in textList:
 			d[str(i)] = (label, val)
@@ -382,17 +389,13 @@ class SwitchVoiceProfilesManager(object):
 				del d[key]
 		# delet
 		synthDatas[SCT_Speech] = d
-		outputDeviceName = ""
+		outputDevice = getOutputDevice()
+		outputDeviceName = getOutputDeviceName(outputDevice)
 		# for nvda >= 2025.1, outputDevice is stored in "audio" section instead of "speech" section
 		# and it is stored by its id instead its name
 		if "outputDevice" in config.conf[SCT_Audio]:
 			outputDevice = config.conf[SCT_Audio]["outputDevice"]
 			synthDatas[SCT_Speech]["outputDevice"] = outputDevice
-			deviceIds, deviceNames = get_outputDevices()
-			try:
-				outputDeviceName = deviceNames[deviceIds.index(outputDevice)]
-			except ValueError:
-				pass
 		synthDatas[KEY_SynthDisplayInfos] = self.getSynthDisplayInfos(synth, d[synth.name], outputDeviceName)
 		# nvda 2024.4: include CLDR check box is replaced by symbolDictionnaries list
 		# so we exclude from setting to keep and restore
@@ -569,8 +572,12 @@ class SwitchVoiceProfilesManager(object):
 			"%s = %s" % (_("Synthesizer"), synthName))
 		synthSettings = selectorConfig[SCT_Speech][synthName].copy()
 		synthDisplayInfos = selectorConfig[KEY_SynthDisplayInfos]
-		if NVDAVersion < [2025, 1]:
+		output = synthDisplayInfos.get("1")
+		if (output is None) or output[0] != _("Output device"):
 			outputDeviceName = selectorConfig[SCT_Speech][KEY_OutputDevice]
+			if outputDeviceName == "default":
+				outputDeviceName = NVDAString("Microsoft Sound Mapper")
+		if not output or output[0] != _("Audio output device"):
 			textList.append(
 				# Translators:  label to report synthesizer output device .
 				"%s = %s" % (_("Output device"), outputDeviceName))

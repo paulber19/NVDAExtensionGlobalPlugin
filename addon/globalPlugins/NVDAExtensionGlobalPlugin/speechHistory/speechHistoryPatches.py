@@ -6,6 +6,7 @@
 
 from logHandler import log
 from speech import speech as speech
+from collections.abc import Sequence
 from ..settings import isInstall
 from ..settings.addonConfig import FCT_SpeechHistory, FCT_TemporaryAudioDevice
 from ..computerTools.temporaryOutputDevice import checkOutputDeviceChange
@@ -25,6 +26,8 @@ def preSpeechAction(speechSequence):
 	"""
 	# reset current output device if temporary output device is set and output device has changed
 	checkOutputDeviceChange()
+	if not isinstance(speechSequence, Sequence):
+		return
 	if isInstall(FCT_SpeechHistory):
 		text = " ".join([x for x in speechSequence if isinstance(x, str)])
 		getSpeechRecorder().record(text)

@@ -4,6 +4,7 @@
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
+from logHandler import log
 import config
 from ..utils.NVDAStrings import NVDAString
 from versionInfo import version_year, version_major
@@ -33,6 +34,26 @@ def getOutputDevice():
 	except KeyError:
 		# for nvda version < 2025.1
 		return config.conf["speech"]["outputDevice"]
+
+
+def getOutputDeviceName(outputDevice):
+	log.debug("getDeviceName: %s" % outputDevice)
+	# for nvda >= 2025.1, outputDevice is stored in "audio" section instead of "speech" section
+	# and it is stored by its id instead its name
+	# else outputDevice is the output device name
+	if "outputDevice" not in config.conf["audio"]:
+		return outputDevice
+	# for nvda version >= 2025.1
+	deviceIds, deviceNames = get_outputDevices()
+	try:
+		outputDeviceName = deviceNames[deviceIds.index(outputDevice)]
+	except ValueError:
+		# We assume it is the default device
+		outputDeviceName = deviceNames[0]
+	if outputDeviceName is None:
+		# Translators: name for default (Microsoft Sound Mapper) audio output device.
+		outputDeviceName = NVDAString("Microsoft Sound Mapper")
+	return outputDeviceName
 
 
 def setOutputDevice(device):
