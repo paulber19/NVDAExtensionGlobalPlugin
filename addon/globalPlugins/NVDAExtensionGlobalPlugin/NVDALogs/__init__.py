@@ -172,7 +172,6 @@ class NVDALogsManagementDialog (
 			)
 			return
 		if api.copyToClip(logFile):
-			print("passe")
 			if currentLog:
 				ui.message(_("Current log file path copied to clipboard"))
 			else:

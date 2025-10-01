@@ -7,6 +7,7 @@
 import addonHandler
 import api
 import winUser
+import winKernel
 import time
 import wx
 from keyboardHandler import KeyboardInputGesture
@@ -49,7 +50,7 @@ def isRealWindow(hWnd):
 		return False
 	if (
 		lExStyle & WS_EX_NOACTIVATE
-		or lExStyle & WS_EX_NOREDIRECTIONBITMAP
+		#or lExStyle == WS_EX_NOREDIRECTIONBITMAP
 	):
 		return False
 
@@ -63,7 +64,11 @@ def isRealWindow(hWnd):
 def getactiveWindows():
 
 	def callback(hWnd, windows):
-		# we exclude non real windows
+		obj = NVDAObjects.window.Window(windowHandle=hwnd)
+		if not obj.name or not obj.isFocusable:
+			# we exclude window with no name and non focusable window
+			return True
+					# we exclude non real windows
 		if not isRealWindow(hWnd):
 			return True
 		title = winUser.getWindowText(hWnd)
@@ -97,7 +102,16 @@ def closeAllWindows(windowsList):
 			# we cannot destroy nvda windows
 			continue
 		# we destroy it
-		oleacc.AccessibleObjectFromWindow(hwnd, -2).accDoDefaultAction(5)
+		killProcess(obj.processID)
+
+
+# original code from killprocess add-on (#Copyright (C) 2023 Ángel Alcantar)
+def killProcess(processID) -> int:
+		PROCESS_TERMINATE = 1  
+		handle = winKernel.kernel32.OpenProcess(PROCESS_TERMINATE, 0, processID)  
+		res = winKernel.kernel32.TerminateProcess(handle, 0)  
+		winKernel.kernel32.CloseHandle(handle)  
+		return res  
 
 
 class ActiveWindowsListDisplay(
@@ -314,7 +328,7 @@ class ActiveWindowsListDisplay(
 			self.windowsListBox.SetFocus()
 			return
 		# we destroy it
-		oleacc.AccessibleObjectFromWindow(hwnd, -2).accDoDefaultAction(5)
+		killProcess(obj.processID)
 		time.sleep(0.5)
 		# windows list update
 		self.windowsListInit()

@@ -39,7 +39,10 @@ def saveCurAddonConfigurationProfiles(addonName):
 	profileNames = []
 	profileNames.extend(config.conf.listProfiles())
 	for name in profileNames:
-		profile = config.conf._getProfile(name)
+		try:
+			profile = config.conf._getProfile(name)
+		except Exception:
+			continue
 		if profile.get(addonName):
 			log.warning("saveCurAddonConfigurationProfiles: profile %s" % name)
 			profile["%s-temp" % addonName] = profile[addonName].copy()
@@ -62,7 +65,10 @@ def deleteAddonProfilesConfig(addonName):
 	profileNames = []
 	profileNames.extend(config.conf.listProfiles())
 	for name in profileNames:
-		profile = config.conf._getProfile(name)
+		try:
+			profile = config.conf._getProfile(name)
+		except Exception:
+			continue
 		if profile.get(addonName):
 			log.warning("%s section deleted from profile: %s" % (addonName, name))
 			del profile[addonName]

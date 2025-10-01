@@ -219,7 +219,6 @@ class AudioSources(object):
 		deviceId = self._device.id if self._device else None
 		for session in AudioUtilities.GetAllSessions(deviceId):
 			pid = session.ProcessId
-			print("pid: %s" %pid)
 
 	def _getAudioSources(self):
 		audioSources = {}
@@ -230,7 +229,6 @@ class AudioSources(object):
 			if not pids.get(session.ProcessId, None):
 				pids[session.ProcessId] = []
 			pids[session.ProcessId].append(session)
-		print("pids: %s" %pids)
 		for session in sessions:
 			sourceName = session.DisplayName
 			if "AudioSrv.Dll" in session.DisplayName:

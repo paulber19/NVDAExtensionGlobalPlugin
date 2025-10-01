@@ -289,7 +289,10 @@ class AddonConfigurationManager():
 		profileNames = []
 		profileNames.extend(config.conf.listProfiles())
 		for name in profileNames:
-			profile = config.conf._getProfile(name)
+			try:
+				profile = config.conf._getProfile(name)
+			except Exception:
+				continue
 			if profile.get("%s-temp" % addonName):
 				log.warning("restoreAddonProfilesConfig: profile %s" % name)
 				profile[addonName] = profile["%s-temp" % addonName].copy()

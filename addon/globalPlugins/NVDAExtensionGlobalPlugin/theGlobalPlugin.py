@@ -1969,7 +1969,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 		sessions = AudioUtilities.GetAllSessions()
 		for session in sessions:
 			name = session.Process.name() if session.Process else None
-			print("name: %s, pid = %s, displayName: %s" % (name, session.ProcessId, session.DisplayName))
 
 
 

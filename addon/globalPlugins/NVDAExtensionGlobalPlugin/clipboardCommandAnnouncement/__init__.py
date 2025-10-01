@@ -666,9 +666,11 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	# for the obj, the informations are bad: role= Window, className= Edit, not states
 	#  tand with no better solution, we check the length of obj.states
 	elif (
-		obj.role in _rolesToCheck
-		or hasattr(obj, "windowClassName")
+		(
+			obj.role in _rolesToCheck
+			or hasattr(obj, "windowClassName")
 		and obj.windowClassName in _classNamesToCheck
+		)
 		and len(obj.states)
 	):
 		# newer revisions of Windows 11 build 22000 moves focus to emoji search field.
