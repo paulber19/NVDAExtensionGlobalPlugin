@@ -16,7 +16,6 @@ addonHandler.initTranslation()
 SCT_General = "General"
 SCT_InstallFeatureOptions = "InstallFeatureOptions"
 SCT_RedefinedKeyLabels = "RedefinedKeyLabels"
-SCT_RedefinedKeyNames = "RedefinedKeyNames"
 SCT_CategoriesAndSymbols = "Categories&Symbols"
 SCT_MinuteTimer = "MinuteTimer"
 SCT_Options = "Options"

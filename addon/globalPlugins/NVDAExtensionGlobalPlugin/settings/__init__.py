@@ -428,10 +428,11 @@ class AddonConfigurationManager():
 					else:
 						self.addonConfig[sect][k] = oldConfig[sect][k]
 		# others section
-		from .addonConfig import SCT_RedefinedKeyLabels
-		for sect in [SCT_RedefinedKeyLabels, ]:
+		from .addonConfig import SCT_RedefinedKeyLabels, SCT_CategoriesAndSymbols, SCT_AudioDevicesForCycle
+		for sect in [SCT_RedefinedKeyLabels, SCT_CategoriesAndSymbols, SCT_AudioDevicesForCycle]:
 			if sect in oldConfig.sections:
 				self.addonConfig[sect] = oldConfig[sect]
+
 
 	def handlePostConfigSave(self):
 		self.saveSettings(True)
@@ -509,10 +510,10 @@ class AddonConfigurationManager():
 		config.post_configSave.unregister(self.handlePostConfigSave)
 
 	def saveRedefinedKeyLabels(self, keyLabels):
-		from .addonConfig import SCT_RedefinedKeyNames, SCT_RedefinedKeyLabels
+		from .addonConfig import SCT_RedefinedKeyLabels
 		lang = getLanguage().split("-")[0]
 		conf = self.addonConfig
-		if SCT_RedefinedKeyNames not in conf:
+		if SCT_RedefinedKeyLabels not in conf:
 			conf[SCT_RedefinedKeyLabels] = {}
 		elif lang in conf[SCT_RedefinedKeyLabels]:
 			del conf[SCT_RedefinedKeyLabels][lang]

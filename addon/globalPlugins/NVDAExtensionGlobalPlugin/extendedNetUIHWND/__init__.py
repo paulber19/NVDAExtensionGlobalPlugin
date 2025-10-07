@@ -23,5 +23,8 @@ class ExtendedNetUIHWND (NVDAObjects.NVDAObject):
 
 
 def chooseNVDAObjectOverlayClasses(obj, clsList):
-	if obj.windowClassName == "NetUIHWND":
+	if (
+		hasattr(obj, "windowClassName")
+		and obj.windowClassName == "NetUIHWND"
+	):
 		clsList.insert(0, ExtendedNetUIHWND)

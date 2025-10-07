@@ -5,6 +5,7 @@
 # See the file COPYING for more details.
 
 import addonHandler
+from logHandler import log
 import api
 import winUser
 import winKernel
@@ -37,23 +38,23 @@ addonHandler.initTranslation()
 
 # Translators: this is the list of windows titles which do not be displayed.
 _windowsToIgnore = _("Start menu|Charm Bar")
+_windowClassToIgnore = ["Windows.UI.Core.CoreWindow",]
 
 
 def isRealWindow(hWnd):
-	lExStyle = getExtendedWindowStyle(hWnd)
-	isToolWindow = (lExStyle & WS_EX_TOOLWINDOW) == 0
-	isAppWindow = (lExStyle & WS_EX_APPWINDOW) == 0
-	hasOwner = winUser.getWindow(hWnd, winUser.GW_OWNER)
 	if not winUser.isWindowVisible(hWnd):
 		return False
 	if getParent(hWnd):
 		return False
+	lExStyle = getExtendedWindowStyle(hWnd)
 	if (
 		lExStyle & WS_EX_NOACTIVATE
 		#or lExStyle == WS_EX_NOREDIRECTIONBITMAP
 	):
 		return False
-
+	isToolWindow = (lExStyle & WS_EX_TOOLWINDOW) == 0
+	isAppWindow = (lExStyle & WS_EX_APPWINDOW) == 0
+	hasOwner = winUser.getWindow(hWnd, winUser.GW_OWNER)
 	if (isToolWindow and not hasOwner) or (
 		(isAppWindow and hasOwner)):
 		if winUser.getWindowText(hWnd):
@@ -64,16 +65,14 @@ def isRealWindow(hWnd):
 def getactiveWindows():
 
 	def callback(hWnd, windows):
-		obj = NVDAObjects.window.Window(windowHandle=hwnd)
-		if not obj.name or not obj.isFocusable:
-			# we exclude window with no name and non focusable window
-			return True
-					# we exclude non real windows
+		# we exclude non real windows
 		if not isRealWindow(hWnd):
 			return True
 		title = winUser.getWindowText(hWnd)
-		placement = getWindowPlacement(hwnd)
-		if not placement or title in _windowsToIgnore.split("|"):
+		windowClassName = winUser.getClassName(hwnd)
+		log.debug("title: %s, windowClass: %s" %(title, windowClassName))
+		#placement = getWindowPlacement(hwnd)
+		if title in _windowsToIgnore.split("|") or windowClassName in _windowClassToIgnore:
 			return True
 		windows.append((title, hWnd))
 		return True
