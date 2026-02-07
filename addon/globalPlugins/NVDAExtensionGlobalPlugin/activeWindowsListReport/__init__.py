@@ -88,6 +88,8 @@ def getactiveWindows():
 		callback(hwnd, windowsList)
 	return windowsList
 
+WM_CLOSE                        = 0x0010
+
 
 def closeAllWindows(windowsList):
 	for f in windowsList:
@@ -101,7 +103,18 @@ def closeAllWindows(windowsList):
 			# we cannot destroy nvda windows
 			continue
 		# we destroy it
-		killProcess(obj.processID)
+		winUser.PostMessage(hwnd,WM_CLOSE, 0, 0) 
+		# some windows require you to wait for them to close
+		# wait for 5 seconds maximum
+		i = 10
+		while i:
+			time.sleep(0.5)
+			i -= 1
+			if not winUser.isWindowVisible(hwnd):
+				break
+
+		if not i:
+			killProcess(obj.processID)
 
 
 # original code from killprocess add-on (#Copyright (C) 2023 Ángel Alcantar)
@@ -327,8 +340,17 @@ class ActiveWindowsListDisplay(
 			self.windowsListBox.SetFocus()
 			return
 		# we destroy it
-		killProcess(obj.processID)
-		time.sleep(0.5)
+			# we cannot use killprocess for a windows explorer window
+		#killProcess(obj.processID)
+		winUser.PostMessage(hwnd,WM_CLOSE, 0, 0) 
+		# some windows require you to wait for them to close
+		# wait for 5 seconds maximum
+		i = 10
+		while i:
+			time.sleep(0.5)
+			i -= 1
+			if not winUser.isWindowVisible(hwnd):
+				break
 		# windows list update
 		self.windowsListInit()
 		self.windowsListBox.Clear()

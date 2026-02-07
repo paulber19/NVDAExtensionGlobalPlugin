@@ -1,6 +1,6 @@
 # updateCheck.py
 # common Part of all of my add-on
-# Copyright 2019-2025 Paulber19
+# Copyright 2019-2026 Paulber19
 # some parts of code comes from others add-ons:
 # add-on Updater (author Joseph Lee)
 # brailleExtender (author Andre-Abush )
@@ -12,14 +12,12 @@ import globalVars
 import time
 import api
 import gui
+import speech
 import config
 import wx
 import core
 import hashlib
-try:
-	from urllib import urlopen
-except Exception:
-	from urllib.request import urlopen
+from urllib.request import urlopen
 from updateCheck import UpdateDownloader
 import tempfile
 import threading
@@ -39,6 +37,7 @@ addonHandler.initTranslation()
 _curAddon = addonHandler.getCodeAddon()
 _checkForUpdate = False
 
+_baseURL = "https://github.com/paulber007/AllMyNVDAAddons/raw/master"
 
 def setCheckForUpdate(check):
 	global _checkForUpdate
@@ -320,10 +319,11 @@ class CheckForAddonUpdate(object):
 		return False
 
 	def getreleaseNoteURL(self, stable=True):
-		baseURL = "https://rawgit.com/paulber007/AllMyNVDAAddons/master"
+		#baseURL = _baseURL 
+
 		if stable:
 			basereleaseNoteURL = "{baseURL}/{addonName}/{releaseNotes}".format(
-				baseURL=baseURL,
+				baseURL=_baseURL,
 				addonName=self.addon.manifest["name"],
 				releaseNotes="releaseNotes")
 			from languageHandler import getLanguage
@@ -346,7 +346,7 @@ class CheckForAddonUpdate(object):
 		else:
 			# dev url
 			url = "{baseURL}/{addonName}/dev/changes.html".format(
-				baseURL=baseURL,
+				baseURL=_baseURL,
 				addonName=self.addon.manifest["name"])
 		return url
 
@@ -402,7 +402,7 @@ Do you want to ignore this incompatibility and still download it now?""") .forma
 		res = None
 		if updateInfosFile is None:
 			try:
-				url = "https://rawgit.com/paulber007/AllMyNVDAAddons/master/myAddons.latest"
+				url = "%s/myAddons.latest" % _baseURL 
 				res = urlopen(url)
 			except IOError as e:
 				log.warning("Fail to download update informations: error = %s" % e)
@@ -573,8 +573,29 @@ class UpdateCheckResultDialog(wx.Dialog):
 		self.EndModal(0)
 
 	def onReleaseNotesButton(self, evt):
+		# with github, we cannot use webbrowser.open  directly with releaseNoteURL .
+		# the browser displays the page code instead of the page.
+		# we must save the code in a file and open this file in the browser.
 		import webbrowser
-		webbrowser.open(self.releaseNoteURL)
+		res = None
+		try:
+			url = self.releaseNoteURL 
+			res = urlopen(url)
+		except IOError as e:
+			log.warning("Fail to get release note : error = %s" % e)
+			return None
+		if res is None or res.code not in [200, 202]:
+			log.warning("no release note: code = %s" % res.code if res is not None else "None")
+			return None
+		html = res.read()
+		res.close()
+		addonName = _curAddon.manifest["name"]
+		destPath = tempfile.mktemp(prefix="%s-" %addonName, suffix=".html")
+		speech.speakMessage(NVDAString("Please wait"))
+		with open(destPath, "wb") as f:
+			f.write(html)
+			webbrowser.open("file://%s" % destPath )
+		wx.CallLater(5000, os.remove, destPath)
 
 	def onYesButton(self, evt):
 		self.EndModal(wx.ID_YES)

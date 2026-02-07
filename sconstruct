@@ -1,5 +1,5 @@
 # NVDA add-on template  SCONSTRUCT file
-#Copyright (C) 2018 - 2023 Paulber19 <paulber19@laposte.net>
+#Copyright (C) 2018Paulber19 <paulber19@laposte.net>
 #This file is covered by the GNU General Public License.
 #See the file COPYING.txt for more details.
 
@@ -8,42 +8,76 @@ import gettext
 import os
 import os.path
 import zipfile
-import sys
 import buildVars
-
-import txt2tags
-import markdown2 as markdown
+import txt2tagsEx as txt2tags
+import markdown
 
 
 def getTranslatedAddonSummary(buildVars, localeLang):
 	try:
-		# No ugettext in Python 3.
-		if sys.version_info.major == 2:
-			_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).ugettext
-		else:
-			_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).gettext
+		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).gettext
 		summary = _(buildVars.addon_info["addon_summary"])
 	except:
 		summary = buildVars.addon_info["addon_summary"]
 	return summary
 
-def writeHTMLFile(dest, htmlText, lang, title, cssFileName):
-	cssFile =cssFileName if cssFileName is not None else "style.css"
+
+
+HTML_HEADERS = """
+<!DOCTYPE html>
+<html lang="{lang}" dir="{dir}">
+<head>
+<meta charset="utf-8">
+<title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href={styles}>
+{extraStylesheet}
+</head>
+""".strip()
+
+RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
+
+
+def writeHTMLFile(dest, htmlText, lang, title, stylesCss, extraStylesCss=""):
+	cssFile =stylesCss if stylesCss is not None else "style.css"
+	extraStylesheet = ""
+	if extraStylesCss != "":
+		extraStylesheet = """<link rel="stylesheet" href=%s""" % extraStylesCss
 	#lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
 	with codecs.open(dest, "w", "utf-8") as f:
-		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-			"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
-			"    \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"%s\" lang=\"%s\">\n" % (lang, lang) +
-			"<head>\n" +
-			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
-			"<link rel=\"stylesheet\" type=\"text/css\" href=\"../%s\" media=\"screen\"/>\n"%cssFile +
-			"<title>%s</title>\n" % title +
-			"</head>\n"
+		f.write(
+			HTML_HEADERS.format(
+				lang=lang,
+				dir="rtl" if lang in RTL_LANG_CODES else "ltr",
+				title=title,
+				styles=stylesCss,
+				extraStylesheet=extraStylesheet,
+			)
 		)
 		f.write(htmlText)
 		f.write("\n</html>\n")
 	f.close()
+
+
+def getStylesCss(fileDir, fileType="t2t"):
+	# the default styles css files are in doc folder
+	# but translators can adapte these files for convenience
+	# so the file modified must be placed in the language folder.
+	if fileType == "t2t":
+		stylesCss = "style_t2t.css"
+		if not os.path.exists(os.path.join(fileDir, stylesCss)):
+			stylesCss = "..\\style_t2t.css"
+		extraStylesCss = ""
+	elif fileType == "md":
+		stylesCss = "styles.css"
+		if not os.path.exists(os.path.join(fileDir, stylesCss)):
+			stylesCss = "..\\%s" % stylesCss
+		extraStylesCss = "numberedHeadings.css"
+		if not os.path.exists(os.path.join(fileDir, extraStylesCss)):
+			extraStylesCss = "..\\%s" % extraStylesCss
+	return (stylesCss, extraStylesCss)
+
+
 def getHTMLBody(dest):
 	src = codecs.open( dest, "r","utf_8",errors="replace")
 	startTag=  "</head>"
@@ -75,8 +109,30 @@ def t2t2html(source, dest):
 	localeLang = os.path.basename(os.path.dirname(source))
 	summary = getTranslatedAddonSummary(buildVars, localeLang)
 	title=u"{0} {1}".format(summary, buildVars.addon_info["addon_version"])
-	writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style_t2t.css")
-	
+	d = os.path.dirname(dest)
+	(stylesCss, extraStylesCss) = getStylesCss(d, "t2t")
+	writeHTMLFile(dest, htmlText, lang, title, stylesCss, extraStylesCss)
+
+markdown_extensions = [
+	"abbr",
+	"admonition",
+	"attr_list",
+	"def_list",
+	# "extra",
+	"fenced_code",
+	"footnotes",
+	"legacy_attrs",
+	"legacy_em",
+	"md_in_html",
+	"meta",
+	"nl2br",
+	"sane_lists",
+	"smarty",
+	"tables",
+	"toc",
+	"wikilinks",
+]
+
 def md2html(source, dest):
 	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
 	localeLang = os.path.basename(os.path.dirname(source))
@@ -86,16 +142,18 @@ def md2html(source, dest):
 		"[[!meta title=\"": "# ",
 		"\"]]": " #",
 	}
+	extensions = []
+	for ext in markdown_extensions:
+			extensions.append("markdown.extensions.%s" % ext)
 	with codecs.open(source, "r", "utf-8") as f:
 		mdText = f.read()
-		if sys.version_info.major == 2:
-			for k, v in headerDic.iteritems():
-				mdText = mdText.replace(k, v, 1)
-		else:
-			for k, v in headerDic.items():
-				mdText = mdText.replace(k, v, 1)
-		htmlText = "<body>\n" +markdown.markdown(mdText) +"\n</body>"
-		writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style.css")
+		for k, v in headerDic.items():
+			mdText = mdText.replace(k, v, 1)
+		htmlText = markdown.markdown(mdText, extensions=extensions)
+		htmlText = "<body>\n" + htmlText + "\n</body>"
+		d = os.path.dirname(dest)
+		(stylesCss, extraStylesCss) = getStylesCss(d, "md")
+		writeHTMLFile(dest, htmlText, lang, title, stylesCss, extraStylesCss)
 
 def generateT2tHelpFiles (source, target, env, for_signature):
 	action = env.Action(lambda target, source, env : t2t2html(source[0].abspath, target[0].abspath) and None,
@@ -191,11 +249,7 @@ def generateManifest(source, dest):
 		f.write(manifest)
 
 def generateTranslatedManifest(source, language, out):
-	# No ugettext in Python 3.
-	if sys.version_info.major == 2:
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).ugettext
-	else:
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).gettext
+	_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).gettext
 	vars = {}
 	for var in ("addon_summary", "addon_description"):
 		vars[var] = _(buildVars.addon_info[var])
