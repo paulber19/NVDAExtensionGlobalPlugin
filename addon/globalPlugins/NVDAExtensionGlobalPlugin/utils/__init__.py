@@ -15,6 +15,7 @@ from keyboardHandler import KeyboardInputGesture
 from logHandler import log
 import queueHandler
 import core
+import mouseHandler
 from ..settings import toggleDialogTitleWithAddonSummaryAdvancedOption
 import speech.speech
 try:
@@ -165,23 +166,25 @@ def getPositionXY(obj):
 	return (x, y)
 
 
-def mouseClick(obj, rightButton=False, twice=False):
-	api.moveMouseToNVDAObject(obj)
-	api.setMouseObject(obj)
+def mouseClick(obj=None, rightButton=False, twice=False):
+	if obj:
+		api.moveMouseToNVDAObject(obj)
+		api.setMouseObject(obj)
 	if not rightButton:
-		winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0, None, None)
-		winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP, 0, 0, None, None)
+		mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0)
+		mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_LEFTUP, 0, 0)
 		if twice:
 			time.sleep(0.1)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0, None, None)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP, 0, 0, None, None)
+			mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0)
+			mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_LEFTUP, 0, 0)
 	else:
-		winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0, None, None)
-		winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTUP, 0, 0, None, None)
+		mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0)
+		mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_RIGHTUP, 0, 0)
 		if twice:
 			time.sleep(0.1)
-			winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0, None, None)
-			winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTUP, 0, 0, None, None)
+			mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0)
+			mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_RIGHTUP, 0, 0)
+		mouseHandler.executeMouseEvent(winUser.MOUSEEVENTF_RIGHTUP, 0, 0)
 
 
 def getSpeechMode():

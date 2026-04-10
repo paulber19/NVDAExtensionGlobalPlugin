@@ -4,13 +4,15 @@
 # This file is covered by the GNU General Public License.
 
 import addonHandler
-# from logHandler import log
+from logHandler import log
 import api
 import os
 import globalVars
 import speech
 import config
 from .commands import BeepWithPauseCommand
+from ..utils.NVDAStrings import NVDAString
+
 
 addonHandler.initTranslation()
 
@@ -61,6 +63,12 @@ def getErrorVoiceSpeechSequence(error=None):
 		speech.commands.ConfigProfileTriggerCommand(t1, False),
 	]
 
+def getErrorMessageSpeechSequence(error=None):
+	seq = []
+	seq.append(NVDAString("spelling error"))
+	seq.append(error)
+	return seq
+
 
 def getErrorSpeechSequence(error=None, reading=False):
 	from ..settings import _addonConfigManager
@@ -71,6 +79,41 @@ def getErrorSpeechSequence(error=None, reading=False):
 	elif _addonConfigManager.reportingSpellingErrorsBySound(reading=reading):
 		return getErrorSoundSpeechSequence(error)
 	elif error is not None:
+		return [error]
+	return None
+
+from ..settings import addonConfig
+
+def getReadingErrorSpeechSequence(error=None, reportSpellingErrorsBySpeech=False, reportSpellingErrorsBySound=False):
+	log.debug("error= %s, reportSpellingErrorsBySpeech= %s, reportSpellingErrorsBySound= %s" %(error, reportSpellingErrorsBySpeech, reportSpellingErrorsBySound))
+	from ..settings import _addonConfigManager
+	reading = True
+	seq = []
+	if reportSpellingErrorsBySound and not reportSpellingErrorsBySpeech:
+		if _addonConfigManager.getReadingReportingSpellingErrorsBySoundOption() == addonConfig.RSE_Sound:
+			seq.extend(getErrorSoundSpeechSequence(error))
+		else:
+			seq.extend(getErrorBeepSpeechSequence(error))
+	elif not reportSpellingErrorsBySound  and reportSpellingErrorsBySpeech:
+		if _addonConfigManager.readingReportingSpellingErrorsByMessage():
+			seq.extend(getErrorMessageSpeechSequence(error))
+		else:
+			seq.extend(getErrorVoiceSpeechSequence(error))
+	elif reportSpellingErrorsBySound  and reportSpellingErrorsBySpeech:
+		if _addonConfigManager.getReadingReportingSpellingErrorsBySoundOption() == addonConfig.RSE_Sound:
+			seq.extend(getErrorSoundSpeechSequence(error=None))
+		else:
+			seq.extend(getErrorBeepSpeechSequence(error=None))
+		if _addonConfigManager.readingReportingSpellingErrorsByMessage():
+			seq.extend(getErrorMessageSpeechSequence(error))
+		else:
+			seq.extend(getErrorVoiceSpeechSequence(error))
+	else:
+		pass
+	
+	if seq:
+		return seq
+	if error is not None:
 		return [error]
 	return None
 

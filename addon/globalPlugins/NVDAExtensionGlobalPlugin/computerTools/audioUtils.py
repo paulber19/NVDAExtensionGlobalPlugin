@@ -10,22 +10,6 @@ from ..utils.NVDAStrings import NVDAString
 from ..utils.nvdaInfos import NVDAVersion
 
 
-def isWasapiUsed():
-	# nvda 2025.1 and above use Wasapi
-	if NVDAVersion >= [2025, 1]:
-		return True
-
-	# wasapi can be used since nvda 2023.2
-	# by checking the advanced option: use wasapi for audio output
-	try:
-		from nvwave import WasapiWavePlayer, WavePlayer
-		if WavePlayer == WasapiWavePlayer:
-			return True
-	except Exception:
-		pass
-	return False
-
-
 def getOutputDevice():
 	try:
 		# for nvda version >=  2025.1

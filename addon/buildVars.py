@@ -57,9 +57,9 @@ For the full list of the add-on's features and their description, see the user m
 """),
 
 	# version
-	"addon_version": "14.1.3",
+	"addon_version": "15.0",
 	# Author(s)
-	"addon_author": "PaulBer19 (paulber19@laposte.net",
+	"addon_author": "PaulBer19 <paulber19@laposte.net>",
 	# URL for the add-on documentation support
 	"addon_url": "https://github.com/paulber19/NVDAExtensionGlobalPlugin.git",
 	# URL for the add-on repository where the source code can be found
@@ -67,10 +67,10 @@ For the full list of the add-on's features and their description, see the user m
 	# Documentation file name
 	"addon_docFileName": "addonUserManual.html",
 	# Minimum NVDA version supported (e.g. "2018.3")
-	"addon_minimumNVDAVersion": "2024.1",
+	"addon_minimumNVDAVersion": "2025.1",
 	# Last NVDA version supported/tested
 	# (e.g. "2018.4", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": "2025.3",
+	"addon_lastTestedNVDAVersion": "2026.1",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel": None,
 	# Add-on license such as GPL 2

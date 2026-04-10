@@ -14,7 +14,7 @@ from gui import nvdaControls
 from gui import guiHelper, mainFrame
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..gui import contextHelpEx
-from ..utils.NVDAStrings import NVDAString
+from ..utils import NVDAStrings
 from locale import strxfrm
 import os
 import sys
@@ -53,6 +53,17 @@ class QuickAddonsActivationDialog(
 	def doGui(self):
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = guiHelper.BoxSizerHelper(self, orientation=wx.VERTICAL)
+		# Translators: This is the label for a comboBox in the NVDAEnhancement settings panel.
+		labelText = _("Add-on's t&ype:")
+		choices = [
+			# Translators:
+			NVDAStrings.NVDAString_pgettext("addonStore", "All"),
+			NVDAStrings.NVDAString_pgettext("addonStore", "Enabled"),
+			NVDAStrings.NVDAString_pgettext("addonStore", "Disabled"),
+		]
+		self.addonTypeBox = sHelper.addLabeledControl(
+			labelText, wx.Choice, choices=choices)
+		self.addonTypeBox.SetSelection(0)
 		# Translators: This is the label for a listbox
 		# on Addons activation dialog.
 		labelText = _("Check to activate:")
@@ -95,10 +106,12 @@ class QuickAddonsActivationDialog(
 		cancelButton.Bind(wx.EVT_BUTTON, lambda evt: self.Destroy())
 		self.SetEscapeId(wx.ID_CANCEL)
 		self.addonsListBox.SetFocus()
+		self.addonTypeBox.Bind(wx.EVT_CHOICE, self.onSelectAddonType)
 		self.refreshAddonsList()
 		self.Bind(wx.EVT_ACTIVATE, self.onActivate)
 
 	def refreshAddonsList(self):
+		addonType = self.addonTypeBox.GetSelection()
 		curIndex = self.addonsListBox.GetSelection()
 		self.addonsListBox.Clear()
 		self.addonsList = []
@@ -117,7 +130,12 @@ class QuickAddonsActivationDialog(
 				or addon.isPendingInstall
 			):
 				continue
-			self.curAddons.append(addon)
+			if (
+				addonType == 0
+				or (addonType == 1) and addon.isRunning
+				or (addonType == 2) and not addon.isRunning
+			):
+				self.curAddons.append(addon)
 
 		for addon in self.curAddons:
 			state = addon.isRunning
@@ -146,6 +164,9 @@ class QuickAddonsActivationDialog(
 			self.refreshAddonsList()
 		evt.Skip()
 
+	def onSelectAddonType(self, evt):
+		self.refreshAddonsList()		
+
 	def onCheckAll(self, evt):
 		for addon in self.curAddons:
 			index = self.curAddons.index(addon)
@@ -165,7 +186,7 @@ class QuickAddonsActivationDialog(
 		if checkedItems == self.curActivatedAddons:
 			# no change
 			# Translators: Title for message asking if the user wishes to restart NVDA even if there were no changes
-			restartTitle = NVDAString("Restart NVDA")
+			restartTitle = NVDAStrings.NVDAString("Restart NVDA")
 			# Translators: A message asking the user if they wish to restart NVDA
 			# even if there were no changes
 			restartMessage = _("There is no change. Do you want to restart NVDA anyway?")

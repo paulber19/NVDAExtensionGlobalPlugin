@@ -14,7 +14,7 @@ import NVDAObjects
 import ctypes
 from gui import guiHelper, mainFrame
 from ..utils.NVDAStrings import NVDAString
-from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
+from ..utils import isOpened, makeAddonWindowTitle, getHelpObj, mouseClick
 from ..gui import contextHelpEx
 import windowUtils
 
@@ -163,23 +163,19 @@ class DisplayNotificationIconsList(
 		(x, y) = self.getPosition()
 		self.Close()
 		winUser.setCursorPos(x, y)
-		winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0, None, None)
-		time.sleep(0.01)
-		winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTUP, 0, 0, None, None)
+		mouseClick(obj=None, rightButton=True)
 
 	def onLeftClickButton(self, event):
-		self.clickLeftMouseButton(1)
+		self.clickLeftMouseButton(twice=False)
 
 	def onDoubleLeftClickButton(self, event):
-		self.clickLeftMouseButton(2)
+		self.clickLeftMouseButton(twice=True)
 
-	def clickLeftMouseButton(self, nb):
+	def clickLeftMouseButton(self, twice):
 		self.Close()
 		(x, y) = self.getPosition()
 		winUser.setCursorPos(x, y)
-		for i in range(nb):
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0, None, None)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP, 0, 0, None, None)
+		mouseClick(obj=None,rightButton=False, twice=twice)
 
 	@classmethod
 	def run(cls):

@@ -8,7 +8,6 @@ from logHandler import log
 import os
 import sys
 import ctypes
-from ..utils.py3Compatibility import getCommonUtilitiesPath
 sysPath = list(sys.path)
 win32securityModulePath = None
 if "win32security" in sys.modules:
@@ -22,7 +21,8 @@ if "win32api" in sys.modules:
 	win32apiModulePath = sys.modules["win32api"]
 	del sys.modules["win32api"]
 sys.path = [sys.path[0]]
-utilitiesPath = getCommonUtilitiesPath()
+from ..utils.py3Compatibility import getUtilitiesPath
+utilitiesPath = getUtilitiesPath()
 win32Path = os.path.join(utilitiesPath, "win32Ex")
 sys.path.append(utilitiesPath)
 sys.path.append(win32Path)

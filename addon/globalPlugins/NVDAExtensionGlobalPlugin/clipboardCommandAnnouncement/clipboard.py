@@ -1,13 +1,18 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\clipboardCommandAnnouncement\clipboard.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2022 Paulber19
+# Copyright (C) 2022-2025 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 # some parts of code were inspired from the code   of Clipboard_monitor.py module of clipSpeak add-on
 # written By Damien Lindley, created: 20th April 2017
 
-from winUser import user32
+try:
+	# for nvda versions >= 2026.1
+	from winBindings.user32 import dll as user32
+except ImportError:
+	# for NVDA versions < 2026.1
+	from winUser import user32
 from logHandler import log
 
 

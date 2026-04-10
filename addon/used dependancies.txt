@@ -1,8 +1,12 @@
 The following dependencies are embedded in the extension:
-- python markdown 3.7:  Copyright 2007-2023 The Python Markdown Project (v. 1.7 and later). License: BSD.
 - pydub 0.25.1: Copyright © 2011 James Robert, http://jiaaro.co. License (MIT License).
-- part of wpywin32  306: Copyright (c) 1994-2008, Mark Hammond 
+- part of pywin32 311 (Copyright (c) 1994-2008, Mark Hammond) :
+ - win32\lib\ntsecuritycon.py
+ - win32\win32api.pyd
+ - win32\win32security.pyd
+ - pywin32_system32\pywintypes311.dll for NVDA using python 3.11 32 bits
+ - pywin32_system32\pywintypes313.dll for NVDA using python 3.13 64 bits
+
+
 - msgfmt and xgettext of GNU Gettext tools : https://gnuwin32.sourceforge.net/downlinks/gettext.php
-- psutil  5.9.6: Copyright (c) 2009, Giampaolo Rodola'. All rights reserved.
-- pycaw v20240210 Copyright (c) 2016 AndreMiras. License (MIT)
 -txt2tags 2.5: Copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Aurelio Jargas,  Copyright 2018, 2019 Takuya Nishimoto

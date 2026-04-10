@@ -6,47 +6,17 @@
 
 # patch of AudioUtilities pycaw class to get audio sources of a specific device
 
-from logHandler import log
 import comtypes
-from ..utils.nvdaInfos import NVDAVersion
 
-if NVDAVersion >= [2024, 2]:
-	# for nvda version >= 2024.2
-	from pycaw.api.audiopolicy import IAudioSessionControl2, IAudioSessionManager2
-	from pycaw.api.mmdeviceapi import IMMDeviceEnumerator
-	from pycaw.constants import (
-		DEVICE_STATE,
-		CLSID_MMDeviceEnumerator,
-		EDataFlow,
-		ERole,
-	)
-	from pycaw.utils import AudioUtilities, AudioSession
-else:
-	# for nvda version <2024.2
-	import sys
-	import os
-	sysPath = list(sys.path)
-	if "pycaw" in sys.modules:
-		log.warning("Potential incompatibility: pycaw module is also used and loaded probably by other add-on")
-		del sys.modules["pycaw"]
-	sys.path = [sys.path[0]]
-	from ..utils.py3Compatibility import getCommonUtilitiesPath
-	commonUtilitiesPath = getCommonUtilitiesPath()
-	pycawPath = os.path.join(commonUtilitiesPath, "pycawEx")
-	psutilPath = os.path.join(commonUtilitiesPath, "psutilEx")
-	sys.path.append(commonUtilitiesPath)
-	sys.path.append(psutilPath)
-	sys.path.append(pycawPath)
-	from pycawEx.pycaw.api.audiopolicy import IAudioSessionControl2, IAudioSessionManager2
-	from pycawEx.pycaw.api.mmdeviceapi import IMMDeviceEnumerator
-	from pycawEx.pycaw.constants import (
-		DEVICE_STATE,
-		CLSID_MMDeviceEnumerator,
-		EDataFlow,
-		ERole,
-	)
-	from pycawEx.pycaw.utils import AudioUtilities, AudioSession
-	sys.path = sysPath
+from pycaw.api.audiopolicy import IAudioSessionControl2, IAudioSessionManager2
+from pycaw.api.mmdeviceapi import IMMDeviceEnumerator
+from pycaw.constants import (
+	DEVICE_STATE,
+	CLSID_MMDeviceEnumerator,
+	EDataFlow,
+	ERole,
+)
+from pycaw.utils import AudioUtilities, AudioSession
 
 
 class MyAudioUtilities(AudioUtilities):

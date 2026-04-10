@@ -130,7 +130,7 @@ These are the following scripts with their interpreter command:
 - "Display the add-on settings dialog": "KEY_ADDON_SETTINGS" command,
 - "Display the dialog for configuring the add-on for the current configuration profile": "KEY_PROFILE_SETTINGS" command,
 - "Display the keyboard keys renaming dialog": "KEY_RENAMING" command,
-- "Display the dialog to configure the selective announcements of the command keys": "KEY_RENAMING" command,
+- "Display the dialog to configure the selective announcements of the command keys": "KEY_SELECTIVE_ANNOUNCEMENT" command,
 
 
 This configuration is saved in two ways depending on the functionality or option concerned:
@@ -1481,7 +1481,12 @@ To be presented to the user in a browser, these files must be converted to HTML.
 
 This is possible simply using the "Create HTML documentation files" button after selecting the add-on in the list of add-ons and choosing a language or all the languages ​​in the list of languages.
 
-Opened in the browser, these HTML files need style files (style.css for Markdown files and style_t2t.css for txt2tags files) placed in the add-on's "doc" folder.
+These HTML files need styles files (styles.css for Markdown files and styles_t2t.css for txt2tags files) which are placed in the extension's doc folder.
+
+These style files can be local to a language. In this case, these files must be placed in the language folder.
+
+During conversion, the contents of these files are inserted into the html document. Therefore, these files are not useful for viewing the html document in the browser.
+
 
 +++ Creation of the catalog file +++[hdr22-6]
 The "Create POT file" button is used to create the catalog file for the selected add-on.
@@ -2105,17 +2110,16 @@ This script is started using the "KEY_QUICK_ADDONS_ACTIVATION" command of the co
 It can be found in the "ADDON_SUMMARY" category with the description "Activate quick add-ons activation dialog".
 
 This dialogue presents:
-- the list of add-ons installed, activated or deactivated,
+- The "add-on type" drop -down list which allows you to choose the type of add-ons that will be presented in the drop -down list that follows it. The choices are: "Enabled", "Disabled"or" All ".
+- The list of installed add-ons corresponding to the chosen type.
 - the "Check all" button to check all the add-ons of the list,
 - the "Uncheck all" button to uncheck all the add-ons of the list,
 - the "Save and restart NVDA" button to validate the changes and restart NVDA,
 - the "Cancel" button to close the dialog without any modification of the add-ons activation status.
 
 
-If the add-on is installed under a version of NVDA prior to NVDA 2023.2, the list only shows the compatible add-ons. 
-
 Only add-ons in a stable state are listed. Add-ons which are in an intermediate state, i.e. either pending activation or deactivation, or pending installation or removal, are excluded.
-Since NVDA 2023.2, incompatible add-ons are also included in the list, and can be enabled or disabled as well.
+Incompatible add-ons are also included in the list, and can be enabled or disabled as well.
 
 They are indicated by the words "(incompatible)" following their identifier.
 
@@ -2176,12 +2180,12 @@ NVDA can flag spelling errors:
 - in reading: movement by line, by word or say everything.
 
 For this, two NVDA options are involved:
-- the "Spelling mistake" option in the "Document information" group in the "Document formatting" category.
-- the “Play sound for spelling mistakes while typing” option from the “Keyboard” category.
+- the "Spelling errors" option in the "Document information" group in the "Document formatting" category.
+- the “Play sound for spelling error when typing ” option from the “Keyboard” category.
 
-For NVDA to report errors when reading and typing, the "Spelling errors" option must be activated. Errors are then indicated by the voice message “Spelling mistake”.
+For NVDA to report errors when reading and typing, the "Spelling errors" option must be activated. Errors are then indicated by the voice message “Spelling error”.
 
-For errors to be indicated instead by a sound when typing, the "Play sound for spelling errors while typing" option must be activated.
+For errors to be indicated instead by a sound when typing, the "Play sound for spelling error when typing" option must be activated.
 
 The add-on modifies this behavior of NVDA in the following way:
 - The "Play sound for spelling error when typing" is renamed in "When typing, report spelling errors".
@@ -2189,14 +2193,13 @@ The add-on modifies this behavior of NVDA in the following way:
 - for each situation, when reading or when typing, it is possible to configure how errors will be signaled: by a double beep, by the sound of NVDA, by the voice message "Spelling error" or by the announcement of the misspelled word under a dedicated configuration profile.
 
 
-The choice of reporting spelling errors is made in the "Reporting spelling errors" group in the "NVDA supplements" category of the add-on's global settings, using the two combo box: "When typing" warn by" and "Reading, warn by".
-
-The possible choices from these combo box  are:
-- beep: a double beep will be emitted.
-- sound: NVDA sound will be played.
-- message: "the spelling mistake voice message will be heard.
-- Announcement of the wrong word: the misspelled word will be heard with the voice parameters of the dedicated “Announcement of misspelled words” configuration profile added by the add-on. This profile will be automatically activated when announcing a misspelled word. This profile allows you to modify, for example, the synthesizer or the voice that will be used to announce the misspelled word.
-
+The choice of reporting spelling errors is made in the "Reporting spelling errors" group in the "NVDA supplements" category of the add-on's global settings:
+- before nVDA version 2026.1,  using the two combo box: "When typing" warn by" and "Reading, warn by". The possible choices from these combo box  are:
+ - beep: a double beep will be emitted.
+ - NVDA error sound : NVDA error sound will be played.
+ - NVDA error message: "the spelling error voice message will be heard.
+ - Announcement of the wrong word: the misspelled word will be heard with the voice parameters of the dedicated “Announcement of misspelled words” configuration profile added by the add-on. This profile will be automatically activated when announcing a misspelled word. This profile allows you to modify, for example, the synthesizer or the voice that will be used to announce the misspelled word.
+- for the following versions, the "In reading" , report by" drop-down list is replaced by the "In reading" group containing two drop-down lists: the "Report by sound" list which allows you to choose between reporting by a beep or by the NVDA error sound, the "Report by speech" list which allows you to choose between reporting by the NVDA error message or the announcement of the misspelled word. These two lists correspond to the "Spelling Error" settings in the NVDA "Document Formatting" category.
 
 The "spelling errors reporting" profile is associated with a dedicated trigger and not present in the list of triggers. It should not be associated with another trigger.
 
@@ -2344,29 +2347,22 @@ Modifier keys are not affected by this limitation.
 ++ control of the "mute" key ++ [HDR308]
 On certain keyboard there are multimedia keys and in particular the "silent" key.
 
-Support on this cut button or restores the volume of the Windows default audio output device (basic operation).
+Pressing on this cut button or restores the volume of the Windows default audio output device (basic operation).
 
 If NVDA uses this device, involuntary support can be very annoying.
 
-To prevent this possible problem, the add-on proposes, by configuration and by configuration profile, to control or not the support on this key. 
+To prevent this possible problem, the extension proposes, by configuration and by configuration profile, to control or not the press on this key. 
 
 In the "Keyboard" category of the configuration profile settings, the "Mute key control" group contains:
 - The drop -down list "Enable control:" whose possible choices are:
- - "Yes": any key support is controlled.
- - "Yes, but only if no Braille display is used: any touch support will be checked provided that there is no braille display used. The sound cut is less embarrassing for users using the Braille and in this case, the support will not be controled.
- - "Never": no press support will be controled.
-- The drop -down list "Press the key:" which offers the following choices:
- - "Confirmation learning": the key action will be processed by Windows after the user's agreement.
- - "On double support": the action of the key will be processed by Windows following a double support on the key.
- - "Never": the action on the key will not be treated by Windows.
+ - "Yes": any key press is controlled.
+ - "Yes, but only if no Braille display is used: any touch press will be controled provided that there is no braille display used. The sound cut is less embarrassing for users using the Braille and in this case, the press will be sent directly to Windows without control.
+ - "NEVER": all key press will be sent directly to Windows.
+- The drop -down list "Send the key:" which offers the following choices:
+ - "With Confirmation": the key will be sent to Windows after the user's agreement.
+ - "On double press": the key will be sent to Windows following a double press on the key.
+ - "Never": the key will not be sent to Windows.
 
-
-In the event that the volume is already cut, any support on the "mute" key is treated by Windows without any control.
-
-Note:
-To carry out this control, a script was associated with the hidden control gesture (without description) "KB: volumemute" which is installed with each loading of a configuration profile, but provided that the control is authorized.
-
-If an application or an extension for an application also uses this "silent" key, just create a configuration profile for this application and not authorize control for this profile. The key will no longer be an order gesture.
 
 + Other improvements +
 ++ Exploring the user configuration folder or nvda program folder ++[hdr202]

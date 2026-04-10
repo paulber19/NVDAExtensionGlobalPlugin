@@ -19,7 +19,6 @@ import wx
 from gui.guiHelper import BoxSizerHelper
 from gui import guiHelper, mainFrame
 from . import waves
-from .audioUtils import isWasapiUsed
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..gui import contextHelpEx
 from ..utils.NVDAStrings import NVDAString
@@ -48,7 +47,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 			return wx.Dialog.__new__(cls)
 		return NVDAAndAudioApplicationsManagerDialog._instance
 
-	def __init__(self, parent):
+	def __init__(self, parent, focus):
 		if NVDAAndAudioApplicationsManagerDialog._instance is not None:
 			return
 		NVDAAndAudioApplicationsManagerDialog._instance = self
@@ -57,6 +56,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		dialogTitle = _("Audio sources's manager")
 		title = NVDAAndAudioApplicationsManagerDialog.title = makeAddonWindowTitle(dialogTitle)
 		super(NVDAAndAudioApplicationsManagerDialog, self).__init__(parent, wx.ID_ANY, title)
+		self.focus = focus
 		from .audioCore import audioOutputDevicesManager
 		self.devices = audioOutputDevicesManager.getDevices()
 		self._currentDevice = audioOutputDevicesManager.getDefaultDevice()
@@ -65,9 +65,10 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.doGui()
 
 	def doGui(self):
-		focus = api.getFocusObject()
+		focus = self.focus
 		from appModuleHandler import getAppNameFromProcessID
 		focusedAppName = getAppNameFromProcessID(focus.processID, True)
+		focusedApplication = (focusedAppName, focus.processID)
 		mainSizer = wx.BoxSizer(wx.VERTICAL)
 		sHelper = BoxSizerHelper(self, orientation=wx.VERTICAL)
 		from .audioCore import audioOutputDevicesManager
@@ -93,14 +94,15 @@ class NVDAAndAudioApplicationsManagerDialog(
 		# in NVDA and audio Applications manager dialog
 		labelText = _("Audio &sources:")
 		self.initApplicationsList()
-		choices = [app.split(".")[0] for app in self.applications]
+		choices = [app[0].split(".")[0] for app in self.applications]
 		self.applicationsListBox = sHelper.addLabeledControl(
 			labelText,
 			wx.Choice,
 			choices=choices
 		)
-		if focusedAppName in self.applications:
-			self.applicationsListBox.SetSelection(self.applications.index(focusedAppName))
+		if focusedApplication in self.applications:
+			index = self.applications.index(focusedApplication)
+			self.applicationsListBox.SetSelection(index)
 		else:
 			self.applicationsListBox.SetSelection(0)
 		# Translators: This is the label for a group
@@ -224,20 +226,23 @@ class NVDAAndAudioApplicationsManagerDialog(
 		evt.Skip()
 
 	def initApplicationsList(self):
-		self.applications = sorted(list(self.audioSources.sources.keys()))
+		self.applications = []
+		self.applications = self.audioSources.getAudioApplications()
 
 	def updateApplicationsList(self):
 		self.audioSources = audioCore.AudioSources(self._currentDevice)
 		curApplications = self.applications
-		curApp = self.applicationsListBox.GetStringSelection()
+		curAppIndex = self.applicationsListBox.GetSelection()
+		curApp = self.applications[curAppIndex ] if curAppIndex >= 0else None
 		self.initApplicationsList()
 		if curApplications == self.applications:
 			return
-		choices = [app.split(".")[0] for app in self.applications]
+		choices = [app[0].split(".")[0] for app in self.applications]
 		self.applicationsListBox.Clear()
 		self.applicationsListBox.Append(choices)
-		if curApp in choices:
-			self.applicationsListBox.SetStringSelection(curApp)
+		if curApp and curApp in self.applications:
+			index = self.applications.index(curApp)
+			self.applicationsListBox.SetSelection(index)
 		elif self.applications:
 			self.applicationsListBox.SetSelection(0)
 
@@ -293,23 +298,14 @@ class NVDAAndAudioApplicationsManagerDialog(
 		if application is None:
 			index = self.applicationsListBox.GetSelection()
 			application = self.applications[index]
-		if isNVDA(application):
-			if (
-				not toggleAllowNVDASoundGainModificationAdvancedOption(False)
-				and (not isWasapiUsed() and not toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False))
-			):
+		if isNVDA(application[0]):
+			if not toggleAllowNVDASoundGainModificationAdvancedOption(False):
 				for item in range(0, self.NVDASoundsGroup.sizer.GetItemCount()):
 					self.NVDASoundsGroup.sizer.Hide(item)
 				return
 			for item in range(0, self.NVDASoundsGroup.sizer.GetItemCount()):
 				self.NVDASoundsGroup.sizer.Show(item)
-			if not isWasapiUsed() and toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False):
-				self.tonalitiesLevelBox.Enable()
-				from ..settings import _addonConfigManager
-				level = _addonConfigManager.getTonalitiesVolumeLevel()
-				self.tonalitiesLevelBox.SetStringSelection(str(level))
-			else:
-				self.tonalitiesLevelBox.Disable()
+			self.tonalitiesLevelBox.Disable()
 			if toggleAllowNVDASoundGainModificationAdvancedOption(False):
 				self.modifyGainButton.Enable()
 			else:
@@ -329,18 +325,19 @@ class NVDAAndAudioApplicationsManagerDialog(
 		if application is None:
 			index = self.applicationsListBox.GetSelection()
 			application = self.applications[index]
-		audioSource = self.audioSources.getAudioSource(application)
+		audioSource = self.audioSources.getApplicationAudioSource(application)
 		volume = audioSource.volume
 		mute = audioSource.getMute()
-		if isNVDA(application):
+		if isNVDA(application[1]):
 			self.volumeMuteCheckBox.Disable()
 		else:
 			self.volumeMuteCheckBox.Enable()
 			self.volumeMuteCheckBox.SetValue(mute)
 		level = self._currentDevice.getAbsoluteLevel(volume)
 		self.volumeBox.SetStringSelection(str(level))
-		log.debug("updateVolumeGroup: %s, volume: %s, device: %s, volume: %s" % (
-			application, volume, self._currentDevice.name, self._currentDevice.getVolume()))
+		log.debug("updateVolumeGroup: %s, pid: %s, volume: %s, device: %s, volume: %s" % (
+			application[0], application[1],
+			volume, self._currentDevice.name, self._currentDevice.getVolume()))
 
 	def updateChannelsGroup(self, application=None):
 		if self.applicationsListBox.Count == 0:
@@ -350,7 +347,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		if application is None:
 			index = self.applicationsListBox.GetSelection()
 			application = self.applications[index]
-		audioSource = self.audioSources.getAudioSource(application)
+		audioSource = self.audioSources.getApplicationAudioSource(application)
 		if not audioSource.isStereo:
 			self.leftChannelBox.Disable()
 			self.rightChannelBox.Disable()
@@ -364,13 +361,13 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.rightChannelBox.SetStringSelection(str(rightVolume))
 
 	def formatApplicationInfo(self, application, name=False, position=True, volume=False, mute=True):
-		log.debug("formatApplicationInfo application= %s, name= %s, position= %s, volume= %s, mute= %s" % (
-			application, name, position, volume, mute))
+		log.debug("formatApplicationInfo application= %s,pid= %s, name= %s, position= %s, volume= %s, mute= %s" % (
+			application[0], application[1],name, position, volume, mute))
 		textList = []
 		if name:
-			textList.append(application.split(".")[0])
+			textList.append(application[0].split(".")[0])
 		if position:
-			audioSource = self.audioSources.getAudioSource(application)
+			audioSource = self.audioSources.getApplicationAudioSource(application)
 			positionMsg = audioSource.getApplicationVolumeInfo()
 			if len(positionMsg):
 				textList.append(positionMsg)
@@ -535,7 +532,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 					else:
 						# Translators: volume is unmute
 						muteMsg = _("unmute")
-					appMsg = ".".join(application.split(".")[:-1])
+					appMsg = ".".join(application[0].split(".")[:-1])
 					wx.CallLater(40, ui.message, "%s %s" % (appMsg, muteMsg))
 				return
 		# for audio split
@@ -569,7 +566,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 				return
 		elif keyCode == wx.WXK_RIGHT:
 			if mod == wx.MOD_SHIFT:
-				if isNVDA(application):
+				if isNVDA(application[1]):
 					toggleChannels(application=application, balance="right")
 				else:
 					if nvdaAudioSource:
@@ -624,14 +621,14 @@ class NVDAAndAudioApplicationsManagerDialog(
 		rightVolume = int(self.rightChannelBox.GetStringSelection()) / 100
 		index = self.applicationsListBox.GetSelection()
 		application = self.applications[index]
-		if isNVDA(application) and (not leftVolume and not rightVolume):
+		if isNVDA(application[1]) and (not leftVolume and not rightVolume):
 			# Translators: message to user to inform
 			# hat the NVDA channel levels cannot be set to zero simultaneously
 			wx.CallLater(40, ui.message, _("The volume of NVDA channels cannot be zero both simultaneously"))
 			self.updateChannelsGroup(application)
 			return
 		audioSources = self.audioSources
-		audioSource = audioSources.getAudioSource(application)
+		audioSource = audioSources.getApplicationAudioSource(application)
 		if not audioSource:
 			return
 		audioSource.setChannels((leftVolume, rightVolume))
@@ -653,7 +650,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 	def _mute(self, mute):
 		index = self.applicationsListBox.GetSelection()
 		application = self.applications[index]
-		audioSource = self.audioSources.getAudioSource(application)
+		audioSource = self.audioSources.getApplicationAudioSource(application)
 		audioSource.setMute(mute)
 
 	def onVolumeMute(self, evt):
@@ -689,8 +686,9 @@ class NVDAAndAudioApplicationsManagerDialog(
 			log.debug(" end of scan too long")
 			return
 		audioOutputDevicesManager.shouldStopScan = False
+		focus = api.getFocusObject()
 		mainFrame.prePopup()
-		d = cls(mainFrame)
+		d = cls(mainFrame, focus)
 		d.CentreOnScreen()
 		d.Show()
 		mainFrame.postPopup()

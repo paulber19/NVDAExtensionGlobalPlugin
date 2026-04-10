@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\WindowsExplorer\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2023 Paulber19
+# Copyright (C) 2026 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -55,37 +55,37 @@ def get_selected_files_explorer_ps():
 #  part of code coming from Nao (NVDA Advanced OCR)  add-on
 # Auteurs : Alessandro Albano, Davide De Carne, Simone Dal Maso
 def get_selected_file_explorer(obj=None):
+	global _shell
 	if obj is None:
 		obj = api.getForegroundObject()
 	file_path = None
-	# We check if we are in the Windows Explorer.
-	if True:
-		desktop = False
-		try:
-			global _shell
-			if not _shell:
-				_shell = COMCreate("shell.application")
-			# We go through the list of open Windows Explorers to find the one that has the focus.
-			for window in _shell.Windows():
-				if window.hwnd == obj.windowHandle:
-					# Now that we have the current folder, we can explore the SelectedItems collection.
-					file_path = str(window.Document.FocusedItem.path)
+	desktop = False
+	try:
+		if not _shell:
+			_shell = COMCreate("shell.application")
+		# We go through the list of open Windows Explorers to find the one that has the focus.
+		for window in _shell.Windows():
+			if window.hwnd == obj.windowHandle:
+				# Now that we have the current folder, we can explore the SelectedItems collection.
+				selected = window.Document.SelectedItems()
+				if selected and selected.Count > 0:
+					file_path =str(selected.Item(0).Path)
 					break
-			else:  # loop exhausted
-				desktop = True
+		else:  # loop exhausted
+			desktop = True
+	except Exception:
+		try:
+			windows = get_selected_files_explorer_ps()
+			if windows:
+				if str(obj.windowHandle) in windows:
+					file_path = windows[str(obj.windowHandle)]
+				else:
+					desktop = True
 		except Exception:
-			try:
-				windows = get_selected_files_explorer_ps()
-				if windows:
-					if str(obj.windowHandle) in windows:
-						file_path = windows[str(obj.windowHandle)]
-					else:
-						desktop = True
-			except Exception:
-				pass
-		if desktop:
-			desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
-			file_path = desktop_path + '\\' + api.getDesktopObject().objectWithFocus().name
+			pass
+	if desktop:
+		desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+		file_path = desktop_path + '\\' + api.getDesktopObject().objectWithFocus().name
 	return file_path
 
 

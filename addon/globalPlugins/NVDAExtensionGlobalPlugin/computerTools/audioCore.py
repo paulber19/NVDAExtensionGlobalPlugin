@@ -7,52 +7,25 @@
 
 import addonHandler
 from logHandler import log
-import os
+import globalVars
 from threading import Thread
 import time
 import ui
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL, CoInitialize
-import sys
 import wx
 import tones
 import config
-from ..utils.nvdaInfos import NVDAVersion
 log.debug("importing pycaw library")
-if NVDAVersion >= [2024, 2]:
-	# for nvda version >= 2024.2
-	from pycaw.api.audioclient import IChannelAudioVolume
-	from pycaw.api.endpointvolume import IAudioEndpointVolume
-	from pycaw.constants import (
-		DEVICE_STATE,
-		AudioDeviceState,
-		EDataFlow,
-	)
-	from pycaw.callbacks import MMNotificationClient
-else:
-	# for nvda version < 2024.2
-	sysPath = list(sys.path)
-	if "pycaw" in sys.modules:
-		log.warning("Potential incompatibility: pycaw module is also used and loaded probably by other add-on")
-		del sys.modules["pycaw"]
-	sys.path = [sys.path[0]]
-	from ..utils.py3Compatibility import getCommonUtilitiesPath
-	commonUtilitiesPath = getCommonUtilitiesPath()
-	pycawPath = os.path.join(commonUtilitiesPath, "pycawEx")
-	psutilPath = os.path.join(commonUtilitiesPath, "psutilEx")
-	sys.path.append(commonUtilitiesPath)
-	sys.path.append(psutilPath)
-	sys.path.append(pycawPath)
-	from pycawEx.pycaw.api.audioclient import IChannelAudioVolume
-	from pycawEx.pycaw.api.endpointvolume import IAudioEndpointVolume
-	from pycawEx.pycaw.constants import (
-		DEVICE_STATE,
-		AudioDeviceState,
-		EDataFlow,
-	)
-	from pycawEx.pycaw.callbacks import MMNotificationClient
-	# restore sys.path
-	sys.path = sysPath
+from pycaw.api.audioclient import IChannelAudioVolume
+from pycaw.api.endpointvolume import IAudioEndpointVolume
+from pycaw.constants import (
+	DEVICE_STATE,
+	AudioDeviceState,
+	EDataFlow,
+)
+from pycaw.callbacks import MMNotificationClient
+
 from .pycawUtils import MyAudioUtilities as AudioUtilities
 
 addonHandler.initTranslation()
@@ -78,11 +51,14 @@ _previousAppVolumeLevels = {}
 _levelLimitationBeep = (400, 30)
 
 
-def isNVDA(appName):
-	return (
-		appName.lower() == nvdaProcessName
-		or appName.startswith("nvda_update")
-	)
+def isNVDA(appNameOrProcessId):
+	if type(appNameOrProcessId) == str:
+		return (
+			appNameOrProcessId.lower() == nvdaProcessName
+			or appNameOrProcessId.startswith("nvda_update")
+		)
+	else:
+		return appNameOrProcessId == globalVars.appPid
 
 
 def getNVDASessionName():
@@ -105,6 +81,40 @@ def getNVDAAudioOuputDevices():
 		from nvwave import _getOutputDevices
 		return [device for device in _getOutputDevices()]
 
+class AudioProcessManager(object):
+	def __init__(self, device=None):
+		self.device = device
+		self.allAudioProcess = self.getAllAudioProcess()
+
+	def getAllAudioProcess(self):
+		deviceID = self.device.id if self.device else None
+		sessions = AudioUtilities.GetAllSessions(deviceID)
+		pids = {}
+		for session in sessions:
+			sourceName = session.DisplayName
+			if "AudioSrv.Dll" in session.DisplayName:
+				if self.device._default:
+					sourceName = _("System sounds")
+				else:
+					sourceName = None
+			elif session.Process:
+				processName = session.Process.name()
+				if sourceName == "":
+					sourceName = processName
+				elif sourceName != "" and not isNVDA(processName):
+					sourceName = processName
+			if sourceName is None:
+				continue
+			pid = session.ProcessId
+			if not pids.get(pid, None):
+				pids[pid] = {}
+				pids[pid]["appName"] = sourceName
+				pids[pid]["sessions"] = []
+			pids[pid]["sessions"].append(session)
+
+		log.debug("pids: device= %s, %s" %(
+			self.device.name if self.device else "default", pids))
+		return pids
 
 class AudioSource(object):
 	def __init__(self, pycawSessions, name=None):
@@ -214,65 +224,35 @@ class AudioSource(object):
 class AudioSources(object):
 	def __init__(self, device=None):
 		self._device = device
-		self._audioSources = self._getAudioSources()
-	def getApplications(self, deviceId=None):
 		deviceId = self._device.id if self._device else None
-		for session in AudioUtilities.GetAllSessions(deviceId):
-			pid = session.ProcessId
+		self.pids = AudioProcessManager(self._device).getAllAudioProcess()
 
-	def _getAudioSources(self):
-		audioSources = {}
+	def getAudioApplications(self):
+		applications = []
 		deviceId = self._device.id if self._device else None
-		sessions = AudioUtilities.GetAllSessions(deviceId)
-		pids = {}
-		for session in sessions:
-			if not pids.get(session.ProcessId, None):
-				pids[session.ProcessId] = []
-			pids[session.ProcessId].append(session)
-		for session in sessions:
-			sourceName = session.DisplayName
-			if "AudioSrv.Dll" in session.DisplayName:
-				if self._device._default:
-					sourceName = _("System sounds")
-				else:
-					sourceName = None
-			elif session.Process:
-				processName = session.Process.name()
-				if sourceName == "":
-					sourceName = processName
-				elif sourceName != "" and not isNVDA(processName):
-					sourceName = processName
-			if not sourceName:
-				continue
-			if audioSources.get(sourceName):
-				continue
-			audioSources[sourceName] = AudioSource(pids[session.ProcessId], sourceName)
-		log.debug("audioSources %s: id: %s, %s" % (
+		for pid in self.pids:
+			audioSource = AudioSource(self.pids[pid]["sessions"], self.pids[pid]["appName"])
+			applications.append((self.pids[pid]["appName"], pid))
+		log.debug("getAudioApplications: device= %s: id: %s, applications=%s" % (
 			self._device.name if self._device else "",
 			self._device.id if self._device else "",
-			audioSources))
-		return audioSources
+			applications))
+		return applications
 
-	@property
-	def sources(self):
-		return self._audioSources
-
-	def getAudioSource(self, appName):
+	def getApplicationAudioSource(self, application):
 		# get audio source for a particular application on this device
-		log.debug("getAudioSource: appName= %s" % appName)
-		audioSource = self.sources.get(appName, None)
-		if audioSource is not None:
-			return audioSource
-		for source in self.sources:
-			audioSource = self.sources[source]
-			processName = audioSource.getProcessName()
-			if processName and appName == processName:
-				return audioSource
-		return None
+		log.debug("getApplicationAudioSource: appName= %s, pid= %s" % (application[0], application[1]))
+		appName, pid = application
+		audioProcess = self.pids[pid]
+		sessions = audioProcess["sessions"]
+		appName = audioProcess["appName"]
+		return AudioSource(sessions, appName)
+
 
 	def getNVDAAudioSource(self):
 		appName = getNVDASessionName()
-		return self.getAudioSource(appName)
+		return self.getApplicationAudioSource((appName, globalVars.appPid))
+
 
 	def validateVolumeLevel(self, level, appName):
 		log.debug("validateVolumeLevel: %s, level: %s" % (appName, level))
@@ -338,8 +318,28 @@ class AudioSources(object):
 			_previousAppVolumeLevels[deviceName] = {}
 		_previousAppVolumeLevels[deviceName][appName] = level
 
-	def setApplicationVolume(self, appName, level=100, report=True, reportValue=None):
+	def setApplicationVolume(self, application, level=100, report=True, reportValue=None):
 		global _previousAppVolumeLevels
+		appName, pid = application
+		log.debug("setApplicationVolume: %s, level= %s, report: %s, reportValue: %s" % (
+			appName, level, report, reportValue))
+		audioSource = self.getApplicationAudioSource(application)
+		if audioSource is None:
+			return
+		audioSource.setMute(False)
+		curLevel = audioSource.volume
+		self.setPreviousApplicationVolumeLevel(appName.lower(), round(curLevel * 100))
+		level = float(level / 100)
+		audioSource.setVolume(level)
+		level = audioSource.volume
+		if report:
+			volume = reportValue if reportValue else int(round(level * 100))
+			self.announceVolumeLevel(volume, appName)
+		log.warning("%s volume is set to %s" % (appName, level))
+	"""
+	def setApplicationVolume(self, application, level=100, report=True, reportValue=None):
+		global _previousAppVolumeLevels
+		appName, pid = application
 		log.debug("setApplicationVolume: %s, level= %s, report: %s, reportValue: %s" % (
 			appName, level, report, reportValue))
 		audioSource = self.getAudioSource(appName)
@@ -356,10 +356,13 @@ class AudioSources(object):
 			self.announceVolumeLevel(volume, appName)
 		log.warning("%s volume is set to %s" % (appName, level))
 
-	def changeAppVolume(self, appName=None, action="increase", value=100, report=True, reportValue=None):
+
+"""
+	def changeAppVolume(self, application=None, action="increase", value=100, report=True, reportValue=None):
+		appName = application[0] if application else None
 		log.debug("changeAppVolume: %s, action= %s, level: %s" % (appName, action, value))
 		from ..settings import _addonConfigManager
-		audioSource = self.getAudioSource(appName)
+		audioSource = self.getApplicationAudioSource(application)
 		if not audioSource:
 			# Translators: message to user to indicate that the application don't use any output audio device
 			ui.message(_("This application don't use any output audio device"))
@@ -384,13 +387,14 @@ class AudioSources(object):
 			log.warning("changeFocusedAppVolume: %s action is not known" % action)
 			return
 		(relativeLevel, absoluteLevel) = self.validateVolumeLevel(level, appName)
-		self.setApplicationVolume(appName, relativeLevel, True, absoluteLevel)
+		self.setApplicationVolume(application, relativeLevel, True, absoluteLevel)
 
-	def setApplicationVolumeToPreviousLevel(self, appName):
+	def setApplicationVolumeToPreviousLevel(self, application):
+		appName, pid = application
 		level = self.getPreviousApplicationVolumeLevel(appName.lower())
 		if level is None:
 			return
-		self.changeAppVolume(appName=appName, action="set", value=level)
+		self.changeAppVolume(application=application, action="set", value=level)
 
 	def getNVDAVolume(self):
 		audioSource = self.getNVDAAudioSource()
@@ -448,18 +452,15 @@ class AudioSources(object):
 			return True
 		return False
 
-	def toggleProcessVolumeMute(self, processName):
-		""" Mutes or unmute process volume """
-		if isNVDA(processName):
+	def toggleApplicationVolumeMute(self, application):
+		""" Mutes or unmute application volume """
+		if isNVDA(application[1]):
 			ui.message(_("Unavailable for NVDA"))
 			return
-		for sourceName in self.sources:
-			if sourceName == processName:
-				audioSource = self.sources[sourceName]
-				audioSource.toggleMute(silent=False)
+		audioSource = self.getApplicationAudioSource(application)
+		audioSource.toggleMute(silent=False)
 
 	def splitChannels(self, NVDAChannel=None, application=None):
-		log.debug("splitChannels: %s, %s" % (NVDAChannel, application))
 		nvdaAudioSource = self.getNVDAAudioSource()
 		if not nvdaAudioSource.isStereo:
 			# Translators: message to user that NVDA is not a stereo audio source
@@ -470,20 +471,26 @@ class AudioSources(object):
 		audioSource = None
 		otherSources = []
 		if application:
-			audioSource = self.getAudioSource(application)
+			log.debug("splitChannels: nvdaChannels= %s, appName= %s, pid= %s" % (NVDAChannel, application[0], application[1]))
+			appName, pid = application
+			audioSource = self.getApplicationAudioSource(application)
 			otherSources = [audioSource, ]
-			appMsgList = application.split(".")
+			appMsgList = appName.split(".")
 			appMsg = ".".join(appMsgList[:-1]) if len(appMsgList) > 1 else application
 			if isNVDA(application) or not audioSource:
 				# split only NVDA
 				otherSources = []
 			else:
 				# split application and NVDA
-				otherSources = [audioSource, ]
+				otherSources = [audioSource,]
 		else:
-			for source in self.sources:
-				audioSource = self.sources[source]
-				if not audioSource.isStereo or audioSource.isNVDAProcess():
+			# NVDA on one side and all application on other side
+			log.debug("splitChannels: nvdaChannels= %s, appName= None" % (NVDAChannel))
+			for pid in self.pids:
+				sessions = self.pids[pid]["sessions"]
+				appName = self.pids[pid]["appName"]
+				audioSource = AudioSource(sessions, appName)
+				if isNVDA(pid):
 					continue
 				otherSources.append(audioSource)
 		if NVDAChannel == "left":
@@ -521,7 +528,6 @@ class AudioSources(object):
 
 		# now set channel for other application
 		for audioSource in otherSources:
-			# audioSource = self.sources[source]
 			(left, right) = audioSource.channelsVolume
 			leftOrRightMax = max(left, right)
 			appLevels = (leftOrRightMax * appChannels[0], leftOrRightMax * appChannels[1])
@@ -534,11 +540,11 @@ class AudioSources(object):
 
 	def toggleChannels(self, balance="center", application=None, silent=False):
 		log.debug("toggleChannels: %s, %s, %s" % (balance, application, silent))
-		processName = application
-		if processName not in self.sources.keys():
+		appName, pid = application
+		if pid not in self.pids.keys():
 			return
-		log.debug("toggleChannels: %s, %s" % (balance, application))
-		audioSource = self.getAudioSource(processName)
+		log.debug("toggleChannels: %s, %s" % (balance, appName))
+		audioSource = self.getApplicationAudioSource(application)
 		if not audioSource.isStereo:
 			# Translators: message to user that audio source is not a stereo audio source
 			wx.CallLater(40, ui.message, _("Not available: %s is not a stereo audio source") % audioSource.name)
@@ -576,8 +582,11 @@ class AudioSources(object):
 				leftOrRightMax = max(left, right)
 				audioSource.setChannels((leftOrRightMax, leftOrRightMax))
 		else:
-			for source in self.sources:
-				audioSource = self.sources[source]
+			for pid in self.pids:
+				audioProcess = self.pids[pid]
+				appName =  audioProcess["appName"]
+				sessions = audioProcess["sessions"]
+				audioSource = AudioSource(appName, sessions)
 				if audioSource.isStereo:
 					(left, right) = audioSource.channelsVolume
 					leftOrRightMax = max(left, right)
@@ -730,19 +739,29 @@ class AudioOutputDevicesManager(object):
 				return device
 		return None
 
+	def findDeviceFromApplicationProcessId(self, appPid):
+		log.debug("findDeviceFromApplicationProcessId: processID = %s, devices= %s" % (appPid, [x.name for x in self._devices]))
+		devices = []
+		for device in self._devices:
+			audioSources = AudioSources(device)
+			if appPid in audioSources.pids:
+				devices.append(device)
+		if not devices or len(devices) > 1:
+			# no output audio device or
+			# the application is on several output audio devices with same processId
+			log.debug("Cannot find output audio device for %s processId" % appPid)
+			return None
+		return devices[0]
+
 	def getCurrentNVDADevice(self):
 		from synthDriverHandler import _audioOutputDevice
 		if _audioOutputDevice is None:
 			return None
 		for device in self._devices:
-			if NVDAVersion >= [2025, 1]:
-				# for nvda version  >= 2025.1
-				#  audio output device is stored by it id
-				if device.id == _audioOutputDevice:
-					return device
-			else:
-				if device.name.startswith(_audioOutputDevice):
-					return device
+
+			#  audio output device is stored by it id
+			if device.id == _audioOutputDevice:
+				return device
 		return self.getDefaultDevice()
 
 	def getDefaultDevice(self):

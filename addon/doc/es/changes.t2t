@@ -22,6 +22,51 @@ Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este h
 Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
 
 
++ v15.0 (26/02/2026) +
+Compatibilidad con NVDA 2026.1.
+
+Las versiones de NVDA anteriores a 2025.1 ya no son soportadas.
+
+
+Nuevas características:
+- en el cuadro de diálogo "Activación rápida de complementos", posibilidad de mostrar sólo los complementos que están activados o desactivados.
+- nueva opción para evitar guardar texto de un solo carácter en el historial de los anuncios del habla.
+
+
+Cambios:
+- para versiones superiores a NVDA 2026.1, para informar errores de ortografía mientras esté leyendo se puede configurar por separado mediante sonido y voz.
+- de forma predeterminada, Mientras se escribe, informar errores de ortografía está desactivado.
+- las hojas de estilo ahora se insertan en los archivos html de la documentación del complemento.
+
+
+Corrección de fallos:
+- las funcionalidades "Control de sonido" y "Separación de audio" funcionan correctamente en los siguientes casos (corrección hecha en la versión 14.1.1):
+ - múltiples instancias de una aplicación en el mismo dispositivo (RadioSure por ejemplo).
+ - una aplicación con múltiples sesiones de audio en el mismo dispositivo (foobar2000 por ejemplo).
+- la ventana "Parámetros" ahora aparece en la lista de ventanas (órden f10) (corrección hecha en la versión 14.1.2).
+- ciertas ventanas como la ventana de "Parámetros" ahora están correctamente destruidas (corrección hecha en la versión 14.1.2).
+- durante una actualización con la conservación de la configuración, los símbolos y categorías añadidas ya no se pierden (corrección hecha en la versión 14.1.2).
+
+
+Desarrolladores:
+- eliminación del paquete "markdown" de la carpeta "utilities". Este paquete está incluido en NVDA desde la versión 2025.1.
+- eliminación del paquete "pycaw" de la carpeta "utilities". Este paquete está incluido en NVDA desde la versión 2024.2.
+- actualización a la versión 311 de los módulos incluidos en la carpeta win32Ex y haciendo parte del paquete  "pywin32". La carpeta "win32Ex" ahora depende de la versión de python utilizada por NVDA (v3.11 o 3.13).
+- eliminación del código concerniente  Wasapi y versiones anteriores a la versión 2025.1 de NVDA.
+- uso del metodo executeMouseEvent del módulo mouseHandler.
+- corrección del error de pydub bajo python 3.13
+- al convertir archivos Markdown o txt2tags a HTML, las hojas de estilo ahora se insertan en el documento HTML.
+- para mostrar el"Qué hay de nuevo" de una nueva versión del complemento, el documento"changes.html" ya no se abre por"urlopen", pero se descarga, se guarda momentáneamente en la carpeta "appData\local\temp" y se abre en el navegador.
+- se toma en cuenta del cierre del sitio rawgit.com para actualizar el complemento.
+- uso de json en lugar de pickle para almacenar el estado de actualización del complemento.
+
+
+Puesta en conformidad con la API de NVDA:
+- se toma en cuenta el desplazamiento de la versión de NVDA en el módulo "buildVersion.py".
+- se toma en cuenta de la nueva posibilidad que ofrece NVDA 2026.1, para informar simultáneamente errores de ortografía tanto por sonido como por voz.
+- se toma en cuenta de la depreciación de la variable user32 del módulo "winUser.py".
+
+
 + v14.1 (16/09/2025) +
 Nuevas características:
 - se añadió el control de la tecla "Silencio" que silencia o reestablece el sonido del dispositivo de salida de audio predeterminado de Windows.

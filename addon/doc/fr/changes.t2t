@@ -19,8 +19,52 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 
 Les versions du type majeure.mineure.x (par exemple v3.1.2) sont des mises à jour de traductions.
 
++ v15.0 (10/02/2026) +
+Compatibilité avec NVDA 2026.1.
 
-+ v14.1 (16/09/2025) +
+Les versions de NVDA antérieures à la 2025.1 ne sont plus supportées.
+
+
+Nouveautés :
+- dans le dialogue "Activation rapide des extensions", possibilité de ne faire afficher que les extensions qui sont activées ou désactivées.
+- nouvelle option pour empêcher l'enregistrement  de texte à un seul caractère dans l'historique des annonces vocales.
+
+
+Changements :
+- pour les versions supérieures  à NVDA 2026.1, le  signalement des fautes d'orthographe pendant la lecture est configurable de manière séparée pour le son et la parole.
+- par défaut, l'annonce des fautes d'orthographe pendant la frappe est désactivée.
+- les feuilles de styles sont  maintenant insérées  dans les fichiers html de la documentation de l'extension.
+
+
+Corrections de bogues :
+- les fonctionnalités "Contrôle du son" et "Séparation de l'audio" fonctionnent correctement dans les cas suivants (correction faite dans la version 14.1.1):
+ - plusieurs instances d'une application sur le même périphérique (RadioSure par exenple).
+ - une application avec plusieurs session audio sur le même périphérique (foobar2000 par exemple.
+- la fenêtre "Paramètres" apparait maintenant dans la liste des fenêtre (commande f10) (correction faite dans la version 14.1.2).
+- certaines fenêtres comme par exemple la fenêtre des "Paramètres" sont maintenant correctement détruites (correction faite dans la version 14.1.2).
+- lors d'une mise à jour avec conservation de la configuration, les symboles  et catégories ajoutés ne sont plus perdus (correction faite dans la version 14.1.2).
+
+
+Développement :
+- suppression du package "markdown" du dossier "utilities". Ce package est inclu dans NVDA depuis la version 2025.1.
+- suppression du package "pycaw" du dossier "utilities". Ce package est inclu dans NVDA depuis la version 2024.2.
+- mise à jour à la version 311 des modules inclu dans le dossier win32Ex et faisant partie du package "pywin32". Le dossier "win32Ex" est maintenant dépendant de la version de  python utilisé par NVDA (v3.11 ou 3.13).
+- suppression du code concernant Wasapi et  les versions antérieures à la version 2025.1 de NVDA.
+- utilisation de la méthode  executeMouseEvent du module mouseHandler.
+- correction de l'erreur de pydub sous python 3.13
+- lors de la conversion en html des fichiers markdown ou txt2tags, les feuilles de style sont maintenant insérées dans le document html.
+- pour afficher le "Quoi de neuf" d'une nouvelle version de l'extension, le document "changes.html" n'est plus ouvert par"urlopen", mais est téléchargé , enregistré momentanément dans le dossier "appData\local\temp" et ouvert dans le navigateur.
+-  prise en compte de la fermeture du site rawgit.com pour la mise à jour  de l'extension.
+- utilisation de json en lieu et place de pickle pour stoquer l'état de la mise à jour de l'extension.
+
+
+Mise en conformité avec l'API de NVDA :
+- prise en compte du déplacement de la version de NVDA dans le module "buildVersion.py".
+- prise en compte de la nouvelle possibilité  qu'offre NVDA 2026.1, de signaler simultanément les fautes d'orthographe  de manière sonore et vocale.
+- prise en compte de la dépréciation  de la variable user32 du module winUser.py .
+
+
++ v14.1 (26/09/2025) +
 Nouveautés:
 - ajout du contrôle de la touche "muet" qui coupe ou rétablit le volume du périphérique de sortie audio par défaut de Windows.
 

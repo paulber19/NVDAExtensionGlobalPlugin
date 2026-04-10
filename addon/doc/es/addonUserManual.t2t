@@ -40,8 +40,7 @@ Este complemento añade a las órdenes globales de NVDA:
    - Ir a la columna / línea siguiente o anterior con la lectura de las celdas que la componen,
    - Ir a la primera / última celda de la fila / columna (conservar para las versiones de NVDA inferiores a la 2022.2),
    - Anunciar las celdas de la columna / fila actual.
- - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7],
-  - [Suplementos para el portapapeles #hdr-1]:
+ - [Anuncio de la funcionalidad asociada a las órdenes de edición del teclado de Windows #hdr7] con:
   - adición  al portapapeles del texto seleccionado,
   - vaciado del portapapeles,
   - mostrar el texto contenido en el portapapeles en una ventana de información,
@@ -619,10 +618,7 @@ Pero:
 
 Se recomienda encarecidamente no instalar complementos que proporcionen el mismo tipo de características.
 
-
-++ Suplementos para El portapapeles ++
-Los siguientes scripts se instalan sistemáticamente por el complemento:
-
+Si se instala esta característica, se instalan a continuación los scripts.
 +++ Añadir el texto seleccionado al portapapeles +++[hdr7-1]
 Esta funcionalidad añade el script que te permite añadir el texto seleccionado al portapapeles.
 
@@ -1496,7 +1492,11 @@ Para ser presentado al usuario en un navegador, estos archivos deben convertirse
 
 Esto es posible simplemente usando el botón "Crear los archivos HTML de documentación" después de seleccionar el complemento en la lista de complementos y elegir un idioma o todos los idiomas en la lista de idiomas.
 
-Abiertos en el navegador, estos archivos HTML necesitan archivos de estilo (style.css para los archivos Markdown y style_t2t.css para los archivos  txt2tags) ubicados en la carpeta doc del complemento.
+Estos archivos HTML necesitan archivos de estilo (style.css para los archivos Markdown y style_t2t.css para los archivos  txt2tags) ubicados en la carpeta doc del complemento.
+
+Estos archivos de estilo pueden ser locales para un idioma. En este caso, estos archivos deben colocarse en la carpeta del idioma.
+
+Durante la conversión, el contenido de estos archivos se inserta en el documento html. Por lo tanto, estos archivos no son útiles para ver el documento html en el navegador.
 
 
 +++ Creación del archivo de catálogo +++[hdr22-6]
@@ -2134,7 +2134,7 @@ Para habilitar o deshabilitar los complementos, NVDA propone nativamente el Admi
 
 Sin embargo, en algunos casos, puede ser necesario deshabilitar todo o parte de los complementos dejando solo algunos complementos activados.
 
-Con el Administrador de Complementos o la Tienda de complementos (Add-on Store), es necesario revisar cada complemento para habilitarlo o deshabilitarlo usando un botón o menú.
+Con la Tienda de complementos (Add-on Store), es necesario revisar cada complemento para habilitarlo o deshabilitarlo usando un botón o menú.
 
 Este complemento intenta que esta manipulación sea más rápida y para eso, trae un script para mostrar el cuadro de diálogo "Activación rápida de complementos".
 
@@ -2142,18 +2142,17 @@ Este script se lanza mediante la órdenes "KEY_QUICK_ADDONS_ACTIVATION" del int�
 Este se encuentra en la categoría  "ADDON_SUMMARY" con la descripción "Mostrar el diálogo para habilitar o deshabilitar rápidamente los complementos".
 
 Este diálogo presenta:
-- La lista de los complementos instalados, activados o desactivados,
+- La lista desplegable "Tipo de complemento" que permite de elegir el tipo de complementos que se presentarán en la lista desplegable que la sigue. Las opciones son: "Activado", "Desactivado" o "Todos".
+- La lista de los complementos instalados correspondiente al tipo elegido.
 - El botón "Marcar todo" para marcar todos los complementos de la lista,
 - El botón "Desmarcar todo" para desmarcar todos los complementos de la lista,
 - El botón "Guardar y reiniciar NVDA" para validar los cambios y reiniciar NVDA,
 - El botón "Cancelar" para cerrar el cuadro de diálogo sin ninguna modificación del estado de activación de los complementos.
 
 
-Si el complemento está instalado en una versión de NVDA anterior a  NVDA 2023.2, la lista solo muestra los complementos  compatibles.
-
 Solo se enumeran los complementos en estado estable. Se excluyen los complementos que se encuentran en un estado intermedio, es decir, en espera de activación o desactivación, o en espera de instalación o eliminación.
 
-Desde NVDA 2023.2, los complementos incompatibles también se incluyen en la lista y también se pueden habilitar o deshabilitar.
+Los complementos incompatibles también se incluyen en la lista y también se pueden habilitar o deshabilitar.
 
 Se indican con la mención "(incompatible)" después de su identificador.
 
@@ -2221,23 +2220,23 @@ Para esto, están involucradas dos opciones de NVDA:
 - La opción "Errores de ortografía" del grupo "Información de documento" de la categoría "Formateado de Documentos".
 - La opción "Reproducir sonido para errores de ortografía mientras se escribe" de la categoría "Teclado".
 
-Para que NVDA indique los errores de Ortografía mientras esté leyendo y mientras se escribe, se debe activar la opción "Errores de ortografía". Los Errores  se indican mediante el mensaje de voz "Errores de ortografía".
+Para que NVDA indique los errores de Ortografía mientras esté leyendo y mientras se escribe, se debe activar la opción "Errores de ortografía". Los Errores  se indican mediante el mensaje de voz "Errores de ortografía". Desde la versión 2026.1 de NVDA, es posible elegir informar por sonido (Sonido de error de NVDA) o por voz (Mensaje de error de NVDA, es decir, "Error de ortografía").
 
 Para que los errores sean más bien indicados mediante un sonido mientras se escribe, la opción "Reproducir sonido para errores de ortografía mientras se escribe" debería estar activada.
 
 El complemento modifica este comportamiento de NVDA de la siguiente manera:
-- La opción "Reproducir sonido para errores de ortografía mientras se escribe" está renombrado en "Mientras se escribe, informar errores de ortografía".
-- El anunciado de errores de ortografía mientras esté leyendo y mientras se escribe son independientes. Si la opción "Errores de ortografía" no está habilitada, pero que la opción "Mientras se escribe, informar errores de ortografía" lo está, los errores se indicarán mientras se escribe.
-- Para cada situación, mientras esté leyendo o mientras se escribe, es posible configurar cómo los errores serán indicados: por un doble pitido, por el sonido de NVDA, por el mensaje de voz "Errores de ortografía" o por el anunciado de palabra mal escrita bajo un perfil de configuración dedicado.
+- La opción "Reproducir sonido para errores de ortografía mientras se escribe" es renombrado en "Mientras se escribe, informar errores de ortografía".
+- El anunciado de errores de ortografía mientras esté leyendo y mientras se escribe son independientes. Si la opción "Errores de ortografía" no está habilitada, pero que la opción "Reproducir sonido para errores de ortografía mientras se escribe" lo está, los errores se indicarán mientras se escribe.
+- Para cada situación, mientras esté leyendo o mientras se escribe, es posible configurar cómo los errores serán indicados: por un doble pitido, por el sonido de error de NVDA, por el mensaje de error de NVDA "Errores de ortografía" o por el anunciado de palabra mal escrita bajo un perfil de configuración dedicado.
 
 
-La elección del anunciado de los errores de ortografía se hace en el grupo "Informando errores de ortografía" en la categoría "Suplementos a NVDA" en "Opciones globales" del complemento, utilizando las listas desplegables "Mientras se escribe, informar por" y "Mientras esté leyendo, informar por".
-
-Las posibles opciones de estas listas desplegables son:
+La elección del anunciado de los errores de ortografía se hace en el grupo "Informando errores de ortografía" en la categoría "Suplementos a NVDA" en "Opciones globales" del complemento:
+- Antes de la versión 2026.1 de NVDA, utilizando las listas desplegables "Mientras se escribe, informar por" y "Mientras esté leyendo, informar por". Las posibles opciones de estas listas desplegables son:
 - Pitido: Se emitirá un doble pitido.
-- Sonido: El sonido de NVDA se reproducirá.
-- Mensaje: El mensaje de voz "Errores de ortografía" se escuchará.
+- Sonido de error de NVDA: El sonido de NVDA se reproducirá.
+- Mensaje de error de NVDA: El mensaje de voz "Errores de ortografía" se escuchará.
 - Anuncio de la palabra mal escrita: La palabra mal escrita se escuchará con los ajustes de voz  del perfil de configuración "Anuncio de la palabra mal escrita" dedicado y añadido por el complemento. Este perfil se activará automáticamente cuando se anuncie una palabra mal escrita. Este perfil te permite modificar, por ejemplo, el sintetizador o la voz que se utilizará para el anuncio de la palabra mal escrita.
+- Para las siguientes versiones, la lista desplegable "Mientras se escribe, informar por" se reemplaza por el grupo "Mientras esté leyendo" que contiene dos listas desplegables: la lista "Informar por sonido" que te permite elegir entre la indicación en forma de pitido o por el sonido de error de NVDA, la lista "Informar por voz" que te permite elegir entre la indicación por el mensaje de error de NVDA o por el anuncio de la palabra mal escrita. Estas dos listas corresponden a la configuración de "Errores de ortografía" en la categoría "Formateado de Documentos" de NVDA.
 
 
 El perfil "Anuncio de la palabra mal escrita" está asociado con un disparador dedicado y no presente en la lista de los disparadores. No se debería asociarlo con otro disparador.
@@ -2248,9 +2247,9 @@ Nota:
 - En el caso de que el anunciado de errores de ortografía se haga verbalmente, es preferible de desactivar la opción "Interrupción de voz para caracteres escritos" de la categoría "Teclado" en las Opciones de NVDA porque cualquier escritura rápida de caracteres Después de una palabra, detiene el anuncio vocal.
 
 
-Tenga en cuenta: esta característica es incompatible con el complemento "speakTypingWords". Si está instalado, la funcionalidad concerniente el anunciado de errores de ortografía mientras se escribe  está restringido:
-- la opción "Mientras se escribe, informar errores de ortografía" ya no está disponible si la opción "Errores de ortografía" no está marcada (funcionamiento básico de NVDA).
-- si la elección del anunciado de errores de ortografía mientras se escribe se ha portado sobre "Anuncio de la palabra mal escrita", será el sonido clásico de error de NVDA que se reproducirá si una  palabra mal escrita se detecta.
+Atención: esta funcionalidad es incompatible con el complemento "speakTypingWords". Si está instalado, la funcionalidad relativa al anunciado de errores de ortografía mientras se escribe está restringida:
+- La opción "Mientras se escribe, informar errores de ortografía" ya no está disponible si la opción "Errores de ortografía" no esta marcado (funcionamiento básico de NVDA).
+- Si la opción para informar errores de ortografía mientras se escribe fue llevado a "Anuncio de la palabra mal escrita", este será el clásico sonido de error de NVDA que se reproducirá si se detecta un error.
 
 
 ++ Bloqueo de las teclas "Insertar" y "Bloqueo mayúsculas" ++[hdr105]
@@ -2387,31 +2386,31 @@ Las teclas modificadoras no se ven afectadas por esta limitación.
 
 
 ++ Control de la tecla "Silencio" ++[hdr308]
-En cierto teclado hay teclas multimedia y en particular la tecla "Silencio".
+En algunos teclados hay teclas multimedia y en particular la tecla "Silencio".
 
-Una pulsación en esta tecla silencia o reestablece el sonido del dispositivo de salida de audio predeterminado de Windows (funcionamiento básico).
+Pulsando esta tecla silencia o reestablece el sonido del dispositivo de salida de audio predeterminado de Windows (funcionamiento básico).
 
-Si NVDA usa este dispositivo, una pulsación involuntaria puede ser muy molesto.
+Si NVDA utiliza este dispositivo, una pulsación involuntaria puede resultar muy molesta.
 
-Para evitar este posible problema, el complemento ofrece, por configuración y por perfil de configuración, controlar o no las pulsaciones en esta tecla.
+Para evitar este posible problema, el complemento ofrece, por configuración y por perfil de configuración, controlar o no las pulsaciones de esta tecla.
 
-En la categoría "Teclado" en las opciones de perfil de configuración, el grupo "Control de la tecla Silencio" contiene:
-- el cuadro combinado "Autorizar el Control:" cuyas posibles elecciones son:
- - "Sí": toda pulsación en la tecla está controlado.
- - "Sí, pero solo si no se usa pantalla braille": toda pulsación en la tecla será controlado siempre que no haya pantalla braille en uso. El corte de sonido es menos molestoso para los usuarios que usan el braille y en este caso, la pulsación no será controlado.
- - "Nunca": ninguna pulsación en la tecla será controlado.
-- el cuadro combinado "Pulsar la tecla:" que ofrece las siguientes opciones:
- - "Después de la confirmación": la acción de la tecla será procesada por Windows después de una autorización del usuario.
- - "Al pulsar dos veces": la acción de la tecla será procesada por Windows después de una doble pulsación en la tecla.
- - "Nunca": la acción de la tecla no será procesada por Windows.
+En la categoría "Teclado" en Opciones de perfil de configuración, el grupo "Control de la tecla Silencio" contiene:
+- La lista desplegable "Permitir el Control:" cuyas posibles opciones son:
+ - "Sí": cada pulsación de la tecla está controlada.
+ - "Sí, pero sólo si no se utiliza ninguna pantalla braille":   cualquier pulsación de tecla será monitoreada siempre que no se utilice ninguna pantalla braille. Silenciar el sonido resulta menos molesto para los usuarios que utilizan braille y en este caso la pulsación será enviada directamente a Windows sin control.
+ - "Nunca": cualquier pulsación de tecla se enviará directamente a Windows.
+- La lista desplegable "Accionar la tecla:" que ofrece las siguientes opciones:
+ - "Después de la confirmación": la tecla se enviará a Windows después del acuerdo del usuario.
+ - "Al pulsar dos veces": la tecla se enviará a Windows después de pulsar dos veces la tecla.
+ - "Nunca": la tecla no se enviará a Windows.
 
 
-En el caso de que el sonido ya esté cortado, toda pulsación en la tecla "Silencio" es procesada por Windows sin ningún control.
+En caso de que el volumen ya esté silenciado, cualquier pulsación de la tecla "Silencio" se envía a Windows sin ningún control.
 
 Nota:
-Para llevar a cabo este control, un script se asoció con el gesto de entrada oculto (sin descripción) "kb:volumeMute" que se instala con cada carga de un perfil de configuración, pero siempre que el control esté autorizado.
+Para realizar este control se ha asociado un script al gesto de entrada oculto (sin descripción) "kb:volumeMute" que se instala cada vez que se carga un perfil de configuración, pero siempre que se autorice el control.
 
-Si una aplicación o un complemento para una aplicación también usa esta tecla "Silencio", simplemente cree un perfil de configuración para esta aplicación y no autorices el control para este perfil. La tecla ya no será un gesto de entrada.
+Si una aplicación o un complemento para una aplicación también usa esta tecla "Silencio", simplemente cree un perfil de configuración para esta aplicación y no permita el control de este perfil. La tecla ya no será un gesto de entrada.
 
 
 + Otras mejoras +

@@ -15,7 +15,6 @@ from ..utils.nvdaInfos import NVDAVersion
 import synthDrivers.oneCore
 from .waves import getModifiedNVDAWaveFile
 from .audioUtils import (
-	isWasapiUsed,
 	getOutputDevice, setOutputDevice)
 from ..settings.addonConfig import FCT_TemporaryAudioDevice
 from ..settings import (
@@ -125,8 +124,7 @@ def _patcePlayWaveFile(install=True):
 	global _nvdaPlayWaveFile
 	if install:
 		needPatch = (
-			(not isWasapiUsed() and toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False))
-			or toggleAllowNVDASoundGainModificationAdvancedOption(False)
+			toggleAllowNVDASoundGainModificationAdvancedOption(False)
 			or isInstall(FCT_TemporaryAudioDevice)
 		)
 		if not needPatch:

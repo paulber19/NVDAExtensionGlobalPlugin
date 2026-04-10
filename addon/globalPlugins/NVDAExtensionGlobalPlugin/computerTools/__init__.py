@@ -9,11 +9,6 @@ from logHandler import log
 
 def initialize():
 	log.debug("computerTools initialization")
-	# for tonalities volume changes
-	from ..settings import toggleAllowNVDATonesVolumeAdjustmentAdvancedOption
-	if toggleAllowNVDATonesVolumeAdjustmentAdvancedOption(False):
-		from . import tonesPatches
-		tonesPatches.initialize()
 	from . import temporaryOutputDevicePatches
 	temporaryOutputDevicePatches.patche()
 	from . import audioCore
@@ -39,7 +34,5 @@ def initialize():
 def terminate():
 	from . import audioCore
 	audioCore.terminate()
-	from . import tonesPatches
-	tonesPatches.terminate()
 	from . import temporaryOutputDevicePatches
 	temporaryOutputDevicePatches.patche(install=False)

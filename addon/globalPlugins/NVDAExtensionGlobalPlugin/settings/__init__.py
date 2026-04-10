@@ -136,6 +136,10 @@ def toggleSpeechRecordInAscendingOrderOption(toggle=True):
 	return toggleOption(addonConfig.ID_SpeechRecordInAscendingOrder, toggle)
 
 
+def toggleDoNotRecordTextWithSingleCharacterOption(toggle=True):
+	return toggleOption(addonConfig.ID_DoNotRecordTextWithSingleCharacter, toggle)
+
+
 def toggleLoopInNavigationModeOption(toggle=True):
 	return toggleOption(addonConfig.ID_LoopInNavigationMode, toggle)
 
@@ -252,18 +256,13 @@ def renameFile(file, dest):
 
 
 class AddonConfigurationManager():
-	_currentConfigVersion = "3.2"
+	_currentConfigVersion = "3.3"
 	_configFileName = "NVDAExtensionGlobalPluginAddon.ini"
 	_versionToConfiguration = {
-
-		"2.5": addonConfig.AddonConfiguration25,
-		"2.6": addonConfig.AddonConfiguration26,
-		"2.7": addonConfig.AddonConfiguration27,
-		"2.8": addonConfig.AddonConfiguration28,
-		"2.9": addonConfig.AddonConfiguration29,
 		"3.0": addonConfig.AddonConfiguration30,
 		"3.1": addonConfig.AddonConfiguration31,
 		"3.2": addonConfig.AddonConfiguration32,
+		"3.3": addonConfig.AddonConfiguration33,
 	}
 
 	def __init__(self):
@@ -374,6 +373,16 @@ class AddonConfigurationManager():
 			self.addonConfig.filename = addonConfigFile
 			# probably, it's an add-on installation, set recovery default volumes
 			self.shouldSetRecoveryDefaultVolumes = True
+			if not os.path.exists(self.oldConfigFile):
+				# probably it's the first addon installation
+				# change the NVDA default value for the alertForSpellingErrors CheckBox 
+				if not config.conf["documentFormatting"]["reportSpellingErrors2"]:
+					config.conf["keyboard"]["alertForSpellingErrors"] = False
+					config.conf.save()
+
+
+				
+
 		# merge step
 		if os.path.exists(self.oldConfigFile):
 			log.debug("Previous config file found: %s" % self.oldConfigFile)
@@ -427,12 +436,11 @@ class AddonConfigurationManager():
 						self.addonConfig[sect][k] = int(oldConfig[sect][k])
 					else:
 						self.addonConfig[sect][k] = oldConfig[sect][k]
-		# others section
+		# others section not defined in configSpec
 		from .addonConfig import SCT_RedefinedKeyLabels, SCT_CategoriesAndSymbols, SCT_AudioDevicesForCycle
 		for sect in [SCT_RedefinedKeyLabels, SCT_CategoriesAndSymbols, SCT_AudioDevicesForCycle]:
 			if sect in oldConfig.sections:
 				self.addonConfig[sect] = oldConfig[sect]
-
 
 	def handlePostConfigSave(self):
 		self.saveSettings(True)
@@ -803,14 +811,17 @@ class AddonConfigurationManager():
 			index = devices.index(device) + 1
 			conf[SCT_AudioDevicesForCycle][str(index)] = device
 
-	def getReportingSpellingErrorsByOption(self, reading=False):
+	def getReportingSpellingErrorsByOption(self, reading=False, by="sound"):
 		from .addonConfig import (
-			SCT_ReportingSpellingErrors, ID_ReportingBy, ID_ReadingReportingBy,
+			SCT_ReportingSpellingErrors, ID_ReportingBy, ID_ReadingReportingBy, ID_ReadingReportingBySound, ID_ReadingReportingBySpeech,
 			RSE_Message, RSE_Sound, RSE_None
 		)
 		conf = self.addonConfig[SCT_ReportingSpellingErrors]
 		if reading:
-			option = conf[ID_ReadingReportingBy]
+			if by == "sound":
+				option = conf[ID_ReadingReportingBySound]
+			else:
+				option = conf[ID_ReadingReportingBySpeech]
 			if option == RSE_None:
 				# default option
 				option = RSE_Message
@@ -821,14 +832,16 @@ class AddonConfigurationManager():
 				# default option
 				option = RSE_Sound
 				self.setReportingSpellingErrorsByOption(option, reading=reading)
-
 		return option
 
-	def setReportingSpellingErrorsByOption(self, option, reading=False):
-		from .addonConfig import SCT_ReportingSpellingErrors, ID_ReportingBy, ID_ReadingReportingBy
+	def setReportingSpellingErrorsByOption(self, option, reading=False, by="sound"):
+		from .addonConfig import SCT_ReportingSpellingErrors, ID_ReportingBy, ID_ReadingReportingBy, ID_ReadingReportingBySound, ID_ReadingReportingBySpeech
 		conf = self.addonConfig[SCT_ReportingSpellingErrors]
 		if reading:
-			conf[ID_ReadingReportingBy] = option
+			if by == "sound":
+				conf[ID_ReadingReportingBySound] = option
+			else:
+				conf[ID_ReadingReportingBySpeech] = option
 		else:
 			conf[ID_ReportingBy] = option
 
@@ -857,12 +870,37 @@ class AddonConfigurationManager():
 			option = self.getReportingSpellingErrorsByOption(reading=reading)
 		return option == addonConfig.RSE_None
 
+	def ReadingReportingSpellingErrorsBySound(self, option=None ):
+		if option is None:
+			option = self.getReadingReportingSpellingErrorsByOption()
+		return option == addonConfig.RSE_Sound
+
+
+
+	def readingReportingSpellingErrorsByMessage(self, option=None):
+		if option is None:
+			option = self.getReadingReportingSpellingErrorsBySpeechOption()
+		return option == addonConfig.RSE_Message
+
+
 	def getReadingReportingSpellingErrorsByOption(self):
-		return self.getReportingSpellingErrorsByOption(reading=True)
+		return self.getReportingSpellingErrorsByOption(reading=True, by="speech")
+
+	def getReadingReportingSpellingErrorsBySoundOption(self):
+		return self.getReportingSpellingErrorsByOption(reading=True, by="sound")
+
+	def getReadingReportingSpellingErrorsBySpeechOption(self):
+		return self.getReportingSpellingErrorsByOption(reading=True, by="speech")
 
 	def setReadingReportingSpellingErrorsByOption(self, option):
 		self.setReportingSpellingErrorsByOption(option, reading=True)
 
+	def setReadingReportingSpellingErrorsBySoundOption(self, option):
+		self.setReportingSpellingErrorsByOption(option, reading=True, by="sound")
+	
+	def setReadingReportingSpellingErrorsBySpeechOption(self, option):
+		self.setReportingSpellingErrorsByOption(option, reading=True, by="speech")
+	
 	def getKeyRepeatDelay(self):
 		from .addonConfig import SCT_AdvancedOptions, ID_KeyRepeatDelay
 		conf = self.addonConfig

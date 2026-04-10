@@ -8,9 +8,25 @@ import gettext
 import os
 import os.path
 import zipfile
+import sys
 import buildVars
 import txt2tagsEx as txt2tags
 import markdown
+
+
+HTML_HEADERS = """
+<!DOCTYPE html>
+<html lang="{lang}" dir="{dir}">
+<head>
+<meta charset="utf-8">
+<title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+{styles}
+</head>
+""".strip()
+
+RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
+
 
 
 def getTranslatedAddonSummary(buildVars, localeLang):
@@ -21,62 +37,44 @@ def getTranslatedAddonSummary(buildVars, localeLang):
 		summary = buildVars.addon_info["addon_summary"]
 	return summary
 
+def getStylesCss(baseDir, stylesCss):
+	stylesCssFile = os.path.join(baseDir, stylesCss)
+	if not os.path.exists(stylesCssFile):
+		dirList = baseDir.split("\\")
+		d = "\\".join(dirList[:-1])
+		cssFile = os.path.join(d, stylesCss)
+		stylesCssFile = os.path.join(baseDir, ".." , stylesCss)
+	return stylesCssFile
 
 
-HTML_HEADERS = """
-<!DOCTYPE html>
-<html lang="{lang}" dir="{dir}">
-<head>
-<meta charset="utf-8">
-<title>{title}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href={styles}>
-{extraStylesheet}
-</head>
-""".strip()
-
-RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
+def getStyles(baseDir, stylesCss):
+	stylesCss = getStylesCss(baseDir, stylesCss)
+	styles = ""
+	if os.path.exists(stylesCss):
+		with codecs.open(stylesCss, "r", "utf-8") as f:
+			styles = """<style media="screen">"""
+			styles = styles + "\n" +f.read()
+			styles = styles + "\n" + "</style>"
+	return styles
 
 
-def writeHTMLFile(dest, htmlText, lang, title, stylesCss, extraStylesCss=""):
-	cssFile =stylesCss if stylesCss is not None else "style.css"
-	extraStylesheet = ""
-	if extraStylesCss != "":
-		extraStylesheet = """<link rel="stylesheet" href=%s""" % extraStylesCss
+
+def writeHTMLFile(dest, htmlText, lang, title, cssFileName):
+	cssFile =cssFileName if cssFileName is not None else "style.css"
+#	cssFile = os.path.join(os.path.dirname(dest), cssFile)
 	#lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
+	styles = getStyles(os.path.dirname(dest), cssFile)
+	header =  HTML_HEADERS.format(
+		lang=lang,
+		dir="rtl" if lang in RTL_LANG_CODES else "ltr",
+		title=title,
+		styles=styles,
+	)
+
 	with codecs.open(dest, "w", "utf-8") as f:
-		f.write(
-			HTML_HEADERS.format(
-				lang=lang,
-				dir="rtl" if lang in RTL_LANG_CODES else "ltr",
-				title=title,
-				styles=stylesCss,
-				extraStylesheet=extraStylesheet,
-			)
-		)
-		f.write(htmlText)
+		f.write(header)
+		f.write("\n" + htmlText)
 		f.write("\n</html>\n")
-	f.close()
-
-
-def getStylesCss(fileDir, fileType="t2t"):
-	# the default styles css files are in doc folder
-	# but translators can adapte these files for convenience
-	# so the file modified must be placed in the language folder.
-	if fileType == "t2t":
-		stylesCss = "style_t2t.css"
-		if not os.path.exists(os.path.join(fileDir, stylesCss)):
-			stylesCss = "..\\style_t2t.css"
-		extraStylesCss = ""
-	elif fileType == "md":
-		stylesCss = "styles.css"
-		if not os.path.exists(os.path.join(fileDir, stylesCss)):
-			stylesCss = "..\\%s" % stylesCss
-		extraStylesCss = "numberedHeadings.css"
-		if not os.path.exists(os.path.join(fileDir, extraStylesCss)):
-			extraStylesCss = "..\\%s" % extraStylesCss
-	return (stylesCss, extraStylesCss)
-
 
 def getHTMLBody(dest):
 	src = codecs.open( dest, "r","utf_8",errors="replace")
@@ -109,9 +107,7 @@ def t2t2html(source, dest):
 	localeLang = os.path.basename(os.path.dirname(source))
 	summary = getTranslatedAddonSummary(buildVars, localeLang)
 	title=u"{0} {1}".format(summary, buildVars.addon_info["addon_version"])
-	d = os.path.dirname(dest)
-	(stylesCss, extraStylesCss) = getStylesCss(d, "t2t")
-	writeHTMLFile(dest, htmlText, lang, title, stylesCss, extraStylesCss)
+	writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style_t2t.css")
 
 markdown_extensions = [
 	"abbr",
@@ -133,6 +129,10 @@ markdown_extensions = [
 	"wikilinks",
 ]
 
+
+
+
+
 def md2html(source, dest):
 	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
 	localeLang = os.path.basename(os.path.dirname(source))
@@ -144,16 +144,14 @@ def md2html(source, dest):
 	}
 	extensions = []
 	for ext in markdown_extensions:
-			extensions.append("markdown.extensions.%s" % ext)
+		extensions.append("markdown.extensions.%s" % ext)
+	
 	with codecs.open(source, "r", "utf-8") as f:
 		mdText = f.read()
 		for k, v in headerDic.items():
 			mdText = mdText.replace(k, v, 1)
-		htmlText = markdown.markdown(mdText, extensions=extensions)
-		htmlText = "<body>\n" + htmlText + "\n</body>"
-		d = os.path.dirname(dest)
-		(stylesCss, extraStylesCss) = getStylesCss(d, "md")
-		writeHTMLFile(dest, htmlText, lang, title, stylesCss, extraStylesCss)
+		htmlText = "<body>\n" +markdown.markdown(mdText, extensions=extensions) +"\n</body>"
+		writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style.css")
 
 def generateT2tHelpFiles (source, target, env, for_signature):
 	action = env.Action(lambda target, source, env : t2t2html(source[0].abspath, target[0].abspath) and None,
@@ -249,7 +247,11 @@ def generateManifest(source, dest):
 		f.write(manifest)
 
 def generateTranslatedManifest(source, language, out):
-	_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).gettext
+	# No ugettext in Python 3.
+	if sys.version_info.major == 2:
+		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).ugettext
+	else:
+		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).gettext
 	vars = {}
 	for var in ("addon_summary", "addon_description"):
 		vars[var] = _(buildVars.addon_info[var])

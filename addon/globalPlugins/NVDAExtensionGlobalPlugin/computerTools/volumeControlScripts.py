@@ -5,12 +5,14 @@
 
 
 import addonHandler
+import globalVars
 import baseObject
 import ui
 import wx
 import api
 import appModuleHandler
 from ..settings.addonConfig import FCT_VolumeControl, FCT_SplitAudio
+from .audioCore import isNVDA
 
 
 addonHandler.initTranslation()
@@ -29,6 +31,20 @@ def getFocusedApplicationName():
 	focus = api.getFocusObject()
 	appName = appModuleHandler.getAppNameFromProcessID(focus.processID, True)
 	return appName
+
+
+def getFocusedApplicationProcessId():
+	focus = api.getFocusObject()
+	return focus.processID
+
+
+def getFocusedApplication():
+	focus = api.getFocusObject()
+	return (
+		appModuleHandler.getAppNameFromProcessID(focus.processID, True),
+		focus.processID
+	)
+
 
 
 class ScriptsForVolume(baseObject.ScriptableObject):
@@ -151,17 +167,17 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	}
 
 	def script_toggleCurrentAppVolumeMute(self, gesture):
-		appName = getFocusedApplicationName()
-		from .audioCore import isNVDA
-		if isNVDA(appName):
+		application = getFocusedApplication()
+		appName, pid = application
+		if isNVDA(pid):
 			ui.message(_("Unavailable for NVDA"))
 			return
 		from .audioCore import AudioSources, audioOutputDevicesManager
-		device = audioOutputDevicesManager.findDeviceFromApplicationName(appName)
+		device = audioOutputDevicesManager.findDeviceFromApplicationProcessId(pid)
 		if device is None:
 			return None
 		audioSources = AudioSources(device)
-		audioSources.toggleProcessVolumeMute(appName)
+		audioSources.toggleApplicationVolumeMute(application)
 
 	def script_setMainAndNVDAVolume(self, gesture):
 		from .audioCore import AudioSources, audioOutputDevicesManager
@@ -176,25 +192,26 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		else:
 			ui.message(_("Not available on this operating's system"))
 
-	def getApplicationAudioSources(self, appName):
-		from .audioCore import AudioSources, audioOutputDevicesManager
-		if appName == "nvda.exe":
+	def getApplicationAudioSources(self, application):
+		from .audioCore import AudioSources, audioOutputDevicesManager, isNVDA
+		appName, pid = application
+		if isNVDA(appName):
 			nvdaDevice = audioOutputDevicesManager.getCurrentNVDADevice()
 			audioSources = AudioSources(nvdaDevice)
 		else:
-			device = audioOutputDevicesManager.findDeviceFromApplicationName(appName)
+			device = audioOutputDevicesManager.findDeviceFromApplicationProcessId(pid)
 			if device is None:
 				return None
 			audioSources = AudioSources(device)
 		return audioSources
 
-	def _changeAppVolume(self, appName=None, action="increase", value=100, report=True, reportValue=None):
-		if appName is None:
-			appName = getFocusedApplicationName()
-		audioSources = self.getApplicationAudioSources(appName)
+	def _changeAppVolume(self, application=None, *args, **kwargs):
+		if application is None:
+			application = getFocusedApplication()
+		audioSources = self.getApplicationAudioSources(application)
 		if audioSources is None:
 			return
-		wx.CallAfter(audioSources.changeAppVolume, appName, action, value, report, reportValue)
+		wx.CallAfter(audioSources.changeAppVolume, application, *args, **kwargs)
 
 	# for focused application
 	def script_increaseFocusedAppVolume(self, gesture):
@@ -250,67 +267,73 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	script_setFocusedAppVolumeTo90Percent.noFinish = True
 
 	def script_setFocusedAppVolumeToPreviousLevel(self, gesture):
-		appName = getFocusedApplicationName()
-		if appName is None:
+		application = getFocusedApplication()
+		if application is None:
 			return
 		from .audioCore import audioOutputDevicesManager, AudioSources
-		appDevice = audioOutputDevicesManager.findDeviceFromApplicationName(appName)
-		if appDevice is None:
+		appName, pid = application
+		device = audioOutputDevicesManager.findDeviceFromApplicationProcessId(application)
+		if device is None:
 			return
-		audioSources = AudioSources(appDevice)
-		wx.CallAfter(audioSources.setApplicationVolumeToPreviousLevel, appName)
+		audioSources = AudioSources(device)
+		wx.CallAfter(audioSources.setApplicationVolumeToPreviousLevel, application)
 
 	# for NVDA
+	def _changeNVDAVolume(self,*args, **kwargs):
+		from ..computerTools.audioCore import getNVDASessionName
+		application = (getNVDASessionName(), globalVars.appPid)
+		self._changeAppVolume(application, *args, **kwargs)
+
 	def script_increaseNVDAVolume(self, gesture):
-		self._changeAppVolume("nvda.exe", action="increase")
+		self._changeNVDAVolume(action="increase")
 	script_increaseNVDAVolume .noFinish = True
 
 	def script_decreaseNVDAVolume(self, gesture):
-		self._changeAppVolume("nvda.exe", action="decrease")
+		self._changeNVDAVolume(action="decrease")
 	script_decreaseNVDAVolume .noFinish = True
 
 	def script_maximizeNVDAVolume(self, gesture):
-		self._changeAppVolume("nvda.exe", action="max")
+		self._changeNVDAVolume(action="max")
 	script_maximizeNVDAVolume .noFinish = True
 
 	def script_minimizeNVDAVolume(self, gesture):
-		self._changeAppVolume("nvda.exe", action="min")
+		self._changeNVDAVolume(action="min")
 	script_minimizeNVDAVolume .noFinish = True
 
 	def script_setNVDAVolumeTo10Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=10)
+		self._changeNVDAVolume(action="set", value=10)
 	script_setNVDAVolumeTo10Percent.noFinish = True
 
 	def script_setNVDAVolumeTo20Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=20)
+		self._changeNVDAVolume(action="set", value=20)
 	script_setNVDAVolumeTo20Percent.noFinish = True
 
 	def script_setNVDAVolumeTo30Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=30)
+		self._changeNVDAVolume(action="set", value=30)
 	script_setNVDAVolumeTo30Percent.noFinish = True
 
 	def script_setNVDAVolumeTo40Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=40)
+		self._changeNVDAVolume(action="set", value=40)
 	script_setNVDAVolumeTo40Percent.noFinish = True
 
 	def script_setNVDAVolumeTo50Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=50)
+		self._changeNVDAVolume(action="set", value=50)
 	script_setNVDAVolumeTo50Percent.noFinish = True
 
 	def script_setNVDAVolumeTo60Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=60)
+		self._changeNVDAVolume(action="set", value=60)
 	script_setNVDAVolumeTo60Percent.noFinish = True
 
 	def script_setNVDAVolumeTo70Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=70)
+		self._changeNVDAVolume(action="set", value=70)
 	script_setNVDAVolumeTo70Percent.noFinish = True
 
 	def script_setNVDAVolumeTo80Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=80)
+		self._changeNVDAVolume(action="set", value=80)
 	script_setNVDAVolumeTo80Percent.noFinish = True
 
 	def script_setNVDAVolumeTo90Percent(self, gesture):
-		self._changeAppVolume("nvda.exe", action="set", value=90)
+		self._changeNVDAVolume(action="set", value=90)
 	script_setNVDAVolumeTo90Percent.noFinish = True
 
 	def script_setNVDAVolumeToPreviousLevel(self, gesture):
@@ -322,14 +345,13 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 	# for speakers
 	def _changeSpeakersVolume(self, action="increase", value=None, reportValue=True, device=None):
 		if device is None:
-			# choose the output audio device that the focused application uses, else the nvda output audio device.
+			# choose the audio output device that the focused application uses, else the nvda output audio device.
 			from .audioCore import audioOutputDevicesManager
-			appName = getFocusedApplicationName()
-			from .audioCore import isNVDA
-			if isNVDA(appName):
+			appName, appPid = getFocusedApplication()
+			if isNVDA(appPid):
 				device = audioOutputDevicesManager.getCurrentNVDADevice()
 			else:
-				device = audioOutputDevicesManager.findDeviceFromApplicationName(appName)
+				device = audioOutputDevicesManager.findDeviceFromApplicationProcessId(appPid)
 				if device is None:
 					device = audioOutputDevicesManager.getDefaultDevice()
 		wx.CallAfter(device.changeVolume, action, value)
@@ -395,41 +417,42 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		from .audioCore import AudioSources, audioOutputDevicesManager
 		nvdaDevice = audioOutputDevicesManager.getCurrentNVDADevice()
 		if application is not None:
-			appDevice = audioOutputDevicesManager.findDeviceFromApplicationName(application)
+			appName, appPid = application
+			appDevice = audioOutputDevicesManager.findDeviceFromApplicationProcessId(appPid)
 			if nvdaDevice != appDevice:
 				ui.message(
 					# Translators: message to user to report that application and NVDA are not on same output audio device
-					_("Not available: %s and NVDA are probably not on tthe same output audio device") % application)
+					_("Not available: %s and NVDA are probably not on tthe same output audio device") % appName)
 				return
 		audioSources = AudioSources(nvdaDevice)
 		audioSources.splitChannels(NVDAChannel, application)
 
 	def script_setNVDAToRightAndFocusedApplicationToLeft(self, gesture):
-		appName = getFocusedApplicationName()
-		from .audioCore import isNVDA
-		if isNVDA(appName):
+		application = getFocusedApplication()
+		appName, appPid = application
+		if isNVDA(appPid):
 			# Translators: message to user to indicate that is not  available because the focused application is NVDA
 			ui.message(_("Not available: focused application is NVDA"))
 			return
-		self._splitChannels(NVDAChannel="right", application=appName)
+		self._splitChannels(NVDAChannel="right", application=application)
 
 	def script_setNVDAToLeftAndFocusedApplicationToRight(self, gesture):
-		appName = getFocusedApplicationName()
-		from .audioCore import isNVDA
-		if isNVDA(appName):
+		application = getFocusedApplication()
+		appName, appPid = application
+		if isNVDA(appPid):
 			# Translators: message to user to indicate that is not  available because the focused application is NVDA
 			ui.message(_("Not available: focused application is NVDA"))
 			return
-		self._splitChannels(NVDAChannel="left", application=appName)
+		self._splitChannels(NVDAChannel="left", application=application)
 
 	def script_centerNVDAAndFocusedApplication(self, gesture):
-		appName = getFocusedApplicationName()
-		from .audioCore import isNVDA
-		if isNVDA(appName):
+		application = getFocusedApplication()
+		appName, appPid = application
+		if isNVDA(appPid):
 			# Translators: message to user to indicate that is not  available because the focused application is NVDA
 			ui.message(_("Not available: focused application is NVDA"))
 			return
-		self._splitChannels(NVDAChannel="None", application=appName)
+		self._splitChannels(NVDAChannel="None", application=application)
 
 	def script_setNVDAToRightAndAllApplicationsToLeft(self, gesture):
 		self._splitChannels(NVDAChannel="right", application=None)
@@ -446,7 +469,6 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		if audioSources is None:
 			return
 		audioSources.toggleChannels(application=appName)
-
 	def script_displayNVDAAndApplicationsAudioManager(self, gesture):
 		from .audioManagerDialog import NVDAAndAudioApplicationsManagerDialog
 		wx.CallAfter(NVDAAndAudioApplicationsManagerDialog.run)

@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\tools\__init__.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 -2025 Paulber19
+# Copyright (C) 2016 -2026 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -11,9 +11,9 @@ import codecs
 # from ctypes import *
 import zipfile
 import gui
+import threading
 import wx
 import languageHandler
-from ..utils.nvdaInfos import NVDAVersion
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import runInThread
 from .generate import generateManifest, generateTranslatedManifest
@@ -27,6 +27,12 @@ sharedPath = os.path.join(_curAddon.path, "shared")
 sys.path.append(sharedPath)
 from negp_messages import confirm_YesNo, warn, alert, inform, ReturnCode
 del sys.path[-1]
+sysPath = list(sys.path)
+from ..utils.py3Compatibility import getCommonUtilitiesPath
+sys.path.append(getCommonUtilitiesPath())
+import txt2tags
+sys.path = sysPath
+import markdown
 
 addonHandler.initTranslation()
 
@@ -51,7 +57,7 @@ def get_all_file_paths(directory):
 					continue
 			else:
 				if os.path.splitext(filename)[1]\
-					in [".pyo", ".pyc", ".nvda-addon", ".pickle"]:
+					in [".pyo", ".pyc", ".nvda-addon", ".pickle", ".json"]:
 					continue
 			filepath = os.path.join(root, filename)
 			file_paths.append(filepath)
@@ -151,32 +157,26 @@ HTML_HEADERS = """
 <meta charset="utf-8">
 <title>{title}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href={styles}>
-{extraStylesheet}
+{styles}
 </head>
 """.strip()
 
 RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
 
 
-def writeHTMLFile(dest, htmlText, title, stylesCss, extraStylesCss=""):
+def writeHTMLFile(dest, htmlText, title, styles):
 	lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
-	extraStylesheet = ""
-	if extraStylesCss != "":
-		extraStylesheet = """<link rel="stylesheet" href=%s""" % extraStylesCss
 	with codecs.open(dest, "w", "utf-8") as f:
 		f.write(
 			HTML_HEADERS.format(
 				lang=lang,
 				dir="rtl" if lang in RTL_LANG_CODES else "ltr",
 				title=title,
-				styles=stylesCss,
-				extraStylesheet=extraStylesheet,
+				styles=styles,
 			)
 		)
-		f.write(htmlText)
+		f.write("\n" + htmlText)
 		f.write("\n</html>\n")
-	f.close()
 
 
 markdown_extensions = [
@@ -199,90 +199,22 @@ markdown_extensions = [
 	"wikilinks",
 ]
 
-if NVDAVersion >= [2025, 1]:
-	# for nvda versions >= 2025.1
-	def md2html(source):
-		import markdown
-		headerDic = {
-			"[[!meta title=\"": "# ",
-			"\"]]": " #",
-		}
-		extensions = []
-		for ext in markdown_extensions:
-			extensions.append("markdown.extensions.%s" % ext)
-		with codecs.open(source, "r", "utf-8") as f:
-			mdText = f.read()
-			for k, v in headerDic.items():
-				mdText = mdText.replace(k, v, 1)
-			htmlText = markdown.markdown(mdText, extensions=extensions)
-		htmlText = "<body>\n" + htmlText + "\n</body>"
-		return htmlText
 
-elif NVDAVersion >= [2024, 2]:
-	# for nvda versions >= 2024.2
-	def md2html(source):
-		sysPath = list(sys.path)
-		sys.path = [sys.path[0]]
-		from ..utils.py3Compatibility import getCommonUtilitiesPath
-		commonUtilitiesPath = getCommonUtilitiesPath()
-		markdownExPath = os.path.join(commonUtilitiesPath, "markdownEx")
-		sys.path.append(commonUtilitiesPath)
-		sys.path.append(markdownExPath)
-		from markdownEx import markdown
-		# restore sys.path
-		sys.path = sysPath
-		del sys.modules["markdownEx"]
-
-		headerDic = {
-			"[[!meta title=\"": "# ",
-			"\"]]": " #",
-		}
-		extensions = []
-		for ext in markdown_extensions:
-			if ext in ["legacy_attrs",]:
-				continue
-			extensions.append("markdownEx.markdown.extensions.%s" % ext)
-		with codecs.open(source, "r", "utf-8") as f:
-			mdText = f.read()
-			for k, v in headerDic.items():
-				mdText = mdText.replace(k, v, 1)
-			htmlText = markdown.markdown(mdText, extensions=extensions)
-		htmlText = "<body>\n" + htmlText + "\n</body>"
-		return htmlText
-
-else:
-	# for versions < 2024.2
-	def md2html(source):
-		sysPath = list(sys.path)
-		markdownModulePath = None
-		if "markdown" in sys.modules:
-			log.warning("Potential incompatibility: markdown module is also used and loaded probably by other add-on")
-			markdownModulePath = sys.modules["markdown"]
-			del sys.modules["markdown"]
-		sys.path = [sys.path[0]]
-		from ..utils.py3Compatibility import getCommonUtilitiesPath
-		commonUtilitiesPath = getCommonUtilitiesPath()
-		markdownExPath = os.path.join(commonUtilitiesPath, "markdownEx")
-		sys.path.append(commonUtilitiesPath)
-		sys.path.append(markdownExPath)
-		from markdown2 import markdown
-		# restore sys.path
-		sys.path = sysPath
-		del sys.modules["markdown2"]
-		if markdownModulePath is not None:
-			sys.modules["markdown"] = markdownModulePath
-
-		headerDic = {
-			"[[!meta title=\"": "# ",
-			"\"]]": " #",
-		}
-		with codecs.open(source, "r", "utf-8") as f:
-			mdText = f.read()
-			for k, v in headerDic.items():
-				mdText = mdText.replace(k, v, 1)
-			htmlText = markdown(mdText)
-		htmlText = "<body>\n" + htmlText + "\n</body>"
-		return htmlText
+def md2html(source):
+	headerDic = {
+		"[[!meta title=\"": "# ",
+		"\"]]": " #",
+	}
+	extensions = []
+	for ext in markdown_extensions:
+		extensions.append("markdown.extensions.%s" % ext)
+	with codecs.open(source, "r", "utf-8") as f:
+		mdText = f.read()
+		for k, v in headerDic.items():
+			mdText = mdText.replace(k, v, 1)
+		htmlText = markdown.markdown(mdText, extensions=extensions)
+	htmlText = "<body>\n" + htmlText + "\n</body>"
+	return htmlText
 
 
 def getHTMLBody(dest):
@@ -311,24 +243,25 @@ def getHTMLBody(dest):
 
 
 def t2t2html(source, dest):
-	sysPath = list(sys.path)
-	txt2TagsModulePath = None
-	if "txt2tags" in sys.modules:
-		log.warning("Potential incompatibility: txt2tags module is also used and loaded probably by other add-on")
-		txt2TagsModulePath = sys.modules["txt2tags"]
-		del sys.modules["txt2tags"]
-	sys.path = [sys.path[0]]
-	from ..utils.py3Compatibility import getCommonUtilitiesPath
-	sys.path.append(getCommonUtilitiesPath())
-	import txt2tags
-	sys.path = list(sysPath)
-	del sys.modules["txt2tags"]
-	if txt2TagsModulePath is not None:
-		sys.modules["txt2tags"] = txt2TagsModulePath
-	txt2tags.exec_command_line(["%s" % (source), ])
-	# we don't want the footer
-	htmlText = getHTMLBody(dest)
-	os.remove(dest)
+	try:
+		os.remove(dest)
+	except Exception:
+		pass
+	log.debug("converting t2t file: %s" % source)
+	cmd = [source,]
+	th = threading.Thread(
+		target=txt2tags.exec_command_line,
+		args=(cmd,)
+	)
+	th.start()
+	th.join()
+	if os.path.exists(dest):
+		# we don't want the footer
+		htmlText = getHTMLBody(dest)
+		os.remove(dest)
+	else:
+		log.warning("cannot convert t2t file: %s" % source)
+		return None
 	return htmlText
 
 
@@ -337,18 +270,26 @@ def getStylesCss(fileDir, fileType="t2t"):
 	# but translators can adapte these files for convenience
 	# so the file modified must be placed in the language folder.
 	if fileType == "t2t":
-		stylesCss = "style_t2t.css"
-		if not os.path.exists(os.path.join(fileDir, stylesCss)):
-			stylesCss = "..\\style_t2t.css"
-		extraStylesCss = ""
+		stylesCss = os.path.join(fileDir, "style_t2t.css")
+		if not os.path.exists(stylesCss):
+			stylesCss = os.path.join(fileDir, "..\\style_t2t.css")
 	elif fileType == "md":
-		stylesCss = "styles.css"
-		if not os.path.exists(os.path.join(fileDir, stylesCss)):
-			stylesCss = "..\\%s" % stylesCss
-		extraStylesCss = "numberedHeadings.css"
-		if not os.path.exists(os.path.join(fileDir, extraStylesCss)):
-			extraStylesCss = "..\\%s" % extraStylesCss
-	return (stylesCss, extraStylesCss)
+		stylesCss = os.path.join(fileDir, "style.css")
+		if not os.path.exists(stylesCss):
+			stylesCss = os.path.join(fileDir, "..\\style.css")
+	return stylesCss
+
+
+def getStyles(fileDir, fileType="t2t"):
+	stylesCss = getStylesCss(fileDir, fileType=fileType)
+	styles = ""
+	if os.path.exists(stylesCss):
+		with codecs.open(stylesCss, "r", "utf-8") as f:
+			styles = """<style media="screen">"""
+			styles = styles + "\n" +f.read()
+			styles = styles + "\n" + "</style>"
+	return styles
+
 
 
 def generateHTMLFiles(addon, docDirs):
@@ -357,27 +298,31 @@ def generateHTMLFiles(addon, docDirs):
 	for d in docDirs:
 		lang = d.split("\\")[-1]
 		fileList = os.listdir(d)
+		filesCount = len(fileList)
 		for file in fileList:
 			theFile = os.path.join(d, file)
 			if not os.path.isfile(theFile):
 				continue
-			f = file.split(".")
-			ext = f[-1].lower()
+#			f = file.split(".")
+			(base, ext) = os.path.splitext(file)			
+			ext = ext[1:]
 			if ext not in ["md", "t2t"]:
 				continue
-			base = addon.path.join(f[:-1])
 			dest = os.path.join(d, base + ".html")
 			manifest = getMmanifestInfos(addon, lang)
 			title = "%s %s" % (manifest["summary"], manifest["version"])
-			(stylesCss, extraStylesCss) = getStylesCss(d, ext)
+			styles = getStyles(d, fileType=ext)
 			if ext == "t2t":
 				htmlText = t2t2html(theFile, dest)
+				if htmlText is None:
+					continue
 				t2tCount += 1
 			elif ext == "md":
 				htmlText = md2html(theFile)
 				mdCount += 1
-			writeHTMLFile(dest, htmlText, title, stylesCss, extraStylesCss)
-	return (mdCount, t2tCount)
+			writeHTMLFile(dest, htmlText, title, styles)
+
+	return (filesCount, mdCount, t2tCount)
 
 
 def clean(addon):
@@ -397,6 +342,8 @@ def _makeHTML(addon, lang):
 			dialogTitle
 		)
 		return
+	th = runInThread.RepeatBeep(delay=2.0, beep=(200, 200), isRunning=None)
+	th.start()
 	docFolder = os.path.join(addon.path, "doc")
 	dirList = getDocLanguages(addon)
 	docDirs = []
@@ -409,7 +356,8 @@ def _makeHTML(addon, lang):
 			if (item == lang or "_" in item and item.split("_")[0] == lang):
 				theDir = os.path.join(docFolder, item)
 				docDirs.append(theDir)
-	(mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
+	(filesCount, mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
+	th.stop()
 	n = mdCount + t2tCount
 	if n == 0:
 		inform(
@@ -418,6 +366,7 @@ def _makeHTML(addon, lang):
 			dialogTitle
 		)
 	else:
+		"""
 		# copy css style file
 		curAddon = addonHandler.getCodeAddon()
 		if mdCount:
@@ -434,6 +383,7 @@ def _makeHTML(addon, lang):
 				shutil.copy(source, dest)
 			except Exception:
 				pass
+		"""
 		inform(
 			# Translators: message to user to report number of converted documents
 			_("%s files converted") % n,
@@ -682,7 +632,7 @@ def _prepareAddon(addon):
 			theDir = os.path.join(docFolder, item)
 			if os.path.isdir(theDir):
 				docDirs.append(theDir)
-		(mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
+		(filesCount,mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
 		cnt = mdCount + t2tCount
 		if cnt == 0:
 			# Translators: message to user to report no document converted

@@ -10,7 +10,10 @@ import ui
 import api
 from ..utils.informationDialog import InformationDialog
 from ..utils.NVDAStrings import NVDAString
-from ..settings import toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption
+from ..settings import (
+	toggleSpeechRecordWithNumberOption, toggleSpeechRecordInAscendingOrderOption,
+	toggleDoNotRecordTextWithSingleCharacterOption
+)
 
 addonHandler.initTranslation()
 
@@ -45,6 +48,8 @@ class SpeechRecorderManager(object):
 			text = text[:-1]
 
 		if len(text.strip()) == 0:
+			return
+		if len(text) == 1 and toggleDoNotRecordTextWithSingleCharacterOption(False):
 			return
 		self._speechHistory.append(text)
 		if len(self._speechHistory) > MAX_RECORD:

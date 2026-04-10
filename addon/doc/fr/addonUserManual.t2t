@@ -1488,7 +1488,11 @@ Pour être présenté à l'utilisateur dans un navigateur, ces fichiers doivent 
 
 Cela est possible simplement à l'aide du bouton "Créer les fichiers HTML de documentation" après avoir sélectionnée l'extension dans la liste des extensions et choisi un langage ou l'ensemble des langages dans la liste des langages.
 
-Ouvert dans le navigateur, ces fichiers HTML ont besoin de fichiers de style (style.css pour les fichiers Markdown et style_t2t.css pour les fichiers txt2tags) placé dans le dossier doc de l'extension.
+Ces fichiers HTML ont besoin des fichiers de styles (styles.css pour les fichiers Markdown et style_t2t.css pour les fichiers txt2tags) qui sont placés dans le dossier doc de l'extension.
+
+Ces fichiers de styles peuvent être  locaux à un langage. Dans ce cas, ces fichiers doivent être placés dans le dossier du langage.
+
+Lors  de la conversion, le contenu de ces fichiers est inséré dans le document html. Ainsi, ces fichiers ne sont pas utils  pour la visualisation du document html dans le navigateur.
 
 
 +++ Création du fichier catalogue +++[hdr22-6]
@@ -2120,7 +2124,7 @@ Pour activer ou désactiver les extensions, NVDA propose nativement le gestionna
 
 Cependant dans certains cas, il peut être nécessaire de désactiver tout ou partie des extensions en ne laissant que quelques extensions activées.
 
-Avec le gestionnaire d'extensions ou l'add-on store, il est alors nécessaire de passer en revue chaque extension pour l'activer ou la désactiver à l'aide d'un bouton ou menu.
+Avec l'add-on store, il est alors nécessaire de passer en revue chaque extension pour l'activer ou la désactiver à l'aide d'un bouton ou menu.
 
 Cette extension tente de rendre plus rapide cette manipulation et pour cela, elle apporte un script pour afficher le dialogue "Activation rapide des extensions".
 
@@ -2128,18 +2132,17 @@ Ce script se lance à l'aide de la commande "KEY_QUICK_ADDONS_ACTIVATION" de l'i
 Il se trouve dans la catégorie "ADDON_SUMMARY" avec la description "Afficher le dialogue pour activer ou désactiver les extensions".
 
 Ce dialogue présente :
-- la liste des extensions installées, activées ou désactivées,
+- la liste déroulante "Type d'extension " qui permet de choisir le type des extensions qui seront présentés dans la liste déroulante qui la suit. Les choix sont : "Activé", "Désactivé" ou "Tous".
+- la liste des extensions installées correspondant au type choisi.
 - le bouton "Cocher tout" pour cocher toutes les extensions de la liste,
 - le bouton "Décocher tout" pour décocher toutes les extensions de la liste,
 - le bouton "Enregistrer et redémarrer NVDA" pour valider les changements et redémarrer NVDA,
 - le bouton "Annuler" pour fermer le dialogue sans aucune modification de l'état d'activation des extensions.
 
 
-Si l'extension est installée sous une version de NVDA antérieures à la 2023.2 de NVDA, La liste ne présente que les extensions compatibles. 
-
 Seules les extensions dans un état stable sont listées. Les extensions qui sont dans un état intermédiaire c'est à dire soit en attente d'activation ou de désactivation, soit en attente d'installation ou de suppression en sont exclues.
 
-Depuis NVDA 2023.2, les extensions incompatible sont inclues aussi dans la liste, et peuvent être activées ou désactivées elles aussi.
+Les extensions incompatible sont inclues aussi dans la liste, et peuvent être activées ou désactivées elles aussi.
 
 Elles sont signalées par la mention "(incompatible)" à la suite de leur identifiant.
 
@@ -2207,23 +2210,23 @@ Pour cela, deux options de NVDA sont impliquées :
 - l'option "Faute d'orthographe" du groupe " Information sur le document" de la catégorie "Mise en forme des documents".
 - l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " de la catégorie "Clavier".
 
-Pour que NVDA signale les fautes en lecture et lors de la frappe, il faut que l'option "Fautes d'orthographe" soit activée. Les fautes sont alors signalées par le message vocal "Faute d'orthographe".
+Pour que NVDA signale les fautes en lecture et lors de la frappe, il faut que l'option "Fautes d'orthographe" soit activée. Les fautes sont alors signalées par le message vocal "Faute d'orthographe". Depuis la version 2026.1 de NVDA, il est possible de choisir le signalement par son (son d'erreur de NVDA) ou par parole (message d'erreur de NVDA, à savoir "Faute d'orthographe").
 
 Pour que les fautes soient signalées plutôt par un son lors de la frappe, il faut que l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " soit activée.
 
 L'extension modifie ce comportement de NVDA de la manière suivante :
 - l'option "Jouer un son pour les fautes d'orthographe pendant la frappe " est renommée en "Pendant la frappe, signaler les fautes d'orthographe".
 - le signalement des fautes d'orthographe en lecture et lors de la frappe sont indépendants. Si l'option "Fautes d'orthographe" n'est pas active, mais que l'option "Pendant la frappe, signaler les fautes d'orthographe" l'est, les fautes seront signalées lors de la frappe.
-- pour chaque situation, en lecture ou lors de la frappe, il est possible de configurer comment seront signalées les fautes : par un double bip, par le son de NVDA, par le message vocal "Faute d'orthographe" ou par l'annonce du mot mal orthographié sous un profil de configuration dédié.
+- pour chaque situation, en lecture ou lors de la frappe, il est possible de configurer comment seront signalées les fautes : par un double bip, par le son d'erreur de NVDA, par le message d'erreur de NVDA ("Faute d'orthographe") ou par l'annonce du mot mal orthographié sous un profil de configuration dédié.
 
 
-Le choix du signalement des fautes d'orthographe se fait dans le groupe "Signalement des fautes d'orthographe" de la catégorie "Compléments à NVDA" des paramètres globaux de l'extension, à l'aide des listes déroulantes "Lors de la frappe, signalé par" et "En lecture, signalé par".
-
-Les choix possibles de ces listes déroulantes sont :
-- bip sonore : un double bip sera émis.
-- son : le son de NVDA sera joué.
-- message : "le message vocal Faute d'orthographe sera entendu.
-- annonce du mot mal orthographié : le mot mal orthographié sera entendu avec les paramètres vocaux du profil de configuration "Annonce des mots mal orthographiés" dédié et ajouté par l'extension. Ce profil sera automatiquement activé lors de l'annonce d'un mot mal orthographié. Ce profil vous permet de modifier par exemple le synthétiseur ou la voix qui va être utilisé pour l'annonce du mot mal orthographié.
+Le choix du signalement des fautes d'orthographe se fait dans le groupe "Signalement des fautes d'orthographe" de la catégorie "Compléments à NVDA" des paramètres globaux de l'extension :
+- avant la version 2026.1 de NVDA, à l'aide des listes déroulantes "Lors de la frappe, signalé par" et "En lecture, signalé par". Les choix possibles de ces listes déroulantes sont :
+ - bip sonore : un double bip sera émis.
+ - son d'erreur de NVDA : le son de NVDA sera joué.
+ - message d'erreur de NVDA : "le message vocal Faute d'orthographe sera entendu.
+ - annonce du mot mal orthographié : le mot mal orthographié sera entendu avec les paramètres vocaux du profil de configuration "Annonce des mots mal orthographiés" dédié et ajouté par l'extension. Ce profil sera automatiquement activé lors de l'annonce d'un mot mal orthographié. Ce profil vous permet de modifier par exemple le synthétiseur ou la voix qui va être utilisé pour l'annonce du mot mal orthographié.
+- pour les versions suivantes, la liste déroulante "En lecture, signalé par" est remplacée par le groupe "Pendant la lecture" contenant deux listes déroulantes: la liste "signalement par son" qui permet de choisir entre le signalement par un bip sonore ou par le son d'erreur de NVDA, la liste "Signalement par parole" qi permet de choisir entre le signalement par le message d'erreur de NVDA ou l'annonce du mot mal orthographié. Ces deux listes correspondent au paramètres "Faute d'orthographe" de la catégorie "Mise en forme des documents" de NVDA.
 
 
 Le profil "Annonce des mots mal orthographiés" est associé à un déclencheur dédié et non présent dans la liste des déclencheurs. Il ne faut pas l'associé à un autre déclencheur.
@@ -2234,10 +2237,9 @@ Note :
 - dans le cas où le signalement des fautes d'orthographe se fait vocalement, il est préférable de désactiver l'option "Interruption de la parole à la frappe d'un caractère " de la catégorie "Clavier" des paramètres de NVDA car toute frappe rapide de caractère après un mot arrête l'annonce vocale.
 
 
-Attention: cette fonctionnalité est incompatible avec l'extension "speakTypingWords". Si celle-ci est installé, la fonctionalité concernant le signalement des fautes d'orthographe pendant la frappe est restreinte:
-- l'option "Pendant la frappe, Signaler les fautes d'orthographe " n'est plus disponible si l'option "Faute d'orthographe"  n'est pas cochée (fonctionnement de base de NVDA).
+Attention: cette fonctionnalité est incompatible avec l'extension "speakTypingWords". Si celle-ci est installé, la fonctionnalité concernant le signalement des fautes d'orthographe pendant la frappe est restreinte:
+- l'option "Pendant la frappe, Signaler les fautes d'orthographe " n'est plus disponible si l'option "Faute d'orthographe" n'est pas cochée (fonctionnement de base de NVDA).
 - si le choix du signalement des fautes d'orthographe pendant la frappe s'est porté sur "annonce du mot mal orthographié", ce sera le son d'erreur classique de NVDA qui sera joué si une faute est détectée. 
-
 
 
 ++ Blocage des touches "Insertion" et "Verrouillage" ++[hdr105]
@@ -2247,9 +2249,7 @@ Il peut être utile dans certains cas d'empêcher l'action des touches "Insertio
 
 Leur rôle initial est:
 - La touche "Insertion" peut faire passer du mode "Insertion" au mode "Refrappe" et inversement.
-- La touche "Verrouillage majuscule" simule l'enfoncement permanent de la touche "Majuscule".
-
-
+- La touche "Verrouillage majuscule" simule l'enfoncement permanent de la touche "Majuscule"
 NVDA permet à l'utilisateur de définir ces touches comme touche "NVDA". Mais dans ce cas, la touche "Insertion" comme la touche "Verrouillage majuscule" ne joue leur rôle initial que s'il y a un double appui rapide.
 
 Par configuration, L'extension donne la possibilité que ces touches n'aient pas d'action quand elles sont dans leur rôle initial.
@@ -2384,15 +2384,15 @@ Pour empêcher cet éventuel problème, l'extension propose, par configuration e
 Dans la catégorie "Clavier" des paramètres du profil de configuration, le groupe "Contrôle de la touche Muet" contient :
 - la liste déroulante "Autoriser le contrôle :" dont les choix possibles sont :
  - "Oui" : tout appui sur la touche est contrôlé.
- - "Oui, mais seulement si aucun afficheur braille est utilisé :   tout appui touche sera contrôlé à condition qu'il n'y ait pas d'afficheur braille utilisé. La coupure du son est moins gênante  pour les utilisateurs  utilisant le braille et dans ce cas, l'appui ne sera pas  contrôlé.
- - "Jamais" : aucun appui sur la touche sera contrôlé.
-- la liste déroulante "Actionner la touche :" qui propose les choix suivants :
- - "apprès confirmation" : l'action de la touche  sera traitée par Windows après accord de l'utilisateur.
- - "Sur double appui" : l'action de la touche sera traitée par Windows suite à un double appui sur la touche.
- - "Jamais" : l'action sur la touche ne sera pas traitée par Windows.
+ - "Oui, mais seulement si aucun afficheur braille est utilisé :   tout appui touche sera contrôlé à condition qu'il n'y ait pas d'afficheur braille utilisé. La coupure du son est moins gênante  pour les utilisateurs  utilisant le braille et dans ce cas, l'appui sera envoyé directement à Windows sans contrôle.
+ - "Jamais" : tout appui sur la touche sera envoyé directement à Windows.
+- la liste déroulante "Envoyer la touche :" qui propose les choix suivants :
+ - "apprès confirmation" : la touche sera envoyer à Windows après accord de l'utilisateur.
+ - "Sur double appui" : la touche sera envoyer à Windows suite à un double appui sur la touche.
+ - "Jamais" : la touche ne sera pas envoyer à Windows.
 
 
-Dans le cas où le volume est déjà coupé, tout appui sur la touche "Muet" est traité par Windows sans aucun contrôle.
+Dans le cas où le volume est déjà coupé, tout appui sur la touche "Muet" est envoyé à Windows sans aucun contrôle.
 
 Note:
 Pour réaliser ce contrôle, un script a été associé au geste de commande caché (sans description) "kb:volumeMute" qui est installé à chaque chargement d'un profil de configuration, mais à condition que le contrôle soit autorisé.

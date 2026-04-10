@@ -31,9 +31,12 @@ def _check_params(length, size):
 def _sample_count(cp, size):
     return len(cp) / size
 
+def buffer(o):
+    return o
+
 
 def _get_samples(cp, size, signed=True):
-    for i in range(_sample_count(cp, size)):
+    for i in range(int(_sample_count(cp, size))):
         yield _get_sample(cp, size, i, signed)
 
 

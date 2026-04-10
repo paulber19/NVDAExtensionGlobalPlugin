@@ -19,6 +19,50 @@ Only the versions of the type major.minor (for example v3.1) are listed in this 
 
 Versions of type major.minor.x (for example v3.1.2) are translation updates.
 
++ V15.0 (February/26/2026) +
+Compatibility with NVDA 2026.1.
+
+NVDA versions prior to 2025.1 are no longer supported.
+
+
+News:
+- In the "Quick activation of extensions" dialogue, possibility of displaying only extensions that are activated or deactivated.
+- New option to prevent text recording with a single character in the history of vocal ads.
+
+
+Changes:
+- for versions higher than NVDA 2026.1, spelling error reporting during playback is configurable separately for sound and speech.
+- by default, reporting spelling errors while typing is disabled.
+- style sheets are now inserted in the extension documentation html files.
+
+
+Bogs corrections:
+- "sound control" features and "audio separation" work properly in the following cases (correction made in version 14.1.1):
+ - Several instances of an application on the same device (radioSure for exenple).
+ - An application with several audio session on the same device (Foobar2000 for example (correction made in version 14.1.2).
+- The "Settings" window now appears in the window list (F10 command) (correction made in version 14.1.2).
+- Some windows such as the "Settings" window are now properly destroyed (correction made in version 14.1.2).
+- During an update with configuration preservation, the symbols and categories added are no longer lost (correction made in version 14.1.2).
+
+
+Development :
+- Deletion of the "Markdown" package from the "Utilities" folder. This package is included in NVDA since the 2025.1 version.
+- Deletion of the "Pycaw" package from the "Utilities" folder. This package is included in NVDA since the 2024.2 version.
+- Update to version 311 of the modules included in the Win32Ex folder and part of the "Pywin32" package. The "Win32EX" file is now dependent on the Python version used by NVDA (V3.11 or 3.13).
+- removed code regarding Wasapi and versions prior to NVDA version 2025.1.
+- Use of the ExecuteMouseeevent method of the Mousehandler module.
+- Correction of Pydub's error under Python 3.13
+- when converting markdown or txt2tags files to html, the style sheets are now inserted in the html document.
+- to display the "What's new" of a new version of the extension, the "changes.html" document is no longer opened by "urlopen", but is downloaded, saved momentarily in the "appData\local\temp" folder and opened in the browser.
+- taking into account the closure of the rawgit.com site for updating add-on.
+- use of json instead of pickle to store the add-on update status.
+
+
+Compliance with the NVDA API:
+- Taking into account the movement of the NVDA version in the "Buildversion.py" module.
+- taking into account the new possibility offered by NVDA 2026.1, to simultaneously report spelling errors by sound  and by speech.
+- taking into account the depreciation of the user32 variable of the winUser.py module.
+
 
 + V14.1 (September/16/2025) +
 News:

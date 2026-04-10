@@ -1,6 +1,6 @@
 # globalPlugins\NVDAExtensionGlobalPlugin\theGlobalPlugin.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2025 Paulber19
+# Copyright (C) 2016 - 2026 Paulber19
 # This file is covered by the GNU General Public License.
 
 
@@ -23,6 +23,7 @@ import scriptHandler
 import queueHandler
 import winUser
 import mouseHandler
+from .utils import mouseClick
 import textInfos
 import winKernel
 import core
@@ -131,7 +132,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	# a dictionnary to map main script to gestures and install feature option
 	_shellGestures = {}
 	_mainScriptToGestureAndfeatureOption = {
-		"test": (("kb:NVDA+control+shift+f11",), None),
+		# "test": (("kb:NVDA+control+shift+f11",), None),
 		"moduleLayer": (("kb:NVDA+j",), None),
 		"reportAppModuleInfoEx": (("kb:nvda+control+f1",), addonConfig.FCT_FocusedApplicationInformations),
 		"reportAppProductNameAndVersion": (("kb:nvda+shift+f1",), addonConfig.FCT_FocusedApplicationInformations),
@@ -1406,12 +1407,8 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			mouseHandler.executeMouseMoveEvent(x, y)
 			time.sleep(0.2)
 			setSpeechMode(oldSpeechMode)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0, None, None)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP, 0, 0, None, None)
-			if twice:
-				time.sleep(0.1)
-				winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN, 0, 0, None, None)
-				winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP, 0, 0, None, None)
+
+			mouseClick(None, rightButton=False, twice=twice)
 		stopDelayScriptTask()
 		count = scriptHandler.getLastScriptRepeatCount()
 		if count == 0:
@@ -1449,12 +1446,7 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 			mouseHandler.executeMouseMoveEvent(x, y)
 			time.sleep(0.2)
 			setSpeechMode(oldSpeechMode)
-			winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0, None, None)
-			winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTUP, 0, 0, None, None)
-			if twice:
-				time.sleep(0.1)
-				winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTDOWN, 0, 0, None, None)
-				winUser.mouse_event(winUser.MOUSEEVENTF_RIGHTUP, 0, 0, None, None)
+			mouseClick(None, rightButton=True, twice=twice)
 		stopDelayScriptTask()
 		count = scriptHandler.getLastScriptRepeatCount()
 		if count == 0:
@@ -1960,21 +1952,6 @@ class NVDAExtensionGlobalPlugin(ScriptsForVolume, globalPluginHandler.GlobalPlug
 	)
 	def script_test(self, gesture):
 		log.info("NVDAExtensionGlobalPlugin test")
-		self.essai()
-
-	def essai(self):
-		from pycaw.utils import (
-			AudioDevice, AudioSession, AudioUtilities
-		)
-		sessions = AudioUtilities.GetAllSessions()
-		for session in sessions:
-			name = session.Process.name() if session.Process else None
-
-
-
-
-
-
 
 
 class HelperDialog(

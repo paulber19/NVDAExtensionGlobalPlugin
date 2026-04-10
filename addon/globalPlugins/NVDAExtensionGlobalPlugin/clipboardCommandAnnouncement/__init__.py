@@ -274,7 +274,6 @@ class EditableTextEx(editableText.EditableText):
 
 	def reportCurrentLine(self):
 		import treeInterceptorHandler
-		import controlTypes
 		obj = api.getFocusObject()
 		treeInterceptor = obj.treeInterceptor
 		if (
@@ -666,10 +665,10 @@ def chooseNVDAObjectOverlayClasses(obj, clsList):
 	# for the obj, the informations are bad: role= Window, className= Edit, not states
 	#  tand with no better solution, we check the length of obj.states
 	elif (
-		(
-			obj.role in _rolesToCheck
-			or hasattr(obj, "windowClassName")
-		and obj.windowClassName in _classNamesToCheck
+		obj.role in _rolesToCheck
+		or (
+			hasattr(obj, "windowClassName")
+			and obj.windowClassName in _classNamesToCheck
 		)
 		and len(obj.states)
 	):
@@ -727,11 +726,13 @@ def setCanInstallSpellingAtTypingFunctionnality():
 	global canInstallSpellingAtTypingFunctionnality
 	try:
 		# if speakTypingWords add-on is running, spelling at typing functionnality can not be installed
-		m = next(filter (lambda a: a.name == "speakTypingWords", addonHandler.getRunningAddons ()))
+		m = next(filter(lambda a: a.name == "speakTypingWords", addonHandler.getRunningAddons()))
 		canInstallSpellingAtTypingFunctionnality = False
 		log.info(
-			"""The add-on "%s" being running, the functionality concerning the reporting of spelling errors when typing is restricted (see the "NVDAExtensionGlobalPlugin" user manual).""" % m.manifest["name"])
+			"""The add-on "%s" being running,"""
+			""" the functionality concerning the reporting of spelling errors when typing"""
+			"""  is restricted (see the "NVDAExtensionGlobalPlugin" user manual).""" % m.manifest["name"])
 	except Exception:
 		# speakTypingWords add-on is not running
 		canInstallSpellingAtTypingFunctionnality = True
-	from . import settingsDialogsPatche
+	from . import settingsDialogsPatche  # noqa:F401

@@ -6,11 +6,21 @@
 
 import addonHandler
 import os
+import sys
 
 
 def getCommonUtilitiesPath():
 	curAddonPath = getAddonPath()
 	return os.path.join(curAddonPath, "utilities")
+
+
+def getUtilitiesPath():
+	curAddonPath = getAddonPath()
+	if sys.version .startswith("3.13"):
+		utilities = "utilitiesPy313"
+	else:
+		utilities = "utilitiesPy311"
+	return os.path.join(curAddonPath, utilities)
 
 
 def getAddonPath(addon=None):
