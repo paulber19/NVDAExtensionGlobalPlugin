@@ -254,7 +254,6 @@ class EditableTextEx(editableText.EditableText):
 				gesture.send()
 				return
 			cm = clipboard.ClipboardManager()
-			time.sleep(0.1)
 			if cm.isEmpty:
 				# Translators: message to report clipboard is empty
 				ui.message(_("Clipboard is empty"))
