@@ -1,6 +1,7 @@
 # Rozszerzenie globalnych poleceń NVDA
 
 - Autor: PaulBer19 (paulber19@laposte.net)
+- Tłumaczenie na język polski: Kazimierz Parzych
 - Strona projektu: [repozytorium GitHub][3]
 - Pobieranie:
   - [wersja stabilna][1]
