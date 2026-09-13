@@ -1,15 +1,15 @@
 # coding: utf-8
 # state.py
 # common Part of all of my add-ons
-# Copyright 2026 Paulber19
+# Copyright 2019-2026 Paulber19
 
 
 import addonHandler
 from logHandler import log
 import os
 import time
-import pickle
-import json
+import yaml
+
 addonHandler.initTranslation()
 
 #: Persistent state information.
@@ -25,9 +25,9 @@ def initialize():
 	global _state, _stateFilename
 	addonPath = addonHandler.getCodeAddon().path
 	try:
-		_stateFilename = os.path.join(addonPath, "updateCheckState.json")
+		_stateFilename = os.path.join(addonPath, "updateCheckState.yaml")
 		with open(_stateFilename, "r") as f:
-			_state = json.load(_state, f, indent=4)
+			_state = yaml.safe_load(f)
 	except Exception:
 		log.debugWarning("update state file don't exist: initialization with default values", exc_info=False)
 		# Defaults.
@@ -40,7 +40,7 @@ def initialize():
 def saveState():
 	try:
 		with open(_stateFilename, "w") as f:
-			json.dump(_state, f, indent=4)
+			yaml.dump(_state, f, indent=4, sort_keys=False)
 	except Exception:
 		log.debugWarning("Error saving state", exc_info=True)
 
@@ -50,14 +50,14 @@ def getLastCheck():
 
 
 def setLastCheck():
-	global _state
+	# global _state
 	_state["lastCheck"] = time.time()
 	_state["remindUpdate"] = False
 	saveState()
 
 
 def setRemindUpdate(on=True):
-	global _state
+	# global _state
 	_state["lastCheck"] = time.time()
 	_state["remindUpdate"] = on
 	saveState()

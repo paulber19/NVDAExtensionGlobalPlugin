@@ -13,7 +13,6 @@ import time
 import wx
 from keyboardHandler import KeyboardInputGesture
 import ui
-import oleacc
 from gui import guiHelper, mainFrame
 import NVDAObjects.window
 import queueHandler
@@ -24,7 +23,7 @@ from .user32 import (
 	SW_SHOWMAXIMIZED, SW_SHOWMINIMIZED, getWindowPlacement, enumWindows,
 	getParent, getExtendedWindowStyle,
 	WS_EX_APPWINDOW, WS_EX_TOOLWINDOW,
-	WS_EX_NOACTIVATE, WS_EX_NOREDIRECTIONBITMAP
+	WS_EX_NOACTIVATE
 )
 import os
 import sys
@@ -49,7 +48,6 @@ def isRealWindow(hWnd):
 	lExStyle = getExtendedWindowStyle(hWnd)
 	if (
 		lExStyle & WS_EX_NOACTIVATE
-		#or lExStyle == WS_EX_NOREDIRECTIONBITMAP
 	):
 		return False
 	isToolWindow = (lExStyle & WS_EX_TOOLWINDOW) == 0
@@ -70,8 +68,7 @@ def getactiveWindows():
 			return True
 		title = winUser.getWindowText(hWnd)
 		windowClassName = winUser.getClassName(hwnd)
-		log.debug("title: %s, windowClass: %s" %(title, windowClassName))
-		#placement = getWindowPlacement(hwnd)
+		log.debug("title: %s, windowClass: %s" % (title, windowClassName))
 		if title in _windowsToIgnore.split("|") or windowClassName in _windowClassToIgnore:
 			return True
 		windows.append((title, hWnd))
@@ -88,7 +85,8 @@ def getactiveWindows():
 		callback(hwnd, windowsList)
 	return windowsList
 
-WM_CLOSE                        = 0x0010
+
+WM_CLOSE = 0x0010
 
 
 def closeAllWindows(windowsList):
@@ -103,7 +101,7 @@ def closeAllWindows(windowsList):
 			# we cannot destroy nvda windows
 			continue
 		# we destroy it
-		winUser.PostMessage(hwnd,WM_CLOSE, 0, 0) 
+		winUser.PostMessage(hwnd, WM_CLOSE, 0, 0)
 		# some windows require you to wait for them to close
 		# wait for 5 seconds maximum
 		i = 10
@@ -117,13 +115,13 @@ def closeAllWindows(windowsList):
 			killProcess(obj.processID)
 
 
-# original code from killprocess add-on (#Copyright (C) 2023 Ángel Alcantar)
+# original code from killprocess add-on (#Copyright (C) 2023 Angel Alcantar)
 def killProcess(processID) -> int:
-		PROCESS_TERMINATE = 1  
-		handle = winKernel.kernel32.OpenProcess(PROCESS_TERMINATE, 0, processID)  
-		res = winKernel.kernel32.TerminateProcess(handle, 0)  
-		winKernel.kernel32.CloseHandle(handle)  
-		return res  
+	PROCESS_TERMINATE = 1
+	handle = winKernel.kernel32.OpenProcess(PROCESS_TERMINATE, 0, processID)
+	res = winKernel.kernel32.TerminateProcess(handle, 0)
+	winKernel.kernel32.CloseHandle(handle)
+	return res
 
 
 class ActiveWindowsListDisplay(
@@ -341,8 +339,7 @@ class ActiveWindowsListDisplay(
 			return
 		# we destroy it
 			# we cannot use killprocess for a windows explorer window
-		#killProcess(obj.processID)
-		winUser.PostMessage(hwnd,WM_CLOSE, 0, 0) 
+		winUser.PostMessage(hwnd, WM_CLOSE, 0, 0)
 		# some windows require you to wait for them to close
 		# wait for 5 seconds maximum
 		i = 10

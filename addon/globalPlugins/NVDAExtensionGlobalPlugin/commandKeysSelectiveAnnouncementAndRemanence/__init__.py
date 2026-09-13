@@ -25,7 +25,7 @@ from vkCodes import byName
 import core
 from inputCore import NoInputGestureAction
 import inputCore
-from ..utils.nvdaInfos import NVDAVersion
+import systemUtils
 from ..utils import speakLater, makeAddonWindowTitle, getHelpObj
 from ..settings import (
 	_addonConfigManager, toggleOnlyNVDAKeyInRemanenceAdvancedOption, toggleBeepAtRemanenceStartAdvancedOption,
@@ -180,7 +180,7 @@ class MyInputManager (object):
 	remanenceActivation = False
 	lastModifiers = []
 	lastGesture = None
-	lastModifierForRepeat = []
+	lastModifiersForRepeat = []
 	lastGestureTime = None
 	enableNumpadNnavigationKeys = False
 
@@ -463,28 +463,20 @@ class MyInputManager (object):
 		immediate = getattr(gesture, "_immediate", True)
 		speechEffect = gesture.speechEffectWhenExecuted
 		if speechEffect == gesture.SPEECHEFFECT_CANCEL:
-			if NVDAVersion >= [2024, 2]:
-				# Import late to avoid circular import.
-				import braille
-				if braille.handler:
+			# Import late to avoid circular import.
+			import braille
+			if braille.handler:
 
-					@braille.handler.suppressClearBrailleRegions(script)
-					def suppressCancelSpeech():
-						speech.cancelSpeech()
-					queueHandler.queueFunction(
-						queueHandler.eventQueue,
-						suppressCancelSpeech,
-						_immediate=immediate,
-					)
-				else:
-					queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech, _immediate=immediate)
-			else:
-				# for nvda versions < 2024.2
+				@braille.handler.suppressClearBrailleRegions(script)
+				def suppressCancelSpeech():
+					speech.cancelSpeech()
 				queueHandler.queueFunction(
 					queueHandler.eventQueue,
-					speech.cancelSpeech,
+					suppressCancelSpeech,
 					_immediate=immediate,
 				)
+			else:
+				queueHandler.queueFunction(queueHandler.eventQueue, speech.cancelSpeech, _immediate=immediate)
 
 		elif speechEffect in (gesture.SPEECHEFFECT_PAUSE, gesture.SPEECHEFFECT_RESUME):
 			queueHandler.queueFunction(
@@ -492,8 +484,8 @@ class MyInputManager (object):
 				speech.pauseSpeech,
 				speechEffect == gesture.SPEECHEFFECT_PAUSE)
 		if gesture.shouldPreventSystemIdle:
-			winKernel.SetThreadExecutionState(
-				winKernel.ES_SYSTEM_REQUIRED | winKernel.ES_DISPLAY_REQUIRED)
+			systemUtils.preventSystemIdle()
+
 		if log.isEnabledFor(log.IO) and not gesture.isModifier:
 			_NVDA_InputManager._lastInputTime = time.time()
 			log.io("Input: %s" % gesture.identifiers[0])
@@ -509,6 +501,7 @@ class MyInputManager (object):
 				gesture.normalizedModifiers = []
 				return
 			raise NoInputGestureAction
+
 		self.speakGesture(gesture)
 		if not script:
 			gesture.reportExtra()

@@ -21,6 +21,18 @@ Solo las versiones de tipo mayor.menor (por ejemplo v3.1) son listados en este h
 
 Las versiones de tipo mayor.menor.x (por ejemplo v3.1.2) son actualizaciones de traducción.
 
++ v15.1 (22/07/2026) +
+Corrección de fallos:
+- ahora se puede buscar actualizaciones de complementos incluso si se produce un error de certificado SSL.
+- escribir un carácter en una celda de Excel ahora se indica correctamente en la pantalla braille.
+- se corrigió el error que ocurría con el software Murmure al pegar la transcripción al portapapeles.
+
+
+Desarrolladores:
+- puesta en conformidad con el modelo del complemento NVAcess (addonTemplate)
+- eliminación del uso del buildVars.py en el módulo install.py
+- uso de yaml en lugar de pickle para gestionar el estado de verificación de actualización.
+
 
 + v15.0 (26/02/2026) +
 Compatibilidad con NVDA 2026.1.

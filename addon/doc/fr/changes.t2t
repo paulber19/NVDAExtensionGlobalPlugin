@@ -19,6 +19,20 @@ Seules les versions du type majeure.mineure (par exemple v3.1) sont recensées d
 
 Les versions du type majeure.mineure.x (par exemple v3.1.2) sont des mises à jour de traductions.
 
+
++ v15.1 (22/07/2026) +
+Correction de bogues:
+- la recherche de mise à jour de l'extension peut se faire maintenant même si une erreur de certificat SSL se produit.
+- la frappe d'un caractère dans une cellule Excell est maintenant correctement signalée sur l'afficheur braille.
+- correction de l'erreur se produisant avec le logiciel Murmure lors du collage de la transcription dans le presse-papier.
+
+
+Développement :
+- mise en conformité avec le modèle d'extension de NVAcess (addonTemplate)
+- suppression de l'utilisation de buildVars.py dans le module install.py
+- utilisation de yaml à la place de pickle pour gérer l'état de recherche de mise à jour.
+
+
 + v15.0 (10/02/2026) +
 Compatibilité avec NVDA 2026.1.
 

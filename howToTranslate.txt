@@ -4,16 +4,15 @@ You can use the "nvda.pot"  catalog file which is located in the  "locale/en" fo
 Place the  "nvda.po" and" nvda.mo" files in the  "locale/xx/LC_MESSAGES" folder (to  create). 
 
 3Creation of locale manifest.ini
-From main manifest.ini, translate "summary" and "description" variables and put these variables in an manifest.ini file (utf-8 coding).
-place this file in "locale/xx" folder.
+The localization manifest.ini files are automatically generated when the addon is created.  (makeAddon.bat command)
 
 4 - Translation of the documentation of the module: 
-This documentation is if french language.
+This original documentation is if french language.
 - translate the  "addon_informations.t2tconf", "addon_keys.t2tconf", "addonUserManual.t2t",  "change.t2t" files. These files are located in "doc\fr" folder.
 - Place the translated files into the  "doc/xx" folder,
-Translate the "readme.md" file located in "doc\en" folder and place it into "doc/xx" folder,
-- convert to html these files by using the add-on developpement tools dialog  of the module("NVDA+j" followed by "t").
+- you can convert to html these files by using the add-on developpement tools dialog  of the module("NVDA+j" followed by "t"). These files are automatically converted to HTML when the addon is created.
 
+The readme.md file located in the "doc\en" folder should not be translated.
 
 5- Adapte the "keyboard.ini" to your keyboard and "symbolCategories.dic" files of "locale/en" folder (encoding in utf-8).
 Place thise files  in the  "locale/xx" folder.

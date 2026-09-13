@@ -94,7 +94,6 @@ def updateProfileConfiguration():
 	from ..settings import getInstallFeatureOption
 	if getInstallFeatureOption(FCT_TextAnalysis) == C_DoNotInstall:
 		return
-	global _profiles
 	# call when profile is triggered.
 	# activate text analyzer  for this profile ,
 	# at first trigger and , if "start text analyzer at NVDA start" option is checked.

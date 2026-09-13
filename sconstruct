@@ -1,319 +1,166 @@
-# NVDA add-on template  SCONSTRUCT file
-#Copyright (C) 2018Paulber19 <paulber19@laposte.net>
-#This file is covered by the GNU General Public License.
-#See the file COPYING.txt for more details.
+# NVDA add-on template SCONSTRUCT file
+# Copyright (C) 2012-2025 Rui Batista, Noelia Martinez, Joseph Lee
+# This file is covered by the GNU General Public License.
+# See the file COPYING.txt for more details.
 
-import codecs
-import gettext
 import os
 import os.path
-import zipfile
 import sys
-import buildVars
-import txt2tagsEx as txt2tags
-import markdown
+from pathlib import Path
+from collections.abc import Iterable
+from typing import Final
+
+# While names imported below are available by default in every SConscript
+# Linters aren't aware about them.
+# To avoid PyRight `reportUndefinedVariable` errors about them they are imported explicitly.
+# When using other  Scons functions please add them to the line below.
+from SCons.Script import EnsurePythonVersion, Variables, BoolVariable, Environment, Copy
+
+# Imports for type hints
+from SCons.Node import FS
+
+# Add-on localization exchange facility and the template requires Python 3.10.
+# For best practice, use Python 3.11 or later to align with NVDA development.
+EnsurePythonVersion(3, 10)
+
+# Bytecode should not be written for build vars module to keep the repository root folder clean.
+sys.dont_write_bytecode = True
+
+import buildVars  # NOQA: E402
 
 
-HTML_HEADERS = """
-<!DOCTYPE html>
-<html lang="{lang}" dir="{dir}">
-<head>
-<meta charset="utf-8">
-<title>{title}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-{styles}
-</head>
-""".strip()
-
-RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
+def validateVersionNumber(key: str, val: str, _):
+	# Used to make sure version major.minor.patch are integers to comply with NV Access add-on store.
+	# Ignore all this if version number is not specified.
+	if val == "0.0.0":
+		return
+	versionNumber = val.split(".")
+	if len(versionNumber) < 3:
+		raise ValueError(f"{key} must have three parts (major.minor.patch)")
+	if not all([part.isnumeric() for part in versionNumber]):
+		raise ValueError(f"{key} (major.minor.patch) must be integers")
 
 
-
-def getTranslatedAddonSummary(buildVars, localeLang):
-	try:
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]).gettext
-		summary = _(buildVars.addon_info["addon_summary"])
-	except:
-		summary = buildVars.addon_info["addon_summary"]
-	return summary
-
-def getStylesCss(baseDir, stylesCss):
-	stylesCssFile = os.path.join(baseDir, stylesCss)
-	if not os.path.exists(stylesCssFile):
-		dirList = baseDir.split("\\")
-		d = "\\".join(dirList[:-1])
-		cssFile = os.path.join(d, stylesCss)
-		stylesCssFile = os.path.join(baseDir, ".." , stylesCss)
-	return stylesCssFile
+def expandGlobs(patterns: Iterable[str], rootdir: Path = Path(".")) -> list[FS.Entry]:
+	return [env.Entry(e) for pattern in patterns for e in rootdir.glob(pattern.lstrip('/'))]
 
 
-def getStyles(baseDir, stylesCss):
-	stylesCss = getStylesCss(baseDir, stylesCss)
-	styles = ""
-	if os.path.exists(stylesCss):
-		with codecs.open(stylesCss, "r", "utf-8") as f:
-			styles = """<style media="screen">"""
-			styles = styles + "\n" +f.read()
-			styles = styles + "\n" + "</style>"
-	return styles
+addonDir: Final = Path("addon/")
+localeDir: Final = addonDir / "locale"
+docsDir: Final = addonDir / "doc"
 
 
+vars = Variables()
+vars.Add("version", "The version of this build", buildVars.addon_info["addon_version"])
+vars.Add("versionNumber", "Version number of the form major.minor.patch", "0.0.0", validateVersionNumber)
+vars.Add(BoolVariable("dev", "Whether this is a daily development version", False))
+vars.Add("channel", "Update channel for this build", buildVars.addon_info["addon_updateChannel"])
 
-def writeHTMLFile(dest, htmlText, lang, title, cssFileName):
-	cssFile =cssFileName if cssFileName is not None else "style.css"
-#	cssFile = os.path.join(os.path.dirname(dest), cssFile)
-	#lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
-	styles = getStyles(os.path.dirname(dest), cssFile)
-	header =  HTML_HEADERS.format(
-		lang=lang,
-		dir="rtl" if lang in RTL_LANG_CODES else "ltr",
-		title=title,
-		styles=styles,
-	)
+env = Environment(variables=vars, ENV=os.environ, tools=["gettexttool", "NVDATool"])
+env.Append(
+	addon_info=buildVars.addon_info,
+	brailleTables=buildVars.brailleTables,
+	symbolDictionaries=buildVars.symbolDictionaries,
+	speechDictionaries=buildVars.speechDictionaries,
+)
 
-	with codecs.open(dest, "w", "utf-8") as f:
-		f.write(header)
-		f.write("\n" + htmlText)
-		f.write("\n</html>\n")
+if env["dev"]:
+	from datetime import date
 
-def getHTMLBody(dest):
-	src = codecs.open( dest, "r","utf_8",errors="replace")
-	startTag=  "</head>"
-	endTag= "<!-- html code generated"
-	appendLine = False
-	text =[]
-	for sLine in src:
-		line = sLine.lower()
-		startTagFound = line.find(startTag)
-		endTagFound = line.find(endTag)
-		if startTagFound >= 0:
-			appendLine = True
-			sLine = sLine[startTagFound+len(startTag):]
-			text.append(sLine)
-			continue
-		elif endTagFound >=0:
-			sLine = sLine[: endTagFound]
-			text.append(sLine)
-			break
-		if appendLine:
-			text.append(sLine)
-	text.append("</body>")
-	return "".join(text)
+	versionTimestamp = date.today().strftime('%Y%m%d')
+	version = f"{versionTimestamp}.0.0"
+	env["addon_info"]["addon_version"] = version
+	env["versionNumber"] = version
+	env["channel"] = "dev"
+elif env["version"] is not None:
+	env["addon_info"]["addon_version"] = env["version"]
+if "channel" in env and env["channel"] is not None:
+	env["addon_info"]["addon_updateChannel"] = env["channel"]
 
-def t2t2html(source, dest):
-	txt2tags.exec_command_line([source,])
-	htmlText = getHTMLBody(dest)
-	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
-	localeLang = os.path.basename(os.path.dirname(source))
-	summary = getTranslatedAddonSummary(buildVars, localeLang)
-	title=u"{0} {1}".format(summary, buildVars.addon_info["addon_version"])
-	writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style_t2t.css")
-
-markdown_extensions = [
-	"abbr",
-	"admonition",
-	"attr_list",
-	"def_list",
-	# "extra",
-	"fenced_code",
-	"footnotes",
-	"legacy_attrs",
-	"legacy_em",
-	"md_in_html",
-	"meta",
-	"nl2br",
-	"sane_lists",
-	"smarty",
-	"tables",
-	"toc",
-	"wikilinks",
-]
+# This is necessary for further use in formatting file names.
+env.Append(**env["addon_info"])
 
 
-
-
-
-def md2html(source, dest):
-	lang = os.path.basename(os.path.dirname(source)).replace('_', '-')
-	localeLang = os.path.basename(os.path.dirname(source))
-	summary = getTranslatedAddonSummary(buildVars, localeLang)
-	title=u"{0} {1}".format(summary, buildVars.addon_info["addon_version"])
-	headerDic = {
-		"[[!meta title=\"": "# ",
-		"\"]]": " #",
-	}
-	extensions = []
-	for ext in markdown_extensions:
-		extensions.append("markdown.extensions.%s" % ext)
-	
-	with codecs.open(source, "r", "utf-8") as f:
-		mdText = f.read()
-		for k, v in headerDic.items():
-			mdText = mdText.replace(k, v, 1)
-		htmlText = "<body>\n" +markdown.markdown(mdText, extensions=extensions) +"\n</body>"
-		writeHTMLFile(dest, htmlText, lang, title, cssFileName = "style.css")
-
-def generateT2tHelpFiles (source, target, env, for_signature):
-	action = env.Action(lambda target, source, env : t2t2html(source[0].abspath, target[0].abspath) and None,
-	lambda target, source, env : "Generating %s" % target[0])
-	return action
-
-
-def generateMDHelpFiles (source, target, env, for_signature):
-	action = env.Action(lambda target, source, env : md2html(source[0].abspath, target[0].abspath) and None,
-	lambda target, source, env : "Generating %s" % target[0])
-	return action
-
-env = Environment(ENV=os.environ, tools=['gettexttool'])
-env.Append(**buildVars.addon_info)
 addonFile = env.File("${addon_name}-${addon_version}.nvda-addon")
+addon = env.NVDAAddon(addonFile, env.Dir(addonDir), excludePatterns=buildVars.excludedFiles)
 
-def addonGenerator(target, source, env, for_signature):
-	action = env.Action(lambda target, source, env : createAddonBundleFromPath(source[0].abspath, target[0].abspath) and None,
-	lambda target, source, env : "Generating Addon %s" % target[0])
-	return action
+langDirs: list[FS.Dir] = [env.Dir(d) for d in env.Glob(localeDir/"*/") if d.isdir()]
 
-def manifestGenerator(target, source, env, for_signature):
-	action = env.Action(lambda target, source, env : generateManifest(source[0].abspath, target[0].abspath) and None,
-	lambda target, source, env : "Generating manifest %s" % target[0])
-	return action
-
-
-def translatedManifestGenerator(target, source, env, for_signature):
-	dir = os.path.abspath(os.path.join(os.path.dirname(str(source[0])), ".."))
-	lang = os.path.basename(dir)
-	action = env.Action(lambda target, source, env : generateTranslatedManifest(source[1].abspath, lang, target[0].abspath) and None,
-	lambda target, source, env : "Generating translated manifest %s" % target[0])
-	return action
-
-env['BUILDERS']['NVDAAddon'] = Builder(generator=addonGenerator)
-env['BUILDERS']['markdown']=Builder(generator = generateMDHelpFiles,
-	suffix='.html',
-	src_suffix='.md')
-
-env['BUILDERS']['txt2tags']=Builder(generator = generateT2tHelpFiles,
-	suffix='.html',
-	src_suffix='.t2t')
-
-env['BUILDERS']['NVDAManifest'] = Builder(generator=manifestGenerator)
-env['BUILDERS']['NVDATranslatedManifest'] = Builder(generator=translatedManifestGenerator)
-
-def createAddonHelp(dir):
-	docsDir = os.path.join(dir, "doc")
-	
-	
-	# copy (to update) readme.md file (if exists) from addon/doc/en folder to repository root
-	readmePath = os.path.join(docsDir, "en", "readme.md")
-	if os.path.isfile(readmePath):
-		#readmeTarget = env.Command(readmePath, "readme.md", Copy("$TARGET", "$SOURCE"))
-		readmeTarget = env.Command( "readme.md",readmePath,  Copy("$TARGET", "$SOURCE"))
-		env.Depends(addon, readmeTarget)
-		env.NoClean(readmeTarget)
-		cssPath = os.path.join(docsDir, "style.css")
-		if os.path.isfile(cssPath):
-			cssTarget = env.Command( "style.css",cssPath,  Copy("$TARGET", "$SOURCE"))
-			env.Depends(addon, cssTarget)
-			env.NoClean(cssTarget)
-	else:
-		# copy readme.md file (if exists) from repository root to addon/doc/en folder
-		if os.path.isfile("readme.md"):
-			readmeTarget = env.Command(readmePath, "readme.md", Copy("$TARGET", "$SOURCE"))
-			env.Depends(addon, readmeTarget)
-		# copy css file  (if exists) from repository root to addon/doc folder
-		if os.path.isfile("style.css"):
-			cssPath = os.path.join(docsDir, "style.css")
-			cssTarget = env.Command(cssPath, "style.css", Copy("$TARGET", "$SOURCE"))
-			env.Depends(addon, cssTarget)
-
-
-def createAddonBundleFromPath(path, dest):
-	""" Creates a bundle from a directory that contains an addon manifest file."""
-	basedir = os.path.abspath(path)
-	with zipfile.ZipFile(dest, 'w', zipfile.ZIP_DEFLATED) as z:
-		# FIXME: the include/exclude feature may or may not be useful. Also python files can be pre-compiled.
-		for dir, dirnames, filenames in os.walk(basedir):
-			relativePath = os.path.relpath(dir, basedir)
-			for filename in filenames:
-				pathInBundle = os.path.join(relativePath, filename)
-				absPath = os.path.join(dir, filename)
-				if pathInBundle not in buildVars.excludedFiles: z.write(absPath, pathInBundle)
-	return dest
-
-def generateManifest(source, dest):
-	with codecs.open(source, "r", "utf-8") as f:
-		manifest_template = f.read()
-	manifest = manifest_template.format(**buildVars.addon_info)
-	with codecs.open(dest, "w", "utf-8") as f:
-		f.write(manifest)
-
-def generateTranslatedManifest(source, language, out):
-	# No ugettext in Python 3.
-	if sys.version_info.major == 2:
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).ugettext
-	else:
-		_ = gettext.translation("nvda", localedir=os.path.join("addon", "locale"), languages=[language]).gettext
-	vars = {}
-	for var in ("addon_summary", "addon_description"):
-		vars[var] = _(buildVars.addon_info[var])
-	with codecs.open(source, "r", "utf-8") as f:
-		manifest_template = f.read()
-	result = manifest_template.format(**vars)
-	with codecs.open(out, "w", "utf-8") as f:
-		f.write(result)
-
-def expandGlobs(files):
-	return [f for pattern in files for f in env.Glob(pattern)]
-
-addon = env.NVDAAddon(addonFile, env.Dir('addon'))
+# Allow all NVDA's gettext po files to be compiled in source/locale, and manifest files to be generated
+moByLang: dict[str, FS.File] = {}
+for dir in langDirs:
+	poFile = dir.File(os.path.join("LC_MESSAGES", "nvda.po"))
+	if os.path.exists(str(poFile)):
+		moTarget = env.gettextMoFile(poFile)
+		moFile = env.File(moTarget[0])
+		moByLang[dir.name] = moFile
+		env.Depends(moTarget, poFile)
+		translatedManifest = env.NVDATranslatedManifest(
+			dir.File("manifest.ini"), [moFile, "manifest-translated.ini.tpl"]
+		)
+		env.Depends(translatedManifest, ["buildVars.py"])
+		env.Depends(addon, [translatedManifest, moTarget])
 
 pythonFiles = expandGlobs(buildVars.pythonSources)
 for file in pythonFiles:
 	env.Depends(addon, file)
 
+# update the repository's "readme.md" and "style.css" files to conform to the add-on version.
+source = docsDir / "style.css"
+target = Path("style.css")
+if source.is_file():
+	cssTarget = env.Command(str(target), str(source), Copy("$TARGET", "$SOURCE"))
+	env.Depends(addon, cssTarget)
+	env.NoClean(cssTarget)
+source = docsDir / buildVars.baseLanguage / "readme.md"
+target = Path("readme.md")
+if source.is_file():
+	readmeTarget = env.Command(str(target), str(source), Copy("$TARGET", "$SOURCE"))
+	env.Depends(addon, readmeTarget)
+	env.NoClean(readmeTarget)
+# Convert txt2tags and markdown files to html
+for mdFile in env.Glob(docsDir/"*/*.md"):
+	# the title of the html file is translated based on the contents of something in the moFile for a language.
+	# Thus, we find the moFile for this language and depend on it if it exists.
+	lang = mdFile.dir.name
+	moFile = moByLang.get(lang)
+	htmlFile = env.md2html(mdFile, moFile=moFile, mdExtensions=buildVars.markdownExtensions)
+	env.Depends(htmlFile, mdFile)
+	if moFile:
+		env.Depends(htmlFile, moFile)
+	env.Depends(addon, htmlFile)
+
+for t2tFile in env.Glob(docsDir/"*/*.t2t"):
+	# the title of the html file is translated based on the contents of something in the moFile for a language.
+	# Thus, we find the moFile for this language and depend on it if it exists.
+	lang = t2tFile.dir.name
+	moFile = moByLang.get(lang)
+	htmlFile = env.t2t2html(t2tFile, moFile=moFile)
+	env.Depends(htmlFile, t2tFile)
+	if moFile:
+		env.Depends(htmlFile, moFile)
+	env.Depends(addon, htmlFile)
+
 # Pot target
 i18nFiles = expandGlobs(buildVars.i18nSources)
-gettextvars={
-		'gettext_package_bugs_address' : 'nvda-translations@freelists.org',
-		'gettext_package_name' : buildVars.addon_info['addon_name'],
-		'gettext_package_version' : buildVars.addon_info['addon_version']
-	}
+gettextvars: dict[str, str] = {
+	"gettext_package_bugs_address": "nvda-translations@groups.io",
+	"gettext_package_name": buildVars.addon_info["addon_name"],
+	"gettext_package_version": buildVars.addon_info["addon_version"],
+}
 
-pot = env.gettextPotFile("${addon_name}-${addon_version}.pot", i18nFiles, **gettextvars)
-env.Alias('pot', pot)
+pot = env.gettextPotFile("${addon_name}.pot", i18nFiles, **gettextvars)
+env.Alias("pot", pot)
 env.Depends(pot, i18nFiles)
 mergePot = env.gettextMergePotFile("${addon_name}-merge.pot", i18nFiles, **gettextvars)
-env.Alias('mergePot', mergePot)
+env.Alias("mergePot", mergePot)
 env.Depends(mergePot, i18nFiles)
 
 # Generate Manifest path
-manifest = env.NVDAManifest(os.path.join("addon", "manifest.ini"), os.path.join("manifest.ini.tpl"))
+manifest = env.NVDAManifest(env.File(addonDir/"manifest.ini"), "manifest.ini.tpl")
 # Ensure manifest is rebuilt if buildVars is updated.
 env.Depends(manifest, "buildVars.py")
 
 env.Depends(addon, manifest)
-createAddonHelp("addon") # We need at least doc in English and should enable the Help button for the add-on in Add-ons Manager
-langDirs = [f for f in env.Glob(os.path.join("addon", "locale", "*"))]
-
-#Allow all NVDA's gettext po files to be compiled in source/locale, and manifest files to be generated
-for dir in langDirs:
-	poFile = dir.File(os.path.join("LC_MESSAGES", "nvda.po"))
-	if os.path.exists(str(poFile)):
-		moFile=env.gettextMoFile(poFile)
-		env.Depends(moFile, poFile)
-		translatedManifest = env.NVDATranslatedManifest(dir.File("manifest.ini"), [moFile, os.path.join("manifest-translated.ini.tpl")])
-		env.Depends(translatedManifest, ["buildVars.py"])
-		env.Depends(addon, [translatedManifest, moFile])
-	#Convert markdown files to html
-	for mdFile in env.Glob(os.path.join('addon', 'doc', '*', '*.md')):
-		mdhtmlFile = env.markdown(mdFile)
-		if os.path.exists(str(poFile)):
-			env.Depends(mdhtmlFile, [mdFile, moFile])
-		env.Depends(addon, mdhtmlFile)
-	#Convert txt2tags files to html
-	for t2tFile in env.Glob(os.path.join('addon', 'doc', '*', '*.t2t')):
-		t2thtmlFile = env.txt2tags(t2tFile)
-		if os.path.exists(str(poFile)):
-			env.Depends(t2thtmlFile, [t2tFile, moFile])
-		env.Depends(addon,t2thtmlFile)
-
-		env.Default(addon)
+env.Default(addon)
+#env.Clean(addon, [".sconsign.dblite", "addon/doc/" + buildVars.baseLanguage + "/"])

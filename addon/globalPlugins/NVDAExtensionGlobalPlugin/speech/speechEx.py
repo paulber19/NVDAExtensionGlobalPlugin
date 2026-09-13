@@ -474,7 +474,7 @@ if NVDAVersion < [2026, 1]:
 		from ..settings.nvdaConfig import _NVDAConfigManager
 		sayBlank = _NVDAConfigManager.toggleSayBlankOption(False)
 		if not suppressBlanks and reason != OutputReason.SAYALL and shouldConsiderTextInfoBlank and sayBlank:
-		# end modification
+			# end modification
 			# Translators: This is spoken when the line is considered blank.
 			speechSequence.append(NVDAString("blank"))
 
@@ -494,6 +494,7 @@ if NVDAVersion < [2026, 1]:
 else:
 	# for NVDA versions >= 2026.1
 	from speech import languageHandling
+
 	def _myGetTextInfoSpeech(  # noqa: C901
 		info: textInfos.TextInfo,
 		useCache: Union[bool, SpeakTextInfoState] = True,
@@ -519,7 +520,8 @@ else:
 		reportIndentation = (
 			unit == textInfos.UNIT_LINE and formatConfig["reportLineIndentation"] != ReportLineIndentation.OFF
 		)
-		# For performance reasons, when navigating by paragraph or table cell, spelling errors will not be announced.
+		# For performance reasons, when navigating by paragraph or table cell,
+		# spelling errors will not be announced.
 		if unit in (textInfos.UNIT_PARAGRAPH, textInfos.UNIT_CELL) and reason == OutputReason.CARET:
 			formatConfig["reportSpellingErrors2"] = 0
 		# my modification
@@ -560,7 +562,7 @@ else:
 			else:
 				break
 		if len(initialFields) > 0:
-			del textWithFields[0 : len(initialFields)]
+			del textWithFields[0:len(initialFields)]
 		endFieldCount = 0
 		for field in reversed(textWithFields):
 			if isinstance(field, textInfos.FieldCommand) and field.command == "controlEnd":
@@ -568,7 +570,7 @@ else:
 			else:
 				break
 		if endFieldCount > 0:
-			del textWithFields[0 - endFieldCount :]
+			del textWithFields[0 - endFieldCount:]
 		for field in initialFields:
 			if isinstance(field, textInfos.ControlField):
 				newControlFieldStack.append(field)
@@ -579,7 +581,8 @@ else:
 		# Calculate how many fields in the old and new controlFieldStacks are the same
 		commonFieldCount = 0
 		for count in range(min(len(newControlFieldStack), len(controlFieldStackCache))):
-			# #2199: When comparing controlFields try using uniqueID if it exists before resorting to compairing the entire dictionary
+			# #2199: When comparing controlFields try using uniqueID
+			# if it exists before resorting to compairing the entire dictionary
 			oldUniqueID = controlFieldStackCache[count].get("uniqueID")
 			newUniqueID = newControlFieldStack[count].get("uniqueID")
 			if ((oldUniqueID is not None or newUniqueID is not None) and newUniqueID == oldUniqueID) or (
@@ -591,7 +594,8 @@ else:
 
 		speechSequence: SpeechSequence = []
 		# #2591: Only if the reason is not focus, Speak the exit of any controlFields not in the new stack.
-		# We don't do this for focus because hearing "out of list", etc. isn't useful when tabbing or using quick navigation and makes navigation less efficient.
+		# We don't do this for focus because hearing "out of list",
+		# etc. isn't useful when tabbing or using quick navigation and makes navigation less efficient.
 		if reason not in [OutputReason.FOCUS, OutputReason.QUICKNAV]:
 			endingBlock = False
 			for count in reversed(range(commonFieldCount, len(controlFieldStackCache))):
@@ -636,7 +640,8 @@ else:
 					shouldConsiderTextInfoBlank = False
 					_extendSpeechSequence_addMathForTextInfo(speechSequence, info, field)
 
-		# When true, we are inside a clickable field, and should therefore not announce any more new clickable fields
+		# When true, we are inside a clickable field,
+# and should therefore not announce any more new clickable fields
 		inClickable = False
 		# Get speech text for any fields in the new controlFieldStack that are not in the old controlFieldStack
 		for count in range(commonFieldCount, len(newControlFieldStack)):
@@ -644,7 +649,8 @@ else:
 			if not inClickable and formatConfig["reportClickable"]:
 				states = field.get("states")
 				if states and controlTypes.State.CLICKABLE in states:
-					# We entered the most outer clickable, so announce it, if we won't be announcing anything else interesting for this field
+					# We entered the most outer clickable,
+					# so announce it, if we won't be announcing anything else interesting for this field
 					presCat = field.getPresentationCategory(newControlFieldStack[0:count], formatConfig, reason)
 					if not presCat or presCat is field.PRESCAT_LAYOUT:
 						speechSequence.append(controlTypes.State.CLICKABLE.displayString)
@@ -666,7 +672,8 @@ else:
 				_extendSpeechSequence_addMathForTextInfo(speechSequence, info, field)
 			commonFieldCount += 1
 
-		# Fetch the text for format field attributes that have changed between what was previously cached, and this textInfo's initialFormatField.
+		# Fetch the text for format field attributes that have changed between what was previously cached,
+# and this textInfo's initialFormatField.
 		fieldSequence = info.getFormatFieldSpeech(
 			newFormatField,
 			formatFieldAttributesCache,
@@ -679,13 +686,10 @@ else:
 		if fieldSequence:
 			# my modification
 			if warnSpellingError:
-				#if NVDAString("spelling error") in fieldSequence:
-					#del fieldSequence[fieldSequence.index(NVDAString("spelling error"))]
-					#nextWordIsSpellingError = True
 				seq = fieldSequence[:]
 				for item in seq:
 					if (
-						type(item) == WaveFileCommand and "extError.wav" in item.fileName
+						type(item) is WaveFileCommand and "extError.wav" in item.fileName
 						or item == NVDAString("spelling error")
 					):
 						del fieldSequence[fieldSequence.index(item)]
@@ -727,9 +731,12 @@ else:
 				)
 			return False
 
-		# Similar to before, but If the most inner clickable is exited, then we allow announcing clickable for the next lot of clickable fields entered.
+		# Similar to before,
+# but If the most inner clickable is exited,
+# then we allow announcing clickable for the next lot of clickable fields entered.
 		inClickable = False
-		# Move through the field commands, getting speech text for all controlStarts, controlEnds and formatChange commands
+		# Move through the field commands,
+		# getting speech text for all controlStarts, controlEnds and formatChange commands
 		# But also keep newControlFieldStack up to date as we will need it for the ends
 		# Add any text to a separate list, as it must be handled differently.
 		# Also make sure that LangChangeCommand objects are added before any controlField or formatField speech
@@ -756,7 +763,7 @@ else:
 						from config.configFlags import ReportSpellingErrors
 						from .sayError import getReadingErrorSpeechSequence
 						if nextWordIsSpellingError:
-							reportSpellingErrorsBySpeech = formatConfig["reportSpellingErrors2"] & ReportSpellingErrors.SPEECH.value
+							reportSpellingErrorsBySpeech = formatConfig["reportSpellingErrors2"] & ReportSpellingErrors.SPEECH.value  # noqa:E501
 							reportSpellingErrorsBySound = formatConfig["reportSpellingErrors2"] & ReportSpellingErrors.SOUND.value
 							seq = getReadingErrorSpeechSequence(command, reportSpellingErrorsBySpeech, reportSpellingErrorsBySound)
 							relativeSpeechSequence.extend(seq)
@@ -826,7 +833,7 @@ else:
 						seq = fieldSequence[:]
 						for item in seq:
 							if (
-								type(item) == WaveFileCommand and "extError.wav" in item.fileName
+								type(item) is WaveFileCommand and "extError.wav" in item.fileName
 								or item == NVDAString("spelling error")
 							):
 								del fieldSequence[fieldSequence.index(item)]
@@ -887,7 +894,8 @@ else:
 			speechSequence.extend(relativeSpeechSequence)
 			shouldConsiderTextInfoBlank = False
 
-		# Finally get speech text for any fields left in new controlFieldStack that are common with the old controlFieldStack (for closing), if extra detail is not requested
+		# Finally get speech text for any fields left in new controlFieldStack
+#  that are common with the old controlFieldStack (for closing), if extra detail is not requested
 		if languageHandling.shouldMakeLangChangeCommand() and lastLanguage is not None:
 			speechSequence.append(
 				LangChangeCommand(None),
@@ -913,7 +921,7 @@ else:
 		from ..settings.nvdaConfig import _NVDAConfigManager
 		sayBlank = _NVDAConfigManager.toggleSayBlankOption(False)
 		if not suppressBlanks and reason != OutputReason.SAYALL and shouldConsiderTextInfoBlank and sayBlank:
-		# end modification
+			# end modification
 			# Translators: This is spoken when the line is considered blank.
 			speechSequence.append(NVDAString("blank"))
 

@@ -109,7 +109,6 @@ def initialize():
 	from . import speechHistoryPatches
 	from ..settings import isInstall
 	from ..settings.addonConfig import FCT_SpeechHistory, FCT_TemporaryAudioDevice
-	global _NVDASpeak, _NVDASpeakSpelling
 	global _speechRecorder
 	if _speechRecorder is not None:
 		return

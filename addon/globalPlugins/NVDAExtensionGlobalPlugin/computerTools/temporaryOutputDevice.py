@@ -69,7 +69,7 @@ def setTemporaryAudioOutputDevice(outputDevice):
 		speech.speakObject(obj)
 
 	def confirm(synth, currentTemporaryOutputDevice, temporary):
-		global _temporaryOutputDevice, confirmDialog
+		global _temporaryOutputDevice
 		from ..settings import _addonConfigManager
 		timeToLive = _addonConfigManager.getConfirmAudioDeviceChangeTimeOut()
 		from ..utils import PutWindowOnForeground

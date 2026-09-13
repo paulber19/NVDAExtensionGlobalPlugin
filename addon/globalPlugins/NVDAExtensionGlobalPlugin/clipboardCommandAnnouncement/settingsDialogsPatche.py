@@ -22,7 +22,8 @@ class MyKeyboardSettingsPanel(KeyboardSettingsPanel):
 
 
 try:
-	NVDASettingsDialog.categoryClasses[NVDASettingsDialog.categoryClasses .index(KeyboardSettingsPanel)] = MyKeyboardSettingsPanel
+	NVDASettingsDialog.categoryClasses[NVDASettingsDialog.categoryClasses .index(
+		KeyboardSettingsPanel)] = MyKeyboardSettingsPanel
 except ValueError:
 	# when the modules are reloaded, MyKeyboardSettingsPanel has already replaced KeyboardSettingsPanel.
 	# But we still have to put it back in place.

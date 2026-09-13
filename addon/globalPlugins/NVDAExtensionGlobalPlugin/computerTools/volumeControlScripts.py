@@ -46,7 +46,6 @@ def getFocusedApplication():
 	)
 
 
-
 class ScriptsForVolume(baseObject.ScriptableObject):
 	_volumeControlMainScriptToGestureAndfeatureOption = {
 		"setMainAndNVDAVolume": (("kb:nvda+escape",), FCT_VolumeControl),
@@ -279,7 +278,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		wx.CallAfter(audioSources.setApplicationVolumeToPreviousLevel, application)
 
 	# for NVDA
-	def _changeNVDAVolume(self,*args, **kwargs):
+	def _changeNVDAVolume(self, *args, **kwargs):
 		from ..computerTools.audioCore import getNVDASessionName
 		application = (getNVDASessionName(), globalVars.appPid)
 		self._changeAppVolume(application, *args, **kwargs)
@@ -469,6 +468,7 @@ class ScriptsForVolume(baseObject.ScriptableObject):
 		if audioSources is None:
 			return
 		audioSources.toggleChannels(application=appName)
+
 	def script_displayNVDAAndApplicationsAudioManager(self, gesture):
 		from .audioManagerDialog import NVDAAndAudioApplicationsManagerDialog
 		wx.CallAfter(NVDAAndAudioApplicationsManagerDialog.run)

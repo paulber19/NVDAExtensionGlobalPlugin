@@ -12,7 +12,7 @@ import speech
 import config
 from .commands import BeepWithPauseCommand
 from ..utils.NVDAStrings import NVDAString
-
+from ..settings import addonConfig
 
 addonHandler.initTranslation()
 
@@ -63,6 +63,7 @@ def getErrorVoiceSpeechSequence(error=None):
 		speech.commands.ConfigProfileTriggerCommand(t1, False),
 	]
 
+
 def getErrorMessageSpeechSequence(error=None):
 	seq = []
 	seq.append(NVDAString("spelling error"))
@@ -82,24 +83,27 @@ def getErrorSpeechSequence(error=None, reading=False):
 		return [error]
 	return None
 
-from ..settings import addonConfig
 
-def getReadingErrorSpeechSequence(error=None, reportSpellingErrorsBySpeech=False, reportSpellingErrorsBySound=False):
-	log.debug("error= %s, reportSpellingErrorsBySpeech= %s, reportSpellingErrorsBySound= %s" %(error, reportSpellingErrorsBySpeech, reportSpellingErrorsBySound))
+def getReadingErrorSpeechSequence(
+	error=None,
+	reportSpellingErrorsBySpeech=False,
+	reportSpellingErrorsBySound=False
+):
+	log.debug("error= %s, reportSpellingErrorsBySpeech= %s, reportSpellingErrorsBySound= %s" % (
+		error, reportSpellingErrorsBySpeech, reportSpellingErrorsBySound))
 	from ..settings import _addonConfigManager
-	reading = True
 	seq = []
 	if reportSpellingErrorsBySound and not reportSpellingErrorsBySpeech:
 		if _addonConfigManager.getReadingReportingSpellingErrorsBySoundOption() == addonConfig.RSE_Sound:
 			seq.extend(getErrorSoundSpeechSequence(error))
 		else:
 			seq.extend(getErrorBeepSpeechSequence(error))
-	elif not reportSpellingErrorsBySound  and reportSpellingErrorsBySpeech:
+	elif not reportSpellingErrorsBySound and reportSpellingErrorsBySpeech:
 		if _addonConfigManager.readingReportingSpellingErrorsByMessage():
 			seq.extend(getErrorMessageSpeechSequence(error))
 		else:
 			seq.extend(getErrorVoiceSpeechSequence(error))
-	elif reportSpellingErrorsBySound  and reportSpellingErrorsBySpeech:
+	elif reportSpellingErrorsBySound and reportSpellingErrorsBySpeech:
 		if _addonConfigManager.getReadingReportingSpellingErrorsBySoundOption() == addonConfig.RSE_Sound:
 			seq.extend(getErrorSoundSpeechSequence(error=None))
 		else:
@@ -110,7 +114,6 @@ def getReadingErrorSpeechSequence(error=None, reportSpellingErrorsBySpeech=False
 			seq.extend(getErrorVoiceSpeechSequence(error))
 	else:
 		pass
-	
 	if seq:
 		return seq
 	if error is not None:

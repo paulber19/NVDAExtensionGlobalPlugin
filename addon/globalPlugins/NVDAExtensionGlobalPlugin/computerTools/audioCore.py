@@ -52,7 +52,7 @@ _levelLimitationBeep = (400, 30)
 
 
 def isNVDA(appNameOrProcessId):
-	if type(appNameOrProcessId) == str:
+	if type(appNameOrProcessId) is str:
 		return (
 			appNameOrProcessId.lower() == nvdaProcessName
 			or appNameOrProcessId.startswith("nvda_update")
@@ -80,6 +80,7 @@ def getNVDAAudioOuputDevices():
 		# for NVDA version < 2025.1
 		from nvwave import _getOutputDevices
 		return [device for device in _getOutputDevices()]
+
 
 class AudioProcessManager(object):
 	def __init__(self, device=None):
@@ -112,9 +113,10 @@ class AudioProcessManager(object):
 				pids[pid]["sessions"] = []
 			pids[pid]["sessions"].append(session)
 
-		log.debug("pids: device= %s, %s" %(
+		log.debug("pids: device= %s, % s" % (
 			self.device.name if self.device else "default", pids))
 		return pids
+
 
 class AudioSource(object):
 	def __init__(self, pycawSessions, name=None):
@@ -224,14 +226,11 @@ class AudioSource(object):
 class AudioSources(object):
 	def __init__(self, device=None):
 		self._device = device
-		deviceId = self._device.id if self._device else None
 		self.pids = AudioProcessManager(self._device).getAllAudioProcess()
 
 	def getAudioApplications(self):
 		applications = []
-		deviceId = self._device.id if self._device else None
 		for pid in self.pids:
-			audioSource = AudioSource(self.pids[pid]["sessions"], self.pids[pid]["appName"])
 			applications.append((self.pids[pid]["appName"], pid))
 		log.debug("getAudioApplications: device= %s: id: %s, applications=%s" % (
 			self._device.name if self._device else "",
@@ -248,11 +247,9 @@ class AudioSources(object):
 		appName = audioProcess["appName"]
 		return AudioSource(sessions, appName)
 
-
 	def getNVDAAudioSource(self):
 		appName = getNVDASessionName()
 		return self.getApplicationAudioSource((appName, globalVars.appPid))
-
 
 	def validateVolumeLevel(self, level, appName):
 		log.debug("validateVolumeLevel: %s, level: %s" % (appName, level))
@@ -305,21 +302,18 @@ class AudioSources(object):
 		wx.CallLater(40, ui.message, msg)
 
 	def getPreviousApplicationVolumeLevel(self, appName):
-		global _previousAppVolumeLevels
 		deviceName = self._device.name
 		if deviceName in _previousAppVolumeLevels:
 			return _previousAppVolumeLevels[deviceName].get(appName, None)
 		return None
 
 	def setPreviousApplicationVolumeLevel(self, appName, level):
-		global _previousAppVolumeLevels
 		deviceName = self._device.name
 		if deviceName not in _previousAppVolumeLevels:
 			_previousAppVolumeLevels[deviceName] = {}
 		_previousAppVolumeLevels[deviceName][appName] = level
 
 	def setApplicationVolume(self, application, level=100, report=True, reportValue=None):
-		global _previousAppVolumeLevels
 		appName, pid = application
 		log.debug("setApplicationVolume: %s, level= %s, report: %s, reportValue: %s" % (
 			appName, level, report, reportValue))
@@ -338,7 +332,6 @@ class AudioSources(object):
 		log.warning("%s volume is set to %s" % (appName, level))
 	"""
 	def setApplicationVolume(self, application, level=100, report=True, reportValue=None):
-		global _previousAppVolumeLevels
 		appName, pid = application
 		log.debug("setApplicationVolume: %s, level= %s, report: %s, reportValue: %s" % (
 			appName, level, report, reportValue))
@@ -435,8 +428,8 @@ class AudioSources(object):
 			splitAudioMode = 0
 		from ..settings import toggleNVDAOnBothChannelsAdvancedOption
 		if not splitAudioMode and toggleNVDAOnBothChannelsAdvancedOption(False):
-			(l, r) = audioSource.channelsVolume
-			channelVolume = max(l, r)
+			(left, right) = audioSource.channelsVolume
+			channelVolume = max(left, right)
 			if channelVolume == 0.0:
 				channelVolume = 1.0
 			channels = (channelVolume, channelVolume)
@@ -471,7 +464,8 @@ class AudioSources(object):
 		audioSource = None
 		otherSources = []
 		if application:
-			log.debug("splitChannels: nvdaChannels= %s, appName= %s, pid= %s" % (NVDAChannel, application[0], application[1]))
+			log.debug("splitChannels: nvdaChannels= %s, appName= %s, pid= %s" % (
+				NVDAChannel, application[0], application[1]))
 			appName, pid = application
 			audioSource = self.getApplicationAudioSource(application)
 			otherSources = [audioSource, ]
@@ -584,7 +578,7 @@ class AudioSources(object):
 		else:
 			for pid in self.pids:
 				audioProcess = self.pids[pid]
-				appName =  audioProcess["appName"]
+				appName = audioProcess["appName"]
 				sessions = audioProcess["sessions"]
 				audioSource = AudioSource(appName, sessions)
 				if audioSource.isStereo:
@@ -740,7 +734,8 @@ class AudioOutputDevicesManager(object):
 		return None
 
 	def findDeviceFromApplicationProcessId(self, appPid):
-		log.debug("findDeviceFromApplicationProcessId: processID = %s, devices= %s" % (appPid, [x.name for x in self._devices]))
+		log.debug("findDeviceFromApplicationProcessId: processID = %s, devices= %s" % (
+			appPid, [x.name for x in self._devices]))
 		devices = []
 		for device in self._devices:
 			audioSources = AudioSources(device)
@@ -783,7 +778,6 @@ class AudioOutputDevicesManager(object):
 
 	def setSpeakersVolumeLevelToPreviousLevel(self):
 		# back the volume of last modified audio device to itthe previous level
-		global _lastSpokenOutputAudioDevice
 		if _lastSpokenOutputAudioDevice:
 			_lastSpokenOutputAudioDevice .setVolumeLevelToPreviousLevel()
 

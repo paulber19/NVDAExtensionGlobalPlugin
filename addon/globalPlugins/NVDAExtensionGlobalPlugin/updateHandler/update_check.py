@@ -18,7 +18,10 @@ import wx
 import core
 import hashlib
 from urllib.request import urlopen
-from updateCheck import UpdateDownloader
+import requests
+import ssl
+import ctypes
+from updateCheck import UpdateDownloader, UPDATE_FETCH_TIMEOUT_S
 import tempfile
 import threading
 import addonAPIVersion
@@ -38,6 +41,7 @@ _curAddon = addonHandler.getCodeAddon()
 _checkForUpdate = False
 
 _baseURL = "https://github.com/paulber007/AllMyNVDAAddons/raw/master"
+
 
 def setCheckForUpdate(check):
 	global _checkForUpdate
@@ -59,6 +63,85 @@ def isCompatible(minimumNVDAVersion, lastTestedNVDAVersion):
 def makeAddonWindowTitle(dialogTitle):
 	addonSummary = _curAddon.manifest['summary']
 	return "%s - %s" % (addonSummary, dialogTitle)
+
+
+# method commes from NVDA updateCheck method (NVAccess copyright).
+# modify to give the url as parameter.
+def _updateWindowsRootCertificates(url):
+	log.debug(f"Updating Windows root certificates for {url}")
+	try:
+		# for NVDA version >= 2026.1
+		from winBindings import crypt32
+	except ImportError:
+		# for NVDA version < 2026.1
+		from . import crypt32
+	with requests.get(
+		url,
+		timeout=UPDATE_FETCH_TIMEOUT_S,
+		# Use an unverified connection to avoid a certificate error.
+		verify=False,
+		stream=True,
+	) as response:
+		# Get the server certificate.
+		cert = response.raw.connection.sock.getpeercert(True)
+	# Convert to a form usable by Windows.
+	certCont = crypt32.CertCreateCertificateContext(
+		0x00000001,  # X509_ASN_ENCODING
+		ctypes.cast(cert, ctypes.POINTER(ctypes.c_byte)),
+		len(cert),
+	)
+	# Ask Windows to build a certificate chain, thus triggering a root certificate update.
+	chainCont = ctypes.c_void_p()
+	crypt32.CertGetCertificateChain(
+		None,
+		certCont,
+		None,
+		None,
+		ctypes.byref(
+			crypt32.CERT_CHAIN_PARA(
+				cbSize=ctypes.sizeof(crypt32.CERT_CHAIN_PARA),
+				RequestedUsage=crypt32.CERT_USAGE_MATCH(),
+			),
+		),
+		0,
+		None,
+		ctypes.byref(chainCont),
+	)
+	crypt32.CertFreeCertificateChain(chainCont)
+	crypt32.CertFreeCertificateContext(certCont)
+
+
+def getURLData(url):
+	try:
+		log.debug(f"Fetching data from {url}")
+		res = urlopen(url, timeout=UPDATE_FETCH_TIMEOUT_S)
+	except IOError as e:
+		if (
+			hasattr(e, "reason")
+			and isinstance(e.reason, ssl.SSLCertVerificationError)
+			and e.reason.reason == "CERTIFICATE_VERIFY_FAILED"
+		):
+			log.warning("Certificat verify failed: try to update  windows root certificates")
+			# #4803: Windows fetches trusted root certificates on demand.
+			# Python doesn't trigger this fetch (PythonIssue:20916), so try it ourselves
+			_updateWindowsRootCertificates(url)
+			# Retry fetching data
+			log.debug(f"Retrying fetching data  from {url}")
+			try:
+				res = urlopen(url, timeout=UPDATE_FETCH_TIMEOUT_S)
+			except Exception as e:
+				log.warning("Certificat verify failed again: %s" % e)
+				log.debug("Try to fetch data without verify certificat")
+				context = ssl._create_unverified_context()
+				try:
+					res = urlopen(url, context=context, timeout=UPDATE_FETCH_TIMEOUT_S)
+				except Exception as e:
+					log.warning(f"Cannot fetch data from {url}. error: {e}")
+					res = None
+		else:
+			log.warning(f"Cannot fetch data from {url}. error: {e}")
+			res = None
+	return res
 
 
 class AddonUpdateDownloader(UpdateDownloader):
@@ -119,9 +202,8 @@ class AddonUpdateDownloader(UpdateDownloader):
 		self.continueUpdatingAddons()
 
 	def _download(self, url):
-		try:
-			remote = urlopen(url)
-		except Exception:
+		remote = getURLData(url)
+		if remote is None:
 			log.warning("Download: cannot open url: %s" % url)
 			raise RuntimeError("URL Download failed: %s url cannot be opened" % url)
 		if remote.code != 200:
@@ -319,7 +401,7 @@ class CheckForAddonUpdate(object):
 		return False
 
 	def getreleaseNoteURL(self, stable=True):
-		#baseURL = _baseURL 
+		# baseURL = _baseURL
 
 		if stable:
 			basereleaseNoteURL = "{baseURL}/{addonName}/{releaseNotes}".format(
@@ -330,16 +412,14 @@ class CheckForAddonUpdate(object):
 			url = "{url}/{language}/changes.html".format(
 				url=basereleaseNoteURL,
 				language=getLanguage())
-			try:
-				urlopen(url)
-			except IOError:
+			res = getURLData(url)
+			if res is None:
 				lang = getLanguage().split("_")[0]
 				url = "{url}/{language}/changes.html".format(
 					url=basereleaseNoteURL,
 					language=lang)
-				try:
-					urlopen(url)
-				except IOError:
+				res = getURLData(url)
+				if res is None:
 					url = "{url}/{language}/changes.html".format(
 						url=basereleaseNoteURL,
 						language="en")
@@ -401,16 +481,16 @@ Do you want to ignore this incompatibility and still download it now?""") .forma
 
 		res = None
 		if updateInfosFile is None:
-			try:
-				url = "%s/myAddons.latest" % _baseURL 
-				res = urlopen(url)
-			except IOError as e:
-				log.warning("Fail to download update informations: error = %s" % e)
+
+			url = "%s/myAddons.latest" % _baseURL
+			res = getURLData(url)
+			if res is None:
+				log.warning("Fail to download update informations")
 				if not self.auto:
 					self.errorUpdateDialog()
 				return None
-			if res is None or res.code not in [200, 202]:
-				log.warning("no update informations: code = %s" % res.code if res is not None else "None")
+			if res.code not in [200, 202]:
+				log.warning("no update informations: code = %s" % res.code)
 				if not self.auto:
 					self.errorUpdateDialog()
 				return None
@@ -578,23 +658,22 @@ class UpdateCheckResultDialog(wx.Dialog):
 		# we must save the code in a file and open this file in the browser.
 		import webbrowser
 		res = None
-		try:
-			url = self.releaseNoteURL 
-			res = urlopen(url)
-		except IOError as e:
-			log.warning("Fail to get release note : error = %s" % e)
+		url = self.releaseNoteURL
+		res = getURLData(url)
+		if res is None:
+			log.warning("Fail to get release note ")
 			return None
-		if res is None or res.code not in [200, 202]:
-			log.warning("no release note: code = %s" % res.code if res is not None else "None")
+		if res.code not in [200, 202]:
+			log.warning("no release note: code = %s" % res.code)
 			return None
 		html = res.read()
 		res.close()
 		addonName = _curAddon.manifest["name"]
-		destPath = tempfile.mktemp(prefix="%s-" %addonName, suffix=".html")
+		destPath = tempfile.mktemp(prefix="%s-" % addonName, suffix=".html")
 		speech.speakMessage(NVDAString("Please wait"))
 		with open(destPath, "wb") as f:
 			f.write(html)
-			webbrowser.open("file://%s" % destPath )
+			webbrowser.open("file://%s" % destPath)
 		wx.CallLater(5000, os.remove, destPath)
 
 	def onYesButton(self, evt):

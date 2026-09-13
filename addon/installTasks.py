@@ -1,19 +1,34 @@
 # -*- coding: UTF-8 -*-
 # installTasks.py
 # a part of NVDAExtensionGlobalPlugin add-on
-# Copyright (C) 2016 - 2025 Paulber19
+# Copyright (C) 2016 - 2026 Paulber19
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
 from logHandler import log
 import os
+import sys
+import globalVars
+import config
+import api
+import addonHandler
+
+addonHandler.initTranslation()
 
 PREVIOUSCONFIGURATIONFILE_SUFFIX = ".prev"
 DELETECONFIGURATIONFILE_SUFFIX = ".delete"
 
 
-_addonName = "NVDAExtensionGlobalPlugin"
-curConfigFileName = "%sAddon.ini" % _addonName
+def getAddonName():
+	curModuleFilePath = os.path.dirname(__file__)
+	manifestPath = os.path.join(curModuleFilePath, addonHandler.MANIFEST_FILENAME)
+	if not os.path.exists(manifestPath):
+		log.warning("There is not manifest.ini for this module")
+		return None
+	with open(manifestPath) as f:
+		manifest = addonHandler.AddonManifest(f)
+		addonName = manifest.get("name")
+	return addonName
 
 
 def renameFile(file, dest):
@@ -28,7 +43,6 @@ def renameFile(file, dest):
 
 
 def saveCurAddonConfigurationProfiles(addonName):
-	import config
 	conf = config.conf
 	save = False
 	if addonName in conf.profiles[0]:
@@ -55,7 +69,6 @@ def saveCurAddonConfigurationProfiles(addonName):
 
 
 def deleteAddonProfilesConfig(addonName):
-	import config
 	conf = config.conf
 	save = False
 	if addonName in conf.profiles[0]:
@@ -78,11 +91,15 @@ def deleteAddonProfilesConfig(addonName):
 	# the "Save configuration on exit" checkbox in General settings.
 	if save:
 		config.conf.save()
+	# delete "spelling error announcement" profil if exist
+	name = _("Spelling errors' announcement")
+	name = api.filterFileName(name)
+	fn = config.conf._getProfileFn(name)
+	if os.path.isfile(fn):
+		os.remove(fn)
 
 
 def keepPreviousSettingsConfirmation(addonSummary):
-	import os
-	import sys
 	curPath = os.path.dirname(__file__)
 	sharedPath = os.path.join(curPath, "shared")
 	sys.path.append(curPath)
@@ -107,22 +124,17 @@ def keepPreviousSettingsConfirmation(addonSummary):
 
 
 def onInstall():
-	import addonHandler
-	addonHandler.initTranslation()
-	import os
-	import globalVars
-	import sys
 	curPath = os.path.dirname(__file__)
 	sys.path.append(curPath)
 	from onInstall import checkWindowListAddonInstalled
 	del sys.path[-1]
-	from addonHandler import _availableAddons
-	addon = _availableAddons[curPath]
+	addon = addonHandler._availableAddons[curPath]
 	addonName = addon.manifest["name"]
 	addonSummary = addon.manifest["summary"]
 	checkWindowListAddonInstalled()
 	# save old configuration if user wants it
 	userConfigPath = globalVars.appArgs.configPath
+	curConfigFileName = "%sAddon.ini" % addonName
 	addonConfigFile = os.path.join(userConfigPath, curConfigFileName)
 	if os.path.exists(addonConfigFile):
 		# existing current addon config
@@ -143,18 +155,14 @@ def onInstall():
 
 
 def onUninstall():
-	import os
-	import globalVars
-	import sys
-	# include the module directory to the path
-	curPath = os.path.dirname(__file__)
-	sys.path.append(curPath)
-	import buildVars
-	addonName = buildVars.addon_info["addon_name"]
-	del sys.path[-1]
+	addonName = getAddonName()
+	if not addonName:
+		log.debug("no addon name in the manifest")
+		return
 	deleteAddonProfilesConfig(addonName)
 	# delete current configuration file
 	userConfigPath = globalVars.appArgs.configPath
+	curConfigFileName = "%sAddon.ini" % addonName
 	addonConfigFile = os.path.join(userConfigPath, curConfigFileName)
 	if os.path.exists(addonConfigFile):
 		os.remove(addonConfigFile)

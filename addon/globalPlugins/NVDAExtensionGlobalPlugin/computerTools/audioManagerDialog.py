@@ -25,7 +25,7 @@ from ..utils.NVDAStrings import NVDAString
 from .audioCore import isNVDA
 from . import audioCore
 from ..settings import (
-	toggleAllowNVDATonesVolumeAdjustmentAdvancedOption, toggleAllowNVDASoundGainModificationAdvancedOption,
+	toggleAllowNVDASoundGainModificationAdvancedOption,
 	togglePlayToneOnAudioDeviceAdvancedOption
 )
 
@@ -233,7 +233,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 		self.audioSources = audioCore.AudioSources(self._currentDevice)
 		curApplications = self.applications
 		curAppIndex = self.applicationsListBox.GetSelection()
-		curApp = self.applications[curAppIndex ] if curAppIndex >= 0else None
+		curApp = self.applications[curAppIndex] if curAppIndex >= 0 else None
 		self.initApplicationsList()
 		if curApplications == self.applications:
 			return
@@ -362,7 +362,7 @@ class NVDAAndAudioApplicationsManagerDialog(
 
 	def formatApplicationInfo(self, application, name=False, position=True, volume=False, mute=True):
 		log.debug("formatApplicationInfo application= %s,pid= %s, name= %s, position= %s, volume= %s, mute= %s" % (
-			application[0], application[1],name, position, volume, mute))
+			application[0], application[1], name, position, volume, mute))
 		textList = []
 		if name:
 			textList.append(application[0].split(".")[0])

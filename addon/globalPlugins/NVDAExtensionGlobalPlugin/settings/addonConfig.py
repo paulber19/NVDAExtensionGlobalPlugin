@@ -194,7 +194,7 @@ else:
 		# Translators: choice label to report  spelling errors with a sound.
 		RSE_Sound: _("NVDA's error sound"),
 	}
-	
+
 	readingReportingSpellingErrorsBySpeechChoiceLabels = {
 		# Translators: choice label to report spelling errors with speech message.
 		RSE_Message: _("NVDA's error message"),

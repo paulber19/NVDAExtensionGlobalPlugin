@@ -369,8 +369,6 @@ class FeaturesInstallationSettingsPanel(
 		self.saveSettingChanges()
 
 
-
-
 class NVDAEnhancementSettingsPanel_2026_1(
 	contextHelpEx.ContextHelpMixinEx,
 	SettingsPanel):
@@ -491,7 +489,6 @@ class NVDAEnhancementSettingsPanel_2026_1(
 		self.readingReportingSpellingErrorsBySoundChoiceBox.SetSelection(
 			list(readingReportingSpellingErrorsBySoundChoiceLabels.keys()).index(option))
 		self.bindHelpEvent(getHelpObj("hdr104"), self.readingReportingSpellingErrorsBySoundChoiceBox)
-		
 		# Translators: This is the label for a choice box in the NVDA enhancement settings panel.
 		labelText = _("Report by speech:")
 		from .addonConfig import readingReportingSpellingErrorsBySpeechChoiceLabels
@@ -552,7 +549,9 @@ class NVDAEnhancementSettingsPanel_2026_1(
 		index = self.reportingSpellingErrorsByChoiceBox.GetSelection()
 		option = [x for x in reportingSpellingErrorsChoiceLabels .keys()][index]
 		_addonConfigManager.setReportingSpellingErrorsByOption(option)
-		from .addonConfig import readingReportingSpellingErrorsBySoundChoiceLabels, readingReportingSpellingErrorsBySpeechChoiceLabels
+		from .addonConfig import (
+			readingReportingSpellingErrorsBySoundChoiceLabels, readingReportingSpellingErrorsBySpeechChoiceLabels
+		)
 		index = self.readingReportingSpellingErrorsBySoundChoiceBox.GetSelection()
 		option = [x for x in readingReportingSpellingErrorsBySoundChoiceLabels .keys()][index]
 		_addonConfigManager.setReadingReportingSpellingErrorsBySoundOption(option)
@@ -578,7 +577,6 @@ class NVDAEnhancementSettingsPanel_2025_1(
 	def __init__(self, parent):
 		self.title = makeAddonWindowTitle(self.title)
 		super().__init__(parent)
-
 
 	def makeSettings(self, settingsSizer):
 		from .addonConfig import (
@@ -729,7 +727,6 @@ class NVDAEnhancementSettingsPanel_2025_1(
 
 	def onSave(self):
 		self.saveSettingChanges()
-
 
 
 class ComputerSettingsPanel(
@@ -991,7 +988,6 @@ class AdvancedSettingsPanel(
 			toggleDialogTitleWithAddonSummaryAdvancedOption,
 			toggleByPassNoDescriptionAdvancedOption,
 			toggleLimitKeyRepeatsAdvancedOption, toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption,
-			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 			toggleAllowNVDASoundGainModificationAdvancedOption, togglePlayToneOnAudioDeviceAdvancedOption
 		)
 		sHelper = BoxSizerHelper(self, sizer=settingsSizer)
@@ -1085,7 +1081,6 @@ class AdvancedSettingsPanel(
 			toggleDialogTitleWithAddonSummaryAdvancedOption,
 			toggleByPassNoDescriptionAdvancedOption,
 			toggleLimitKeyRepeatsAdvancedOption, toggleRecordCurrentSettingsForCurrentSelectorAdvancedOption,
-			toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 			toggleAllowNVDASoundGainModificationAdvancedOption,
 			togglePlayToneOnAudioDeviceAdvancedOption,
 		)
@@ -1392,6 +1387,7 @@ class MultiCategorySettingsDialogEx(
 			askForRestart = askForRestart or panel.restartNVDA
 		if askForRestart:
 			askForNVDARestart()
+
 
 if NVDAVersion < [2026, 1]:
 	# for nvda versions < 2026.1

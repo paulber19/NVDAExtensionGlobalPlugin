@@ -1,9 +1,10 @@
 name = {addon_name}
 summary = "{addon_summary}"
-version = {addon_version}
 description = """{addon_description}"""
 author = "{addon_author}"
-url = "{addon_url}"
+url = {addon_url}
+version = {addon_version}
+changelog = """{addon_changelog}"""
 docFileName = {addon_docFileName}
 minimumNVDAVersion = {addon_minimumNVDAVersion}
 lastTestedNVDAVersion = {addon_lastTestedNVDAVersion}

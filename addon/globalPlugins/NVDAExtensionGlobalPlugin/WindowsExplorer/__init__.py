@@ -69,7 +69,7 @@ def get_selected_file_explorer(obj=None):
 				# Now that we have the current folder, we can explore the SelectedItems collection.
 				selected = window.Document.SelectedItems()
 				if selected and selected.Count > 0:
-					file_path =str(selected.Item(0).Path)
+					file_path = str(selected.Item(0).Path)
 					break
 		else:  # loop exhausted
 			desktop = True

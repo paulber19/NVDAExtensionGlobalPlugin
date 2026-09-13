@@ -42,7 +42,10 @@ def setShouldProcessRemanence():
 		_shouldProcessRemanence = False
 		return
 
-	dci = ti.get("documentConstantIdentifier", None)
+	try:
+		dci = ti.documentConstantIdentifier
+	except AttributeError:
+		dci = None
 	if dci is None:
 		return
 	gmail = "https://mail.google.com/mail/"

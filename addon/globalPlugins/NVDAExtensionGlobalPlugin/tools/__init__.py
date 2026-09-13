@@ -11,14 +11,12 @@ import codecs
 # from ctypes import *
 import zipfile
 import gui
-import threading
 import wx
 import languageHandler
 from ..utils import isOpened, makeAddonWindowTitle, getHelpObj
 from ..utils import runInThread
-from .generate import generateManifest, generateTranslatedManifest
 from .gettextTools import generatePotFile, compilePoFiles
-import shutil
+import importlib
 from ..gui import contextHelpEx
 import os
 import sys
@@ -30,9 +28,7 @@ del sys.path[-1]
 sysPath = list(sys.path)
 from ..utils.py3Compatibility import getCommonUtilitiesPath
 sys.path.append(getCommonUtilitiesPath())
-import txt2tags
-sys.path = sysPath
-import markdown
+sys.path = sysPath[:]
 
 addonHandler.initTranslation()
 
@@ -41,8 +37,9 @@ _curModuleFilePath = os.path.dirname(__file__)
 
 # Translators: strings used to generate readme.md file
 _buildVarsStrings = {
-	"addonInfoStart": "addon_info = {",
-	"addonInfoEnd": "}",
+	"addonInfoStart": "addon_info = AddonInfo(",
+	"addonInfoEnd": ")",
+	"dict": "{}",
 }
 
 
@@ -57,7 +54,7 @@ def get_all_file_paths(directory):
 					continue
 			else:
 				if os.path.splitext(filename)[1]\
-					in [".pyo", ".pyc", ".nvda-addon", ".pickle", ".json"]:
+					in [".pyo", ".pyc", ".nvda-addon", ".pickle", ".json", ".yaml"]:
 					continue
 			filepath = os.path.join(root, filename)
 			file_paths.append(filepath)
@@ -66,16 +63,8 @@ def get_all_file_paths(directory):
 
 def createAddonBundleFromPath(addon):
 	file_paths = get_all_file_paths(addon.path)
-	sysPath = list(sys.path)
-	sys.path.append(addon.path)
-	try:
-		import buildVars
-		from importlib import reload
-		reload(buildVars)
-		sys.path = sysPath
-		del sys.modules["buildVars"]
-	except ImportError:
-		sys.path = sysPath
+	buildVars = importBuildVars(addon)
+	if buildVars is None:
 		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -127,211 +116,6 @@ def getDocLanguages(addon):
 	return langs
 
 
-def getMmanifestInfos(addon, lang):
-	path = addon.path
-	manifest_path = os.path.join(path, addonHandler.MANIFEST_FILENAME)
-	with open(manifest_path) as f:
-		translatedInput = None
-		translatedPath = os.path.join("locale", lang)
-		p = os.path.join(path, translatedPath, addonHandler.MANIFEST_FILENAME)
-		if os.path.exists(p):
-			log.debug("Using manifest translation from %s", p)
-			translatedInput = open(p, 'rb')
-			try:
-				return addonHandler.AddonManifest(f, translatedInput)
-			except Exception:
-				# Translators: dialog title on errorr.
-				dialogTitle = _("error")
-				alert(
-					# Translators: message to the user on getting addon manifest.
-					_("Cannot get add-on translated manifest of %s language") % lang,
-					dialogTitle,
-				)
-	return addonHandler.AddonManifest(manifest_path)
-
-
-HTML_HEADERS = """
-<!DOCTYPE html>
-<html lang="{lang}" dir="{dir}">
-<head>
-<meta charset="utf-8">
-<title>{title}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-{styles}
-</head>
-""".strip()
-
-RTL_LANG_CODES = frozenset({"ar", "fa", "he"})
-
-
-def writeHTMLFile(dest, htmlText, title, styles):
-	lang = os.path.basename(os.path.dirname(dest)).replace('_', '-')
-	with codecs.open(dest, "w", "utf-8") as f:
-		f.write(
-			HTML_HEADERS.format(
-				lang=lang,
-				dir="rtl" if lang in RTL_LANG_CODES else "ltr",
-				title=title,
-				styles=styles,
-			)
-		)
-		f.write("\n" + htmlText)
-		f.write("\n</html>\n")
-
-
-markdown_extensions = [
-	"abbr",
-	"admonition",
-	"attr_list",
-	"def_list",
-	# "extra",
-	"fenced_code",
-	"footnotes",
-	"legacy_attrs",
-	"legacy_em",
-	"md_in_html",
-	"meta",
-	"nl2br",
-	"sane_lists",
-	"smarty",
-	"tables",
-	"toc",
-	"wikilinks",
-]
-
-
-def md2html(source):
-	headerDic = {
-		"[[!meta title=\"": "# ",
-		"\"]]": " #",
-	}
-	extensions = []
-	for ext in markdown_extensions:
-		extensions.append("markdown.extensions.%s" % ext)
-	with codecs.open(source, "r", "utf-8") as f:
-		mdText = f.read()
-		for k, v in headerDic.items():
-			mdText = mdText.replace(k, v, 1)
-		htmlText = markdown.markdown(mdText, extensions=extensions)
-	htmlText = "<body>\n" + htmlText + "\n</body>"
-	return htmlText
-
-
-def getHTMLBody(dest):
-	src = codecs.open(dest, "r", "utf_8", errors="replace")
-	startTag = "</head>"
-	endTag = "<!-- html code generated"
-	appendLine = False
-	text = []
-	for sLine in src:
-		line = sLine.lower()
-		startTagFound = line.find(startTag)
-		endTagFound = line.find(endTag)
-		if startTagFound >= 0:
-			appendLine = True
-			sLine = sLine[startTagFound + len(startTag):]
-			text.append(sLine)
-			continue
-		elif endTagFound >= 0:
-			sLine = sLine[: endTagFound]
-			text.append(sLine)
-			break
-		if appendLine:
-			text.append(sLine)
-	text.append("</body>")
-	return "".join(text)
-
-
-def t2t2html(source, dest):
-	try:
-		os.remove(dest)
-	except Exception:
-		pass
-	log.debug("converting t2t file: %s" % source)
-	cmd = [source,]
-	th = threading.Thread(
-		target=txt2tags.exec_command_line,
-		args=(cmd,)
-	)
-	th.start()
-	th.join()
-	if os.path.exists(dest):
-		# we don't want the footer
-		htmlText = getHTMLBody(dest)
-		os.remove(dest)
-	else:
-		log.warning("cannot convert t2t file: %s" % source)
-		return None
-	return htmlText
-
-
-def getStylesCss(fileDir, fileType="t2t"):
-	# the default styles css files are in doc folder
-	# but translators can adapte these files for convenience
-	# so the file modified must be placed in the language folder.
-	if fileType == "t2t":
-		stylesCss = os.path.join(fileDir, "style_t2t.css")
-		if not os.path.exists(stylesCss):
-			stylesCss = os.path.join(fileDir, "..\\style_t2t.css")
-	elif fileType == "md":
-		stylesCss = os.path.join(fileDir, "style.css")
-		if not os.path.exists(stylesCss):
-			stylesCss = os.path.join(fileDir, "..\\style.css")
-	return stylesCss
-
-
-def getStyles(fileDir, fileType="t2t"):
-	stylesCss = getStylesCss(fileDir, fileType=fileType)
-	styles = ""
-	if os.path.exists(stylesCss):
-		with codecs.open(stylesCss, "r", "utf-8") as f:
-			styles = """<style media="screen">"""
-			styles = styles + "\n" +f.read()
-			styles = styles + "\n" + "</style>"
-	return styles
-
-
-
-def generateHTMLFiles(addon, docDirs):
-	mdCount = 0
-	t2tCount = 0
-	for d in docDirs:
-		lang = d.split("\\")[-1]
-		fileList = os.listdir(d)
-		filesCount = len(fileList)
-		for file in fileList:
-			theFile = os.path.join(d, file)
-			if not os.path.isfile(theFile):
-				continue
-#			f = file.split(".")
-			(base, ext) = os.path.splitext(file)			
-			ext = ext[1:]
-			if ext not in ["md", "t2t"]:
-				continue
-			dest = os.path.join(d, base + ".html")
-			manifest = getMmanifestInfos(addon, lang)
-			title = "%s %s" % (manifest["summary"], manifest["version"])
-			styles = getStyles(d, fileType=ext)
-			if ext == "t2t":
-				htmlText = t2t2html(theFile, dest)
-				if htmlText is None:
-					continue
-				t2tCount += 1
-			elif ext == "md":
-				htmlText = md2html(theFile)
-				mdCount += 1
-			writeHTMLFile(dest, htmlText, title, styles)
-
-	return (filesCount, mdCount, t2tCount)
-
-
-def clean(addon):
-	if os.path.exists(os.path.join(addon.path, "buildVars.pyo")):
-		os.remove(os.path.join(addon.path, "buildVars.pyo"))
-	if os.path.exists(os.path.join(addon.path, "buildVars.pyc")):
-		os.remove(os.path.join(addon.path, "buildVars.pyc"))
-
-
 def _makeHTML(addon, lang):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of HTML documentation files")
@@ -356,7 +140,12 @@ def _makeHTML(addon, lang):
 			if (item == lang or "_" in item and item.split("_")[0] == lang):
 				theDir = os.path.join(docFolder, item)
 				docDirs.append(theDir)
-	(filesCount, mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
+	buildVars = importBuildVars(addon)
+	mdExtensions = []
+	if buildVars:
+		mdExtensions = getattr(buildVars, "markdownExtensions", [])
+	from .docs import generateHTMLFiles
+	(filesCount, mdCount, t2tCount) = generateHTMLFiles(addon, docDirs, mdExtensions)
 	th.stop()
 	n = mdCount + t2tCount
 	if n == 0:
@@ -366,46 +155,18 @@ def _makeHTML(addon, lang):
 			dialogTitle
 		)
 	else:
-		"""
-		# copy css style file
-		curAddon = addonHandler.getCodeAddon()
-		if mdCount:
-			source = os.path.join(curAddon.path, "doc", "style_md.css")
-			dest = os.path.join(docFolder, "style_md.css")
-			try:
-				shutil.copy(source, dest)
-			except Exception:
-				pass
-		elif t2tCount:
-			source = os.path.join(curAddon.path, "doc", "style_t2t.css")
-			dest = os.path.join(docFolder, "style_t2t.css")
-			try:
-				shutil.copy(source, dest)
-			except Exception:
-				pass
-		"""
 		inform(
 			# Translators: message to user to report number of converted documents
 			_("%s files converted") % n,
 			dialogTitle
 		)
-	# clean up
-		clean(addon)
 
 
 def _makeMainManifestIni(addon):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of manifest.ini file")
-	sysPath = list(sys.path)
-	sys.path.append(addon.path)
-	try:
-		import buildVars
-		from importlib import reload
-		reload(buildVars)
-		sys.path = sysPath
-		del sys.modules["buildVars"]
-	except ImportError:
-		sys.path = sysPath
+	buildVars = importBuildVars(addon)
+	if buildVars is None:
 		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -421,31 +182,22 @@ def _makeMainManifestIni(addon):
 		) != ReturnCode.YES:
 			return
 	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
-	with codecs.open(templateFile, "r", "utf-8") as f:
-		manifest_template = f.read()
-	from .generate import generateManifest
 	addonInfo = buildVars.addon_info.copy()
-	generateManifest(dest, addonInfo, manifest_template)
+	brailleTables = getattr(buildVars, "brailleTables", None)
+	symbolDictionaries = getattr(buildVars, "symbolDictionaries", None)
+	speechDictionaries = getattr(buildVars, "speechDictionaries", None)
+	from .manifests import generateManifest
+	generateManifest(templateFile, dest, addonInfo, brailleTables, symbolDictionaries, speechDictionaries)
 	# Translators: message to user to report end of manifest.ini creation
 	msg = _("The manifest.ini file has been updated")
 	inform(msg, dialogTitle)
-	# clean up
-	clean(addon)
 
 
 def _makeLocaleManifestIni(addon, lang):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of localization manifest.ini file")
-	sysPath = list(sys.path)
-	sys.path.append(addon.path)
-	try:
-		import buildVars
-		from importlib import reload
-		reload(buildVars)
-		sys.path = sysPath
-		del sys.modules["buildVars"]
-	except ImportError:
-		sys.path = sysPath
+	buildVars = importBuildVars(addon)
+	if buildVars is None:
 		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -454,9 +206,6 @@ def _makeLocaleManifestIni(addon, lang):
 		return
 	templateFile = os.path.join(
 		_curModuleFilePath, "manifest-translated.ini.tpl")
-	with codecs.open(templateFile, "r", "utf-8") as f:
-		manifest_template = f.read()
-	from .generate import generateTranslatedManifest
 	localeDir = os.path.join(addon.path, "locale")
 	if not os.path.exists(localeDir):
 		warn(
@@ -480,16 +229,29 @@ def _makeLocaleManifestIni(addon, lang):
 	count = 0
 	noTranslation = []
 	for lang in langs:
-		moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
+		moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.mo")
 		if not os.path.exists(moFile):
 			continue
-		if not generateTranslatedManifest(addon, manifest, lang, manifest_template):
+		brailleTables = getattr(buildVars, "brailleTables", None)
+		symbolDictionaries = getattr(buildVars, "symbolDictionaries", None)
+		speechDictionaries = getattr(buildVars, "speechDictionaries", None)
+		dest = os.path.join(addon.path, "locale", lang, "manifest.ini")
+		from .manifests import generateTranslatedManifest
+		if not generateTranslatedManifest(
+			templateFile, dest,
+			mo=moFile,
+			addon_info=buildVars.addon_info,
+			brailleTables=brailleTables,
+			symbolDictionaries=symbolDictionaries,
+			speechDictionaries=speechDictionaries
+		):
 			noTranslation.append(lang)
 		count = count + 1
+
 	if len(noTranslation):
 		# Translators: title of dialog
 		dialogTitle = _("Creation of localization manifest.ini file")
-		# Translators: message to user.
+		# Translators: message to user. speechDictionaries )
 		missingTranslationMsg = _("Some translation strings are missing for \"%s\" language") % lang
 		warn(missingTranslationMsg, dialogTitle)
 	if count:
@@ -500,25 +262,14 @@ def _makeLocaleManifestIni(addon, lang):
 		# Translators: message to user to report no translated manifest.ini file .
 		msg = _("No localization manifest.ini file created")
 	inform(msg, dialogTitle)
-	# clean up
-	clean(addon)
 
 
 def _generatePOTFile(addon):
 	addonSummary = addon.manifest["summary"]
 	# Translators: title of dialog
 	dialogTitle = _("Creation of POT file of %s add-on") % addonSummary
-	sysPath = list(sys.path)
-	sys.path.append(addon.path)
-	try:
-		import buildVars
-		from importlib import reload
-		reload(buildVars)
-		sys.path = sysPath
-		del sys.modules["buildVars"]
-	except ImportError:
-		sys.path = sysPath
-
+	buildVars = importBuildVars(addon)
+	if buildVars is None:
 		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -540,8 +291,6 @@ def _generatePOTFile(addon):
 			# Translators: message to user pot file canot be created
 			msg = _("Impossible to create POT file")
 		alert(msg, dialogTitle)
-	# clean up
-	clean(addon)
 
 
 def getManifest(addon):
@@ -557,16 +306,8 @@ def _prepareAddon(addon):
 	addonSummary = addon.manifest["summary"]
 	# Translators: title of dialog
 	dialogTitle = _("Prepare %s add-on") % addonSummary
-	sysPath = list(sys.path)
-	sys.path.append(addon.path)
-	try:
-		import buildVars
-		from importlib import reload
-		reload(buildVars)
-		sys.path = sysPath
-		del sys.modules["buildVars"]
-	except ImportError:
-		sys.path = sysPath
+	buildVars = importBuildVars(addon)
+	if buildVars is None:
 		alert(
 			# Translators: message to user.
 			_("Error: buildVars.py file is not found"),
@@ -580,17 +321,17 @@ def _prepareAddon(addon):
 	# update of main manifest.ini file
 	dest = os.path.join(addon.path, "manifest.ini")
 	templateFile = os.path.join(_curModuleFilePath, "manifest.ini.tpl")
-	with codecs.open(templateFile, "r", "utf-8") as f:
-		manifest_template = f.read()
 	addonInfo = buildVars.addon_info.copy()
-	generateManifest(dest, addonInfo, manifest_template)
+	brailleTables = getattr(buildVars, "brailleTables", None)
+	symbolDictionaries = getattr(buildVars, "symbolDictionaries", None)
+	speechDictionaries = getattr(buildVars, "speechDictionaries", None)
+	from .manifests import generateManifest
+	generateManifest(templateFile, dest, addonInfo, brailleTables, symbolDictionaries, speechDictionaries)
 	textList = []
 	# Translators: part of message to report update of manifest.ini file
 	textList.append(_("Manifest.ini file updated"))
 	# update or creation of all translated manifest.ini files
 	templateFile = os.path.join(_curModuleFilePath, "manifest-translated.ini.tpl")
-	with codecs.open(templateFile, "r", "utf-8") as f:
-		manifest_template = f.read()
 	localeDir = os.path.join(addon.path, "locale")
 	manifest = getManifest(addon)
 	if manifest is None:
@@ -605,11 +346,22 @@ def _prepareAddon(addon):
 			count = 0
 			noTranslations = []
 			for lang in langs:
-				moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.po")
+				moFile = os.path.join(localeDir, lang, "LC_MESSAGES", "nvda.mo")
 				if not os.path.exists(moFile):
 					continue
+				brailleTables = getattr(buildVars, "brailleTables", None)
+				symbolDictionaries = getattr(buildVars, "symbolDictionaries", None)
+				speechDictionaries = getattr(buildVars, "speechDictionaries", None)
+				dest = os.path.join(addon.path, "locale", lang, "manifest.ini")
+				from .manifests import generateTranslatedManifest
 				if not generateTranslatedManifest(
-					addon, manifest, lang, manifest_template):
+					templateFile, dest,
+					mo=moFile,
+					addon_info=buildVars.addon_info,
+					brailleTables=brailleTables,
+					symbolDictionaries=symbolDictionaries,
+					speechDictionaries=speechDictionaries
+				):
 					noTranslations.append(lang)
 				count += 1
 			if count:
@@ -628,11 +380,13 @@ def _prepareAddon(addon):
 		docFolder = os.path.join(addon.path, "doc")
 		dirList = os.listdir(docFolder)
 		docDirs = []
+		from .docs import generateHTMLFiles
 		for item in dirList:
 			theDir = os.path.join(docFolder, item)
 			if os.path.isdir(theDir):
 				docDirs.append(theDir)
-		(filesCount,mdCount, t2tCount) = generateHTMLFiles(addon, docDirs)
+		mdExtensions = getattr(buildVars, "markdownExtensions", [])
+		(filesCount, mdCount, t2tCount) = generateHTMLFiles(addon, docDirs, mdExtensions)
 		cnt = mdCount + t2tCount
 		if cnt == 0:
 			# Translators: message to user to report no document converted
@@ -679,14 +433,12 @@ def _prepareAddon(addon):
 	msg = _("Completed") + "\r\n\r\n" + text
 	th.stop()
 	wx.CallAfter(warn, msg, dialogTitle)
-	# clean up
-	clean(addon)
 
 
 def _createBuildVarsFile(addon):
 	# Translators: title of dialog
 	dialogTitle = _("Creation of buildVars.py file")
-	templateFile = os.path.join(_curModuleFilePath, "buildVars.py.tpl")
+	templateFile = os.path.join(_curModuleFilePath, "buildVars.py-V2.tpl")
 	with codecs.open(templateFile, "r", "utf-8") as f:
 		buildVars_template = f.read()
 	manifest_path = os.path.join(addon.path, addonHandler.MANIFEST_FILENAME)
@@ -700,7 +452,7 @@ def _createBuildVarsFile(addon):
 		return
 	with open(manifest_path) as f:
 		manifest = addonHandler.AddonManifest(f)
-	dest = os.path.join(addon.path, "buildVars.py")
+	dest = os.path.join(addon.path, "buildVarsTemp.py")
 	if os.path.exists(dest):
 		# Translators: message to user.
 		msg = _("Warning: buildVars.py already exists. Do you want to replace it?")
@@ -711,9 +463,10 @@ def _createBuildVarsFile(addon):
 
 	default_vars = {
 		"name": "addonTemplate",
-		"summary": "Add-on user visible name",
-		"description": """Description for the add-on. It can span multiple lines.""",
-		"version": "x.y",
+		"summary": "Add-on template",
+		"description": """To be written.""",
+		"version": "0.0",
+		"changelog": """To be written.""",
 		"author": str("name <name@domain.com>"),
 		"url": None,
 		"sourceURL": None,
@@ -727,14 +480,14 @@ def _createBuildVarsFile(addon):
 	vars = {}
 	vars.update(_buildVarsStrings)
 	vars.update(default_vars)
-	for var in manifest:
-		if manifest[var] is None:
+	for item in manifest:
+		if manifest[item] is None:
 			continue
-		if type(manifest[var]) is tuple:
-			tempList = [str(x) for x in manifest[var]]
-			vars[var] = ".".join(tempList)
+		if type(manifest[item]) is tuple:
+			tempList = [str(x) for x in manifest[item]]
+			vars[item] = ".".join(tempList)
 			continue
-		vars[var] = manifest[var]
+		vars[item] = manifest[item]
 	buildVars = buildVars_template.format(**vars)
 	buildVars = buildVars.replace("\"None\"", "None")
 	buildVars = buildVars.replace("_(\"\"\"None\"\"\")", "None")
@@ -743,8 +496,32 @@ def _createBuildVarsFile(addon):
 	# Translators message to user to report buildVars.py has been created
 		msg = _("The buildVars.py file has been created")
 	inform(msg, dialogTitle)
-	# clean up
-	clean(addon)
+
+
+def importBuildVars(addon):
+	if "buildVars" in sys.modules:
+		import buildVars
+		spec = buildVars.__spec__
+		spec.loader.exec_module(buildVars)
+
+		return buildVars
+	buildVarsFile = os.path.join(addon.path, "buildVars.py")
+	if not os.path.exists(buildVarsFile):
+		log.warning("addon has no buildVars.py file")
+		return None
+
+	spec = importlib.util.spec_from_file_location("buildVars", buildVarsFile)
+	module = importlib.util.module_from_spec(spec)
+	sysPath = sys.path[:]
+	sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+	try:
+		spec.loader.exec_module(module)
+		sys.modules["buildVars"] = module
+	except Exception as e:
+		log.error("Error importing buildVars: %s " % e)
+		module = None
+	sys.path = sysPath[:]
+	return module
 
 
 class ToolsForAddonDialog(
@@ -881,11 +658,16 @@ class ToolsForAddonDialog(
 			self.languagesListBox.SetSelection(0)
 
 	def Destroy(self):
+		if "buildVars" in sys.modules:
+			del sys.modules["buildVars"]
 		ToolsForAddonDialog._instance = None
 		super(ToolsForAddonDialog, self).Destroy()
 
 	def onSelectAddon(self, event):
 		self.updateLanguagesListBox()
+		if "buildVars" in sys.modules:
+			del sys.modules["buildVars"]
+
 		event.Skip()
 
 	def onCreateBuildVarsFileButton(self, event):
@@ -935,6 +717,32 @@ class ToolsForAddonDialog(
 		wx.CallLater(300, subprocess.call, cmd, shell=True)
 		self.Close()
 
+	def importBuildVars(self, addon):
+		buildVarsFile = os.path.join(addon.path, "buildVars.py")
+		if not os.path.exists(buildVarsFile):
+			log.warning("addon has no buildVars.py file")
+			return None
+		with open(buildVarsFile, "r") as f:
+			buildVars = f.read()
+		buildVars = buildVars.replace("from", "from .")
+		patchedBuildVarsFile = os.path.join(_curModuleFilePath, "patchedBuildVars.py")
+		with open(patchedBuildVarsFile, "w") as f:
+			f.write(buildVars)
+		if not os.path.exists(patchedBuildVarsFile):
+			log.error("cannot write %s file" % patchedBuildVarsFile)
+			return None
+		self.addonPatchedBuildVars = patchedBuildVarsFile
+		try:
+			import importlib
+			spec = importlib.util.spec_from_file_location("buildVars", patchedBuildVarsFile)
+			module = importlib.util.module_from_spec(spec)
+			spec.loader.exec_module(module)
+			sys.modules["buildVars"] = module
+			return module
+		except ImportError:
+			log.error("Error importing buildVars: cannot import patchedBuildVars.py module")
+			return None
+
 	def updateAddonVersion(self, addon, oldVersion, newVersion):
 		# Translators: title of dialog
 		dialogTitle = _("Update add-on version")
@@ -947,11 +755,12 @@ class ToolsForAddonDialog(
 			)
 			return
 		buildVarsList = []
-		buildVars = codecs.open(buildVarsFile, "r", "utf_8", errors="replace")
-		for line in buildVars:
+		buildVarsBuf = codecs.open(buildVarsFile, "r", "utf_8", errors="replace")
+		for line in buildVarsBuf:
 			buildVarsList.append(line)
-		buildVars.close()
-		match = "\"addon_version\""
+		buildVarsBuf.close()
+
+		match = "addon_version"
 		found = False
 		for line in buildVarsList:
 			if match in line:
@@ -981,18 +790,10 @@ class ToolsForAddonDialog(
 	def onUpdateVersionButton(self, evt):
 		index = self.addonsListBox.GetSelection()
 		addon = self.addonsList[index]
+		buildVars = importBuildVars(addon)
 		# Translators: title of dialog
 		dialogTitle = _("Update add-on version")
-		sysPath = list(sys.path)
-		sys.path.append(addon.path)
-		try:
-			import buildVars
-			from importlib import reload
-			reload(buildVars)
-			sys.path = sysPath
-			del sys.modules["buildVars"]
-		except ImportError:
-			sys.path = sysPath
+		if buildVars is None:
 			# Translators: jmessage to user.
 			alert(
 				# Translators: message to user buildVars.py file is not found.

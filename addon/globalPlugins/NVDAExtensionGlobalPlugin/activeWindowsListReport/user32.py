@@ -431,6 +431,7 @@ def GetLastError():
 
 def enumWindows():
 	_EnumWindows = ctypes.windll.user32.EnumWindows
+	args = _EnumWindows.argtypes 
 	_EnumWindows.argtypes = [WNDENUMPROC, LPARAM]
 	_EnumWindows.restype = bool
 
@@ -440,6 +441,7 @@ def enumWindows():
 		errcode = GetLastError()
 		if errcode not in (ERROR_NO_MORE_FILES, ERROR_SUCCESS):
 			raise ctypes.WinError(errcode)
+	_EnumWindows.argtypes  = args
 	return EnumFunc.hwnd
 
 

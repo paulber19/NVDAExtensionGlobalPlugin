@@ -18,7 +18,6 @@ from .audioUtils import (
 	getOutputDevice, setOutputDevice)
 from ..settings.addonConfig import FCT_TemporaryAudioDevice
 from ..settings import (
-	toggleAllowNVDATonesVolumeAdjustmentAdvancedOption,
 	toggleAllowNVDASoundGainModificationAdvancedOption,
 	isInstall
 )
@@ -57,7 +56,6 @@ def _myOneCoreSynthDriverMaybeInitPlayer(*args, **kwargs):
 	But this method continue to use config.conf["speech"]["outputDevice"]
 	We need to patch this method so that it uses _audioOutputDevice variable instead
 	"""
-	global _NVDAOneCoreSynthDriverMaybeInitPlayer
 	from synthDriverHandler import _audioOutputDevice
 	currentOutputDevice = getOutputDevice()
 	setOutputDevice(_audioOutputDevice)
@@ -200,7 +198,7 @@ def patche(install=True):
 		log.warning(
 			"Incompatibility: synthDriverHandler .setSynth method has also been patched "
 			"probably by another add-on: %s."
-			"There is a risk of malfunction" % synthDriverHandler .setSynth._maybeInitPlayer.__module__)
+			"There is a risk of malfunction" % synthDriverHandler .setSynth.__module__)
 	synthDriverHandler .setSynth = _mySetSynth
 	log.debug(
 		"To allow NVDA set synth to use temporary audio device,"

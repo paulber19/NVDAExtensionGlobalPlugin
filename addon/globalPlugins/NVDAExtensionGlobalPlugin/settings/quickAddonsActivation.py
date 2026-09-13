@@ -165,7 +165,7 @@ class QuickAddonsActivationDialog(
 		evt.Skip()
 
 	def onSelectAddonType(self, evt):
-		self.refreshAddonsList()		
+		self.refreshAddonsList()
 
 	def onCheckAll(self, evt):
 		for addon in self.curAddons:

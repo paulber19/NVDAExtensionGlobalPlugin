@@ -8,7 +8,6 @@
 import addonHandler
 from logHandler import log
 import wx
-import time
 import winUser
 import NVDAObjects
 import ctypes
@@ -175,7 +174,7 @@ class DisplayNotificationIconsList(
 		self.Close()
 		(x, y) = self.getPosition()
 		winUser.setCursorPos(x, y)
-		mouseClick(obj=None,rightButton=False, twice=twice)
+		mouseClick(obj=None, rightButton=False, twice=twice)
 
 	@classmethod
 	def run(cls):

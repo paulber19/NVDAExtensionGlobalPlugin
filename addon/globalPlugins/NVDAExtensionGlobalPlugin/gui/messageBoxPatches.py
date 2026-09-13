@@ -50,7 +50,6 @@ if NVDAVersion < [2025, 1]:
 		from gui import mainFrame
 		import core
 		from logHandler import log
-		global _reportObjectDescriptionOptions
 		with gui.message._messageBoxCounterLock:
 			gui.message._messageBoxCounter += 1
 			_reportObjectDescriptionOptions.append(config.conf["presentation"]["reportObjectDescriptions"])
@@ -75,7 +74,6 @@ else:
 	_NVDAMessageDialogShowModal = None
 
 	def myMessageDialogFunc(func, *args, **kwargs):
-		global _reportObjectDescriptionOptions
 		log.debug("myMessageDialogInit")
 		c = config.conf
 		pre = c["presentation"]["reportObjectDescriptions"]
@@ -126,6 +124,6 @@ def terminate():
 		# for nvda version >= 2025.1
 		global _NVDAMessageDialogShowModal
 		if _NVDAMessageDialogShowModal is not None:
-
 			from gui.message import MessageDialog
 			MessageDialog.ShowModal = _NVDAMessageDialogShowModal
+			_NVDAMessageDialogShowModal = None

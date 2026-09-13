@@ -33,7 +33,6 @@ import eventHandler
 import core
 import contentRecog.recogUi
 import unicodedata
-from ..utils.nvdaInfos import NVDAVersion
 from ..utils.NVDAStrings import NVDAString
 from ..utils import delayScriptTaskWithDelay, stopDelayScriptTask, clearDelayScriptTask
 from ..settings import isInstall
@@ -345,6 +344,8 @@ class EditableTextEx(editableText.EditableText):
 
 class NVDAObjectExBase(NVDAObject):
 	def _reportErrorInPreviousWord(self, typedWord=None):
+		if not typedWord:
+			return
 		try:
 			# self might be a descendant of the text control; e.g. Symphony.
 			# We want to deal with the entire text, so use the caret object.
@@ -448,29 +449,15 @@ class NVDAObjectEx(NVDAObjectExBase):
 
 	def NVDAObject_event_typedCharacter(self, ch):
 		from ..settings.nvdaConfig import _NVDAConfigManager
-		if not (ch.isalnum() or ch.isspace()):
-			typingEchoMode = config.conf["keyboard"]["speakTypedCharacters"]
-			if _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False):
-				if NVDAVersion < [2025, 1]:
-					# for nvda versions < 2025.1
-					config.conf["keyboard"]["speakTypedCharacters"] = True
-				else:
-					# for nvda versions >= 2025.1
-					from config.configFlags import TypingEcho
-					config.conf["keyboard"]["speakTypedCharacters"] = TypingEcho.ALWAYS.value
-			speech.speakTypedCharacters(ch)
-			config.conf["keyboard"]["speakTypedCharacters"] = typingEchoMode
-		else:
-			speech.speakTypedCharacters(ch)
-		import winUser
-
+		typingEchoMode = config.conf["keyboard"]["speakTypedCharacters"]
 		if (
-			config.conf["keyboard"]["beepForLowercaseWithCapslock"]
-			and ch.islower()
-			and winUser.getKeyState(winUser.VK_CAPITAL) & 1
+			not (ch.isalnum() or ch.isspace())
+			and _NVDAConfigManager.toggleSpeakAlphaNumCharsOption(False)
 		):
-			import tones
-			tones.beep(3000, 40)
+			from config.configFlags import TypingEcho
+			config.conf["keyboard"]["speakTypedCharacters"] = TypingEcho.ALWAYS.value
+		super().event_typedCharacter(ch)
+		config.conf["keyboard"]["speakTypedCharacters"] = typingEchoMode
 
 
 class ClipboardCommandAnnouncement(object):
